@@ -51,12 +51,15 @@ class ProjectContext:
         self.backup_ignore = os.path.join(root_dir, ".geminiignore.bak")
         self.desc_file = os.path.join(root_dir, "input", "description.md")
         
+        self.requirements_dir = os.path.join(root_dir, "requirements")
+        
         self.runner = runner or GeminiRunner()
         
         # Ensures directories exist
         os.makedirs(self.sandbox_dir, exist_ok=True)
         os.makedirs(self.specs_dir, exist_ok=True)
         os.makedirs(self.research_dir, exist_ok=True)
+        os.makedirs(self.requirements_dir, exist_ok=True)
         
         self.has_existing_ignore = os.path.exists(self.ignore_file)
         self.state = self._load_state()
@@ -72,8 +75,11 @@ class ProjectContext:
         return {
             "generated": [], 
             "fleshed_out": [], 
+            "extracted_requirements": [],
             "final_review_completed": False,
-            "requirements_completed": False,
+            "requirements_extracted": False,
+            "requirements_merged": False,
+            "requirements_ordered": False,
             "phases_completed": False,
             "tasks_completed": False,
             "tdd_completed": False
@@ -305,29 +311,95 @@ class Phase3FinalReview(BasePhase):
         ctx.save_state()
         print("Successfully completed the Final Alignment Review.")
 
-class Phase4DistillRequirements(BasePhase):
+class Phase4AExtractRequirements(BasePhase):
     def execute(self, ctx: ProjectContext):
-        if ctx.state.get("requirements_completed", False):
-            print("Requirements distillation already completed.")
+        if ctx.state.get("requirements_extracted", False):
+            print("Requirements extraction already completed.")
             return
             
-        print("\n=> [Phase 4: Distill Requirements] Generating requirements.md...")
-        req_prompt_tmpl = ctx.load_prompt("requirements.md")
-        req_prompt = req_prompt_tmpl.format(description_ctx=ctx.description_ctx)
-        ignore_content = "/*\n!/.sandbox/\n!/specs/\n!/research/\n!/requirements.md\n"
+        print("\n=> [Phase 4A: Extract Requirements] Extracting requirements from each document...")
+        prompt_tmpl = ctx.load_prompt("extract_requirements.md")
         
+        for doc in DOCS:
+            if doc["id"] in ctx.state.get("extracted_requirements", []):
+                continue
+                
+            doc_path = ctx.get_document_path(doc)
+            if not os.path.exists(doc_path):
+                continue
+                
+            target_path = f"../requirements/{doc['id']}.md"
+            expected_file = os.path.join(ctx.requirements_dir, f"{doc['id']}.md")
+            
+            print(f"   -> Extracting from {doc['name']}...")
+            prompt = prompt_tmpl.format(
+                description_ctx=ctx.description_ctx,
+                document_name=doc['name'],
+                document_path=f"../{'specs' if doc['type'] == 'spec' else 'research'}/{doc['id']}.md",
+                target_path=target_path
+            )
+            
+            ignore_content = "/*\n!/.sandbox/\n!/requirements/\n"
+            allowed_files = [expected_file]
+            result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
+            
+            if result.returncode != 0:
+                print(f"\n[!] Error extracting requirements from {doc['name']}.")
+                sys.exit(1)
+            
+            ctx.state.setdefault("extracted_requirements", []).append(doc["id"])
+            ctx.save_state()
+            
+        ctx.state["requirements_extracted"] = True
+        ctx.save_state()
+
+class Phase4BMergeRequirements(BasePhase):
+    def execute(self, ctx: ProjectContext):
+        if ctx.state.get("requirements_merged", False):
+            print("Requirements merging already completed.")
+            return
+            
+        print("\n=> [Phase 4B: Merge and Resolve Conflicts] Consolidating all requirements...")
+        prompt_tmpl = ctx.load_prompt("merge_requirements.md")
+        prompt = prompt_tmpl.format(description_ctx=ctx.description_ctx)
+        
+        # This phase can modify requirements.md AND any source doc in specs/ or research/
+        ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/requirements.md\n!/specs/\n!/research/\n"
+        
+        # Allowed files include the final requirements.md and ALL source docs for potential conflict resolution
         allowed_files = [os.path.join(ctx.root_dir, "requirements.md")]
-        result = ctx.run_gemini(req_prompt, ignore_content, allowed_files=allowed_files)
+        allowed_files.extend([ctx.get_document_path(d) for d in DOCS])
+        
+        result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
         
         if result.returncode != 0:
-            print("\n[!] Error generating requirements.")
-            print(result.stdout)
-            print(result.stderr)
+            print("\n[!] Error merging requirements.")
             sys.exit(1)
             
-        ctx.state["requirements_completed"] = True
+        ctx.state["requirements_merged"] = True
         ctx.save_state()
-        print("Successfully completed the requirements distillation.")
+
+class Phase4COrderRequirements(BasePhase):
+    def execute(self, ctx: ProjectContext):
+        if ctx.state.get("requirements_ordered", False):
+            print("Requirements ordering already completed.")
+            return
+            
+        print("\n=> [Phase 4C: Order Requirements] Sequencing requirements and capturing dependencies...")
+        prompt_tmpl = ctx.load_prompt("order_requirements.md")
+        prompt = prompt_tmpl.format(description_ctx=ctx.description_ctx)
+        
+        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n"
+        allowed_files = [os.path.join(ctx.root_dir, "requirements.md")]
+        
+        result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
+        
+        if result.returncode != 0:
+            print("\n[!] Error ordering requirements.")
+            sys.exit(1)
+            
+        ctx.state["requirements_ordered"] = True
+        ctx.save_state()
 
 class Phase5GenerateEpics(BasePhase):
     def execute(self, ctx: ProjectContext):
@@ -428,7 +500,9 @@ class Orchestrator:
                 Phase2FleshOutDoc(doc).execute(self.ctx)
 
             Phase3FinalReview().execute(self.ctx)
-            Phase4DistillRequirements().execute(self.ctx)
+            Phase4AExtractRequirements().execute(self.ctx)
+            Phase4BMergeRequirements().execute(self.ctx)
+            Phase4COrderRequirements().execute(self.ctx)
             Phase5GenerateEpics().execute(self.ctx)
             Phase6BreakDownTasks().execute(self.ctx)
             #Phase7TDDLoop().execute(self.ctx)
