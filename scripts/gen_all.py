@@ -107,6 +107,12 @@ class ProjectContext:
         with open(prompt_path, "r", encoding="utf-8") as f:
             return f.read().strip()
 
+    def format_prompt(self, tmpl: str, **kwargs) -> str:
+        result = tmpl
+        for k, v in kwargs.items():
+            result = result.replace(f"{{{k}}}", str(v))
+        return result
+
     def backup_ignore_file(self):
         if self.has_existing_ignore:
             shutil.copy(self.ignore_file, self.backup_ignore)
@@ -293,7 +299,7 @@ class Phase2FleshOutDoc(BasePhase):
                 continue
                 
             print(f"   -> [Phase 2: Flesh Out Section] {header_clean} in {self.doc['name']} ...")
-            flesh_prompt = flesh_prompt_tmpl.format(
+            flesh_prompt = ctx.format_prompt(flesh_prompt_tmpl,
                 header=header_clean,
                 target_path=target_path,
                 description_ctx=ctx.description_ctx,
@@ -324,7 +330,7 @@ class Phase3FinalReview(BasePhase):
             
         print("\n=> [Phase 3: Final Alignment Review] Reviewing all documents for consistency...")
         final_prompt_tmpl = ctx.load_prompt("final_review.md")
-        final_prompt = final_prompt_tmpl.format(description_ctx=ctx.description_ctx)
+        final_prompt = ctx.format_prompt(final_prompt_tmpl, description_ctx=ctx.description_ctx)
         ignore_content = "/*\n!/.sandbox/\n!/specs/\n!/research/\n"
         
         # Final review can modify all existing specs and research files
@@ -362,7 +368,7 @@ class Phase4AExtractRequirements(BasePhase):
             expected_file = os.path.join(ctx.requirements_dir, f"{doc['id']}.md")
             
             print(f"   -> Extracting from {doc['name']}...")
-            prompt = prompt_tmpl.format(
+            prompt = ctx.format_prompt(prompt_tmpl,
                 description_ctx=ctx.description_ctx,
                 document_name=doc['name'],
                 document_path=f"{'specs' if doc['type'] == 'spec' else 'research'}/{doc['id']}.md",
@@ -391,7 +397,7 @@ class Phase4BMergeRequirements(BasePhase):
             
         print("\n=> [Phase 4B: Merge and Resolve Conflicts] Consolidating all requirements...")
         prompt_tmpl = ctx.load_prompt("merge_requirements.md")
-        prompt = prompt_tmpl.format(description_ctx=ctx.description_ctx)
+        prompt = ctx.format_prompt(prompt_tmpl, description_ctx=ctx.description_ctx)
         
         # This phase can modify requirements.md AND any source doc in specs/ or research/
         ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/requirements.md\n!/specs/\n!/research/\n"
@@ -417,7 +423,7 @@ class Phase4COrderRequirements(BasePhase):
             
         print("\n=> [Phase 4C: Order Requirements] Sequencing requirements and capturing dependencies...")
         prompt_tmpl = ctx.load_prompt("order_requirements.md")
-        prompt = prompt_tmpl.format(description_ctx=ctx.description_ctx)
+        prompt = ctx.format_prompt(prompt_tmpl, description_ctx=ctx.description_ctx)
         
         ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n"
         allowed_files = [os.path.join(ctx.root_dir, "requirements.md")]
@@ -439,7 +445,7 @@ class Phase5GenerateEpics(BasePhase):
             
         print("\n=> [Phase 5: Generate Epics] Generating phases.md...")
         phases_prompt_tmpl = ctx.load_prompt("phases.md")
-        phases_prompt = phases_prompt_tmpl.format(description_ctx=ctx.description_ctx)
+        phases_prompt = ctx.format_prompt(phases_prompt_tmpl, description_ctx=ctx.description_ctx)
         ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/phases.md\n"
         
         allowed_files = [os.path.join(ctx.root_dir, "phases.md")]
@@ -463,7 +469,7 @@ class Phase6BreakDownTasks(BasePhase):
             
         print("\n=> [Phase 6: Break Down Tasks] Generating tasks.md...")
         tasks_prompt_tmpl = ctx.load_prompt("tasks.md")
-        tasks_prompt = tasks_prompt_tmpl.format(description_ctx=ctx.description_ctx)
+        tasks_prompt = ctx.format_prompt(tasks_prompt_tmpl, description_ctx=ctx.description_ctx)
         ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/phases.md\n!/tasks.md\n"
         
         allowed_files = [os.path.join(ctx.root_dir, "tasks.md")]
@@ -498,7 +504,7 @@ class Phase7TDDLoop(BasePhase):
                         break
             
             tdd_prompt_tmpl = ctx.load_prompt("tdd_loop.md")
-            tdd_prompt = tdd_prompt_tmpl.format(description_ctx=ctx.description_ctx)
+            tdd_prompt = ctx.format_prompt(tdd_prompt_tmpl, description_ctx=ctx.description_ctx)
             ignore_content = ".sandbox/\n"
             
             print(f"\n   -> Invoking Developer Agent for the next task...")
