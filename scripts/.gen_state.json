@@ -108,7 +108,8 @@
     "extracted_requirements": [
         "1_prd",
         "2_tas",
-        "3_mcp_design"
+        "3_mcp_design",
+        "4_user_features"
     ],
     "final_review_completed": true,
     "requirements_extracted": false,
