@@ -471,6 +471,8 @@ class Phase4COrderRequirements(BasePhase):
         result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
         
         if result.returncode != 0:
+            print(result.stdout)
+            print(result.stderr)
             print("\n[!] Error ordering requirements.")
             sys.exit(1)
             
