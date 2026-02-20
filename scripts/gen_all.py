@@ -542,6 +542,7 @@ class Phase5GenerateEpics(BasePhase):
         ctx.save_state()
         print("Successfully generated project phases.")
 
+class Phase6BreakDownTasks(BasePhase):
     def execute(self, ctx: ProjectContext):
         if ctx.state.get("tasks_completed", False):
             print("Task generation already completed.")
@@ -578,7 +579,7 @@ class Phase5GenerateEpics(BasePhase):
                                              phase_filename=phase_filename,
                                              group_filename=group_filename)
             
-            ignore_content = f"/*\n!/.sandbox/\n!/phases/\n!/tasks/\n"
+            ignore_content = f"/*\n!/.sandbox/\n!/phases/\n!/tasks/\n!/scripts/verify_requirements.py\n"
             group_filepath = os.path.join(tasks_dir, group_filename)
             allowed_files = [group_filepath]
             
@@ -600,7 +601,7 @@ class Phase5GenerateEpics(BasePhase):
                 except json.JSONDecodeError as e:
                     print(f"\n[!] Error parsing grouping JSON file {group_filepath}: {e}")
                     sys.exit(1)
-            
+                
             print(f"   -> Found {len(sub_epics)} Sub-Epic groupings for {phase_filename}.")
             
             # 2. Lead Developer Pass: Iterative Detail Generation
