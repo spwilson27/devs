@@ -605,7 +605,7 @@ class Phase6BreakDownTasks(BasePhase):
             print(f"   -> Found {len(sub_epics)} Sub-Epic groupings for {phase_filename}.")
             
             # 2. Lead Developer Pass: Iterative Detail Generation
-            for sub_epic_name, reqs in sub_epics.items():
+            for sub_epic_name, reqs in sorted(sub_epics.items()):
                 if not isinstance(reqs, list):
                     continue
                     

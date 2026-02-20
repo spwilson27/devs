@@ -126,20 +126,6 @@
     "requirements_ordered": true,
     "phases_completed": true,
     "tasks_completed": false,
-    "tasks_generated": [
-        "phase_1_research_strategy_execution.md",
-        "phase_1_feature_mapping_project_planning.md",
-        "phase_1_detailed_project_planning.md",
-        "phase_1_market_research_core_environment.md",
-        "phase_1_market_analysis_trends.md",
-        "phase_1_market_risks_opportunities.md",
-        "phase_1_user_research_core_demographics.md",
-        "phase_1_user_behaviors_pain_points.md",
-        "phase_1_user_journey_mapping.md",
-        "phase_1_user_feedback_validation.md",
-        "phase_1_persona_needs_agentic_architectural.md",
-        "phase_1_persona_needs_developer_design.md",
-        "phase_1_persona_needs_domain_maker.md"
-    ],
+    "tasks_generated": [],
     "tdd_completed": false
 }
