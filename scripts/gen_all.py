@@ -160,12 +160,21 @@ class ProjectContext:
     def verify_changes(self, before: Dict[str, float], allowed_files: List[str]):
         after = self.get_workspace_snapshot()
         allowed_set = set(os.path.abspath(f) for f in allowed_files)
+        allowed_dirs = [os.path.abspath(f) for f in allowed_files if os.path.isdir(f) or f.endswith(os.sep)]
         
         # Check for new or modified files
         for path in after:
             if path not in before or after[path] > before.get(path, 0):
                 abs_path = os.path.abspath(path)
-                if abs_path not in allowed_set:
+                is_allowed = abs_path in allowed_set
+                
+                if not is_allowed:
+                    for d in allowed_dirs:
+                        if abs_path.startswith(d if d.endswith(os.sep) else d + os.sep):
+                            is_allowed = True
+                            break
+                            
+                if not is_allowed:
                     # Allow internal script files
                     if abs_path in [os.path.abspath(self.state_file), 
                                   os.path.abspath(self.ignore_file), 
@@ -179,7 +188,14 @@ class ProjectContext:
         for path in before:
             if path not in after:
                 abs_path = os.path.abspath(path)
-                if abs_path not in allowed_set:
+                is_allowed = abs_path in allowed_set
+                if not is_allowed:
+                    for d in allowed_dirs:
+                        if abs_path.startswith(d if d.endswith(os.sep) else d + os.sep):
+                            is_allowed = True
+                            break
+                            
+                if not is_allowed:
                     print(f"\n[SANDBOX VIOLATION] Unauthorized deletion detected: {path}")
                     sys.exit(1)
 
@@ -447,14 +463,32 @@ class Phase4COrderRequirements(BasePhase):
         prompt_tmpl = ctx.load_prompt("order_requirements.md")
         prompt = ctx.format_prompt(prompt_tmpl, description_ctx=ctx.description_ctx)
         
-        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n"
-        allowed_files = [os.path.join(ctx.root_dir, "requirements.md")]
+        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/ordered_requirements.md\n!/scripts/verify_requirements.py\n"
+        allowed_files = [os.path.join(ctx.root_dir, "ordered_requirements.md")]
         
         result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
         
         if result.returncode != 0:
             print("\n[!] Error ordering requirements.")
             sys.exit(1)
+            
+        print("\n   -> Verifying ordered_requirements.md against active requirements in requirements.md...")
+        verify_res = subprocess.run(
+            [sys.executable, "scripts/verify_requirements.py", "--verify-ordered", "requirements.md", "ordered_requirements.md"],
+            capture_output=True, text=True, cwd=ctx.root_dir
+        )
+        if verify_res.returncode != 0:
+            print("\n[!] Automated verification failed after ordering requirements:")
+            print(verify_res.stdout)
+            sys.exit(1)
+            
+        # Overwrite master with ordered version and cleanup
+        master_req_path = os.path.join(ctx.root_dir, "requirements.md")
+        ordered_req_path = os.path.join(ctx.root_dir, "ordered_requirements.md")
+        if os.path.exists(ordered_req_path):
+            if os.path.exists(master_req_path):
+                os.remove(master_req_path)
+            shutil.move(ordered_req_path, master_req_path)
             
         ctx.state["requirements_ordered"] = True
         ctx.save_state()
@@ -465,18 +499,31 @@ class Phase5GenerateEpics(BasePhase):
             print("Phase generation already completed.")
             return
             
-        print("\n=> [Phase 5: Generate Epics] Generating phases.md...")
+        print("\n=> [Phase 5: Generate Epics] Generating detailed phases/")
         phases_prompt_tmpl = ctx.load_prompt("phases.md")
         phases_prompt = ctx.format_prompt(phases_prompt_tmpl, description_ctx=ctx.description_ctx)
-        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/phases.md\n"
+        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/phases/\n!/scripts/verify_requirements.py\n"
         
-        allowed_files = [os.path.join(ctx.root_dir, "phases.md")]
+        phases_dir = os.path.join(ctx.root_dir, "phases")
+        os.makedirs(phases_dir, exist_ok=True)
+        # Adding trailing slash allows creating content inside it
+        allowed_files = [phases_dir + os.sep]
         result = ctx.run_gemini(phases_prompt, ignore_content, allowed_files=allowed_files)
         
         if result.returncode != 0:
             print("\n[!] Error generating phases.")
             print(result.stdout)
             print(result.stderr)
+            sys.exit(1)
+            
+        print("\n   -> Verifying phases/ covers all requirements...")
+        verify_res = subprocess.run(
+            [sys.executable, "scripts/verify_requirements.py", "--verify-phases", "requirements.md", "phases/"],
+            capture_output=True, text=True, cwd=ctx.root_dir
+        )
+        if verify_res.returncode != 0:
+            print("\n[!] Automated verification failed: Not all requirements mapped to phases:")
+            print(verify_res.stdout)
             sys.exit(1)
             
         ctx.state["phases_completed"] = True

@@ -75,12 +75,78 @@ def verify_master(master_file, requirements_dir):
             print(f"  - [{req}]")
         return 1
 
+def verify_phases(master_file, phases_target):
+    """Verifies that all requirements from the master requirements list exist in the phases document or directory."""
+    print(f"Verifying {phases_target} covers all requirements in {master_file}...")
+    
+    master_reqs = parse_requirements(master_file)
+    phases_reqs = set()
+    
+    if os.path.isdir(phases_target):
+        for filename in os.listdir(phases_target):
+            if filename.endswith(".md"):
+                file_path = os.path.join(phases_target, filename)
+                phases_reqs.update(parse_requirements(file_path))
+    else:
+        phases_reqs = parse_requirements(phases_target)
+    
+    missing = master_reqs - phases_reqs
+    
+    if not missing:
+        print(f"Success: All {len(master_reqs)} requirements from {master_file} are mapped to a phase in {phases_target}.")
+        return 0
+    else:
+        print(f"FAILED: The following {len(missing)} requirements are NOT mapped to any phase in {phases_target}:")
+        for req in sorted(missing):
+            print(f"  - [{req}]")
+        return 1
+
+def verify_ordered(master_file, ordered_file):
+    """Verifies that all ACTIVE requirements from the master list exist in the ordered document."""
+    print(f"Verifying {ordered_file} covers all active requirements in {master_file}...")
+    
+    with open(master_file, 'r', encoding='utf-8') as f:
+        master_content = f.read()
+        
+    # Split to find active vs removed
+    parts = re.split(r'(?i)#+\s*Removed or Modified Requirements', master_content)
+    active_content = parts[0]
+    
+    active_reqs = set(REQ_REGEX.findall(active_content))
+    ordered_reqs = parse_requirements(ordered_file)
+    
+    missing = active_reqs - ordered_reqs
+    extra = ordered_reqs - active_reqs
+    
+    success = True
+    if missing:
+        print(f"FAILED: The following {len(missing)} active requirements are missing from {ordered_file}:")
+        for req in sorted(missing):
+            print(f"  - [{req}]")
+        success = False
+        
+    if extra:
+        print(f"FAILED: The following {len(extra)} requirements in {ordered_file} are invalid or were supposed to be removed:")
+        for req in sorted(extra):
+            print(f"  - [{req}]")
+        success = False
+        
+    if success:
+        print(f"Success: {ordered_file} contains exactly the {len(active_reqs)} active requirements from {master_file}.")
+        return 0
+    else:
+        return 1
+
 def main():
     parser = argparse.ArgumentParser(description="Verify requirement extraction consistency.")
     parser.add_argument("--verify-doc", nargs=2, metavar=("SOURCE_FILE", "EXTRACTED_FILE"),
                         help="Verify that all requirements in SOURCE_FILE are present in EXTRACTED_FILE")
     parser.add_argument("--verify-master", action="store_true",
                         help="Verify that all requirements from the requirements/ directory are in the master requirements.md")
+    parser.add_argument("--verify-phases", nargs=2, metavar=("MASTER_FILE", "PHASES_FILE"),
+                        help="Verify that all requirements in MASTER_FILE are mapped within PHASES_FILE")
+    parser.add_argument("--verify-ordered", nargs=2, metavar=("MASTER_FILE", "ORDERED_FILE"),
+                        help="Verify that all ACTIVE requirements in MASTER_FILE are mapped within ORDERED_FILE")
     
     args = parser.parse_args()
     
@@ -100,6 +166,14 @@ def main():
             requirements_dir = "../requirements"
             
         exit_code = verify_master(master_file, requirements_dir)
+        
+    elif args.verify_phases:
+        master_file, phases_file = args.verify_phases
+        exit_code = verify_phases(master_file, phases_file)
+        
+    elif args.verify_ordered:
+        master_file, ordered_file = args.verify_ordered
+        exit_code = verify_ordered(master_file, ordered_file)
         
     else:
         parser.print_help()
