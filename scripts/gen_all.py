@@ -542,16 +542,6 @@ class Phase5GenerateEpics(BasePhase):
         ctx.save_state()
         print("Successfully generated project phases.")
 
-    def _extract_json_block(self, content: str) -> Optional[Dict]:
-        match = re.search(r'<json>\s*(.*?)\s*</json>', content, re.DOTALL)
-        if match:
-            try:
-                return json.loads(match.group(1))
-            except json.JSONDecodeError as e:
-                print(f"Error decoding JSON block: {e}")
-                return None
-        return None
-
     def execute(self, ctx: ProjectContext):
         if ctx.state.get("tasks_completed", False):
             print("Task generation already completed.")
@@ -579,14 +569,20 @@ class Phase5GenerateEpics(BasePhase):
         for phase_filename in sorted(phase_files):
             phase_id = phase_filename.replace(".md", "")
             
+            group_filename = f"{phase_id}_grouping.json"
+            
             # 1. Project Manager Pass: Group Requirements
             print(f"   -> Grouping requirements for {phase_filename} into Sub-Epics...")
             grouping_prompt = ctx.format_prompt(grouping_prompt_tmpl, 
                                              description_ctx=ctx.description_ctx,
-                                             phase_filename=phase_filename)
+                                             phase_filename=phase_filename,
+                                             group_filename=group_filename)
             
-            ignore_content = f"/*\n!/.sandbox/\n!/phases/\n"
-            group_result = ctx.run_gemini(grouping_prompt, ignore_content)
+            ignore_content = f"/*\n!/.sandbox/\n!/phases/\n!/tasks/\n"
+            group_filepath = os.path.join(tasks_dir, group_filename)
+            allowed_files = [group_filepath]
+            
+            group_result = ctx.run_gemini(grouping_prompt, ignore_content, allowed_files=allowed_files)
             
             if group_result.returncode != 0:
                 print(f"\n[!] Error grouping tasks for {phase_filename}.")
@@ -594,11 +590,18 @@ class Phase5GenerateEpics(BasePhase):
                 print(group_result.stderr)
                 sys.exit(1)
                 
-            sub_epics = self._extract_json_block(group_result.stdout)
-            if not sub_epics:
-                print(f"\n[!] Error: Failed to extract valid JSON groupings for {phase_filename}.")
-                print(group_result.stdout)
+            if not os.path.exists(group_filepath):
+                print(f"\n[!] Error: Agent failed to generate grouping JSON file {group_filepath}.")
                 sys.exit(1)
+                
+            with open(group_filepath, "r", encoding="utf-8") as f:
+                try:
+                    sub_epics = json.load(f)
+                except json.JSONDecodeError as e:
+                    print(f"\n[!] Error parsing grouping JSON file {group_filepath}: {e}")
+                    sys.exit(1)
+            
+            print(f"   -> Found {len(sub_epics)} Sub-Epic groupings for {phase_filename}.")
             
             # 2. Lead Developer Pass: Iterative Detail Generation
             for sub_epic_name, reqs in sub_epics.items():
