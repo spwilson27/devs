@@ -1,0 +1,54 @@
+{
+    "generated": [
+        "market_research",
+        "competitive_analysis",
+        "tech_landscape",
+        "user_research",
+        "1_prd",
+        "2_tas",
+        "3_mcp_design",
+        "4_user_features",
+        "5_security_design",
+        "6_ui_ux_architecture"
+    ],
+    "fleshed_out": [
+        "1_prd",
+        "2_tas",
+        "3_mcp_design",
+        "4_user_features",
+        "5_security_design"
+    ],
+    "fleshed_out_headers": {
+        "4_user_features": [
+            "# User Features Specification: devs",
+            "## 1. Feature Overview & Categorization",
+            "## 2. Detailed User Journeys",
+            "## 3. Detailed Feature Specifications",
+            "## 4. User Interface Requirements",
+            "## 5. Safety, Governance & Edge Cases",
+            "## 6. Technical Unknowns & Design Questions"
+        ],
+        "5_security_design": [
+            "# Security Design: devs",
+            "## 1. Threat Model & Attack Surface",
+            "## 2. Authentication & Authorization Policies",
+            "## 3. Data at Rest & Data in Transit Encryption",
+            "## 4. Application Security Controls",
+            "## 5. Logging, Monitoring & Audit Trails"
+        ],
+        "6_ui_ux_architecture": [
+            "# UI/UX Architecture: devs",
+            "## 1. Frontend Architecture Overview & Frameworks",
+            "## 2. Component Hierarchy & Reusability Strategy",
+            "## 3. State Management Paradigm"
+        ]
+    },
+    "extracted_requirements": [],
+    "final_review_completed": false,
+    "requirements_extracted": false,
+    "requirements_merged": false,
+    "requirements_ordered": false,
+    "phases_completed": false,
+    "tasks_completed": false,
+    "tdd_completed": false
+}
