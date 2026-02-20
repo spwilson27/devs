@@ -124,7 +124,7 @@
     "requirements_extracted": true,
     "requirements_merged": true,
     "requirements_ordered": true,
-    "phases_completed": false,
+    "phases_completed": true,
     "tasks_completed": false,
     "tdd_completed": false
 }
