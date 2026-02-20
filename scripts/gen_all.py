@@ -77,6 +77,7 @@ class ProjectContext:
             "requirements_ordered": False,
             "phases_completed": False,
             "tasks_completed": False,
+            "tasks_generated": [],
             "tdd_completed": False
         }
         if os.path.exists(self.state_file):
@@ -541,27 +542,100 @@ class Phase5GenerateEpics(BasePhase):
         ctx.save_state()
         print("Successfully generated project phases.")
 
-class Phase6BreakDownTasks(BasePhase):
+    def _extract_json_block(self, content: str) -> Optional[Dict]:
+        match = re.search(r'<json>\s*(.*?)\s*</json>', content, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group(1))
+            except json.JSONDecodeError as e:
+                print(f"Error decoding JSON block: {e}")
+                return None
+        return None
+
     def execute(self, ctx: ProjectContext):
         if ctx.state.get("tasks_completed", False):
             print("Task generation already completed.")
             return
             
-        print("\n=> [Phase 6: Break Down Tasks] Generating detailed tasks/")
-        tasks_prompt_tmpl = ctx.load_prompt("tasks.md")
-        tasks_prompt = ctx.format_prompt(tasks_prompt_tmpl, description_ctx=ctx.description_ctx)
-        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/phases/\n!/tasks/\n!/scripts/verify_requirements.py\n"
+        print("\n=> [Phase 6: Break Down Tasks] Generating detailed tasks using Sub-Epic Grouping/")
         
+        phases_dir = os.path.join(ctx.root_dir, "phases")
         tasks_dir = os.path.join(ctx.root_dir, "tasks")
         os.makedirs(tasks_dir, exist_ok=True)
-        allowed_files = [tasks_dir + os.sep]
-        result = ctx.run_gemini(tasks_prompt, ignore_content, allowed_files=allowed_files)
         
-        if result.returncode != 0:
-            print("\n[!] Error generating tasks.")
-            print(result.stdout)
-            print(result.stderr)
+        if not os.path.exists(phases_dir):
+            print("\n[!] Error: phases directory does not exist.")
             sys.exit(1)
+            
+        phase_files = [f for f in os.listdir(phases_dir) if f.endswith(".md")]
+        if not phase_files:
+            print("\n[!] Error: No phase documents found in phases/.")
+            sys.exit(1)
+            
+        grouping_prompt_tmpl = ctx.load_prompt("group_tasks.md")
+        tasks_prompt_tmpl = ctx.load_prompt("tasks.md")
+        ctx.state.setdefault("tasks_generated", [])
+        
+        for phase_filename in sorted(phase_files):
+            phase_id = phase_filename.replace(".md", "")
+            
+            # 1. Project Manager Pass: Group Requirements
+            print(f"   -> Grouping requirements for {phase_filename} into Sub-Epics...")
+            grouping_prompt = ctx.format_prompt(grouping_prompt_tmpl, 
+                                             description_ctx=ctx.description_ctx,
+                                             phase_filename=phase_filename)
+            
+            ignore_content = f"/*\n!/.sandbox/\n!/phases/\n"
+            group_result = ctx.run_gemini(grouping_prompt, ignore_content)
+            
+            if group_result.returncode != 0:
+                print(f"\n[!] Error grouping tasks for {phase_filename}.")
+                print(group_result.stdout)
+                print(group_result.stderr)
+                sys.exit(1)
+                
+            sub_epics = self._extract_json_block(group_result.stdout)
+            if not sub_epics:
+                print(f"\n[!] Error: Failed to extract valid JSON groupings for {phase_filename}.")
+                print(group_result.stdout)
+                sys.exit(1)
+            
+            # 2. Lead Developer Pass: Iterative Detail Generation
+            for sub_epic_name, reqs in sub_epics.items():
+                if not isinstance(reqs, list):
+                    continue
+                    
+                # Create a filesystem safe name for the sub-epic
+                safe_name = re.sub(r'[^a-zA-Z0-9_\-]+', '_', sub_epic_name.lower())
+                target_filename = f"{phase_id}_{safe_name}.md"
+                
+                if target_filename in ctx.state["tasks_generated"]:
+                    print(f"      -> Skipping task {target_filename} (already generated).")
+                    continue
+                    
+                print(f"      -> Breaking down '{sub_epic_name}' ({len(reqs)} reqs) into {target_filename}...")
+                
+                reqs_str = json.dumps(reqs)
+                tasks_prompt = ctx.format_prompt(tasks_prompt_tmpl, 
+                                                 description_ctx=ctx.description_ctx,
+                                                 phase_filename=phase_filename,
+                                                 sub_epic_name=sub_epic_name,
+                                                 sub_epic_reqs=reqs_str,
+                                                 target_filename=target_filename)
+                
+                ignore_content = f"/*\n!/.sandbox/\n!/requirements.md\n!/phases/\n!/tasks/\n!/scripts/verify_requirements.py\n"
+                
+                allowed_files = [os.path.join(tasks_dir, target_filename)]
+                result = ctx.run_gemini(tasks_prompt, ignore_content, allowed_files=allowed_files)
+                
+                if result.returncode != 0:
+                    print(f"\n[!] Error generating tasks for {target_filename}.")
+                    print(result.stdout)
+                    print(result.stderr)
+                    sys.exit(1)
+                    
+                ctx.state["tasks_generated"].append(target_filename)
+                ctx.save_state()
             
         print("\n   -> Verifying tasks/ covers all requirements from phases/...")
         verify_res = subprocess.run(

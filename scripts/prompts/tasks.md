@@ -1,40 +1,40 @@
 # PERSONA
-You are a Lead AI Developer. Your job is to break down a high-level phases document into atomic, actionable checklist items in a `tasks.md` file.
+You are a Lead AI Developer. Your job is to break down a specific chunk of requirements from a high-level phase document into atomic, actionable checklist items.
 
 # CONTEXT
 {description_ctx}
 
 # TASK
-1. Read `../requirements.md` and all files within `../phases/`.
-2. Break every phase into highly detailed, small, atomic tasks represented as checklists.
-3. Generate a unique, highly detailed Markdown document for each phase inside the `../tasks/` directory (e.g., `../tasks/phase_1.md`).
-4. Every single requirement `[REQ-...]` or `[TAS-...]` ID from the phases MUST be explicitly mapped to at least one task.
-5. You MUST verify that 100% of the requirements were handled by running `python scripts/verify_requirements.py --verify-tasks ../phases/ ../tasks/`.
-6. If the script reports unmapped requirements, you MUST update documents in `../tasks/` to include them and run the script again until it passes perfectly.
+1. Read `../requirements.md` and the specific phase document `../phases/{phase_filename}`.
+2. Focus **ONLY** on the following Sub-Epic and its explicitly assigned Requirement IDs:
+   - **Sub-Epic Name**: {sub_epic_name}
+   - **Requirement IDs to Cover**: {sub_epic_reqs}
+3. Break this specific Sub-Epic into highly detailed, small, atomic tasks represented as checklists.
+4. Generate a unique, highly detailed Markdown document for this Sub-Epic inside the `../tasks/` directory as `../tasks/{target_filename}`.
+5. Every single requirement ID listed above MUST be explicitly mapped to at least one task.
+6. Do NOT generate tasks for requirements outside of this specific list.
 
 # CHAIN OF THOUGHT
 Before generating the final document, silently plan your approach:
-1. Use your tools to read `../requirements.md` and the contents of the `../phases/` directory.
-2. For each phase, identify the specific code components, tests, and configurations needed to fulfill the requirements.
+1. Use your tools to read `../phases/{phase_filename}` and filter for the targeted requirement IDs: {sub_epic_reqs}.
+2. Identify the specific code components, tests, and configurations needed to fulfill this specific Sub-Epic: {sub_epic_name}.
 3. Break these down into extremely granular, actionable steps with enough detail for a developer agent to execute TDD confidently.
-4. Prepare the final Markdown task manifests.
-5. Run the verification script and iterate if you missed any requirements.
+4. Prepare the final Markdown task manifest.
 
 # CONSTRAINTS
-- You MUST use your file editing tools to write the output exactly to documents inside `../tasks/`.
+- You MUST use your file editing tools to write the output exactly to `../tasks/{target_filename}`.
 - Tasks must be actionable units of work suitable for an AI agent to execute.
-- End your turn immediately once all the files are written.
+- End your turn immediately once the file is written.
 
 # OUTPUT FORMAT
-- Must be a set of valid GitHub-Flavored Markdown documents saved to `../tasks/`.
+- Must be a valid GitHub-Flavored Markdown document saved to `../tasks/{target_filename}`.
 - Format tasks as a GitHub-flavored Markdown checklist.
-- You MUST structure EACH Task document EXACTLY utilizing the following markdown format:
+- You MUST structure the Task document EXACTLY utilizing the following markdown format:
 
 ```markdown
-# Tasks for Phase {N}: {Phase Title}
+# Tasks for {sub_epic_name} (Phase: {phase_filename})
 
-## Epic {Epic Name}
-### Covered Requirements
+## Covered Requirements
 - [{REQ_ID_1}], [{REQ_ID_2}]
 
 ### Task Checklist
@@ -42,5 +42,5 @@ Before generating the final document, silently plan your approach:
 - [ ] **Subtask 2: {Task Name}**: {Highly detailed technical instructions...}
 
 ### Testing & Verification
-- [ ] {Detailed instructions describing exactly what Playwright tests, unit tests, or validations need to be built to turn this phase Green}
+- [ ] {Detailed instructions describing exactly what Playwright tests, unit tests, or validations need to be built to turn this epic Green}
 ```
