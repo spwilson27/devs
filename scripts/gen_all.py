@@ -200,7 +200,8 @@ class ProjectContext:
         if os.path.exists(filepath):
             with open(filepath, 'r', encoding='utf-8') as f:
                 for line in f:
-                    if re.match(r'^#+\s+', line):
+                    # Only want to capture h1 and h2
+                    if re.match(r'^#{1,2}\s+', line):
                         headers.append(line.strip())
         return headers
 
