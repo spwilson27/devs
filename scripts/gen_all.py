@@ -567,6 +567,7 @@ class Phase6BreakDownTasks(BasePhase):
         grouping_prompt_tmpl = ctx.load_prompt("group_tasks.md")
         tasks_prompt_tmpl = ctx.load_prompt("tasks.md")
         ctx.state.setdefault("tasks_generated", [])
+        ctx.state.setdefault("ordered_phases_generated", [])
         
         for phase_filename in sorted(phase_files):
             phase_id = phase_filename.replace(".md", "")
@@ -584,7 +585,10 @@ class Phase6BreakDownTasks(BasePhase):
             group_filepath = os.path.join(tasks_dir, group_filename)
             allowed_files = [group_filepath]
             
-            group_result = ctx.run_gemini(grouping_prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
+            if phase_id in ctx.state.get("ordered_phases_generated", []):
+                print(f"   -> Skipping {phase_filename}: Already grouped.")
+            else:
+                group_result = ctx.run_gemini(grouping_prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
             
             if group_result.returncode != 0:
                 print(f"\n[!] Error grouping tasks for {phase_filename}.")
@@ -592,16 +596,17 @@ class Phase6BreakDownTasks(BasePhase):
                 print(group_result.stderr)
                 sys.exit(1)
                 
-            if not os.path.exists(group_filepath):
-                print(f"\n[!] Error: Agent failed to generate grouping JSON file {group_filepath}.")
-                sys.exit(1)
-                
-            with open(group_filepath, "r", encoding="utf-8") as f:
-                try:
-                    sub_epics = json.load(f)
-                except json.JSONDecodeError as e:
-                    print(f"\n[!] Error parsing grouping JSON file {group_filepath}: {e}")
+                if not os.path.exists(group_filepath):
+                    print(f"\n[!] Error: Agent failed to generate grouping JSON file {group_filepath}.")
                     sys.exit(1)
+                    
+                with open(group_filepath, "r", encoding="utf-8") as f:
+                    try:
+                        sub_epics = json.load(f)
+                    except json.JSONDecodeError as e:
+                        print(f"\n[!] Error parsing grouping JSON file {group_filepath}: {e}")
+                        sys.exit(1)
+                ctx.state["ordered_phases_generated"].append(phase_id)
                 
             print(f"   -> Found {len(sub_epics)} Sub-Epic groupings for {phase_filename}.")
             
