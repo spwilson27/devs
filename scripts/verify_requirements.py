@@ -75,20 +75,21 @@ def verify_master(master_file, requirements_dir):
             print(f"  - [{req}]")
         return 1
 
-def verify_phases(master_file, phases_target):
-    """Verifies that all requirements from the master requirements list exist in the phases document or directory."""
-    print(f"Verifying {phases_target} covers all requirements in {master_file}...")
+def verify_phases(master_file, phases_dir):
+    """Verifies that all requirements from the master requirements list exist in the phases directory."""
+    print(f"Verifying {phases_dir} covers all requirements in {master_file}...")
     
     master_reqs = parse_requirements(master_file)
     phases_reqs = set()
     
-    if os.path.isdir(phases_target):
-        for filename in os.listdir(phases_target):
-            if filename.endswith(".md"):
-                file_path = os.path.join(phases_target, filename)
-                phases_reqs.update(parse_requirements(file_path))
-    else:
-        phases_reqs = parse_requirements(phases_target)
+    if not os.path.exists(phases_dir) or not os.path.isdir(phases_dir):
+        print(f"Error: Directory not found or not a directory: {phases_dir}")
+        return 1
+
+    for filename in os.listdir(phases_dir):
+        if filename.endswith(".md"):
+            file_path = os.path.join(phases_dir, filename)
+            phases_reqs.update(parse_requirements(file_path))
     
     missing = master_reqs - phases_reqs
     
@@ -106,22 +107,24 @@ def verify_tasks(phases_dir, tasks_dir):
     print(f"Verifying {tasks_dir} covers all requirements mapped in {phases_dir}...")
     
     phases_reqs = set()
-    if os.path.isdir(phases_dir):
-        for filename in os.listdir(phases_dir):
-            if filename.endswith(".md"):
-                file_path = os.path.join(phases_dir, filename)
-                phases_reqs.update(parse_requirements(file_path))
-    else:
-        phases_reqs = parse_requirements(phases_dir)
-        
+    if not os.path.exists(phases_dir) or not os.path.isdir(phases_dir):
+        print(f"Error: Directory not found or not a directory: {phases_dir}")
+        return 1
+
+    for filename in os.listdir(phases_dir):
+        if filename.endswith(".md"):
+            file_path = os.path.join(phases_dir, filename)
+            phases_reqs.update(parse_requirements(file_path))
+            
     tasks_reqs = set()
-    if os.path.isdir(tasks_dir):
-        for filename in os.listdir(tasks_dir):
-            if filename.endswith(".md"):
-                file_path = os.path.join(tasks_dir, filename)
-                tasks_reqs.update(parse_requirements(file_path))
-    else:
-        tasks_reqs = parse_requirements(tasks_dir)
+    if not os.path.exists(tasks_dir) or not os.path.isdir(tasks_dir):
+        print(f"Error: Directory not found or not a directory: {tasks_dir}")
+        return 1
+
+    for filename in os.listdir(tasks_dir):
+        if filename.endswith(".md"):
+            file_path = os.path.join(tasks_dir, filename)
+            tasks_reqs.update(parse_requirements(file_path))
         
     missing = phases_reqs - tasks_reqs
     
@@ -176,8 +179,8 @@ def main():
                         help="Verify that all requirements in SOURCE_FILE are present in EXTRACTED_FILE")
     parser.add_argument("--verify-master", action="store_true",
                         help="Verify that all requirements from the requirements/ directory are in the master requirements.md")
-    parser.add_argument("--verify-phases", nargs=2, metavar=("MASTER_FILE", "PHASES_FILE"),
-                        help="Verify that all requirements in MASTER_FILE are mapped within PHASES_FILE")
+    parser.add_argument("--verify-phases", nargs=2, metavar=("MASTER_FILE", "PHASES_DIR"),
+                        help="Verify that all requirements in MASTER_FILE are mapped within PHASES_DIR")
     parser.add_argument("--verify-ordered", nargs=2, metavar=("MASTER_FILE", "ORDERED_FILE"),
                         help="Verify that all ACTIVE requirements in MASTER_FILE are mapped within ORDERED_FILE")
     parser.add_argument("--verify-tasks", nargs=2, metavar=("PHASES_DIR", "TASKS_DIR"),
@@ -203,8 +206,8 @@ def main():
         exit_code = verify_master(master_file, requirements_dir)
         
     elif args.verify_phases:
-        master_file, phases_file = args.verify_phases
-        exit_code = verify_phases(master_file, phases_file)
+        master_file, phases_dir = args.verify_phases
+        exit_code = verify_phases(master_file, phases_dir)
         
     elif args.verify_ordered:
         master_file, ordered_file = args.verify_ordered
