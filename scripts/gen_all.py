@@ -160,6 +160,12 @@ class ProjectContext:
                     pass
         return snapshot
 
+    def stage_changes(self, file_paths: List[str]):
+        if not file_paths:
+            return
+        clean_paths = [os.path.abspath(p) for p in file_paths if p]
+        subprocess.run(["git", "add"] + clean_paths, cwd=self.root_dir, check=False)
+
     def verify_changes(self, before: Dict[str, float], allowed_files: List[str]):
         after = self.get_workspace_snapshot()
         allowed_set = set(os.path.abspath(f) for f in allowed_files)
@@ -290,6 +296,7 @@ class Phase1GenerateDoc(BasePhase):
             print(result.stderr)
             sys.exit(1)
             
+        ctx.stage_changes(allowed_files)
         ctx.state.setdefault("generated", []).append(self.doc["id"])
         ctx.save_state()
 
@@ -343,6 +350,7 @@ class Phase2FleshOutDoc(BasePhase):
                 print(result.stderr)
                 sys.exit(1)
             
+            ctx.stage_changes(allowed_files)
             ctx.state["fleshed_out_headers"][self.doc["id"]].append(header_clean)
             ctx.save_state()
         
@@ -370,6 +378,7 @@ class Phase3FinalReview(BasePhase):
             print(result.stderr)
             sys.exit(1)
             
+        ctx.stage_changes(allowed_files)
         ctx.state["final_review_completed"] = True
         ctx.save_state()
         print("Successfully completed the Final Alignment Review.")
@@ -428,6 +437,7 @@ class Phase4AExtractRequirements(BasePhase):
                 print(verify_res.stdout)
                 sys.exit(1)
             
+            ctx.stage_changes(allowed_files)
             ctx.state.setdefault("extracted_requirements", []).append(doc["id"])
             ctx.save_state()
             
@@ -467,6 +477,7 @@ class Phase4BMergeRequirements(BasePhase):
             print(verify_res.stdout)
             sys.exit(1)
             
+        ctx.stage_changes(allowed_files)
         ctx.state["requirements_merged"] = True
         ctx.save_state()
 
@@ -509,6 +520,7 @@ class Phase4COrderRequirements(BasePhase):
                 os.remove(master_req_path)
             shutil.move(ordered_req_path, master_req_path)
             
+        ctx.stage_changes([master_req_path])
         ctx.state["requirements_ordered"] = True
         ctx.save_state()
 
@@ -545,6 +557,7 @@ class Phase5GenerateEpics(BasePhase):
             print(verify_res.stdout)
             sys.exit(1)
             
+        ctx.stage_changes(allowed_files)
         ctx.state["phases_completed"] = True
         ctx.save_state()
         print("Successfully generated project phases.")
@@ -591,7 +604,7 @@ class Phase6BreakDownTasks(BasePhase):
             group_filepath = os.path.join(tasks_dir, group_filename)
             allowed_files = [group_filepath]
             
-            if phase_id not in ctx.state.get("ordered_phases_generated", []):
+            if not os.path.exists(group_filepath):
                 group_result = ctx.run_gemini(grouping_prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
             
                 if group_result.returncode != 0:
@@ -613,9 +626,6 @@ class Phase6BreakDownTasks(BasePhase):
                 except json.JSONDecodeError as e:
                     print(f"\n[!] Error parsing grouping JSON file {group_filepath}: {e}")
                     sys.exit(1)
-
-            if phase_id not in ctx.state.get("ordered_phases_generated", []):
-                ctx.state["ordered_phases_generated"].append(phase_id)
                 
             print(f"   -> Found {len(sub_epics)} Sub-Epic groupings for {phase_filename}.")
             
@@ -671,6 +681,7 @@ class Phase6BreakDownTasks(BasePhase):
             print(verify_res.stdout)
             sys.exit(1)
             
+        ctx.stage_changes([tasks_dir])
         ctx.state["tasks_completed"] = True
         ctx.save_state()
         print("Successfully generated atomic tasks.")
@@ -769,7 +780,7 @@ class Orchestrator:
             self.run_phase_with_retry(Phase4COrderRequirements())
             self.run_phase_with_retry(Phase5GenerateEpics())
             #self.run_phase_with_retry(Phase6BreakDownTasks())
-            Phase6BreakDownTasks().execute(self.ctx)
+            self.run_phase_with_retry(Phase6BreakDownTasks())
             #Phase7TDDLoop().execute(self.ctx)
         finally:
             self.ctx.restore_ignore_file()

@@ -316,7 +316,7 @@ The abstraction layer for running code securely across different platforms.
 - **[2_TAS-REQ-024] `SandboxProvider`**: Abstract interface for executing shell commands and file operations.
 - **[2_TAS-REQ-025] `DockerDriver`**: Implementation for CLI users, managing ephemeral containers with strict resource limits ([TAS-021]).
 - **[2_TAS-REQ-026] `WebContainerDriver`**: Implementation for VSCode Web, enabling browser-native Node.js execution.
-- **[TAS-080] `FilesystemManager`**: Handles the synchronization between the host project directory and the sandbox environment, ensuring `.git` and `.devs` are protected ([REQ-SEC-003]).
+- **[TAS-080-1] `FilesystemManager`**: Handles the synchronization between the host project directory and the sandbox environment, ensuring `.git` and `.devs` are protected ([REQ-SEC-003]).
 
 #### 4.2.4 **[TAS-100] @devs/memory** (Semantic & Temporal Persistence)
 Manages the tiered memory system required for long-running projects.

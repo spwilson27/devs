@@ -504,7 +504,7 @@
 - **Source:** TAS (Technical Architecture Specification) (specs/2_tas.md)
 - **Dependencies:** [2_TAS-REQ-024]
 
-### **[TAS-080]** FilesystemManager
+### **[TAS-080-1]** FilesystemManager
 - **Type:** Security
 - **Description:** Synchronizes host and sandbox while protecting sensitive metadata like .git and .devs.
 - **Source:** TAS (Technical Architecture Specification) (specs/2_tas.md)
@@ -514,7 +514,7 @@
 - **Type:** Security
 - **Description:** Ensures .git and .devs are protected during filesystem synchronization between host and sandbox.
 - **Source:** TAS (Technical Architecture Specification) (specs/2_tas.md)
-- **Dependencies:** [TAS-080]
+- **Dependencies:** [TAS-080-1]
 
 ### **[TAS-100]** @devs/memory
 - **Type:** Technical
