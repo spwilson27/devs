@@ -123,7 +123,7 @@
     "final_review_completed": true,
     "requirements_extracted": true,
     "requirements_merged": true,
-    "requirements_ordered": false,
+    "requirements_ordered": true,
     "phases_completed": false,
     "tasks_completed": false,
     "tdd_completed": false
