@@ -4,8 +4,8 @@ import re
 import sys
 import json
 
-# Regex to match requirements like [REQ-123], [TAS-001], [REQ-SEC-001]
-REQ_REGEX = re.compile(r"\[([A-Z][A-Z0-9]*-[A-Z0-9\-]+)\]")
+# Regex to match requirements like [REQ-123], [TAS-001], [REQ-SEC-001], [1_PRD-REQ-001]
+REQ_REGEX = re.compile(r"\[([A-Z0-9_]+-[A-Z0-9\-_]+)\]")
 
 def parse_requirements(file_path):
     """Extracts all requirement IDs from a given file."""
