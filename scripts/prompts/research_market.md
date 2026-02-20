@@ -11,12 +11,15 @@ You will analyze the total addressable market (TAM), current industry trends, po
 # CHAIN OF THOUGHT
 Before generating the final document, plan your approach:
 1. Identify the core value proposition of the product based on the Context.
-2. Outline the specific market segments, TAM/SAM/SOM estimates, and macro trends that apply to this value proposition.
-3. Cross-reference your planned points against any provided `<previous_document>` tags. If previous documents mention specific target audiences or constraints, ensure your market analysis directly addresses them.
-4. Structure the final document according to the required `OUTPUT FORMAT`.
+2. Use your search tools to find real-world data, market size estimates, and industry trends to ground your analysis.
+3. Outline the specific market segments, TAM/SAM/SOM estimates, and macro trends that apply to this value proposition.
+4. Cross-reference your planned points against any provided `<previous_document>` tags. If previous documents mention specific target audiences or constraints, ensure your market analysis directly addresses them.
+5. Structure the final document according to the required `OUTPUT FORMAT`, ensuring you provide and verify references for all factual claims.
 
 # CONSTRAINTS
 - You may use a `<thinking>...</thinking>` block at the very beginning of your response to plan your approach. After the thinking block, output ONLY the raw Markdown document. Do not include any conversational filler.
+- You MUST use search to ground your document in real-world facts and data.
+- You MUST provide and verify citations/references for all claims, statistics, and market data.
 - Ensure all claims or projections sound highly realistic and logically derived from the project description.
 - You MUST save the generated document exactly to `{target_path}` using your file editing tools.
 
@@ -35,3 +38,4 @@ Before generating the final document, plan your approach:
   4. Regulatory & Compliance Considerations
   5. Potential Business Models & Monetization Strategies
   6. Go-to-Market (GTM) Recommendations
+  7. References & Citations

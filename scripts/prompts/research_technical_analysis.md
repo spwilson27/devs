@@ -11,13 +11,16 @@ Based on the product's vision, you will research the optimal technology stack, e
 # CHAIN OF THOUGHT
 Before generating the final document, plan your approach:
 1. Identify the core functional and non-functional requirements implied by the Context.
-2. Formulate an initial technology stack (Frontend, Backend, Database, Infrastructure) that safely and scalably meets those needs.
-3. Cross-reference your planned architecture against any provided `<previous_document>` tags (e.g., if Market or Competitive research mentions specific platforms or compliance needs, your architecture must support them).
-4. Identify 2-3 major technical risks or integration challenges.
-5. Structure the final document according to the required `OUTPUT FORMAT`.
+2. Use your search tools to find real-world data, technical documentation, and technology landscape trends to ground your analysis.
+3. Formulate an initial technology stack (Frontend, Backend, Database, Infrastructure) that safely and scalably meets those needs.
+4. Cross-reference your planned architecture against any provided `<previous_document>` tags (e.g., if Market or Competitive research mentions specific platforms or compliance needs, your architecture must support them).
+5. Identify 2-3 major technical risks or integration challenges.
+6. Structure the final document according to the required `OUTPUT FORMAT`, ensuring you provide and verify references for all factual claims.
 
 # CONSTRAINTS
 - You may use a `<thinking>...</thinking>` block at the very beginning of your response to plan your approach. After the thinking block, output ONLY the raw Markdown document. Do not include any conversational filler.
+- You MUST use search to ground your document in real-world facts and data.
+- You MUST provide and verify citations/references for all claims, statistics, and technical data.
 - Provide authoritative, pragmatic recommendations that will serve as the primary guide for developer agents.
 - For any architectural diagrams, use code blocks with Mermaid markup (`mermaid`) exclusively.
 - You MUST save the generated document exactly to `{target_path}` using your file editing tools.
@@ -37,3 +40,4 @@ Before generating the final document, plan your approach:
   4. Third-Party Services, APIs, and External Dependencies
   5. Security, Performance & Scalability Considerations
   6. Technical Risks & Mitigation Strategies
+  7. References & Citations
