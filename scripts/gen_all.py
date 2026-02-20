@@ -28,13 +28,13 @@ DOCS = [
 
 class GeminiRunner:
     """Wraps the actual subprocess call for testability"""
-    def run(self, sandbox_dir: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
+    def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
         with open(ignore_file, "w", encoding="utf-8") as f:
             f.write(ignore_content)
         return subprocess.run(
             ["gemini", "-y"],
             input=full_prompt,
-            cwd=sandbox_dir,
+            cwd=cwd,
             capture_output=True,
             text=True
         )
@@ -121,7 +121,7 @@ class ProjectContext:
 
     def get_target_path(self, doc: dict) -> str:
         out_folder = "specs" if doc["type"] == "spec" else "research"
-        return f"../{out_folder}/{doc['id']}.md"
+        return f"{out_folder}/{doc['id']}.md"
 
     def get_accumulated_context(self, current_doc: dict) -> str:
         accumulated_context = ""
@@ -176,7 +176,7 @@ class ProjectContext:
 
     def run_gemini(self, full_prompt: str, ignore_content: str, allowed_files: Optional[List[str]] = None) -> subprocess.CompletedProcess:
         before = self.get_workspace_snapshot()
-        result = self.runner.run(self.sandbox_dir, full_prompt, ignore_content, self.ignore_file)
+        result = self.runner.run(self.root_dir, full_prompt, ignore_content, self.ignore_file)
         if allowed_files is not None:
             self.verify_changes(before, allowed_files)
         return result
@@ -328,14 +328,14 @@ class Phase4AExtractRequirements(BasePhase):
             if not os.path.exists(doc_path):
                 continue
                 
-            target_path = f"../requirements/{doc['id']}.md"
+            target_path = f"requirements/{doc['id']}.md"
             expected_file = os.path.join(ctx.requirements_dir, f"{doc['id']}.md")
             
             print(f"   -> Extracting from {doc['name']}...")
             prompt = prompt_tmpl.format(
                 description_ctx=ctx.description_ctx,
                 document_name=doc['name'],
-                document_path=f"../{'specs' if doc['type'] == 'spec' else 'research'}/{doc['id']}.md",
+                document_path=f"{'specs' if doc['type'] == 'spec' else 'research'}/{doc['id']}.md",
                 target_path=target_path
             )
             

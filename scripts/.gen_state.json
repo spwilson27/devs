@@ -1,0 +1,14 @@
+{
+    "generated": [
+        "market_research",
+        "competitive_analysis",
+        "tech_landscape",
+        "user_research"
+    ],
+    "fleshed_out": [],
+    "final_review_completed": false,
+    "requirements_completed": false,
+    "phases_completed": false,
+    "tasks_completed": false,
+    "tdd_completed": false
+}
