@@ -598,15 +598,18 @@ class Phase6BreakDownTasks(BasePhase):
                     print(f"\n[!] Error: Agent failed to generate grouping JSON file {group_filepath}.")
                     sys.exit(1)
                     
-                with open(group_filepath, "r", encoding="utf-8") as f:
-                    try:
-                        sub_epics = json.load(f)
-                    except json.JSONDecodeError as e:
-                        print(f"\n[!] Error parsing grouping JSON file {group_filepath}: {e}")
-                        sys.exit(1)
-                ctx.state["ordered_phases_generated"].append(phase_id)
             else:
                 print(f"   -> Skipping {phase_filename}: Already grouped.")
+
+            with open(group_filepath, "r", encoding="utf-8") as f:
+                try:
+                    sub_epics = json.load(f)
+                except json.JSONDecodeError as e:
+                    print(f"\n[!] Error parsing grouping JSON file {group_filepath}: {e}")
+                    sys.exit(1)
+
+            if phase_id not in ctx.state.get("ordered_phases_generated", []):
+                ctx.state["ordered_phases_generated"].append(phase_id)
                 
             print(f"   -> Found {len(sub_epics)} Sub-Epic groupings for {phase_filename}.")
             
