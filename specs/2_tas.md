@@ -87,11 +87,11 @@ graph TB
 ### 1.6 Agentic Data Flow & State Management
 Data flows through the system in a **[TAS-083] Cyclical Refinement pattern**:
 - **[TAS-082] Input**: User provides a brief and journeys.
-- **Expansion**: Research agents expand this into thousands of tokens of context.
-- **Compression**: The Architect distills research into structured specifications.
-- **Decomposition**: The Distiller breaks specifications into atomic, executable tasks.
-- **Execution**: Developer agents transform tasks into code commits.
-- **Verification**: Reviewer agents validate commits against requirements.
+- **[2_TAS-REQ-001] Expansion**: Research agents expand this into thousands of tokens of context.
+- **[2_TAS-REQ-002] Compression**: The Architect distills research into structured specifications.
+- **[2_TAS-REQ-003] Decomposition**: The Distiller breaks specifications into atomic, executable tasks.
+- **[2_TAS-REQ-004] Execution**: Developer agents transform tasks into code commits.
+- **[2_TAS-REQ-005] Verification**: Reviewer agents validate commits against requirements.
 
 The state is managed using a **[TAS-054] Snapshot-at-Commit strategy**. After every successful task, the system:
 1.  **[TAS-055] Git Snapshots**: Commits the code change to the project's Git repository.
@@ -245,7 +245,7 @@ The relational database is the **[TAS-066] Primary Source of Truth** for the pro
 
 LanceDB provides semantic search capabilities for the "Long-term Memory" layer. This allows agents to retrieve relevant context across Epics.
 
-*   **Path**: `.devs/memory.lancedb`
+*   **[2_TAS-REQ-015] Path**: `.devs/memory.lancedb`
 *   **[TAS-091] Embedding Model**: `text-embedding-004` (768 dimensions).
 *   **[TAS-092] Indexing Strategy**: IVF-PQ (Inverted File with Product Quantization).
 
@@ -299,40 +299,40 @@ graph TD
 
 #### 4.2.1 **[TAS-097] @devs/core** (Orchestration Engine)
 The central nervous system of the project, responsible for state transitions and persistence.
-- **`OrchestrationGraph`**: Implements the LangGraph.js state machine. Manages nodes for Research, Design, Distillation, and the TDD Implementation loop.
-- **`StateRepository`**: SQLite-backed ACID checkpointer for LangGraph state and `agent_logs`.
-- **`EventBus`**: Provides real-time event streaming for VSCode and CLI status updates.
-- **`HumanInTheLoopManager`**: Manages the "Wait-for-Approval" gates, persisting the graph state until a user directive is received.
+- **[2_TAS-REQ-016] `OrchestrationGraph`**: Implements the LangGraph.js state machine. Manages nodes for Research, Design, Distillation, and the TDD Implementation loop.
+- **[2_TAS-REQ-017] `StateRepository`**: SQLite-backed ACID checkpointer for LangGraph state and `agent_logs`.
+- **[2_TAS-REQ-018] `EventBus`**: Provides real-time event streaming for VSCode and CLI status updates.
+- **[2_TAS-REQ-019] `HumanInTheLoopManager`**: Manages the "Wait-for-Approval" gates, persisting the graph state until a user directive is received.
 
 #### 4.2.2 **[TAS-098] @devs/agents** (Agent Intelligence)
 Encapsulates all LLM-specific logic, prompts, and tool bindings.
-- **`AgentFactory`**: Dynamically instantiates agents with specific Tier (Pro vs Flash) and System Prompts.
-- **`PromptManager`**: Version-controlled repository of system instructions, including the "Glass-Box" reasoning protocols.
-- **`ToolRegistry`**: Mapping of MCP tools to specific agent roles (e.g., only `DeveloperAgent` has `write_file` access).
-- **`ReasoningEngine`**: Logic for parsing the "Structured Thought Protocol" (JSON thoughts/actions).
+- **[2_TAS-REQ-020] `AgentFactory`**: Dynamically instantiates agents with specific Tier (Pro vs Flash) and System Prompts.
+- **[2_TAS-REQ-021] `PromptManager`**: Version-controlled repository of system instructions, including the "Glass-Box" reasoning protocols.
+- **[2_TAS-REQ-022] `ToolRegistry`**: Mapping of MCP tools to specific agent roles (e.g., only `DeveloperAgent` has `write_file` access).
+- **[2_TAS-REQ-023] `ReasoningEngine`**: Logic for parsing the "Structured Thought Protocol" (JSON thoughts/actions).
 
 #### 4.2.3 **[TAS-099] @devs/sandbox** (Isolated Execution)
 The abstraction layer for running code securely across different platforms.
-- **`SandboxProvider`**: Abstract interface for executing shell commands and file operations.
-- **`DockerDriver`**: Implementation for CLI users, managing ephemeral containers with strict resource limits ([TAS-021]).
-- **`WebContainerDriver`**: Implementation for VSCode Web, enabling browser-native Node.js execution.
-- **`FilesystemManager`**: Handles the synchronization between the host project directory and the sandbox environment, ensuring `.git` and `.devs` are protected ([REQ-SEC-003]).
+- **[2_TAS-REQ-024] `SandboxProvider`**: Abstract interface for executing shell commands and file operations.
+- **[2_TAS-REQ-025] `DockerDriver`**: Implementation for CLI users, managing ephemeral containers with strict resource limits ([TAS-021]).
+- **[2_TAS-REQ-026] `WebContainerDriver`**: Implementation for VSCode Web, enabling browser-native Node.js execution.
+- **[TAS-080] `FilesystemManager`**: Handles the synchronization between the host project directory and the sandbox environment, ensuring `.git` and `.devs` are protected ([REQ-SEC-003]).
 
 #### 4.2.4 **[TAS-100] @devs/memory** (Semantic & Temporal Persistence)
 Manages the tiered memory system required for long-running projects.
-- **`VectorStore`**: LanceDB integration for long-term project-wide constraints and architectural decisions ([TAS-011]).
-- **`ContextPruner`**: Sophisticated logic for sliding-window context management, ensuring agents stay within the 1M token limit without losing critical architectural info ([REQ-SYS-001]).
-- **`MemoryRefresher`**: Periodic background task that summarizes Epic progress into Long-term memory.
+- **[2_TAS-REQ-027] `VectorStore`**: LanceDB integration for long-term project-wide constraints and architectural decisions ([TAS-011]).
+- **[2_TAS-REQ-028] `ContextPruner`**: Sophisticated logic for sliding-window context management, ensuring agents stay within the 1M token limit without losing critical architectural info ([REQ-SYS-001]).
+- **[2_TAS-REQ-029] `MemoryRefresher`**: Periodic background task that summarizes Epic progress into Long-term memory.
 
 #### 4.2.5 **[TAS-101] @devs/mcp** (Communication Protocols)
 Standardizes how the system talks to itself and the generated project.
-- **`OrchestratorServer`**: An MCP server that exposes the internal state of `devs` to the VSCode UI.
-- **`ProjectServerTemplate`**: The blueprint for the MCP server that is injected into every generated project to enable "Agent-Ready" debugging ([REQ-GOAL-004]).
-- **`ToolProxy`**: Bridges tool calls from the LLM to the `devs-sandbox` execution layer.
+- **[2_TAS-REQ-030] `OrchestratorServer`**: An MCP server that exposes the internal state of `devs` to the VSCode UI.
+- **[2_TAS-REQ-031] `ProjectServerTemplate`**: The blueprint for the MCP server that is injected into every generated project to enable "Agent-Ready" debugging ([REQ-GOAL-004]).
+- **[2_TAS-REQ-032] `ToolProxy`**: Bridges tool calls from the LLM to the `devs-sandbox` execution layer.
 
 #### 4.2.6 **[TAS-102] @devs/cli & @devs/vscode** (User Interfaces)
-- **`CLIController`**: Handles command-line arguments, environment setup, and terminal-based progress reporting.
-- **`ExtensionHost`**: The VSCode extension wrapper, managing the Webview lifecycle and real-time trace streaming.
+- **[2_TAS-REQ-033] `CLIController`**: Handles command-line arguments, environment setup, and terminal-based progress reporting.
+- **[2_TAS-REQ-034] `ExtensionHost`**: The VSCode extension wrapper, managing the Webview lifecycle and real-time trace streaming.
 
 ### 4.3 Component Communication Patterns
 
@@ -395,15 +395,15 @@ The orchestrator follows a **[TAS-103] cyclical graph** with the following prima
 
 ### 7.1 `DevsServer` (System Control)
 Provides tools for external interfaces (VSCode/CLI) to interact with the orchestrator:
-*   `get_project_status()`: Returns requirement fulfillment and task progress.
-*   `inject_directive(text)`: Adds a human-in-the-loop constraint to the active task.
-*   `rewind_to_task(taskId)`: Rolls back the git state and SQLite state.
+*   **[2_TAS-REQ-006] `get_project_status()`**: Returns requirement fulfillment and task progress.
+*   **[2_TAS-REQ-007] `inject_directive(text)`**: Adds a human-in-the-loop constraint to the active task.
+*   **[2_TAS-REQ-008] `rewind_to_task(taskId)`**: Rolls back the git state and SQLite state.
 
 ### 7.2 `ProjectServer` (Agentic Observability)
 Injected into every project generated by 'devs'. Located at `/mcp-server/`.
-*   `inspect_state(path)`: Reads runtime variables or database state of the generated app.
-*   `run_profiler(duration)`: Captures CPU/Memory traces to identify bottlenecks.
-*   `execute_query(sql)`: Allows the agent to verify data persistence during TDD.
+*   **[2_TAS-REQ-009] `inspect_state(path)`**: Reads runtime variables or database state of the generated app.
+*   **[2_TAS-REQ-010] `run_profiler(duration)`**: Captures CPU/Memory traces to identify bottlenecks.
+*   **[2_TAS-REQ-011] `execute_query(sql)`**: Allows the agent to verify data persistence during TDD.
 
 ---
 
@@ -607,9 +607,9 @@ interface SAOP_Envelope {
     }
     ```
 *   **`scripts/`**:
-    *   `bootstrap-sandbox.sh`: Prepares the Docker/WebContainer environment.
-    *   `run-mcp.sh`: Utility to start the project's internal MCP server.
-    *   `validate-all.sh`: Runs the full verification suite (Lint, Build, Test).
+    *   **[2_TAS-REQ-012] `bootstrap-sandbox.sh`**: Prepares the Docker/WebContainer environment.
+    *   **[2_TAS-REQ-013] `run-mcp.sh`**: Utility to start the project's internal MCP server.
+    *   **[2_TAS-REQ-014] `validate-all.sh`**: Runs the full verification suite (Lint, Build, Test).
 
 ### 10.8 Edge Cases & Technical Risks
 - **[RISK-601] Monorepo Complexity**: If the project evolves into a monorepo (e.g., `apps/` and `packages/`), the `.devs/` and `.agent/` directories MUST remain at the root, but `catalog.json` must support multi-package mapping.
