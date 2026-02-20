@@ -414,6 +414,8 @@ class Phase4AExtractRequirements(BasePhase):
             
             if result.returncode != 0:
                 print(f"\n[!] Error extracting requirements from {doc['name']}.")
+                print(result.stdout)
+                print(result.stderr)
                 sys.exit(1)
             
             print(f"   -> Verifying extraction for {doc['name']}...")
@@ -730,12 +732,22 @@ class Orchestrator:
                 if e.code == 0:
                     return
                 print(f"\n[!] Phase {phase.__class__.__name__} failed on attempt {attempt}.")
+                if attempt < max_retries:
+                    action = input("Press ENTER to restore workspace and retry, or type 'q' to quit: ")
+                    if action.lower() == 'q':
+                        sys.exit(1)
+                
                 print(f"   -> Restoring workspace...")
                 subprocess.run(["git", "restore", "."], cwd=self.ctx.root_dir, check=False)
                 subprocess.run(["git", "clean", "-fd"], cwd=self.ctx.root_dir, check=False)
                 self.ctx.state = self.ctx._load_state()
             except Exception as e:
                 print(f"\n[!] Phase {phase.__class__.__name__} encountered an error on attempt {attempt}: {e}")
+                if attempt < max_retries:
+                    action = input("Press ENTER to restore workspace and retry, or type 'q' to quit: ")
+                    if action.lower() == 'q':
+                        sys.exit(1)
+                        
                 print(f"   -> Restoring workspace...")
                 subprocess.run(["git", "restore", "."], cwd=self.ctx.root_dir, check=False)
                 subprocess.run(["git", "clean", "-fd"], cwd=self.ctx.root_dir, check=False)
