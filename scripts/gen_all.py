@@ -609,21 +609,51 @@ class Orchestrator:
     def __init__(self, ctx: ProjectContext):
         self.ctx = ctx
 
+    def run_phase_with_retry(self, phase, commit_msg: str, max_retries: int = 3):
+        for attempt in range(1, max_retries + 1):
+            if attempt > 1:
+                print(f"\n   [Retry {attempt}/{max_retries}] Retrying {phase.__class__.__name__}...")
+                
+            try:
+                phase.execute(self.ctx)
+                print(f"   -> Phase {phase.__class__.__name__} completed. Committing changes...")
+                subprocess.run(["git", "add", "."], cwd=self.ctx.root_dir, check=False)
+                subprocess.run(["git", "commit", "-m", commit_msg], cwd=self.ctx.root_dir, check=False)
+                return
+            except SystemExit as e:
+                # Some verify scripts might return 0 through sys.exit() on success
+                if e.code == 0:
+                    return
+                print(f"\n[!] Phase {phase.__class__.__name__} failed on attempt {attempt}.")
+                print(f"   -> Restoring workspace...")
+                subprocess.run(["git", "restore", "."], cwd=self.ctx.root_dir, check=False)
+                subprocess.run(["git", "clean", "-fd"], cwd=self.ctx.root_dir, check=False)
+                self.ctx.state = self.ctx._load_state()
+            except Exception as e:
+                print(f"\n[!] Phase {phase.__class__.__name__} encountered an error on attempt {attempt}: {e}")
+                print(f"   -> Restoring workspace...")
+                subprocess.run(["git", "restore", "."], cwd=self.ctx.root_dir, check=False)
+                subprocess.run(["git", "clean", "-fd"], cwd=self.ctx.root_dir, check=False)
+                self.ctx.state = self.ctx._load_state()
+                
+        print(f"\n[!] {phase.__class__.__name__} failed after {max_retries} attempts.")
+        sys.exit(1)
+
     def run(self):
         print("Beginning multi-phase document generation and lifecycle orchestration...")
         self.ctx.backup_ignore_file()
         try:
             # Phase 1 and 2 for each document
             for doc in DOCS:
-                Phase1GenerateDoc(doc).execute(self.ctx)
-                Phase2FleshOutDoc(doc).execute(self.ctx)
+                self.run_phase_with_retry(Phase1GenerateDoc(doc), f"Auto-commit: Generate {doc['name']}")
+                self.run_phase_with_retry(Phase2FleshOutDoc(doc), f"Auto-commit: Flesh out {doc['name']}")
 
-            Phase3FinalReview().execute(self.ctx)
-            Phase4AExtractRequirements().execute(self.ctx)
-            Phase4BMergeRequirements().execute(self.ctx)
-            Phase4COrderRequirements().execute(self.ctx)
-            Phase5GenerateEpics().execute(self.ctx)
-            Phase6BreakDownTasks().execute(self.ctx)
+            self.run_phase_with_retry(Phase3FinalReview(), "Auto-commit: Final alignment review")
+            self.run_phase_with_retry(Phase4AExtractRequirements(), "Auto-commit: Extract all requirements")
+            self.run_phase_with_retry(Phase4BMergeRequirements(), "Auto-commit: Merge requirements")
+            self.run_phase_with_retry(Phase4COrderRequirements(), "Auto-commit: Order requirements")
+            self.run_phase_with_retry(Phase5GenerateEpics(), "Auto-commit: Generate epics/phases")
+            self.run_phase_with_retry(Phase6BreakDownTasks(), "Auto-commit: Break down tasks")
             #Phase7TDDLoop().execute(self.ctx)
         finally:
             self.ctx.restore_ignore_file()
