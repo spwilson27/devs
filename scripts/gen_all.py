@@ -612,13 +612,18 @@ class Phase6BreakDownTasks(BasePhase):
                     
                 # Create a filesystem safe name for the sub-epic
                 safe_name = re.sub(r'[^a-zA-Z0-9_\-]+', '_', sub_epic_name.lower())
-                target_filename = f"{phase_id}_{safe_name}.md"
+                # E.g. tasks/phase_1/01_project_planning.md
+                target_filename = os.path.join(phase_id, f"{safe_name}.md")
                 
                 if target_filename in ctx.state["tasks_generated"]:
                     print(f"      -> Skipping task {target_filename} (already generated).")
                     continue
                     
                 print(f"      -> Breaking down '{sub_epic_name}' ({len(reqs)} reqs) into {target_filename}...")
+                
+                # Ensure the subdirectory exists
+                phase_task_dir = os.path.join(tasks_dir, phase_id)
+                os.makedirs(phase_task_dir, exist_ok=True)
                 
                 reqs_str = json.dumps(reqs)
                 tasks_prompt = ctx.format_prompt(tasks_prompt_tmpl, 
