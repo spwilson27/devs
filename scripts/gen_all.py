@@ -746,7 +746,8 @@ class Orchestrator:
             self.run_phase_with_retry(Phase4BMergeRequirements(), "Auto-commit: Merge requirements")
             self.run_phase_with_retry(Phase4COrderRequirements(), "Auto-commit: Order requirements")
             self.run_phase_with_retry(Phase5GenerateEpics(), "Auto-commit: Generate epics/phases")
-            self.run_phase_with_retry(Phase6BreakDownTasks(), "Auto-commit: Break down tasks")
+            #self.run_phase_with_retry(Phase6BreakDownTasks(), "Auto-commit: Break down tasks")
+            Phase6BreakDownTasks()
             #Phase7TDDLoop().execute(self.ctx)
         finally:
             self.ctx.restore_ignore_file()
