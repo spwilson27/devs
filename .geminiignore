@@ -1,5 +1,6 @@
 /*
 !/.sandbox/
 !/requirements/
+!/requirements.md
+!/specs/
 !/scripts/verify_requirements.py
-!/specs/4_user_features.md
