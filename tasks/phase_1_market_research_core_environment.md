@@ -1,0 +1,19 @@
+# Tasks for Market Research Core & Environment (Phase: phase_1.md)
+
+## Covered Requirements
+- [REQ-MR-CORE], [REQ-MR-001], [REQ-MR-002], [REQ-MR-003], [REQ-MR-004], [REQ-MR-005]
+
+### Task Checklist
+- [ ] **Subtask 1: Core Project Workspace & Pillar Setup (REQ-MR-CORE)**: Initialize the `devs` project as a TypeScript monorepo. Configure `tsconfig.json` with strict type-checking and `rootDir/outDir` settings. Setup `eslint` and `prettier` with rules that enforce the "Architecture-Driven Development" (ADD) pillar, specifically prohibiting "magic" exports or undocumented side effects. Create the base directory structure: `src/core`, `src/mcp`, `src/agents`, `src/cli`, and `packages/vscode-extension`.
+- [ ] **Subtask 2: MCP SDK Integration & Server Foundation (REQ-MR-001)**: Install and configure the `@modelcontextprotocol/sdk`. Implement a base `MCPServer` class in `src/mcp/server.ts` that supports both stdio and SSE transports. Define a standard `ToolRegistry` that allows other `devs` components to dynamically register capabilities that will be exposed to LLM agents.
+- [ ] **Subtask 3: Glass-Box Tracing & Observability Engine (REQ-MR-002)**: Implement a centralized `GlassBoxTracer` in `src/core/observability/`. This engine must capture every agent reasoning step (Thought), tool execution (Action), and result (Observation). Traces should be stored in a local, append-only JSONL file within the `.devs/logs` directory. Create an MCP Resource `devs://trace/current` to allow external tools (like the VSCode extension) to stream these logs in real-time.
+- [ ] **Subtask 4: TDD Infrastructure & Test-First Enforcement (REQ-MR-003)**: Setup `vitest` as the primary test runner. Implement a "pre-commit" or "pre-task-completion" hook using `simple-git-hooks` or a custom script that mandates 100% test coverage for any new code added to `src/core`. Create a base `TDDWorkshop` class that agents must use to execute their "Red-Green-Refactor" cycles in an isolated environment.
+- [ ] **Subtask 5: VSCode Extension Scaffolding (REQ-MR-004)**: Generate the initial VSCode extension boilerplate in `packages/vscode-extension`. Configure the `package.json` to include the `devs.dashboard` view container. Implement a basic `ExtensionHost` that can communicate with the `devs` core process via a local socket or MCP.
+- [ ] **Subtask 6: CLI Framework & HITL Intervention Loop (REQ-MR-005)**: Setup a CLI using `commander.js`. Implement a `devs dev` command that starts the orchestrator. Crucially, implement a `HumanInterventionManager` that can pause execution and wait for a user signal (`SIGUSR1` or a specific file flag in `.devs/state`) before proceeding with the next phase or epic, fulfilling the "Human-in-the-loop" requirement.
+- [ ] **Subtask 7: Environment Configuration for Zero-Retention (REQ-MR-CORE)**: Implement a `ConfigManager` that reads from `.env` and `devs.config.json`. Add a mandatory `zero_retention_mode` flag that, when enabled, prevents the `GlassBoxTracer` from writing to disk or sending data to any external telemetry, ensuring enterprise compliance.
+
+### Testing & Verification
+- [ ] **Unit Tests for MCP Server**: Build vitest suites to verify that the MCP server correctly registers tools and handles JSON-RPC requests without crashing.
+- [ ] **Observability Verification**: Run a mock agent task and verify that the `GlassBoxTracer` generates a valid JSONL trace containing at least one `Thought` and one `Action` entry.
+- [ ] **HITL Workflow Validation**: Execute the CLI `dev` command and verify that the process enters a "PAUSED" state and successfully resumes upon user intervention (e.g., pressing 'Enter' or writing to the state file).
+- [ ] **TDD Gate Check**: Intentionally add a new function without a corresponding test and verify that the TDD enforcement script correctly identifies the coverage gap and blocks completion.

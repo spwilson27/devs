@@ -1,31 +1,136 @@
 {
-  "Research Management Strategy": ["REQ-RES-PLAN", "REQ-RES-001", "REQ-RES-002"],
-  "Research Tooling & Execution": ["REQ-RES-003", "REQ-RES-004", "REQ-RES-005"],
-  "Feature Hierarchy Definition": ["REQ-MAP-001", "REQ-MAP-002", "REQ-MAP-003"],
-  "Dependency & Traceability Mapping": ["REQ-MAP-004", "REQ-MAP-005", "REQ-MAP-006"],
-  "Roadmap & Milestone Definition": ["REQ-PLAN-001", "REQ-PLAN-002", "REQ-PLAN-003"],
-  "Resource & Risk Planning": ["REQ-PLAN-004", "REQ-PLAN-005"],
-  "Market Research Core Framework": ["REQ-MR-CORE", "REQ-MR-001", "REQ-MR-002"],
-  "Industry & Ecosystem Analysis": ["REQ-MR-003", "REQ-MR-004", "REQ-MR-005"],
-  "Market Trend Identification": ["REQ-MR-006", "REQ-MR-007", "REQ-MR-008"],
-  "Target Audience Segmentation": ["REQ-MR-009", "REQ-MR-010", "REQ-MR-011"],
-  "Market Opportunity Assessment": ["REQ-MR-012", "REQ-MR-013", "REQ-MR-014", "REQ-MR-015"],
-  "User Research Core Framework": ["REQ-UR-CORE", "REQ-UR-001", "REQ-UR-002"],
-  "User Persona Development": ["REQ-UR-003", "REQ-UR-004", "REQ-UR-005"],
-  "User Journey Mapping": ["REQ-UR-006", "REQ-UR-007", "REQ-UR-008"],
-  "Pain Point Identification": ["REQ-UR-009", "REQ-UR-010", "REQ-UR-011"],
-  "User Needs Prioritization": ["REQ-UR-012", "REQ-UR-013", "REQ-UR-014"],
-  "UX Validation & Feedback": ["REQ-UR-015", "REQ-UR-016", "REQ-UR-017"],
-  "Behavioral & Interaction Analysis": ["REQ-UR-018", "REQ-UR-019", "REQ-UR-020"],
-  "Persona Needs Core Definition": ["REQ-NEED-CORE", "REQ-NEED-AGENT-01", "REQ-NEED-AGENT-02", "REQ-NEED-AGENT-03"],
-  "Architect & Developer Needs": ["REQ-NEED-ARCH-01", "REQ-NEED-ARCH-02", "REQ-NEED-ARCH-03", "REQ-NEED-DEVS-01"],
-  "Developer & Domain Needs": ["REQ-NEED-DEVS-02", "REQ-NEED-DEVS-03", "REQ-NEED-DOMAIN-01", "REQ-NEED-DOMAIN-02"],
-  "Maker & Domain Specialist Needs": ["REQ-NEED-DOMAIN-03", "REQ-NEED-MAKER-01", "REQ-NEED-MAKER-02", "REQ-NEED-MAKER-03"],
-  "Competitive Analysis Core Strategy": ["REQ-COMP-CORE", "REQ-COMP-001", "REQ-COMP-002", "REQ-COMP-003"],
-  "Competitor Identification & Profiling": ["REQ-COMP-004", "REQ-COMP-005", "REQ-COMP-006", "REQ-COMP-007"],
-  "Feature Parity Assessment": ["REQ-COMP-008", "REQ-COMP-009", "REQ-COMP-010", "REQ-COMP-011"],
-  "Pricing & Business Model Analysis": ["REQ-COMP-012", "REQ-COMP-013", "REQ-COMP-014", "REQ-COMP-015"],
-  "Technical Stack Comparison": ["REQ-COMP-016", "REQ-COMP-017", "REQ-COMP-018", "REQ-COMP-019"],
-  "UX & Design Competitive Benchmarking": ["REQ-COMP-020", "REQ-COMP-021", "REQ-COMP-022", "REQ-COMP-023"],
-  "SWOT & Competitive Positioning": ["REQ-COMP-024", "REQ-COMP-025", "REQ-COMP-026", "REQ-COMP-027"]
+  "Research Strategy & Execution": [
+    "REQ-RES-PLAN",
+    "REQ-RES-001",
+    "REQ-RES-002",
+    "REQ-RES-003",
+    "REQ-RES-004",
+    "REQ-RES-005"
+  ],
+  "Feature Mapping & Project Planning": [
+    "REQ-MAP-001",
+    "REQ-MAP-002",
+    "REQ-MAP-003",
+    "REQ-MAP-004",
+    "REQ-MAP-005"
+  ],
+  "Detailed Project Planning": [
+    "REQ-MAP-006",
+    "REQ-PLAN-001",
+    "REQ-PLAN-002",
+    "REQ-PLAN-003",
+    "REQ-PLAN-004",
+    "REQ-PLAN-005"
+  ],
+  "Market Research Core & Environment": [
+    "REQ-MR-CORE",
+    "REQ-MR-001",
+    "REQ-MR-002",
+    "REQ-MR-003",
+    "REQ-MR-004",
+    "REQ-MR-005"
+  ],
+  "Market Analysis & Trends": [
+    "REQ-MR-006",
+    "REQ-MR-007",
+    "REQ-MR-008",
+    "REQ-MR-009",
+    "REQ-MR-010"
+  ],
+  "Market Risks & Opportunities": [
+    "REQ-MR-011",
+    "REQ-MR-012",
+    "REQ-MR-013",
+    "REQ-MR-014",
+    "REQ-MR-015"
+  ],
+  "User Research Core & Demographics": [
+    "REQ-UR-CORE",
+    "REQ-UR-001",
+    "REQ-UR-002",
+    "REQ-UR-003",
+    "REQ-UR-004",
+    "REQ-UR-005"
+  ],
+  "User Behaviors & Pain Points": [
+    "REQ-UR-006",
+    "REQ-UR-007",
+    "REQ-UR-008",
+    "REQ-UR-009",
+    "REQ-UR-010"
+  ],
+  "User Journey Mapping": [
+    "REQ-UR-011",
+    "REQ-UR-012",
+    "REQ-UR-013",
+    "REQ-UR-014",
+    "REQ-UR-015"
+  ],
+  "User Feedback & Validation": [
+    "REQ-UR-016",
+    "REQ-UR-017",
+    "REQ-UR-018",
+    "REQ-UR-019",
+    "REQ-UR-020"
+  ],
+  "Persona Needs: Agentic & Architectural": [
+    "REQ-NEED-CORE",
+    "REQ-NEED-AGENT-01",
+    "REQ-NEED-AGENT-02",
+    "REQ-NEED-AGENT-03",
+    "REQ-NEED-ARCH-01"
+  ],
+  "Persona Needs: Developer & Design": [
+    "REQ-NEED-ARCH-02",
+    "REQ-NEED-ARCH-03",
+    "REQ-NEED-DEVS-01",
+    "REQ-NEED-DEVS-02",
+    "REQ-NEED-DEVS-03"
+  ],
+  "Persona Needs: Domain & Maker": [
+    "REQ-NEED-DOMAIN-01",
+    "REQ-NEED-DOMAIN-02",
+    "REQ-NEED-DOMAIN-03",
+    "REQ-NEED-MAKER-01",
+    "REQ-NEED-MAKER-02",
+    "REQ-NEED-MAKER-03"
+  ],
+  "Competitive Analysis Core & Competitors": [
+    "REQ-COMP-CORE",
+    "REQ-COMP-001",
+    "REQ-COMP-002",
+    "REQ-COMP-003",
+    "REQ-COMP-004",
+    "REQ-COMP-005"
+  ],
+  "Competitive Feature Parity": [
+    "REQ-COMP-006",
+    "REQ-COMP-007",
+    "REQ-COMP-008",
+    "REQ-COMP-009",
+    "REQ-COMP-010"
+  ],
+  "Competitive Pricing & Positioning": [
+    "REQ-COMP-011",
+    "REQ-COMP-012",
+    "REQ-COMP-013",
+    "REQ-COMP-014",
+    "REQ-COMP-015"
+  ],
+  "Competitive SWOT Analysis": [
+    "REQ-COMP-016",
+    "REQ-COMP-017",
+    "REQ-COMP-018",
+    "REQ-COMP-019",
+    "REQ-COMP-020"
+  ],
+  "Competitive Strategy & Differentiation": [
+    "REQ-COMP-021",
+    "REQ-COMP-022",
+    "REQ-COMP-023",
+    "REQ-COMP-024",
+    "REQ-COMP-025",
+    "REQ-COMP-026",
+    "REQ-COMP-027"
+  ]
 }
