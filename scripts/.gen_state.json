@@ -106,7 +106,8 @@
         ]
     },
     "extracted_requirements": [
-        "1_prd"
+        "1_prd",
+        "2_tas"
     ],
     "final_review_completed": true,
     "requirements_extracted": false,
