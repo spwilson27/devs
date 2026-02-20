@@ -94,10 +94,10 @@ def verify_phases(master_file, phases_dir):
     missing = master_reqs - phases_reqs
     
     if not missing:
-        print(f"Success: All {len(master_reqs)} requirements from {master_file} are mapped to a phase in {phases_target}.")
+        print(f"Success: All {len(master_reqs)} requirements from {master_file} are mapped to a phase in {phases_dir}.")
         return 0
     else:
-        print(f"FAILED: The following {len(missing)} requirements are NOT mapped to any phase in {phases_target}:")
+        print(f"FAILED: The following {len(missing)} requirements are NOT mapped to any phase in {phases_dir}:")
         for req in sorted(missing):
             print(f"  - [{req}]")
         return 1
