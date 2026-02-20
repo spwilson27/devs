@@ -66,15 +66,10 @@ class ProjectContext:
         self.description_ctx = self._load_description()
 
     def _load_state(self) -> Dict[str, Any]:
-        if os.path.exists(self.state_file):
-            with open(self.state_file, "r") as f:
-                try:
-                    return json.load(f)
-                except json.JSONDecodeError:
-                    pass
-        return {
+        state = {
             "generated": [], 
             "fleshed_out": [], 
+            "fleshed_out_headers": {},
             "extracted_requirements": [],
             "final_review_completed": False,
             "requirements_extracted": False,
@@ -84,6 +79,14 @@ class ProjectContext:
             "tasks_completed": False,
             "tdd_completed": False
         }
+        if os.path.exists(self.state_file):
+            with open(self.state_file, "r") as f:
+                try:
+                    loaded = json.load(f)
+                    state.update(loaded)
+                except json.JSONDecodeError:
+                    pass
+        return state
 
     def save_state(self):
         with open(self.state_file, "w") as f:
@@ -277,12 +280,21 @@ class Phase2FleshOutDoc(BasePhase):
         headers = ctx.parse_markdown_headers(expected_file)
         flesh_prompt_tmpl = ctx.load_prompt("flesh_out.md")
         
+        ctx.state.setdefault("fleshed_out_headers", {})
+        ctx.state["fleshed_out_headers"].setdefault(self.doc["id"], [])
+        
         for header in headers:
-            if header.strip() == "":
+            header_clean = header.strip()
+            if header_clean == "":
                 continue
-            print(f"   -> [Phase 2: Flesh Out Section] {header} in {self.doc['name']} ...")
+                
+            if header_clean in ctx.state["fleshed_out_headers"][self.doc["id"]]:
+                print(f"   -> [Phase 2: Flesh Out Section] Skipping '{header_clean}' in {self.doc['name']} (already fleshed out).")
+                continue
+                
+            print(f"   -> [Phase 2: Flesh Out Section] {header_clean} in {self.doc['name']} ...")
             flesh_prompt = flesh_prompt_tmpl.format(
-                header=header.strip(),
+                header=header_clean,
                 target_path=target_path,
                 description_ctx=ctx.description_ctx,
                 accumulated_context=accumulated_context
@@ -293,10 +305,13 @@ class Phase2FleshOutDoc(BasePhase):
             result = ctx.run_gemini(flesh_prompt, ignore_content, allowed_files=allowed_files)
             
             if result.returncode != 0:
-                print(f"\n[!] Error fleshing out section {header} in {self.doc['name']}.")
+                print(f"\n[!] Error fleshing out section {header_clean} in {self.doc['name']}.")
                 print(result.stdout)
                 print(result.stderr)
                 sys.exit(1)
+            
+            ctx.state["fleshed_out_headers"][self.doc["id"]].append(header_clean)
+            ctx.save_state()
         
         ctx.state.setdefault("fleshed_out", []).append(self.doc["id"])
         ctx.save_state()
