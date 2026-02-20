@@ -116,10 +116,12 @@
         "4_user_features",
         "5_security_design",
         "6_ui_ux_architecture",
-        "7_ui_ux_design"
+        "7_ui_ux_design",
+        "8_risks_mitigation",
+        "9_project_roadmap"
     ],
     "final_review_completed": true,
-    "requirements_extracted": false,
+    "requirements_extracted": true,
     "requirements_merged": false,
     "requirements_ordered": false,
     "phases_completed": false,

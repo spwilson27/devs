@@ -33,13 +33,13 @@ The order of operations is governed by the following critical dependencies:
 
 ### 1.4 Gated Autonomy & Human-in-the-Loop (HITL)
 The roadmap incorporates five "Hard Gates" where the orchestrator suspends execution until a human user issues a `RESUME` directive via the CLI or VSCode:
-1.  **The Research Gate (Post-Phase 3)**: Approval of the Research Suite (Market, Tech, Comp, User).
-2.  **The Blueprint Gate (Post-Phase 4)**: Approval of the PRD and TAS. This freezes the architectural DNA.
-3.  **The Roadmap Gate (Post-Phase 5)**: Approval of the 8-16 Epics and 200+ Tasks. This authorizes the implementation spend.
-4.  **The Epic Start Gate**: User review of the upcoming tasks at the beginning of each Epic.
-5.  **The Final Validation Gate (Post-Phase 8)**: The "Zero-Defect" audit before the project is marked as `COMPLETED`.
+1.  **The Research Gate (Post-Phase 3)**: Approval of the Research Suite (Market, Tech, Comp, User). [REQ-ROAD-001]
+2.  **The Blueprint Gate (Post-Phase 4)**: Approval of the PRD and TAS. This freezes the architectural DNA. [REQ-ROAD-002]
+3.  **The Roadmap Gate (Post-Phase 5)**: Approval of the 8-16 Epics and 200+ Tasks. This authorizes the implementation spend. [REQ-ROAD-003]
+4.  **The Epic Start Gate**: User review of the upcoming tasks at the beginning of each Epic. [REQ-ROAD-004]
+5.  **The Final Validation Gate (Post-Phase 8)**: The "Zero-Defect" audit before the project is marked as `COMPLETED`. [REQ-ROAD-005]
 
-Additionally, the **Task Failure Gate (HITL Recovery)** is triggered if an agent hits the entropy limit.
+Additionally, the **Task Failure Gate (HITL Recovery)** is triggered if an agent hits the entropy limit. [REQ-ROAD-006]
 
 ### 1.5 Technical Unknowns & Execution Risks
 - **Context Management**: Can the `ContextPruner` (Phase 1) effectively manage the 1M+ token context of Gemini 3 Pro during 50+ turn implementation tasks without losing architectural focus?
@@ -120,22 +120,22 @@ graph TD
 
 ### 2.1 Stage Transitions & State Logic
 
-1.  **Discovery-to-Architecture (P3 -> P4)**: The transition occurs once the Research Manager Agent confirms that confidence scores for Market, Tech, and Competitive reports exceed 85%. If scores are low, the system triggers a "Deep Search" recursive turn.
-2.  **The Blueprint Gate (Gate 1)**: This is a blocking synchronous wait. The orchestrator persists the current LangGraph checkpoint to SQLite and enters a `WAITING_FOR_USER` state. Implementation cannot begin until a signed `approval_token` is written to the `documents` table.
-3.  **The Distillation Compiler (P5)**: Phase 5 acts as a "Compiler" for the project. It validates that 100% of the `Must-have` requirements in the PRD are mapped to at least one task in the DAG. Any "Orphaned Requirements" trigger an automated re-distillation turn.
+1.  **Discovery-to-Architecture (P3 -> P4)**: The transition occurs once the Research Manager Agent confirms that confidence scores for Market, Tech, and Competitive reports exceed 85%. If scores are low, the system triggers a "Deep Search" recursive turn. [REQ-ROAD-007]
+2.  **The Blueprint Gate (Gate 1)**: This is a blocking synchronous wait. The orchestrator persists the current LangGraph checkpoint to SQLite and enters a `WAITING_FOR_USER` state. Implementation cannot begin until a signed `approval_token` is written to the `documents` table. [REQ-ROAD-008]
+3.  **The Distillation Compiler (P5)**: Phase 5 acts as a "Compiler" for the project. It validates that 100% of the `Must-have` requirements in the PRD are mapped to at least one task in the DAG. Any "Orphaned Requirements" trigger an automated re-distillation turn. [REQ-ROAD-009]
 4.  **The TDD implementation Loop (P6)**:
-    *   **Context Injection**: Every turn in the loop is preceded by a `ContextRefresh` where the `ContextPruner` ensures the 1M token window contains the PRD, TAS, and the active task requirements.
-    *   **The Red-Phase Gate**: A task MUST fail its test in the sandbox before implementation begins. This prevents "hallucination-driven success" where an agent claims a task is done without verifying it.
-    *   **Entropy Detection**: The system hashes the last 3 terminal outputs. If hashes match, the `EntropyDetector` interrupts the loop and invokes a `PivotAgent` to rethink the implementation strategy from first principles.
-5.  **Multi-Agent Verification (ReviewNode)**: Verification is performed by a separate agent instance with a "Hostile Auditor" prompt. It validates:
+    *   **Context Injection**: Every turn in the loop is preceded by a `ContextRefresh` where the `ContextPruner` ensures the 1M token window contains the PRD, TAS, and the active task requirements. [REQ-ROAD-010]
+    *   **The Red-Phase Gate**: A task MUST fail its test in the sandbox before implementation begins. This prevents "hallucination-driven success" where an agent claims a task is done without verifying it. [REQ-ROAD-011]
+    *   **Entropy Detection**: The system hashes the last 3 terminal outputs. If hashes match, the `EntropyDetector` interrupts the loop and invokes a `PivotAgent` to rethink the implementation strategy from first principles. [REQ-ROAD-012]
+5.  **Multi-Agent Verification (ReviewNode)**: Verification is performed by a separate agent instance with a "Hostile Auditor" prompt. It validates: [REQ-ROAD-013]
     *   **Functional Integrity**: All tests in the Epic pass.
     *   **Architectural Fidelity**: No unapproved libraries or pattern violations (checked against TAS).
     *   **Documentation Density**: Presence of `.agent.md` files for new modules.
 
 ### 2.2 Persistence & Recovery Protocol
 
-*   **ACID State Transitions**: Every node transition in the diagram (e.g., `Green` to `Sandbox2`) is recorded as a LangGraph checkpoint in SQLite. If the process is killed mid-turn, the system resumes from the exact same "Thought" or "Action" turn.
-*   **Git-SQLite Correlation**: Every `CommitNode` execution updates the `tasks` table with the `git_commit_hash`. This allows the "Time-Travel" feature (`devs rewind`) to perfectly synchronize the filesystem and the database.
+*   **ACID State Transitions**: Every node transition in the diagram (e.g., `Green` to `Sandbox2`) is recorded as a LangGraph checkpoint in SQLite. If the process is killed mid-turn, the system resumes from the exact same "Thought" or "Action" turn. [REQ-ROAD-014]
+*   **Git-SQLite Correlation**: Every `CommitNode` execution updates the `tasks` table with the `git_commit_hash`. This allows the "Time-Travel" feature (`devs rewind`) to perfectly synchronize the filesystem and the database. [REQ-ROAD-015]
 
 ### 2.3 Critical Path & Edge Cases
 
@@ -321,46 +321,47 @@ Phase 5 is the **Logical Bridge** between human-approved blueprints and machine-
 To ensure the "Glass-Box" integrity and prevent cascading failures, each phase must satisfy a rigorous set of entry and exit criteria. No phase transition is permitted until 100% of its "Definition of Done" (DoD) requirements are met and persisted in the `state.sqlite` audit log.
 
 ### 5.1 [DOD-P1] Foundation (The Brain)
-*   **State Integrity**: `SQLiteSaver` must pass "Chaos Testing" (simulated process kills during high-frequency writes) with 0% state corruption.
-*   **Schema Validation**: All 7 core tables (projects, documents, requirements, epics, tasks, agent_logs, entropy_events) must support ACID transactions.
-*   **SAOP Compliance**: The `Structured Agent-Orchestrator Protocol` must validate 100% of agent envelopes against the versioned JSON schema.
-*   **Memory Efficiency**: `ContextPruner` must successfully compress a 1M token context into a <200k token summary without losing P3 (Must-have) requirements.
+*   **State Integrity**: `SQLiteSaver` must pass "Chaos Testing" (simulated process kills during high-frequency writes) with 0% state corruption. [REQ-ROAD-016]
+*   **Schema Validation**: All 7 core tables (projects, documents, requirements, epics, tasks, agent_logs, entropy_events) must support ACID transactions. [REQ-ROAD-017]
+*   **SAOP Compliance**: The `Structured Agent-Orchestrator Protocol` must validate 100% of agent envelopes against the versioned JSON schema. [REQ-ROAD-018]
+*   **Memory Efficiency**: `ContextPruner` must successfully compress a 1M token context into a <200k token summary without losing P3 (Must-have) requirements. [REQ-ROAD-019]
 
 ### 5.2 [DOD-P2] Execution (The Hands)
-*   **Sandbox Isolation**: 100% of unauthorized network egress attempts must be blocked and logged.
-*   **Redaction Accuracy**: `SecretMasker` must achieve >99.9% recall on a benchmark of 500+ diverse secrets (API keys, SSH tokens).
-*   **Surgical Precision**: `surgical_edit` tool must pass the "Large File Refactor" test, applying 20+ non-contiguous edits without breaking syntax.
-*   **MCP Handshake**: 100% success rate for agent-to-tool handshakes via the `@modelcontextprotocol/sdk`.
+*   **Sandbox Isolation**: 100% of unauthorized network egress attempts must be blocked and logged. [REQ-ROAD-020]
+*   **Redaction Accuracy**: `SecretMasker` must achieve >99.9% recall on a benchmark of 500+ diverse secrets (API keys, SSH tokens). [REQ-ROAD-021]
+*   **Surgical Precision**: `surgical_edit` tool must pass the "Large File Refactor" test, applying 20+ non-contiguous edits without breaking syntax. [REQ-ROAD-022]
+*   **MCP Handshake**: 100% success rate for agent-to-tool handshakes via the `@modelcontextprotocol/sdk`. [REQ-ROAD-023]
 
 ### 5.3 [DOD-P3] Discovery (The Eyes)
-*   **Parallelization**: `ResearchManager` must handle 3+ concurrent search/extract streams without thread starvation or rate-limit lockouts.
-*   **Source Credibility**: 100% of cited facts in research reports must be linked to a verifiable URL with a `Confidence Score` > 0.8.
-*   **Content Extraction**: `ContentExtractor` must successfully convert SPA/Dynamic sites into clean Markdown, stripping 100% of navigation/ad noise.
+*   **Parallelization**: `ResearchManager` must handle 3+ concurrent search/extract streams without thread starvation or rate-limit lockouts. [REQ-ROAD-024]
+*   **Source Credibility**: 100% of cited facts in research reports must be linked to a verifiable URL with a `Confidence Score` > 0.8. [REQ-ROAD-025]
+*   **Content Extraction**: `ContentExtractor` must successfully convert SPA/Dynamic sites into clean Markdown, stripping 100% of navigation/ad noise. [REQ-ROAD-026]
 
 ### 5.4 [DOD-P4] Synthesis (The Blueprint)
-*   **Document Validity**: PRD, TAS, Security, and UI/UX docs must pass the Markdown linting suite and be stored as `APPROVED` version 1.0.
-*   **Visual Correctness**: 100% of Mermaid.js diagrams (ERD, Sequence) must render without syntax errors in the `MermaidHost`.
-*   **Architectural Traceability**: Every requirement in the PRD must be linked to at least one interface contract in the TAS.
+*   **Document Validity**: PRD, TAS, Security, and UI/UX docs must pass the Markdown linting suite and be stored as `APPROVED` version 1.0. [REQ-ROAD-027]
+*   **Visual Correctness**: 100% of Mermaid.js diagrams (ERD, Sequence) must render without syntax errors in the `MermaidHost`. [REQ-ROAD-028]
+*   **Architectural Traceability**: Every requirement in the PRD must be linked to at least one interface contract in the TAS. [REQ-ROAD-029]
 
 ### 5.5 [DOD-P5] Planning (The Strategy)
-*   **Requirement Coverage**: The `RTI` (Requirement Traceability Index) must be 1.0. 100% of requirements must be mapped to Task IDs.
-*   **DAG Determinism**: The Task DAG must be a Directed Acyclic Graph with zero cycles and clear dependency paths.
-*   **Cost Heuristics**: The `TokenEstimate` must be within 25% of actual usage for the "Foundation" milestone benchmark.
+*   **Requirement Coverage**: The `RTI` (Requirement Traceability Index) must be 1.0. 100% of requirements must be mapped to Task IDs. [REQ-ROAD-030]
+*   **DAG Determinism**: The Task DAG must be a Directed Acyclic Graph with zero cycles and clear dependency paths. [REQ-ROAD-031]
+*   **Cost Heuristics**: The `TokenEstimate` must be within 25% of actual usage for the "Foundation" milestone benchmark. [REQ-ROAD-032]
 
 ### 5.6 [DOD-P6] Implementation (The Loop)
-*   **TDD Fidelity**: 100% of tasks must pass the "Red-Phase Gate" (empirical verification of a failing test).
-*   **Reviewer Autonomy**: The Reviewer Agent must successfully catch and revert at least one "Deliberate Anti-Pattern" (e.g., hardcoded secret) in the implementation.
-*   **Entropy Prevention**: `EntropyDetector` must pause the orchestrator within 1 turn of a detected hash-match loop.
+*   **TDD Fidelity**: 100% of tasks must pass the "Red-Phase Gate" (empirical verification of a failing test). [REQ-ROAD-033]
+*   **Reviewer Autonomy**: The Reviewer Agent must successfully catch and revert at least one "Deliberate Anti-Pattern" (e.g., hardcoded secret) in the implementation. [REQ-ROAD-034]
+*   **Entropy Prevention**: `EntropyDetector` must pause the orchestrator within 1 turn of a detected hash-match loop. [REQ-ROAD-035]
 
 ### 5.7 [DOD-P7] Interface (The Lens)
-*   **Real-time Streaming**: VSCode Webview must maintain 60FPS during high-frequency log updates from Gemini 3 Flash.
-*   **State Synchronization**: 0ms desync between CLI TUI and VSCode UI when both are active on the same `.devs` folder.
-*   **Rewind Fidelity**: `devs rewind` must restore the filesystem and SQLite state to a previous Task ID with 100% checksum match.
+*   **Real-time Streaming**: VSCode Webview must maintain 60FPS during high-frequency log updates from Gemini 3 Flash. [REQ-ROAD-036]
+*   **State Synchronization**: 0ms desync between CLI TUI and VSCode UI when both are active on the same `.devs` folder. [REQ-ROAD-037]
+*   **Rewind Fidelity**: `devs rewind` must restore the filesystem and SQLite state to a previous Task ID with 100% checksum match. [REQ-ROAD-038]
 
 ### 5.8 [DOD-P8] Optimization (The Polish)
-*   **Self-Host Success**: 'devs' must successfully implement a minor feature for its own core orchestrator using the autonomous P6 loop.
-*   **Global Audit**: Final "Full Project Validation" must run all tests (unit, integration, e2e) in a clean, non-persistent sandbox with 100% pass rate.
-*   **AOD Density**: 1:1 ratio between production modules and `.agent.md` documentation files.
+*   **Self-Host Success**: 'devs' must successfully implement a minor feature for its own core orchestrator using the autonomous P6 loop. [REQ-ROAD-039]
+*   **Global Audit**: Final "Full Project Validation" must run all tests (unit, integration, e2e) in a clean, non-persistent sandbox with 100% pass rate. [REQ-ROAD-040]
+*   **AOD Density**: 1:1 ratio between production modules and `.agent.md` documentation files. [REQ-ROAD-041]
+*   **Global Validation**: Implementation of "Global Validation" phase for full project requirement audit. [REQ-ROAD-042]
 
 ## 6. Research Spikes & Technical Unknowns
 
