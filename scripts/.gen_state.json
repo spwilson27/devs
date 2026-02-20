@@ -117,7 +117,7 @@
         "9_project_roadmap"
     ],
     "final_review_completed": true,
-    "requirements_extracted": false,
+    "requirements_extracted": true,
     "requirements_merged": false,
     "requirements_ordered": false,
     "phases_completed": false,
