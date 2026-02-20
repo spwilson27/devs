@@ -585,17 +585,15 @@ class Phase6BreakDownTasks(BasePhase):
             group_filepath = os.path.join(tasks_dir, group_filename)
             allowed_files = [group_filepath]
             
-            if phase_id in ctx.state.get("ordered_phases_generated", []):
-                print(f"   -> Skipping {phase_filename}: Already grouped.")
-            else:
+            if phase_id not in ctx.state.get("ordered_phases_generated", []):
                 group_result = ctx.run_gemini(grouping_prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
             
-            if group_result.returncode != 0:
-                print(f"\n[!] Error grouping tasks for {phase_filename}.")
-                print(group_result.stdout)
-                print(group_result.stderr)
-                sys.exit(1)
-                
+                if group_result.returncode != 0:
+                    print(f"\n[!] Error grouping tasks for {phase_filename}.")
+                    print(group_result.stdout)
+                    print(group_result.stderr)
+                    sys.exit(1)
+                    
                 if not os.path.exists(group_filepath):
                     print(f"\n[!] Error: Agent failed to generate grouping JSON file {group_filepath}.")
                     sys.exit(1)
@@ -607,6 +605,8 @@ class Phase6BreakDownTasks(BasePhase):
                         print(f"\n[!] Error parsing grouping JSON file {group_filepath}: {e}")
                         sys.exit(1)
                 ctx.state["ordered_phases_generated"].append(phase_id)
+            else:
+                print(f"   -> Skipping {phase_filename}: Already grouped.")
                 
             print(f"   -> Found {len(sub_epics)} Sub-Epic groupings for {phase_filename}.")
             
