@@ -536,18 +536,30 @@ class Phase6BreakDownTasks(BasePhase):
             print("Task generation already completed.")
             return
             
-        print("\n=> [Phase 6: Break Down Tasks] Generating tasks.md...")
+        print("\n=> [Phase 6: Break Down Tasks] Generating detailed tasks/")
         tasks_prompt_tmpl = ctx.load_prompt("tasks.md")
         tasks_prompt = ctx.format_prompt(tasks_prompt_tmpl, description_ctx=ctx.description_ctx)
-        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/phases.md\n!/tasks.md\n"
+        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/phases/\n!/tasks/\n!/scripts/verify_requirements.py\n"
         
-        allowed_files = [os.path.join(ctx.root_dir, "tasks.md")]
+        tasks_dir = os.path.join(ctx.root_dir, "tasks")
+        os.makedirs(tasks_dir, exist_ok=True)
+        allowed_files = [tasks_dir + os.sep]
         result = ctx.run_gemini(tasks_prompt, ignore_content, allowed_files=allowed_files)
         
         if result.returncode != 0:
             print("\n[!] Error generating tasks.")
             print(result.stdout)
             print(result.stderr)
+            sys.exit(1)
+            
+        print("\n   -> Verifying tasks/ covers all requirements from phases/...")
+        verify_res = subprocess.run(
+            [sys.executable, "scripts/verify_requirements.py", "--verify-tasks", "phases/", "tasks/"],
+            capture_output=True, text=True, cwd=ctx.root_dir
+        )
+        if verify_res.returncode != 0:
+            print("\n[!] Automated verification failed: Not all requirements mapped to actionable tasks:")
+            print(verify_res.stdout)
             sys.exit(1)
             
         ctx.state["tasks_completed"] = True

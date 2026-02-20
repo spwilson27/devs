@@ -101,6 +101,39 @@ def verify_phases(master_file, phases_target):
             print(f"  - [{req}]")
         return 1
 
+def verify_tasks(phases_dir, tasks_dir):
+    """Verifies that all requirements mapped in the phases directory exist in the tasks directory."""
+    print(f"Verifying {tasks_dir} covers all requirements mapped in {phases_dir}...")
+    
+    phases_reqs = set()
+    if os.path.isdir(phases_dir):
+        for filename in os.listdir(phases_dir):
+            if filename.endswith(".md"):
+                file_path = os.path.join(phases_dir, filename)
+                phases_reqs.update(parse_requirements(file_path))
+    else:
+        phases_reqs = parse_requirements(phases_dir)
+        
+    tasks_reqs = set()
+    if os.path.isdir(tasks_dir):
+        for filename in os.listdir(tasks_dir):
+            if filename.endswith(".md"):
+                file_path = os.path.join(tasks_dir, filename)
+                tasks_reqs.update(parse_requirements(file_path))
+    else:
+        tasks_reqs = parse_requirements(tasks_dir)
+        
+    missing = phases_reqs - tasks_reqs
+    
+    if not missing:
+        print(f"Success: All {len(phases_reqs)} requirements from {phases_dir} are mapped to a task in {tasks_dir}.")
+        return 0
+    else:
+        print(f"FAILED: The following {len(missing)} requirements are NOT mapped to any task in {tasks_dir}:")
+        for req in sorted(missing):
+            print(f"  - [{req}]")
+        return 1
+
 def verify_ordered(master_file, ordered_file):
     """Verifies that all ACTIVE requirements from the master list exist in the ordered document."""
     print(f"Verifying {ordered_file} covers all active requirements in {master_file}...")
@@ -147,6 +180,8 @@ def main():
                         help="Verify that all requirements in MASTER_FILE are mapped within PHASES_FILE")
     parser.add_argument("--verify-ordered", nargs=2, metavar=("MASTER_FILE", "ORDERED_FILE"),
                         help="Verify that all ACTIVE requirements in MASTER_FILE are mapped within ORDERED_FILE")
+    parser.add_argument("--verify-tasks", nargs=2, metavar=("PHASES_DIR", "TASKS_DIR"),
+                        help="Verify that all requirements in PHASES_DIR are mapped within TASKS_DIR")
     
     args = parser.parse_args()
     
@@ -174,6 +209,10 @@ def main():
     elif args.verify_ordered:
         master_file, ordered_file = args.verify_ordered
         exit_code = verify_ordered(master_file, ordered_file)
+        
+    elif args.verify_tasks:
+        phases_dir, tasks_dir = args.verify_tasks
+        exit_code = verify_tasks(phases_dir, tasks_dir)
         
     else:
         parser.print_help()
