@@ -122,10 +122,11 @@ def verify_tasks(phases_dir, tasks_dir):
         print(f"Error: Directory not found or not a directory: {tasks_dir}")
         return 1
 
-    for filename in os.listdir(tasks_dir):
-        if filename.endswith(".md"):
-            file_path = os.path.join(tasks_dir, filename)
-            tasks_reqs.update(parse_requirements(file_path))
+    for root, _, files in os.walk(tasks_dir):
+        for filename in files:
+            if filename.endswith(".md"):
+                file_path = os.path.join(root, filename)
+                tasks_reqs.update(parse_requirements(file_path))
         
     missing = phases_reqs - tasks_reqs
     

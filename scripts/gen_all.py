@@ -626,17 +626,17 @@ class Phase6BreakDownTasks(BasePhase):
                     
                 # Create a filesystem safe name for the sub-epic
                 safe_name = re.sub(r'[^a-zA-Z0-9_\-]+', '_', sub_epic_name.lower())
-                # E.g. tasks/phase_1/01_project_planning.md
-                target_filename = os.path.join(phase_id, f"{safe_name}.md")
+                # E.g. tasks/phase_1/01_project_planning/
+                target_dir = os.path.join(phase_id, f"{safe_name}")
                 
-                if target_filename in ctx.state["tasks_generated"]:
-                    print(f"      -> Skipping task {target_filename} (already generated).")
+                if target_dir in ctx.state["tasks_generated"]:
+                    print(f"      -> Skipping task generation for {target_dir} (already generated).")
                     continue
                     
-                print(f"      -> Breaking down '{sub_epic_name}' ({len(reqs)} reqs) into {target_filename}...")
+                print(f"      -> Breaking down '{sub_epic_name}' ({len(reqs)} reqs) into {target_dir}/...")
                 
                 # Ensure the subdirectory exists
-                phase_task_dir = os.path.join(tasks_dir, phase_id)
+                phase_task_dir = os.path.join(tasks_dir, target_dir)
                 os.makedirs(phase_task_dir, exist_ok=True)
                 
                 reqs_str = json.dumps(reqs)
@@ -645,20 +645,20 @@ class Phase6BreakDownTasks(BasePhase):
                                                  phase_filename=phase_filename,
                                                  sub_epic_name=sub_epic_name,
                                                  sub_epic_reqs=reqs_str,
-                                                 target_filename=target_filename)
+                                                 target_dir=target_dir)
                 
                 ignore_content = f"/*\n!/.sandbox/\n!/requirements.md\n!/phases/\n!/tasks/\n!/scripts/verify_requirements.py\n"
                 
-                allowed_files = [os.path.join(tasks_dir, target_filename)]
+                allowed_files = [phase_task_dir + os.sep]
                 result = ctx.run_gemini(tasks_prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
                 
                 if result.returncode != 0:
-                    print(f"\n[!] Error generating tasks for {target_filename}.")
+                    print(f"\n[!] Error generating tasks for {target_dir}.")
                     print(result.stdout)
                     print(result.stderr)
                     sys.exit(1)
                     
-                ctx.state["tasks_generated"].append(target_filename)
+                ctx.state["tasks_generated"].append(target_dir)
                 ctx.save_state()
             
         print("\n   -> Verifying tasks/ covers all requirements from phases/...")
