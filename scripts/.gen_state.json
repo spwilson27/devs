@@ -105,7 +105,9 @@
             "## 5. Phase Transition Checkpoints (Definition of Done)"
         ]
     },
-    "extracted_requirements": [],
+    "extracted_requirements": [
+        "1_prd"
+    ],
     "final_review_completed": true,
     "requirements_extracted": false,
     "requirements_merged": false,
