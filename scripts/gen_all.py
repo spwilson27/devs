@@ -15,15 +15,15 @@ DOCS = [
     {"id": "user_research", "type": "research", "name": "User Research Report", "desc": "Analyze potential users and create a user research report.", "prompt_file": "research_user_research.md"},
     
     # Specs
-    {"id": "prd", "type": "spec", "name": "PRD (Product Requirements Document)", "desc": "Create a Product Requirements Document (PRD).", "prompt_file": "spec_doc.md"},
-    {"id": "tas", "type": "spec", "name": "TAS (Technical Architecture Specification)", "desc": "Create a Technical Architecture Specification (TAS).", "prompt_file": "spec_doc.md"},
-    {"id": "mcp_design", "type": "spec", "name": "MCP and AI Development Design", "desc": "Create an MCP and AI Development Design document.", "prompt_file": "spec_doc.md"},
-    {"id": "user_features", "type": "spec", "name": "User Features", "desc": "Create a User Features document describing user journeys and expectations.", "prompt_file": "spec_doc.md"},
-    {"id": "security_design", "type": "spec", "name": "Security Design", "desc": "Create a Security Design document detailing risks and security architectures.", "prompt_file": "spec_doc.md"},
-    {"id": "ui_ux_architecture", "type": "spec", "name": "UI/UX Architecture", "desc": "Create a UI/UX Architecture document.", "prompt_file": "spec_doc.md"},
-    {"id": "ui_ux_design", "type": "spec", "name": "UI/UX Design", "desc": "Create a UI/UX Design document.", "prompt_file": "spec_doc.md"},
-    {"id": "risks_mitigation", "type": "spec", "name": "Risks and Mitigation", "desc": "Create a Risks and Mitigation document.", "prompt_file": "spec_doc.md"},
-    {"id": "project_roadmap", "type": "spec", "name": "Project Roadmap", "desc": "Create a Project Roadmap.", "prompt_file": "spec_doc.md"}
+    {"id": "1_prd", "type": "spec", "name": "PRD (Product Requirements Document)", "desc": "Create a Product Requirements Document (PRD).", "prompt_file": "spec_doc.md"},
+    {"id": "2_tas", "type": "spec", "name": "TAS (Technical Architecture Specification)", "desc": "Create a Technical Architecture Specification (TAS).", "prompt_file": "spec_doc.md"},
+    {"id": "3_mcp_design", "type": "spec", "name": "MCP and AI Development Design", "desc": "Create an MCP and AI Development Design document.", "prompt_file": "spec_doc.md"},
+    {"id": "4_user_features", "type": "spec", "name": "User Features", "desc": "Create a User Features document describing user journeys and expectations.", "prompt_file": "spec_doc.md"},
+    {"id": "5_security_design", "type": "spec", "name": "Security Design", "desc": "Create a Security Design document detailing risks and security architectures.", "prompt_file": "spec_doc.md"},
+    {"id": "6_ui_ux_architecture", "type": "spec", "name": "UI/UX Architecture", "desc": "Create a UI/UX Architecture document.", "prompt_file": "spec_doc.md"},
+    {"id": "7_ui_ux_design", "type": "spec", "name": "UI/UX Design", "desc": "Create a UI/UX Design document.", "prompt_file": "spec_doc.md"},
+    {"id": "8_risks_mitigation", "type": "spec", "name": "Risks and Mitigation", "desc": "Create a Risks and Mitigation document.", "prompt_file": "spec_doc.md"},
+    {"id": "9_project_roadmap", "type": "spec", "name": "Project Roadmap", "desc": "Create a Project Roadmap.", "prompt_file": "spec_doc.md"}
 ]
 
 class GeminiRunner:

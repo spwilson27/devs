@@ -13,9 +13,15 @@ It accomplishes this by using a series of agents to:
   - Create a technology landscape report
   - Create a user research report
 2. Develop a detailed set of high level documents (PRD, TAS, MCP Arch, etc.)
+  - For each document: Prompt AI to flesh out the phase of the document
 3. Distill documents into a complete list of requirements
-4. Generate a series of high level ordered project phases (epics) tied which meet all requirements
+  - For each document: Distill document into a list of requirements
+  - Merge requirements from all documents
+  - Order requirements by dependencies
+4. Generate a series of high level ordered project phases (epics) tied which meet all requirements (expect around 8-16 phases)
 5. Break phases into atomic tasks, which must meet all requirements for the given phase
+  - For each phase: Break phase into atomic tasks (Ideally around 25+ per phase)
+  - For each phase: Review the broken down tasks to ensure all requirements are met
 6. Finally iterate through tasks performing a rigorous test-driven development cycle for each task including:
    a. Initial Test written
    b. Task Implementation
