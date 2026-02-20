@@ -204,6 +204,13 @@ class ProjectContext:
     def strip_thinking_tags(self, filepath: str):
         if not os.path.exists(filepath):
             return
+            
+        if os.path.isdir(filepath):
+            for filename in os.listdir(filepath):
+                if filename.endswith(".md"):
+                    self.strip_thinking_tags(os.path.join(filepath, filename))
+            return
+            
         with open(filepath, "r", encoding="utf-8") as f:
             content = f.read()
             
