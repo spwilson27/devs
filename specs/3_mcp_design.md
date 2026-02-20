@@ -311,7 +311,7 @@ The 'devs' system implements a comprehensive observability suite designed to ens
 ### 4.7 Root Cause Analysis (RCA) and Failure Reporting
 When a task fails, the system performs an automated RCA to provide the user with actionable insights.
 
-- **RCA Turn**: A **Gemini 1.5 Pro** instance (the Reviewer) analyzes the `agent_logs` and the `Suspended Sandbox` to identify the root cause (e.g., "Dependency Conflict," "Ambiguous PRD Requirement," "Sandbox Permission Denied").
+- **RCA Turn**: A **Gemini 3 Pro** instance (the Reviewer) analyzes the `agent_logs` and the `Suspended Sandbox` to identify the root cause (e.g., "Dependency Conflict," "Ambiguous PRD Requirement," "Sandbox Permission Denied").
 - **Failure Report**: The system generates a Markdown report containing:
     - The specific **REQ-ID** that failed.
     - A summary of the agent's "Thinking" before the failure.
@@ -359,11 +359,11 @@ Long-term memory is the "Source of Truth" for the entire project, persisted sema
 - **Decision Log Indexing**: Every architectural decision made during Phase 2 (Design) is vectorized, allowing the Developer Agent to ask "Why was X chosen over Y?" during implementation.
 
 ### 5.5 Context Pruning, Summarization, and Refresh [TAS-024, REQ-SYS-001]
-To manage the 1M token context window of Gemini 1.5 Pro efficiently, the orchestrator implements a "Sliding Relevance Window."
+To manage the 1M token context window of Gemini 3 Pro efficiently, the orchestrator implements a "Sliding Relevance Window."
 
 - **[TAS-049] Trigger Thresholds**:
     - **Warning**: At 600k tokens, the system flags the task for "Context Compression."
-    - **Action**: At 800k tokens, the orchestrator triggers a **Gemini 1.5 Flash** "Compression Turn."
+    - **Action**: At 800k tokens, the orchestrator triggers a **Gemini 3 Flash** "Compression Turn."
 - **Compression Logic**:
     1.  Turns 1 through (N-10) are summarized into a structured Markdown "History Log."
     2.  The original tool observations (which are the largest part of the context) are discarded from the active window but remain in `state.sqlite`.

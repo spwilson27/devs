@@ -53,12 +53,12 @@ The 'devs' system is built on five non-negotiable architectural pillars that ens
 *   **Rate Limiting & Token Management**: The system must gracefully handle LLM API rate limits, implementing exponential backoff and prioritizing critical reasoning tasks over routine code reviews.
 *   **State Persistence & Recovery**: Every state change (from requirement distillation to task completion) must be persisted locally. The system must be able to resume from any point after a crash, network failure, or user-initiated pause.
 *   **Conflict Resolution**: In cases where the Reviewer Agent and Developer Agent disagree, the system must either attempt an automated resolution turn or escalate to the user.
-*   **Context Window Optimization**: Despite the large context window of Gemini 1.5 Pro, the system must implement efficient context pruning to ensure that the most relevant information (current task requirements, relevant file context, and architectural constraints) is prioritized.
+*   **Context Window Optimization**: Despite the large context window of Gemini 3 Pro, the system must implement efficient context pruning to ensure that the most relevant information (current task requirements, relevant file context, and architectural constraints) is prioritized.
 *   **Dependency Management**: The system must ensure that agents do not introduce conflicting or insecure third-party dependencies during the implementation phase.
 
 ### 1.5 Risks & Unknowns
 
-*   **Risk**: **Reasoning Depth Limits**. While Gemini 1.5 Pro is highly capable, extremely complex architectural patterns might still require human intervention to guide the agent.
+*   **Risk**: **Reasoning Depth Limits**. While Gemini 3 Pro is highly capable, extremely complex architectural patterns might still require human intervention to guide the agent.
 *   **Risk**: **Token Costs**. End-to-end project generation involves high token counts. The system must provide cost estimates and monitoring.
 *   **Risk**: **Sandbox Escape**. While sandboxing is a requirement, ensuring 100% isolation from the host system while allowing necessary tool access is a non-trivial engineering challenge.
 *   **Unknown**: **Performance of Agentic Profiling**. The effectiveness of using agents to profile and optimize code via MCP is an experimental area and may require significant tuning.
@@ -249,9 +249,9 @@ This is the core execution engine. It MUST be deterministic and resilient.
 *   **[REQ-SYS-002] Crash Recovery**:
     *   The orchestrator MUST be fully stateless. Any interruption (power loss, network drop) MUST allow for a `devs resume` that picks up at the exact same task and state.
 *   **[REQ-SYS-003] Multi-Model Orchestration**:
-    *   **Architect Agent**: MUST use Gemini 1.5 Pro (High Reasoning).
-    *   **Developer Agent**: MUST use Gemini 1.5 Pro (Complex Implementation).
-    *   **Reviewer/Linter Agent**: MAY use Gemini 1.5 Flash (Speed & Cost Efficiency).
+    *   **Architect Agent**: MUST use Gemini 3 Pro (High Reasoning).
+    *   **Developer Agent**: MUST use Gemini 3 Pro (Complex Implementation).
+    *   **Reviewer/Linter Agent**: MAY use Gemini 3 Flash (Speed & Cost Efficiency).
 *   **[REQ-SYS-004] Agentic Profiling via MCP**:
     *   The generated project MUST support an MCP server that allows the developer agent to run the code, capture performance traces, and inspect variables during the TDD loop.
 
@@ -385,8 +385,8 @@ Scaling to 200+ tasks requires efficient management of LLM context and system re
     - While leveraging Gemini's 1M+ token window, the system MUST implement a "Sliding Relevance Window."
     - Older task logs and reasoning MUST be summarized and moved to "Medium-term Memory" (Vector DB) to keep the active context window focused on the TAS, PRD, and current task requirements.
 *   **[REQ-PERF-002] Tiered Model Orchestration**: 
-    - **Tier 1 (Pro)**: Gemini 1.5 Pro used for Research, Architecture, and Task Implementation.
-    - **Tier 2 (Flash)**: Gemini 1.5 Flash used for routine Code Review, Linting, and simple Unit Test generation to minimize latency and cost.
+    - **Tier 1 (Pro)**: Gemini 3 Pro used for Research, Architecture, and Task Implementation.
+    - **Tier 2 (Flash)**: Gemini 3 Flash used for routine Code Review, Linting, and simple Unit Test generation to minimize latency and cost.
 *   **[REQ-PERF-003] Parallel Task Execution**: 
     - The orchestrator MUST identify independent tasks within the same Epic and execute them in parallel sandboxes where possible, respecting the Dependency DAG.
 
@@ -442,7 +442,7 @@ To ensure 'devs' meets the high standards of a "Virtual Engineering Team," succe
 
 *   **[REQ-MET-008] Token-to-Value Ratio (TVR)**:
     *   **Definition**: Total USD cost of LLM tokens consumed per successfully completed Task.
-    *   **Target**: < $1.50 per task (average) using the Tiered Model Orchestration (Gemini 1.5 Pro/Flash mix).
+    *   **Target**: < $1.50 per task (average) using the Tiered Model Orchestration (Gemini 3 Pro/Flash mix).
 *   **[REQ-MET-009] Sandbox Provisioning Latency**:
     *   **Definition**: Time from Task assignment to "Sandbox Ready" state (including dependency warm-up).
     *   **Target**: < 30 seconds for local Docker; < 10 seconds for WebContainers.
@@ -500,6 +500,6 @@ To ensure 'devs' meets the high standards of a "Virtual Engineering Team," succe
 *   **[REQ-OOS-016] Browser/OS-Specific Polyfilling & Quirk-Handling**: No support for legacy browser polyfills (e.g., IE11) or handling of non-standard, version-specific operating system quirks unless explicitly defined in the TAS.
 *   **[REQ-OOS-017] 3D Modeling, Texturing & Game Asset Pipelines**: The system does NOT generate 3D meshes, textures, animation rigging, or spatial audio assets.
 *   **[REQ-OOS-018] Formal Cryptographic & Smart Contract Auditing**: No formal verification of smart contracts or high-stakes cryptographic primitives beyond standard unit testing protocols.
-*   **[REQ-OOS-019] Full Offline Operational Mode**: Due to the reliance on high-reasoning LLMs (Gemini 1.5 Pro), an active internet connection for API communication is a hard requirement.
+*   **[REQ-OOS-019] Full Offline Operational Mode**: Due to the reliance on high-reasoning LLMs (Gemini 3 Pro), an active internet connection for API communication is a hard requirement.
 *   **[REQ-OOS-020] Project Hosting & PaaS Functionality**: 'devs' is a development orchestrator, not a hosting provider. It does NOT provide any platform-as-a-service (PaaS) capabilities for the generated code.
 

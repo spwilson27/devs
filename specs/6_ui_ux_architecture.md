@@ -28,7 +28,7 @@ The interface for "Makers" and CI/CD integration, prioritizing speed and scripta
 *   **[UI-ARCH-003] Interface-Core Decoupling (The "Thin UI" Rule)**: The UI layers MUST remain strictly observational. No business logic, agent state transitions, or requirement distillation logic is permitted in the presentation packages. All state transformations must occur in `@devs/core`.
 *   **[UI-ARCH-004] Theme-Aware Styling**: The VSCode Extension MUST NOT hardcode colors. It MUST utilize the standard VSCode CSS variables (e.g., `--vscode-editor-background`) to ensure perfect legibility across Dark, Light, and High-Contrast themes.
 *   **[UI-ARCH-005] Sub-Second State Hydration**: The UI MUST be reactive. It utilizes a dedicated "Event Stream" (WebSockets in CLI, `postMessage` in VSCode) to reflect the underlying SQLite state transitions.
-*   **[UI-ARCH-020] Message Throttling**: The UI MUST implement a throttling mechanism (max 60fps) for agent thought streams. High-frequency updates from Gemini 1.5 Flash MUST NOT block the UI main thread or cause "input lag" in the VSCode editor.
+*   **[UI-ARCH-020] Message Throttling**: The UI MUST implement a throttling mechanism (max 60fps) for agent thought streams. High-frequency updates from Gemini 3 Flash MUST NOT block the UI main thread or cause "input lag" in the VSCode editor.
 *   **[UI-ARCH-021] Bundle Size Constraints**: The Webview bundle MUST be optimized for load speed. Heavy visualization libraries (Mermaid, D3) SHOULD be lazy-loaded only when the user navigates to the Roadmap or Spec views.
 
 ### 1.3 Communication Bridge & Protocol
@@ -197,7 +197,7 @@ The UI maintains a "Mirror State" of the orchestrator through a robust event-dri
 4.  **Reconciliation**: The Zustand store merges the delta. React components subscribed to that specific entity ID re-render.
 
 #### 3.2.2 Throttling & Batching (The 60FPS Rule)
-**[UI-STATE-005] Update Batching**: During high-velocity implementation tasks (e.g., Gemini 1.5 Flash logs), the `@devs/core` orchestrator MUST NOT emit individual character-level updates. It MUST batch thought chunks every 32ms (targeting 30fps) to prevent the VSCode `postMessage` bridge from saturating.
+**[UI-STATE-005] Update Batching**: During high-velocity implementation tasks (e.g., Gemini 3 Flash logs), the `@devs/core` orchestrator MUST NOT emit individual character-level updates. It MUST batch thought chunks every 32ms (targeting 30fps) to prevent the VSCode `postMessage` bridge from saturating.
 **[UI-STATE-006] Selective Reactivity**: The `ThoughtStreamer` component uses a "Selector-based" subscription to Zustand. It only re-renders when the `active_turn_content` for its specific `task_id` changes.
 
 ### 3.3 Zustand Store Design & Slicing

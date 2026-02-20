@@ -278,7 +278,7 @@ The 'devs' design system is engineered for **Architectural Cohesion** with the V
 - **Threading**: Heavy canvas updates (DAG layout) MUST be offloaded to a Web Worker to ensure that the React main thread remains responsive for user input.
 
 **[UI-DES-049.1] Interaction Unknowns & Risks**:
-- **Risk [RISK-DES-040]**: High-frequency updates from Gemini 1.5 Flash could lead to "Stuttering" if animations are too complex. *Mitigation*: Implementation of a global "Animation Throttler" that drops frames if the CPU usage exceeds 30%.
+- **Risk [RISK-DES-040]**: High-frequency updates from Gemini 3 Flash could lead to "Stuttering" if animations are too complex. *Mitigation*: Implementation of a global "Animation Throttler" that drops frames if the CPU usage exceeds 30%.
 - **Unknown [UNK-DES-041]**: Should the "Thinking Pulse" be color-coded based on model confidence? *Recommendation*: No, keep it neutral; use the `LogTerminal` for confidence scores to avoid visual noise.
 
 ---

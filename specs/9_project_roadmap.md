@@ -42,7 +42,7 @@ The roadmap incorporates five "Hard Gates" where the orchestrator suspends execu
 Additionally, the **Task Failure Gate (HITL Recovery)** is triggered if an agent hits the entropy limit.
 
 ### 1.5 Technical Unknowns & Execution Risks
-- **Context Management**: Can the `ContextPruner` (Phase 1) effectively manage the 1M+ token context of Gemini 1.5 Pro during 50+ turn implementation tasks without losing architectural focus?
+- **Context Management**: Can the `ContextPruner` (Phase 1) effectively manage the 1M+ token context of Gemini 3 Pro during 50+ turn implementation tasks without losing architectural focus?
 - **Sandbox Parity**: Will `WebContainers` (Phase 2) provide enough syscall coverage for complex backend projects (e.g., PostgreSQL/Redis mock-ups) within the VSCode Web environment?
 - **Agentic Entropy**: Will the `EntropyDetector` (Phase 6) be sensitive enough to detect subtle "logical loops" where an agent is not repeating an error but is failing to make progress on a requirement?
 
@@ -158,7 +158,7 @@ The implementation of 'devs' is divided into 8 discrete phases, each adding a la
     - **[TASK-102]** Schema design for SQLite `state.sqlite` (projects, documents, requirements, epics, tasks, agent_logs, entropy_events).
     - **[TASK-103]** Implement `SQLiteSaver` checkpointer for ACID-compliant state snapshots, ensuring zero data loss on process crash.
     - **[TASK-104]** Integrate LanceDB for vectorized Long-term Memory (Project DNA, Architectural Decisions).
-    - **[TASK-105]** Develop the `ContextPruner` utilizing Gemini 1.5 Flash for summarizing intermediate reasoning turns (1M context window management).
+    - **[TASK-105]** Develop the `ContextPruner` utilizing Gemini 3 Flash for summarizing intermediate reasoning turns (1M context window management).
     - **[TASK-106]** Implement the SAOP (Structured Agent-Orchestrator Protocol) parser and validator.
 - **Technical Requirements**: [REQ-SYS-002], [REQ-SYS-003], [REQ-MAP-002], [TAS-010], [TAS-011].
 - **Edge Cases & Failure Modes**:
@@ -205,7 +205,7 @@ The implementation of 'devs' is divided into 8 discrete phases, each adding a la
 ### **[ROAD-004]** Phase 4: Documentation & Blueprinting Agents
 **Objective**: Generate authoritative blueprints (PRD/TAS) that guide the development process.
 - **Detailed Tasks**:
-    - **[TASK-401]** Implement `ArchitectAgent` (Gemini 1.5 Pro) for PRD and TAS generation.
+    - **[TASK-401]** Implement `ArchitectAgent` (Gemini 3 Pro) for PRD and TAS generation.
     - **[TASK-402]** Build Mermaid.js auto-generator for ERDs, Sequence Diagrams, and Site Maps.
     - **[TASK-403]** Implement specialized Security Design and UI/UX Architecture agents.
     - **[TASK-404]** Develop the "Wait-for-Approval" HITL gate logic in LangGraph.
@@ -353,7 +353,7 @@ To ensure the "Glass-Box" integrity and prevent cascading failures, each phase m
 *   **Entropy Prevention**: `EntropyDetector` must pause the orchestrator within 1 turn of a detected hash-match loop.
 
 ### 5.7 [DOD-P7] Interface (The Lens)
-*   **Real-time Streaming**: VSCode Webview must maintain 60FPS during high-frequency log updates from Gemini 1.5 Flash.
+*   **Real-time Streaming**: VSCode Webview must maintain 60FPS during high-frequency log updates from Gemini 3 Flash.
 *   **State Synchronization**: 0ms desync between CLI TUI and VSCode UI when both are active on the same `.devs` folder.
 *   **Rewind Fidelity**: `devs rewind` must restore the filesystem and SQLite state to a previous Task ID with 100% checksum match.
 

@@ -54,7 +54,7 @@ graph TB
         Checkpointer[ACID Checkpointer]
     end
 
-    subgraph "Agent Suite (Gemini 1.5 Pro/Flash)"
+    subgraph "Agent Suite (Gemini 3 Pro/Flash)"
         ResAgent[Research Agent]
         ArchAgent[Architect Agent]
         Distiller[Requirement Distiller]
@@ -115,8 +115,8 @@ The "Glass-Box" is implemented via:
 *   **[TAS-006] Package Manager**: `pnpm` v9.x. Leverages a monorepo workspace structure for core logic, CLI, and extension packages, utilizing content-addressable storage to minimize disk footprint across project sandboxes.
 
 ### 2.2 LLM & Multi-Agent Orchestration
-*   **[TAS-007] Primary Reasoning Model**: Google Gemini 1.5 Pro. Leveraged for its 1M+ token context window, enabling the ingestion of massive research reports and entire codebases without loss of detail. Used for high-level research, architectural design, and complex implementation tasks.
-*   **[TAS-008] Utility & Review Model**: Google Gemini 1.5 Flash. Employed for low-latency tasks including code linting, unit test generation, and real-time summarization of agent execution logs.
+*   **[TAS-007] Primary Reasoning Model**: Google Gemini 3 Pro. Leveraged for its 1M+ token context window, enabling the ingestion of massive research reports and entire codebases without loss of detail. Used for high-level research, architectural design, and complex implementation tasks.
+*   **[TAS-008] Utility & Review Model**: Google Gemini 3 Flash. Employed for low-latency tasks including code linting, unit test generation, and real-time summarization of agent execution logs.
 *   **[TAS-009] Orchestration Engine**: `LangGraph.js`. Orchestrates the multi-agent workflow as a stateful, cyclical graph.
     *   **Persistence**: Custom `SQLiteSaver` implementation ensures every node transition is persisted to the local `.devs/state.sqlite` database.
     *   **Interrupts**: Native support for "Gated Autonomy" checkpoints, allowing for human-in-the-loop approvals at Phase 2 and 3.

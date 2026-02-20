@@ -250,7 +250,7 @@ The Application Security Controls (ASC) represent the technical enforcement laye
     - **Regex Suite**: A library of 100+ patterns covering AWS Keys, Stripe Tokens, GCP Service Accounts, SSH Private Keys, and JWTs.
     - **Entropy Detection**: Any contiguous string of 20+ characters with a Shannon Entropy score > 4.5 is flagged for redaction.
 - **[SEC-051] Phase 2: Contextual Validation (Flash-Model)**:
-    - Flagged strings are sent to a local `Gemini 1.5 Flash` instance with a specific "Classifier" prompt. The model determines if the string is a legitimate secret or a safe technical artifact (e.g., a SHA-256 hash of a file).
+    - Flagged strings are sent to a local `Gemini 3 Flash` instance with a specific "Classifier" prompt. The model determines if the string is a legitimate secret or a safe technical artifact (e.g., a SHA-256 hash of a file).
 - **[SEC-052] Phase 3: Replacement & Hashing**:
     - Detected secrets are replaced with a deterministic placeholder: `[REDACTED_<TYPE>_<SHORT_HASH>]`. This allows the agent to recognize that a secret exists and is consistent across turns without seeing the value.
 - **[SEC-053] Input Redaction (Tool Call Protection)**:
@@ -390,5 +390,5 @@ Agents are restricted from performing low-level cryptographic operations to mini
 
 - **[RISK-901] Sandbox Performance**: The overhead of strict Docker isolation (especially with no-exec / tmpfs) may impact build times for large projects.
 - **[RISK-902] Redaction False Positives**: High-entropy strings in binary files or encoded assets may be incorrectly redacted, breaking builds.
-- **[UNKNOWN-901]**: Will Gemini 1.5 Pro's long context window increase the risk of "Context Injection" where a malicious requirement in an older task influences a current task?
+- **[UNKNOWN-901]**: Will Gemini 3 Pro's long context window increase the risk of "Context Injection" where a malicious requirement in an older task influences a current task?
 - **[UNKNOWN-902]**: How to handle projects requiring "Native Extensions" that need compilation and might require broader sandbox permissions?

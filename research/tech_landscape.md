@@ -15,9 +15,9 @@ A critical architectural pillar is the **Model Context Protocol (MCP)** integrat
     *   *Justification:* LangGraph allows for cyclical graphs and explicit state management, which is essential for the iterative "TDD Loop" and "Research-to-Requirement" transitions.
 
 ### Language Models (LLMs)
-*   **Primary Model:** **Gemini 1.5 Pro**.
+*   **Primary Model:** **Gemini 3 Pro**.
     *   *Justification:* Its 1M+ token context window is uniquely suited for ingesting entire codebases, documentation, and research reports simultaneously, reducing the need for complex RAG (Retrieval-Augmented Generation) in many development scenarios.
-*   **Secondary/Fast Model:** **Gemini 1.5 Flash**.
+*   **Secondary/Fast Model:** **Gemini 3 Flash**.
     *   *Justification:* Used for low-latency tasks like code reviews, unit test generation, and simple requirement distillation.
 
 ### Model Context Protocol (MCP)
@@ -82,7 +82,7 @@ graph TD
 
 | Service/Dependency | Purpose | Criticality |
 | :--- | :--- | :--- |
-| **Google AI Studio / Vertex AI** | Access to Gemini 1.5 Pro/Flash models. | High |
+| **Google AI Studio / Vertex AI** | Access to Gemini 3 Pro/Flash models. | High |
 | **GitHub API** | Scaffolding repositories, managing PRs (if cloud-synced). | Medium |
 | **MCP SDK** | Enabling tool-use for all agents. | High |
 | **Docker Engine** | Providing sandboxed environments for code execution. | High |
@@ -112,4 +112,4 @@ graph TD
 | **Dependency Hell** | Medium | The Architect Agent must generate a locked dependency manifest. The Developer Agent is restricted from adding new libraries without a re-architecting phase. |
 | **Stale Context** | Medium | Implement a "Context Refresh" at the start of every Epic, where the Architect Agent re-summarizes the current state of the project to clear noise. |
 | **Sandbox Escape** | High | Use minimal base images for containers and implement strict `seccomp` profiles to limit system calls. |
-| **LLM Hallucination in TDD** | Medium | Use a multi-model check: Gemini 1.5 Pro writes the test, Gemini 1.5 Flash reviews it for logic, and the code is only written once the test *fails* as expected (Red phase). |
+| **LLM Hallucination in TDD** | Medium | Use a multi-model check: Gemini 3 Pro writes the test, Gemini 3 Flash reviews it for logic, and the code is only written once the test *fails* as expected (Red phase). |
