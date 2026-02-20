@@ -109,9 +109,9 @@ graph TD
 ### 2.2 AI & LLM Infrastructure
 - **Model Orchestration:** **Vercel AI SDK (`ai` package)**.
     - Provides a unified provider-agnostic interface for streaming, tool-calling, and structured output (via `zod` schemas).
-- **Primary LLM Provider:** **Google Gemini 1.5 Pro & Flash**.
-    - **Gemini 1.5 Pro:** (2M Context) Primary for the `RESEARCH`, `ARCHITECT`, and `PLAN` phases. Handles codebase-wide reasoning.
-    - **Gemini 1.5 Flash:** (1M Context) Primary for the `IMPLEMENT` (TDD loop) and `REVIEW` phases. Optimized for low-latency iterations.
+- **Primary LLM Provider:** **Google Gemini 3.1 Pro & 3 Flash**.
+    - **Gemini 3.1 Pro:** (1M Context) Primary for the `RESEARCH`, `ARCHITECT`, and `PLAN` phases. Handles codebase-wide reasoning.
+    - **Gemini 3 Flash:** (1M Context) Primary for the `IMPLEMENT` (TDD loop) and `REVIEW` phases. Optimized for low-latency iterations.
 - **Context Management:**
     - **Programmatic Context Caching:** Static artifacts (PRD, TAS, requirements) are cached via the Gemini API to reduce per-turn token costs and latency.
     - **Token Counting:** `tiktoken` or provider-native tokenizers used for proactive context pruning.
@@ -432,7 +432,7 @@ The primary interface for the Interface Layer to control the SDLC workflow.
 ## 8. Memory & Context Management
 
 ### 8.1 Hierarchical Memory Management
-**[TAS-025]** **Context Window Optimization:** To manage the 2M token window effectively:
+**[TAS-025]** **Context Window Optimization:** To manage the 1m token window effectively:
 - **Short-Term (Task Context):** Raw logs of the current `TASK` implementation (approx. last 20 turns).
 - **Medium-Term (Epic Context):** Agentic summaries of completed tasks within the current Epic.
 - **Long-Term (Global Context):** The PRD, TAS, and `GEMINI.md`. These are injected into every prompt.
@@ -558,7 +558,7 @@ Scrubbed values are replaced with `[REDACTED_SECRET]`.
 ## 11. Questions, Risks & Unknowns
 
 ### 11.1 Technical Risks
-- **[RISK-001] Context Drift:** Long-term memory might lose signal as the project grows, despite the 2M window.
+- **[RISK-001] Context Drift:** Long-term memory might lose signal as the project grows, despite the 1m window.
 - **[RISK-002] Sandbox Complexity:** Supporting non-Node projects (e.g., Rust, Python) requires dynamic Docker image management.
 - **[RISK-003] SQLite Performance:** Large state graphs with thousands of `TURN` records might slow down the "Time-Travel" UI.
 

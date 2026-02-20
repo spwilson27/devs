@@ -66,7 +66,7 @@ The core of `devs` is a **"Glass-Box"** orchestration engine built on `LangGraph
         *   *Long-term/Global:* Immutable project constraints (e.g., "No external CSS," "Must use TypeScript").
     *   **Standardized Tooling (MCP):** A consistent interface to interact with the shell, filesystem, and debugger.
     *   **Sandboxed Execution:** A secure "playground" (Docker/Sandbox) where it can run tests and execute shell commands without harming the host system.
-    *   **Context Management:** Efficient use of the LLM context window (Gemini 1.5 Pro) through pruning and relevance-weighted RAG.
+    *   **Context Management:** Efficient use of the LLM context window (Gemini 3.1 Pro) through pruning and relevance-weighted RAG.
 *   **Edge Cases & Risks:**
     *   **Loop Trapping:** Getting stuck in a "fix-test-fail" cycle. *Mitigation: Heuristic loop detection and mandatory escalation to Persona 2 after N failures.*
     *   **Scope Creep:** Attempting to implement features from future Epics. *Mitigation: Strict task-based sandboxing and file-access whitelisting.*
@@ -161,7 +161,7 @@ Every requirement distilled MUST follow this schema:
 - **Short-Term (Task Context):** Rolling window of recent tool calls, file diffs, and compiler/linter errors.
 - **Medium-Term (Project Context):** Summary of the current Epic and a "Knowledge Base" of previously solved tasks.
 - **Long-Term (Global Constraints):** Stored in `GEMINI.md`. Immutable rules (e.g., "Always use Functional Programming"). Agents MUST check LTM before every implementation turn.
-- **Context Management:** Use Gemini 1.5 Pro's 2M context for "Project-Wide" awareness, but utilize "Context Pruning" to keep implementation prompts focused on the current task.
+- **Context Management:** Use Gemini 3.1 Pro's 1m context for "Project-Wide" awareness, but utilize "Context Pruning" to keep implementation prompts focused on the current task.
 
 ### 3.6 Phase 5: Agentic-Native Capability (MCP)
 **[REQ-015] MCP Integration & Exposure:**
@@ -179,7 +179,7 @@ Every requirement distilled MUST follow this schema:
   - **TypeScript:** Strict mode enabled across all internal system code and generated project code to ensure type safety for agentic reasoning.
 - **Orchestration & AI:**
   - **LangGraph.js:** The core engine for stateful, cyclic multi-agent workflows. It must handle human-in-the-loop (HITL) transitions and branching logic.
-  - **Google Gemini 1.5 Pro/Flash:** Primary LLMs. Pro is used for high-context research and architecture (2M+ tokens); Flash is used for rapid, iterative TDD implementation turns.
+  - **Google Gemini 3.1 Pro/Flash:** Primary LLMs. Pro is used for high-context research and architecture (1m+ tokens); Flash is used for rapid, iterative TDD implementation turns.
   - **LiteLLM / Vercel AI SDK:** Abstraction layers to ensure provider-agnostic LLM communication and support for fallback models (Claude 3.5, GPT-4o).
 - **Persistence & State:**
   - **SQLite (Drizzle ORM):** Local-first relational store for structured metadata, turn-by-turn agent memory, and task state tracking.
@@ -278,7 +278,7 @@ The following areas are explicitly excluded from the current scope of the `devs`
 
 ### 7.1 Technical & Architectural Risks
 *   **[RISK-001] Context Window Bloat & Performance Degradation:**
-    - **Description:** Even with Gemini 1.5 Pro's 2M token window, extremely long-running projects with deep histories, thousands of files, and complex dependency trees can exhaust the context or cause significant latency/cost spikes.
+    - **Description:** Even with Gemini 3.1 Pro's 1m token window, extremely long-running projects with deep histories, thousands of files, and complex dependency trees can exhaust the context or cause significant latency/cost spikes.
     - **Mitigation:** Implementation of hierarchical memory pruning, context-aware RAG for non-critical files, and mandatory "State Summarization" checkpoints every N turns.
 *   **[RISK-002] State Divergence (The "Split Brain" Problem):**
     - **Description:** A critical risk where the filesystem state (Git), the agent's internal memory, and the SQLite state graph fall out of sync. This typically occurs after unmonitored manual user edits or partial tool-call failures.

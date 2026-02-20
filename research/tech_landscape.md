@@ -13,8 +13,8 @@ The core architecture centers on a **Unified Orchestration Engine** that manages
     *   *Justification:* Provides native compatibility with the VSCode Extension API, strong typing for complex agent states, and a vast ecosystem for CLI development (OCLIF) and MCP integration.
 *   **Agent Framework:** **LangGraph.js**
     *   *Justification:* Unlike linear chains, LangGraph supports cyclic agent workflows, fine-grained state management, and "human-in-the-loop" breakpoints, which are essential for the `devs` "Glass-Box" architecture.
-*   **LLM Integration:** **Google Gemini 1.5 Pro/Flash** (Primary) via **LiteLLM** or **Vercel AI SDK**
-    *   *Justification:* Gemini 1.5's massive context window (2M+ tokens) is critical for ingestng entire codebases and long-running project histories. LiteLLM provides a provider-agnostic abstraction for fallback to Claude 3.5 Sonnet or GPT-4o.
+*   **LLM Integration:** **Google Gemini 3.1 Pro/Flash** (Primary) via **LiteLLM** or **Vercel AI SDK**
+    *   *Justification:* Gemini 3.1's massive context window (1M+ tokens) is critical for ingestng entire codebases and long-running project histories. LiteLLM provides a provider-agnostic abstraction for fallback to Claude 3.5 Sonnet or GPT-4o.
 
 ### 2.2 Frontend & Interface
 *   **VSCode Extension:** **VSCode API + React (Webviews)**
@@ -116,7 +116,7 @@ graph TD
 | Risk | Impact | Mitigation Strategy |
 | :--- | :--- | :--- |
 | **LLM Loop Trapping** | High (Cost/Time) | Implement **Loop Detection logic** in LangGraph; monitor token usage per task; force human intervention after X iterations. |
-| **Context Window Overflow** | Medium | Utilize **Gemini 1.5 Pro's 2M context**; implement sliding-window memory and RAG for non-critical context. |
+| **Context Window Overflow** | Medium | Utilize **Gemini 3.1 Pro's 1M context**; implement sliding-window memory and RAG for non-critical context. |
 | **Sandbox Escapes** | High (Security) | Use **Docker containers** with no network access for implementation tasks; enforce strict file system path white-listing. |
 | **State Divergence** | Medium | Maintain a strict **Single Source of Truth** in SQLite; use Git as a fallback for filesystem restoration. |
 | **MCP Fragmentation** | Low | Standardize on the core **MCP TypeScript SDK** and contribute to open-source MCP servers to ensure ecosystem stability. |
