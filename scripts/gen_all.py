@@ -375,12 +375,22 @@ class Phase4AExtractRequirements(BasePhase):
                 target_path=target_path
             )
             
-            ignore_content = "/*\n!/.sandbox/\n!/requirements/\n"
+            ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/scripts/verify_requirements.py\n"
             allowed_files = [expected_file]
             result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
             
             if result.returncode != 0:
                 print(f"\n[!] Error extracting requirements from {doc['name']}.")
+                sys.exit(1)
+            
+            print(f"   -> Verifying extraction for {doc['name']}...")
+            verify_res = subprocess.run(
+                [sys.executable, "scripts/verify_requirements.py", "--verify-doc", doc_path, expected_file],
+                capture_output=True, text=True, cwd=ctx.root_dir
+            )
+            if verify_res.returncode != 0:
+                print(f"\n[!] Automated verification failed for {doc['name']}:")
+                print(verify_res.stdout)
                 sys.exit(1)
             
             ctx.state.setdefault("extracted_requirements", []).append(doc["id"])
@@ -400,7 +410,7 @@ class Phase4BMergeRequirements(BasePhase):
         prompt = ctx.format_prompt(prompt_tmpl, description_ctx=ctx.description_ctx)
         
         # This phase can modify requirements.md AND any source doc in specs/ or research/
-        ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/requirements.md\n!/specs/\n!/research/\n"
+        ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/requirements.md\n!/specs/\n!/research/\n!/scripts/verify_requirements.py\n"
         
         # Allowed files include the final requirements.md and ALL source docs for potential conflict resolution
         allowed_files = [os.path.join(ctx.root_dir, "requirements.md")]
@@ -410,6 +420,16 @@ class Phase4BMergeRequirements(BasePhase):
         
         if result.returncode != 0:
             print("\n[!] Error merging requirements.")
+            sys.exit(1)
+            
+        print("\n   -> Verifying merged requirements.md...")
+        verify_res = subprocess.run(
+            [sys.executable, "scripts/verify_requirements.py", "--verify-master"],
+            capture_output=True, text=True, cwd=ctx.root_dir
+        )
+        if verify_res.returncode != 0:
+            print("\n[!] Automated verification failed after merging requirements:")
+            print(verify_res.stdout)
             sys.exit(1)
             
         ctx.state["requirements_merged"] = True
