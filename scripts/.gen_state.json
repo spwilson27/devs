@@ -107,7 +107,7 @@
     },
     "extracted_requirements": [],
     "final_review_completed": true,
-    "requirements_extracted": true,
+    "requirements_extracted": false,
     "requirements_merged": false,
     "requirements_ordered": false,
     "phases_completed": false,
