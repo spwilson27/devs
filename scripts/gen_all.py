@@ -384,6 +384,10 @@ class Phase4AExtractRequirements(BasePhase):
         prompt_tmpl = ctx.load_prompt("extract_requirements.md")
         
         for doc in DOCS:
+            if doc["type"] == "research":
+                print(f"   -> Skipping extraction for research doc: {doc['name']}...")
+                continue
+
             if doc["id"] in ctx.state.get("extracted_requirements", []):
                 continue
                 
@@ -438,12 +442,12 @@ class Phase4BMergeRequirements(BasePhase):
         prompt_tmpl = ctx.load_prompt("merge_requirements.md")
         prompt = ctx.format_prompt(prompt_tmpl, description_ctx=ctx.description_ctx)
         
-        # This phase can modify requirements.md AND any source doc in specs/ or research/
-        ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/requirements.md\n!/specs/\n!/research/\n!/scripts/verify_requirements.py\n"
+        # This phase can modify requirements.md AND any source doc in specs/
+        ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/requirements.md\n!/specs/\n!/scripts/verify_requirements.py\n"
         
-        # Allowed files include the final requirements.md and ALL source docs for potential conflict resolution
+        # Allowed files include the final requirements.md and specs for potential conflict resolution
         allowed_files = [os.path.join(ctx.root_dir, "requirements.md")]
-        allowed_files.extend([ctx.get_document_path(d) for d in DOCS])
+        allowed_files.extend([ctx.get_document_path(d) for d in DOCS if d["type"] != "research"])
         
         result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
         

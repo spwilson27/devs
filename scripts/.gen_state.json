@@ -106,10 +106,6 @@
         ]
     },
     "extracted_requirements": [
-        "market_research",
-        "competitive_analysis",
-        "tech_landscape",
-        "user_research",
         "1_prd",
         "2_tas",
         "3_mcp_design",
@@ -121,24 +117,12 @@
         "9_project_roadmap"
     ],
     "final_review_completed": true,
-    "requirements_extracted": true,
-    "requirements_merged": true,
-    "requirements_ordered": true,
-    "phases_completed": true,
+    "requirements_extracted": false,
+    "requirements_merged": false,
+    "requirements_ordered": false,
+    "phases_completed": false,
     "tasks_completed": false,
-    "ordered_phases_generated": [
-        "phase_1"
-    ],
-    "tasks_generated": [
-        "phase_1/01_research_planning_strategy.md",
-        "phase_1/02_research_planning_operations.md",
-        "phase_1/03_feature_mapping_core.md",
-        "phase_1/04_feature_mapping_advanced.md",
-        "phase_1/05_project_planning_execution.md",
-        "phase_1/06_project_planning_delivery.md",
-        "phase_1/07_persona_needs_core.md",
-        "phase_1/08_maker_persona_needs.md",
-        "phase_1/09_architect_persona_needs.md"
-    ],
-    "tdd_completed": false
+    "tasks_generated": [],
+    "tdd_completed": false,
+    "ordered_phases_generated": []
 }

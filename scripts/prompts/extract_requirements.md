@@ -17,10 +17,12 @@ You are a Lead Product Manager. Your job is to read a specific project document 
 Before generating the final document, plan your approach:
 1. Read the source document carefully.
 2. Identify every atomic requirement (functional, technical, UX, security, etc.).
-3. If the requirement lacks an ID tagged as `[REQ-...]`, plan exactly what tag to give it, then plan to edit the source doc ('{document_path}') to append the tag to the requirement.
-4. List all tagged requirements clearly and unambiguously directly into '{target_path}'.
-5. Do not summarize; be exhaustive for this specific document.
-6. After creating and updating the files, execute the validation check bidirectional script and iterate if it reports errors.
+3. If the requirement lacks an ID tagged as `[REQ-...]`, plan exactly what tag to give it.
+4. CRITICAL: To prevent ID collisions across different documents, you MUST prepend the short document ID to EVERY requirement tag you create. For example, if extracting from '1_prd', the tag MUST be `[1_PRD-REQ-...]`. DO NOT generate generic `[REQ-...]` tags.
+5. Plan to edit the source doc ('{document_path}') to append the prefixed tag to the requirement.
+6. List all tagged requirements clearly and unambiguously directly into '{target_path}'.
+7. Do not summarize; be exhaustive for this specific document.
+8. After creating and updating the files, execute the validation check bidirectional script and iterate if it reports errors.
 
 # CONSTRAINTS
 - You may use a `<thinking>...</thinking>` block at the very beginning of your response to plan your approach. After the thinking block, output ONLY the raw Markdown document. Do not include any conversational filler.
