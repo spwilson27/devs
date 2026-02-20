@@ -1,0 +1,16 @@
+# Tasks for 04_Feature Mapping Advanced (Phase: phase_1.md)
+
+## Covered Requirements
+- [REQ-MAP-004], [REQ-MAP-005], [REQ-MAP-006]
+
+### Task Checklist
+- [ ] **Subtask 1: Implement MCP Server Injection Logic**: Modify the core `SandboxEnvironment` class (e.g., in `src/core/sandbox.ts` or similar) to accept an array of MCP server configurations. Implement an `injectMCPServers()` method that sets up the required environment variables, mounts, and initializes the MCP server processes inside the Docker/isolated sandbox immediately upon startup. This fulfills [REQ-MAP-004].
+- [ ] **Subtask 2: Create LangGraph State Emitter**: Enhance the main LangGraph orchestration layer (`src/orchestrator/graph.ts`) to broadcast state changes. Implement an event emitter or WebSockets service that listens to state transitions, serializes the current graph state (active nodes, variables, agent thoughts), and broadcasts this payload over an IPC channel or local WebSocket server to connected clients. This initiates [REQ-MAP-005].
+- [ ] **Subtask 3: Develop VSCode Sidebar Webview for State Streaming**: In the `vscode-extension/` package, create a new Webview Panel Provider named `DevsStateSidebarProvider`. This provider must establish a WebSocket or IPC connection to the core `devs` CLI/service, listen for the LangGraph state events emitted in Subtask 2, and render a reactive UI (e.g., using React) that displays the real-time agent thoughts, current executing node, and system state. This completes [REQ-MAP-005].
+- [ ] **Subtask 4: Implement Entropy Detector Utility**: Create a new module `src/utils/entropyDetector.ts` that provides an `EntropyDetector` class. This class must maintain a stateful mapping of `taskId` to `attemptCount`. Implement a `recordAttempt(taskId: string)` method that increments the count and returns a boolean or throws an `EntropyLimitExceededError` if the attempt count strictly exceeds the maximum allowed limit of 3 retries. This initiates [REQ-MAP-006].
+- [ ] **Subtask 5: Integrate Entropy Detection into Task Execution Node**: Update the main LangGraph task execution node (`src/nodes/taskExecutor.ts`). Wrap the execution logic in a try-catch block. On failure, invoke the `EntropyDetector` for the current task ID. If the retry limit is not reached, queue the task for a retry. If the limit (3 retries) is exceeded, automatically halt the task progression, log a failure state with the full stack trace, and emit an event to trigger the User/HITL manual intervention checkpoint. This completes [REQ-MAP-006].
+
+### Testing & Verification
+- [ ] Create a unit test `test_entropy_detector.ts` to verify the `EntropyDetector` correctly tracks task attempts, correctly allows up to 3 execution attempts, and throws an error on the 4th attempt.
+- [ ] Write an integration test `test_sandbox_mcp_injection.ts` that initializes a mock `SandboxEnvironment`, injects a dummy MCP server configuration, and verifies that the MCP server process starts successfully and responds to a basic health check ping within the isolated context.
+- [ ] Implement a VSCode Extension E2E test using `@vscode/test-electron` or Playwright to simulate the LangGraph state emitter broadcasting a mock state event, and assert that the Sidebar Webview UI updates its DOM to display the expected active node and agent thought text.

@@ -126,6 +126,16 @@
     "requirements_ordered": true,
     "phases_completed": true,
     "tasks_completed": false,
-    "tasks_generated": [],
+    "tasks_generated": [
+        "phase_1/01_research_planning_strategy.md",
+        "phase_1/02_research_planning_operations.md",
+        "phase_1/03_feature_mapping_core.md",
+        "phase_1/04_feature_mapping_advanced.md",
+        "phase_1/05_project_planning_execution.md",
+        "phase_1/06_project_planning_delivery.md",
+        "phase_1/07_persona_needs_core.md",
+        "phase_1/08_maker_persona_needs.md",
+        "phase_1/09_architect_persona_needs.md"
+    ],
     "tdd_completed": false
 }
