@@ -101,16 +101,10 @@ develop a complete software project.
   development but likely is inexperienced with the specific technologies required
   for my project. I will want to review all architectural decisions
   within high level documents and approve them before the project proceeds.
-- I will want to be able to pause the automatic development process at any point
-  and resume it later. I will want to navigate "backward or forwards in time" to
-  any previous state in the document generation or development process. (Think
-  git for the development and automated prompting process.) I would like to
-  automatically leverage gemini checkpoints to support this.
 - At any point in the process (document generation or automated development),
   I will want to be able to monitor the development process and will
   want to be able to intervene and provide feedback or new requirements at any
-  point in the process. After doing so, I will want to be able to
-  "branch" from that point forward and continue development down a new path.
+  point in the process.
 - I will want to automatically detect and prevent AI agents from
   getting trapped in loops which waste agent tokens and time.
 - I will want the AI agents to be sandboxed to prevent them from working on 

@@ -1,5 +1,11 @@
 {
     "model": {
         "name": "gemini-3-flash-preview"
+    },
+    "telemetry": {
+        "enabled": true,
+        "target": "local",
+        "otlpEndpoint": "",
+        "outfile": "/Users/mrwilson/.gemini/telemetry.log"
     }
 }
