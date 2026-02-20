@@ -23,11 +23,12 @@ It accomplishes this by using a series of agents to:
   - For each phase: Break phase into atomic tasks (Ideally around 25+ per phase)
   - For each phase: Review the broken down tasks to ensure all requirements are met
 6. Finally iterate through tasks performing a rigorous test-driven development cycle for each task including:
-   a. Initial Test written
-   b. Task Implementation
-   c. Code Review
-   d. Testing
-   e. Documentation (project documentation, and agent "memory" is updated)
+   a. Agent: Initial Test written
+   b. Agent: Task Implementation
+   c. Agent: Code Review
+   d. Agent: Run Automated Tests to verify
+   e. Agent: Update Documentation (project documentation, and agent "memory" is updated)
+   f. Automated: run the tests to verify the agents haven't lied about the tests passing
 
 ## High Level Documents
 
