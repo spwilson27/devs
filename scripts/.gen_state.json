@@ -126,6 +126,9 @@
     "requirements_ordered": true,
     "phases_completed": true,
     "tasks_completed": false,
+    "ordered_phases_generated": [
+        "phase_1"
+    ],
     "tasks_generated": [
         "phase_1/01_research_planning_strategy.md",
         "phase_1/02_research_planning_operations.md",
