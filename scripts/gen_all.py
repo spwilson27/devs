@@ -716,16 +716,14 @@ class Orchestrator:
     def __init__(self, ctx: ProjectContext):
         self.ctx = ctx
 
-    def run_phase_with_retry(self, phase, commit_msg: str, max_retries: int = 3):
+    def run_phase_with_retry(self, phase, max_retries: int = 3):
         for attempt in range(1, max_retries + 1):
             if attempt > 1:
                 print(f"\n   [Retry {attempt}/{max_retries}] Retrying {phase.__class__.__name__}...")
                 
             try:
                 phase.execute(self.ctx)
-                print(f"   -> Phase {phase.__class__.__name__} completed. Committing changes...")
-                subprocess.run(["git", "add", "."], cwd=self.ctx.root_dir, check=False)
-                subprocess.run(["git", "commit", "-m", commit_msg], cwd=self.ctx.root_dir, check=False)
+                print(f"   -> Phase {phase.__class__.__name__} completed.")
                 return
             except SystemExit as e:
                 # Some verify scripts might return 0 through sys.exit() on success
@@ -733,34 +731,24 @@ class Orchestrator:
                     return
                 print(f"\n[!] Phase {phase.__class__.__name__} failed on attempt {attempt}.")
                 if attempt < max_retries:
-                    action = input("Press ENTER to restore workspace and retry, 'c' to continue (if manually resolved), or 'q' to quit: ")
+                    action = input("Press ENTER to retry, 'c' to continue (if manually resolved), or 'q' to quit: ")
                     if action.lower() == 'q':
                         sys.exit(1)
                     elif action.lower() == 'c':
-                        print(f"   -> Continuing (assuming manual resolution). Committing changes...")
-                        subprocess.run(["git", "add", "."], cwd=self.ctx.root_dir, check=False)
-                        subprocess.run(["git", "commit", "-m", commit_msg], cwd=self.ctx.root_dir, check=False)
+                        print(f"   -> Continuing (assuming manual resolution).")
                         return
                 
-                print(f"   -> Restoring workspace...")
-                subprocess.run(["git", "restore", "."], cwd=self.ctx.root_dir, check=False)
-                subprocess.run(["git", "clean", "-fd"], cwd=self.ctx.root_dir, check=False)
                 self.ctx.state = self.ctx._load_state()
             except Exception as e:
                 print(f"\n[!] Phase {phase.__class__.__name__} encountered an error on attempt {attempt}: {e}")
                 if attempt < max_retries:
-                    action = input("Press ENTER to restore workspace and retry, 'c' to continue (if manually resolved), or 'q' to quit: ")
+                    action = input("Press ENTER to retry, 'c' to continue (if manually resolved), or 'q' to quit: ")
                     if action.lower() == 'q':
                         sys.exit(1)
                     elif action.lower() == 'c':
-                        print(f"   -> Continuing (assuming manual resolution). Committing changes...")
-                        subprocess.run(["git", "add", "."], cwd=self.ctx.root_dir, check=False)
-                        subprocess.run(["git", "commit", "-m", commit_msg], cwd=self.ctx.root_dir, check=False)
+                        print(f"   -> Continuing (assuming manual resolution).")
                         return
                         
-                print(f"   -> Restoring workspace...")
-                subprocess.run(["git", "restore", "."], cwd=self.ctx.root_dir, check=False)
-                subprocess.run(["git", "clean", "-fd"], cwd=self.ctx.root_dir, check=False)
                 self.ctx.state = self.ctx._load_state()
                 
         print(f"\n[!] {phase.__class__.__name__} failed after {max_retries} attempts.")
@@ -772,15 +760,15 @@ class Orchestrator:
         try:
             # Phase 1 and 2 for each document
             for doc in DOCS:
-                self.run_phase_with_retry(Phase1GenerateDoc(doc), f"Auto-commit: Generate {doc['name']}")
-                self.run_phase_with_retry(Phase2FleshOutDoc(doc), f"Auto-commit: Flesh out {doc['name']}")
+                self.run_phase_with_retry(Phase1GenerateDoc(doc))
+                self.run_phase_with_retry(Phase2FleshOutDoc(doc))
 
-            self.run_phase_with_retry(Phase3FinalReview(), "Auto-commit: Final alignment review")
-            self.run_phase_with_retry(Phase4AExtractRequirements(), "Auto-commit: Extract all requirements")
-            self.run_phase_with_retry(Phase4BMergeRequirements(), "Auto-commit: Merge requirements")
-            self.run_phase_with_retry(Phase4COrderRequirements(), "Auto-commit: Order requirements")
-            self.run_phase_with_retry(Phase5GenerateEpics(), "Auto-commit: Generate epics/phases")
-            #self.run_phase_with_retry(Phase6BreakDownTasks(), "Auto-commit: Break down tasks")
+            self.run_phase_with_retry(Phase3FinalReview())
+            self.run_phase_with_retry(Phase4AExtractRequirements())
+            self.run_phase_with_retry(Phase4BMergeRequirements())
+            self.run_phase_with_retry(Phase4COrderRequirements())
+            self.run_phase_with_retry(Phase5GenerateEpics())
+            #self.run_phase_with_retry(Phase6BreakDownTasks())
             Phase6BreakDownTasks().execute(self.ctx)
             #Phase7TDDLoop().execute(self.ctx)
         finally:
