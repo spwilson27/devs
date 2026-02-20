@@ -42,3 +42,12 @@ Before generating the final document, plan your approach:
 - **Source:** {Source document 1, Source document 2, etc.}
 - **Dependencies:** None
 ```
+
+- For the "Removed or Modified Requirements" section, structure EACH item EXACTLY utilizing the following markdown format:
+
+```markdown
+### **[{REQ_ID}]** {Requirement Title}
+- **Original Source:** {Source document 1, Source document 2, etc.}
+- **Action:** {Removed | Modified}
+- **Rationale:** {Clear explanation for exactly why it was dropped or changed and how conflicts were resolved}
+```
