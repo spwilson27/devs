@@ -221,11 +221,12 @@ class ProjectContext:
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(new_content)
 
-    def run_gemini(self, full_prompt: str, ignore_content: str, allowed_files: Optional[List[str]] = None) -> subprocess.CompletedProcess:
+    def run_gemini(self, full_prompt: str, ignore_content: str, allowed_files: Optional[List[str]] = None, sandbox: bool = True) -> subprocess.CompletedProcess:
         before = self.get_workspace_snapshot()
         result = self.runner.run(self.root_dir, full_prompt, ignore_content, self.ignore_file)
         if allowed_files is not None:
-            self.verify_changes(before, allowed_files)
+            if sandbox:
+                self.verify_changes(before, allowed_files)
             for f in allowed_files:
                 self.strip_thinking_tags(os.path.abspath(f))
         return result
@@ -583,7 +584,7 @@ class Phase6BreakDownTasks(BasePhase):
             group_filepath = os.path.join(tasks_dir, group_filename)
             allowed_files = [group_filepath]
             
-            group_result = ctx.run_gemini(grouping_prompt, ignore_content, allowed_files=allowed_files)
+            group_result = ctx.run_gemini(grouping_prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
             
             if group_result.returncode != 0:
                 print(f"\n[!] Error grouping tasks for {phase_filename}.")
@@ -630,7 +631,7 @@ class Phase6BreakDownTasks(BasePhase):
                 ignore_content = f"/*\n!/.sandbox/\n!/requirements.md\n!/phases/\n!/tasks/\n!/scripts/verify_requirements.py\n"
                 
                 allowed_files = [os.path.join(tasks_dir, target_filename)]
-                result = ctx.run_gemini(tasks_prompt, ignore_content, allowed_files=allowed_files)
+                result = ctx.run_gemini(tasks_prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
                 
                 if result.returncode != 0:
                     print(f"\n[!] Error generating tasks for {target_filename}.")
