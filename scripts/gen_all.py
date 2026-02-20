@@ -733,9 +733,14 @@ class Orchestrator:
                     return
                 print(f"\n[!] Phase {phase.__class__.__name__} failed on attempt {attempt}.")
                 if attempt < max_retries:
-                    action = input("Press ENTER to restore workspace and retry, or type 'q' to quit: ")
+                    action = input("Press ENTER to restore workspace and retry, 'c' to continue (if manually resolved), or 'q' to quit: ")
                     if action.lower() == 'q':
                         sys.exit(1)
+                    elif action.lower() == 'c':
+                        print(f"   -> Continuing (assuming manual resolution). Committing changes...")
+                        subprocess.run(["git", "add", "."], cwd=self.ctx.root_dir, check=False)
+                        subprocess.run(["git", "commit", "-m", commit_msg], cwd=self.ctx.root_dir, check=False)
+                        return
                 
                 print(f"   -> Restoring workspace...")
                 subprocess.run(["git", "restore", "."], cwd=self.ctx.root_dir, check=False)
@@ -744,9 +749,14 @@ class Orchestrator:
             except Exception as e:
                 print(f"\n[!] Phase {phase.__class__.__name__} encountered an error on attempt {attempt}: {e}")
                 if attempt < max_retries:
-                    action = input("Press ENTER to restore workspace and retry, or type 'q' to quit: ")
+                    action = input("Press ENTER to restore workspace and retry, 'c' to continue (if manually resolved), or 'q' to quit: ")
                     if action.lower() == 'q':
                         sys.exit(1)
+                    elif action.lower() == 'c':
+                        print(f"   -> Continuing (assuming manual resolution). Committing changes...")
+                        subprocess.run(["git", "add", "."], cwd=self.ctx.root_dir, check=False)
+                        subprocess.run(["git", "commit", "-m", commit_msg], cwd=self.ctx.root_dir, check=False)
+                        return
                         
                 print(f"   -> Restoring workspace...")
                 subprocess.run(["git", "restore", "."], cwd=self.ctx.root_dir, check=False)
