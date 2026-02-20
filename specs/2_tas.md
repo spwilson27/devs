@@ -8,9 +8,9 @@ The architecture prioritizes **architectural integrity** over simple code genera
 
 ### 1.1 System Philosophy: The Glass-Box Orchestrator
 Unlike traditional "Black-Box" AI agents that perform hidden operations, 'devs' operates as a "Glass-Box." This means:
-1.  **Full Traceability**: Every agent thought, decision, tool call, and terminal output is captured and queryable.
-2.  **Stateful Determinism**: The system can be paused, resumed, or rewound to any previous state (Task/Epic) with 100% fidelity.
-3.  **Human-in-the-Loop (HITL)**: The system provides explicit "Gated Autonomy" checkpoints where users must approve architectural blueprints and roadmaps before implementation begins.
+1.  **[TAS-046] Full Traceability**: Every agent thought, decision, tool call, and terminal output is captured and queryable.
+2.  **[TAS-047] Stateful Determinism**: The system can be paused, resumed, or rewound to any previous state (Task/Epic) with 100% fidelity.
+3.  **[TAS-048] Human-in-the-Loop (HITL)**: The system provides explicit "Gated Autonomy" checkpoints where users must approve architectural blueprints and roadmaps before implementation begins.
 
 ### 1.2 Core Architectural Pillars
 *   **[TAS-001] Glass-Box Transparency & Auditability**: Every state transition and agent reasoning step is persisted to a local SQLite database (`.devs/state.sqlite`). This serves as the "Flight Recorder" for the project, allowing human developers or auditor agents to understand *why* a specific architectural decision was made.
@@ -21,10 +21,10 @@ Unlike traditional "Black-Box" AI agents that perform hidden operations, 'devs' 
 ### 1.3 Component Topology & Responsibility Matrix
 The system is divided into four primary layers:
 
-1.  **Orchestration Layer**: Uses LangGraph.js to manage the high-level state machine. It handles agent handoffs, checkpointing to SQLite, and human-in-the-loop signaling.
-2.  **Agent Suite**: A collection of specialized agents (Research, Architect, Developer, Reviewer) each with dedicated system prompts and tool-access permissions.
-3.  **Execution Layer (Sandbox)**: An isolated Docker or WebContainer environment where the agent performs file I/O, runs tests, and executes shell commands.
-4.  **Memory Layer**: A tiered system consisting of:
+1.  **[TAS-078] Orchestration Layer**: Uses LangGraph.js to manage the high-level state machine. It handles agent handoffs, checkpointing to SQLite, and human-in-the-loop signaling.
+2.  **[TAS-079] Agent Suite**: A collection of specialized agents (Research, Architect, Developer, Reviewer) each with dedicated system prompts and tool-access permissions.
+3.  **[TAS-080] Execution Layer (Sandbox)**: An isolated Docker or WebContainer environment where the agent performs file I/O, runs tests, and executes shell commands.
+4.  **[TAS-081] Memory Layer**: A tiered system consisting of:
     *   **Short-term**: Active task context and recent tool outputs.
     *   **Medium-term**: Epic-level decisions and recently resolved task summaries.
     *   **Long-term**: Project-wide constraints and architectural patterns stored in LanceDB (Vector).
@@ -32,11 +32,11 @@ The system is divided into four primary layers:
 ### 1.4 The Plan-Act-Verify Lifecycle
 The orchestrator moves the project through five distinct phases:
 
-1.  **Phase 1: Discovery & Research**: Deployment of parallel agents to analyze the market, technology landscape, and competitive space.
-2.  **Phase 2: Blueprint Generation**: The Architect Agent generates authoritative PRDs and TAS documents. This phase ends with a mandatory user approval gate.
-3.  **Phase 3: Requirement Compilation**: The Distiller Agent translates documents into a flat list of atomic requirements and a Directed Acyclic Graph (DAG) of implementation tasks.
-4.  **Phase 4: TDD Implementation**: Iterative execution of tasks. For each task, the Developer Agent writes a test, fails it, writes the code, and passes it.
-5.  **Phase 5: Full System Validation**: A final "Global Reviewer" agent runs the entire test suite and verifies documentation density before marking the project as complete.
+1.  **[TAS-049] Phase 1: Discovery & Research**: Deployment of parallel agents to analyze the market, technology landscape, and competitive space.
+2.  **[TAS-050] Phase 2: Blueprint Generation**: The Architect Agent generates authoritative PRDs and TAS documents. This phase ends with a mandatory user approval gate.
+3.  **[TAS-051] Phase 3: Requirement Compilation**: The Distiller Agent translates documents into a flat list of atomic requirements and a Directed Acyclic Graph (DAG) of implementation tasks.
+4.  **[TAS-052] Phase 4: TDD Implementation**: Iterative execution of tasks. For each task, the Developer Agent writes a test, fails it, writes the code, and passes it.
+5.  **[TAS-053] Phase 5: Full System Validation**: A final "Global Reviewer" agent runs the entire test suite and verifies documentation density before marking the project as complete.
 
 ### 1.5 System Architecture Diagram
 
@@ -85,25 +85,25 @@ graph TB
 ```
 
 ### 1.6 Agentic Data Flow & State Management
-Data flows through the system in a "Cyclical Refinement" pattern:
-- **Input**: User provides a brief and journeys.
+Data flows through the system in a **[TAS-083] Cyclical Refinement pattern**:
+- **[TAS-082] Input**: User provides a brief and journeys.
 - **Expansion**: Research agents expand this into thousands of tokens of context.
 - **Compression**: The Architect distills research into structured specifications.
 - **Decomposition**: The Distiller breaks specifications into atomic, executable tasks.
 - **Execution**: Developer agents transform tasks into code commits.
 - **Verification**: Reviewer agents validate commits against requirements.
 
-The state is managed using a **Snapshot-at-Commit** strategy. After every successful task, the system:
-1.  Commits the code change to the project's Git repository.
-2.  Persists the agent's reasoning trace to SQLite.
-3.  Updates the Vector DB with any new architectural decisions made during the task.
+The state is managed using a **[TAS-054] Snapshot-at-Commit strategy**. After every successful task, the system:
+1.  **[TAS-055] Git Snapshots**: Commits the code change to the project's Git repository.
+2.  **[TAS-056] Trace Persistence**: Persists the agent's reasoning trace to SQLite.
+3.  **[TAS-057] Vector Memory Updates**: Updates the Vector DB with any new architectural decisions made during the task.
 
 ### 1.7 Observability & Traceability Infrastructure
 The "Glass-Box" is implemented via:
-*   **Trace Streaming**: Real-time websocket streaming of agent "Thoughts" to the VSCode UI.
-*   **Decision Logs**: A searchable history of every alternative the agent considered but rejected.
-*   **Requirement Mapping**: Every function and test in the generated codebase is tagged with a `REQ-ID`, enabling a full audit trail from the PRD to the source code.
-*   **Entropy Detection**: Real-time monitoring of agent loops; if an agent repeats a failing strategy 3 times, the system automatically pauses and alerts the user.
+*   **[TAS-058] Trace Streaming**: Real-time websocket streaming of agent "Thoughts" to the VSCode UI.
+*   **[TAS-059] Decision Logs**: A searchable history of every alternative the agent considered but rejected.
+*   **[TAS-063] Requirement Mapping**: Every function and test in the generated codebase is tagged with a `REQ-ID`, enabling a full audit trail from the PRD to the source code.
+*   **[TAS-064] Entropy Detection**: Real-time monitoring of agent loops; if an agent repeats a failing strategy 3 times, the system automatically pauses and alerts the user.
 
 ---
 
@@ -159,10 +159,11 @@ The `devs` orchestrator relies on a dual-persistence strategy to maintain its "G
 
 ### 3.1 Relational Schema (SQLite: `.devs/state.sqlite`)
 
-The relational database is the primary source of truth for the project's state machine and audit logs. All tables use ACID-compliant transactions to ensure consistency during multi-agent handoffs.
+The relational database is the **[TAS-066] Primary Source of Truth** for the project's state machine and audit logs. All tables use **[TAS-067] ACID-Compliant Transactions** to ensure consistency during multi-agent handoffs.
 
 #### 3.1.1 Core Entity Tables
 
+**[TAS-105] Projects Table**:
 | Table | Column | Type | Constraints | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **`projects`** | `id` | UUID | PRIMARY KEY | Unique identifier for the project. |
@@ -173,6 +174,7 @@ The relational database is the primary source of truth for the project's state m
 | | `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Timestamp of project initialization. |
 | | `updated_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Timestamp of last state change. |
 
+**[TAS-106] Documents Table**:
 | Table | Column | Type | Constraints | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **`documents`** | `id` | UUID | PRIMARY KEY | Unique identifier for the document. |
@@ -183,6 +185,7 @@ The relational database is the primary source of truth for the project's state m
 | | `approval_status`| TEXT | CHECK(...) | PENDING, APPROVED, REJECTED. |
 | | `approved_at` | DATETIME | | Timestamp of human sign-off. |
 
+**[TAS-107] Requirements Table**:
 | Table | Column | Type | Constraints | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **`requirements`** | `id` | TEXT | PRIMARY KEY | Human-readable ID (e.g., `REQ-001`). |
@@ -192,6 +195,7 @@ The relational database is the primary source of truth for the project's state m
 | | `status` | TEXT | CHECK(...) | PENDING, IMPLEMENTED, VERIFIED, DEPRECATED. |
 | | `trace_meta` | JSON | | Mapping to specific sections in documents. |
 
+**[TAS-108] Epics Table**:
 | Table | Column | Type | Constraints | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **`epics`** | `id` | UUID | PRIMARY KEY | Unique identifier for the Epic. |
@@ -200,6 +204,7 @@ The relational database is the primary source of truth for the project's state m
 | | `order_index` | INTEGER | NOT NULL | Sequence in the roadmap (1-16). |
 | | `status` | TEXT | CHECK(...) | TODO, IN_PROGRESS, COMPLETED. |
 
+**[TAS-109] Tasks Table**:
 | Table | Column | Type | Constraints | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **`tasks`** | `id` | UUID | PRIMARY KEY | Unique identifier for the task. |
@@ -213,6 +218,7 @@ The relational database is the primary source of truth for the project's state m
 
 #### 3.1.2 The Glass-Box Audit Tables
 
+**[TAS-110] Agent Logs Table**:
 | Table | Column | Type | Constraints | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **`agent_logs`** | `id` | INTEGER | PRIMARY KEY AUTOINCREMENT | Sequential log ID. |
@@ -226,6 +232,7 @@ The relational database is the primary source of truth for the project's state m
 | | `token_usage` | INTEGER | | Estimated tokens used for this turn. |
 | | `timestamp` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Log time. |
 
+**[TAS-111] Entropy Events Table**:
 | Table | Column | Type | Constraints | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **`entropy_events`** | `id` | INTEGER | PRIMARY KEY AUTOINCREMENT | Tracks repeating failures for loop prevention. |
@@ -239,9 +246,10 @@ The relational database is the primary source of truth for the project's state m
 LanceDB provides semantic search capabilities for the "Long-term Memory" layer. This allows agents to retrieve relevant context across Epics.
 
 *   **Path**: `.devs/memory.lancedb`
-*   **Embedding Model**: `text-embedding-004` (768 dimensions).
-*   **Indexing Strategy**: IVF-PQ (Inverted File with Product Quantization).
+*   **[TAS-091] Embedding Model**: `text-embedding-004` (768 dimensions).
+*   **[TAS-092] Indexing Strategy**: IVF-PQ (Inverted File with Product Quantization).
 
+**[TAS-093] Vector Schema**:
 | Field | Type | Description |
 | :--- | :--- | :--- |
 | **`id`** | UUID | Primary key. |
@@ -253,18 +261,18 @@ LanceDB provides semantic search capabilities for the "Long-term Memory" layer. 
 
 ### 3.3 State Machine Snapshots & Git Integration
 
-While SQLite handles logs and status, the orchestrator's graph state (LangGraph) is persisted as a "Checkpoint" object.
+While SQLite handles logs and status, the orchestrator's graph state (LangGraph) is persisted as a **[TAS-094] Checkpoint object**.
 
 *   **Checkpoint Store**: `checkpoints` table in SQLite (managed by LangGraph's `SqliteSaver`).
 *   **Content**: Binary/JSON blob of the entire graph state, including thread-local variables and recursion stacks.
-*   **Git Snapshots**: Every successful task completion results in a Git commit to the target repository. The `tasks` table stores the `commit_hash`, enabling the "Project Rewind" feature to restore both the filesystem (via `git checkout`) and the DB state (via time-traveling the SQLite logs).
+*   **[TAS-095] Git Snapshots**: Every successful task completion results in a Git commit to the target repository. The `tasks` table stores the `commit_hash`, enabling the "Project Rewind" feature to restore both the filesystem (via `git checkout`) and the DB state (via time-traveling the SQLite logs).
 
 ### 3.4 Data Integrity & Safety Edge Cases
 
-1.  **Orphaned Requirements**: The system must verify that every requirement in the `requirements` table is mapped to at least one entry in the `tasks` table. This is checked during Phase 3 (Distillation).
-2.  **State Mismatch**: If the `.devs` folder is deleted but the code remains, the orchestrator MUST treat the project as "Research-only" until a recovery process reconstructs the requirement map from code comments/documentation.
-3.  **Concurrency Management**: Although designed as a single-user tool, all DB writes use WAL mode and row-level locking to prevent corruption during parallel agent execution (e.g., parallel Research agents).
-4.  **Scaling Traces**: If `agent_logs` grow beyond 100MB, the system will implement an archival strategy, moving older Epic logs to compressed JSON files while keeping metadata in SQLite.
+1.  **[TAS-068] Orphaned Requirements**: The system must verify that every requirement in the `requirements` table is mapped to at least one entry in the `tasks` table. This is checked during Phase 3 (Distillation).
+2.  **[TAS-069] State Recovery**: If the `.devs` folder is deleted but the code remains, the orchestrator MUST treat the project as "Research-only" until a recovery process reconstructs the requirement map from code comments/documentation.
+3.  **[TAS-070] Concurrency Management**: Although designed as a single-user tool, all DB writes use WAL mode and row-level locking to prevent corruption during parallel agent execution (e.g., parallel Research agents).
+4.  **[TAS-071] Scaling Traces**: If `agent_logs` grow beyond 100MB, the system will implement an archival strategy, moving older Epic logs to compressed JSON files while keeping metadata in SQLite.
 
 ---
 
@@ -273,6 +281,7 @@ While SQLite handles logs and status, the orchestrator's graph state (LangGraph)
 The `devs` orchestrator is implemented as a TypeScript monorepo, ensuring a clean separation of concerns between the core state machine, agent logic, execution environments, and user interfaces.
 
 ### 4.1 Module Dependency Diagram
+**[TAS-096] Module Architecture**:
 ```mermaid
 graph TD
     CLI[devs-cli] --> Core[devs-core]
@@ -288,48 +297,48 @@ graph TD
 
 ### 4.2 Core Modules Definition
 
-#### 4.2.1 `@devs/core` (Orchestration Engine)
+#### 4.2.1 **[TAS-097] @devs/core** (Orchestration Engine)
 The central nervous system of the project, responsible for state transitions and persistence.
 - **`OrchestrationGraph`**: Implements the LangGraph.js state machine. Manages nodes for Research, Design, Distillation, and the TDD Implementation loop.
 - **`StateRepository`**: SQLite-backed ACID checkpointer for LangGraph state and `agent_logs`.
 - **`EventBus`**: Provides real-time event streaming for VSCode and CLI status updates.
 - **`HumanInTheLoopManager`**: Manages the "Wait-for-Approval" gates, persisting the graph state until a user directive is received.
 
-#### 4.2.2 `@devs/agents` (Agent Intelligence)
+#### 4.2.2 **[TAS-098] @devs/agents** (Agent Intelligence)
 Encapsulates all LLM-specific logic, prompts, and tool bindings.
 - **`AgentFactory`**: Dynamically instantiates agents with specific Tier (Pro vs Flash) and System Prompts.
 - **`PromptManager`**: Version-controlled repository of system instructions, including the "Glass-Box" reasoning protocols.
 - **`ToolRegistry`**: Mapping of MCP tools to specific agent roles (e.g., only `DeveloperAgent` has `write_file` access).
 - **`ReasoningEngine`**: Logic for parsing the "Structured Thought Protocol" (JSON thoughts/actions).
 
-#### 4.2.3 `@devs/sandbox` (Isolated Execution)
+#### 4.2.3 **[TAS-099] @devs/sandbox** (Isolated Execution)
 The abstraction layer for running code securely across different platforms.
 - **`SandboxProvider`**: Abstract interface for executing shell commands and file operations.
 - **`DockerDriver`**: Implementation for CLI users, managing ephemeral containers with strict resource limits ([TAS-021]).
 - **`WebContainerDriver`**: Implementation for VSCode Web, enabling browser-native Node.js execution.
 - **`FilesystemManager`**: Handles the synchronization between the host project directory and the sandbox environment, ensuring `.git` and `.devs` are protected ([REQ-SEC-003]).
 
-#### 4.2.4 `@devs/memory` (Semantic & Temporal Persistence)
+#### 4.2.4 **[TAS-100] @devs/memory** (Semantic & Temporal Persistence)
 Manages the tiered memory system required for long-running projects.
 - **`VectorStore`**: LanceDB integration for long-term project-wide constraints and architectural decisions ([TAS-011]).
 - **`ContextPruner`**: Sophisticated logic for sliding-window context management, ensuring agents stay within the 1M token limit without losing critical architectural info ([REQ-SYS-001]).
 - **`MemoryRefresher`**: Periodic background task that summarizes Epic progress into Long-term memory.
 
-#### 4.2.5 `@devs/mcp` (Communication Protocols)
+#### 4.2.5 **[TAS-101] @devs/mcp** (Communication Protocols)
 Standardizes how the system talks to itself and the generated project.
 - **`OrchestratorServer`**: An MCP server that exposes the internal state of `devs` to the VSCode UI.
 - **`ProjectServerTemplate`**: The blueprint for the MCP server that is injected into every generated project to enable "Agent-Ready" debugging ([REQ-GOAL-004]).
 - **`ToolProxy`**: Bridges tool calls from the LLM to the `devs-sandbox` execution layer.
 
-#### 4.2.6 `@devs/cli` & `@devs/vscode` (User Interfaces)
+#### 4.2.6 **[TAS-102] @devs/cli & @devs/vscode** (User Interfaces)
 - **`CLIController`**: Handles command-line arguments, environment setup, and terminal-based progress reporting.
 - **`ExtensionHost`**: The VSCode extension wrapper, managing the Webview lifecycle and real-time trace streaming.
 
 ### 4.3 Component Communication Patterns
 
-1.  **Command Execution**: Agents emit a `tool_call`. `devs-core` validates the call via the `ToolRegistry` and forwards it to `devs-sandbox`. The result is returned to the agent and simultaneously logged to the `agent_logs` table in `devs-core`.
-2.  **State Checkpointing**: After every node transition in LangGraph, `devs-core` triggers an ACID commit to SQLite. If the process dies, the next `devs resume` call reloads the exact graph state from the `checkpoints` table.
-3.  **Cross-Agent Verification**: When a `DeveloperAgent` completes a task, the `ReviewerAgent` is invoked by `devs-core`. The Reviewer is provided with a clean `devs-sandbox` instance to run the TDD suite independently.
+1.  **[TAS-072] Command Execution**: Agents emit a `tool_call`. `devs-core` validates the call via the `ToolRegistry` and forwards it to `devs-sandbox`. The result is returned to the agent and simultaneously logged to the `agent_logs` table in `devs-core`.
+2.  **[TAS-073] State Checkpointing**: After every node transition in LangGraph, `devs-core` triggers an ACID commit to SQLite. If the process dies, the next `devs resume` call reloads the exact graph state from the `checkpoints` table.
+3.  **[TAS-074] Cross-Agent Verification**: When a `DeveloperAgent` completes a task, the `ReviewerAgent` is invoked by `devs-core`. The Reviewer is provided with a clean `devs-sandbox` instance to run the TDD suite independently.
 
 ### 4.4 Technical Risks & Unknowns
 - **[RISK-401] Sandbox Latency**: Using Docker containers for every task execution (Red, Green, Lint) may introduce significant overhead. We may need a "Warm Sandbox" pool.
@@ -341,7 +350,7 @@ Standardizes how the system talks to itself and the generated project.
 ## 5. Orchestration & Agent Logic
 
 ### 5.1 LangGraph State Machine
-The orchestrator follows a cyclical graph with the following primary nodes:
+The orchestrator follows a **[TAS-103] cyclical graph** with the following primary nodes:
 1.  **`ResearchNode`**: Iterates through Market, Comp, and Tech analysis.
 2.  **`DesignNode`**: Generates PRD and TAS; waits for **[TAS-015] User Approval Gate**. This gate requires explicit user sign-off on the generated blueprints before the project can proceed to distillation.
 3.  **`DistillNode`**: Transforms documents into atomic Requirements and a Task DAG.
@@ -403,7 +412,7 @@ Injected into every project generated by 'devs'. Located at `/mcp-server/`.
 ### 8.1 Structured Agent-Orchestrator Protocol (SAOP)
 [TAS-035] To ensure "Glass-Box" transparency and prevent architectural drift, all interactions between the Agent Suite and the Orchestration Layer MUST follow the SAOP specification. This protocol mandates a strict separation between internal reasoning, strategy formulation, and external tool execution.
 
-#### 8.1.1 Turn Envelope Schema
+#### 8.1.1 **[TAS-112] Turn Envelope Schema**
 Every interaction turn from an agent must be encapsulated in the following strictly-typed JSON structure:
 ```typescript
 interface SAOP_Envelope {
@@ -440,7 +449,7 @@ interface SAOP_Envelope {
 [TAS-036] The orchestrator utilizes the MCP standard to provide a unified interface for all tool-based operations, ensuring that the system is modular and can easily integrate new capabilities.
 
 #### 8.2.1 Core Toolset Scoping
-Tools are exposed to agents based on the current Phase and Epic context:
+[TAS-077] Tools are exposed to agents based on the current Phase and Epic context:
 - **Phase 1 (Research)**: Scope includes `web_discovery`, `competitive_analysis_engine`, and `vector_memory_retrieval`.
 - **Phase 4 (Implementation)**: Scope includes `isolated_fs`, `shell_sandbox`, `test_runner`, and `agentic_profiler`.
 
@@ -472,7 +481,7 @@ Tools are exposed to agents based on the current Phase and Epic context:
 ### 8.3 Real-time Trace & Event Streaming (RTES)
 [TAS-038] The orchestrator implements a real-time event bus to synchronize state between the headless core and the VSCode Extension / CLI Dashboard.
 
-#### 8.3.1 Event Types and Payloads
+#### 8.3.1 **[TAS-113] Event Types and Payloads**
 - **`AGENT_THOUGHT_STREAM`**: Incremental chunks of the `reasoning_chain` for low-latency UI feedback.
 - **`TOOL_LIFECYCLE`**: Transitions between `INVOKED`, `RUNNING`, and `COMPLETED`.
 - **`SANDBOX_BUFFER_PULSE`**: Real-time streaming of terminal output (masked for secrets).
@@ -491,8 +500,8 @@ Tools are exposed to agents based on the current Phase and Epic context:
 ### 8.5 Persistence & Inter-Agent Handoff
 [TAS-039] All state transitions MUST be persistent and stateless. Handoffs between agents occur via the "Shared Database State."
 
-- **Data Locality**: No agent may hold long-term state in its internal memory. All findings must be written to the `documents` or `requirements` tables.
-- **Git State Correlation**: Every task transition is mapped to a Git Commit. The `tasks` table stores the `HEAD` hash, allowing the orchestrator to revert the entire environment (Filesystem + DB) to any historical point.
+- **[TAS-075] Data Locality**: No agent may hold long-term state in its internal memory. All findings must be written to the `documents` or `requirements` tables.
+- **[TAS-114] Git State Correlation**: Every task transition is mapped to a Git Commit. The `tasks` table stores the `HEAD` hash, allowing the orchestrator to revert the entire environment (Filesystem + DB) to any historical point.
 
 ### 8.6 Unknowns & Technical Risks
 - **[RISK-801] Non-UTF8 Tool Output**: Handling binary data or non-standard characters in terminal outputs could crash the JSON-based SAOP. A robust Base64 fallback is required.
@@ -514,7 +523,7 @@ Tools are exposed to agents based on the current Phase and Epic context:
 
 [TAS-040] The directory structure of a project generated by `devs` is designed for "Glass-Box" transparency, agentic observability, and strict architectural integrity. It differentiates between the orchestrator's internal state (`.devs/`), agent-specific guidance (`.agent/`), and the production codebase (`src/`).
 
-### 10.1 Top-Level Overview
+### 10.1 **[TAS-104] Top-Level Overview**
 
 ```text
 <project-root>/
@@ -587,7 +596,7 @@ Tools are exposed to agents based on the current Phase and Epic context:
     *   **`agent/`**: Specialized tests designed to be run by the Reviewer Agent to verify "Agentic Observability" (e.g., checking if the MCP server correctly reports a specific state change).
 
 ### 10.7 Root-Level Configuration & Scripts
-*   **`package.json`**: Must include a `devs` section for project-level metadata.
+*   **[TAS-076] Version Manifest**: `package.json` must include a `devs` section for project-level metadata.
     ```json
     {
       "devs": {

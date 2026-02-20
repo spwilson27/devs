@@ -105,7 +105,19 @@
             "## 5. Phase Transition Checkpoints (Definition of Done)"
         ]
     },
-    "extracted_requirements": [],
+    "extracted_requirements": [
+        "market_research",
+        "competitive_analysis",
+        "tech_landscape",
+        "user_research",
+        "1_prd",
+        "2_tas",
+        "3_mcp_design",
+        "4_user_features",
+        "5_security_design",
+        "6_ui_ux_architecture",
+        "7_ui_ux_design"
+    ],
     "final_review_completed": true,
     "requirements_extracted": false,
     "requirements_merged": false,

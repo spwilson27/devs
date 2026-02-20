@@ -150,6 +150,8 @@ class ProjectContext:
             if ".git" in root or ".sandbox" in root:
                 continue
             for file in files:
+                if file == ".DS_Store":
+                    continue
                 filepath = os.path.join(root, file)
                 try:
                     snapshot[filepath] = os.path.getmtime(filepath)

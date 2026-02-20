@@ -140,7 +140,7 @@ The goal is to move from a minimal project description to an authoritative resea
 *   **Interaction Protocol**:
     *   **Input**: User provides a prompt and journeys via `devs init` or the VSCode "New Project" wizard.
     *   **Agent Action**: Orchestrator spawns `ResearchAgent` clusters. Each agent emits a `RESEARCH_START` event with a target domain.
-    *   **UI Feedback**: VSCode Sidebar shows a "Researching..." status with a list of active search queries and scraped URLs. CLI shows a progress bar with `[Scraping competitors...]`.
+    *   **UI Feedback**: **[REQ-UI-001]** VSCode Sidebar shows a "Researching..." status with a list of active search queries and scraped URLs. **[REQ-UI-002]** CLI shows a progress bar with `[Scraping competitors...]`.
 *   **Edge Cases & Failure Modes**:
     *   **[EDGE-RES-01] Ambiguous Brief**: If the prompt is < 100 characters or lacks a clear objective, the agent MUST emit a `CLARIFICATION_REQUIRED` status. The UI must present a "Clarification Input" field.
     *   **[EDGE-RES-02] Search Dead-end**: If no relevant competitors are found, the agent must not return an empty report. It MUST perform "Adjacent Market Analysis" and explain why a direct match was not found.
@@ -151,7 +151,7 @@ The transition from research to architecture is a hard human-in-the-loop gate.
 
 *   **Interaction Protocol**:
     *   **Delivery**: Architect Agent generates PRD/TAS and moves to `WAITING_FOR_APPROVAL` state.
-    *   **Review Mode**: VSCode renders a "Review Dashboard" with a side-by-side view of the Brief and the new Specs. Mermaid diagrams (ERDs, Sequence) are rendered as interactive SVG blocks.
+    *   **Review Mode**: **[REQ-UI-003]** VSCode renders a "Review Dashboard" with a side-by-side view of the Brief and the new Specs. **[REQ-UI-004]** Mermaid diagrams (ERDs, Sequence) are rendered as interactive SVG blocks.
     *   **Approval**: User clicks "Approve" or provides a "Revision Directive".
 *   **Edge Cases & Failure Modes**:
     *   **[EDGE-ARC-01] Manual Markdown Corruption**: If the user manually edits the PRD/TAS Markdown and introduces syntax errors (e.g., broken Mermaid blocks), the system must run a `LINT_SPECS` check. On failure, it blocks progress and highlights the error line in the editor.
@@ -162,7 +162,7 @@ The transformation of documents into an executable roadmap.
 
 *   **Interaction Protocol**:
     *   **Logic**: Distiller Agent parses all `docs/*.md` and generates the `requirements` and `tasks` tables in `state.sqlite`.
-    *   **UI Presentation**: A "Roadmap Viewer" (Gantt-style or DAG) showing the 8-16 Epics. Each Epic is expandable to show its constituent tasks.
+    *   **UI Presentation**: **[REQ-UI-005]** A "Roadmap Viewer" (Gantt-style or DAG) showing the 8-16 Epics. Each Epic is expandable to show its constituent tasks.
 *   **Edge Cases & Failure Modes**:
     *   **[EDGE-PLN-01] Requirement Orphanage**: If a requirement is extracted from the PRD but cannot be mapped to any implementation task, the system flags a "Coverage Gap" and forces the agent to re-decompose the Epic.
     *   **[EDGE-PLN-02] Circular Task Dependencies**: If the DAG generator creates a cycle (Task A -> B -> A), the orchestrator must automatically run a "Cycle Resolution" turn or prompt the user to manually reorder the tasks.
@@ -171,8 +171,8 @@ The transformation of documents into an executable roadmap.
 The core execution engine where requirements become code.
 
 *   **Interaction Protocol (Plan-Act-Verify)**:
-    *   **Task Start**: Agent retrieves context -> UI shows "Active Task" card with REQ-ID.
-    *   **Red Phase**: Agent writes test -> CLI/VSCode Terminal shows `npm test` failure -> Success status: "Test Established (Red)".
+    *   **Task Start**: Agent retrieves context -> **[REQ-UI-006]** UI shows "Active Task" card with REQ-ID.
+    *   **Red Phase**: Agent writes test -> **[REQ-UI-007]** CLI/VSCode Terminal shows `npm test` failure -> Success status: "Test Established (Red)".
     *   **Green Phase**: Agent writes code -> CLI/VSCode Terminal shows `npm test` success -> Success status: "Requirement Met (Green)".
     *   **Review Phase**: Separate Reviewer Agent runs regression suite -> UI shows "Reviewing...".
 *   **Edge Cases & Failure Modes**:

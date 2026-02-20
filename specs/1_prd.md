@@ -8,11 +8,11 @@
 ### 1.2 Core Philosophy: The Glass-Box Orchestrator
 The 'devs' system is built on five non-negotiable architectural pillars that ensure the output is professional-grade, audit-ready, and resilient:
 
-1.  **Research-First Methodology**: No code is written until the problem space, competitive landscape, and technology options are exhaustively analyzed. This prevents "architectural drift" and ensures the stack is optimal for the specific use case.
-2.  **Architecture-Driven Development (ADD)**: Every project must have a validated PRD and TAS before implementation begins. This "blueprint-first" approach ensures that the agents are building against a stable, human-approved design.
-3.  **Strict TDD (Test-Driven Development) Loop**: Implementation follows a rigorous "Red-Green-Refactor" cycle. Every feature is validated by automated tests executed in a secure sandbox *before* the task is marked as complete. Tests are the primary source of truth for requirement fulfillment.
-4.  **Agentic Observability & Traceability (Glass-Box)**: Every decision, tool call, and reasoning step is logged and queryable. The user can inspect the "thought process" of any agent at any time, eliminating the "Black-Box" mystery of autonomous systems.
-5.  **MCP-Native (Model Context Protocol)**: Both the 'devs' orchestrator and the projects it generates are built with native support for the Model Context Protocol. This enables deep introspection, debugging, and profiling via standardized interfaces, allowing agents to "understand" the code they are writing and the environment it runs in.
+1.  **[REQ-PIL-001] Research-First Methodology**: No code is written until the problem space, competitive landscape, and technology options are exhaustively analyzed. This prevents "architectural drift" and ensures the stack is optimal for the specific use case.
+2.  **[REQ-PIL-002] Architecture-Driven Development (ADD)**: Every project must have a validated PRD and TAS before implementation begins. This "blueprint-first" approach ensures that the agents are building against a stable, human-approved design.
+3.  **[REQ-PIL-003] Strict TDD (Test-Driven Development) Loop**: Implementation follows a rigorous "Red-Green-Refactor" cycle. Every feature is validated by automated tests executed in a secure sandbox *before* the task is marked as complete. Tests are the primary source of truth for requirement fulfillment.
+4.  **[REQ-PIL-004] Agentic Observability & Traceability (Glass-Box)**: Every decision, tool call, and reasoning step is logged and queryable. The user can inspect the "thought process" of any agent at any time, eliminating the "Black-Box" mystery of autonomous systems.
+5.  **[REQ-PIL-005] MCP-Native (Model Context Protocol)**: Both the 'devs' orchestrator and the projects it generates are built with native support for the Model Context Protocol. This enables deep introspection, debugging, and profiling via standardized interfaces, allowing agents to "understand" the code they are writing and the environment it runs in.
 
 ### 1.3 High-Level Business & Technical Goals
 
@@ -50,11 +50,11 @@ The 'devs' system is built on five non-negotiable architectural pillars that ens
 
 ### 1.4 Technical Constraints & Edge Cases
 
-*   **Rate Limiting & Token Management**: The system must gracefully handle LLM API rate limits, implementing exponential backoff and prioritizing critical reasoning tasks over routine code reviews.
-*   **State Persistence & Recovery**: Every state change (from requirement distillation to task completion) must be persisted locally. The system must be able to resume from any point after a crash, network failure, or user-initiated pause.
-*   **Conflict Resolution**: In cases where the Reviewer Agent and Developer Agent disagree, the system must either attempt an automated resolution turn or escalate to the user.
-*   **Context Window Optimization**: Despite the large context window of Gemini 3 Pro, the system must implement efficient context pruning to ensure that the most relevant information (current task requirements, relevant file context, and architectural constraints) is prioritized.
-*   **Dependency Management**: The system must ensure that agents do not introduce conflicting or insecure third-party dependencies during the implementation phase.
+*   **[REQ-CON-001] Rate Limiting & Token Management**: The system must gracefully handle LLM API rate limits, implementing exponential backoff and prioritizing critical reasoning tasks over routine code reviews.
+*   **[REQ-CON-002] State Persistence & Recovery**: Every state change (from requirement distillation to task completion) must be persisted locally. The system must be able to resume from any point after a crash, network failure, or user-initiated pause.
+*   **[REQ-CON-003] Conflict Resolution**: In cases where the Reviewer Agent and Developer Agent disagree, the system must either attempt an automated resolution turn or escalate to the user.
+*   **[REQ-CON-004] Context Window Optimization**: Despite the large context window of Gemini 3 Pro, the system must implement efficient context pruning to ensure that the most relevant information (current task requirements, relevant file context, and architectural constraints) is prioritized.
+*   **[REQ-CON-005] Dependency Management**: The system must ensure that agents do not introduce conflicting or insecure third-party dependencies during the implementation phase.
 
 ### 1.5 Risks & Unknowns
 
@@ -152,27 +152,26 @@ The 'devs' system is designed to serve a diverse set of human stakeholders and t
 
 To ensure the "Glass-Box" philosophy, the following checkpoints are hard-coded into the orchestration engine:
 
-1.  **Phase 1 Completion**: User must approve the Research Suite (Market, Comp, Tech, User).
-2.  **Architecture Suite Approval**: User must sign off on PRD and TAS before the Distiller runs.
-3.  **Roadmap & Epic Review**: User must approve the sequence of 8-16 Epics.
-4.  **Epic Start**: User can review the 25+ tasks for the upcoming Epic and add/remove tasks.
-5.  **Task Failure**: If an agent hits the entropy limit, the system MUST hand off to the user for manual correction or requirement adjustment.
+1.  **[REQ-HITL-001] Phase 1 Completion**: User must approve the Research Suite (Market, Comp, Tech, User).
+2.  **[REQ-HITL-002] Architecture Suite Approval**: User must sign off on PRD and TAS before the Distiller runs.
+3.  **[REQ-HITL-003] Roadmap & Epic Review**: User must approve the sequence of 8-16 Epics.
+4.  **[REQ-HITL-004] Epic Start**: User can review the 25+ tasks for the upcoming Epic and add/remove tasks.
+5.  **[REQ-HITL-005] Task Failure**: If an agent hits the entropy limit, the system MUST hand off to the user for manual correction or requirement adjustment.
 
 ## 3. Detailed Functional Requirements
 
 ### 3.1 Orchestrator Interface & Multi-Modal Access
-*   **[REQ-INT-001] CLI Tool**: 
-    *   The system MUST be operable via a terminal interface (e.g., `devs init`, `devs run`, `devs status`).
-    *   **Headless Mode**: Support for `--json` output for all commands to allow integration into CI/CD pipelines or other scripts.
-    *   **State Control**: Commands to `pause`, `resume`, `rewind` (to specific task/epic), and `skip` current operations.
+*   **[REQ-INT-001] CLI Operability**: The system MUST be operable via a terminal interface (e.g., `devs init`, `devs run`, `devs status`).
+*   **[REQ-INT-005] CLI Headless Mode**: Support for `--json` output for all commands to allow integration into CI/CD pipelines or other scripts.
+*   **[REQ-INT-006] CLI State Control**: Commands to `pause`, `resume`, `rewind` (to specific task/epic), and `skip` current operations.
 *   **[REQ-INT-002] VSCode Extension**: 
-    *   **Project Dashboard**: A dedicated sidebar view showing the status of the current Epic, a progress bar for the overall project, and a tree-view of all Tasks.
-    *   **Document Editor**: Integrated Markdown preview and editor for PRD, TAS, and other generated documents with "Sync & Regenerate" capabilities.
-    *   **Agent Console**: A streaming log view that differentiates between "Thoughts" (internal reasoning), "Actions" (tool calls), and "Observations" (tool output).
-    *   **Human-in-the-Loop Popups**: Visual prompts for approvals at defined checkpoints.
+    *   **[REQ-INT-007] VSCode Project Dashboard**: A dedicated sidebar view showing the status of the current Epic, a progress bar for the overall project, and a tree-view of all Tasks.
+    *   **[REQ-INT-008] VSCode Document Editor**: Integrated Markdown preview and editor for PRD, TAS, and other generated documents with "Sync & Regenerate" capabilities.
+    *   **[REQ-INT-009] VSCode Agent Console**: A streaming log view that differentiates between "Thoughts" (internal reasoning), "Actions" (tool calls), and "Observations" (tool output).
+    *   **[REQ-INT-010] VSCode Human-in-the-Loop Popups**: Visual prompts for approvals at defined checkpoints.
 *   **[REQ-INT-003] MCP Orchestrator Server**: 
-    *   The 'devs' system MUST expose its own internal state via an MCP server.
-    *   This allows the user's primary AI assistant (e.g., Gemini in VSCode) to query the `devs` status, read requirements, and inspect the task DAG directly.
+    *   **[REQ-INT-011] MCP State Exposure**: The 'devs' system MUST expose its own internal state via an MCP server.
+    *   **[REQ-INT-012] MCP Assistant Querying**: This allows the user's primary AI assistant (e.g., Gemini in VSCode) to query the `devs` status, read requirements, and inspect the task DAG directly.
 *   **[REQ-INT-004] Real-time State Synchronization**: 
     *   The CLI and VSCode extension MUST share a common state file (`.devs/state.json` or SQLite) to ensure seamless switching between interfaces.
 
@@ -188,35 +187,35 @@ The system MUST deploy specialized agents to generate a research suite. Every re
     *   **Deliverable**: Detailed profiles for 3+ personas (User, Admin, Developer).
     *   **Journey Visualization**: Mermaid.js sequence diagrams for the "Primary Value Journey" (the core thing the app does).
 *   **[REQ-RES-004] Research Edge Cases**:
-    *   **Niche Markets**: If no direct competitors are found, the agent MUST analyze "Adjacent Markets" or "Manual Workarounds" currently used by the target personas.
-    *   **Stale Data**: Agents MUST perform a live search to ensure recommended libraries are not deprecated (e.g., checking last commit date on GitHub).
+    *   **[REQ-RES-004] Niche Markets**: If no direct competitors are found, the agent MUST analyze "Adjacent Markets" or "Manual Workarounds" currently used by the target personas.
+    *   **[REQ-RES-005] Stale Data Prevention**: Agents MUST perform a live search to ensure recommended libraries are not deprecated (e.g., checking last commit date on GitHub).
 
 ### 3.3 Phase 2: High-Level Documentation (Agent-Ready Blueprints)
 The system MUST generate authoritative documents. Each document MUST follow a strict schema to ensure they are machine-readable by the Distiller Agent.
 *   **[REQ-DOC-001] PRD (Product Requirements Document)**:
     *   MUST include: Goals, Non-Goals, User Stories (Gherkin format preferred), and high-level Constraints.
 *   **[REQ-DOC-002] TAS (Technical Architecture Specification)**:
-    *   **System Layout**: Detailed folder structure proposal.
-    *   **Data Model**: Mermaid.js ERD (Entity Relationship Diagram).
-    *   **API/Interface Contracts**: Definition of core internal interfaces (e.g., TypeScript interfaces or Protobuf definitions).
+    *   **[REQ-DOC-006] System Layout**: Detailed folder structure proposal.
+    *   **[REQ-DOC-007] Data Model**: Mermaid.js ERD (Entity Relationship Diagram).
+    *   **[REQ-DOC-008] API/Interface Contracts**: Definition of core internal interfaces (e.g., TypeScript interfaces or Protobuf definitions).
 *   **[REQ-DOC-003] MCP & Glass-Box Architecture**:
     *   Specification for the project's internal MCP server.
     *   Definition of "Introspection Points": Where the agent will hook in to profile or debug the system.
 *   **[REQ-DOC-004] UI/UX Design System**:
     *   Definition of color palettes, typography, and core component library (e.g., Tailwind + Radix UI).
-    *   Mermaid.js Site Map showing page hierarchy.
+    *   **[REQ-DOC-009] Site Map**: Mermaid.js Site Map showing page hierarchy.
 *   **[REQ-DOC-005] Security & Mitigation Plan**:
     *   Threat model identifying at least the Top 3 security risks.
-    *   Mitigation strategies for each risk (e.g., "Use Zod for input validation to prevent injection").
+    *   **[REQ-DOC-010] Mitigation Strategies**: Mitigation strategies for each risk (e.g., "Use Zod for input validation to prevent injection").
 
 ### 3.4 Phase 3: Requirement Distillation & Roadmap Generation
 *   **[REQ-PLAN-001] Atomic Requirement Extraction**: 
     *   The Distiller Agent MUST parse all Phase 1 & 2 docs to extract unique, non-overlapping requirements.
     *   Each requirement MUST be: **Atomic** (one thing), **Testable** (can be verified by code), and **Traceable** (points back to a document section).
 *   **[REQ-PLAN-002] Epic & Task Orchestration**:
-    *   **Epic Count**: 8-16 phases, each representing a logical milestone (e.g., "Epic 1: Auth & User Profiles").
-    *   **Task Granularity**: 25+ tasks per Epic. A task is considered "Too Large" if its estimated LoC change exceeds 200 lines.
-    *   **Task Definition**: Every task MUST include: `ID`, `Title`, `Description`, `Input Files`, `Success Criteria (Tests)`, and `Dependencies`.
+    *   **[REQ-PLAN-002] Epic Count**: 8-16 phases, each representing a logical milestone (e.g., "Epic 1: Auth & User Profiles").
+    *   **[REQ-PLAN-004] Task Granularity**: 25+ tasks per Epic. A task is considered "Too Large" if its estimated LoC change exceeds 200 lines.
+    *   **[REQ-PLAN-005] Task Definition**: Every task MUST include: `ID`, `Title`, `Description`, `Input Files`, `Success Criteria (Tests)`, and `Dependencies`.
 *   **[REQ-PLAN-003] Dependency DAG**:
     *   The system MUST generate a Directed Acyclic Graph of all tasks.
     *   The scheduler MUST support parallel task execution where no dependencies exist (within the same Epic).
@@ -224,9 +223,9 @@ The system MUST generate authoritative documents. Each document MUST follow a st
 ### 3.5 Phase 4: TDD Implementation & Verification Loop
 This is the core execution engine. It MUST be deterministic and resilient.
 *   **[REQ-IMP-001] Sandbox Lifecycle Management**:
-    *   **Provisioning**: For each task, the orchestrator MUST spin up a fresh sandbox (Docker container or WebContainer).
-    *   **Pre-flight**: The sandbox MUST be injected with: the current codebase, the task requirements, and the necessary MCP tools.
-    *   **Cleanup**: Sandboxes MUST be persisted to a "Suspended" state on failure to allow user debugging, and destroyed on success.
+    *   **[REQ-IMP-001] Provisioning**: For each task, the orchestrator MUST spin up a fresh sandbox (Docker container or WebContainer).
+    *   **[REQ-IMP-006] Pre-flight**: The sandbox MUST be injected with: the current codebase, the task requirements, and the necessary MCP tools.
+    *   **[REQ-IMP-007] Cleanup**: Sandboxes MUST be persisted to a "Suspended" state on failure to allow user debugging, and destroyed on success.
 *   **[REQ-IMP-002] Strict TDD Cycle**:
     *   **Step A (Red)**: Agent writes a test that covers the task requirement. Test MUST FAIL in the sandbox.
     *   **Step B (Green)**: Agent implements the code. Test MUST PASS.
@@ -236,11 +235,11 @@ This is the core execution engine. It MUST be deterministic and resilient.
     *   **Medium-term**: Decisions made within the current Epic (e.g., "We chose library X over Y").
     *   **Long-term**: Project-wide constraints (e.g., "Never use 'any' in TypeScript"). Stored in `.devs/memory.lancedb`.
 *   **[REQ-IMP-004] Git Strategy & Atomic Commits**:
-    *   The system MUST manage a git repository for the generated project.
-    *   Each task completion MUST result in a commit. The commit message MUST include the Task ID and a concise summary of the change.
+    *   **[REQ-IMP-004] Git Repository Management**: The system MUST manage a git repository for the generated project.
+    *   **[REQ-IMP-008] Atomic Commits**: Each task completion MUST result in a commit. The commit message MUST include the Task ID and a concise summary of the change.
 *   **[REQ-IMP-005] Entropy Detection & Automated Backoff**:
-    *   If a task fails the TDD loop 3 times, the agent MUST attempt a "Strategy Shift" (e.g., "I will try a different library" or "I will simplify the implementation").
-    *   After 5 total failures, the system MUST pause and hand off to the user with a detailed "Failure Report" and logs.
+    *   **[REQ-IMP-005] Strategy Shift**: If a task fails the TDD loop 3 times, the agent MUST attempt a "Strategy Shift" (e.g., "I will try a different library" or "I will simplify the implementation").
+    *   **[REQ-IMP-009] Automated Hand-off**: After 5 total failures, the system MUST pause and hand off to the user with a detailed "Failure Report" and logs.
 
 ### 3.6 Cross-Cutting System Requirements
 *   **[REQ-SYS-001] Token Optimization**:
@@ -338,39 +337,39 @@ All AI-generated code execution MUST be strictly isolated from the host machine 
 
 *   **[REQ-SEC-001] Mandatory Containerization**: Every task involving code execution, dependency installation, or automated testing MUST occur within a fresh, ephemeral sandbox (e.g., Docker or WebContainers).
 *   **[REQ-SEC-002] Network Egress Control**: 
-    - Sandboxes MUST operate on a "Deny-All" network policy by default.
-    - Explicit allow-lists MUST be implemented for:
+    *   **[REQ-SEC-002] Deny-All Policy**: Sandboxes MUST operate on a "Deny-All" network policy by default.
+    *   **[REQ-SEC-008] Explicit Allow-lists**: Explicit allow-lists MUST be implemented for:
         - Known package managers (npm, pip, cargo) during dependency installation phases.
         - Specific user-approved external APIs if required by the research phase.
 *   **[REQ-SEC-003] Filesystem Integrity**: 
-    - The sandbox MUST only have write access to the specific project directory (`/workspace`).
-    - The host's `.git` and `.devs` directories MUST be mounted as read-only or excluded entirely from the sandbox to prevent agents from corrupting project state or history.
+    *   **[REQ-SEC-003] Write Access**: The sandbox MUST only have write access to the specific project directory (`/workspace`).
+    *   **[REQ-SEC-009] Host Protection**: The host's `.git` and `.devs` directories MUST be mounted as read-only or excluded entirely from the sandbox to prevent agents from corrupting project state or history.
 *   **[REQ-SEC-004] Resource Quotas**: 
-    - Each sandbox MUST be restricted to a maximum CPU (e.g., 2 cores) and Memory (e.g., 4GB) usage to prevent "Fork Bombs" or memory leak attacks from consuming host resources.
-    - Execution time MUST be capped at 5 minutes per tool call; exceeding this triggers an immediate "Process Kill" and failure log.
+    *   **[REQ-SEC-004] CPU/Memory Restrictions**: Each sandbox MUST be restricted to a maximum CPU (e.g., 2 cores) and Memory (e.g., 4GB) usage to prevent "Fork Bombs" or memory leak attacks from consuming host resources.
+    *   **[REQ-SEC-010] Execution Time Cap**: Execution time MUST be capped at 5 minutes per tool call; exceeding this triggers an immediate "Process Kill" and failure log.
 
 ### 5.2 LLM Security & Data Privacy
 Protecting sensitive information and ensuring the integrity of agent reasoning is paramount.
 
 *   **[REQ-SEC-005] Automated Secret & PII Redaction**: 
-    - All agent logs, reasoning traces, and tool outputs MUST be passed through a regex-based and LLM-assisted scanner before being persisted to the SQLite database.
-    - Detected secrets (API keys, AWS tokens, SSH keys) MUST be replaced with `[REDACTED]`.
+    *   **[REQ-SEC-005] Redaction Scanner**: All agent logs, reasoning traces, and tool outputs MUST be passed through a regex-based and LLM-assisted scanner before being persisted to the SQLite database.
+    *   **[REQ-SEC-011] Secret Replacement**: Detected secrets (API keys, AWS tokens, SSH keys) MUST be replaced with `[REDACTED]`.
 *   **[REQ-SEC-006] Prompt Injection Mitigation**: 
-    - All external research data (web scrapes, competitor docs) MUST be treated as "Untrusted Input."
-    - The system MUST use structured prompting and delimited sections (e.g., `<untrusted_context>`) to minimize the risk of data-driven prompt injection overriding agent instructions.
+    *   **[REQ-SEC-006] Untrusted Input Handling**: All external research data (web scrapes, competitor docs) MUST be treated as "Untrusted Input."
+    *   **[REQ-SEC-012] Structured Prompting**: The system MUST use structured prompting and delimited sections (e.g., `<untrusted_context>`) to minimize the risk of data-driven prompt injection overriding agent instructions.
 *   **[REQ-SEC-007] Dependency Vulnerability Scanning**: 
-    - The Developer Agent MUST run a security audit (e.g., `npm audit`) after every dependency installation.
-    - Any "High" or "Critical" vulnerability MUST trigger a task failure and an immediate "Risk & Mitigation" update.
+    *   **[REQ-SEC-007] Security Audit**: The Developer Agent MUST run a security audit (e.g., `npm audit`) after every dependency installation.
+    *   **[REQ-SEC-013] Vulnerability Trigger**: Any "High" or "Critical" vulnerability MUST trigger a task failure and an immediate "Risk & Mitigation" update.
 
 ### 5.3 Reliability, Fault Tolerance & Loop Prevention
 The system MUST be resilient to LLM hallucinations and transient errors.
 
 *   **[REQ-REL-001] Entropy & Loop Detection**: 
-    - The orchestrator MUST monitor the "Semantic Delta" between task attempts.
-    - If the agent generates the same error or identical code across 3 consecutive turns, the system MUST flag "Strategy Entropy" and force a reasoning pivot or pause for human intervention.
+    *   **[REQ-REL-001] Delta Monitoring**: The orchestrator MUST monitor the "Semantic Delta" between task attempts.
+    *   **[REQ-REL-005] Strategy Pivot**: If the agent generates the same error or identical code across 3 consecutive turns, the system MUST flag "Strategy Entropy" and force a reasoning pivot or pause for human intervention.
 *   **[REQ-REL-002] Maximum Turn & Token Budgets**: 
-    - Every task MUST have a hard limit of 10 implementation turns and a token budget (e.g., 200k tokens).
-    - Exceeding these limits triggers an automatic `PAUSE` and a detailed failure report presented to the user.
+    *   **[REQ-REL-002] Turn Limit**: Every task MUST have a hard limit of 10 implementation turns and a token budget (e.g., 200k tokens).
+    *   **[REQ-REL-006] Token Budget**: Exceeding these limits triggers an automatic `PAUSE` and a detailed failure report presented to the user.
 *   **[REQ-REL-003] Deterministic State Recovery (ACID Compliance)**: 
     - All project state transitions MUST be persisted to the local `.devs/state.sqlite` database using ACID-compliant transactions.
     - The system MUST support `RESUME` from any interrupted state (crash, network loss) by re-loading the last successful Task Snapshot.
@@ -382,8 +381,8 @@ The system MUST be resilient to LLM hallucinations and transient errors.
 Scaling to 200+ tasks requires efficient management of LLM context and system resources.
 
 *   **[REQ-PERF-001] Context Window Compression & Pruning**: 
-    - While leveraging Gemini's 1M+ token window, the system MUST implement a "Sliding Relevance Window."
-    - Older task logs and reasoning MUST be summarized and moved to "Medium-term Memory" (Vector DB) to keep the active context window focused on the TAS, PRD, and current task requirements.
+    *   **[REQ-PERF-001] Sliding Window**: While leveraging Gemini's 1M+ token window, the system MUST implement a "Sliding Relevance Window."
+    *   **[REQ-PERF-004] Summarization Handoffs**: Older task logs and reasoning MUST be summarized and moved to "Medium-term Memory" (Vector DB) to keep the active context window focused on the TAS, PRD, and current task requirements.
 *   **[REQ-PERF-002] Tiered Model Orchestration**: 
     - **Tier 1 (Pro)**: Gemini 3 Pro used for Research, Architecture, and Task Implementation.
     - **Tier 2 (Flash)**: Gemini 3 Flash used for routine Code Review, Linting, and simple Unit Test generation to minimize latency and cost.
@@ -394,15 +393,15 @@ Scaling to 200+ tasks requires efficient management of LLM context and system re
 The generated project MUST be natively optimized for inspection and debugging by both humans and agents.
 
 *   **[REQ-OBS-001] Native MCP Server Integration**: 
-    - Every project generated by 'devs' MUST include a standardized MCP server (`/mcp-server`) that provides:
-        - **Introspection**: Read access to internal state, logs, and environment variables.
-        - **Execution**: Ability to run specific modules or tests in isolation.
-        - **Profiling**: Access to CPU/Memory traces during execution.
+    *   Every project generated by 'devs' MUST include a standardized MCP server (`/mcp-server`) that provides:
+        - **[REQ-OBS-001] Introspection**: Read access to internal state, logs, and environment variables.
+        - **[REQ-OBS-004] Execution**: Ability to run specific modules or tests in isolation.
+        - **[REQ-OBS-005] Profiling**: Access to CPU/Memory traces during execution.
 *   **[REQ-OBS-002] Agent-Oriented Documentation (AOD)**: 
-    - Each module MUST include a `.agent.md` file (or equivalent JSDoc/Docstrings) that explicitly defines:
-        - "Why" the module exists (intent).
-        - "How" to test it.
-        - Known "Edge Cases" and constraints for future developer agents.
+    *   Each module MUST include a `.agent.md` file (or equivalent JSDoc/Docstrings) that explicitly defines:
+        - **[REQ-OBS-002] Intent**: "Why" the module exists (intent).
+        - **[REQ-OBS-006] Testability**: "How" to test it.
+        - **[REQ-OBS-007] Edge Cases**: Known "Edge Cases" and constraints for future developer agents.
 *   **[REQ-OBS-003] Real-time State Tracing**: 
     - All internal "Agent-to-Agent" communication and tool calls MUST be streamed to the `.devs/trace.log` for real-time monitoring via the VSCode Extension.
 
