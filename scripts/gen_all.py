@@ -367,16 +367,18 @@ class Phase4AExtractRequirements(BasePhase):
             target_path = f"requirements/{doc['id']}.md"
             expected_file = os.path.join(ctx.requirements_dir, f"{doc['id']}.md")
             
+            doc_rel_path = f"{'specs' if doc['type'] == 'spec' else 'research'}/{doc['id']}.md"
+            
             print(f"   -> Extracting from {doc['name']}...")
             prompt = ctx.format_prompt(prompt_tmpl,
                 description_ctx=ctx.description_ctx,
                 document_name=doc['name'],
-                document_path=f"{'specs' if doc['type'] == 'spec' else 'research'}/{doc['id']}.md",
+                document_path=doc_rel_path,
                 target_path=target_path
             )
             
-            ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/scripts/verify_requirements.py\n"
-            allowed_files = [expected_file]
+            ignore_content = f"/*\n!/.sandbox/\n!/requirements/\n!/scripts/verify_requirements.py\n!/{doc_rel_path}\n"
+            allowed_files = [expected_file, doc_path]
             result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
             
             if result.returncode != 0:

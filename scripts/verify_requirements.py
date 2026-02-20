@@ -23,15 +23,27 @@ def verify_doc(source_file, extracted_file):
     source_reqs = parse_requirements(source_file)
     extracted_reqs = parse_requirements(extracted_file)
     
-    missing = source_reqs - extracted_reqs
+    missing_in_extracted = source_reqs - extracted_reqs
+    missing_in_source = extracted_reqs - source_reqs
     
-    if not missing:
-        print(f"Success: All {len(source_reqs)} requirements from {source_file} are present in {extracted_file}.")
+    success = True
+    
+    if missing_in_extracted:
+        print(f"FAILED: The following {len(missing_in_extracted)} requirements are missing from {extracted_file}:")
+        for req in sorted(missing_in_extracted):
+            print(f"  - [{req}]")
+        success = False
+        
+    if missing_in_source:
+        print(f"FAILED: The following {len(missing_in_source)} requirements are missing from {source_file}:")
+        for req in sorted(missing_in_source):
+            print(f"  - [{req}]")
+        success = False
+        
+    if success:
+        print(f"Success: Both {source_file} and {extracted_file} perfectly match exactly the same {len(source_reqs)} requirement IDs.")
         return 0
     else:
-        print(f"FAILED: The following {len(missing)} requirements are missing from {extracted_file}:")
-        for req in sorted(missing):
-            print(f"  - [{req}]")
         return 1
 
 def verify_master(master_file, requirements_dir):
