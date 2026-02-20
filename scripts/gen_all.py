@@ -15,15 +15,15 @@ DOCS = [
     {"id": "user_research", "type": "research", "name": "User Research Report", "desc": "Analyze potential users and create a user research report.", "prompt_file": "research_user_research.md"},
     
     # Specs
-    {"id": "1_prd", "type": "spec", "name": "PRD (Product Requirements Document)", "desc": "Create a Product Requirements Document (PRD).", "prompt_file": "spec_doc.md"},
-    {"id": "2_tas", "type": "spec", "name": "TAS (Technical Architecture Specification)", "desc": "Create a Technical Architecture Specification (TAS).", "prompt_file": "spec_doc.md"},
-    {"id": "3_mcp_design", "type": "spec", "name": "MCP and AI Development Design", "desc": "Create an MCP and AI Development Design document.", "prompt_file": "spec_doc.md"},
-    {"id": "4_user_features", "type": "spec", "name": "User Features", "desc": "Create a User Features document describing user journeys and expectations.", "prompt_file": "spec_doc.md"},
-    {"id": "5_security_design", "type": "spec", "name": "Security Design", "desc": "Create a Security Design document detailing risks and security architectures.", "prompt_file": "spec_doc.md"},
-    {"id": "6_ui_ux_architecture", "type": "spec", "name": "UI/UX Architecture", "desc": "Create a UI/UX Architecture document.", "prompt_file": "spec_doc.md"},
-    {"id": "7_ui_ux_design", "type": "spec", "name": "UI/UX Design", "desc": "Create a UI/UX Design document.", "prompt_file": "spec_doc.md"},
-    {"id": "8_risks_mitigation", "type": "spec", "name": "Risks and Mitigation", "desc": "Create a Risks and Mitigation document.", "prompt_file": "spec_doc.md"},
-    {"id": "9_project_roadmap", "type": "spec", "name": "Project Roadmap", "desc": "Create a Project Roadmap.", "prompt_file": "spec_doc.md"}
+    {"id": "1_prd", "type": "spec", "name": "PRD (Product Requirements Document)", "desc": "Create a Product Requirements Document (PRD).", "prompt_file": "spec_prd.md"},
+    {"id": "2_tas", "type": "spec", "name": "TAS (Technical Architecture Specification)", "desc": "Create a Technical Architecture Specification (TAS).", "prompt_file": "spec_tas.md"},
+    {"id": "3_mcp_design", "type": "spec", "name": "MCP and AI Development Design", "desc": "Create an MCP and AI Development Design document.", "prompt_file": "spec_mcp_design.md"},
+    {"id": "4_user_features", "type": "spec", "name": "User Features", "desc": "Create a User Features document describing user journeys and expectations.", "prompt_file": "spec_user_features.md"},
+    {"id": "5_security_design", "type": "spec", "name": "Security Design", "desc": "Create a Security Design document detailing risks and security architectures.", "prompt_file": "spec_security_design.md"},
+    {"id": "6_ui_ux_architecture", "type": "spec", "name": "UI/UX Architecture", "desc": "Create a UI/UX Architecture document.", "prompt_file": "spec_ui_ux_architecture.md"},
+    {"id": "7_ui_ux_design", "type": "spec", "name": "UI/UX Design", "desc": "Create a UI/UX Design document.", "prompt_file": "spec_ui_ux_design.md"},
+    {"id": "8_risks_mitigation", "type": "spec", "name": "Risks and Mitigation", "desc": "Create a Risks and Mitigation document.", "prompt_file": "spec_risks_mitigation.md"},
+    {"id": "9_project_roadmap", "type": "spec", "name": "Project Roadmap", "desc": "Create a Project Roadmap.", "prompt_file": "spec_project_roadmap.md"}
 ]
 
 class GeminiRunner:
@@ -132,7 +132,7 @@ class ProjectContext:
             if os.path.exists(prev_file):
                 with open(prev_file, "r", encoding="utf-8") as f:
                     content = f.read()
-                    accumulated_context += f"\n\n--- PREVIOUS PROJECT DOCUMENT: {prev_doc['name']} ---\n{content}\n"
+                    accumulated_context += f'\n\n<previous_document name="{prev_doc["name"]}">\n{content}\n</previous_document>\n'
         return accumulated_context
 
     def get_workspace_snapshot(self) -> Dict[str, float]:
@@ -174,11 +174,25 @@ class ProjectContext:
                     print(f"\n[SANDBOX VIOLATION] Unauthorized deletion detected: {path}")
                     sys.exit(1)
 
+    def strip_thinking_tags(self, filepath: str):
+        if not os.path.exists(filepath):
+            return
+        with open(filepath, "r", encoding="utf-8") as f:
+            content = f.read()
+            
+        new_content = re.sub(r'<thinking>.*?</thinking>\s*', '', content, flags=re.DOTALL)
+        
+        if new_content != content:
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(new_content)
+
     def run_gemini(self, full_prompt: str, ignore_content: str, allowed_files: Optional[List[str]] = None) -> subprocess.CompletedProcess:
         before = self.get_workspace_snapshot()
         result = self.runner.run(self.root_dir, full_prompt, ignore_content, self.ignore_file)
         if allowed_files is not None:
             self.verify_changes(before, allowed_files)
+            for f in allowed_files:
+                self.strip_thinking_tags(os.path.abspath(f))
         return result
 
     def parse_markdown_headers(self, filepath: str) -> List[str]:

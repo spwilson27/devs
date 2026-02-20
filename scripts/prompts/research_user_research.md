@@ -9,18 +9,23 @@ Description: {document_description}
 You will identify target demographics, their primary needs, behaviors, and the key problems this product will solve for them. Build detailed profiles and outline how they will interact with the system. You must actively synthesize any provided previous project context to ensure this report aligns with and builds upon established project knowledge without introducing contradictions.
 
 # CHAIN OF THOUGHT
-Before generating the final document, silently plan your approach:
+Before generating the final document, plan your approach:
 1. Identify the core problem the product solves based on the Context.
 2. Formulate 3 distinct target audience segments that experience this problem.
-3. Cross-reference your planned segments against any *Previous Project Context* (e.g., if Market or Competitive research identifies a specific niche, your personas must reflect that niche).
+3. Cross-reference your planned segments against any provided `<previous_document>` tags (e.g., if Market or Competitive research identifies a specific niche, your personas must reflect that niche).
 4. Draft a core user journey for each persona showing how they interact with the product to solve their problem.
 5. Structure the final document according to the required `OUTPUT FORMAT`.
 
 # CONSTRAINTS
-- Output ONLY the raw Markdown content. Do not include any conversational filler or your internal thought process outside of the generated document.
+- You may use a `<thinking>...</thinking>` block at the very beginning of your response to plan your approach. After the thinking block, output ONLY the raw Markdown document. Do not include any conversational filler.
 - The findings must provide a solid foundation for feature prioritization and UX design, ensuring the development team understands WHO they are building for and WHY.
 - For user journey diagrams, use code blocks with Mermaid markup (`mermaid`) exclusively.
 - You MUST save the generated document exactly to `{target_path}` using your file editing tools.
+
+# ANTI-PATTERNS (WHAT NOT TO DO)
+- Do not invent or add core product features that are not explicitly requested in the Context or logically required to fulfill a requested feature.
+- Do not use placeholder text like "[Insert Name Here]" or "TBD"; make authoritative, data-backed decisions.
+- Do not recommend deprecated or legacy technologies.
 
 # OUTPUT FORMAT
 - Must be a valid GitHub-Flavored Markdown document.
