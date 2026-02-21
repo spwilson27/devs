@@ -160,6 +160,8 @@ class ProjectContext:
             "phases_completed": False,
             "tasks_completed": False,
             "tasks_generated": [],
+            "dag_completed": False,
+            "dag_reviewed": False,
             "tdd_completed": False
         }
         if os.path.exists(self.state_file):
@@ -818,6 +820,159 @@ class Phase7TDDLoop(BasePhase):
                 
             print("   -> Agent completed a cycle. Checking status...")
 
+class Phase7ADAGGeneration(BasePhase):
+    def execute(self, ctx: ProjectContext):
+        if ctx.state.get("dag_completed", False):
+            print("DAG Generation already completed.")
+            return
+
+        print("\n=> [Phase 7A: DAG Generation] Creating dependency graphs for tasks...")
+        
+        tasks_dir = os.path.join(ctx.root_dir, "tasks")
+        if not os.path.exists(tasks_dir):
+            print("\n[!] Error: tasks directory does not exist. Run Phase 6 first.")
+            sys.exit(1)
+
+        phase_dirs = [d for d in os.listdir(tasks_dir) if os.path.isdir(os.path.join(tasks_dir, d)) and d.startswith("phase_")]
+        if not phase_dirs:
+            print("\n[!] Error: No phase directories found in tasks/.")
+            sys.exit(1)
+
+        dag_prompt_tmpl = ctx.load_prompt("dag_tasks.md")
+
+        for phase_id in sorted(phase_dirs):
+            phase_dir_path = os.path.join(tasks_dir, phase_id)
+            dag_file_path = os.path.join(phase_dir_path, "dag.json")
+            
+            if os.path.exists(dag_file_path):
+                 print(f"   -> Skipping DAG Generation for {phase_id} (already exists).")
+                 continue
+                 
+            # Gather tasks
+            sub_epics = [d for d in os.listdir(phase_dir_path) if os.path.isdir(os.path.join(phase_dir_path, d))]
+            if not sub_epics:
+                continue
+                
+            tasks_content = ""
+            for sub_epic in sorted(sub_epics):
+                tasks_content += f"### Task ID: {sub_epic}\n"
+                
+                # Check for multiple md files, take the first one or a specific one if a standard is defined.
+                # In current implementation, detailed tasks might be in an index.md or named after the subepic.
+                # Assuming there's a markdown file inside.
+                sub_epic_dir = os.path.join(phase_dir_path, sub_epic)
+                md_files = [f for f in os.listdir(sub_epic_dir) if f.endswith(".md")]
+                
+                for md_file in md_files:
+                     with open(os.path.join(sub_epic_dir, md_file), "r", encoding="utf-8") as f:
+                          content = f.read()
+                          # Indent content slightly so it's readable
+                          tasks_content += "\n".join([f"    {line}" for line in content.split("\n")]) + "\n\n"
+            
+            print(f"   -> Generating DAG for {phase_id}...")
+            
+            prompt = ctx.format_prompt(
+                dag_prompt_tmpl,
+                phase_filename=phase_id,
+                target_path=f"tasks/{phase_id}/dag.json",
+                description_ctx=ctx.description_ctx,
+                tasks_content=tasks_content
+            )
+
+            ignore_content = f"/*\n!/.sandbox/\n!/tasks/{phase_id}/dag.json\n"
+            allowed_files = [dag_file_path]
+            
+            result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
+            
+            if result.returncode != 0:
+                print(f"\n[!] Error generating DAG for {phase_id}.")
+                print(result.stdout)
+                print(result.stderr)
+                sys.exit(1)
+                
+            if not os.path.exists(dag_file_path):
+                print(f"\n[!] Error: Agent failed to generate DAG JSON file {dag_file_path}.")
+                sys.exit(1)
+
+        ctx.stage_changes([tasks_dir])
+        ctx.state["dag_completed"] = True
+        ctx.save_state()
+        print("Successfully generated task DAGs.")
+
+
+class Phase7BDAGReview(BasePhase):
+    def execute(self, ctx: ProjectContext):
+        if ctx.state.get("dag_reviewed", False):
+            print("DAG Review already completed.")
+            return
+
+        print("\n=> [Phase 7B: DAG Review] Reviewing and refining dependency graphs...")
+        
+        tasks_dir = os.path.join(ctx.root_dir, "tasks")
+        if not os.path.exists(tasks_dir):
+            sys.exit(0)
+
+        phase_dirs = [d for d in os.listdir(tasks_dir) if os.path.isdir(os.path.join(tasks_dir, d)) and d.startswith("phase_")]
+        review_prompt_tmpl = ctx.load_prompt("dag_tasks_review.md")
+
+        for phase_id in sorted(phase_dirs):
+            phase_dir_path = os.path.join(tasks_dir, phase_id)
+            dag_file_path = os.path.join(phase_dir_path, "dag.json")
+            reviewed_dag_file_path = os.path.join(phase_dir_path, "dag_reviewed.json")
+            
+            if not os.path.exists(dag_file_path):
+                continue
+                
+            if os.path.exists(reviewed_dag_file_path):
+                 print(f"   -> Skipping DAG Review for {phase_id} (already reviewed).")
+                 continue
+
+            with open(dag_file_path, "r", encoding="utf-8") as f:
+                proposed_dag = f.read()
+
+            # Gather tasks
+            sub_epics = [d for d in os.listdir(phase_dir_path) if os.path.isdir(os.path.join(phase_dir_path, d))]
+            tasks_content = ""
+            for sub_epic in sorted(sub_epics):
+                tasks_content += f"### Task ID: {sub_epic}\n"
+                sub_epic_dir = os.path.join(phase_dir_path, sub_epic)
+                md_files = [f for f in os.listdir(sub_epic_dir) if f.endswith(".md")]
+                for md_file in md_files:
+                     with open(os.path.join(sub_epic_dir, md_file), "r", encoding="utf-8") as f:
+                          content = f.read()
+                          tasks_content += "\n".join([f"    {line}" for line in content.split("\n")]) + "\n\n"
+            
+            print(f"   -> Reviewing DAG for {phase_id}...")
+            
+            prompt = ctx.format_prompt(
+                review_prompt_tmpl,
+                phase_filename=phase_id,
+                target_path=f"tasks/{phase_id}/dag_reviewed.json",
+                description_ctx=ctx.description_ctx,
+                tasks_content=tasks_content,
+                proposed_dag=proposed_dag
+            )
+
+            ignore_content = f"/*\n!/.sandbox/\n!/tasks/{phase_id}/dag_reviewed.json\n"
+            allowed_files = [reviewed_dag_file_path]
+            
+            result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
+            
+            if result.returncode != 0:
+                print(f"\n[!] Error reviewing DAG for {phase_id}.")
+                print(result.stdout)
+                print(result.stderr)
+                sys.exit(1)
+                
+            if not os.path.exists(reviewed_dag_file_path):
+                print(f"\n[!] Error: Agent failed to generate reviewed DAG JSON file {reviewed_dag_file_path}.")
+                sys.exit(1)
+
+        ctx.stage_changes([tasks_dir])
+        ctx.state["dag_reviewed"] = True
+        ctx.save_state()
+        print("Successfully reviewed and refined task DAGs.")
+
 class Orchestrator:
     def __init__(self, ctx: ProjectContext):
         self.ctx = ctx
@@ -882,6 +1037,11 @@ class Orchestrator:
             self.run_phase_with_retry(Phase5GenerateEpics())
             #self.run_phase_with_retry(Phase6BreakDownTasks())
             self.run_phase_with_retry(Phase6BreakDownTasks())
+            
+            # DAG Generation Steps
+            self.run_phase_with_retry(Phase7ADAGGeneration())
+            self.run_phase_with_retry(Phase7BDAGReview())
+            
             #Phase7TDDLoop().execute(self.ctx)
         finally:
             self.ctx.restore_ignore_file()
@@ -924,6 +1084,7 @@ def main():
             "4-order": "requirements_ordered",
             "5-epics": "phases_completed",
             "6-tasks": "tasks_completed",
+            "7-dag": "dag_completed",
         }
         key = phase_state_keys.get(args.phase)
         if key and ctx.state.get(key, False):
