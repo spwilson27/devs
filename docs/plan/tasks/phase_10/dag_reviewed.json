@@ -1,56 +1,204 @@
 {
-  "01_cli_foundation_core_logic": [],
-  "02_headless_mode_ipc_parity": [
-    "01_cli_foundation_core_logic"
+  "01_cli_foundation_core_logic/01_setup_cli_package.md": [],
+  "01_cli_foundation_core_logic/02_implement_cli_controller.md": [
+    "01_cli_foundation_core_logic/01_setup_cli_package.md"
   ],
-  "03_cli_state_control_commands": [
-    "02_headless_mode_ipc_parity"
+  "01_cli_foundation_core_logic/03_implement_core_commands.md": [
+    "01_cli_foundation_core_logic/02_implement_cli_controller.md"
   ],
-  "04_tui_framework_styling_foundations": [
-    "01_cli_foundation_core_logic"
+  "01_cli_foundation_core_logic/04_implement_headless_mode.md": [
+    "01_cli_foundation_core_logic/02_implement_cli_controller.md"
   ],
-  "05_tui_core_semantic_palette": [
-    "04_tui_framework_styling_foundations"
+  "01_cli_foundation_core_logic/05_implement_cli_security_gates.md": [
+    "01_cli_foundation_core_logic/01_setup_cli_package.md"
   ],
-  "06_tui_resilience_platform_support": [
-    "04_tui_framework_styling_foundations"
+  "02_headless_mode_ipc_parity/01_orchestrator_ipc_server.md": [],
+  "02_headless_mode_ipc_parity/02_cli_ipc_client_parity.md": [
+    "01_cli_foundation_core_logic/03_implement_core_commands.md",
+    "02_headless_mode_ipc_parity/01_orchestrator_ipc_server.md"
   ],
-  "07_tui_fallbacks_color_modes": [
-    "05_tui_core_semantic_palette",
-    "06_tui_resilience_platform_support"
+  "02_headless_mode_ipc_parity/03_headless_json_output.md": [
+    "01_cli_foundation_core_logic/04_implement_headless_mode.md"
   ],
-  "08_tui_layout_main_zones": [
-    "05_tui_core_semantic_palette"
+  "02_headless_mode_ipc_parity/04_headless_navigation_focus.md": [
+    "01_cli_foundation_core_logic/04_implement_headless_mode.md"
   ],
-  "09_tui_footer_layout_adaptability": [
-    "08_tui_layout_main_zones"
+  "02_headless_mode_ipc_parity/05_multi_model_orchestration_telemetry.md": [
+    "02_headless_mode_ipc_parity/03_headless_json_output.md"
   ],
-  "10_tui_block_hierarchy_styling": [
-    "12_tui_log_streaming_event_support"
+  "03_cli_state_control_commands/01_platform_agnostic_zustand_store.md": [],
+  "03_cli_state_control_commands/02_cli_state_control_basic.md": [
+    "01_cli_foundation_core_logic/03_implement_core_commands.md",
+    "03_cli_state_control_commands/01_platform_agnostic_zustand_store.md"
   ],
-  "11_tui_primitive_components": [
-    "07_tui_fallbacks_color_modes"
+  "03_cli_state_control_commands/03_cli_rewind_command.md": [
+    "03_cli_state_control_commands/02_cli_state_control_basic.md"
   ],
-  "12_tui_log_streaming_event_support": [
-    "08_tui_layout_main_zones",
-    "11_tui_primitive_components"
+  "03_cli_state_control_commands/04_cli_doctor_command.md": [
+    "01_cli_foundation_core_logic/03_implement_core_commands.md"
   ],
-  "13_tui_progress_status_dashboards": [
-    "08_tui_layout_main_zones",
-    "11_tui_primitive_components"
+  "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md": [
+    "01_cli_foundation_core_logic/01_setup_cli_package.md"
   ],
-  "14_tui_navigation_hotkeys_foundation": [
-    "08_tui_layout_main_zones"
+  "04_tui_framework_styling_foundations/02_implement_tui_theme_and_ansi_palette.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
   ],
-  "15_tui_specific_hotkeys_focus": [
-    "11_tui_primitive_components",
-    "14_tui_navigation_hotkeys_foundation"
+  "04_tui_framework_styling_foundations/03_implement_terminal_color_detection_and_fallback.md": [
+    "04_tui_framework_styling_foundations/02_implement_tui_theme_and_ansi_palette.md"
   ],
-  "16_tui_approval_gates_interaction": [
-    "11_tui_primitive_components",
-    "14_tui_navigation_hotkeys_foundation"
+  "04_tui_framework_styling_foundations/04_create_base_tui_layout_scaffolding.md": [
+    "04_tui_framework_styling_foundations/02_implement_tui_theme_and_ansi_palette.md"
   ],
-  "17_tui_diff_reviewer": [
-    "16_tui_approval_gates_interaction"
+  "05_tui_core_semantic_palette/01_define_palette_constants.md": [],
+  "05_tui_core_semantic_palette/02_create_theme_context.md": [
+    "05_tui_core_semantic_palette/01_define_palette_constants.md",
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "05_tui_core_semantic_palette/03_implement_visual_palette_tester.md": [
+    "05_tui_core_semantic_palette/02_create_theme_context.md"
+  ],
+  "06_tui_resilience_platform_support/01_terminal_capability_detection.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "06_tui_resilience_platform_support/02_terminal_resize_robustness.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "06_tui_resilience_platform_support/03_os_compatibility_input_normalization.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "07_tui_fallbacks_color_modes/01_ansi_color_mapping.md": [
+    "05_tui_core_semantic_palette/01_define_palette_constants.md"
+  ],
+  "07_tui_fallbacks_color_modes/02_glyph_provider_ascii_fallbacks.md": [
+    "06_tui_resilience_platform_support/01_terminal_capability_detection.md"
+  ],
+  "07_tui_fallbacks_color_modes/03_integrate_fallbacks_into_tui.md": [
+    "07_tui_fallbacks_color_modes/01_ansi_color_mapping.md",
+    "07_tui_fallbacks_color_modes/02_glyph_provider_ascii_fallbacks.md"
+  ],
+  "08_tui_layout_main_zones/01_scaffold_tui_flexbox_layout.md": [
+    "04_tui_framework_styling_foundations/04_create_base_tui_layout_scaffolding.md"
+  ],
+  "08_tui_layout_main_zones/02_implement_system_health_header.md": [
+    "08_tui_layout_main_zones/01_scaffold_tui_flexbox_layout.md"
+  ],
+  "08_tui_layout_main_zones/03_implement_epic_navigation_sidebar.md": [
+    "08_tui_layout_main_zones/01_scaffold_tui_flexbox_layout.md"
+  ],
+  "08_tui_layout_main_zones/04_implement_implementation_console_main.md": [
+    "08_tui_layout_main_zones/01_scaffold_tui_flexbox_layout.md"
+  ],
+  "08_tui_layout_main_zones/05_implement_adaptive_layout_logic.md": [
+    "08_tui_layout_main_zones/01_scaffold_tui_flexbox_layout.md",
+    "06_tui_resilience_platform_support/02_terminal_resize_robustness.md"
+  ],
+  "09_tui_footer_layout_adaptability/01_footer_component_implementation.md": [
+    "08_tui_layout_main_zones/01_scaffold_tui_flexbox_layout.md"
+  ],
+  "09_tui_footer_layout_adaptability/02_layout_adaptability_hook.md": [
+    "06_tui_resilience_platform_support/02_terminal_resize_robustness.md"
+  ],
+  "09_tui_footer_layout_adaptability/03_compact_layout_adaptation.md": [
+    "09_tui_footer_layout_adaptability/02_layout_adaptability_hook.md",
+    "08_tui_layout_main_zones/05_implement_adaptive_layout_logic.md"
+  ],
+  "10_tui_block_hierarchy_styling/01_structured_block_primitive.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "10_tui_block_hierarchy_styling/02_tool_call_reasoning_blocks.md": [
+    "10_tui_block_hierarchy_styling/01_structured_block_primitive.md",
+    "08_tui_layout_main_zones/04_implement_implementation_console_main.md"
+  ],
+  "10_tui_block_hierarchy_styling/03_indentation_dotted_hierarchy.md": [
+    "10_tui_block_hierarchy_styling/02_tool_call_reasoning_blocks.md"
+  ],
+  "11_tui_primitive_components/01_status_badge.md": [
+    "05_tui_core_semantic_palette/02_create_theme_context.md"
+  ],
+  "11_tui_primitive_components/02_icon_button.md": [
+    "07_tui_fallbacks_color_modes/02_glyph_provider_ascii_fallbacks.md"
+  ],
+  "11_tui_primitive_components/03_action_card.md": [
+    "10_tui_block_hierarchy_styling/01_structured_block_primitive.md"
+  ],
+  "11_tui_primitive_components/04_step_progress.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "12_tui_log_streaming_event_support/01_define_tui_event_bus.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "12_tui_log_streaming_event_support/02_implement_log_terminal_primitive.md": [
+    "12_tui_log_streaming_event_support/01_define_tui_event_bus.md"
+  ],
+  "12_tui_log_streaming_event_support/03_log_streaming_and_scrollback.md": [
+    "12_tui_log_streaming_event_support/02_implement_log_terminal_primitive.md"
+  ],
+  "12_tui_log_streaming_event_support/04_tui_secret_redaction.md": [
+    "12_tui_log_streaming_event_support/01_define_tui_event_bus.md"
+  ],
+  "13_tui_progress_status_dashboards/01_tui_header_telemetry.md": [
+    "08_tui_layout_main_zones/02_implement_system_health_header.md"
+  ],
+  "13_tui_progress_status_dashboards/02_progress_indicator_components.md": [
+    "11_tui_primitive_components/04_step_progress.md"
+  ],
+  "13_tui_progress_status_dashboards/03_status_dashboard_view.md": [
+    "13_tui_progress_status_dashboards/01_tui_header_telemetry.md",
+    "13_tui_progress_status_dashboards/02_progress_indicator_components.md",
+    "08_tui_layout_main_zones/01_scaffold_tui_flexbox_layout.md"
+  ],
+  "14_tui_navigation_hotkeys_foundation/01_setup_tui_hotkey_manager.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "14_tui_navigation_hotkeys_foundation/02_implement_global_actions_hotkeys.md": [
+    "14_tui_navigation_hotkeys_foundation/01_setup_tui_hotkey_manager.md"
+  ],
+  "14_tui_navigation_hotkeys_foundation/03_implement_zone_focus_management.md": [
+    "14_tui_navigation_hotkeys_foundation/01_setup_tui_hotkey_manager.md"
+  ],
+  "14_tui_navigation_hotkeys_foundation/04_implement_roadmap_keyboard_navigation.md": [
+    "14_tui_navigation_hotkeys_foundation/03_implement_zone_focus_management.md",
+    "08_tui_layout_main_zones/03_implement_epic_navigation_sidebar.md"
+  ],
+  "14_tui_navigation_hotkeys_foundation/05_implement_phase_gate_hotkeys.md": [
+    "14_tui_navigation_hotkeys_foundation/01_setup_tui_hotkey_manager.md"
+  ],
+  "14_tui_navigation_hotkeys_foundation/06_implement_whisperer_hotkey.md": [
+    "14_tui_navigation_hotkeys_foundation/03_implement_zone_focus_management.md"
+  ],
+  "15_tui_specific_hotkeys_focus/01_implement_global_action_hotkeys.md": [
+    "14_tui_navigation_hotkeys_foundation/02_implement_global_actions_hotkeys.md"
+  ],
+  "15_tui_specific_hotkeys_focus/02_implement_whisperer_hotkey_and_focus.md": [
+    "14_tui_navigation_hotkeys_foundation/06_implement_whisperer_hotkey.md"
+  ],
+  "15_tui_specific_hotkeys_focus/03_implement_roadmap_navigation_and_focus_toggle.md": [
+    "14_tui_navigation_hotkeys_foundation/04_implement_roadmap_keyboard_navigation.md"
+  ],
+  "15_tui_specific_hotkeys_focus/04_implement_focus_visuals_double_borders.md": [
+    "11_tui_primitive_components/03_action_card.md",
+    "14_tui_navigation_hotkeys_foundation/03_implement_zone_focus_management.md"
+  ],
+  "16_tui_approval_gates_interaction/01_gate_keyboard_handler.md": [
+    "14_tui_navigation_hotkeys_foundation/01_setup_tui_hotkey_manager.md"
+  ],
+  "16_tui_approval_gates_interaction/02_approval_gate_component.md": [
+    "16_tui_approval_gates_interaction/01_gate_keyboard_handler.md"
+  ],
+  "16_tui_approval_gates_interaction/03_document_reviewer_tui.md": [
+    "10_tui_block_hierarchy_styling/01_structured_block_primitive.md"
+  ],
+  "16_tui_approval_gates_interaction/04_hitl_orchestrator_sync.md": [
+    "16_tui_approval_gates_interaction/02_approval_gate_component.md"
+  ],
+  "17_tui_diff_reviewer/01_diff_parser_and_renderer.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "17_tui_diff_reviewer/02_multi_select_signoff_component.md": [
+    "04_tui_framework_styling_foundations/01_setup_cli_package_and_ink_foundation.md"
+  ],
+  "17_tui_diff_reviewer/03_terminal_diff_reviewer_view.md": [
+    "17_tui_diff_reviewer/01_diff_parser_and_renderer.md",
+    "17_tui_diff_reviewer/02_multi_select_signoff_component.md"
   ]
 }

@@ -1,9 +1,106 @@
 {
-  "01_out-of-scope_manifest_-_infrastructure_deployment": [],
-  "02_out-of-scope_manifest_-_platform_runtime_services": [],
-  "03_out-of-scope_manifest_-_content_asset_generation": [],
-  "04_out-of-scope_manifest_-_quality_compliance": [],
-  "05_future_roadmap_strategy": [],
-  "06_architecture_governance_gate": [],
-  "07_project_handover": []
+  "01_out-of-scope_manifest_-_infrastructure_deployment/01_define_greenfield_only_boundary_and_legacy_refactoring_oos.md": [],
+  "01_out-of-scope_manifest_-_infrastructure_deployment/02_document_live_production_infrastructure_provisioning_oos.md": [
+    "01_out-of-scope_manifest_-_infrastructure_deployment/01_define_greenfield_only_boundary_and_legacy_refactoring_oos.md"
+  ],
+  "01_out-of-scope_manifest_-_infrastructure_deployment/03_document_production_data_migration_oos.md": [
+    "01_out-of-scope_manifest_-_infrastructure_deployment/02_document_live_production_infrastructure_provisioning_oos.md"
+  ],
+  "01_out-of-scope_manifest_-_infrastructure_deployment/04_document_full_offline_mode_oos_and_connectivity_enforcement.md": [
+    "01_out-of-scope_manifest_-_infrastructure_deployment/03_document_production_data_migration_oos.md"
+  ],
+  "01_out-of-scope_manifest_-_infrastructure_deployment/05_document_project_hosting_paas_oos_and_export_boundary.md": [
+    "01_out-of-scope_manifest_-_infrastructure_deployment/04_document_full_offline_mode_oos_and_connectivity_enforcement.md"
+  ],
+  "02_out-of-scope_manifest_-_platform_runtime_services/01_define_oos_manifest_schema_and_data_model.md": [],
+  "02_out-of-scope_manifest_-_platform_runtime_services/02_implement_agent_as_a_service_boundary_guard.md": [],
+  "02_out-of-scope_manifest_-_platform_runtime_services/03_enforce_single_user_architecture_boundary.md": [
+    "02_out-of-scope_manifest_-_platform_runtime_services/02_implement_agent_as_a_service_boundary_guard.md"
+  ],
+  "02_out-of-scope_manifest_-_platform_runtime_services/04_implement_llm_provider_factory_with_local_llm_exclusion.md": [
+    "02_out-of-scope_manifest_-_platform_runtime_services/03_enforce_single_user_architecture_boundary.md"
+  ],
+  "02_out-of-scope_manifest_-_platform_runtime_services/05_implement_secret_management_boundary_enforcement.md": [
+    "02_out-of-scope_manifest_-_platform_runtime_services/04_implement_llm_provider_factory_with_local_llm_exclusion.md"
+  ],
+  "02_out-of-scope_manifest_-_platform_runtime_services/06_implement_browser_os_polyfill_exclusion_constraint.md": [
+    "02_out-of-scope_manifest_-_platform_runtime_services/05_implement_secret_management_boundary_enforcement.md"
+  ],
+  "03_out-of-scope_manifest_-_content_asset_generation/01_define_oos_manifest_schema_and_loader.md": [],
+  "03_out-of-scope_manifest_-_content_asset_generation/02_implement_oos_classifier_creative_content_and_3d_assets.md": [
+    "03_out-of-scope_manifest_-_content_asset_generation/01_define_oos_manifest_schema_and_loader.md"
+  ],
+  "03_out-of-scope_manifest_-_content_asset_generation/03_implement_oos_classifier_hardware_appstore_legal.md": [
+    "03_out-of-scope_manifest_-_content_asset_generation/02_implement_oos_classifier_creative_content_and_3d_assets.md"
+  ],
+  "03_out-of-scope_manifest_-_content_asset_generation/04_integrate_oos_guard_middleware_into_orchestrator.md": [
+    "03_out-of-scope_manifest_-_content_asset_generation/03_implement_oos_classifier_hardware_appstore_legal.md"
+  ],
+  "03_out-of-scope_manifest_-_content_asset_generation/05_implement_oos_rejection_messaging_and_cli_notifications.md": [
+    "03_out-of-scope_manifest_-_content_asset_generation/04_integrate_oos_guard_middleware_into_orchestrator.md"
+  ],
+  "04_out-of-scope_manifest_-_quality_compliance/01_document_niche_language_oos_boundary.md": [
+    "01_out-of-scope_manifest_-_infrastructure_deployment/05_document_project_hosting_paas_oos_and_export_boundary.md"
+  ],
+  "04_out-of-scope_manifest_-_quality_compliance/02_document_manual_uiux_qa_oos_and_enforce_automated_validation.md": [
+    "04_out-of-scope_manifest_-_quality_compliance/01_document_niche_language_oos_boundary.md"
+  ],
+  "04_out-of-scope_manifest_-_quality_compliance/03_document_red_team_pentesting_oos_and_enforce_sast_boundary.md": [
+    "04_out-of-scope_manifest_-_quality_compliance/02_document_manual_uiux_qa_oos_and_enforce_automated_validation.md"
+  ],
+  "04_out-of-scope_manifest_-_quality_compliance/04_document_distributed_load_testing_oos_and_enforce_local_benchmark_boundary.md": [
+    "04_out-of-scope_manifest_-_quality_compliance/03_document_red_team_pentesting_oos_and_enforce_sast_boundary.md"
+  ],
+  "04_out-of-scope_manifest_-_quality_compliance/05_document_formal_crypto_auditing_oos_and_enforce_standard_testing_boundary.md": [
+    "04_out-of-scope_manifest_-_quality_compliance/04_document_distributed_load_testing_oos_and_enforce_local_benchmark_boundary.md"
+  ],
+  "04_out-of-scope_manifest_-_quality_compliance/06_build_oos_manifest_completeness_and_compliance_validation_suite.md": [
+    "04_out-of-scope_manifest_-_quality_compliance/05_document_formal_crypto_auditing_oos_and_enforce_standard_testing_boundary.md",
+    "03_out-of-scope_manifest_-_content_asset_generation/05_implement_oos_rejection_messaging_and_cli_notifications.md"
+  ],
+  "05_future_roadmap_strategy/01_local_llm_provider_abstraction.md": [],
+  "05_future_roadmap_strategy/02_team_mode_architecture_hooks.md": [
+    "05_future_roadmap_strategy/01_local_llm_provider_abstraction.md"
+  ],
+  "05_future_roadmap_strategy/03_github_pr_reviewer_integration.md": [
+    "05_future_roadmap_strategy/02_team_mode_architecture_hooks.md"
+  ],
+  "05_future_roadmap_strategy/04_native_mobile_monitoring_api.md": [
+    "05_future_roadmap_strategy/03_github_pr_reviewer_integration.md"
+  ],
+  "05_future_roadmap_strategy/05_future_roadmap_document_and_validation.md": [
+    "05_future_roadmap_strategy/04_native_mobile_monitoring_api.md"
+  ],
+  "06_architecture_governance_gate/01_tas_revision_gate_state_machine.md": [],
+  "06_architecture_governance_gate/02_mcp_tool_request_tas_revision.md": [
+    "06_architecture_governance_gate/01_tas_revision_gate_state_machine.md"
+  ],
+  "06_architecture_governance_gate/03_tas_diff_generation_and_validation.md": [
+    "06_architecture_governance_gate/02_mcp_tool_request_tas_revision.md"
+  ],
+  "06_architecture_governance_gate/04_hitl_approval_workflow.md": [
+    "06_architecture_governance_gate/03_tas_diff_generation_and_validation.md"
+  ],
+  "06_architecture_governance_gate/05_cli_and_vscode_integration.md": [
+    "06_architecture_governance_gate/04_hitl_approval_workflow.md",
+    "04_out-of-scope_manifest_-_quality_compliance/06_build_oos_manifest_completeness_and_compliance_validation_suite.md"
+  ],
+  "06_architecture_governance_gate/06_e2e_integration_tests_and_audit_trail.md": [
+    "06_architecture_governance_gate/05_cli_and_vscode_integration.md"
+  ],
+  "07_project_handover/01_devs_export_command_scaffold.md": [
+    "06_architecture_governance_gate/05_cli_and_vscode_integration.md"
+  ],
+  "07_project_handover/02_final_validation_report_generator.md": [
+    "07_project_handover/01_devs_export_command_scaffold.md"
+  ],
+  "07_project_handover/03_project_archive_packager.md": [
+    "07_project_handover/02_final_validation_report_generator.md"
+  ],
+  "07_project_handover/04_onboarding_agent_manifest_generator.md": [
+    "07_project_handover/03_project_archive_packager.md"
+  ],
+  "07_project_handover/05_export_orchestrator_e2e_integration.md": [
+    "07_project_handover/04_onboarding_agent_manifest_generator.md"
+  ]
 }

@@ -1,56 +1,198 @@
 {
-  "01_rewind_core_infrastructure": [],
-  "02_filesystem_state_restoration": [
-    "01_rewind_core_infrastructure"
+  "01_rewind_core_infrastructure/01_sqlite_acid_transaction_schema.md": [],
+  "01_rewind_core_infrastructure/02_git_db_correlation.md": [
+    "01_rewind_core_infrastructure/01_sqlite_acid_transaction_schema.md"
   ],
-  "03_relational_state_rollback": [
-    "01_rewind_core_infrastructure"
+  "01_rewind_core_infrastructure/03_rewind_to_task_mcp_tool.md": [
+    "01_rewind_core_infrastructure/02_git_db_correlation.md"
   ],
-  "04_vector_memory_management": [],
-  "05_full_rewind_execution": [
-    "02_filesystem_state_restoration",
-    "03_relational_state_rollback",
-    "04_vector_memory_management"
+  "01_rewind_core_infrastructure/04_devs_rewind_cli_command.md": [
+    "01_rewind_core_infrastructure/03_rewind_to_task_mcp_tool.md"
   ],
-  "06_crash_recovery_and_resume": [
-    "02_filesystem_state_restoration",
-    "03_relational_state_rollback"
+  "02_filesystem_state_restoration/01_store_git_commit_hash_in_tasks_table.md": [
+    "01_rewind_core_infrastructure/01_sqlite_acid_transaction_schema.md"
   ],
-  "07_dirty_workspace_detection": [
-    "05_full_rewind_execution",
-    "06_crash_recovery_and_resume"
+  "02_filesystem_state_restoration/02_embed_state_snapshot_in_commit_footer.md": [],
+  "02_filesystem_state_restoration/03_atomic_snapshots_and_state_locking.md": [],
+  "02_filesystem_state_restoration/04_force_filesystem_restoration_git_checkout.md": [
+    "02_filesystem_state_restoration/01_store_git_commit_hash_in_tasks_table.md"
   ],
-  "08_state_machine_and_integrity": [
-    "03_relational_state_rollback"
+  "02_filesystem_state_restoration/05_soft_rewind_retain_failing_tests.md": [
+    "02_filesystem_state_restoration/04_force_filesystem_restoration_git_checkout.md"
   ],
-  "09_agent_error_and_loop_handling": [
-    "08_state_machine_and_integrity"
+  "03_relational_state_rollback/01_versioned_sqlite_schema_migration_strategy.md": [
+    "01_rewind_core_infrastructure/01_sqlite_acid_transaction_schema.md"
   ],
-  "10_retry_and_tool_error_protocol": [
-    "13_human-in-the-loop_recovery"
+  "03_relational_state_rollback/02_transactional_sqlite_persistence_layer.md": [
+    "01_rewind_core_infrastructure/01_sqlite_acid_transaction_schema.md"
   ],
-  "11_sandbox_and_failure_preservation": [
-    "01_rewind_core_infrastructure"
+  "03_relational_state_rollback/03_langgraph_checkpoint_persistence_to_sqlite.md": [
+    "03_relational_state_rollback/01_versioned_sqlite_schema_migration_strategy.md"
   ],
-  "12_model_failover_and_provider_handling": [],
-  "13_human-in-the-loop_recovery": [
-    "06_crash_recovery_and_resume",
-    "09_agent_error_and_loop_handling"
+  "03_relational_state_rollback/04_acid_compliant_relational_state_rollback_engine.md": [
+    "03_relational_state_rollback/02_transactional_sqlite_persistence_layer.md",
+    "03_relational_state_rollback/03_langgraph_checkpoint_persistence_to_sqlite.md"
   ],
-  "14_entropy_detection_and_pivot": [
-    "09_agent_error_and_loop_handling",
-    "13_human-in-the-loop_recovery"
+  "03_relational_state_rollback/05_schema_drift_reconciliation_on_rewind.md": [
+    "03_relational_state_rollback/01_versioned_sqlite_schema_migration_strategy.md",
+    "03_relational_state_rollback/04_acid_compliant_relational_state_rollback_engine.md"
   ],
-  "15_cli_and_ui_state_controls": [
-    "07_dirty_workspace_detection",
-    "14_entropy_detection_and_pivot"
+  "04_vector_memory_management/01_vector_pruner_service.md": [],
+  "04_vector_memory_management/02_vector_retrieval_noise_filtering.md": [],
+  "04_vector_memory_management/03_raw_observation_buffer_semantic_drift.md": [],
+  "04_vector_memory_management/04_approval_gated_vector_dna_ingestion.md": [],
+  "05_full_rewind_execution/01_rewind_cli_command_and_orchestrator.md": [
+    "01_rewind_core_infrastructure/04_devs_rewind_cli_command.md"
   ],
-  "16_budget_recovery_and_redaction": [
-    "06_crash_recovery_and_resume"
+  "05_full_rewind_execution/02_filesystem_reset_via_git.md": [
+    "05_full_rewind_execution/01_rewind_cli_command_and_orchestrator.md"
   ],
-  "17_infrastructure_risk_mitigation": [
-    "11_sandbox_and_failure_preservation",
-    "12_model_failover_and_provider_handling",
-    "13_human-in-the-loop_recovery"
-  ]
+  "05_full_rewind_execution/03_relational_state_reset.md": [
+    "05_full_rewind_execution/01_rewind_cli_command_and_orchestrator.md",
+    "03_relational_state_rollback/04_acid_compliant_relational_state_rollback_engine.md"
+  ],
+  "05_full_rewind_execution/04_vector_memory_pruning.md": [
+    "05_full_rewind_execution/01_rewind_cli_command_and_orchestrator.md",
+    "04_vector_memory_management/01_vector_pruner_service.md"
+  ],
+  "05_full_rewind_execution/05_rewind_fidelity_verification_and_performance.md": [
+    "05_full_rewind_execution/02_filesystem_reset_via_git.md",
+    "05_full_rewind_execution/03_relational_state_reset.md",
+    "05_full_rewind_execution/04_vector_memory_pruning.md"
+  ],
+  "06_crash_recovery_and_resume/01_langgraph_acid_checkpointing.md": [
+    "01_rewind_core_infrastructure/01_sqlite_acid_transaction_schema.md"
+  ],
+  "06_crash_recovery_and_resume/02_startup_lockfile_cleanup.md": [],
+  "06_crash_recovery_and_resume/03_git_db_consistency_verification.md": [
+    "06_crash_recovery_and_resume/02_startup_lockfile_cleanup.md"
+  ],
+  "06_crash_recovery_and_resume/04_stateless_orchestrator_and_resume_command.md": [
+    "06_crash_recovery_and_resume/01_langgraph_acid_checkpointing.md",
+    "06_crash_recovery_and_resume/03_git_db_consistency_verification.md"
+  ],
+  "06_crash_recovery_and_resume/05_state_reconstruction_from_annotations.md": [
+    "06_crash_recovery_and_resume/03_git_db_consistency_verification.md"
+  ],
+  "07_dirty_workspace_detection/01_git_status_detection_service.md": [],
+  "07_dirty_workspace_detection/02_rewind_block_with_user_prompt.md": [
+    "07_dirty_workspace_detection/01_git_status_detection_service.md",
+    "07_dirty_workspace_detection/03_git_resolution_services.md"
+  ],
+  "07_dirty_workspace_detection/03_git_resolution_services.md": [],
+  "07_dirty_workspace_detection/04_resume_command_dirty_workspace_integration.md": [
+    "07_dirty_workspace_detection/01_git_status_detection_service.md",
+    "07_dirty_workspace_detection/03_git_resolution_services.md",
+    "06_crash_recovery_and_resume/04_stateless_orchestrator_and_resume_command.md"
+  ],
+  "08_state_machine_and_integrity/01_state_machine_core_and_acid_transitions.md": [],
+  "08_state_machine_and_integrity/02_automated_db_integrity_checker.md": [],
+  "08_state_machine_and_integrity/03_audit_trail_reconstruction.md": [
+    "02_filesystem_state_restoration/02_embed_state_snapshot_in_commit_footer.md"
+  ],
+  "08_state_machine_and_integrity/04_roadmap_reconstruction_via_commit_tags.md": [
+    "08_state_machine_and_integrity/03_audit_trail_reconstruction.md"
+  ],
+  "08_state_machine_and_integrity/05_expert_debugger_inspect_state_tool.md": [
+    "08_state_machine_and_integrity/01_state_machine_core_and_acid_transitions.md"
+  ],
+  "09_agent_error_and_loop_handling/01_agent_suspension_paused_for_intervention.md": [],
+  "09_agent_error_and_loop_handling/02_graceful_suspension_on_network_loss.md": [
+    "09_agent_error_and_loop_handling/01_agent_suspension_paused_for_intervention.md"
+  ],
+  "09_agent_error_and_loop_handling/03_strategy_blacklist_rca_lesson_logging.md": [
+    "09_agent_error_and_loop_handling/01_agent_suspension_paused_for_intervention.md"
+  ],
+  "09_agent_error_and_loop_handling/04_user_triggered_strategy_override.md": [
+    "09_agent_error_and_loop_handling/03_strategy_blacklist_rca_lesson_logging.md"
+  ],
+  "09_agent_error_and_loop_handling/05_loop_detection_and_strategy_pivot.md": [
+    "09_agent_error_and_loop_handling/01_agent_suspension_paused_for_intervention.md"
+  ],
+  "10_retry_and_tool_error_protocol/01_retry_protocol_core.md": [],
+  "10_retry_and_tool_error_protocol/02_flaky_test_heuristic_detector.md": [
+    "10_retry_and_tool_error_protocol/01_retry_protocol_core.md"
+  ],
+  "10_retry_and_tool_error_protocol/03_tool_timeout_enforcement.md": [],
+  "10_retry_and_tool_error_protocol/04_malformed_response_handler.md": [],
+  "10_retry_and_tool_error_protocol/05_partial_completion_resume_protocol.md": [
+    "10_retry_and_tool_error_protocol/04_malformed_response_handler.md"
+  ],
+  "11_sandbox_and_failure_preservation/01_forensic_sandbox_state_capture.md": [],
+  "11_sandbox_and_failure_preservation/02_devs_debug_cli_command.md": [
+    "11_sandbox_and_failure_preservation/01_forensic_sandbox_state_capture.md"
+  ],
+  "11_sandbox_and_failure_preservation/03_transient_error_classification_and_retry.md": [
+    "11_sandbox_and_failure_preservation/01_forensic_sandbox_state_capture.md"
+  ],
+  "11_sandbox_and_failure_preservation/04_container_warm_pool.md": [],
+  "11_sandbox_and_failure_preservation/05_webcontainers_lightweight_sandbox_fallback.md": [
+    "11_sandbox_and_failure_preservation/04_container_warm_pool.md"
+  ],
+  "12_model_failover_and_provider_handling/01_provider_registry_and_failover_config.md": [],
+  "12_model_failover_and_provider_handling/02_failover_detection_and_switching_logic.md": [
+    "12_model_failover_and_provider_handling/01_provider_registry_and_failover_config.md"
+  ],
+  "12_model_failover_and_provider_handling/03_model_agnostic_state_serialization.md": [],
+  "12_model_failover_and_provider_handling/04_provider_handoff_continuity_integration.md": [
+    "12_model_failover_and_provider_handling/02_failover_detection_and_switching_logic.md",
+    "12_model_failover_and_provider_handling/03_model_agnostic_state_serialization.md"
+  ],
+  "12_model_failover_and_provider_handling/05_mcp_tool_json_schema_validation.md": [],
+  "12_model_failover_and_provider_handling/06_context_window_monitoring_and_management.md": [],
+  "13_human-in-the-loop_recovery/01_implement_human_in_the_loop_manager.md": [
+    "06_crash_recovery_and_resume/01_langgraph_acid_checkpointing.md"
+  ],
+  "13_human-in-the-loop_recovery/02_implement_user_intervention_detection.md": [
+    "13_human-in-the-loop_recovery/01_implement_human_in_the_loop_manager.md"
+  ],
+  "13_human-in-the-loop_recovery/03_implement_contextual_ingestion_on_resume.md": [
+    "13_human-in-the-loop_recovery/01_implement_human_in_the_loop_manager.md"
+  ],
+  "13_human-in-the-loop_recovery/04_implement_task_failure_gate_on_entropy_limit.md": [
+    "13_human-in-the-loop_recovery/01_implement_human_in_the_loop_manager.md"
+  ],
+  "14_entropy_detection_and_pivot/01_saop_payload_hash_tracking.md": [],
+  "14_entropy_detection_and_pivot/02_loop_detection_logic.md": [
+    "14_entropy_detection_and_pivot/01_saop_payload_hash_tracking.md"
+  ],
+  "14_entropy_detection_and_pivot/03_architectural_review_turn.md": [
+    "14_entropy_detection_and_pivot/02_loop_detection_logic.md"
+  ],
+  "14_entropy_detection_and_pivot/04_failure_counter_and_pause_threshold.md": [],
+  "14_entropy_detection_and_pivot/05_entropy_pause_user_handoff.md": [
+    "14_entropy_detection_and_pivot/04_failure_counter_and_pause_threshold.md"
+  ],
+  "14_entropy_detection_and_pivot/06_entropy_orchestration_integration.md": [
+    "14_entropy_detection_and_pivot/03_architectural_review_turn.md",
+    "14_entropy_detection_and_pivot/05_entropy_pause_user_handoff.md"
+  ],
+  "15_cli_and_ui_state_controls/01_cli_pause_resume_skip_commands.md": [],
+  "15_cli_and_ui_state_controls/02_cli_rewind_command.md": [
+    "07_dirty_workspace_detection/01_git_status_detection_service.md"
+  ],
+  "15_cli_and_ui_state_controls/03_rewind_ui_feedback.md": [
+    "15_cli_and_ui_state_controls/02_cli_rewind_command.md"
+  ],
+  "15_cli_and_ui_state_controls/04_entropy_pause_logic_and_cli.md": [],
+  "15_cli_and_ui_state_controls/05_entropy_pivot_prompts.md": [],
+  "15_cli_and_ui_state_controls/06_aic_interaction_dialogs.md": [],
+  "15_cli_and_ui_state_controls/07_multi_choice_resolution_proposals.md": [
+    "15_cli_and_ui_state_controls/06_aic_interaction_dialogs.md"
+  ],
+  "16_budget_recovery_and_redaction/01_budget_exhaustion_detection_and_freeze.md": [],
+  "16_budget_recovery_and_redaction/02_budget_recovery_config_validation.md": [
+    "16_budget_recovery_and_redaction/01_budget_exhaustion_detection_and_freeze.md"
+  ],
+  "16_budget_recovery_and_redaction/03_redaction_false_positive_detection_and_allowlist.md": [],
+  "16_budget_recovery_and_redaction/04_redaction_false_positive_audit_dashboard.md": [
+    "16_budget_recovery_and_redaction/03_redaction_false_positive_detection_and_allowlist.md"
+  ],
+  "17_infrastructure_risk_mitigation/01_dependency_deadlock_mitigation.md": [],
+  "17_infrastructure_risk_mitigation/02_context_drift_mitigation.md": [],
+  "17_infrastructure_risk_mitigation/03_extension_memory_limit_guard.md": [],
+  "17_infrastructure_risk_mitigation/04_monorepo_state_management.md": [],
+  "17_infrastructure_risk_mitigation/05_documentation_drift_detection.md": [],
+  "17_infrastructure_risk_mitigation/06_non_utf8_output_sanitization.md": [],
+  "17_infrastructure_risk_mitigation/07_langgraph_recursion_depth_guard.md": []
 }

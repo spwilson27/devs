@@ -1,64 +1,214 @@
 {
-  "01_lancedb_vector_store_infrastructure": [],
-  "02_lancedb_integration_and_search": [
-    "01_lancedb_vector_store_infrastructure"
+  "01_lancedb_vector_store_infrastructure/01_package_setup_and_lancedb_dependencies.md": [],
+  "01_lancedb_vector_store_infrastructure/02_lancedb_connection_and_initialization.md": [
+    "01_lancedb_vector_store_infrastructure/01_package_setup_and_lancedb_dependencies.md"
   ],
-  "03_tiered_memory_architecture": [
-    "02_lancedb_integration_and_search"
+  "01_lancedb_vector_store_infrastructure/03_vector_schema_definition.md": [
+    "01_lancedb_vector_store_infrastructure/02_lancedb_connection_and_initialization.md"
   ],
-  "04_short_and_medium_term_memory": [
-    "03_tiered_memory_architecture"
+  "01_lancedb_vector_store_infrastructure/04_embedding_service_text_embedding_004.md": [
+    "01_lancedb_vector_store_infrastructure/03_vector_schema_definition.md"
   ],
-  "05_long_term_memory_implementation": [
-    "04_short_and_medium_term_memory"
+  "01_lancedb_vector_store_infrastructure/05_ivf_pq_index_configuration.md": [
+    "01_lancedb_vector_store_infrastructure/03_vector_schema_definition.md"
   ],
-  "06_context_pruner_core": [
-    "04_short_and_medium_term_memory"
+  "01_lancedb_vector_store_infrastructure/06_vector_store_class_implementation.md": [
+    "01_lancedb_vector_store_infrastructure/02_lancedb_connection_and_initialization.md",
+    "01_lancedb_vector_store_infrastructure/03_vector_schema_definition.md",
+    "01_lancedb_vector_store_infrastructure/05_ivf_pq_index_configuration.md"
   ],
-  "07_sliding_relevance_window": [
-    "06_context_pruner_core"
+  "02_lancedb_integration_and_search/01_lancedb_package_setup_and_schema.md": [],
+  "02_lancedb_integration_and_search/02_embedding_service_integration.md": [],
+  "02_lancedb_integration_and_search/03_vector_store_crud_implementation.md": [
+    "02_lancedb_integration_and_search/01_lancedb_package_setup_and_schema.md",
+    "02_lancedb_integration_and_search/02_embedding_service_integration.md"
   ],
-  "08_context_compression_and_token_management": [
-    "07_sliding_relevance_window"
+  "02_lancedb_integration_and_search/04_cosine_similarity_search_tool.md": [
+    "02_lancedb_integration_and_search/03_vector_store_crud_implementation.md"
   ],
-  "09_active_file_pinning_and_context_injection": [
-    "08_context_compression_and_token_management",
-    "04_short_and_medium_term_memory"
+  "02_lancedb_integration_and_search/05_proactive_rag_pre_task_retrieval.md": [
+    "02_lancedb_integration_and_search/04_cosine_similarity_search_tool.md"
   ],
-  "10_spec_refresh_protocol": [
-    "08_context_compression_and_token_management",
-    "09_active_file_pinning_and_context_injection",
-    "05_long_term_memory_implementation"
+  "03_tiered_memory_architecture/01_memory_package_interfaces.md": [],
+  "03_tiered_memory_architecture/02_short_term_memory_implementation.md": [
+    "03_tiered_memory_architecture/01_memory_package_interfaces.md"
   ],
-  "11_memory_refresher_and_summarization": [
-    "10_spec_refresh_protocol",
-    "05_long_term_memory_implementation",
-    "08_context_compression_and_token_management"
+  "03_tiered_memory_architecture/03_medium_term_memory_implementation.md": [
+    "03_tiered_memory_architecture/01_memory_package_interfaces.md"
   ],
-  "12_strategy_blacklist_and_lesson_learned": [
-    "04_short_and_medium_term_memory",
-    "11_memory_refresher_and_summarization"
+  "03_tiered_memory_architecture/04_long_term_memory_implementation.md": [
+    "03_tiered_memory_architecture/01_memory_package_interfaces.md"
   ],
-  "13_user_directive_and_feedback": [
-    "12_strategy_blacklist_and_lesson_learned"
+  "03_tiered_memory_architecture/05_tiered_memory_manager.md": [
+    "03_tiered_memory_architecture/02_short_term_memory_implementation.md",
+    "03_tiered_memory_architecture/03_medium_term_memory_implementation.md",
+    "03_tiered_memory_architecture/04_long_term_memory_implementation.md"
   ],
-  "14_memory_rewind_and_sync_safety": [
-    "13_user_directive_and_feedback",
-    "11_memory_refresher_and_summarization",
-    "17_context_drift_and_semantic_integrity"
+  "03_tiered_memory_architecture/06_agent_runtime_integration.md": [
+    "03_tiered_memory_architecture/05_tiered_memory_manager.md"
   ],
-  "15_long_term_memory_drift_investigation": [
-    "14_memory_rewind_and_sync_safety"
+  "04_short_and_medium_term_memory/01_define_tiered_memory_interfaces.md": [],
+  "04_short_and_medium_term_memory/02_implement_short_term_memory.md": [
+    "04_short_and_medium_term_memory/01_define_tiered_memory_interfaces.md"
   ],
-  "16_vector_memory_security_and_integrity": [
-    "05_long_term_memory_implementation",
-    "15_long_term_memory_drift_investigation"
+  "04_short_and_medium_term_memory/03_sqlite_schema_migration.md": [],
+  "04_short_and_medium_term_memory/04_implement_medium_term_memory.md": [
+    "04_short_and_medium_term_memory/01_define_tiered_memory_interfaces.md",
+    "04_short_and_medium_term_memory/03_sqlite_schema_migration.md"
   ],
-  "17_context_drift_and_semantic_integrity": [
-    "10_spec_refresh_protocol",
-    "16_vector_memory_security_and_integrity"
+  "04_short_and_medium_term_memory/05_mcp_memory_tool_wrappers.md": [
+    "04_short_and_medium_term_memory/02_implement_short_term_memory.md",
+    "04_short_and_medium_term_memory/04_implement_medium_term_memory.md"
   ],
-  "18_performance_and_benchmarking": [
-    "17_context_drift_and_semantic_integrity"
-  ]
+  "04_short_and_medium_term_memory/06_tiered_memory_manager.md": [
+    "04_short_and_medium_term_memory/02_implement_short_term_memory.md",
+    "04_short_and_medium_term_memory/04_implement_medium_term_memory.md"
+  ],
+  "05_long_term_memory_implementation/01_lancedb_schema_and_initialization.md": [],
+  "05_long_term_memory_implementation/02_content_extraction_pipeline.md": [],
+  "05_long_term_memory_implementation/03_architectural_decision_vectorization.md": [
+    "05_long_term_memory_implementation/01_lancedb_schema_and_initialization.md"
+  ],
+  "05_long_term_memory_implementation/04_rca_learning_injection.md": [
+    "05_long_term_memory_implementation/01_lancedb_schema_and_initialization.md"
+  ],
+  "05_long_term_memory_implementation/05_long_term_memory_search_api.md": [
+    "05_long_term_memory_implementation/01_lancedb_schema_and_initialization.md"
+  ],
+  "06_context_pruner_core/01_define_context_pruner_types_and_token_utilities.md": [],
+  "06_context_pruner_core/02_implement_token_threshold_detection_and_pruning_trigger.md": [
+    "06_context_pruner_core/01_define_context_pruner_types_and_token_utilities.md"
+  ],
+  "06_context_pruner_core/03_implement_gemini_flash_summarization_engine.md": [
+    "06_context_pruner_core/01_define_context_pruner_types_and_token_utilities.md"
+  ],
+  "06_context_pruner_core/04_implement_context_pruner_sliding_window_class.md": [
+    "06_context_pruner_core/02_implement_token_threshold_detection_and_pruning_trigger.md",
+    "06_context_pruner_core/03_implement_gemini_flash_summarization_engine.md"
+  ],
+  "06_context_pruner_core/05_wire_context_pruner_into_orchestrator_loop.md": [
+    "06_context_pruner_core/04_implement_context_pruner_sliding_window_class.md"
+  ],
+  "07_sliding_relevance_window/01_sliding_window_data_model_and_token_counter.md": [],
+  "07_sliding_relevance_window/02_window_composer_dynamic_context_construction.md": [
+    "07_sliding_relevance_window/01_sliding_window_data_model_and_token_counter.md"
+  ],
+  "07_sliding_relevance_window/03_context_pruner_flash_summarization.md": [
+    "07_sliding_relevance_window/01_sliding_window_data_model_and_token_counter.md"
+  ],
+  "07_sliding_relevance_window/04_deterministic_tool_output_pruning.md": [],
+  "07_sliding_relevance_window/05_integrate_sliding_window_into_orchestration_loop.md": [
+    "07_sliding_relevance_window/02_window_composer_dynamic_context_construction.md",
+    "07_sliding_relevance_window/03_context_pruner_flash_summarization.md",
+    "07_sliding_relevance_window/04_deterministic_tool_output_pruning.md"
+  ],
+  "08_context_compression_and_token_management/01_token_threshold_monitor.md": [],
+  "08_context_compression_and_token_management/02_gemini_flash_compression_turn.md": [],
+  "08_context_compression_and_token_management/03_token_budget_enforcement.md": [],
+  "08_context_compression_and_token_management/04_sliding_relevance_window_pruner.md": [],
+  "08_context_compression_and_token_management/05_context_compression_pipeline_integration.md": [
+    "08_context_compression_and_token_management/01_token_threshold_monitor.md",
+    "08_context_compression_and_token_management/02_gemini_flash_compression_turn.md",
+    "08_context_compression_and_token_management/03_token_budget_enforcement.md",
+    "08_context_compression_and_token_management/04_sliding_relevance_window_pruner.md"
+  ],
+  "09_active_file_pinning_and_context_injection/01_active_file_pin_data_model.md": [],
+  "09_active_file_pinning_and_context_injection/02_sandbox_server_pin_tools.md": [
+    "09_active_file_pinning_and_context_injection/01_active_file_pin_data_model.md"
+  ],
+  "09_active_file_pinning_and_context_injection/03_lru_file_swap_out_logic.md": [
+    "09_active_file_pinning_and_context_injection/01_active_file_pin_data_model.md",
+    "09_active_file_pinning_and_context_injection/02_sandbox_server_pin_tools.md"
+  ],
+  "09_active_file_pinning_and_context_injection/04_context_refresh_service.md": [
+    "09_active_file_pinning_and_context_injection/03_lru_file_swap_out_logic.md"
+  ],
+  "09_active_file_pinning_and_context_injection/05_token_budget_manager.md": [],
+  "09_active_file_pinning_and_context_injection/06_sliding_window_summarizer.md": [],
+  "10_spec_refresh_protocol/01_turn_counter_and_refresh_trigger.md": [],
+  "10_spec_refresh_protocol/02_spec_refresh_service.md": [],
+  "10_spec_refresh_protocol/03_integrate_spec_refresh_into_context_pruner.md": [
+    "10_spec_refresh_protocol/01_turn_counter_and_refresh_trigger.md",
+    "10_spec_refresh_protocol/02_spec_refresh_service.md"
+  ],
+  "10_spec_refresh_protocol/04_tool_result_truncation_policy.md": [],
+  "10_spec_refresh_protocol/05_get_task_trace_mcp_tool.md": [],
+  "10_spec_refresh_protocol/06_intent_drift_benchmark.md": [
+    "10_spec_refresh_protocol/03_integrate_spec_refresh_into_context_pruner.md"
+  ],
+  "11_memory_refresher_and_summarization/01_memory_refresher_core_module.md": [],
+  "11_memory_refresher_and_summarization/02_summarization_handoff_to_medium_term_memory.md": [],
+  "11_memory_refresher_and_summarization/03_token_threshold_monitor_and_context_refresh_trigger.md": [
+    "11_memory_refresher_and_summarization/02_summarization_handoff_to_medium_term_memory.md"
+  ],
+  "11_memory_refresher_and_summarization/04_sliding_window_and_spec_refresh_protocol.md": [],
+  "11_memory_refresher_and_summarization/05_semantic_similarity_threshold_filtering.md": [],
+  "12_strategy_blacklist_and_lesson_learned/01_sqlite_lessons_learned_schema.md": [],
+  "12_strategy_blacklist_and_lesson_learned/02_lesson_learned_service.md": [
+    "12_strategy_blacklist_and_lesson_learned/01_sqlite_lessons_learned_schema.md"
+  ],
+  "12_strategy_blacklist_and_lesson_learned/03_rca_auto_log_integration.md": [
+    "12_strategy_blacklist_and_lesson_learned/02_lesson_learned_service.md"
+  ],
+  "12_strategy_blacklist_and_lesson_learned/04_strategy_blacklist_enforcement.md": [
+    "12_strategy_blacklist_and_lesson_learned/02_lesson_learned_service.md"
+  ],
+  "12_strategy_blacklist_and_lesson_learned/05_user_fix_dna_encoding.md": [],
+  "12_strategy_blacklist_and_lesson_learned/06_directive_history_service.md": [
+    "12_strategy_blacklist_and_lesson_learned/01_sqlite_lessons_learned_schema.md"
+  ],
+  "12_strategy_blacklist_and_lesson_learned/07_human_intervention_trigger.md": [
+    "12_strategy_blacklist_and_lesson_learned/05_user_fix_dna_encoding.md",
+    "12_strategy_blacklist_and_lesson_learned/06_directive_history_service.md"
+  ],
+  "12_strategy_blacklist_and_lesson_learned/08_mcp_tools_lesson_blacklist.md": [
+    "12_strategy_blacklist_and_lesson_learned/02_lesson_learned_service.md",
+    "12_strategy_blacklist_and_lesson_learned/06_directive_history_service.md"
+  ],
+  "13_user_directive_and_feedback/01_feedback_injection_tool.md": [],
+  "13_user_directive_and_feedback/02_user_directive_precedence.md": [],
+  "13_user_directive_and_feedback/03_shared_memory_architecture_decision.md": [],
+  "13_user_directive_and_feedback/04_tas_context_injection.md": [],
+  "14_memory_rewind_and_sync_safety/01_rewind_point_metadata_schema.md": [],
+  "14_memory_rewind_and_sync_safety/02_vector_memory_hard_pruning_on_rewind.md": [
+    "14_memory_rewind_and_sync_safety/01_rewind_point_metadata_schema.md"
+  ],
+  "14_memory_rewind_and_sync_safety/03_temporal_filtering_in_search_memory.md": [
+    "14_memory_rewind_and_sync_safety/01_rewind_point_metadata_schema.md"
+  ],
+  "14_memory_rewind_and_sync_safety/04_semantic_decay_scoring.md": [
+    "14_memory_rewind_and_sync_safety/01_rewind_point_metadata_schema.md"
+  ],
+  "14_memory_rewind_and_sync_safety/05_stale_memory_pruning_job.md": [
+    "14_memory_rewind_and_sync_safety/04_semantic_decay_scoring.md"
+  ],
+  "14_memory_rewind_and_sync_safety/06_retrieval_quality_monitoring.md": [],
+  "15_long_term_memory_drift_investigation/01_design_drift_investigation_harness.md": [],
+  "15_long_term_memory_drift_investigation/02_implement_noise_injection_pipeline.md": [],
+  "15_long_term_memory_drift_investigation/03_build_iterative_write_query_simulation_loop.md": [
+    "15_long_term_memory_drift_investigation/01_design_drift_investigation_harness.md",
+    "15_long_term_memory_drift_investigation/02_implement_noise_injection_pipeline.md"
+  ],
+  "15_long_term_memory_drift_investigation/04_implement_drift_report_aggregation.md": [
+    "15_long_term_memory_drift_investigation/03_build_iterative_write_query_simulation_loop.md"
+  ],
+  "15_long_term_memory_drift_investigation/05_persist_drift_report_and_expose_cli.md": [
+    "15_long_term_memory_drift_investigation/04_implement_drift_report_aggregation.md"
+  ],
+  "15_long_term_memory_drift_investigation/06_expose_mcp_tool_and_run_baseline_spike.md": [
+    "15_long_term_memory_drift_investigation/04_implement_drift_report_aggregation.md"
+  ],
+  "16_vector_memory_security_and_integrity/01_implement_vector_database_encryption.md": [],
+  "16_vector_memory_security_and_integrity/02_implement_trusted_untrusted_partition_separation.md": [],
+  "16_vector_memory_security_and_integrity/03_implement_approved_only_vector_commit_gate.md": [
+    "16_vector_memory_security_and_integrity/02_implement_trusted_untrusted_partition_separation.md"
+  ],
+  "17_context_drift_and_semantic_integrity/01_context_drift_guard_tas_requirements_prioritization.md": [],
+  "17_context_drift_and_semantic_integrity/02_semantic_drift_prevention_terminal_observation_retention.md": [
+    "17_context_drift_and_semantic_integrity/01_context_drift_guard_tas_requirements_prioritization.md"
+  ],
+  "17_context_drift_and_semantic_integrity/03_vector_retrieval_noise_filtering_epic_scoped_metadata.md": [],
+  "18_performance_and_benchmarking/01_background_indexing_throttle.md": [],
+  "18_performance_and_benchmarking/02_research_result_cache.md": [],
+  "18_performance_and_benchmarking/03_memory_efficiency_benchmark.md": []
 }

@@ -1,36 +1,210 @@
 {
-  "01_distiller_core_extraction": [],
-  "02_decomposition_and_orchestration": [
-    "01_distiller_core_extraction"
+  "01_distiller_core_extraction/01_define_domain_models_and_interfaces.md": [],
+  "01_distiller_core_extraction/02_parser_contract_unit_tests.md": [
+    "01_distiller_core_extraction/01_define_domain_models_and_interfaces.md"
   ],
-  "03_task_dag_generation": [
-    "02_decomposition_and_orchestration"
+  "01_distiller_core_extraction/03_markdown_and_prd_parsers.md": [
+    "01_distiller_core_extraction/02_parser_contract_unit_tests.md"
   ],
-  "04_rti_and_coverage": [
-    "02_decomposition_and_orchestration"
+  "01_distiller_core_extraction/04_normalization_and_deduplication.md": [
+    "01_distiller_core_extraction/01_define_domain_models_and_interfaces.md"
   ],
-  "05_task_constraints_and_planning": [
-    "03_task_dag_generation",
-    "04_rti_and_coverage"
+  "01_distiller_core_extraction/05_distillation_compiler_pipeline.md": [
+    "01_distiller_core_extraction/03_markdown_and_prd_parsers.md",
+    "01_distiller_core_extraction/04_normalization_and_deduplication.md",
+    "01_distiller_core_extraction/06_rti_calculator_and_coverage.md"
   ],
-  "06_roadmap_planner_and_gates": [
-    "05_task_constraints_and_planning"
+  "01_distiller_core_extraction/06_rti_calculator_and_coverage.md": [
+    "01_distiller_core_extraction/01_define_domain_models_and_interfaces.md"
   ],
-  "07_cost_estimation_and_budgeting": [
-    "05_task_constraints_and_planning"
+  "01_distiller_core_extraction/07_multi_agent_cross_check_integration.md": [
+    "01_distiller_core_extraction/03_markdown_and_prd_parsers.md"
   ],
-  "08_roadmap_visualization_ui": [
-    "06_roadmap_planner_and_gates",
-    "10_approval_and_checkpoints"
+  "02_decomposition_and_orchestration/01_define_task_schema.md": [],
+  "02_decomposition_and_orchestration/02_spec_ingestion_and_req_extraction.md": [],
+  "02_decomposition_and_orchestration/03_atomic_task_splitter.md": [
+    "02_decomposition_and_orchestration/01_define_task_schema.md"
   ],
-  "09_risk_mitigation_and_monitoring": [
-    "04_rti_and_coverage",
-    "10_approval_and_checkpoints"
+  "02_decomposition_and_orchestration/04_epic_partitioning_and_orchestration.md": [
+    "02_decomposition_and_orchestration/01_define_task_schema.md"
   ],
-  "10_approval_and_checkpoints": [
-    "06_roadmap_planner_and_gates"
+  "02_decomposition_and_orchestration/05_task_dependency_dag_generator.md": [
+    "02_decomposition_and_orchestration/01_define_task_schema.md"
   ],
-  "11_technical_requirements_and_feedback": [
-    "01_distiller_core_extraction"
+  "02_decomposition_and_orchestration/06_integration_and_task_validation.md": [
+    "02_decomposition_and_orchestration/02_spec_ingestion_and_req_extraction.md",
+    "02_decomposition_and_orchestration/03_atomic_task_splitter.md",
+    "02_decomposition_and_orchestration/04_epic_partitioning_and_orchestration.md",
+    "02_decomposition_and_orchestration/05_task_dependency_dag_generator.md"
+  ],
+  "03_task_dag_generation/01_design_algorithm.md": [
+    "03_task_dag_generation/02_task_model_and_schema.md"
+  ],
+  "03_task_dag_generation/02_task_model_and_schema.md": [],
+  "03_task_dag_generation/03_dag_generator_core.md": [
+    "03_task_dag_generation/02_task_model_and_schema.md"
+  ],
+  "03_task_dag_generation/04_deadlock_detection.md": [
+    "03_task_dag_generation/03_dag_generator_core.md"
+  ],
+  "03_task_dag_generation/05_cycle_resolution.md": [
+    "03_task_dag_generation/03_dag_generator_core.md",
+    "03_task_dag_generation/04_deadlock_detection.md"
+  ],
+  "03_task_dag_generation/06_dag_execution_logic.md": [
+    "03_task_dag_generation/03_dag_generator_core.md"
+  ],
+  "03_task_dag_generation/07_integration_pipeline_tests.md": [
+    "03_task_dag_generation/01_design_algorithm.md",
+    "03_task_dag_generation/03_dag_generator_core.md",
+    "03_task_dag_generation/04_deadlock_detection.md",
+    "03_task_dag_generation/05_cycle_resolution.md",
+    "03_task_dag_generation/06_dag_execution_logic.md"
+  ],
+  "04_rti_and_coverage/01_define_rti_data_model.md": [],
+  "04_rti_and_coverage/02_requirement_task_linking_api.md": [
+    "04_rti_and_coverage/01_define_rti_data_model.md"
+  ],
+  "04_rti_and_coverage/03_implement_rti_calculator.md": [
+    "04_rti_and_coverage/01_define_rti_data_model.md",
+    "04_rti_and_coverage/02_requirement_task_linking_api.md"
+  ],
+  "04_rti_and_coverage/04_requirement_coverage_validator.md": [
+    "04_rti_and_coverage/03_implement_rti_calculator.md"
+  ],
+  "04_rti_and_coverage/05_unit_tests_for_rti_edge_cases.md": [
+    "04_rti_and_coverage/03_implement_rti_calculator.md"
+  ],
+  "04_rti_and_coverage/06_integration_e2e_rti_pipeline.md": [
+    "04_rti_and_coverage/02_requirement_task_linking_api.md",
+    "04_rti_and_coverage/03_implement_rti_calculator.md",
+    "04_rti_and_coverage/04_requirement_coverage_validator.md"
+  ],
+  "04_rti_and_coverage/07_ci_gate_for_rti.md": [
+    "04_rti_and_coverage/04_requirement_coverage_validator.md"
+  ],
+  "04_rti_and_coverage/08_documentation_and_agent_memory.md": [
+    "04_rti_and_coverage/01_define_rti_data_model.md",
+    "04_rti_and_coverage/03_implement_rti_calculator.md",
+    "04_rti_and_coverage/04_requirement_coverage_validator.md",
+    "04_rti_and_coverage/06_integration_e2e_rti_pipeline.md",
+    "04_rti_and_coverage/07_ci_gate_for_rti.md"
+  ],
+  "05_task_constraints_and_planning/01_define_epic_model.md": [],
+  "05_task_constraints_and_planning/02_implement_epic_partitioning_algorithm.md": [
+    "05_task_constraints_and_planning/01_define_epic_model.md"
+  ],
+  "05_task_constraints_and_planning/03_define_task_model_and_validation.md": [],
+  "05_task_constraints_and_planning/04_task_granularity_enforcement.md": [
+    "05_task_constraints_and_planning/03_define_task_model_and_validation.md"
+  ],
+  "05_task_constraints_and_planning/05_epic_start_gate_and_dod_checks.md": [
+    "05_task_constraints_and_planning/01_define_epic_model.md",
+    "05_task_constraints_and_planning/03_define_task_model_and_validation.md"
+  ],
+  "05_task_constraints_and_planning/06_planner_cli_and_api_contract.md": [
+    "05_task_constraints_and_planning/02_implement_epic_partitioning_algorithm.md",
+    "05_task_constraints_and_planning/05_epic_start_gate_and_dod_checks.md"
+  ],
+  "06_roadmap_planner_and_gates/01_map_plan_requirements.md": [],
+  "06_roadmap_planner_and_gates/02_roadmap_planner_core.md": [
+    "06_roadmap_planner_and_gates/01_map_plan_requirements.md"
+  ],
+  "06_roadmap_planner_and_gates/03_roadmap_gate_post_phase5.md": [],
+  "06_roadmap_planner_and_gates/04_epic_start_gate_logic.md": [],
+  "06_roadmap_planner_and_gates/05_epic_commencement_checkpoint_ui.md": [
+    "06_roadmap_planner_and_gates/04_epic_start_gate_logic.md"
+  ],
+  "07_cost_estimation_and_budgeting/01_define_cost_estimation_data_model.md": [],
+  "07_cost_estimation_and_budgeting/02_implement_token_estimate_heuristic.md": [],
+  "07_cost_estimation_and_budgeting/03_create_pre_execution_budget_estimator.md": [
+    "07_cost_estimation_and_budgeting/01_define_cost_estimation_data_model.md",
+    "07_cost_estimation_and_budgeting/02_implement_token_estimate_heuristic.md"
+  ],
+  "07_cost_estimation_and_budgeting/04_build_token_budget_config_ui_and_config.md": [
+    "07_cost_estimation_and_budgeting/03_create_pre_execution_budget_estimator.md"
+  ],
+  "07_cost_estimation_and_budgeting/05_integration_tests_for_cost_estimation_accuracy.md": [
+    "07_cost_estimation_and_budgeting/03_create_pre_execution_budget_estimator.md"
+  ],
+  "07_cost_estimation_and_budgeting/06_benchmark_suite_for_cost_heuristics.md": [
+    "07_cost_estimation_and_budgeting/02_implement_token_estimate_heuristic.md"
+  ],
+  "07_cost_estimation_and_budgeting/07_phase_cost_breakdown_report.md": [],
+  "08_roadmap_visualization_ui/01_scaffold_roadmap_viewer.md": [],
+  "08_roadmap_visualization_ui/02_requirement_to_task_api_and_model.md": [],
+  "08_roadmap_visualization_ui/03_roadmap_backend_endpoints.md": [
+    "08_roadmap_visualization_ui/02_requirement_to_task_api_and_model.md"
+  ],
+  "08_roadmap_visualization_ui/04_dag_data_store_and_realtime_updates.md": [
+    "08_roadmap_visualization_ui/03_roadmap_backend_endpoints.md"
+  ],
+  "08_roadmap_visualization_ui/05_dag_canvas_renderer_core.md": [
+    "08_roadmap_visualization_ui/01_scaffold_roadmap_viewer.md"
+  ],
+  "08_roadmap_visualization_ui/06_gantt_layout_and_epic_expand.md": [
+    "08_roadmap_visualization_ui/01_scaffold_roadmap_viewer.md"
+  ],
+  "08_roadmap_visualization_ui/07_semantic_zoom_and_interactions.md": [
+    "08_roadmap_visualization_ui/05_dag_canvas_renderer_core.md",
+    "08_roadmap_visualization_ui/06_gantt_layout_and_epic_expand.md"
+  ],
+  "08_roadmap_visualization_ui/08_approval_workflow_ui.md": [
+    "08_roadmap_visualization_ui/01_scaffold_roadmap_viewer.md",
+    "08_roadmap_visualization_ui/03_roadmap_backend_endpoints.md"
+  ],
+  "08_roadmap_visualization_ui/09_requirement_refinement_and_redistill_ui.md": [
+    "08_roadmap_visualization_ui/01_scaffold_roadmap_viewer.md",
+    "08_roadmap_visualization_ui/02_requirement_to_task_api_and_model.md",
+    "08_roadmap_visualization_ui/03_roadmap_backend_endpoints.md"
+  ],
+  "08_roadmap_visualization_ui/10_tests_ci_and_automated_verification.md": [
+    "08_roadmap_visualization_ui/04_dag_data_store_and_realtime_updates.md",
+    "08_roadmap_visualization_ui/07_semantic_zoom_and_interactions.md",
+    "08_roadmap_visualization_ui/08_approval_workflow_ui.md",
+    "08_roadmap_visualization_ui/09_requirement_refinement_and_redistill_ui.md"
+  ],
+  "09_risk_mitigation_and_monitoring/01_multi_agent_cross_check.md": [],
+  "09_risk_mitigation_and_monitoring/02_user_approval_gate.md": [
+    "09_risk_mitigation_and_monitoring/01_multi_agent_cross_check.md"
+  ],
+  "09_risk_mitigation_and_monitoring/03_rti_monitoring_and_alerts.md": [],
+  "09_risk_mitigation_and_monitoring/04_hallucination_detection.md": [
+    "09_risk_mitigation_and_monitoring/01_multi_agent_cross_check.md"
+  ],
+  "09_risk_mitigation_and_monitoring/05_traceability_gap_mitigation.md": [
+    "09_risk_mitigation_and_monitoring/03_rti_monitoring_and_alerts.md"
+  ],
+  "10_approval_and_checkpoints/01_db_schema_and_migrations.md": [],
+  "10_approval_and_checkpoints/02_approval_api_endpoints.md": [
+    "10_approval_and_checkpoints/01_db_schema_and_migrations.md"
+  ],
+  "10_approval_and_checkpoints/03_epic_start_review_interface.md": [
+    "10_approval_and_checkpoints/01_db_schema_and_migrations.md"
+  ],
+  "10_approval_and_checkpoints/04_progress_summary_service.md": [],
+  "10_approval_and_checkpoints/05_orphaned_requirements_detection.md": [
+    "10_approval_and_checkpoints/01_db_schema_and_migrations.md"
+  ],
+  "10_approval_and_checkpoints/06_tests_and_ci_checks.md": [
+    "10_approval_and_checkpoints/01_db_schema_and_migrations.md",
+    "10_approval_and_checkpoints/02_approval_api_endpoints.md",
+    "10_approval_and_checkpoints/03_epic_start_review_interface.md",
+    "10_approval_and_checkpoints/04_progress_summary_service.md",
+    "10_approval_and_checkpoints/05_orphaned_requirements_detection.md"
+  ],
+  "11_technical_requirements_and_feedback/01_define_tech_requirements_schema.md": [],
+  "11_technical_requirements_and_feedback/02_extract_tech_requirements_parser.md": [
+    "11_technical_requirements_and_feedback/01_define_tech_requirements_schema.md"
+  ],
+  "11_technical_requirements_and_feedback/03_planning_metadata_and_flags.md": [
+    "11_technical_requirements_and_feedback/01_define_tech_requirements_schema.md"
+  ],
+  "11_technical_requirements_and_feedback/04_roadmap_requirements_mapping_and_rti.md": [
+    "11_technical_requirements_and_feedback/01_define_tech_requirements_schema.md"
+  ],
+  "11_technical_requirements_and_feedback/05_contradiction_detection.md": [],
+  "11_technical_requirements_and_feedback/06_feedback_loop_and_clarification_api.md": [
+    "11_technical_requirements_and_feedback/05_contradiction_detection.md"
   ]
 }

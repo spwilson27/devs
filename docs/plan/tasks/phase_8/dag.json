@@ -1,54 +1,443 @@
 {
-  "01_tas": [],
-  "02_1_prd": [],
-  "03_tas": [
-    "01_tas"
+  "01_tas/01_define_tdd_engine_api.md": [],
+  "01_tas/02_write_unit_tests_for_testnode.md": [
+    "01_tas/01_define_tdd_engine_api.md"
   ],
-  "04_1_prd": [],
-  "05_3_mcp": [],
-  "06_3_mcp": [
-    "03_tas",
-    "05_3_mcp"
+  "01_tas/03_implement_testnode.md": [
+    "01_tas/02_write_unit_tests_for_testnode.md"
   ],
-  "07_tas": [],
-  "08_1_prd": [
-    "01_tas"
+  "01_tas/04_write_unit_tests_for_verificationnode.md": [
+    "01_tas/01_define_tdd_engine_api.md"
   ],
-  "09_1_prd": [],
-  "10_1_prd": [],
-  "11_3_mcp": [
-    "01_tas"
+  "01_tas/05_implement_verificationnode.md": [
+    "01_tas/04_write_unit_tests_for_verificationnode.md",
+    "01_tas/03_implement_testnode.md"
   ],
-  "12_3_mcp": [
-    "16_9_roadmap"
+  "01_tas/06_write_unit_tests_for_codenode.md": [
+    "01_tas/01_define_tdd_engine_api.md"
   ],
-  "13_2_tas": [
-    "17_5_security_design"
+  "01_tas/07_implement_codenode.md": [
+    "01_tas/06_write_unit_tests_for_codenode.md"
   ],
-  "14_9_roadmap": [],
-  "15_9_roadmap": [],
-  "16_9_roadmap": [],
-  "17_5_security_design": [],
-  "18_5_security_design": [],
-  "19_5_security_design": [],
-  "20_5_security_design": [],
-  "21_5_security_design": [],
-  "22_8_risks": [],
-  "23_8_risks": [],
-  "24_8_risks": [],
-  "25_8_risks": [],
-  "26_8_risks": [],
-  "27_8_risks": [],
-  "28_8_risks": [],
-  "29_8_risks": [],
-  "30_4_user_features": [],
-  "31_4_user_features": [],
-  "32_4_user_features": [],
-  "33_4_user_features": [],
-  "34_4_user_features": [],
-  "35_1_prd": [],
-  "36_1_prd": [],
-  "37_1_prd": [],
-  "38_9_roadmap": [],
-  "39_9_roadmap": []
+  "01_tas/08_implement_tdd_loop_controller.md": [
+    "01_tas/03_implement_testnode.md",
+    "01_tas/05_implement_verificationnode.md",
+    "01_tas/07_implement_codenode.md"
+  ],
+  "01_tas/09_integration_tests_tdd_engine.md": [
+    "01_tas/08_implement_tdd_loop_controller.md"
+  ],
+  "01_tas/10_update_documentation_tdd_engine.md": [
+    "01_tas/09_integration_tests_tdd_engine.md"
+  ],
+  "02_1_prd/01_hand_off_spec.md": [],
+  "02_1_prd/02_hand_off_persistence_api.md": [
+    "02_1_prd/01_hand_off_spec.md"
+  ],
+  "02_1_prd/03_hand_off_user_resolution_cli.md": [
+    "02_1_prd/02_hand_off_persistence_api.md"
+  ],
+  "02_1_prd/04_seeded_sandbox.md": [],
+  "02_1_prd/05_deterministic_test_runner.md": [
+    "02_1_prd/04_seeded_sandbox.md"
+  ],
+  "02_1_prd/06_determinism_verification_monitor.md": [
+    "02_1_prd/05_deterministic_test_runner.md"
+  ],
+  "03_tas/01_enforce_test_first_testnode.md": [],
+  "03_tas/02_implement_verification_node.md": [],
+  "03_tas/03_developeragent_tdd_gate.md": [
+    "03_tas/01_enforce_test_first_testnode.md",
+    "03_tas/02_implement_verification_node.md"
+  ],
+  "03_tas/04_tasks_table_schema.md": [],
+  "03_tas/05_commitnode_atomic_commit.md": [
+    "03_tas/04_tasks_table_schema.md"
+  ],
+  "03_tas/06_interagent_handoff.md": [],
+  "03_tas/07_entropy_detector.md": [],
+  "04_1_prd/01_implement_entropy_detector.md": [],
+  "04_1_prd/02_implement_strategy_pivot.md": [
+    "04_1_prd/01_implement_entropy_detector.md"
+  ],
+  "04_1_prd/03_turn_and_token_budgets.md": [],
+  "04_1_prd/04_mcp_server_and_docs.md": [],
+  "04_1_prd/05_integration_tdd_loop.md": [
+    "04_1_prd/02_implement_strategy_pivot.md",
+    "04_1_prd/03_turn_and_token_budgets.md",
+    "04_1_prd/04_mcp_server_and_docs.md"
+  ],
+  "05_3_mcp/01_register_agent_manifest.md": [],
+  "05_3_mcp/02_add_sample_agent_doc.md": [],
+  "05_3_mcp/03_define_observability_schema_and_logger.md": [],
+  "05_3_mcp/04_commitnode_interface_tests.md": [],
+  "05_3_mcp/05_implement_commitnode_core.md": [
+    "05_3_mcp/04_commitnode_interface_tests.md"
+  ],
+  "05_3_mcp/06_capture_trace_tool.md": [],
+  "05_3_mcp/07_dependency_locking.md": [],
+  "05_3_mcp/08_dependency_audit_and_recovery.md": [
+    "05_3_mcp/07_dependency_locking.md"
+  ],
+  "06_3_mcp/01_add_git_commit_hash_field.md": [],
+  "06_3_mcp/02_git_commit_utility.md": [],
+  "06_3_mcp/03_commitnode_integration.md": [
+    "06_3_mcp/01_add_git_commit_hash_field.md",
+    "06_3_mcp/02_git_commit_utility.md"
+  ],
+  "06_3_mcp/04_atomic_transaction_tests.md": [
+    "06_3_mcp/03_commitnode_integration.md"
+  ],
+  "06_3_mcp/05_rewind_and_verification.md": [
+    "06_3_mcp/03_commitnode_integration.md"
+  ],
+  "06_3_mcp/06_documentation_and_ci.md": [
+    "06_3_mcp/04_atomic_transaction_tests.md",
+    "06_3_mcp/05_rewind_and_verification.md"
+  ],
+  "07_tas/01_define_agent_roles_and_prompts.md": [],
+  "07_tas/02_implement_prompt_manager.md": [
+    "07_tas/01_define_agent_roles_and_prompts.md"
+  ],
+  "07_tas/03_tool_registry_and_permissions.md": [],
+  "07_tas/04_implement_agent_factory.md": [
+    "07_tas/02_implement_prompt_manager.md",
+    "07_tas/03_tool_registry_and_permissions.md"
+  ],
+  "07_tas/05_implement_binary_gate_core.md": [],
+  "07_tas/06_integrate_binary_gate_with_tdd_engine.md": [
+    "07_tas/05_implement_binary_gate_core.md",
+    "07_tas/04_implement_agent_factory.md"
+  ],
+  "08_1_prd/01_testnode_red_phase.md": [],
+  "08_1_prd/02_test_runner_verification.md": [
+    "08_1_prd/01_testnode_red_phase.md"
+  ],
+  "08_1_prd/03_commitnode_implementation.md": [],
+  "08_1_prd/04_commit_message_taskid_enforcement.md": [
+    "08_1_prd/03_commitnode_implementation.md"
+  ],
+  "08_1_prd/05_entropy_detector.md": [],
+  "08_1_prd/06_entropy_backoff.md": [
+    "08_1_prd/05_entropy_detector.md"
+  ],
+  "08_1_prd/07_memory_and_decision_logging.md": [],
+  "08_1_prd/08_integration_tdd_cycle.md": [
+    "08_1_prd/02_test_runner_verification.md",
+    "08_1_prd/04_commit_message_taskid_enforcement.md",
+    "08_1_prd/06_entropy_backoff.md",
+    "08_1_prd/07_memory_and_decision_logging.md"
+  ],
+  "09_1_prd/01_automated_handoff_after_5_failures.md": [],
+  "09_1_prd/02_git_repository_management.md": [],
+  "09_1_prd/03_strategy_shift_after_3_failures.md": [],
+  "09_1_prd/04_deterministic_execution_engine.md": [],
+  "09_1_prd/05_multi_agent_verification.md": [
+    "09_1_prd/04_deterministic_execution_engine.md"
+  ],
+  "10_1_prd/01_define_strict_tdd_prd.md": [],
+  "10_1_prd/02_testnode_red_phase.md": [
+    "10_1_prd/01_define_strict_tdd_prd.md"
+  ],
+  "10_1_prd/03_codenode_green_phase.md": [
+    "10_1_prd/02_testnode_red_phase.md"
+  ],
+  "10_1_prd/04_refactornode_cleanup.md": [],
+  "10_1_prd/05_commitnode_atomic_commit.md": [
+    "10_1_prd/03_codenode_green_phase.md"
+  ],
+  "10_1_prd/06_entropy_detector_and_pivot.md": [],
+  "10_1_prd/07_finalize_task_manifest.md": [
+    "10_1_prd/01_define_strict_tdd_prd.md",
+    "10_1_prd/02_testnode_red_phase.md",
+    "10_1_prd/03_codenode_green_phase.md",
+    "10_1_prd/04_refactornode_cleanup.md",
+    "10_1_prd/05_commitnode_atomic_commit.md",
+    "10_1_prd/06_entropy_detector_and_pivot.md"
+  ],
+  "11_3_mcp/01_define_taskstrategy_model.md": [],
+  "11_3_mcp/02_implement_plannode.md": [
+    "11_3_mcp/01_define_taskstrategy_model.md"
+  ],
+  "11_3_mcp/03_implement_testnode_red_phase.md": [
+    "11_3_mcp/01_define_taskstrategy_model.md"
+  ],
+  "11_3_mcp/04_implement_codenode_green_phase.md": [
+    "11_3_mcp/03_implement_testnode_red_phase.md"
+  ],
+  "11_3_mcp/05_implement_langgraph_orchestrator.md": [
+    "11_3_mcp/02_implement_plannode.md",
+    "11_3_mcp/04_implement_codenode_green_phase.md"
+  ],
+  "11_3_mcp/06_add_tdd_e2e_integration_tests.md": [
+    "11_3_mcp/05_implement_langgraph_orchestrator.md"
+  ],
+  "12_3_mcp/01_refactornode_interface.md": [],
+  "12_3_mcp/02_refactornode_unit_tests.md": [
+    "12_3_mcp/01_refactornode_interface.md"
+  ],
+  "12_3_mcp/03_refactornode_surgical_edit_integration.md": [
+    "12_3_mcp/01_refactornode_interface.md"
+  ],
+  "12_3_mcp/04_refactornode_file_locking_and_sandbox.md": [
+    "12_3_mcp/01_refactornode_interface.md"
+  ],
+  "12_3_mcp/05_refactornode_commit_and_metadata.md": [
+    "12_3_mcp/01_refactornode_interface.md"
+  ],
+  "12_3_mcp/06_refactornode_e2e_and_verification.md": [
+    "12_3_mcp/02_refactornode_unit_tests.md",
+    "12_3_mcp/03_refactornode_surgical_edit_integration.md",
+    "12_3_mcp/04_refactornode_file_locking_and_sandbox.md",
+    "12_3_mcp/05_refactornode_commit_and_metadata.md"
+  ],
+  "13_2_tas/01_developer_agent_execution_process.md": [],
+  "13_2_tas/02_agentfactory_implementation.md": [
+    "13_2_tas/01_developer_agent_execution_process.md"
+  ],
+  "13_2_tas/03_prompt_manager.md": [],
+  "13_2_tas/04_tool_registry.md": [],
+  "13_2_tas/05_reasoning_engine.md": [],
+  "14_9_roadmap/01_implement_tdd_engine_skeleton.md": [],
+  "14_9_roadmap/02_testnode_red_phase.md": [
+    "14_9_roadmap/01_implement_tdd_engine_skeleton.md"
+  ],
+  "14_9_roadmap/03_codenode_green_phase.md": [
+    "14_9_roadmap/01_implement_tdd_engine_skeleton.md"
+  ],
+  "14_9_roadmap/04_developer_agent_saop_turn_logic.md": [],
+  "14_9_roadmap/05_strategy_pivot_logic.md": [],
+  "14_9_roadmap/06_medium_term_memory_handoffs.md": [],
+  "15_9_roadmap/01_red_phase_gate.md": [],
+  "15_9_roadmap/02_entropy_detector_sha256.md": [],
+  "15_9_roadmap/03_entropy_prevention_pause.md": [
+    "15_9_roadmap/02_entropy_detector_sha256.md"
+  ],
+  "15_9_roadmap/04_entropy_buffer_research_strategy.md": [],
+  "15_9_roadmap/05_tdd_fidelity_benchmark.md": [],
+  "15_9_roadmap/06_integration_entropy_tdd_metrics.md": [
+    "15_9_roadmap/01_red_phase_gate.md",
+    "15_9_roadmap/03_entropy_prevention_pause.md",
+    "15_9_roadmap/04_entropy_buffer_research_strategy.md",
+    "15_9_roadmap/05_tdd_fidelity_benchmark.md"
+  ],
+  "16_9_roadmap/01_entropy_detector_tests.md": [],
+  "16_9_roadmap/02_entropy_detector_implementation.md": [
+    "16_9_roadmap/01_entropy_detector_tests.md"
+  ],
+  "16_9_roadmap/03_surgical_edit_tests.md": [],
+  "16_9_roadmap/04_surgical_edit_implementation.md": [
+    "16_9_roadmap/03_surgical_edit_tests.md"
+  ],
+  "16_9_roadmap/05_self_host_smoke.md": [
+    "16_9_roadmap/04_surgical_edit_implementation.md"
+  ],
+  "16_9_roadmap/06_dod_p6_verification.md": [
+    "16_9_roadmap/02_entropy_detector_implementation.md",
+    "16_9_roadmap/05_self_host_smoke.md"
+  ],
+  "17_5_security_design/01_agent_identity_key_management.md": [],
+  "17_5_security_design/02_agent_signature_and_verification.md": [
+    "17_5_security_design/01_agent_identity_key_management.md"
+  ],
+  "17_5_security_design/03_orchestrator_signoff_policy.md": [
+    "17_5_security_design/02_agent_signature_and_verification.md"
+  ],
+  "17_5_security_design/04_saop_persistence_schema.md": [],
+  "17_5_security_design/05_git_linkage_and_nonrepudiation.md": [
+    "17_5_security_design/04_saop_persistence_schema.md",
+    "17_5_security_design/02_agent_signature_and_verification.md"
+  ],
+  "17_5_security_design/06_rbac_model_definition.md": [],
+  "17_5_security_design/07_tool_registry_rbac_enforcement.md": [
+    "17_5_security_design/06_rbac_model_definition.md"
+  ],
+  "17_5_security_design/08_argument_sanitization_and_path_normalization.md": [],
+  "17_5_security_design/09_zero_persistence_secrets_and_secretmasker.md": [],
+  "18_5_security_design/01_native_keychain_integration.md": [],
+  "18_5_security_design/02_master_key_pbkdf2.md": [],
+  "18_5_security_design/03_zero_plaintext_config.md": [
+    "18_5_security_design/01_native_keychain_integration.md"
+  ],
+  "18_5_security_design/04_input_redaction_protection.md": [],
+  "18_5_security_design/05_zero_trust_dependency_management.md": [],
+  "19_5_security_design/01_mandatory_lockfile_enforcement.md": [],
+  "19_5_security_design/02_script_execution_blocking.md": [],
+  "19_5_security_design/03_atomic_state_wal.md": [],
+  "19_5_security_design/04_atomic_task_commits.md": [
+    "19_5_security_design/03_atomic_state_wal.md"
+  ],
+  "19_5_security_design/05_git_db_correlation_rewind.md": [
+    "19_5_security_design/04_atomic_task_commits.md"
+  ],
+  "20_5_security_design/01_entropy_detection.md": [],
+  "20_5_security_design/02_deterministic_loop_detection.md": [
+    "20_5_security_design/01_entropy_detection.md"
+  ],
+  "20_5_security_design/03_strategy_pivot_directive.md": [],
+  "20_5_security_design/04_indirect_tool_invocation_mitigation.md": [],
+  "20_5_security_design/05_privilege_escalation_dependency_mitigation.md": [],
+  "21_5_security_design/01_master_key_derivation.md": [],
+  "21_5_security_design/02_kek_key_wrapping.md": [
+    "21_5_security_design/01_master_key_derivation.md"
+  ],
+  "21_5_security_design/03_host_keychain_integration.md": [],
+  "21_5_security_design/04_no_raw_keys_in_llm_context.md": [],
+  "21_5_security_design/05_default_secure_generated_crypto.md": [],
+  "22_8_risks/01_entropy_detector.md": [],
+  "22_8_risks/02_strategy_pivot.md": [
+    "22_8_risks/01_entropy_detector.md"
+  ],
+  "22_8_risks/03_hard_turn_limits.md": [],
+  "22_8_risks/04_cost_guardrails.md": [],
+  "22_8_risks/05_tas_library_enforcement.md": [],
+  "23_8_risks/01_lockfile_util.md": [],
+  "23_8_risks/02_reviewer_lockfile_check.md": [
+    "23_8_risks/01_lockfile_util.md"
+  ],
+  "23_8_risks/03_complexity_detector.md": [],
+  "23_8_risks/04_architect_decomposition.md": [
+    "23_8_risks/03_complexity_detector.md"
+  ],
+  "23_8_risks/05_shadow_architect.md": [],
+  "23_8_risks/06_plannode_pre_code_gate.md": [
+    "23_8_risks/05_shadow_architect.md"
+  ],
+  "23_8_risks/07_tas_revision_proposal.md": [],
+  "23_8_risks/08_model_failover_and_routing.md": [],
+  "24_8_risks/01_jittered_exponential_backoff.md": [],
+  "24_8_risks/02_backoff_integration_llm_client.md": [
+    "24_8_risks/01_jittered_exponential_backoff.md"
+  ],
+  "24_8_risks/03_backoff_config_and_env.md": [
+    "24_8_risks/02_backoff_integration_llm_client.md"
+  ],
+  "24_8_risks/04_path_normalization_middleware.md": [],
+  "24_8_risks/05_replace_fs_with_normalization.md": [
+    "24_8_risks/04_path_normalization_middleware.md"
+  ],
+  "24_8_risks/06_file_lock_manager.md": [],
+  "24_8_risks/07_integrate_file_lock_into_executor.md": [
+    "24_8_risks/06_file_lock_manager.md"
+  ],
+  "24_8_risks/08_dependency_orchestrator_manifest_serialization.md": [],
+  "24_8_risks/09_manifest_atomic_write_tests.md": [
+    "24_8_risks/08_dependency_orchestrator_manifest_serialization.md"
+  ],
+  "24_8_risks/10_manifest_orchestrator_filelock_integration.md": [
+    "24_8_risks/08_dependency_orchestrator_manifest_serialization.md",
+    "24_8_risks/06_file_lock_manager.md"
+  ],
+  "24_8_risks/11_realtime_resource_gauges_module.md": [],
+  "24_8_risks/12_integrate_gauges_and_pause_on_threshold.md": [
+    "24_8_risks/11_realtime_resource_gauges_module.md"
+  ],
+  "25_8_risks/01_multi_model_failover.md": [],
+  "25_8_risks/02_tiered_model_orchestration.md": [],
+  "25_8_risks/03_mandatory_tdd_verification.md": [],
+  "25_8_risks/04_zero_data_retention.md": [],
+  "25_8_risks/05_origin_traceability.md": [],
+  "26_8_risks/01_idiomatic_pattern_enforcement.md": [],
+  "26_8_risks/02_agent_suspension_on_failure.md": [],
+  "26_8_risks/03_user_intervention_detection.md": [],
+  "26_8_risks/04_contextual_ingestion_after_resume.md": [],
+  "26_8_risks/05_model_failover_logic.md": [],
+  "27_8_risks/01_state_preservation.md": [],
+  "27_8_risks/02_soft_rewind.md": [],
+  "27_8_risks/03_regression_reimplementation.md": [],
+  "27_8_risks/04_budget_alert.md": [],
+  "27_8_risks/05_budget_recovery.md": [
+    "27_8_risks/04_budget_alert.md",
+    "27_8_risks/01_state_preservation.md"
+  ],
+  "28_8_risks/01_flakiness_heuristics.md": [],
+  "28_8_risks/02_agentic_looping_risk_mitigation.md": [],
+  "28_8_risks/03_flaky_tests_mitigation.md": [
+    "28_8_risks/01_flakiness_heuristics.md"
+  ],
+  "28_8_risks/04_model_reasoning_ceiling_mitigation.md": [],
+  "28_8_risks/05_dependency_collision_mitigation.md": [],
+  "29_8_risks/01_llm_rate_limit_and_caching.md": [],
+  "29_8_risks/01_llm_rate_limit_detection.md": [],
+  "29_8_risks/02_agent_deadlock_and_conflict_resolution.md": [],
+  "29_8_risks/02_llm_backoff_and_circuit_breaker.md": [
+    "29_8_risks/01_llm_rate_limit_detection.md"
+  ],
+  "29_8_risks/03_agent_deadlock_detection_service.md": [],
+  "29_8_risks/03_model_provider_abstraction.md": [],
+  "29_8_risks/04_deadlock_recovery_watchdog.md": [
+    "29_8_risks/03_agent_deadlock_detection_service.md"
+  ],
+  "29_8_risks/04_token_cost_guardrails.md": [],
+  "29_8_risks/05_dependency_vetting_and_vulnerability_scan.md": [],
+  "29_8_risks/06_lockfile_integrity_enforcer.md": [],
+  "29_8_risks/07_task_budget_monitoring.md": [],
+  "29_8_risks/08_economic_viability_reporting.md": [
+    "29_8_risks/07_task_budget_monitoring.md"
+  ],
+  "29_8_risks/09_multi_agent_conflict_detection.md": [],
+  "29_8_risks/10_conflict_arbitration_agent.md": [
+    "29_8_risks/09_multi_agent_conflict_detection.md"
+  ],
+  "30_4_user_features/01_core_rewind_orchestrator.md": [],
+  "30_4_user_features/02_cli_ui_rewind_controls.md": [
+    "30_4_user_features/01_core_rewind_orchestrator.md"
+  ],
+  "30_4_user_features/03_context_injection_whispering.md": [],
+  "30_4_user_features/04_cross_verification_sandbox.md": [],
+  "30_4_user_features/05_entropy_detection_hashing.md": [],
+  "30_4_user_features/06_strategy_pivot_and_loop_break.md": [
+    "30_4_user_features/05_entropy_detection_hashing.md"
+  ],
+  "31_4_user_features/01_pattern_conflict_dialog.md": [],
+  "31_4_user_features/02_active_task_card_ui.md": [],
+  "31_4_user_features/03_tdd_test_status_ui.md": [],
+  "31_4_user_features/04_test_hallucination_verification.md": [],
+  "31_4_user_features/05_flaky_test_detection.md": [],
+  "32_4_user_features/01_detect_dirty_workspace.md": [],
+  "32_4_user_features/01_dirty_workspace_rewind_block.md": [
+    "32_4_user_features/01_detect_dirty_workspace.md"
+  ],
+  "32_4_user_features/02_block_rewind_ui.md": [
+    "32_4_user_features/01_dirty_workspace_rewind_block.md"
+  ],
+  "32_4_user_features/02_graceful_suspension_on_interruption.md": [],
+  "32_4_user_features/03_rca_report_generation.md": [],
+  "32_4_user_features/03_suspend_on_interrupt.md": [
+    "32_4_user_features/04_suspend_state_persistence.md"
+  ],
+  "32_4_user_features/04_interactive_failure_diffs.md": [],
+  "32_4_user_features/04_suspend_state_persistence.md": [],
+  "32_4_user_features/05_suspended_sandbox_access.md": [],
+  "32_4_user_features/06_rca_report_agent.md": [],
+  "32_4_user_features/07_interactive_failure_diff.md": [],
+  "33_4_user_features/01_manual_intervention_thresholds.md": [],
+  "33_4_user_features/02_entropy_pivot_prompts.md": [],
+  "33_4_user_features/03_short_term_memory_injection.md": [],
+  "33_4_user_features/04_multi_choice_resolution.md": [],
+  "33_4_user_features/05_deterministic_rollback.md": [],
+  "34_4_user_features/01_observation_hashing_loop_detection.md": [],
+  "34_4_user_features/02_strategy_pivot_on_loop.md": [
+    "34_4_user_features/01_observation_hashing_loop_detection.md"
+  ],
+  "34_4_user_features/03_entropy_pause_and_suspension.md": [],
+  "34_4_user_features/04_manual_strategy_override.md": [],
+  "35_1_prd/01_token_cost_budget_manager.md": [],
+  "35_1_prd/02_entropy_failure_analyzer.md": [],
+  "35_1_prd/03_whisper_directive_injection.md": [],
+  "35_1_prd/04_manual_task_completion_override.md": [],
+  "35_1_prd/05_project_rewind_engine.md": [],
+  "36_1_prd/01_track_tar_and_ttfc.md": [],
+  "36_1_prd/02_track_tvr_and_cost.md": [],
+  "36_1_prd/03_track_intervention_frequency.md": [],
+  "36_1_prd/04_implement_decision_transparency_reporting.md": [],
+  "37_1_prd/01_entropy_detection_accuracy.md": [],
+  "37_1_prd/02_pattern_enforcement.md": [],
+  "37_1_prd/03_mcp_tool_environment.md": [],
+  "37_1_prd/04_time_travel_debugging.md": [],
+  "38_9_roadmap/01_tdd_loop_implementation.md": [],
+  "38_9_roadmap/02_file_level_locking_mechanism.md": [],
+  "38_9_roadmap/03_tar_ttfc_kpi_tracking.md": [],
+  "39_9_roadmap/01_implement_surgical_edit_precision.md": [],
+  "39_9_roadmap/02_implement_dependency_deadlock_blocker.md": []
 }

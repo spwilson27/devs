@@ -1,46 +1,115 @@
 {
-  "01_reviewer_agent_core_initialization": [],
-  "02_reviewer_agent_prompting_identity": [
-    "01_reviewer_agent_core_initialization"
+  "01_reviewer_agent_core_initialization/01_create_reviewer_agent_and_hostile_prompt.md": [],
+  "01_reviewer_agent_core_initialization/02_implement_pattern_compliance_and_regression_audit.md": [
+    "01_reviewer_agent_core_initialization/01_create_reviewer_agent_and_hostile_prompt.md"
   ],
-  "03_cross-verification_validation_logic": [
-    "01_reviewer_agent_core_initialization"
+  "01_reviewer_agent_core_initialization/03_implement_anti_pattern_and_security_flaw_detection.md": [
+    "01_reviewer_agent_core_initialization/01_create_reviewer_agent_and_hostile_prompt.md"
   ],
-  "04_automated_code_auditing": [
-    "03_cross-verification_validation_logic"
+  "02_reviewer_agent_prompting_identity/01_reviewer_agent_identity_and_independent_validation.md": [
+    "01_reviewer_agent_core_initialization/01_create_reviewer_agent_and_hostile_prompt.md"
   ],
-  "05_security_sast_integration": [
-    "03_cross-verification_validation_logic"
+  "02_reviewer_agent_prompting_identity/02_reviewer_agent_security_prompting.md": [
+    "01_reviewer_agent_core_initialization/01_create_reviewer_agent_and_hostile_prompt.md"
   ],
-  "06_test_suite_integrity_flakiness": [],
-  "07_documentation_auditing_aod_": [
-    "03_cross-verification_validation_logic"
+  "02_reviewer_agent_prompting_identity/03_reviewer_agent_hierarchy_of_concerns_audit.md": [
+    "01_reviewer_agent_core_initialization/01_create_reviewer_agent_and_hostile_prompt.md"
   ],
-  "08_aod_edge_cases_details": [
-    "07_documentation_auditing_aod_"
+  "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md": [
+    "01_reviewer_agent_core_initialization/01_create_reviewer_agent_and_hostile_prompt.md"
   ],
-  "09_root_cause_analysis_rca_debugging": [
-    "06_test_suite_integrity_flakiness",
-    "10_human-in-the-loop_gates"
+  "03_cross-verification_validation_logic/02_implement_reviewer_commit_validation.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
   ],
-  "10_human-in-the-loop_gates": [
-    "03_cross-verification_validation_logic"
+  "03_cross-verification_validation_logic/03_implement_regression_and_tas_violation_checks.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md",
+    "01_reviewer_agent_core_initialization/02_implement_pattern_compliance_and_regression_audit.md"
   ],
-  "11_escalation_checkpoints": [
-    "03_cross-verification_validation_logic",
-    "06_test_suite_integrity_flakiness"
+  "03_cross-verification_validation_logic/04_implement_cross_language_semantic_verification.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
   ],
-  "12_global_validation_infrastructure": [
-    "06_test_suite_integrity_flakiness"
+  "04_automated_code_auditing/01_integrate_static_analysis_tools.md": [],
+  "04_automated_code_auditing/02_reviewer_agent_clean_code_prompt.md": [
+    "01_reviewer_agent_core_initialization/01_create_reviewer_agent_and_hostile_prompt.md"
   ],
-  "13_full_system_audits": [
-    "12_global_validation_infrastructure"
+  "04_automated_code_auditing/03_reviewer_agent_tas_violation_block.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
   ],
-  "14_fact-checking_benchmarking": [
-    "03_cross-verification_validation_logic"
+  "05_security_sast_integration/01_automated_sast_injection.md": [],
+  "05_security_sast_integration/02_verification_bypass_prevention.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
   ],
-  "15_quality_metrics_definition": [
-    "12_global_validation_infrastructure",
-    "14_fact-checking_benchmarking"
+  "05_security_sast_integration/03_deterministic_entropy_detection.md": [],
+  "05_security_sast_integration/04_logic_anomaly_alerts.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
+  ],
+  "06_test_suite_integrity_flakiness/01_sandbox_execution_runner.md": [],
+  "06_test_suite_integrity_flakiness/02_multi_run_verification.md": [
+    "06_test_suite_integrity_flakiness/01_sandbox_execution_runner.md"
+  ],
+  "06_test_suite_integrity_flakiness/03_heuristic_failure_analyzer.md": [],
+  "06_test_suite_integrity_flakiness/04_flaky_test_escalation.md": [
+    "06_test_suite_integrity_flakiness/03_heuristic_failure_analyzer.md"
+  ],
+  "07_documentation_auditing_aod_/01_setup_aod_auditor_infrastructure.md": [],
+  "07_documentation_auditing_aod_/02_implement_aod_density_verification.md": [
+    "07_documentation_auditing_aod_/01_setup_aod_auditor_infrastructure.md"
+  ],
+  "07_documentation_auditing_aod_/03_implement_aod_content_verification.md": [
+    "07_documentation_auditing_aod_/01_setup_aod_auditor_infrastructure.md"
+  ],
+  "07_documentation_auditing_aod_/04_integrate_aod_auditor_with_reviewer.md": [
+    "07_documentation_auditing_aod_/02_implement_aod_density_verification.md",
+    "07_documentation_auditing_aod_/03_implement_aod_content_verification.md",
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
+  ],
+  "08_aod_edge_cases_details/01_aod_testability_edge_cases.md": [],
+  "08_aod_edge_cases_details/02_automated_onboarding_generation.md": [],
+  "08_aod_edge_cases_details/03_aod_audit_reviewer_agent.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
+  ],
+  "09_root_cause_analysis_rca_debugging/01_implement_rca_analyzer.md": [],
+  "09_root_cause_analysis_rca_debugging/02_implement_regression_blame_identification.md": [],
+  "09_root_cause_analysis_rca_debugging/03_implement_user_escalation_on_arbitration_failure.md": [
+    "10_human-in-the-loop_gates/03_arbitration_node.md"
+  ],
+  "09_root_cause_analysis_rca_debugging/04_inject_agent_ready_debugging_mcp_server.md": [],
+  "10_human-in-the-loop_gates/01_implement_user_approval_gates.md": [],
+  "10_human-in-the-loop_gates/02_expert_refinement_gates.md": [],
+  "10_human-in-the-loop_gates/03_arbitration_node.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
+  ],
+  "11_escalation_checkpoints/01_sandbox_escape_monitoring.md": [],
+  "11_escalation_checkpoints/02_failure_escalation_pause.md": [],
+  "11_escalation_checkpoints/03_deterministic_snapshot_points.md": [],
+  "12_global_validation_infrastructure/01_global_validation_orchestrator_node.md": [],
+  "12_global_validation_infrastructure/02_clean_sandbox_audit_runner.md": [],
+  "12_global_validation_infrastructure/03_global_validation_reporting_and_gate.md": [
+    "12_global_validation_infrastructure/01_global_validation_orchestrator_node.md",
+    "12_global_validation_infrastructure/02_clean_sandbox_audit_runner.md"
+  ],
+  "13_full_system_audits/01_setup_global_sandbox_runner.md": [],
+  "13_full_system_audits/02_post_parallel_epic_validation_node.md": [
+    "13_full_system_audits/01_setup_global_sandbox_runner.md"
+  ],
+  "13_full_system_audits/03_final_zero_defect_audit_gate.md": [
+    "13_full_system_audits/01_setup_global_sandbox_runner.md"
+  ],
+  "13_full_system_audits/04_orchestrator_verification_suite.md": [
+    "13_full_system_audits/02_post_parallel_epic_validation_node.md",
+    "13_full_system_audits/03_final_zero_defect_audit_gate.md",
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
+  ],
+  "14_fact-checking_benchmarking/01_fact_checker_agent.md": [],
+  "14_fact-checking_benchmarking/02_reviewer_autonomy_gate.md": [
+    "03_cross-verification_validation_logic/01_implement_review_node_agent_instantiation.md"
+  ],
+  "14_fact-checking_benchmarking/03_benchmarking_suite.md": [],
+  "15_quality_metrics_definition/01_implement_benchmarking_engine.md": [],
+  "15_quality_metrics_definition/02_implement_optimization_dod_validator.md": [],
+  "15_quality_metrics_definition/03_integrate_metrics_into_global_validation.md": [
+    "15_quality_metrics_definition/01_implement_benchmarking_engine.md",
+    "15_quality_metrics_definition/02_implement_optimization_dod_validator.md",
+    "12_global_validation_infrastructure/01_global_validation_orchestrator_node.md"
   ]
 }

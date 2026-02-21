@@ -1,371 +1,536 @@
 {
-  "01_vscode_extension_core": [],
-  "02_webview_stack_scaffolding": [
-    "01_vscode_extension_core"
-  ],
-  "03_interface_core_decoupling": [
-    "02_webview_stack_scaffolding"
-  ],
-  "04_event_streaming_bridge": [
-    "03_interface_core_decoupling"
-  ],
-  "05_ui_interaction_triggers": [
-    "03_interface_core_decoupling"
-  ],
-  "06_global_state_tiers": [
-    "03_interface_core_decoupling"
-  ],
-  "07_state_watchers_sync": [
-    "06_global_state_tiers"
-  ],
-  "08_persistence_recovery": [
-    "06_global_state_tiers"
-  ],
-  "09_view_routing_arch": [
-    "06_global_state_tiers"
-  ],
-  "10_view_lifecycle_policy": [
-    "09_view_routing_arch"
-  ],
-  "11_dashboard_research_views": [
-    "09_view_routing_arch"
-  ],
-  "12_spec_roadmap_views": [
-    "09_view_routing_arch"
-  ],
-  "13_console_settings_views": [
-    "09_view_routing_arch"
-  ],
-  "14_theme_variable_mapping": [
-    "02_webview_stack_scaffolding"
-  ],
-  "15_glass_box_effects": [
-    "14_theme_variable_mapping"
-  ],
-  "16_typography_philosophy": [
-    "14_theme_variable_mapping"
-  ],
-  "17_font_inheritance_stack": [
-    "16_typography_philosophy"
-  ],
-  "18_font_loading_antialiasing": [
-    "17_font_inheritance_stack"
-  ],
-  "19_narrative_font_intent": [
-    "16_typography_philosophy"
-  ],
-  "20_technical_font_intent": [
-    "16_typography_philosophy"
-  ],
-  "21_directive_nav_fonts": [
-    "16_typography_philosophy"
-  ],
-  "22_type_scale_h1_h3": [
-    "16_typography_philosophy"
-  ],
-  "23_type_scale_body_mono": [
-    "16_typography_philosophy",
-    "22_type_scale_h1_h3"
-  ],
-  "24_font_weight_ligatures": [
-    "16_typography_philosophy"
-  ],
-  "25_variable_scaling_rem": [
-    "16_typography_philosophy"
-  ],
-  "26_agent_reasoning_fonts": [
-    "16_typography_philosophy"
-  ],
-  "27_agent_hierarchy_authority": [
-    "14_theme_variable_mapping"
-  ],
-  "28_agent_role_colors": [
-    "14_theme_variable_mapping"
-  ],
-  "29_ansi_palette_consistency": [
-    "14_theme_variable_mapping"
-  ],
-  "30_layout_grid_z_index": [
-    "14_theme_variable_mapping"
-  ],
-  "31_layered_z_index": [
-    "30_layout_grid_z_index"
-  ],
-  "32_zone_anchoring_rules": [
-    "30_layout_grid_z_index"
-  ],
-  "33_persistent_zones_nav": [
-    "30_layout_grid_z_index",
-    "09_view_routing_arch"
-  ],
-  "34_adaptive_breakpoints": [
-    "30_layout_grid_z_index"
-  ],
-  "35_viewport_constraints": [
-    "34_adaptive_breakpoints"
-  ],
-  "36_high_density_snr": [
-    "34_adaptive_breakpoints"
-  ],
-  "37_layout_modes_scaling": [
-    "36_high_density_snr"
-  ],
-  "38_iconography_standards": [
-    "02_webview_stack_scaffolding"
-  ],
-  "39_icon_intent_roles": [
-    "38_iconography_standards"
-  ],
-  "40_icon_status_actions": [
-    "39_icon_intent_roles"
-  ],
-  "41_container_radius_shadow": [
-    "14_theme_variable_mapping"
-  ],
-  "42_shadow_task_cards": [
-    "41_container_radius_shadow"
-  ],
-  "43_interactive_targets": [
-    "14_theme_variable_mapping"
-  ],
-  "44_dashboard_sidebar_hub": [
-    "11_dashboard_research_views",
-    "42_shadow_task_cards"
-  ],
-  "45_performance_reactivity": [
-    "06_global_state_tiers",
-    "04_event_streaming_bridge"
-  ],
-  "46_memoization_lazy_loading": [
-    "09_view_routing_arch"
-  ],
-  "47_security_shield_csp": [
-    "01_vscode_extension_core"
-  ],
-  "48_motion_philosophy": [
-    "14_theme_variable_mapping"
-  ],
-  "49_animation_targets": [
-    "48_motion_philosophy"
-  ],
-  "50_thought_pulse_logic": [
-    "48_motion_philosophy"
-  ],
-  "51_invocation_shimmer": [
-    "48_motion_philosophy"
-  ],
-  "52_attention_pulses": [
-    "48_motion_philosophy"
-  ],
-  "53_interaction_highlighting": [
-    "14_theme_variable_mapping"
-  ],
-  "54_context_guidance_ui": [
-    "09_view_routing_arch"
-  ],
-  "55_distillation_particles": [
-    "48_motion_philosophy"
-  ],
-  "56_glitch_state_visuals": [
-    "48_motion_philosophy",
-    "14_theme_variable_mapping"
-  ],
-  "57_thoughtstreamer_component": [
-    "13_console_settings_views",
-    "04_event_streaming_bridge"
-  ],
-  "58_thought_connectivity": [
-    "57_thoughtstreamer_component",
-    "95_requirement_saop_models"
-  ],
-  "59_log_windowing_core": [
-    "57_thoughtstreamer_component"
-  ],
-  "60_log_ui_presentation": [
-    "59_log_windowing_core"
-  ],
-  "61_markdown_preview_engine": [
-    "12_spec_roadmap_views"
-  ],
-  "62_blueprint_spec_views": [
-    "12_spec_roadmap_views",
-    "61_markdown_preview_engine"
-  ],
-  "100_shared_logic_svg_hooks": [
-    "02_webview_stack_scaffolding"
-  ],
-  "63_dag_visualization_engine": [
-    "12_spec_roadmap_views",
-    "100_shared_logic_svg_hooks"
-  ],
-  "64_dag_performance_base": [
-    "63_dag_visualization_engine"
-  ],
-  "65_dag_layering_strategy": [
-    "63_dag_visualization_engine"
-  ],
-  "66_visual_acceleration": [
-    "64_dag_performance_base"
-  ],
-  "67_dag_pan_zoom_logic": [
-    "63_dag_visualization_engine"
-  ],
-  "68_dag_node_state_models": [
-    "63_dag_visualization_engine"
-  ],
-  "69_dag_edge_metrics": [
-    "68_dag_node_state_models"
-  ],
-  "70_dag_lod_scaling": [
-    "69_dag_edge_metrics"
-  ],
-  "71_massive_graph_lod": [
-    "70_dag_lod_scaling"
-  ],
-  "72_mermaid_interactive_host": [
-    "61_markdown_preview_engine",
-    "100_shared_logic_svg_hooks"
-  ],
-  "73_mermaid_resilience": [
-    "72_mermaid_interactive_host"
-  ],
-  "74_roadmap_gantt_dag": [
-    "63_dag_visualization_engine",
-    "12_spec_roadmap_views"
-  ],
-  "75_blueprint_auto_sync": [
-    "72_mermaid_interactive_host",
-    "74_roadmap_gantt_dag"
-  ],
-  "76_directive_injection_core": [
-    "05_ui_interaction_triggers"
-  ],
-  "77_injection_autocomplete": [
-    "76_directive_injection_core"
-  ],
-  "78_directive_whisperer_input": [
-    "76_directive_injection_core"
-  ],
-  "79_directive_context_snippets": [
-    "77_injection_autocomplete",
-    "78_directive_whisperer_input"
-  ],
-  "80_priority_toggle_feedback": [
-    "79_directive_context_snippets",
-    "58_thought_connectivity"
-  ],
-  "81_directive_visual_confirm": [
-    "80_priority_toggle_feedback"
-  ],
-  "82_hitl_gating_interface": [
-    "12_spec_roadmap_views",
-    "05_ui_interaction_triggers"
-  ],
-  "83_transactional_signoff_diff": [
-    "82_hitl_gating_interface"
-  ],
-  "84_state_delta_highlighting": [
-    "83_transactional_signoff_diff"
-  ],
-  "85_accessibility_wcag_base": [
-    "14_theme_variable_mapping"
-  ],
-  "86_high_contrast_overrides": [
-    "85_accessibility_wcag_base"
-  ],
-  "87_contrast_risk_resilience": [
-    "86_high_contrast_overrides"
-  ],
-  "88_screen_reader_optimization": [
-    "57_thoughtstreamer_component",
-    "85_accessibility_wcag_base"
-  ],
-  "89_focus_keyboard_control": [
-    "38_iconography_standards",
-    "85_accessibility_wcag_base"
-  ],
-  "90_reduced_motion_media": [
-    "48_motion_philosophy"
-  ],
-  "91_reduced_motion_transitions": [
-    "90_reduced_motion_media"
-  ],
-  "92_i18n_skeleton_core": [
-    "02_webview_stack_scaffolding"
-  ],
-  "93_global_script_fallbacks": [
-    "16_typography_philosophy"
-  ],
-  "94_language_pluralization_ui": [
-    "92_i18n_skeleton_core"
-  ],
-  "95_requirement_saop_models": [
-    "03_interface_core_decoupling"
-  ],
-  "96_diagram_alt_text_contrast": [
-    "73_mermaid_resilience",
-    "87_contrast_risk_resilience"
-  ],
-  "97_diagnostics_rca_metrics": [
-    "56_glitch_state_visuals"
-  ],
-  "98_disconnection_overlays": [
-    "04_event_streaming_bridge"
-  ],
-  "99_resilience_skeleton_rollback": [
-    "98_disconnection_overlays",
-    "80_priority_toggle_feedback"
-  ],
-  "101_interface_dod_polish": [
-    "07_state_watchers_sync",
-    "08_persistence_recovery",
-    "10_view_lifecycle_policy",
-    "15_glass_box_effects",
-    "18_font_loading_antialiasing",
-    "19_narrative_font_intent",
-    "20_technical_font_intent",
-    "21_directive_nav_fonts",
-    "23_type_scale_body_mono",
-    "24_font_weight_ligatures",
-    "25_variable_scaling_rem",
-    "26_agent_reasoning_fonts",
-    "27_agent_hierarchy_authority",
-    "28_agent_role_colors",
-    "29_ansi_palette_consistency",
-    "31_layered_z_index",
-    "32_zone_anchoring_rules",
-    "33_persistent_zones_nav",
-    "35_viewport_constraints",
-    "37_layout_modes_scaling",
-    "40_icon_status_actions",
-    "43_interactive_targets",
-    "44_dashboard_sidebar_hub",
-    "45_performance_reactivity",
-    "46_memoization_lazy_loading",
-    "47_security_shield_csp",
-    "49_animation_targets",
-    "50_thought_pulse_logic",
-    "51_invocation_shimmer",
-    "52_attention_pulses",
-    "53_interaction_highlighting",
-    "54_context_guidance_ui",
-    "55_distillation_particles",
-    "60_log_ui_presentation",
-    "62_blueprint_spec_views",
-    "65_dag_layering_strategy",
-    "66_visual_acceleration",
-    "67_dag_pan_zoom_logic",
-    "71_massive_graph_lod",
-    "75_blueprint_auto_sync",
-    "81_directive_visual_confirm",
-    "84_state_delta_highlighting",
-    "88_screen_reader_optimization",
-    "89_focus_keyboard_control",
-    "91_reduced_motion_transitions",
-    "93_global_script_fallbacks",
-    "94_language_pluralization_ui",
-    "96_diagram_alt_text_contrast",
-    "97_diagnostics_rca_metrics",
-    "99_resilience_skeleton_rollback"
-  ]
+  "01_vscode_extension_core/01_scaffold_extension_package.md": [],
+  "01_vscode_extension_core/02_implement_extension_lifecycle.md": [
+    "01_vscode_extension_core/01_scaffold_extension_package.md"
+  ],
+  "01_vscode_extension_core/03_develop_webview_panel_manager.md": [],
+  "01_vscode_extension_core/04_setup_webview_build_pipeline.md": [],
+  "01_vscode_extension_core/05_implement_typed_message_bridge.md": [],
+  "01_vscode_extension_core/06_vscode_theme_integration.md": [],
+  "02_webview_stack_scaffolding/01_initialize_webview_react_ts.md": [],
+  "02_webview_stack_scaffolding/02_configure_tailwind_shadow_dom.md": [
+    "02_webview_stack_scaffolding/01_initialize_webview_react_ts.md"
+  ],
+  "02_webview_stack_scaffolding/03_setup_vscode_ui_toolkit.md": [],
+  "02_webview_stack_scaffolding/04_implement_csp_resource_loading.md": [],
+  "03_interface_core_decoupling/01_define_mcp_schema.md": [],
+  "03_interface_core_decoupling/02_implement_extension_mcp_client.md": [],
+  "03_interface_core_decoupling/03_implement_webview_bridge.md": [],
+  "03_interface_core_decoupling/04_implement_state_mirror.md": [
+    "03_interface_core_decoupling/03_implement_webview_bridge.md"
+  ],
+  "04_event_streaming_bridge/01_core_high_frequency_message_batching_engine.md": [],
+  "04_event_streaming_bridge/02_core_state_change_protocol_orchestrator_integration.md": [],
+  "04_event_streaming_bridge/03_webview_60fps_real_time_update_controller.md": [],
+  "04_event_streaming_bridge/04_vscode_extension_event_bridge_integration.md": [],
+  "05_ui_interaction_triggers/01_scaffold_ui_hooks_package.md": [],
+  "05_ui_interaction_triggers/02_implement_entropy_and_requirement_hooks.md": [
+    "05_ui_interaction_triggers/01_scaffold_ui_hooks_package.md"
+  ],
+  "05_ui_interaction_triggers/03_implement_ui_tool_call_bridge.md": [],
+  "05_ui_interaction_triggers/04_implement_error_propagation_ui.md": [],
+  "05_ui_interaction_triggers/05_implement_extension_uri_handler.md": [],
+  "06_global_state_tiers/01_define_state_types.md": [],
+  "06_global_state_tiers/02_implement_tier1_layout_store.md": [],
+  "06_global_state_tiers/03_implement_tier2_project_mirror.md": [],
+  "06_global_state_tiers/04_implement_mcp_hydration_bridge.md": [],
+  "06_global_state_tiers/05_implement_tier3_preferences_bridge.md": [],
+  "06_global_state_tiers/06_implement_tier0_component_patterns.md": [],
+  "07_state_watchers_sync/01_configure_sqlite_wal_and_sequence_tracking.md": [],
+  "07_state_watchers_sync/02_setup_fs_watcher_extension_host.md": [],
+  "07_state_watchers_sync/03_implement_webview_desync_detection.md": [],
+  "08_persistence_recovery/01_webview_state_utility.md": [],
+  "08_persistence_recovery/02_navigation_persistence.md": [
+    "08_persistence_recovery/01_webview_state_utility.md"
+  ],
+  "08_persistence_recovery/03_periodic_state_backup.md": [],
+  "08_persistence_recovery/04_transient_view_state_restoration.md": [
+    "08_persistence_recovery/02_navigation_persistence.md"
+  ],
+  "09_view_routing_arch/01_implement_router_provider.md": [],
+  "09_view_routing_arch/02_implement_virtual_history_stack.md": [
+    "09_view_routing_arch/01_implement_router_provider.md"
+  ],
+  "09_view_routing_arch/03_implement_multi_pane_layout.md": [],
+  "100_shared_logic_svg_hooks/01_implement_use_svg_viewport_hook.md": [],
+  "100_shared_logic_svg_hooks/02_implement_static_svg_snapshot_handler.md": [],
+  "100_shared_logic_svg_hooks/03_implement_use_active_task_lock_hook.md": [],
+  "101_interface_dod_polish/01_telemetry_visual_hierarchy.md": [],
+  "101_interface_dod_polish/02_tdd_status_ui.md": [],
+  "101_interface_dod_polish/03_interface_dod_polish.md": [],
+  "10_view_lifecycle_policy/01_incremental_view_unlocking.md": [],
+  "10_view_lifecycle_policy/02_hitl_hard_redirects.md": [],
+  "10_view_lifecycle_policy/03_invalid_context_recovery.md": [],
+  "10_view_lifecycle_policy/04_adaptive_layout_engine.md": [],
+  "11_dashboard_research_views/01_dashboard_view_scaffolding.md": [],
+  "11_dashboard_research_views/02_dashboard_project_metrics.md": [
+    "11_dashboard_research_views/01_dashboard_view_scaffolding.md"
+  ],
+  "11_dashboard_research_views/03_dashboard_task_summary_list.md": [],
+  "11_dashboard_research_views/04_research_view_scaffolding.md": [],
+  "11_dashboard_research_views/05_research_report_viewer.md": [],
+  "11_dashboard_research_views/06_research_tech_landscape_matrix.md": [],
+  "12_spec_roadmap_views/01_initialize_spec_view_module.md": [],
+  "12_spec_roadmap_views/02_initialize_roadmap_view_module.md": [],
+  "12_spec_roadmap_views/03_implement_phase_access_guards.md": [],
+  "13_console_settings_views/01_console_view_scaffolding.md": [],
+  "13_console_settings_views/02_console_thought_streamer_integration.md": [
+    "13_console_settings_views/01_console_view_scaffolding.md"
+  ],
+  "13_console_settings_views/03_console_performance_virtualization.md": [],
+  "13_console_settings_views/04_settings_view_implementation.md": [],
+  "14_theme_variable_mapping/01_theme_token_mapping.md": [],
+  "14_theme_variable_mapping/02_global_theme_styles.md": [],
+  "14_theme_variable_mapping/03_high_contrast_overrides.md": [],
+  "14_theme_variable_mapping/04_theme_resilience_validation.md": [],
+  "15_glass_box_effects/01_css_glass_box_utility.md": [],
+  "15_glass_box_effects/02_theme_synchronization_optimization.md": [],
+  "16_typography_philosophy/01_setup_tiered_font_system.md": [],
+  "16_typography_philosophy/02_implement_typography_philosophy_and_scale.md": [],
+  "17_font_inheritance_stack/01_global_typography_configuration.md": [],
+  "17_font_inheritance_stack/02_implement_narrative_thought_stream_typography.md": [],
+  "17_font_inheritance_stack/03_implement_technical_log_font_inheritance.md": [],
+  "18_font_loading_antialiasing/01_setup_font_antialiasing.md": [],
+  "18_font_loading_antialiasing/02_implement_serif_font_strategy.md": [],
+  "19_narrative_font_intent/01_define_narrative_font_tokens.md": [],
+  "19_narrative_font_intent/02_apply_narrative_styles_to_thought_blocks.md": [],
+  "20_technical_font_intent/01_define_technical_typography_tokens.md": [],
+  "20_technical_font_intent/02_apply_technical_block_styling.md": [],
+  "21_directive_nav_fonts/01_setup_typography_tokens.md": [],
+  "21_directive_nav_fonts/02_implement_directive_whisperer_font.md": [
+    "21_directive_nav_fonts/01_setup_typography_tokens.md"
+  ],
+  "21_directive_nav_fonts/03_implement_navigation_typography.md": [],
+  "22_type_scale_h1_h3/01_configure_tailwind_type_scale.md": [],
+  "22_type_scale_h1_h3/02_implement_heading_components.md": [],
+  "23_type_scale_body_mono/01_configure_tailwind_typography.md": [],
+  "23_type_scale_body_mono/02_apply_global_typography.md": [],
+  "23_type_scale_body_mono/03_configure_narrative_line_height.md": [],
+  "23_type_scale_body_mono/04_configure_technical_line_height.md": [],
+  "23_type_scale_body_mono/05_configure_navigation_line_height.md": [],
+  "24_font_weight_ligatures/01_define_code_typography_tokens.md": [],
+  "24_font_weight_ligatures/02_apply_typography_to_thought_streamer.md": [],
+  "24_font_weight_ligatures/03_verify_typography_rendering.md": [],
+  "25_variable_scaling_rem/01_vscode_settings_font_sync.md": [],
+  "25_variable_scaling_rem/02_rem_based_spacing_refactor.md": [],
+  "25_variable_scaling_rem/03_high_contrast_weight_stepup.md": [],
+  "26_agent_reasoning_fonts/01_configure_font_theme.md": [],
+  "26_agent_reasoning_fonts/02_render_agentic_thoughts.md": [],
+  "26_agent_reasoning_fonts/03_render_human_directives.md": [],
+  "26_agent_reasoning_fonts/04_render_tool_invocations.md": [],
+  "26_agent_reasoning_fonts/05_integrate_semantic_differentiators.md": [],
+  "27_agent_hierarchy_authority/01_agency_authority_foundation.md": [],
+  "27_agent_hierarchy_authority/02_human_authority_component.md": [],
+  "27_agent_hierarchy_authority/03_agent_autonomy_component.md": [],
+  "27_agent_hierarchy_authority/04_environmental_fact_component.md": [],
+  "28_agent_role_colors/01_define_agent_role_theme_config.md": [],
+  "28_agent_role_colors/02_implement_developer_role_color.md": [],
+  "28_agent_role_colors/03_implement_reviewer_role_color.md": [],
+  "28_agent_role_colors/04_implement_architect_role_color.md": [],
+  "29_ansi_palette_consistency/01_define_shared_ansi_palette.md": [],
+  "29_ansi_palette_consistency/02_implement_log_terminal_ansi_parser.md": [],
+  "29_ansi_palette_consistency/03_validate_ansi_consistency.md": [],
+  "30_layout_grid_z_index/01_tailwind_spacing_base_grid.md": [],
+  "30_layout_grid_z_index/02_main_layout_zones_resizability.md": [],
+  "30_layout_grid_z_index/03_layering_z_index_system.md": [],
+  "31_layered_z_index/01_implement_navigation_layer.md": [],
+  "31_layered_z_index/02_implement_overlay_layer.md": [],
+  "31_layered_z_index/03_implement_modal_layer.md": [],
+  "31_layered_z_index/04_implement_critical_layer.md": [],
+  "32_zone_anchoring_rules/01_define_z_index_hierarchy.md": [],
+  "32_zone_anchoring_rules/02_implement_fixed_zone_architecture.md": [],
+  "32_zone_anchoring_rules/03_enforce_no_drawer_policy.md": [],
+  "32_zone_anchoring_rules/04_implement_ultra_wide_scaling.md": [],
+  "32_zone_anchoring_rules/05_implement_ghost_rail_and_scrollbars.md": [],
+  "33_persistent_zones_nav/01_core_layout_persistent_zones.md": [],
+  "33_persistent_zones_nav/02_navigation_zone_anchor.md": [],
+  "33_persistent_zones_nav/03_health_zone_anchor.md": [],
+  "34_adaptive_breakpoints/01_viewport_breakpoints.md": [],
+  "34_adaptive_breakpoints/02_mobile_viewport_optimization.md": [],
+  "34_adaptive_breakpoints/03_narrow_sidebar_mode.md": [],
+  "34_adaptive_breakpoints/04_main_viewport_centering.md": [
+    "34_adaptive_breakpoints/03_narrow_sidebar_mode.md"
+  ],
+  "34_adaptive_breakpoints/05_overlay_positioning_logic.md": [],
+  "35_viewport_constraints/01_define_breakpoints.md": [],
+  "35_viewport_constraints/02_sidebar_ghost_rail.md": [],
+  "35_viewport_constraints/03_resizable_pane_constraints.md": [],
+  "35_viewport_constraints/04_bottom_console_minimization.md": [],
+  "35_viewport_constraints/05_viewport_acceptance_tests.md": [],
+  "36_high_density_snr/01_density-scaling-engine.md": [],
+  "36_high_density_snr/02_compact-task-list-component.md": [],
+  "36_high_density_snr/03_sparklines-and-status-indicators.md": [],
+  "36_high_density_snr/04_technical-label-conciseness.md": [],
+  "36_high_density_snr/05_layout-mode-definitions.md": [],
+  "37_layout_modes_scaling/01_define_layout_modes.md": [],
+  "37_layout_modes_scaling/02_standard_mode_responsive.md": [],
+  "37_layout_modes_scaling/03_wide_mode_tri_pane.md": [],
+  "37_layout_modes_scaling/04_density_scaling.md": [],
+  "37_layout_modes_scaling/05_scrollbar_metrics.md": [],
+  "37_layout_modes_scaling/06_layout_modes_integration.md": [],
+  "38_iconography_standards/01_iconography_specification.md": [],
+  "38_iconography_standards/02_icon_component.md": [],
+  "38_iconography_standards/03_codicon_integration_build.md": [],
+  "38_iconography_standards/04_icon_accessibility_and_theming_tests.md": [],
+  "38_iconography_standards/05_icon_preview_story.md": [],
+  "39_icon_intent_roles/01_icon_prefix_requirement.md": [],
+  "39_icon_intent_roles/02_icon_fallback_requirement.md": [],
+  "39_icon_intent_roles/03_icon_intent_marker.md": [],
+  "39_icon_intent_roles/04_icon_role_differentiator.md": [],
+  "40_icon_status_actions/01_icon_status_indicator_requirement.md": [],
+  "40_icon_status_actions/02_icon_status_indicator_unit_tests.md": [],
+  "40_icon_status_actions/03_icon_status_indicator_integration.md": [],
+  "40_icon_status_actions/04_icon_status_indicator_accessibility_and_ci.md": [],
+  "40_icon_status_actions/05_icon_action_trigger_requirement.md": [],
+  "40_icon_status_actions/06_icon_action_trigger_unit_tests.md": [],
+  "40_icon_status_actions/07_icon_action_trigger_integration.md": [],
+  "40_icon_status_actions/08_icon_action_trigger_e2e_and_ci.md": [],
+  "41_container_radius_shadow/01_define_design_tokens.md": [],
+  "41_container_radius_shadow/02_card_component_styles.md": [],
+  "41_container_radius_shadow/03_shadow_utilities_and_visual_regression.md": [],
+  "41_container_radius_shadow/04_dag_node_dimensions_and_tests.md": [],
+  "42_shadow_task_cards/01_define_shadow_design_tokens.md": [],
+  "42_shadow_task_cards/02_add_tailwind_shadow_utilities.md": [
+    "42_shadow_task_cards/01_define_shadow_design_tokens.md"
+  ],
+  "42_shadow_task_cards/03_task_card_component.md": [],
+  "42_shadow_task_cards/04_active_task_card_ui.md": [
+    "42_shadow_task_cards/03_task_card_component.md"
+  ],
+  "43_interactive_targets/01_define_interactive_target_tokens.md": [],
+  "43_interactive_targets/02_standard_button_component.md": [],
+  "43_interactive_targets/03_dag_node_interactive_targets.md": [],
+  "43_interactive_targets/04_contextual_focus_manager.md": [],
+  "43_interactive_targets/05_accessibility_and_a11y_tests.md": [],
+  "44_dashboard_sidebar_hub/01_register_sidebar_view.md": [],
+  "44_dashboard_sidebar_hub/02_webview_skeleton.md": [],
+  "44_dashboard_sidebar_hub/03_zustand_store.md": [],
+  "44_dashboard_sidebar_hub/04_multi_agent_panel.md": [],
+  "44_dashboard_sidebar_hub/05_task_tree_component.md": [],
+  "44_dashboard_sidebar_hub/06_mini_dag_visual.md": [],
+  "44_dashboard_sidebar_hub/07_review_dashboard_toggle.md": [],
+  "44_dashboard_sidebar_hub/08_webview_message_contract.md": [],
+  "44_dashboard_sidebar_hub/09_accessibility_keyboard.md": [],
+  "44_dashboard_sidebar_hub/10_theming_and_high_density_css.md": [],
+  "44_dashboard_sidebar_hub/11_integration_tests_and_verification.md": [],
+  "44_dashboard_sidebar_hub/12_docs_update_and_coverage_check.md": [],
+  "45_performance_reactivity/01_zustand_selective_reactivity.md": [],
+  "45_performance_reactivity/02_state_hydration_fast_snapshot.md": [],
+  "45_performance_reactivity/03_postmessage_throttler_60fps.md": [],
+  "45_performance_reactivity/04_update_batcher_32ms.md": [],
+  "45_performance_reactivity/05_invalid_context_recovery_dashboard_fallback.md": [],
+  "46_memoization_lazy_loading/01_ui_hooks_memoization.md": [],
+  "46_memoization_lazy_loading/02_logterminal_char_streaming.md": [],
+  "46_memoization_lazy_loading/03_thoughtstreamer_incremental.md": [],
+  "46_memoization_lazy_loading/04_dynamic_imports_heavy_visuals.md": [],
+  "46_memoization_lazy_loading/05_bundle_size_ci_check.md": [],
+  "46_memoization_lazy_loading/06_integration_e2e_lazy_loading_and_rendering.md": [],
+  "47_security_shield_csp/01_strict_webview_csp_css_isolation.md": [],
+  "47_security_shield_csp/02_image_redaction_sanitization_buffer.md": [],
+  "47_security_shield_csp/03_red_screen_security_alert.md": [],
+  "47_security_shield_csp/04_detect_sandbox_breach_and_trigger_red_screen.md": [],
+  "48_motion_philosophy/01_functional_animation_manifesto.md": [],
+  "48_motion_philosophy/02_animation_tokens_and_tailwind.md": [],
+  "48_motion_philosophy/03_motion_primitives_components.md": [],
+  "48_motion_philosophy/04_animation_linter_and_ci_rule.md": [],
+  "48_motion_philosophy/05_reduced_motion_and_throttler.md": [],
+  "48_motion_philosophy/06_examples_and_documentation.md": [],
+  "49_animation_targets/01_benchmark_60fps_harness.md": [],
+  "49_animation_targets/02_frame_orchestrator.md": [],
+  "49_animation_targets/03_animation_throttler.md": [],
+  "49_animation_targets/04_integrate_batcher_throttler.md": [],
+  "49_animation_targets/05_monitoring_metrics.md": [
+    "49_animation_targets/03_animation_throttler.md"
+  ],
+  "50_thought_pulse_logic/01_thought_pulse_visual_styles.md": [],
+  "50_thought_pulse_logic/02_thought_pulse_timing.md": [],
+  "50_thought_pulse_logic/03_thought_pulse_control_logic.md": [
+    "50_thought_pulse_logic/02_thought_pulse_timing.md",
+    "50_thought_pulse_logic/01_thought_pulse_visual_styles.md"
+  ],
+  "51_invocation_shimmer/01_define_tokens_and_css_variables.md": [],
+  "51_invocation_shimmer/02_invocation_shimmer_component.md": [
+    "51_invocation_shimmer/01_define_tokens_and_css_variables.md"
+  ],
+  "51_invocation_shimmer/03_active_progress_sweep.md": [],
+  "51_invocation_shimmer/04_completion_pop.md": [],
+  "51_invocation_shimmer/05_failure_shake.md": [],
+  "51_invocation_shimmer/06_integration_state_wiring.md": [],
+  "51_invocation_shimmer/07_storybook_and_accessibility.md": [],
+  "52_attention_pulses/01_attention_pulse_visual_glow.md": [],
+  "52_attention_pulses/02_phase_stepper_pulse_amber.md": [],
+  "52_attention_pulses/03_attention_pulse_logic_termination.md": [],
+  "53_interaction_highlighting/01_implement_node_hover_elevation.md": [],
+  "53_interaction_highlighting/02_selection_state_and_persistent_border.md": [],
+  "53_interaction_highlighting/03_zoom_to_center_transition.md": [],
+  "53_interaction_highlighting/04_graph_traversal_utilities.md": [],
+  "53_interaction_highlighting/05_dependency_flow_highlighting.md": [],
+  "54_context_guidance_ui/01_agent_doc_parser_and_summary_extractor.md": [],
+  "54_context_guidance_ui/02_module_summary_bridge.md": [
+    "54_context_guidance_ui/01_agent_doc_parser_and_summary_extractor.md"
+  ],
+  "54_context_guidance_ui/03_module_hover_component.md": [],
+  "54_context_guidance_ui/04_hover_integration_and_caching.md": [],
+  "54_context_guidance_ui/05_documentation_and_ci_verification.md": [],
+  "55_distillation_particles/01_design_and_specification.md": [],
+  "55_distillation_particles/02_particle_engine_unit_tests.md": [],
+  "55_distillation_particles/03_particle_engine_implementation.md": [],
+  "55_distillation_particles/04_react_component_and_snapshots.md": [],
+  "55_distillation_particles/05_integration_event_binding.md": [],
+  "55_distillation_particles/06_reduced_motion_and_stagger_timing.md": [],
+  "55_distillation_particles/07_performance_worker_offload.md": [],
+  "56_glitch_state_visuals/01_glitch_design_tokens_and_spec.md": [],
+  "56_glitch_state_visuals/02_glitch_rewind_component.md": [],
+  "56_glitch_state_visuals/03_state_restored_feedback.md": [],
+  "56_glitch_state_visuals/04_integration_state_management.md": [],
+  "56_glitch_state_visuals/05_reduced_motion_and_accessibility_tests.md": [],
+  "56_glitch_state_visuals/06_visual_regression_and_rca_modal.md": [],
+  "57_thoughtstreamer_component/01_thoughtstreamer_scaffold.md": [],
+  "57_thoughtstreamer_component/02_virtual_scrolling.md": [
+    "57_thoughtstreamer_component/01_thoughtstreamer_scaffold.md"
+  ],
+  "57_thoughtstreamer_component/03_thoughtstyling_serif_italic.md": [],
+  "57_thoughtstreamer_component/04_stream_ingestion_postmessage.md": [],
+  "57_thoughtstreamer_component/05_accessibility_aria_live.md": [],
+  "57_thoughtstreamer_component/06_tests_and_verification.md": [],
+  "58_thought_connectivity/01_define_thought_and_toolcall_contract.md": [],
+  "58_thought_connectivity/02_backend_emit_thought_ids_on_toolcalls.md": [],
+  "58_thought_connectivity/03_thoughtstream_react_store_and_selector.md": [],
+  "58_thought_connectivity/04_thought_visual_link_renderer.md": [],
+  "58_thought_connectivity/05_thought_interaction_highlighting.md": [],
+  "58_thought_connectivity/06_thoughtstream_aria_live.md": [],
+  "58_thought_connectivity/07_accessibility_buffering_and_debounce.md": [],
+  "58_thought_connectivity/08_documentation_and_api_examples.md": [],
+  "59_log_windowing_core/01_design_and_acceptance.md": [],
+  "59_log_windowing_core/02_store_and_chunking.md": [],
+  "59_log_windowing_core/03_consoleview_virtualized_list.md": [],
+  "59_log_windowing_core/04_log_chunking_and_read_more.md": [],
+  "59_log_windowing_core/05_streaming_and_throttling_integration.md": [],
+  "59_log_windowing_core/06_e2e_massive_logs_accessibility.md": [],
+  "60_log_ui_presentation/01_log_truncation_engine.md": [],
+  "60_log_ui_presentation/02_narrow_mode_log_button.md": [],
+  "60_log_ui_presentation/03_wide_mode_side_by_side.md": [],
+  "60_log_ui_presentation/04_scroll_lock_streaming.md": [],
+  "61_markdown_preview_engine/01_vscode_document_editor.md": [],
+  "61_markdown_preview_engine/02_react_markdown_rendering_component.md": [],
+  "61_markdown_preview_engine/03_incremental_markdown_streaming.md": [],
+  "61_markdown_preview_engine/04_syntax_highlighting_integration.md": [],
+  "61_markdown_preview_engine/05_integration_tests_and_ci.md": [],
+  "62_blueprint_spec_views/01_spec_view_skeleton.md": [],
+  "62_blueprint_spec_views/02_markdown_renderer_and_mermaid.md": [],
+  "62_blueprint_spec_views/03_cross_document_linking.md": [],
+  "62_blueprint_spec_views/04_link_hover_preview.md": [],
+  "62_blueprint_spec_views/05_accessibility_and_theme.md": [],
+  "62_blueprint_spec_views/06_integration_and_e2e.md": [],
+  "63_dag_visualization_engine/01_dagcanvas_scaffold.md": [],
+  "63_dag_visualization_engine/02_force_engine_integration.md": [
+    "63_dag_visualization_engine/01_dagcanvas_scaffold.md"
+  ],
+  "63_dag_visualization_engine/03_layout_worker_offloading.md": [],
+  "63_dag_visualization_engine/04_rendering_pipeline_vector_first.md": [],
+  "63_dag_visualization_engine/05_zoom_pan_interactions.md": [],
+  "63_dag_visualization_engine/06_node_edge_states_interaction.md": [],
+  "63_dag_visualization_engine/07_performance_and_scalability.md": [],
+  "63_dag_visualization_engine/08_docs_examples_and_storybook.md": [],
+  "64_dag_performance_base/01_dag_performance_test_harness.md": [],
+  "64_dag_performance_base/02_dag_synthetic_graph_generator.md": [],
+  "64_dag_performance_base/03_force_layout_service.md": [],
+  "64_dag_performance_base/04_dagcanvas_d3_integration.md": [],
+  "64_dag_performance_base/05_performance_regression_reporter.md": [],
+  "65_dag_layering_strategy/01_svg_base_layers.md": [],
+  "65_dag_layering_strategy/02_svg_edges_render.md": [],
+  "65_dag_layering_strategy/03_svg_nodes_labels.md": [],
+  "65_dag_layering_strategy/04_canvas_fallback_renderer.md": [],
+  "65_dag_layering_strategy/05_canvas_interaction_overlay.md": [],
+  "65_dag_layering_strategy/06_worker_offloading_layout.md": [],
+  "66_visual_acceleration/01_graph_throttling_debouncer.md": [],
+  "66_visual_acceleration/02_web_worker_layout_offload.md": [],
+  "66_visual_acceleration/03_gpu_layer_abstraction.md": [],
+  "66_visual_acceleration/04_battery_saver_throttling.md": [],
+  "67_dag_pan_zoom_logic/01_define_pan_zoom_architecture.md": [],
+  "67_dag_pan_zoom_logic/02_math_and_unit_tests_for_pan_zoom.md": [],
+  "67_dag_pan_zoom_logic/03_integrate_react_zoom_pan_pinch.md": [],
+  "67_dag_pan_zoom_logic/04_momentum_scrolling_physics.md": [],
+  "67_dag_pan_zoom_logic/05_focus_interaction_and_centering.md": [],
+  "67_dag_pan_zoom_logic/06_keyboard_and_accessibility_controls.md": [],
+  "67_dag_pan_zoom_logic/07_e2e_diagram_pan_zoom_tests.md": [],
+  "68_dag_node_state_models/01_ui_task_dag_model.md": [],
+  "68_dag_node_state_models/02_node_dimensions_padding.md": [],
+  "68_dag_node_state_models/03_node_state_visuals.md": [],
+  "68_dag_node_state_models/04_dagcanvas_integration.md": [],
+  "68_dag_node_state_models/05_tests_and_documentation.md": [],
+  "69_dag_edge_metrics/01_edge_stroke_unit_tests.md": [],
+  "69_dag_edge_metrics/02_edge_component_implementation.md": [],
+  "69_dag_edge_metrics/03_dagcanvas_edge_integration.md": [],
+  "69_dag_edge_metrics/04_port_layout_unit_tests.md": [],
+  "69_dag_edge_metrics/05_port_layout_algorithm_implementation.md": [],
+  "69_dag_edge_metrics/06_node_port_integration.md": [],
+  "69_dag_edge_metrics/07_visual_regression_and_e2e_tests.md": [],
+  "69_dag_edge_metrics/08_docs_and_requirement_mapping.md": [],
+  "70_dag_lod_scaling/01_lod_state_machine_and_zoom_threshold_service.md": [],
+  "70_dag_lod_scaling/02_lod3_close_full_detail_node_renderer.md": [],
+  "70_dag_lod_scaling/03_lod2_mid_simplified_node_renderer_and_thinned_edges.md": [],
+  "71_massive_graph_lod/01_lod_zustand_store_calculation.md": [],
+  "71_massive_graph_lod/02_massive_graph_auto_lod_mode.md": [],
+  "71_massive_graph_lod/03_semantic_zoom_thresholds.md": [],
+  "71_massive_graph_lod/04_lod1_epic_bounding_box_renderer.md": [],
+  "71_massive_graph_lod/05_lod_user_toggle_control.md": [],
+  "72_mermaid_interactive_host/01_mermaid_host_component_scaffold.md": [],
+  "72_mermaid_interactive_host/02_sandbox_isolation_layer.md": [
+    "72_mermaid_interactive_host/01_mermaid_host_component_scaffold.md"
+  ],
+  "72_mermaid_interactive_host/03_interactive_svg_interactions.md": [],
+  "73_mermaid_resilience/01_mermaid_error_boundary_and_fallback.md": [],
+  "73_mermaid_resilience/02_mermaid_theme_synchronization.md": [],
+  "74_roadmap_gantt_dag/01_roadmap_view_dag_canvas_foundation.md": [],
+  "74_roadmap_gantt_dag/02_gantt_style_expandable_epic_task_layout.md": [],
+  "74_roadmap_gantt_dag/03_epic_clustering_bounding_boxes.md": [],
+  "74_roadmap_gantt_dag/04_roadmap_multi_pane_discovery.md": [],
+  "75_blueprint_auto_sync/01_mermaid_host_file_watcher_auto_sync.md": [],
+  "75_blueprint_auto_sync/02_agentic_deep_link_handler.md": [],
+  "75_blueprint_auto_sync/03_temporal_navigation_dag_editor.md": [],
+  "76_directive_injection_core/01_mcp_inject_directive_tool.md": [],
+  "76_directive_injection_core/02_context_aware_injection.md": [],
+  "77_injection_autocomplete/01_injection_autocomplete_ghost_text.md": [],
+  "78_directive_whisperer_input/01_directive_whisperer_input.md": [],
+  "79_directive_context_snippets/01_directive_context_snippets.md": [],
+  "80_priority_toggle_feedback/01_implement_priority_toggle_ui.md": [],
+  "80_priority_toggle_feedback/01_priority_toggle_checkbox_component.md": [],
+  "80_priority_toggle_feedback/02_directive_submission_state_integration.md": [],
+  "80_priority_toggle_feedback/02_implement_directive_submission_state_integration.md": [],
+  "80_priority_toggle_feedback/03_implement_priority_feedback_badge_in_thought_streamer.md": [
+    "80_priority_toggle_feedback/02_implement_directive_submission_state_integration.md",
+    "80_priority_toggle_feedback/02_directive_submission_state_integration.md"
+  ],
+  "80_priority_toggle_feedback/03_priority_acknowledgement_badge.md": [],
+  "81_directive_visual_confirm/01_directive_injected_badge_component.md": [],
+  "81_directive_visual_confirm/02_directive_badge_persistence_and_fadeout.md": [
+    "81_directive_visual_confirm/01_directive_injected_badge_component.md"
+  ],
+  "81_directive_visual_confirm/03_agentic_ingestion_highlight.md": [
+    "81_directive_visual_confirm/02_directive_badge_persistence_and_fadeout.md"
+  ],
+  "81_directive_visual_confirm/04_color_mix_glass_box_backgrounds.md": [
+    "81_directive_visual_confirm/01_directive_injected_badge_component.md"
+  ],
+  "82_hitl_gating_interface/01_hitl_gate_data_model_and_api.md": [],
+  "82_hitl_gating_interface/01_hitl_gate_state_model.md": [],
+  "82_hitl_gating_interface/02_hitl_approval_modal_component.md": [],
+  "82_hitl_gating_interface/02_vscode_extension_hitl_gate_trigger.md": [],
+  "82_hitl_gating_interface/03_dual_pane_gated_spec_review_layout.md": [],
+  "82_hitl_gating_interface/03_hitl_extension_host_bridge.md": [],
+  "82_hitl_gating_interface/04_gated_spec_review_dual_pane_layout.md": [],
+  "82_hitl_gating_interface/04_requirement_hover_cross_reference_highlighting.md": [],
+  "82_hitl_gating_interface/05_approval_checkboxes_and_signoff_button.md": [],
+  "82_hitl_gating_interface/05_requirement_highlighting_cross_document.md": [
+    "82_hitl_gating_interface/04_requirement_hover_cross_reference_highlighting.md",
+    "82_hitl_gating_interface/04_gated_spec_review_dual_pane_layout.md"
+  ],
+  "82_hitl_gating_interface/06_approval_checkboxes_sign_off_gate.md": [],
+  "82_hitl_gating_interface/06_integrated_diff_view_for_architectural_changes.md": [
+    "82_hitl_gating_interface/01_hitl_gate_data_model_and_api.md",
+    "82_hitl_gating_interface/01_hitl_gate_state_model.md"
+  ],
+  "82_hitl_gating_interface/07_architectural_diff_view_risk_badges.md": [
+    "82_hitl_gating_interface/01_hitl_gate_data_model_and_api.md",
+    "82_hitl_gating_interface/01_hitl_gate_state_model.md"
+  ],
+  "82_hitl_gating_interface/07_hitl_gate_status_indicators_and_routing.md": [],
+  "83_transactional_signoff_diff/01_transactional_signoff_modal_scaffold.md": [],
+  "83_transactional_signoff_diff/02_side_by_side_diff_view.md": [
+    "83_transactional_signoff_diff/01_transactional_signoff_modal_scaffold.md"
+  ],
+  "83_transactional_signoff_diff/03_risk_indicator_badges.md": [],
+  "84_state_delta_highlighting/01_diff_view_data_model.md": [],
+  "84_state_delta_highlighting/02_diff_view_react_component.md": [],
+  "84_state_delta_highlighting/03_diff_view_console_integration.md": [],
+  "84_state_delta_highlighting/04_spec_signoff_component.md": [],
+  "84_state_delta_highlighting/05_spec_signoff_view_integration.md": [],
+  "85_accessibility_wcag_base/01_wcag_audit_toolchain_setup.md": [],
+  "85_accessibility_wcag_base/02_contrast_ratio_enforcement.md": [
+    "85_accessibility_wcag_base/01_wcag_audit_toolchain_setup.md"
+  ],
+  "85_accessibility_wcag_base/03_semantic_html_aria_structure.md": [],
+  "86_high_contrast_overrides/01_hc_mode_detection_and_css_architecture.md": [],
+  "86_high_contrast_overrides/02_alpha_blending_removal.md": [],
+  "86_high_contrast_overrides/03_border_emphasis.md": [],
+  "86_high_contrast_overrides/04_text_luminance_verification.md": [],
+  "87_contrast_risk_resilience/01_forced_contrast_mode_css_overrides.md": [],
+  "87_contrast_risk_resilience/01_high_contrast_theme_detection.md": [],
+  "87_contrast_risk_resilience/02_alpha_to_solid_background_conversion.md": [],
+  "87_contrast_risk_resilience/02_monospace_only_accessibility_fallback.md": [],
+  "87_contrast_risk_resilience/03_mermaid_accessible_palette.md": [],
+  "87_contrast_risk_resilience/03_mermaid_accessible_palettes_and_pattern_fills.md": [],
+  "87_contrast_risk_resilience/04_monospace_fallback_mode.md": [],
+  "87_contrast_risk_resilience/05_wcag_contrast_validation_suite.md": [],
+  "88_screen_reader_optimization/01_implement_aria_live_announcer_component.md": [],
+  "88_screen_reader_optimization/01_implement_aria_live_polite_region_for_agent_thoughts.md": [],
+  "88_screen_reader_optimization/02_implement_aria_live_assertive_region_for_interventions.md": [
+    "88_screen_reader_optimization/01_implement_aria_live_polite_region_for_agent_thoughts.md",
+    "88_screen_reader_optimization/01_implement_aria_live_announcer_component.md"
+  ],
+  "88_screen_reader_optimization/02_integrate_aria_live_into_agent_console.md": [],
+  "88_screen_reader_optimization/03_implement_agentic_event_announcement_buffer.md": [],
+  "88_screen_reader_optimization/03_implement_tts_clean_log_mode.md": [],
+  "88_screen_reader_optimization/04_implement_clean_log_mode_for_tts_compatibility.md": [],
+  "89_focus_keyboard_control/01_dag_node_keyboard_focus.md": [],
+  "89_focus_keyboard_control/01_keyboard_focusable_task_cards.md": [],
+  "89_focus_keyboard_control/02_keyboard_focusable_dag_nodes.md": [],
+  "89_focus_keyboard_control/02_task_card_keyboard_focus.md": [],
+  "89_focus_keyboard_control/03_focus_ring_css_standard_and_hc.md": [],
+  "89_focus_keyboard_control/03_focus_ring_persistence.md": [],
+  "90_reduced_motion_media/01_implement_use_reduced_motion_hook.md": [],
+  "90_reduced_motion_media/02_disable_thoughtstream_sliding_animations.md": [
+    "90_reduced_motion_media/01_implement_use_reduced_motion_hook.md"
+  ],
+  "90_reduced_motion_media/03_replace_thinking_pulse_with_static_icon.md": [
+    "90_reduced_motion_media/01_implement_use_reduced_motion_hook.md",
+    "90_reduced_motion_media/02_disable_thoughtstream_sliding_animations.md"
+  ],
+  "91_reduced_motion_transitions/01_use_reduced_motion_hook_and_global_css.md": [],
+  "91_reduced_motion_transitions/02_disable_distillation_sweep_reduced_motion.md": [],
+  "91_reduced_motion_transitions/03_instant_jump_tab_transitions_reduced_motion.md": [],
+  "92_i18n_skeleton_core/01_setup_i18next_infrastructure.md": [],
+  "92_i18n_skeleton_core/02_create_translation_namespaces_and_migrate_strings.md": [
+    "92_i18n_skeleton_core/01_setup_i18next_infrastructure.md"
+  ],
+  "92_i18n_skeleton_core/03_locale_aware_formatting_utilities.md": [],
+  "92_i18n_skeleton_core/04_utf8_unicode_enforcement.md": [],
+  "93_global_script_fallbacks/01_define_cjk_font_fallback_stack.md": [],
+  "93_global_script_fallbacks/02_implement_os_aware_cjk_font_injection.md": [],
+  "93_global_script_fallbacks/03_implement_rtl_layout_support.md": [],
+  "94_language_pluralization_ui/01_i18next_infrastructure_setup.md": [],
+  "94_language_pluralization_ui/02_ui_string_externalization_pluralization.md": [],
+  "94_language_pluralization_ui/03_language_model_selection_ui.md": [
+    "94_language_pluralization_ui/01_i18next_infrastructure_setup.md"
+  ],
+  "94_language_pluralization_ui/04_semantic_headers_structural_navigation.md": [],
+  "95_requirement_saop_models/01_define_saop_typescript_interfaces.md": [],
+  "95_requirement_saop_models/02_implement_saop_stream_parser.md": [],
+  "95_requirement_saop_models/03_implement_saop_zustand_store_slice.md": [],
+  "95_requirement_saop_models/04_implement_req_id_detection.md": [],
+  "95_requirement_saop_models/05_implement_req_badge_component.md": [],
+  "96_diagram_alt_text_contrast/01_contrast_utility_module.md": [],
+  "96_diagram_alt_text_contrast/02_mermaidhost_contrast_integration.md": [],
+  "96_diagram_alt_text_contrast/03_diagram_alternative_data_model.md": [],
+  "96_diagram_alt_text_contrast/04_diagram_alternative_panel_ui.md": [],
+  "97_diagnostics_rca_metrics/01_lod_toggle_dashboard_fatigue.md": [],
+  "97_diagnostics_rca_metrics/02_rca_report_modal.md": [],
+  "97_diagnostics_rca_metrics/03_flamegraph_telemetry_view.md": [
+    "97_diagnostics_rca_metrics/01_lod_toggle_dashboard_fatigue.md"
+  ],
+  "97_diagnostics_rca_metrics/04_heap_snapshot_treemap.md": [
+    "97_diagnostics_rca_metrics/01_lod_toggle_dashboard_fatigue.md"
+  ],
+  "98_disconnection_overlays/01_mcp_connection_state_machine.md": [],
+  "98_disconnection_overlays/02_disconnected_overlay_component.md": [],
+  "98_disconnection_overlays/03_interaction_disabling_guard.md": [],
+  "98_disconnection_overlays/04_state_reconciliation_on_reconnect.md": [],
+  "98_disconnection_overlays/05_overlay_accessibility_and_reduced_motion.md": [],
+  "99_resilience_skeleton_rollback/01_skeleton_shimmer_components.md": [],
+  "99_resilience_skeleton_rollback/02_disconnection_mask_overlay.md": [],
+  "99_resilience_skeleton_rollback/03_disconnection_resilience_state_machine.md": [
+    "99_resilience_skeleton_rollback/02_disconnection_mask_overlay.md"
+  ],
+  "99_resilience_skeleton_rollback/04_optimistic_state_rollback.md": []
 }

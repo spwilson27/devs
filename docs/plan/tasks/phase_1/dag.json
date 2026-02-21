@@ -1,33 +1,193 @@
 {
-  "01_project_infrastructure_monorepo_setup": [],
-  "02_sqlite_schema_persistence_layer": [
-    "01_project_infrastructure_monorepo_setup"
+  "01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md": [],
+  "01_project_infrastructure_monorepo_setup/02_configure_typescript_strict.md": [
+    "01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md"
   ],
-  "03_acid_transactions_state_integrity": [
-    "02_sqlite_schema_persistence_layer"
+  "01_project_infrastructure_monorepo_setup/03_setup_project_directories.md": [
+    "01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md"
   ],
-  "04_langgraph_core_orchestration_engine": [
-    "03_acid_transactions_state_integrity"
+  "01_project_infrastructure_monorepo_setup/04_setup_aod_infrastructure.md": [
+    "01_project_infrastructure_monorepo_setup/03_setup_project_directories.md"
   ],
-  "05_state_checkpointing_recovery": [
-    "04_langgraph_core_orchestration_engine"
+  "01_project_infrastructure_monorepo_setup/05_define_shared_state_manifest.md": [
+    "01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md"
   ],
-  "06_git_integration_snapshot_strategy": [
-    "02_sqlite_schema_persistence_layer"
+  "01_project_infrastructure_monorepo_setup/06_implement_scaffolding_utility.md": [
+    "01_project_infrastructure_monorepo_setup/03_setup_project_directories.md",
+    "01_project_infrastructure_monorepo_setup/05_define_shared_state_manifest.md"
   ],
-  "07_audit_trails_glass-box_observability": [
-    "04_langgraph_core_orchestration_engine"
+  "02_sqlite_schema_persistence_layer/01_initialize_persistence_layer.md": [
+    "01_project_infrastructure_monorepo_setup/03_setup_project_directories.md"
   ],
-  "08_cli_integration_state_control": [
-    "06_git_integration_snapshot_strategy",
-    "07_audit_trails_glass-box_observability",
-    "10_lifecycle_management_phase_milestones"
+  "02_sqlite_schema_persistence_layer/02_implement_core_tables_schema.md": [
+    "02_sqlite_schema_persistence_layer/01_initialize_persistence_layer.md"
   ],
-  "09_determinism_robustness_testing": [
-    "05_state_checkpointing_recovery",
-    "08_cli_integration_state_control"
+  "02_sqlite_schema_persistence_layer/03_define_interaction_schemas.md": [
+    "01_project_infrastructure_monorepo_setup/02_configure_typescript_strict.md"
   ],
-  "10_lifecycle_management_phase_milestones": [
-    "04_langgraph_core_orchestration_engine"
+  "02_sqlite_schema_persistence_layer/04_implement_state_repository.md": [
+    "02_sqlite_schema_persistence_layer/02_implement_core_tables_schema.md"
+  ],
+  "03_acid_transactions_state_integrity/01_sqlite_wal_hardening.md": [
+    "02_sqlite_schema_persistence_layer/01_initialize_persistence_layer.md"
+  ],
+  "03_acid_transactions_state_integrity/02_acid_state_repository.md": [
+    "02_sqlite_schema_persistence_layer/04_implement_state_repository.md",
+    "03_acid_transactions_state_integrity/01_sqlite_wal_hardening.md"
+  ],
+  "03_acid_transactions_state_integrity/03_langgraph_sqlite_saver.md": [
+    "03_acid_transactions_state_integrity/02_acid_state_repository.md"
+  ],
+  "03_acid_transactions_state_integrity/04_git_atomic_manager.md": [
+    "03_acid_transactions_state_integrity/02_acid_state_repository.md",
+    "06_git_integration_snapshot_strategy/01_git_client_wrapper.md"
+  ],
+  "03_acid_transactions_state_integrity/05_schema_drift_reconciliation.md": [
+    "03_acid_transactions_state_integrity/02_acid_state_repository.md"
+  ],
+  "04_langgraph_core_orchestration_engine/01_define_orchestration_state.md": [
+    "01_project_infrastructure_monorepo_setup/02_configure_typescript_strict.md",
+    "02_sqlite_schema_persistence_layer/03_define_interaction_schemas.md"
+  ],
+  "04_langgraph_core_orchestration_engine/02_implement_cyclical_graph.md": [
+    "04_langgraph_core_orchestration_engine/01_define_orchestration_state.md"
+  ],
+  "04_langgraph_core_orchestration_engine/03_integrate_sqlite_persistence.md": [
+    "04_langgraph_core_orchestration_engine/02_implement_cyclical_graph.md",
+    "05_state_checkpointing_recovery/01_sqlite_saver_implementation.md"
+  ],
+  "04_langgraph_core_orchestration_engine/04_implement_hitl_gates.md": [
+    "04_langgraph_core_orchestration_engine/02_implement_cyclical_graph.md"
+  ],
+  "04_langgraph_core_orchestration_engine/05_robustness_and_error_handling.md": [
+    "04_langgraph_core_orchestration_engine/02_implement_cyclical_graph.md"
+  ],
+  "05_state_checkpointing_recovery/01_sqlite_saver_implementation.md": [
+    "03_acid_transactions_state_integrity/03_langgraph_sqlite_saver.md"
+  ],
+  "05_state_checkpointing_recovery/02_crash_recovery_engine.md": [
+    "05_state_checkpointing_recovery/01_sqlite_saver_implementation.md",
+    "04_langgraph_core_orchestration_engine/03_integrate_sqlite_persistence.md"
+  ],
+  "05_state_checkpointing_recovery/03_stateless_orchestrator_initialization.md": [
+    "05_state_checkpointing_recovery/02_crash_recovery_engine.md"
+  ],
+  "05_state_checkpointing_recovery/04_relational_rollback.md": [
+    "05_state_checkpointing_recovery/02_crash_recovery_engine.md",
+    "03_acid_transactions_state_integrity/02_acid_state_repository.md"
+  ],
+  "05_state_checkpointing_recovery/05_heuristic_state_reconstruction.md": [
+    "05_state_checkpointing_recovery/03_stateless_orchestrator_initialization.md"
+  ],
+  "06_git_integration_snapshot_strategy/01_git_client_wrapper.md": [
+    "01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md"
+  ],
+  "06_git_integration_snapshot_strategy/02_task_commit_logic.md": [
+    "06_git_integration_snapshot_strategy/01_git_client_wrapper.md",
+    "06_git_integration_snapshot_strategy/05_git_exclusion_strategy.md"
+  ],
+  "06_git_integration_snapshot_strategy/03_git_hash_persistence.md": [
+    "06_git_integration_snapshot_strategy/02_task_commit_logic.md",
+    "02_sqlite_schema_persistence_layer/04_implement_state_repository.md"
+  ],
+  "06_git_integration_snapshot_strategy/04_commit_footer_metadata.md": [
+    "06_git_integration_snapshot_strategy/02_task_commit_logic.md"
+  ],
+  "06_git_integration_snapshot_strategy/05_git_exclusion_strategy.md": [
+    "06_git_integration_snapshot_strategy/01_git_client_wrapper.md",
+    "01_project_infrastructure_monorepo_setup/03_setup_project_directories.md"
+  ],
+  "06_git_integration_snapshot_strategy/06_git_integrity_and_recovery.md": [
+    "06_git_integration_snapshot_strategy/01_git_client_wrapper.md"
+  ],
+  "07_audit_trails_glass-box_observability/01_define_agent_log_schemas.md": [
+    "02_sqlite_schema_persistence_layer/02_implement_core_tables_schema.md"
+  ],
+  "07_audit_trails_glass-box_observability/02_real_time_trace_interceptor.md": [
+    "07_audit_trails_glass-box_observability/01_define_agent_log_schemas.md",
+    "04_langgraph_core_orchestration_engine/02_implement_cyclical_graph.md",
+    "08_cli_integration_state_control/05_core_eventbus_implementation.md"
+  ],
+  "07_audit_trails_glass-box_observability/03_acid_state_transition_logger.md": [
+    "07_audit_trails_glass-box_observability/02_real_time_trace_interceptor.md",
+    "03_acid_transactions_state_integrity/02_acid_state_repository.md"
+  ],
+  "07_audit_trails_glass-box_observability/04_decision_logs_capture_system.md": [
+    "07_audit_trails_glass-box_observability/01_define_agent_log_schemas.md"
+  ],
+  "07_audit_trails_glass-box_observability/05_audit_trail_reconstruction_logic.md": [
+    "07_audit_trails_glass-box_observability/02_real_time_trace_interceptor.md",
+    "07_audit_trails_glass-box_observability/04_decision_logs_capture_system.md",
+    "06_git_integration_snapshot_strategy/03_git_hash_persistence.md"
+  ],
+  "08_cli_integration_state_control/01_cli_scaffolding_init.md": [
+    "01_project_infrastructure_monorepo_setup/06_implement_scaffolding_utility.md",
+    "10_lifecycle_management_phase_milestones/02_implement_init_logic.md"
+  ],
+  "08_cli_integration_state_control/02_cli_status_json.md": [
+    "08_cli_integration_state_control/01_cli_scaffolding_init.md",
+    "10_lifecycle_management_phase_milestones/03_implement_lifecycle_control.md"
+  ],
+  "08_cli_integration_state_control/03_cli_state_control_commands.md": [
+    "08_cli_integration_state_control/01_cli_scaffolding_init.md",
+    "10_lifecycle_management_phase_milestones/03_implement_lifecycle_control.md"
+  ],
+  "08_cli_integration_state_control/04_cli_rewind_time_travel.md": [
+    "08_cli_integration_state_control/03_cli_state_control_commands.md",
+    "09_determinism_robustness_testing/03_rewind_engine_restoration.md"
+  ],
+  "08_cli_integration_state_control/05_core_eventbus_implementation.md": [
+    "01_project_infrastructure_monorepo_setup/02_configure_typescript_strict.md"
+  ],
+  "08_cli_integration_state_control/06_cli_eventbus_integration_sync.md": [
+    "08_cli_integration_state_control/05_core_eventbus_implementation.md",
+    "08_cli_integration_state_control/02_cli_status_json.md"
+  ],
+  "09_determinism_robustness_testing/01_dag_cycle_detection.md": [
+    "04_langgraph_core_orchestration_engine/02_implement_cyclical_graph.md"
+  ],
+  "09_determinism_robustness_testing/02_sqlite_chaos_testing.md": [
+    "03_acid_transactions_state_integrity/03_langgraph_sqlite_saver.md",
+    "05_state_checkpointing_recovery/01_sqlite_saver_implementation.md"
+  ],
+  "09_determinism_robustness_testing/03_rewind_engine_restoration.md": [
+    "05_state_checkpointing_recovery/04_relational_rollback.md",
+    "06_git_integration_snapshot_strategy/03_git_hash_persistence.md"
+  ],
+  "09_determinism_robustness_testing/04_startup_lock_cleanup.md": [
+    "05_state_checkpointing_recovery/03_stateless_orchestrator_initialization.md"
+  ],
+  "09_determinism_robustness_testing/05_dirty_workspace_detection.md": [
+    "06_git_integration_snapshot_strategy/06_git_integrity_and_recovery.md"
+  ],
+  "09_determinism_robustness_testing/06_roadmap_reconstruction.md": [
+    "06_git_integration_snapshot_strategy/04_commit_footer_metadata.md",
+    "02_sqlite_schema_persistence_layer/04_implement_state_repository.md"
+  ],
+  "09_determinism_robustness_testing/07_input_data_locality.md": [
+    "04_langgraph_core_orchestration_engine/01_define_orchestration_state.md",
+    "02_sqlite_schema_persistence_layer/04_implement_state_repository.md"
+  ],
+  "10_lifecycle_management_phase_milestones/01_define_lifecycle_enums_schema.md": [
+    "02_sqlite_schema_persistence_layer/02_implement_core_tables_schema.md"
+  ],
+  "10_lifecycle_management_phase_milestones/02_implement_init_logic.md": [
+    "10_lifecycle_management_phase_milestones/01_define_lifecycle_enums_schema.md",
+    "01_project_infrastructure_monorepo_setup/06_implement_scaffolding_utility.md",
+    "06_git_integration_snapshot_strategy/01_git_client_wrapper.md"
+  ],
+  "10_lifecycle_management_phase_milestones/03_implement_lifecycle_control.md": [
+    "10_lifecycle_management_phase_milestones/01_define_lifecycle_enums_schema.md",
+    "04_langgraph_core_orchestration_engine/04_implement_hitl_gates.md"
+  ],
+  "10_lifecycle_management_phase_milestones/04_implement_milestone_tracking.md": [
+    "10_lifecycle_management_phase_milestones/01_define_lifecycle_enums_schema.md"
+  ],
+  "10_lifecycle_management_phase_milestones/05_setup_roadmap_epics.md": [
+    "10_lifecycle_management_phase_milestones/02_implement_init_logic.md"
+  ],
+  "10_lifecycle_management_phase_milestones/06_implement_foundation_dod_check.md": [
+    "10_lifecycle_management_phase_milestones/04_implement_milestone_tracking.md",
+    "06_git_integration_snapshot_strategy/01_git_client_wrapper.md"
   ]
 }

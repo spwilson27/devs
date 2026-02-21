@@ -1,43 +1,237 @@
 {
-  "01_real-time_event_bus_infrastructure": [],
-  "02_trace_streaming_and_agent_console_core": [],
-  "03_agent_console_ui_components": [
-    "02_trace_streaming_and_agent_console_core"
+  "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md": [],
+  "01_real-time_event_bus_infrastructure/02_implement_thought_batching_buffer.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
   ],
-  "04_safety_and_control_ui": [
-    "01_real-time_event_bus_infrastructure"
+  "01_real-time_event_bus_infrastructure/03_build_websocket_server_bridge.md": [
+    "01_real-time_event_bus_infrastructure/02_implement_thought_batching_buffer.md"
   ],
-  "05_dag_visualization_and_task_graph": [],
-  "06_dag_canvas_interactions": [
-    "05_dag_visualization_and_task_graph"
+  "01_real-time_event_bus_infrastructure/04_build_sse_bridge.md": [
+    "01_real-time_event_bus_infrastructure/02_implement_thought_batching_buffer.md"
   ],
-  "07_project_dashboard_modules": [
-    "01_real-time_event_bus_infrastructure"
+  "01_real-time_event_bus_infrastructure/05_build_vscode_postmessage_bridge.md": [
+    "01_real-time_event_bus_infrastructure/02_implement_thought_batching_buffer.md"
   ],
-  "08_cost_and_token_monitoring": [
-    "01_real-time_event_bus_infrastructure",
-    "07_project_dashboard_modules"
+  "01_real-time_event_bus_infrastructure/06_implement_state_synchronization.md": [
+    "01_real-time_event_bus_infrastructure/03_build_websocket_server_bridge.md",
+    "01_real-time_event_bus_infrastructure/05_build_vscode_postmessage_bridge.md"
   ],
-  "09_system_health_and_performance_profiling": [
-    "01_real-time_event_bus_infrastructure",
-    "07_project_dashboard_modules"
+  "02_trace_streaming_and_agent_console_core/01_define_saop_envelope_schema.md": [],
+  "02_trace_streaming_and_agent_console_core/02_implement_orchestrator_saop_streaming_server.md": [
+    "02_trace_streaming_and_agent_console_core/01_define_saop_envelope_schema.md"
   ],
-  "10_research_and_document_review_panels": [],
-  "11_document_approval_and_requirement_linking": [
-    "10_research_and_document_review_panels"
+  "02_trace_streaming_and_agent_console_core/03_implement_thought_batching_buffer.md": [
+    "02_trace_streaming_and_agent_console_core/02_implement_orchestrator_saop_streaming_server.md"
   ],
-  "12_animation_system_and_ux_feedback": [
-    "03_agent_console_ui_components",
-    "04_safety_and_control_ui",
-    "05_dag_visualization_and_task_graph",
-    "07_project_dashboard_modules"
+  "02_trace_streaming_and_agent_console_core/04_implement_vscode_saop_ws_client.md": [
+    "02_trace_streaming_and_agent_console_core/01_define_saop_envelope_schema.md"
   ],
-  "13_animation_performance_and_guardrails": [
-    "12_animation_system_and_ux_feedback"
+  "02_trace_streaming_and_agent_console_core/05_implement_saop_stream_state_management.md": [
+    "02_trace_streaming_and_agent_console_core/01_define_saop_envelope_schema.md"
   ],
-  "14_loop_detection_and_accessibility": [
-    "01_real-time_event_bus_infrastructure",
-    "03_agent_console_ui_components",
-    "05_dag_visualization_and_task_graph"
-  ]
+  "02_trace_streaming_and_agent_console_core/06_build_agent_console_react_component.md": [
+    "02_trace_streaming_and_agent_console_core/05_implement_saop_stream_state_management.md"
+  ],
+  "02_trace_streaming_and_agent_console_core/07_wire_postmessage_bridge.md": [
+    "02_trace_streaming_and_agent_console_core/04_implement_vscode_saop_ws_client.md",
+    "02_trace_streaming_and_agent_console_core/06_build_agent_console_react_component.md"
+  ],
+  "03_agent_console_ui_components/01_agent_console_three_pane_layout.md": [
+    "02_trace_streaming_and_agent_console_core/06_build_agent_console_react_component.md"
+  ],
+  "03_agent_console_ui_components/02_thought_stream_center_pane.md": [
+    "03_agent_console_ui_components/01_agent_console_three_pane_layout.md"
+  ],
+  "03_agent_console_ui_components/03_tool_log_right_sidebar.md": [
+    "03_agent_console_ui_components/01_agent_console_three_pane_layout.md"
+  ],
+  "03_agent_console_ui_components/04_sandbox_terminal_bottom_pane.md": [
+    "03_agent_console_ui_components/01_agent_console_three_pane_layout.md"
+  ],
+  "03_agent_console_ui_components/05_virtualized_trace_list.md": [
+    "03_agent_console_ui_components/02_thought_stream_center_pane.md"
+  ],
+  "04_safety_and_control_ui/01_safety_mode_interceptor_backend.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "04_safety_and_control_ui/02_safety_mode_toggle_ui.md": [
+    "04_safety_and_control_ui/01_safety_mode_interceptor_backend.md"
+  ],
+  "04_safety_and_control_ui/03_tool_call_approval_dialog.md": [
+    "04_safety_and_control_ui/01_safety_mode_interceptor_backend.md"
+  ],
+  "04_safety_and_control_ui/04_global_pause_resume_backend.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "04_safety_and_control_ui/05_global_pause_resume_ui.md": [
+    "04_safety_and_control_ui/04_global_pause_resume_backend.md"
+  ],
+  "04_safety_and_control_ui/06_hitl_status_indicator.md": [
+    "04_safety_and_control_ui/03_tool_call_approval_dialog.md",
+    "04_safety_and_control_ui/01_safety_mode_interceptor_backend.md"
+  ],
+  "05_dag_visualization_and_task_graph/01_dag_data_model_and_store.md": [],
+  "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md": [
+    "05_dag_visualization_and_task_graph/01_dag_data_model_and_store.md"
+  ],
+  "05_dag_visualization_and_task_graph/03_epic_clustering_bounding_boxes.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md"
+  ],
+  "05_dag_visualization_and_task_graph/04_critical_path_algorithm_and_highlighting.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md"
+  ],
+  "05_dag_visualization_and_task_graph/05_dag_filtering_bar.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md",
+    "05_dag_visualization_and_task_graph/01_dag_data_model_and_store.md"
+  ],
+  "05_dag_visualization_and_task_graph/06_task_detail_card_slide_out_panel.md": [
+    "05_dag_visualization_and_task_graph/01_dag_data_model_and_store.md"
+  ],
+  "05_dag_visualization_and_task_graph/07_real_time_dag_state_updates.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md"
+  ],
+  "06_dag_canvas_interactions/01_node_hover_elevation_animation.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md"
+  ],
+  "06_dag_canvas_interactions/02_node_selection_anchor_and_centering.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md",
+    "05_dag_visualization_and_task_graph/01_dag_data_model_and_store.md"
+  ],
+  "06_dag_canvas_interactions/03_dependency_flow_highlighting.md": [
+    "06_dag_canvas_interactions/02_node_selection_anchor_and_centering.md"
+  ],
+  "06_dag_canvas_interactions/04_pan_zoom_inertia_physics.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md"
+  ],
+  "06_dag_canvas_interactions/05_semantic_zooming.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md",
+    "05_dag_visualization_and_task_graph/03_epic_clustering_bounding_boxes.md"
+  ],
+  "06_dag_canvas_interactions/06_dag_node_to_prd_requirement_mapping_spike.md": [],
+  "07_project_dashboard_modules/01_epic_progress_radial.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "07_project_dashboard_modules/02_activity_feed.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "07_project_dashboard_modules/03_health_telemetry_gauges.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "07_project_dashboard_modules/04_phase_stepper.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "08_cost_and_token_monitoring/01_cost_tracking_service.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "08_cost_and_token_monitoring/02_cost_transparency_dashboard_panel.md": [
+    "08_cost_and_token_monitoring/01_cost_tracking_service.md"
+  ],
+  "08_cost_and_token_monitoring/03_token_budget_overrun_warning.md": [
+    "08_cost_and_token_monitoring/01_cost_tracking_service.md"
+  ],
+  "09_system_health_and_performance_profiling/01_system_health_metrics_collector_backend.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "09_system_health_and_performance_profiling/02_api_connectivity_probe_service.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "09_system_health_and_performance_profiling/03_resource_gauges_ui_component.md": [
+    "09_system_health_and_performance_profiling/01_system_health_metrics_collector_backend.md"
+  ],
+  "09_system_health_and_performance_profiling/04_api_connectivity_status_indicators_ui.md": [
+    "09_system_health_and_performance_profiling/02_api_connectivity_probe_service.md"
+  ],
+  "09_system_health_and_performance_profiling/05_projectserver_profiling_mcp_tool.md": [],
+  "09_system_health_and_performance_profiling/06_flamegraph_visualization_ui_component.md": [
+    "09_system_health_and_performance_profiling/05_projectserver_profiling_mcp_tool.md"
+  ],
+  "09_system_health_and_performance_profiling/07_heap_snapshot_treemap_ui_component.md": [
+    "09_system_health_and_performance_profiling/05_projectserver_profiling_mcp_tool.md"
+  ],
+  "10_research_and_document_review_panels/01_research_panel_tab_container.md": [],
+  "10_research_and_document_review_panels/02_source_citation_tooltip.md": [
+    "10_research_and_document_review_panels/01_research_panel_tab_container.md"
+  ],
+  "10_research_and_document_review_panels/03_decision_matrix_table.md": [
+    "10_research_and_document_review_panels/01_research_panel_tab_container.md"
+  ],
+  "10_research_and_document_review_panels/04_dual_pane_document_viewer.md": [],
+  "11_document_approval_and_requirement_linking/01_requirement_highlighting_data_model.md": [],
+  "11_document_approval_and_requirement_linking/02_prd_hover_erd_highlight_interaction.md": [
+    "11_document_approval_and_requirement_linking/01_requirement_highlighting_data_model.md",
+    "10_research_and_document_review_panels/04_dual_pane_document_viewer.md"
+  ],
+  "11_document_approval_and_requirement_linking/03_signoff_checkboxes_and_approval_gate.md": [
+    "10_research_and_document_review_panels/04_dual_pane_document_viewer.md"
+  ],
+  "11_document_approval_and_requirement_linking/04_state_exposure_feed_transparency.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "11_document_approval_and_requirement_linking/05_semantic_diff_ui_high_signal_approvals.md": [
+    "10_research_and_document_review_panels/04_dual_pane_document_viewer.md"
+  ],
+  "11_document_approval_and_requirement_linking/06_batch_approval_staggered_review_cadence.md": [
+    "11_document_approval_and_requirement_linking/03_signoff_checkboxes_and_approval_gate.md"
+  ],
+  "12_animation_system_and_ux_feedback/01_reasoning_pulse_animation.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md",
+    "03_agent_console_ui_components/02_thought_stream_center_pane.md",
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md"
+  ],
+  "12_animation_system_and_ux_feedback/02_tool_execution_shimmer_and_progress_sweep.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md",
+    "02_trace_streaming_and_agent_console_core/06_build_agent_console_react_component.md"
+  ],
+  "12_animation_system_and_ux_feedback/03_tool_execution_completion_pop_and_failure_shake.md": [
+    "12_animation_system_and_ux_feedback/02_tool_execution_shimmer_and_progress_sweep.md"
+  ],
+  "12_animation_system_and_ux_feedback/04_gated_autonomy_attention_pulse.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md",
+    "07_project_dashboard_modules/04_phase_stepper.md",
+    "11_document_approval_and_requirement_linking/03_signoff_checkboxes_and_approval_gate.md",
+    "02_trace_streaming_and_agent_console_core/06_build_agent_console_react_component.md"
+  ],
+  "12_animation_system_and_ux_feedback/05_directive_injection_feedback.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md",
+    "02_trace_streaming_and_agent_console_core/06_build_agent_console_react_component.md"
+  ],
+  "12_animation_system_and_ux_feedback/06_distillation_sweep_animation.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "13_animation_performance_and_guardrails/01_fps_benchmarking_infrastructure.md": [],
+  "13_animation_performance_and_guardrails/02_animation_throttler_cpu_guard.md": [
+    "13_animation_performance_and_guardrails/01_fps_benchmarking_infrastructure.md"
+  ],
+  "13_animation_performance_and_guardrails/03_dag_web_worker_offloading.md": [
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md"
+  ],
+  "13_animation_performance_and_guardrails/04_reduced_motion_accessibility.md": [
+    "12_animation_system_and_ux_feedback/01_reasoning_pulse_animation.md",
+    "12_animation_system_and_ux_feedback/02_tool_execution_shimmer_and_progress_sweep.md",
+    "05_dag_visualization_and_task_graph/04_critical_path_algorithm_and_highlighting.md",
+    "12_animation_system_and_ux_feedback/06_distillation_sweep_animation.md",
+    "12_animation_system_and_ux_feedback/04_gated_autonomy_attention_pulse.md"
+  ],
+  "13_animation_performance_and_guardrails/05_rewind_glitch_desaturation_animation.md": [
+    "13_animation_performance_and_guardrails/04_reduced_motion_accessibility.md",
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "13_animation_performance_and_guardrails/06_state_restored_toast_notification.md": [
+    "13_animation_performance_and_guardrails/05_rewind_glitch_desaturation_animation.md",
+    "13_animation_performance_and_guardrails/04_reduced_motion_accessibility.md"
+  ],
+  "14_loop_detection_and_accessibility/01_loop_detection_state_logic.md": [
+    "01_real-time_event_bus_infrastructure/01_define_event_bus_interface_and_types.md"
+  ],
+  "14_loop_detection_and_accessibility/02_dag_node_loop_indicator_ui.md": [
+    "14_loop_detection_and_accessibility/01_loop_detection_state_logic.md",
+    "05_dag_visualization_and_task_graph/02_dag_canvas_core_renderer.md"
+  ],
+  "14_loop_detection_and_accessibility/03_aria_live_polite_agent_thoughts.md": [
+    "02_trace_streaming_and_agent_console_core/06_build_agent_console_react_component.md"
+  ],
+  "14_loop_detection_and_accessibility/04_aria_live_assertive_task_success.md": [
+    "14_loop_detection_and_accessibility/03_aria_live_polite_agent_thoughts.md"
+  ],
+  "14_loop_detection_and_accessibility/05_introspection_gutter_icons.md": []
 }

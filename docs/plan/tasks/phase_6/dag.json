@@ -1,31 +1,175 @@
 {
-  "01_architectagent_core_implementation": [],
-  "02_architecture-driven_development_setup": [
-    "01_architectagent_core_implementation"
+  "01_architectagent_core_implementation/01_architectagent_skeleton.md": [],
+  "01_architectagent_core_implementation/02_gemini_adapter.md": [],
+  "01_architectagent_core_implementation/03_research_to_spec_compression.md": [],
+  "01_architectagent_core_implementation/04_spec_generation_pipeline.md": [
+    "01_architectagent_core_implementation/02_gemini_adapter.md",
+    "01_architectagent_core_implementation/03_research_to_spec_compression.md"
   ],
-  "03_prd_and_tas_document_generation": [],
-  "04_mcp_and_system_structure_documents": [],
-  "05_security_and_ux_document_generation": [
-    "01_architectagent_core_implementation",
-    "04_mcp_and_system_structure_documents"
+  "01_architectagent_core_implementation/05_document_checksum_and_validator.md": [],
+  "01_architectagent_core_implementation/06_approval_gate_stub.md": [],
+  "02_architecture-driven_development_setup/01_presence_check_prd_tas.md": [],
+  "02_architecture-driven_development_setup/02_document_validator.md": [
+    "02_architecture-driven_development_setup/01_presence_check_prd_tas.md"
   ],
-  "06_diagram_auto-generation": [],
-  "07_document_validation_and_traceability": [
-    "03_prd_and_tas_document_generation",
-    "04_mcp_and_system_structure_documents"
+  "02_architecture-driven_development_setup/03_machine_readable_schema.md": [
+    "02_architecture-driven_development_setup/01_presence_check_prd_tas.md"
   ],
-  "08_document_integrity_and_security": [
-    "02_architecture-driven_development_setup"
+  "02_architecture-driven_development_setup/04_document_checksum.md": [],
+  "02_architecture-driven_development_setup/05_approval_token_persistence.md": [
+    "02_architecture-driven_development_setup/04_document_checksum.md"
   ],
-  "09_architectural_fidelity_and_drift_mitigation": [
-    "07_document_validation_and_traceability"
+  "02_architecture-driven_development_setup/06_blueprint_gate_logic.md": [
+    "02_architecture-driven_development_setup/05_approval_token_persistence.md"
   ],
-  "10_review_dashboard_ui": [],
-  "11_blueprint_gate_logic": [
-    "02_architecture-driven_development_setup"
+  "02_architecture-driven_development_setup/07_mcp_enforcement_api.md": [
+    "02_architecture-driven_development_setup/06_blueprint_gate_logic.md"
   ],
-  "12_hitl_approval_interface": [
-    "10_review_dashboard_ui",
-    "11_blueprint_gate_logic"
+  "02_architecture-driven_development_setup/08_integration_e2e_add.md": [
+    "02_architecture-driven_development_setup/02_document_validator.md",
+    "02_architecture-driven_development_setup/03_machine_readable_schema.md",
+    "02_architecture-driven_development_setup/07_mcp_enforcement_api.md"
+  ],
+  "02_architecture-driven_development_setup/09_update_docs_and_agent_memory.md": [
+    "02_architecture-driven_development_setup/08_integration_e2e_add.md"
+  ],
+  "03_prd_and_tas_document_generation/01_define_prd_generator_interface_and_initial_tests.md": [],
+  "03_prd_and_tas_document_generation/02_implement_prd_content_components.md": [
+    "03_prd_and_tas_document_generation/01_define_prd_generator_interface_and_initial_tests.md"
+  ],
+  "03_prd_and_tas_document_generation/03_prd_machine_readable_schema_and_validation.md": [
+    "03_prd_and_tas_document_generation/01_define_prd_generator_interface_and_initial_tests.md"
+  ],
+  "03_prd_and_tas_document_generation/04_define_tas_generator_interface_and_initial_tests.md": [],
+  "03_prd_and_tas_document_generation/05_implement_tas_diagrams_and_erd_generator.md": [
+    "03_prd_and_tas_document_generation/04_define_tas_generator_interface_and_initial_tests.md"
+  ],
+  "03_prd_and_tas_document_generation/06_tas_api_contracts_and_machine_readable_schema.md": [
+    "03_prd_and_tas_document_generation/04_define_tas_generator_interface_and_initial_tests.md"
+  ],
+  "04_mcp_and_system_structure_documents/01_scaffold_docs_directory.md": [],
+  "04_mcp_and_system_structure_documents/02_define_system_layout.md": [
+    "04_mcp_and_system_structure_documents/01_scaffold_docs_directory.md"
+  ],
+  "04_mcp_and_system_structure_documents/04_machine_readable_document_schema.md": [
+    "04_mcp_and_system_structure_documents/01_scaffold_docs_directory.md"
+  ],
+  "05_security_and_ux_document_generation/01_define_security_spec_schema.md": [],
+  "05_security_and_ux_document_generation/02_implement_security_agent.md": [
+    "05_security_and_ux_document_generation/01_define_security_spec_schema.md"
+  ],
+  "05_security_and_ux_document_generation/03_create_uiux_design_system_schema.md": [],
+  "05_security_and_ux_document_generation/04_implement_uiux_agent.md": [
+    "05_security_and_ux_document_generation/03_create_uiux_design_system_schema.md"
+  ],
+  "05_security_and_ux_document_generation/05_generate_documents_pipeline.md": [
+    "05_security_and_ux_document_generation/02_implement_security_agent.md",
+    "05_security_and_ux_document_generation/04_implement_uiux_agent.md"
+  ],
+  "05_security_and_ux_document_generation/06_enforce_security_spec_check.md": [
+    "05_security_and_ux_document_generation/01_define_security_spec_schema.md"
+  ],
+  "06_diagram_auto-generation/01_scaffold_diagram_generator.md": [],
+  "06_diagram_auto-generation/02_erd_mermaid_generator.md": [
+    "06_diagram_auto-generation/01_scaffold_diagram_generator.md"
+  ],
+  "06_diagram_auto-generation/03_sitemap_mermaid_generator.md": [
+    "06_diagram_auto-generation/01_scaffold_diagram_generator.md"
+  ],
+  "06_diagram_auto-generation/04_api_contract_mermaid_generator.md": [
+    "06_diagram_auto-generation/01_scaffold_diagram_generator.md"
+  ],
+  "06_diagram_auto-generation/05_mermaid_renderer_integration.md": [
+    "06_diagram_auto-generation/01_scaffold_diagram_generator.md"
+  ],
+  "06_diagram_auto-generation/06_document_validator_mermaid.md": [
+    "06_diagram_auto-generation/01_scaffold_diagram_generator.md"
+  ],
+  "06_diagram_auto-generation/07_integration_tests_pipeline.md": [
+    "06_diagram_auto-generation/02_erd_mermaid_generator.md",
+    "06_diagram_auto-generation/03_sitemap_mermaid_generator.md",
+    "06_diagram_auto-generation/04_api_contract_mermaid_generator.md",
+    "06_diagram_auto-generation/05_mermaid_renderer_integration.md",
+    "06_diagram_auto-generation/06_document_validator_mermaid.md"
+  ],
+  "07_document_validation_and_traceability/01_document_validator_core.md": [],
+  "07_document_validation_and_traceability/02_manual_markdown_corruption_ui_and_rules.md": [
+    "07_document_validation_and_traceability/01_document_validator_core.md"
+  ],
+  "07_document_validation_and_traceability/03_mermaid_syntax_and_render_validation.md": [
+    "07_document_validation_and_traceability/01_document_validator_core.md"
+  ],
+  "07_document_validation_and_traceability/04_spec_synchronization_engine.md": [
+    "07_document_validation_and_traceability/01_document_validator_core.md"
+  ],
+  "07_document_validation_and_traceability/05_architectural_traceability_mapping.md": [],
+  "08_document_integrity_and_security/01_document_checksum.md": [],
+  "08_document_integrity_and_security/02_orchestrator_checksum_gate.md": [
+    "08_document_integrity_and_security/01_document_checksum.md"
+  ],
+  "08_document_integrity_and_security/03_aod_checksum_verification.md": [
+    "08_document_integrity_and_security/01_document_checksum.md"
+  ],
+  "08_document_integrity_and_security/04_immutable_signoff_and_directive.md": [],
+  "08_document_integrity_and_security/05_mitigation_strategies_and_checks.md": [
+    "08_document_integrity_and_security/01_document_checksum.md",
+    "08_document_integrity_and_security/02_orchestrator_checksum_gate.md",
+    "08_document_integrity_and_security/03_aod_checksum_verification.md",
+    "08_document_integrity_and_security/04_immutable_signoff_and_directive.md"
+  ],
+  "09_architectural_fidelity_and_drift_mitigation/01_architectural_fidelity_tas_gate.md": [],
+  "10_review_dashboard_ui/01_initialize_review_dashboard_shell.md": [],
+  "10_review_dashboard_ui/02_brief_vs_spec_side_by_side.md": [
+    "10_review_dashboard_ui/01_initialize_review_dashboard_shell.md"
+  ],
+  "10_review_dashboard_ui/03_granular_approval_controls.md": [
+    "10_review_dashboard_ui/02_brief_vs_spec_side_by_side.md"
+  ],
+  "10_review_dashboard_ui/04_render_mermaid_interactive_svg.md": [],
+  "10_review_dashboard_ui/05_pattern_conflict_dialog.md": [
+    "10_review_dashboard_ui/01_initialize_review_dashboard_shell.md"
+  ],
+  "10_review_dashboard_ui/06_persist_approval_tokens_and_gate.md": [
+    "10_review_dashboard_ui/01_initialize_review_dashboard_shell.md"
+  ],
+  "11_blueprint_gate_logic/01_approval_token_model.md": [],
+  "11_blueprint_gate_logic/02_approval_token_api.md": [
+    "11_blueprint_gate_logic/01_approval_token_model.md"
+  ],
+  "11_blueprint_gate_logic/03_langgraph_waitforapproval_node.md": [
+    "11_blueprint_gate_logic/02_approval_token_api.md"
+  ],
+  "11_blueprint_gate_logic/04_architecture_freeze_guard.md": [
+    "11_blueprint_gate_logic/01_approval_token_model.md"
+  ],
+  "11_blueprint_gate_logic/05_document_checksum_verification.md": [
+    "11_blueprint_gate_logic/01_approval_token_model.md",
+    "11_blueprint_gate_logic/04_architecture_freeze_guard.md"
+  ],
+  "11_blueprint_gate_logic/06_integration_e2e_gate_flow.md": [
+    "11_blueprint_gate_logic/03_langgraph_waitforapproval_node.md",
+    "11_blueprint_gate_logic/05_document_checksum_verification.md"
+  ],
+  "12_hitl_approval_interface/01_data_model_and_persistence.md": [],
+  "12_hitl_approval_interface/02_backend_approval_api_endpoints.md": [
+    "12_hitl_approval_interface/01_data_model_and_persistence.md"
+  ],
+  "12_hitl_approval_interface/03_gate_enforcement_middleware.md": [
+    "12_hitl_approval_interface/01_data_model_and_persistence.md"
+  ],
+  "12_hitl_approval_interface/04_ui_signoff_components.md": [
+    "12_hitl_approval_interface/02_backend_approval_api_endpoints.md"
+  ],
+  "12_hitl_approval_interface/05_granular_approval_ui_diffing.md": [
+    "12_hitl_approval_interface/02_backend_approval_api_endpoints.md"
+  ],
+  "12_hitl_approval_interface/06_interactive_qna_interface.md": [],
+  "12_hitl_approval_interface/07_integration_tests_for_approval_flow.md": [
+    "12_hitl_approval_interface/03_gate_enforcement_middleware.md",
+    "12_hitl_approval_interface/04_ui_signoff_components.md"
+  ],
+  "12_hitl_approval_interface/08_document_integrity_and_verification.md": [
+    "12_hitl_approval_interface/01_data_model_and_persistence.md",
+    "12_hitl_approval_interface/03_gate_enforcement_middleware.md"
   ]
 }

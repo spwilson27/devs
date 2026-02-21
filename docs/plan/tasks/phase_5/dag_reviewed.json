@@ -1,52 +1,205 @@
 {
-  "01_research_phase_foundation_methodology": [],
-  "02_researchmanager_agent_core": [
-    "01_research_phase_foundation_methodology"
+  "01_research_phase_foundation_methodology/01_research_manager_skeleton_and_project_structure.md": [],
+  "01_research_phase_foundation_methodology/02_research_first_methodology_gate_enforcement.md": [
+    "01_research_phase_foundation_methodology/01_research_manager_skeleton_and_project_structure.md"
   ],
-  "03_search_integration_tools": [],
-  "04_content_extraction_tools": [
-    "02_researchmanager_agent_core"
+  "01_research_phase_foundation_methodology/03_user_brief_expansion_engine.md": [
+    "01_research_phase_foundation_methodology/01_research_manager_skeleton_and_project_structure.md"
   ],
-  "05_research_sandbox_security_permissions": [
-    "03_search_integration_tools",
-    "04_content_extraction_tools"
+  "01_research_phase_foundation_methodology/04_research_phase_configuration_schema_and_wiring.md": [
+    "01_research_phase_foundation_methodology/01_research_manager_skeleton_and_project_structure.md",
+    "01_research_phase_foundation_methodology/03_user_brief_expansion_engine.md"
   ],
-  "06_input_sanitization_prompt_injection_mitigation": [
-    "04_content_extraction_tools",
-    "08_technology_adjacent_market_research"
+  "01_research_phase_foundation_methodology/05_architecture_first_strategy_artifact_generation.md": [
+    "01_research_phase_foundation_methodology/01_research_manager_skeleton_and_project_structure.md"
   ],
-  "07_market_user_research_domains": [
-    "02_researchmanager_agent_core",
-    "03_search_integration_tools",
-    "04_content_extraction_tools"
+  "02_researchmanager_agent_core/01_define_researchmanager_data_models_and_interface.md": [],
+  "02_researchmanager_agent_core/02_implement_brief_decomposition.md": [
+    "02_researchmanager_agent_core/01_define_researchmanager_data_models_and_interface.md"
   ],
-  "08_technology_adjacent_market_research": [
-    "02_researchmanager_agent_core",
-    "03_search_integration_tools",
-    "04_content_extraction_tools"
+  "02_researchmanager_agent_core/03_implement_parallel_execution_engine.md": [
+    "02_researchmanager_agent_core/01_define_researchmanager_data_models_and_interface.md"
   ],
-  "09_source_verification_fact-checking": [
-    "07_market_user_research_domains",
-    "08_technology_adjacent_market_research"
+  "02_researchmanager_agent_core/04_implement_confidence_scoring_and_citation_verification.md": [
+    "02_researchmanager_agent_core/01_define_researchmanager_data_models_and_interface.md",
+    "02_researchmanager_agent_core/03_implement_parallel_execution_engine.md"
   ],
-  "10_report_generation_engine": [
-    "07_market_user_research_domains",
-    "08_technology_adjacent_market_research"
+  "02_researchmanager_agent_core/05_implement_entropy_detection_and_retry_logic.md": [
+    "02_researchmanager_agent_core/03_implement_parallel_execution_engine.md"
   ],
-  "11_user_interface_progress_reporting": [
-    "02_researchmanager_agent_core"
+  "02_researchmanager_agent_core/06_implement_rate_limit_handling_and_anti_starvation.md": [
+    "02_researchmanager_agent_core/03_implement_parallel_execution_engine.md"
   ],
-  "12_edge_case_error_handling": [
-    "04_content_extraction_tools",
-    "07_market_user_research_domains",
-    "08_technology_adjacent_market_research"
+  "02_researchmanager_agent_core/07_wire_research_manager_run_pipeline.md": [
+    "02_researchmanager_agent_core/02_implement_brief_decomposition.md",
+    "02_researchmanager_agent_core/03_implement_parallel_execution_engine.md",
+    "02_researchmanager_agent_core/04_implement_confidence_scoring_and_citation_verification.md",
+    "02_researchmanager_agent_core/05_implement_entropy_detection_and_retry_logic.md",
+    "02_researchmanager_agent_core/06_implement_rate_limit_handling_and_anti_starvation.md"
   ],
-  "13_hitl_gate_phase_transition": [
-    "05_research_sandbox_security_permissions",
-    "06_input_sanitization_prompt_injection_mitigation",
-    "09_source_verification_fact-checking",
-    "10_report_generation_engine",
-    "11_user_interface_progress_reporting",
-    "12_edge_case_error_handling"
+  "03_search_integration_tools/01_serper_api_client_setup.md": [],
+  "03_search_integration_tools/02_source_credibility_scoring.md": [
+    "03_search_integration_tools/01_serper_api_client_setup.md"
+  ],
+  "03_search_integration_tools/03_stale_data_detection_live_validation.md": [
+    "03_search_integration_tools/01_serper_api_client_setup.md",
+    "03_search_integration_tools/02_source_credibility_scoring.md"
+  ],
+  "03_search_integration_tools/04_search_rate_limit_and_caching.md": [
+    "03_search_integration_tools/01_serper_api_client_setup.md"
+  ],
+  "03_search_integration_tools/05_citation_confidence_enforcement.md": [
+    "03_search_integration_tools/02_source_credibility_scoring.md",
+    "03_search_integration_tools/04_search_rate_limit_and_caching.md"
+  ],
+  "04_content_extraction_tools/01_content_extractor_interface_and_adapter_pattern.md": [],
+  "04_content_extraction_tools/02_implement_firecrawl_adapter.md": [
+    "04_content_extraction_tools/01_content_extractor_interface_and_adapter_pattern.md"
+  ],
+  "04_content_extraction_tools/03_implement_jina_reader_adapter.md": [
+    "04_content_extraction_tools/01_content_extractor_interface_and_adapter_pattern.md"
+  ],
+  "04_content_extraction_tools/04_spa_noise_stripping_and_markdown_validation.md": [
+    "04_content_extraction_tools/01_content_extractor_interface_and_adapter_pattern.md",
+    "04_content_extraction_tools/02_implement_firecrawl_adapter.md",
+    "04_content_extraction_tools/03_implement_jina_reader_adapter.md"
+  ],
+  "04_content_extraction_tools/05_wire_content_extractor_into_research_manager.md": [
+    "04_content_extraction_tools/01_content_extractor_interface_and_adapter_pattern.md"
+  ],
+  "04_content_extraction_tools/06_retry_rate_limit_and_circuit_breaker.md": [
+    "04_content_extraction_tools/01_content_extractor_interface_and_adapter_pattern.md"
+  ],
+  "04_content_extraction_tools/07_expose_as_mcp_tool.md": [
+    "04_content_extraction_tools/01_content_extractor_interface_and_adapter_pattern.md"
+  ],
+  "05_research_sandbox_security_permissions/01_mcp_server_sandbox_injection.md": [],
+  "05_research_sandbox_security_permissions/02_phase_specific_permission_system.md": [
+    "05_research_sandbox_security_permissions/01_mcp_server_sandbox_injection.md"
+  ],
+  "05_research_sandbox_security_permissions/03_https_only_egress_enforcement.md": [
+    "03_search_integration_tools/01_serper_api_client_setup.md",
+    "04_content_extraction_tools/01_content_extractor_interface_and_adapter_pattern.md"
+  ],
+  "06_input_sanitization_prompt_injection_mitigation/01_implement_untrusted_context_delimiters.md": [],
+  "06_input_sanitization_prompt_injection_mitigation/02_implement_sanitizer_agent.md": [],
+  "06_input_sanitization_prompt_injection_mitigation/03_implement_supply_chain_reputation_check.md": [
+    "08_technology_adjacent_market_research/01_tech_landscape_agent_implementation.md"
+  ],
+  "07_market_user_research_domains/01_market_research_data_models.md": [],
+  "07_market_user_research_domains/02_competitor_identification_agent.md": [
+    "07_market_user_research_domains/01_market_research_data_models.md"
+  ],
+  "07_market_user_research_domains/03_swot_analysis_mermaid_generator.md": [
+    "07_market_user_research_domains/01_market_research_data_models.md"
+  ],
+  "07_market_user_research_domains/04_market_analysis_report_generator.md": [
+    "07_market_user_research_domains/01_market_research_data_models.md",
+    "07_market_user_research_domains/03_swot_analysis_mermaid_generator.md"
+  ],
+  "07_market_user_research_domains/05_user_persona_data_models.md": [],
+  "07_market_user_research_domains/06_persona_generation_agent.md": [
+    "07_market_user_research_domains/01_market_research_data_models.md",
+    "07_market_user_research_domains/05_user_persona_data_models.md"
+  ],
+  "07_market_user_research_domains/07_journey_map_mermaid_generator.md": [
+    "07_market_user_research_domains/05_user_persona_data_models.md"
+  ],
+  "07_market_user_research_domains/08_user_research_report_generator.md": [
+    "07_market_user_research_domains/05_user_persona_data_models.md",
+    "07_market_user_research_domains/07_journey_map_mermaid_generator.md"
+  ],
+  "08_technology_adjacent_market_research/01_tech_landscape_agent_implementation.md": [],
+  "08_technology_adjacent_market_research/02_weighted_decision_matrix_generator.md": [
+    "08_technology_adjacent_market_research/01_tech_landscape_agent_implementation.md"
+  ],
+  "08_technology_adjacent_market_research/03_tech_landscape_report_generation.md": [
+    "08_technology_adjacent_market_research/01_tech_landscape_agent_implementation.md",
+    "08_technology_adjacent_market_research/02_weighted_decision_matrix_generator.md"
+  ],
+  "08_technology_adjacent_market_research/04_adjacent_market_detection_logic.md": [
+    "07_market_user_research_domains/01_market_research_data_models.md"
+  ],
+  "08_technology_adjacent_market_research/05_adjacent_market_research_agent.md": [
+    "08_technology_adjacent_market_research/04_adjacent_market_detection_logic.md"
+  ],
+  "08_technology_adjacent_market_research/06_niche_market_manual_workaround_report.md": [
+    "08_technology_adjacent_market_research/05_adjacent_market_research_agent.md"
+  ],
+  "09_source_verification_fact-checking/01_implement_source_citation_schema.md": [],
+  "09_source_verification_fact-checking/02_implement_automated_link_validation.md": [
+    "09_source_verification_fact-checking/01_implement_source_citation_schema.md"
+  ],
+  "09_source_verification_fact-checking/03_implement_fact_checker_agent.md": [
+    "09_source_verification_fact-checking/01_implement_source_citation_schema.md"
+  ],
+  "09_source_verification_fact-checking/04_integrate_hallucination_mitigation_pipeline.md": [
+    "09_source_verification_fact-checking/01_implement_source_citation_schema.md",
+    "09_source_verification_fact-checking/02_implement_automated_link_validation.md",
+    "09_source_verification_fact-checking/03_implement_fact_checker_agent.md"
+  ],
+  "10_report_generation_engine/01_report_generator_base_interfaces.md": [],
+  "10_report_generation_engine/02_mermaid_swot_diagram_generator.md": [],
+  "10_report_generation_engine/03_tech_landscape_decision_matrix_generator.md": [],
+  "10_report_generation_engine/04_market_and_competitive_report_generators.md": [
+    "10_report_generation_engine/01_report_generator_base_interfaces.md",
+    "10_report_generation_engine/02_mermaid_swot_diagram_generator.md"
+  ],
+  "10_report_generation_engine/05_technology_and_user_research_report_generators.md": [
+    "10_report_generation_engine/01_report_generator_base_interfaces.md",
+    "10_report_generation_engine/03_tech_landscape_decision_matrix_generator.md"
+  ],
+  "10_report_generation_engine/06_persistent_decision_log_sqlite.md": [
+    "10_report_generation_engine/01_report_generator_base_interfaces.md"
+  ],
+  "10_report_generation_engine/07_high_fidelity_rationale_engine.md": [
+    "10_report_generation_engine/04_market_and_competitive_report_generators.md",
+    "10_report_generation_engine/05_technology_and_user_research_report_generators.md"
+  ],
+  "11_user_interface_progress_reporting/01_vscode_sidebar_research_status_panel.md": [],
+  "11_user_interface_progress_reporting/02_cli_progress_bar_research_phase.md": [],
+  "11_user_interface_progress_reporting/03_ambiguous_brief_detection_clarification_required.md": [],
+  "11_user_interface_progress_reporting/04_agent_initiated_clarification_aic_protocol.md": [],
+  "11_user_interface_progress_reporting/05_clarification_ui_vscode_cli.md": [
+    "11_user_interface_progress_reporting/04_agent_initiated_clarification_aic_protocol.md"
+  ],
+  "12_edge_case_error_handling/01_adjacent_market_analysis_fallback.md": [],
+  "12_edge_case_error_handling/02_source_contradiction_detection_and_flagging.md": [],
+  "12_edge_case_error_handling/03_multi_lingual_research_support.md": [],
+  "13_hitl_gate_phase_transition/01_phase_gate_data_model_and_state_machine.md": [],
+  "13_hitl_gate_phase_transition/02_confidence_score_validator_and_deep_search_trigger.md": [],
+  "13_hitl_gate_phase_transition/03_hitl_approval_presentation_service.md": [
+    "13_hitl_gate_phase_transition/01_phase_gate_data_model_and_state_machine.md"
+  ],
+  "13_hitl_gate_phase_transition/04_vscode_and_cli_notification_adapters.md": [
+    "13_hitl_gate_phase_transition/03_hitl_approval_presentation_service.md"
+  ],
+  "13_hitl_gate_phase_transition/05_discovery_phase_orchestrator_and_hitl_integration.md": [
+    "13_hitl_gate_phase_transition/01_phase_gate_data_model_and_state_machine.md",
+    "13_hitl_gate_phase_transition/02_confidence_score_validator_and_deep_search_trigger.md",
+    "13_hitl_gate_phase_transition/03_hitl_approval_presentation_service.md"
+  ],
+  "13_hitl_gate_phase_transition/06_discovery_to_architecture_phase_transition.md": [
+    "13_hitl_gate_phase_transition/01_phase_gate_data_model_and_state_machine.md"
+  ],
+  "13_hitl_gate_phase_transition/07_discovery_definition_of_done_checker.md": [
+    "13_hitl_gate_phase_transition/01_phase_gate_data_model_and_state_machine.md"
+  ],
+  "13_hitl_gate_phase_transition/08_sqlite_persistence_for_phase_gate_records.md": [
+    "13_hitl_gate_phase_transition/01_phase_gate_data_model_and_state_machine.md"
+  ],
+  "13_hitl_gate_phase_transition/09_mcp_tool_endpoints_for_hitl_gate.md": [
+    "13_hitl_gate_phase_transition/01_phase_gate_data_model_and_state_machine.md",
+    "13_hitl_gate_phase_transition/03_hitl_approval_presentation_service.md",
+    "13_hitl_gate_phase_transition/06_discovery_to_architecture_phase_transition.md"
+  ],
+  "13_hitl_gate_phase_transition/10_e2e_integration_test_hitl_gate_phase_transition.md": [
+    "13_hitl_gate_phase_transition/01_phase_gate_data_model_and_state_machine.md",
+    "13_hitl_gate_phase_transition/02_confidence_score_validator_and_deep_search_trigger.md",
+    "13_hitl_gate_phase_transition/03_hitl_approval_presentation_service.md",
+    "13_hitl_gate_phase_transition/05_discovery_phase_orchestrator_and_hitl_integration.md",
+    "13_hitl_gate_phase_transition/06_discovery_to_architecture_phase_transition.md",
+    "13_hitl_gate_phase_transition/07_discovery_definition_of_done_checker.md",
+    "13_hitl_gate_phase_transition/08_sqlite_persistence_for_phase_gate_records.md"
   ]
 }

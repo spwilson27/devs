@@ -1,42 +1,234 @@
 {
-  "01_module_foundation_directory_structure": [],
-  "02_sandbox_abstraction_layer": [
-    "01_module_foundation_directory_structure"
+  "01_module_foundation_directory_structure/01_initialize_sandbox_package.md": [],
+  "01_module_foundation_directory_structure/02_establish_src_directory_structure.md": [
+    "01_module_foundation_directory_structure/01_initialize_sandbox_package.md"
   ],
-  "03_docker_driver_implementation": [
-    "02_sandbox_abstraction_layer"
+  "01_module_foundation_directory_structure/03_establish_tests_directory_structure.md": [
+    "01_module_foundation_directory_structure/01_initialize_sandbox_package.md",
+    "01_module_foundation_directory_structure/02_establish_src_directory_structure.md"
   ],
-  "04_webcontainer_driver_implementation": [
-    "02_sandbox_abstraction_layer"
+  "01_module_foundation_directory_structure/04_create_agent_aod_directory.md": [
+    "01_module_foundation_directory_structure/01_initialize_sandbox_package.md"
   ],
-  "05_filesystem_manager_isolation": [
-    "03_docker_driver_implementation",
-    "04_webcontainer_driver_implementation"
+  "01_module_foundation_directory_structure/05_implement_bootstrap_sandbox_script.md": [
+    "01_module_foundation_directory_structure/02_establish_src_directory_structure.md"
   ],
-  "06_network_egress_control": [
-    "03_docker_driver_implementation",
-    "04_webcontainer_driver_implementation"
+  "01_module_foundation_directory_structure/06_implement_validate_all_script.md": [
+    "01_module_foundation_directory_structure/02_establish_src_directory_structure.md",
+    "01_module_foundation_directory_structure/03_establish_tests_directory_structure.md"
   ],
-  "07_resource_quotas_constraints": [
-    "05_filesystem_manager_isolation"
+  "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md": [
+    "01_module_foundation_directory_structure/02_establish_src_directory_structure.md"
   ],
-  "08_sandbox_lifecycle_environment_management": [
-    "05_filesystem_manager_isolation"
+  "02_sandbox_abstraction_layer/02_implement_docker_driver.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md"
   ],
-  "09_secretmasker_middleware_core": [],
-  "10_redaction_pipeline_phases": [
-    "09_secretmasker_middleware_core"
+  "02_sandbox_abstraction_layer/03_implement_webcontainer_driver.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md",
+    "02_sandbox_abstraction_layer/02_implement_docker_driver.md"
   ],
-  "11_sandbox_security_monitoring_breach_detection": [
-    "06_network_egress_control",
-    "07_resource_quotas_constraints",
-    "08_sandbox_lifecycle_environment_management"
+  "02_sandbox_abstraction_layer/04_implement_sandbox_lifecycle_manager.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md"
   ],
-  "12_user-facing_sandbox_features_verification": [
-    "10_redaction_pipeline_phases",
-    "11_sandbox_security_monitoring_breach_detection"
+  "03_docker_driver_implementation/01_hardened_docker_base_image.md": [
+    "01_module_foundation_directory_structure/01_initialize_sandbox_package.md"
   ],
-  "13_definition_of_done": [
-    "12_user-facing_sandbox_features_verification"
+  "03_docker_driver_implementation/02_docker_driver_core_implementation.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md",
+    "03_docker_driver_implementation/01_hardened_docker_base_image.md"
+  ],
+  "03_docker_driver_implementation/03_docker_driver_security_hardening.md": [
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md"
+  ],
+  "03_docker_driver_implementation/04_image_reconstruction_and_fallback_registry.md": [
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md"
+  ],
+  "03_docker_driver_implementation/05_dependency_vulnerability_scanning.md": [
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md"
+  ],
+  "04_webcontainer_driver_implementation/01_spike_webcontainer_parity_research.md": [
+    "01_module_foundation_directory_structure/01_initialize_sandbox_package.md"
+  ],
+  "04_webcontainer_driver_implementation/02_webcontainer_driver_core_implementation.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md",
+    "04_webcontainer_driver_implementation/01_spike_webcontainer_parity_research.md"
+  ],
+  "04_webcontainer_driver_implementation/03_webcontainer_syscall_compatibility_layer.md": [
+    "04_webcontainer_driver_implementation/02_webcontainer_driver_core_implementation.md"
+  ],
+  "04_webcontainer_driver_implementation/04_webcontainer_native_dependency_fallback.md": [
+    "04_webcontainer_driver_implementation/03_webcontainer_syscall_compatibility_layer.md"
+  ],
+  "04_webcontainer_driver_implementation/05_webcontainer_driver_integration_tests.md": [
+    "04_webcontainer_driver_implementation/02_webcontainer_driver_core_implementation.md",
+    "04_webcontainer_driver_implementation/04_webcontainer_native_dependency_fallback.md"
+  ],
+  "05_filesystem_manager_isolation/01_filesystem_manager_core.md": [
+    "01_module_foundation_directory_structure/02_establish_src_directory_structure.md"
+  ],
+  "05_filesystem_manager_isolation/02_readonly_root_and_tmpfs_configuration.md": [
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md"
+  ],
+  "05_filesystem_manager_isolation/03_temporary_directory_lifecycle_and_permissions.md": [
+    "05_filesystem_manager_isolation/01_filesystem_manager_core.md"
+  ],
+  "06_network_egress_control/01_core_proxy_server_skeleton.md": [
+    "01_module_foundation_directory_structure/02_establish_src_directory_structure.md"
+  ],
+  "06_network_egress_control/02_domain_allowlist_enforcement_engine.md": [
+    "06_network_egress_control/01_core_proxy_server_skeleton.md"
+  ],
+  "06_network_egress_control/03_isolated_dns_resolver.md": [
+    "06_network_egress_control/02_domain_allowlist_enforcement_engine.md"
+  ],
+  "06_network_egress_control/04_docker_network_bridge_integration.md": [
+    "06_network_egress_control/01_core_proxy_server_skeleton.md",
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md"
+  ],
+  "06_network_egress_control/05_webcontainer_network_shim.md": [
+    "06_network_egress_control/02_domain_allowlist_enforcement_engine.md",
+    "04_webcontainer_driver_implementation/02_webcontainer_driver_core_implementation.md"
+  ],
+  "06_network_egress_control/06_proxy_audit_logging_and_observability.md": [
+    "06_network_egress_control/01_core_proxy_server_skeleton.md"
+  ],
+  "06_network_egress_control/07_e2e_egress_policy_validation_ci_gate.md": [
+    "06_network_egress_control/04_docker_network_bridge_integration.md",
+    "06_network_egress_control/05_webcontainer_network_shim.md",
+    "06_network_egress_control/06_proxy_audit_logging_and_observability.md",
+    "06_network_egress_control/03_isolated_dns_resolver.md"
+  ],
+  "07_resource_quotas_constraints/01_configure_docker_cpu_ram_cgroup_limits.md": [
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md"
+  ],
+  "07_resource_quotas_constraints/02_implement_execution_time_cap.md": [
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md",
+    "04_webcontainer_driver_implementation/02_webcontainer_driver_core_implementation.md"
+  ],
+  "07_resource_quotas_constraints/03_implement_run_shell_monitored_cpu_rss_kill.md": [],
+  "07_resource_quotas_constraints/04_enforce_writable_volume_disk_quotas.md": [
+    "07_resource_quotas_constraints/01_configure_docker_cpu_ram_cgroup_limits.md",
+    "05_filesystem_manager_isolation/01_filesystem_manager_core.md"
+  ],
+  "07_resource_quotas_constraints/05_sandbox_resource_exhaustion_detection_cleanup.md": [
+    "07_resource_quotas_constraints/04_enforce_writable_volume_disk_quotas.md",
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md"
+  ],
+  "08_sandbox_lifecycle_environment_management/01_preflight_sandbox_injection.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md",
+    "05_filesystem_manager_isolation/01_filesystem_manager_core.md"
+  ],
+  "08_sandbox_lifecycle_environment_management/02_sandbox_cleanup_conditional_persistence.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md"
+  ],
+  "08_sandbox_lifecycle_environment_management/03_env_variable_sanitization.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md"
+  ],
+  "08_sandbox_lifecycle_environment_management/04_secure_secret_injection.md": [
+    "08_sandbox_lifecycle_environment_management/01_preflight_sandbox_injection.md"
+  ],
+  "08_sandbox_lifecycle_environment_management/05_ephemeral_session_key_rotation.md": [
+    "08_sandbox_lifecycle_environment_management/04_secure_secret_injection.md"
+  ],
+  "08_sandbox_lifecycle_environment_management/06_sandbox_orchestrator_fresh_ephemeral_lifecycle.md": [
+    "08_sandbox_lifecycle_environment_management/05_ephemeral_session_key_rotation.md",
+    "08_sandbox_lifecycle_environment_management/02_sandbox_cleanup_conditional_persistence.md",
+    "08_sandbox_lifecycle_environment_management/03_env_variable_sanitization.md"
+  ],
+  "09_secretmasker_middleware_core/01_secretmasker_module_setup_and_interface_definition.md": [],
+  "09_secretmasker_middleware_core/02_regex_pattern_library_implementation.md": [
+    "09_secretmasker_middleware_core/01_secretmasker_module_setup_and_interface_definition.md"
+  ],
+  "09_secretmasker_middleware_core/03_shannon_entropy_engine_implementation.md": [
+    "09_secretmasker_middleware_core/01_secretmasker_module_setup_and_interface_definition.md"
+  ],
+  "09_secretmasker_middleware_core/04_three_phase_redaction_pipeline.md": [
+    "09_secretmasker_middleware_core/02_regex_pattern_library_implementation.md",
+    "09_secretmasker_middleware_core/03_shannon_entropy_engine_implementation.md"
+  ],
+  "09_secretmasker_middleware_core/05_toolproxy_stream_integration.md": [
+    "09_secretmasker_middleware_core/04_three_phase_redaction_pipeline.md"
+  ],
+  "09_secretmasker_middleware_core/06_pre_persistence_redaction_sqlite_integration.md": [
+    "09_secretmasker_middleware_core/04_three_phase_redaction_pipeline.md"
+  ],
+  "09_secretmasker_middleware_core/07_acceptance_testing_and_security_verification.md": [
+    "09_secretmasker_middleware_core/04_three_phase_redaction_pipeline.md"
+  ],
+  "10_redaction_pipeline_phases/01_shannon_entropy_detector.md": [
+    "09_secretmasker_middleware_core/01_secretmasker_module_setup_and_interface_definition.md"
+  ],
+  "10_redaction_pipeline_phases/02_regex_pattern_library.md": [
+    "09_secretmasker_middleware_core/01_secretmasker_module_setup_and_interface_definition.md"
+  ],
+  "10_redaction_pipeline_phases/03_phase1_scanner.md": [
+    "10_redaction_pipeline_phases/01_shannon_entropy_detector.md",
+    "10_redaction_pipeline_phases/02_regex_pattern_library.md"
+  ],
+  "10_redaction_pipeline_phases/04_phase2_contextual_validation.md": [
+    "10_redaction_pipeline_phases/03_phase1_scanner.md"
+  ],
+  "10_redaction_pipeline_phases/05_phase3_replacement_hashing.md": [
+    "10_redaction_pipeline_phases/04_phase2_contextual_validation.md"
+  ],
+  "10_redaction_pipeline_phases/06_reasoning_log_anonymization.md": [
+    "10_redaction_pipeline_phases/05_phase3_replacement_hashing.md"
+  ],
+  "10_redaction_pipeline_phases/07_ui_redaction_parity_stream.md": [
+    "10_redaction_pipeline_phases/05_phase3_replacement_hashing.md"
+  ],
+  "10_redaction_pipeline_phases/08_secret_masker_integration.md": [
+    "10_redaction_pipeline_phases/05_phase3_replacement_hashing.md",
+    "10_redaction_pipeline_phases/06_reasoning_log_anonymization.md",
+    "10_redaction_pipeline_phases/07_ui_redaction_parity_stream.md"
+  ],
+  "11_sandbox_security_monitoring_breach_detection/01_sandbox_monitor_core.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md"
+  ],
+  "11_sandbox_security_monitoring_breach_detection/02_cpu_resource_exhaustion_detector.md": [
+    "11_sandbox_security_monitoring_breach_detection/01_sandbox_monitor_core.md"
+  ],
+  "11_sandbox_security_monitoring_breach_detection/03_sandbox_escape_detection_hardening.md": [
+    "11_sandbox_security_monitoring_breach_detection/01_sandbox_monitor_core.md",
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md"
+  ],
+  "11_sandbox_security_monitoring_breach_detection/04_post_install_dependency_audit_gate.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md"
+  ],
+  "11_sandbox_security_monitoring_breach_detection/05_dependency_deadlock_tas_reconciliation.md": [],
+  "11_sandbox_security_monitoring_breach_detection/06_canonical_sandbox_images_determinism.md": [
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md",
+    "11_sandbox_security_monitoring_breach_detection/01_sandbox_monitor_core.md"
+  ],
+  "12_user-facing_sandbox_features_verification/01_sandbox_isolation_ui_configuration.md": [],
+  "12_user-facing_sandbox_features_verification/02_sandbox_monitor_resource_limit_enforcement.md": [
+    "11_sandbox_security_monitoring_breach_detection/01_sandbox_monitor_core.md",
+    "07_resource_quotas_constraints/01_configure_docker_cpu_ram_cgroup_limits.md"
+  ],
+  "12_user-facing_sandbox_features_verification/03_network_egress_blocking_verification_audit.md": [
+    "06_network_egress_control/07_e2e_egress_policy_validation_ci_gate.md",
+    "11_sandbox_security_monitoring_breach_detection/03_sandbox_escape_detection_hardening.md"
+  ],
+  "12_user-facing_sandbox_features_verification/04_secret_masker_accuracy_benchmark.md": [
+    "10_redaction_pipeline_phases/08_secret_masker_integration.md"
+  ],
+  "12_user-facing_sandbox_features_verification/05_sandbox_latency_profiling_scale_benchmarks.md": [
+    "02_sandbox_abstraction_layer/01_define_sandbox_provider_interface.md",
+    "03_docker_driver_implementation/02_docker_driver_core_implementation.md",
+    "04_webcontainer_driver_implementation/02_webcontainer_driver_core_implementation.md"
+  ],
+  "13_definition_of_done/01_sandbox_isolation_verification_suite.md": [
+    "06_network_egress_control/07_e2e_egress_policy_validation_ci_gate.md"
+  ],
+  "13_definition_of_done/02_secretmasker_benchmark_suite.md": [
+    "12_user-facing_sandbox_features_verification/04_secret_masker_accuracy_benchmark.md"
+  ],
+  "13_definition_of_done/03_surgical_edit_large_file_refactor_verification.md": [],
+  "13_definition_of_done/04_mcp_handshake_success_rate_verification.md": [],
+  "13_definition_of_done/05_phase2_dod_automated_gate_and_audit.md": [
+    "13_definition_of_done/01_sandbox_isolation_verification_suite.md",
+    "13_definition_of_done/02_secretmasker_benchmark_suite.md",
+    "13_definition_of_done/03_surgical_edit_large_file_refactor_verification.md",
+    "13_definition_of_done/04_mcp_handshake_success_rate_verification.md"
   ]
 }

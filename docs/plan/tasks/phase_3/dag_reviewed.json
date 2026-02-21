@@ -1,52 +1,239 @@
 {
-  "01_mcp_protocol_foundation_standards": [],
-  "02_saop_protocol_implementation": [],
-  "03_ipc_security_authentication": [
-    "01_mcp_protocol_foundation_standards",
-    "04_orchestratorserver_core"
+  "01_mcp_protocol_foundation_standards/01_mcp_package_scaffold_and_sdk_integration.md": [],
+  "01_mcp_protocol_foundation_standards/02_mcp_tool_interface_schemas_and_standards.md": [
+    "01_mcp_protocol_foundation_standards/01_mcp_package_scaffold_and_sdk_integration.md"
   ],
-  "04_orchestratorserver_core": [
-    "01_mcp_protocol_foundation_standards"
+  "01_mcp_protocol_foundation_standards/03_ipc_transport_unix_sockets_named_pipes.md": [
+    "01_mcp_protocol_foundation_standards/01_mcp_package_scaffold_and_sdk_integration.md"
   ],
-  "05_orchestratorserver_tools": [
-    "04_orchestratorserver_core"
+  "01_mcp_protocol_foundation_standards/04_mcp_spec_compliance_validator_and_version_registry.md": [
+    "01_mcp_protocol_foundation_standards/01_mcp_package_scaffold_and_sdk_integration.md"
   ],
-  "06_tool_registry_proxy": [
-    "01_mcp_protocol_foundation_standards"
+  "01_mcp_protocol_foundation_standards/05_mcp_native_architecture_blueprint.md": [
+    "01_mcp_protocol_foundation_standards/02_mcp_tool_interface_schemas_and_standards.md",
+    "01_mcp_protocol_foundation_standards/04_mcp_spec_compliance_validator_and_version_registry.md"
   ],
-  "07_sandbox_bridge_injection": [
-    "06_tool_registry_proxy"
+  "02_saop_protocol_implementation/01_define_saop_envelope_json_schema.md": [],
+  "02_saop_protocol_implementation/02_implement_saop_parser_and_validator.md": [
+    "02_saop_protocol_implementation/01_define_saop_envelope_json_schema.md"
   ],
-  "08_projectserver_template": [
-    "01_mcp_protocol_foundation_standards"
+  "02_saop_protocol_implementation/03_implement_turn_index_tracking.md": [
+    "02_saop_protocol_implementation/02_implement_saop_parser_and_validator.md"
   ],
-  "09_projectserver_introspection_tools": [
-    "08_projectserver_template"
+  "02_saop_protocol_implementation/04_implement_context_refresh_logic.md": [
+    "02_saop_protocol_implementation/02_implement_saop_parser_and_validator.md"
   ],
-  "10_observability_real-time_tracing": [
-    "02_saop_protocol_implementation",
-    "04_orchestratorserver_core"
+  "03_ipc_security_authentication/01_ipc_transport_unix_socket_named_pipe.md": [],
+  "03_ipc_security_authentication/02_ipc_handshake_token_generation_validation.md": [
+    "03_ipc_security_authentication/01_ipc_transport_unix_socket_named_pipe.md"
   ],
-  "11_flight_recorder_audit_logging": [
-    "10_observability_real-time_tracing"
+  "03_ipc_security_authentication/03_x25519_key_exchange_session_encryption.md": [
+    "03_ipc_security_authentication/02_ipc_handshake_token_generation_validation.md"
   ],
-  "12_agent_turn_management_error_recovery": [
-    "02_saop_protocol_implementation",
-    "07_sandbox_bridge_injection"
+  "03_ipc_security_authentication/04_mcp_localhost_binding_bearer_token_auth.md": [],
+  "03_ipc_security_authentication/05_cryptographic_mcp_tools_orchestrator.md": [
+    "03_ipc_security_authentication/04_mcp_localhost_binding_bearer_token_auth.md"
   ],
-  "13_agent_autonomy_reviewer_intelligence": [
-    "04_orchestratorserver_core",
-    "11_flight_recorder_audit_logging"
+  "04_orchestratorserver_core/01_orchestratorserver_package_setup.md": [
+    "01_mcp_protocol_foundation_standards/01_mcp_package_scaffold_and_sdk_integration.md"
   ],
-  "14_multi-agent_distributed_execution": [
-    "02_saop_protocol_implementation",
-    "06_tool_registry_proxy",
-    "08_projectserver_template",
-    "11_flight_recorder_audit_logging"
+  "04_orchestratorserver_core/02_orchestratorserver_data_models.md": [
+    "04_orchestratorserver_core/01_orchestratorserver_package_setup.md"
   ],
-  "15_risk_mitigations_resilience": [
-    "02_saop_protocol_implementation",
-    "06_tool_registry_proxy",
-    "11_flight_recorder_audit_logging"
+  "04_orchestratorserver_core/03_orchestratorserver_mcp_initialization.md": [
+    "04_orchestratorserver_core/02_orchestratorserver_data_models.md"
+  ],
+  "04_orchestratorserver_core/04_orchestratorserver_state_exposure_tools.md": [
+    "04_orchestratorserver_core/03_orchestratorserver_mcp_initialization.md"
+  ],
+  "04_orchestratorserver_core/05_orchestratorserver_handshake_reliability.md": [
+    "04_orchestratorserver_core/03_orchestratorserver_mcp_initialization.md"
+  ],
+  "04_orchestratorserver_core/06_orchestratorserver_lifecycle_integration.md": [
+    "04_orchestratorserver_core/03_orchestratorserver_mcp_initialization.md"
+  ],
+  "05_orchestratorserver_tools/01_implement_get_project_context_tool.md": [
+    "04_orchestratorserver_core/04_orchestratorserver_state_exposure_tools.md"
+  ],
+  "05_orchestratorserver_tools/02_implement_search_memory_tool.md": [
+    "04_orchestratorserver_core/04_orchestratorserver_state_exposure_tools.md"
+  ],
+  "05_orchestratorserver_tools/03_implement_get_project_status_tool.md": [
+    "04_orchestratorserver_core/04_orchestratorserver_state_exposure_tools.md"
+  ],
+  "05_orchestratorserver_tools/04_implement_inject_directive_tool.md": [
+    "04_orchestratorserver_core/04_orchestratorserver_state_exposure_tools.md"
+  ],
+  "05_orchestratorserver_tools/05_implement_rewind_to_task_tool.md": [
+    "04_orchestratorserver_core/04_orchestratorserver_state_exposure_tools.md"
+  ],
+  "05_orchestratorserver_tools/06_expose_mcp_state_and_assistant_querying.md": [
+    "05_orchestratorserver_tools/01_implement_get_project_context_tool.md",
+    "05_orchestratorserver_tools/02_implement_search_memory_tool.md",
+    "05_orchestratorserver_tools/03_implement_get_project_status_tool.md",
+    "05_orchestratorserver_tools/04_implement_inject_directive_tool.md",
+    "05_orchestratorserver_tools/05_implement_rewind_to_task_tool.md"
+  ],
+  "05_orchestratorserver_tools/07_implement_run_mcp_script.md": [
+    "05_orchestratorserver_tools/06_expose_mcp_state_and_assistant_querying.md",
+    "04_orchestratorserver_core/06_orchestratorserver_lifecycle_integration.md"
+  ],
+  "06_tool_registry_proxy/01_tool_registry_foundation.md": [],
+  "06_tool_registry_proxy/02_phase_scoped_tool_filtering.md": [
+    "06_tool_registry_proxy/01_tool_registry_foundation.md"
+  ],
+  "06_tool_registry_proxy/03_json_schema_validation_and_argument_enforcement.md": [
+    "06_tool_registry_proxy/01_tool_registry_foundation.md"
+  ],
+  "06_tool_registry_proxy/04_path_sanitization_and_access_control.md": [
+    "06_tool_registry_proxy/01_tool_registry_foundation.md"
+  ],
+  "06_tool_registry_proxy/05_tool_proxy_sandbox_bridge.md": [
+    "06_tool_registry_proxy/03_json_schema_validation_and_argument_enforcement.md",
+    "06_tool_registry_proxy/04_path_sanitization_and_access_control.md"
+  ],
+  "07_sandbox_bridge_injection/01_implement_tool_proxy_sandbox_bridge.md": [
+    "06_tool_registry_proxy/05_tool_proxy_sandbox_bridge.md"
+  ],
+  "07_sandbox_bridge_injection/02_implement_sandbox_retry_protocol.md": [
+    "07_sandbox_bridge_injection/01_implement_tool_proxy_sandbox_bridge.md"
+  ],
+  "07_sandbox_bridge_injection/03_implement_state_pollution_prevention.md": [
+    "07_sandbox_bridge_injection/01_implement_tool_proxy_sandbox_bridge.md"
+  ],
+  "08_projectserver_template/01_project_server_template_scaffold.md": [],
+  "08_projectserver_template/02_mcp_server_entry_point_and_transport.md": [
+    "08_projectserver_template/01_project_server_template_scaffold.md"
+  ],
+  "08_projectserver_template/03_introspection_tools_implementation.md": [
+    "08_projectserver_template/02_mcp_server_entry_point_and_transport.md"
+  ],
+  "08_projectserver_template/04_lifecycle_sync_autostart.md": [
+    "08_projectserver_template/02_mcp_server_entry_point_and_transport.md"
+  ],
+  "08_projectserver_template/05_integrate_template_into_generation_pipeline.md": [
+    "08_projectserver_template/01_project_server_template_scaffold.md"
+  ],
+  "08_projectserver_template/06_mcp_native_integration_and_aod_manifest.md": [
+    "08_projectserver_template/03_introspection_tools_implementation.md"
+  ],
+  "09_projectserver_introspection_tools/01_define_introspection_interfaces_and_types.md": [],
+  "09_projectserver_introspection_tools/02_implement_introspection_point_registry.md": [
+    "09_projectserver_introspection_tools/01_define_introspection_interfaces_and_types.md"
+  ],
+  "09_projectserver_introspection_tools/03_implement_filesystem_operation_tool.md": [
+    "09_projectserver_introspection_tools/01_define_introspection_interfaces_and_types.md"
+  ],
+  "09_projectserver_introspection_tools/04_implement_inspect_state_tool.md": [
+    "09_projectserver_introspection_tools/02_implement_introspection_point_registry.md"
+  ],
+  "09_projectserver_introspection_tools/05_implement_run_test_task_tool.md": [
+    "09_projectserver_introspection_tools/01_define_introspection_interfaces_and_types.md",
+    "09_projectserver_introspection_tools/03_implement_filesystem_operation_tool.md"
+  ],
+  "09_projectserver_introspection_tools/06_implement_run_profiler_tool.md": [
+    "09_projectserver_introspection_tools/01_define_introspection_interfaces_and_types.md",
+    "09_projectserver_introspection_tools/03_implement_filesystem_operation_tool.md"
+  ],
+  "09_projectserver_introspection_tools/07_implement_execute_query_tool.md": [
+    "09_projectserver_introspection_tools/01_define_introspection_interfaces_and_types.md",
+    "09_projectserver_introspection_tools/03_implement_filesystem_operation_tool.md"
+  ],
+  "09_projectserver_introspection_tools/08_implement_read_logs_tool.md": [
+    "09_projectserver_introspection_tools/01_define_introspection_interfaces_and_types.md"
+  ],
+  "10_observability_real-time_tracing/01_define_observation_json_standard.md": [
+    "02_saop_protocol_implementation/01_define_saop_envelope_json_schema.md"
+  ],
+  "10_observability_real-time_tracing/02_implement_flight_recorder_trace_log.md": [
+    "10_observability_real-time_tracing/01_define_observation_json_standard.md"
+  ],
+  "10_observability_real-time_tracing/03_implement_saop_trace_stream_endpoint.md": [
+    "10_observability_real-time_tracing/02_implement_flight_recorder_trace_log.md"
+  ],
+  "10_observability_real-time_tracing/04_build_agent_console_backend_pipeline.md": [
+    "10_observability_real-time_tracing/03_implement_saop_trace_stream_endpoint.md"
+  ],
+  "10_observability_real-time_tracing/05_implement_projectserver_mcp_observability_tools.md": [
+    "10_observability_real-time_tracing/01_define_observation_json_standard.md"
+  ],
+  "10_observability_real-time_tracing/06_validate_observability_stack_e2e.md": [
+    "10_observability_real-time_tracing/04_build_agent_console_backend_pipeline.md",
+    "10_observability_real-time_tracing/05_implement_projectserver_mcp_observability_tools.md"
+  ],
+  "11_flight_recorder_audit_logging/01_agent_logs_sqlite_schema.md": [],
+  "11_flight_recorder_audit_logging/02_saop_turn_persistence_service.md": [
+    "11_flight_recorder_audit_logging/01_agent_logs_sqlite_schema.md",
+    "02_saop_protocol_implementation/01_define_saop_envelope_json_schema.md"
+  ],
+  "11_flight_recorder_audit_logging/03_immutable_observation_capture.md": [
+    "11_flight_recorder_audit_logging/02_saop_turn_persistence_service.md",
+    "10_observability_real-time_tracing/01_define_observation_json_standard.md"
+  ],
+  "11_flight_recorder_audit_logging/04_log_metadata_correlation.md": [
+    "11_flight_recorder_audit_logging/02_saop_turn_persistence_service.md"
+  ],
+  "11_flight_recorder_audit_logging/05_git_db_correlation_trace_linked_commits.md": [
+    "11_flight_recorder_audit_logging/02_saop_turn_persistence_service.md"
+  ],
+  "11_flight_recorder_audit_logging/06_structured_audit_export_cli.md": [
+    "11_flight_recorder_audit_logging/05_git_db_correlation_trace_linked_commits.md"
+  ],
+  "12_agent_turn_management_error_recovery/01_malformed_response_retry_protocol.md": [
+    "02_saop_protocol_implementation/02_implement_saop_parser_and_validator.md"
+  ],
+  "12_agent_turn_management_error_recovery/02_partial_completions_resume_protocol.md": [
+    "12_agent_turn_management_error_recovery/01_malformed_response_retry_protocol.md"
+  ],
+  "12_agent_turn_management_error_recovery/03_tool_timeout_enforcement.md": [
+    "06_tool_registry_proxy/05_tool_proxy_sandbox_bridge.md"
+  ],
+  "12_agent_turn_management_error_recovery/04_task_to_task_handoff_task_summary.md": [
+    "11_flight_recorder_audit_logging/02_saop_turn_persistence_service.md"
+  ],
+  "12_agent_turn_management_error_recovery/05_binary_gate_protocol_sandbox_transitions.md": [
+    "07_sandbox_bridge_injection/01_implement_tool_proxy_sandbox_bridge.md"
+  ],
+  "12_agent_turn_management_error_recovery/06_requirement_tagged_logic_annotations.md": [],
+  "13_agent_autonomy_reviewer_intelligence/01_implement_hitl_gate_state_machine.md": [],
+  "13_agent_autonomy_reviewer_intelligence/02_implement_failure_report_generator.md": [
+    "11_flight_recorder_audit_logging/02_saop_turn_persistence_service.md"
+  ],
+  "13_agent_autonomy_reviewer_intelligence/03_implement_reviewer_audit_engine.md": [
+    "13_agent_autonomy_reviewer_intelligence/02_implement_failure_report_generator.md"
+  ],
+  "13_agent_autonomy_reviewer_intelligence/04_implement_shadow_requirement_detector.md": [
+    "13_agent_autonomy_reviewer_intelligence/03_implement_reviewer_audit_engine.md"
+  ],
+  "13_agent_autonomy_reviewer_intelligence/05_implement_aod_manifest_projectserver.md": [
+    "08_projectserver_template/06_mcp_native_integration_and_aod_manifest.md",
+    "13_agent_autonomy_reviewer_intelligence/03_implement_reviewer_audit_engine.md"
+  ],
+  "13_agent_autonomy_reviewer_intelligence/06_implement_tool_schema_validator_help_prompt.md": [
+    "06_tool_registry_proxy/03_json_schema_validation_and_argument_enforcement.md"
+  ],
+  "14_multi-agent_distributed_execution/01_agent_id_partitioning_in_agent_logs.md": [
+    "11_flight_recorder_audit_logging/01_agent_logs_sqlite_schema.md"
+  ],
+  "14_multi-agent_distributed_execution/02_multi-agent_collaboration_coordinator.md": [],
+  "14_multi-agent_distributed_execution/03_saop_parallel_turn_support.md": [
+    "02_saop_protocol_implementation/01_define_saop_envelope_json_schema.md"
+  ],
+  "14_multi-agent_distributed_execution/04_multi-container_project_server_registry.md": [],
+  "14_multi-agent_distributed_execution/05_cross-container_tool_routing_in_toolproxy.md": [
+    "06_tool_registry_proxy/05_tool_proxy_sandbox_bridge.md",
+    "14_multi-agent_distributed_execution/04_multi-container_project_server_registry.md"
+  ],
+  "14_multi-agent_distributed_execution/06_background_process_manager.md": [],
+  "14_multi-agent_distributed_execution/07_deterministic_entropy_hashing.md": [],
+  "15_risk_mitigations_resilience/01_agent_log_archival_strategy.md": [
+    "11_flight_recorder_audit_logging/01_agent_logs_sqlite_schema.md"
+  ],
+  "15_risk_mitigations_resilience/02_saop_schema_versioning_and_migration.md": [
+    "02_saop_protocol_implementation/01_define_saop_envelope_json_schema.md",
+    "11_flight_recorder_audit_logging/01_agent_logs_sqlite_schema.md"
+  ],
+  "15_risk_mitigations_resilience/03_non_utf8_tool_output_handling.md": [
+    "06_tool_registry_proxy/05_tool_proxy_sandbox_bridge.md"
   ]
 }
