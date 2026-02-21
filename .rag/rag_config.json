@@ -1,5 +1,5 @@
 {
-    "_comment": "RAG source configuration. Add one entry per directory you want indexed.",
+    "_comment": "RAG source configuration. Each source may provide `dir` (legacy) or `dirs` (array of path patterns). Use '**' for recursive globs or trailing '/' for non-recursive.",
     "skip_dirs": [
         ".git",
         "target",
@@ -10,11 +10,18 @@
     ],
     "sources": [
         {
-            "dir": "../docs",
+            "dirs": ["../docs/**", "../.agent/**"],
             "extensions": [
                 ".md"
             ],
             "label": "docs"
+        },
+        {
+            "dirs": ["../*", "../src/**", "../packages/**"],
+            "extensions": [
+                ".md", ".py", ".ts", ".tsx", ".js", ".jsx", ".yaml", ".json"
+            ],
+            "label": "src"
         }
     ]
 }
