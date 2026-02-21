@@ -23,5 +23,17 @@ done
 echo "Running git worktree prune..."
 git worktree prune
 
+echo "Deleting branches starting with 'ai-phase'..."
+for branch in $(git branch --format='%(refname:short)' --list 'ai-phase*'); do
+    echo "Deleting branch: $branch"
+    git branch -D "$branch"
+done
+
+echo "Running prune"
+git prune
+
+echo "Running git gc..."
+git gc
+
 echo "Done."
 
