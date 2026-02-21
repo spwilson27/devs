@@ -10,7 +10,7 @@
     ],
     "sources": [
         {
-            "dir": "../",
+            "dir": "../docs",
             "extensions": [
                 ".md"
             ],
