@@ -1,32 +1,34 @@
-# Task: Suspended Sandbox Access UI/CLI (Sub-Epic: 32_4_USER_FEATURES)
+# Task: Implement Suspended Sandbox Access (Sub-Epic: 32_4_USER_FEATURES)
 
 ## Covered Requirements
 - [4_USER_FEATURES-REQ-062]
 
 ## 1. Initial Test Written
-- [ ] Integration tests for CLI commands: `devs sandbox list`, `devs sandbox inspect <id>`, `devs sandbox download <id>`, and `devs sandbox restore <id> --target <path>`.
-- [ ] Tests should assert that `inspect` returns metadata, that `download` returns a valid snapshot archive with expected checksum, and that `restore --target` reconstructs the sandbox in the target path (read-only by default).
-- [ ] Access control tests: verify that only authorized users/process contexts can access snapshots (mock auth layer).
+- [ ] Write an integration test in `src/sandbox/sandbox-manager.test.ts` that simulates a task failure.
+- [ ] Assert that the `SandboxManager` does *not* automatically destroy the Docker/WebContainer instance when the orchestrator transitions to a failed state.
+- [ ] Write a test for the `devs debug --task <ID>` CLI command to verify it successfully retrieves the container ID associated with the failed task and executes an interactive shell session.
 
 ## 2. Task Implementation
-- [ ] Implement CLI subcommands under devs CLI (or API endpoints) backed by SuspendedSandboxManager:
-  - `devs sandbox list [--task <id>]` -> tabular output with snapshot_id, created_at, head_sha, size
-  - `devs sandbox inspect <snapshot_id> [--json]` -> prints metadata
-  - `devs sandbox download <snapshot_id> --out <path>` -> writes tar.gz
-  - `devs sandbox restore <snapshot_id> --target <path> [--read-only]` -> restores files
-- [ ] Implement optional `--mount` behavior that creates a read-only copy or mounts via OS mechanisms (document fallback strategy if mount not available).
-- [ ] Wire CLI commands to the project's auth/permission layer and ensure logging of access events without leaking file contents.
+- [ ] Update `src/sandbox/sandbox-manager.ts` to accept a `keepAliveOnFailure` flag.
+- [ ] Modify the orchestration loop so that upon definitive task failure (exhausted retries or critical error), the sandbox is paused/kept alive rather than torn down, and its container ID is logged to the SQLite `tasks` table under a new `suspended_container_id` column.
+- [ ] Create a new CLI command `devs debug` in `src/cli/commands/debug.ts`.
+- [ ] Implement argument parsing to accept `--task <ID>`. If no ID is provided, default to the most recently failed task.
+- [ ] Implement the logic to look up the `suspended_container_id` from the database.
+- [ ] Use `child_process.spawn` to execute `docker exec -it <container_id> /bin/bash` (or `sh`), piping `stdio: 'inherit'` to give the user direct, one-click terminal access into the container.
+- [ ] Implement cleanup logic so that when the user resumes or starts a new task, old suspended containers are properly garbage collected.
 
 ## 3. Code Review
-- [ ] Verify CLI UX is consistent with existing commands and supports machine-readable JSON output.
-- [ ] Confirm permission checks are enforced server-side for API endpoints.
-- [ ] Ensure downloads are streamed and checksummed.
+- [ ] Ensure that the `stdio: 'inherit'` binding correctly handles terminal resizing and Ctrl+C interrupts without killing the parent `devs` CLI process unexpectedly.
+- [ ] Verify that suspended containers do not accumulate indefinitely and consume excessive disk space/memory (garbage collection is robust).
+- [ ] Ensure the command gracefully handles WebContainer environments (which may require a different terminal attachment approach than Docker).
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run CLI integration tests for list/inspect/download/restore flows and the access control tests.
+- [ ] Run `npm test -- src/sandbox/sandbox-manager.test.ts` and `npm test -- src/cli/commands/debug.test.ts`.
+- [ ] Manually verify (or use E2E scripts) that zombie containers are not left behind after a successful debugging session.
 
 ## 5. Update Documentation
-- [ ] Update docs/sandbox/suspended-snapshots.md with CLI usage examples and security notes about snapshot access.
+- [ ] Document the `devs debug` command in `docs/cli.md`.
+- [ ] Update the debugging guide in `docs/debugging.md` to explain how users can drop into a failed sandbox to manually inspect state.
 
 ## 6. Automated Verification
-- [ ] CI job that runs the sandbox CLI tests and validates checksums for downloads and success of restore operations.
+- [ ] Run a shell script that mocks a failed task, invokes `devs debug --task <mock_id>`, and passes an `ls` command into the stdin of the spawned process, asserting that it returns the directory listing of the container and exits cleanly.

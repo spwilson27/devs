@@ -1,0 +1,90 @@
+{
+  "01_Reviewer Agent Core Initialization": [
+    "9_ROADMAP-TAS-603",
+    "8_RISKS-REQ-096",
+    "1_PRD-REQ-NEED-ARCH-03",
+    "9_ROADMAP-REQ-013"
+  ],
+  "02_Reviewer Agent Prompting & Identity": [
+    "5_SECURITY_DESIGN-REQ-SEC-STR-001",
+    "8_RISKS-REQ-027",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-085",
+    "3_MCP-REQ-MET-009"
+  ],
+  "03_Cross-Verification & Validation Logic": [
+    "1_PRD-REQ-REL-004",
+    "TAS-074",
+    "2_TAS-REQ-005",
+    "3_MCP-TAS-086",
+    "4_USER_FEATURES-REQ-059"
+  ],
+  "04_Automated Code Auditing": [
+    "TAS-033",
+    "1_PRD-REQ-MET-006",
+    "8_RISKS-REQ-067",
+    "9_ROADMAP-REQ-IMP-002"
+  ],
+  "05_Security & SAST Integration": [
+    "8_RISKS-REQ-026",
+    "5_SECURITY_DESIGN-REQ-SEC-THR-004",
+    "8_RISKS-REQ-039",
+    "TAS-019"
+  ],
+  "06_Test Suite Integrity & Flakiness": [
+    "1_PRD-REQ-MET-005",
+    "8_RISKS-REQ-116",
+    "3_MCP-TAS-091",
+    "8_RISKS-REQ-099"
+  ],
+  "07_Documentation Auditing (AOD)": [
+    "1_PRD-REQ-OBS-002",
+    "1_PRD-REQ-MET-007",
+    "3_MCP-REQ-MET-007",
+    "8_RISKS-REQ-061"
+  ],
+  "08_AOD Edge Cases & Details": [
+    "1_PRD-REQ-OBS-006",
+    "1_PRD-REQ-OBS-007",
+    "8_RISKS-REQ-098",
+    "8_RISKS-REQ-068"
+  ],
+  "09_Root Cause Analysis (RCA) & Debugging": [
+    "3_MCP-TAS-096",
+    "8_RISKS-REQ-086",
+    "8_RISKS-REQ-023",
+    "REQ-GOAL-004"
+  ],
+  "10_Human-in-the-Loop & Gates": [
+    "TAS-015",
+    "TAS-048",
+    "8_RISKS-REQ-021",
+    "8_RISKS-REQ-022"
+  ],
+  "11_Escalation & Checkpoints": [
+    "TAS-020",
+    "1_PRD-REQ-UI-015",
+    "1_PRD-REQ-UI-016"
+  ],
+  "12_Global Validation Infrastructure": [
+    "TAS-053",
+    "8_RISKS-REQ-107",
+    "9_ROADMAP-TAS-801",
+    "9_ROADMAP-REQ-042"
+  ],
+  "13_Full System Audits": [
+    "9_ROADMAP-REQ-040",
+    "TAS-032",
+    "8_RISKS-REQ-049",
+    "9_ROADMAP-REQ-005"
+  ],
+  "14_Fact-Checking & Benchmarking": [
+    "8_RISKS-REQ-052",
+    "9_ROADMAP-REQ-034",
+    "9_ROADMAP-TAS-803"
+  ],
+  "15_Quality Metrics Definition": [
+    "9_ROADMAP-REQ-MET-001",
+    "9_ROADMAP-REQ-MET-003",
+    "9_ROADMAP-DOD-P8"
+  ]
+}
