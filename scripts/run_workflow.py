@@ -188,6 +188,21 @@ def run_agent(agent_type: str, prompt_file: str, root_dir: str, task_context: di
     return True
 
 
+def get_existing_worktree(root_dir: str, branch_name: str) -> str:
+    """Returns the path of an existing worktree for the given branch, or None."""
+    try:
+        res = subprocess.run(["git", "worktree", "list", "--porcelain"], cwd=root_dir, capture_output=True, text=True, check=True)
+        current_wt = None
+        for line in res.stdout.splitlines():
+            if line.startswith("worktree "):
+                current_wt = line[9:]
+            elif line.startswith("branch ") and line[7:].endswith(f"refs/heads/{branch_name}"):
+                return current_wt
+    except subprocess.CalledProcessError:
+        pass
+    return None
+
+
 def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: str = "gemini", max_retries: int = 3) -> bool:
     """Handles the lifecycle of a single task: worktree creation, agents, and commit."""
     phase_id, task_id = full_task_id.split("/", 1)
@@ -196,19 +211,30 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: 
     
     worktrees_dir = os.path.join(root_dir, ".agent", "worktrees")
     os.makedirs(worktrees_dir, exist_ok=True)
-    tmpdir = tempfile.mkdtemp(prefix=f"ai_{safe_task_id}_", dir=worktrees_dir)
 
     print(f"\n   -> [Implementation] Starting {full_task_id}")
-    print(f"      Creating git worktree at {tmpdir} on branch {branch_name}...")
     
+    tmpdir = ""
     success = False
     try:
-        # Create worktree
-        try:
-            subprocess.run(["git", "worktree", "add", "-B", branch_name, tmpdir, "dev"], cwd=root_dir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
-        except subprocess.CalledProcessError as e:
-            print(f"      [!] Failed to create worktree:\n{e.stderr.decode('utf-8')}")
-            return False
+        existing_wt = get_existing_worktree(root_dir, branch_name)
+        if existing_wt:
+            tmpdir = existing_wt
+            print(f"      Found existing worktree at {tmpdir} on branch {branch_name}. Resetting to dev...")
+            try:
+                subprocess.run(["git", "reset", "--hard", "dev"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+                subprocess.run(["git", "clean", "-fd"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as e:
+                print(f"      [!] Failed to reset existing worktree:\n{e.stderr.decode('utf-8')}")
+                return False
+        else:
+            tmpdir = tempfile.mkdtemp(prefix=f"ai_{safe_task_id}_", dir=worktrees_dir)
+            print(f"      Creating git worktree at {tmpdir} on branch {branch_name}...")
+            try:
+                subprocess.run(["git", "worktree", "add", "-B", branch_name, tmpdir, "dev"], cwd=root_dir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as e:
+                print(f"      [!] Failed to create worktree:\n{e.stderr.decode('utf-8')}")
+                return False
 
         task_details = get_task_details(root_dir, full_task_id)
         description_ctx = get_project_context(root_dir)
