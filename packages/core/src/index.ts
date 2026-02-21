@@ -33,3 +33,6 @@ export * from "./orchestration/SqliteSaver.js";
 
 // Git-Atomic coordinator: binds SQLite task-state updates to git commits atomically.
 export * from "./orchestration/GitAtomicManager.js";
+
+// Schema drift detection and reconciliation (8_RISKS-REQ-073).
+export * from "./persistence/SchemaReconciler.js";
