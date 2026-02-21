@@ -15,20 +15,30 @@
 /**
  * The canonical set of topics that can be published on the EventBus.
  *
- * - STATE_CHANGE  : Emitted whenever the SQLite state is mutated (task status,
- *                   project lifecycle, etc.). Enables the CLI and VSCode extension
- *                   to stay in sync without polling.
- * - PAUSE         : Control command to pause the active orchestration turn.
- * - RESUME        : Control command to resume a previously paused orchestration.
- * - LOG_STREAM    : Incremental log lines emitted during active orchestration
- *                   turns for real-time streaming to the CLI dashboard or VSCode
- *                   Output Channel.
+ * - STATE_CHANGE      : Emitted whenever the SQLite state is mutated (task status,
+ *                       project lifecycle, etc.). Enables the CLI and VSCode extension
+ *                       to stay in sync without polling.
+ * - PAUSE             : Control command to pause the active orchestration turn.
+ * - RESUME            : Control command to resume a previously paused orchestration.
+ * - LOG_STREAM        : Incremental log lines emitted during active orchestration
+ *                       turns for real-time streaming to the CLI dashboard or VSCode
+ *                       Output Channel.
+ * - TRACE_THOUGHT     : Emitted when an agent emits a reasoning step (thought).
+ *                       Consumed by the TraceInterceptor to persist THOUGHT entries
+ *                       to the `agent_logs` Glass-Box audit table.
+ * - TRACE_ACTION      : Emitted when an agent initiates a tool call. Consumed by
+ *                       the TraceInterceptor to persist ACTION entries.
+ * - TRACE_OBSERVATION : Emitted when an agent receives a tool result. Consumed by
+ *                       the TraceInterceptor to persist OBSERVATION entries.
  */
 export const EventTopics = {
   STATE_CHANGE: "STATE_CHANGE",
   PAUSE: "PAUSE",
   RESUME: "RESUME",
   LOG_STREAM: "LOG_STREAM",
+  TRACE_THOUGHT: "TRACE_THOUGHT",
+  TRACE_ACTION: "TRACE_ACTION",
+  TRACE_OBSERVATION: "TRACE_OBSERVATION",
 } as const;
 
 export type EventTopic = (typeof EventTopics)[keyof typeof EventTopics];
@@ -107,6 +117,84 @@ export interface LogStreamPayload {
   timestamp: string;
 }
 
+/**
+ * Payload for TRACE_THOUGHT events.
+ *
+ * Emitted by an orchestration node when an agent produces a reasoning step.
+ * The TraceInterceptor subscribes to this topic and persists it as a THOUGHT
+ * entry in the `agent_logs` table (Glass-Box audit trail).
+ *
+ * Requirements: [TAS-001], [TAS-046], [1_PRD-REQ-PIL-004]
+ */
+export interface TraceThoughtPayload {
+  /** FK to the task currently being executed. */
+  task_id: number;
+  /** Optional FK to the parent epic (enables epic-scoped audit queries). */
+  epic_id?: number | null;
+  /** Zero-based index of the agent's turn within this task execution. */
+  turn_index: number;
+  /** Agent persona (e.g., "developer", "researcher", "reviewer"). */
+  agent_role: string;
+  /** The raw reasoning text produced by the agent. */
+  thought: string;
+  /** Optional git commit SHA linking the trace to the current repository state. */
+  commit_hash?: string | null;
+  /** ISO 8601 UTC timestamp. */
+  timestamp: string;
+}
+
+/**
+ * Payload for TRACE_ACTION events.
+ *
+ * Emitted by an orchestration node when an agent initiates a tool call.
+ * The TraceInterceptor persists it as an ACTION entry in `agent_logs`.
+ *
+ * Requirements: [TAS-001], [TAS-046], [1_PRD-REQ-PIL-004]
+ */
+export interface TraceActionPayload {
+  /** FK to the task currently being executed. */
+  task_id: number;
+  /** Optional FK to the parent epic. */
+  epic_id?: number | null;
+  /** Zero-based index of the agent's turn within this task execution. */
+  turn_index: number;
+  /** Agent persona. */
+  agent_role: string;
+  /** The name of the tool being invoked. */
+  tool_name: string;
+  /** The structured input provided to the tool. */
+  tool_input: Record<string, unknown>;
+  /** Optional git commit SHA. */
+  commit_hash?: string | null;
+  /** ISO 8601 UTC timestamp. */
+  timestamp: string;
+}
+
+/**
+ * Payload for TRACE_OBSERVATION events.
+ *
+ * Emitted by an orchestration node when an agent receives a tool result.
+ * The TraceInterceptor persists it as an OBSERVATION entry in `agent_logs`.
+ *
+ * Requirements: [TAS-001], [TAS-046], [1_PRD-REQ-PIL-004]
+ */
+export interface TraceObservationPayload {
+  /** FK to the task currently being executed. */
+  task_id: number;
+  /** Optional FK to the parent epic. */
+  epic_id?: number | null;
+  /** Zero-based index of the agent's turn within this task execution. */
+  turn_index: number;
+  /** Agent persona. */
+  agent_role: string;
+  /** The result returned by the tool (any JSON-serialisable value). */
+  tool_result: unknown;
+  /** Optional git commit SHA. */
+  commit_hash?: string | null;
+  /** ISO 8601 UTC timestamp. */
+  timestamp: string;
+}
+
 // ── Payload map & discriminated access ────────────────────────────────────────
 
 /**
@@ -120,6 +208,9 @@ export type EventPayloadMap = {
   PAUSE: PausePayload;
   RESUME: ResumePayload;
   LOG_STREAM: LogStreamPayload;
+  TRACE_THOUGHT: TraceThoughtPayload;
+  TRACE_ACTION: TraceActionPayload;
+  TRACE_OBSERVATION: TraceObservationPayload;
 };
 
 // ── Wire message envelope ──────────────────────────────────────────────────────

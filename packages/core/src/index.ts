@@ -54,6 +54,9 @@ export * from "./persistence/TaskRepository.js";
 // DecisionLogger: structured API for recording agent architectural decisions (TAS-059).
 export * from "./audit/DecisionLogger.js";
 
+// TraceInterceptor: real-time Flight Recorder — captures THOUGHT/ACTION/OBSERVATION to agent_logs (TAS-001, TAS-046, 1_PRD-REQ-PIL-004).
+export * from "./audit/TraceInterceptor.js";
+
 // Cross-process EventBus — typed pub/sub over Unix Domain Sockets (2_TAS-REQ-018, 1_PRD-REQ-INT-004).
 export * from "./events/types.js";
 export * from "./events/EventBus.js";
