@@ -858,15 +858,12 @@ class Phase7ADAGGeneration(BasePhase):
                 
             tasks_content = ""
             for sub_epic in sorted(sub_epics):
-                tasks_content += f"### Task ID: {sub_epic}\n"
-                
-                # Check for multiple md files, take the first one or a specific one if a standard is defined.
-                # In current implementation, detailed tasks might be in an index.md or named after the subepic.
-                # Assuming there's a markdown file inside.
                 sub_epic_dir = os.path.join(phase_dir_path, sub_epic)
                 md_files = [f for f in os.listdir(sub_epic_dir) if f.endswith(".md")]
                 
-                for md_file in md_files:
+                for md_file in sorted(md_files):
+                     task_id = f"{sub_epic}/{md_file}"
+                     tasks_content += f"### Task ID: {task_id}\n"
                      with open(os.path.join(sub_epic_dir, md_file), "r", encoding="utf-8") as f:
                           content = f.read()
                           # Indent content slightly so it's readable
@@ -952,10 +949,12 @@ class Phase7BDAGReview(BasePhase):
             sub_epics = [d for d in os.listdir(phase_dir_path) if os.path.isdir(os.path.join(phase_dir_path, d))]
             tasks_content = ""
             for sub_epic in sorted(sub_epics):
-                tasks_content += f"### Task ID: {sub_epic}\n"
                 sub_epic_dir = os.path.join(phase_dir_path, sub_epic)
                 md_files = [f for f in os.listdir(sub_epic_dir) if f.endswith(".md")]
-                for md_file in md_files:
+                
+                for md_file in sorted(md_files):
+                     task_id = f"{sub_epic}/{md_file}"
+                     tasks_content += f"### Task ID: {task_id}\n"
                      with open(os.path.join(sub_epic_dir, md_file), "r", encoding="utf-8") as f:
                           content = f.read()
                           tasks_content += "\n".join([f"    {line}" for line in content.split("\n")]) + "\n\n"

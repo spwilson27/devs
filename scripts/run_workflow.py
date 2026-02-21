@@ -204,13 +204,85 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
             print(f"      [!] Task failed. Leaving worktree {tmpdir} and branch {branch_name} for investigation.")
 
 
-def phase_sort_key(tid: str):
+def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, max_retries: int = 3) -> bool:
+    """Creates a clean clone of the repo, merges the task branch, and verifies presubmit."""
+    phase_part, name_part = task_id.split("/")
+    branch_name = f"ai-phase-{name_part}"
+    
+    # We clone into a new tmpdir to avoid messing with the developer's main working tree
+    tmpdir = tempfile.mkdtemp(prefix=f"merge_{name_part}_")
+    
+    print(f"\n   => [Merge] Attempting to merge {task_id} into main...")
+    print(f"      Cloning repository to {tmpdir}...")
+    
+    # Clone the repo locally
+    subprocess.run(["git", "clone", root_dir, tmpdir], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    
     try:
-        phase_str, task_name = tid.split("/", 1)
-        phase_num = int(phase_str.replace("phase_", ""))
-        return (phase_num, task_name)
-    except ValueError:
-        return (999, tid)
+        context = {
+            "branches_list": branch_name,
+            "description_ctx": get_project_context(root_dir)
+        }
+        
+        # 1. Verification Loop for Merge
+        for attempt in range(1, max_retries + 1):
+            if attempt == 1:
+                # First attempt: Try a simple fast-forward merge via git CLI
+                print(f"      [Merge] Attempting fast-forward merge (Attempt 1/{max_retries})...")
+                # Checkout branch to fetch it into the clone
+                subprocess.run(["git", "fetch", "origin", branch_name], cwd=tmpdir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                merge_res = subprocess.run(["git", "merge", "--ff-only", f"origin/{branch_name}"], cwd=tmpdir, capture_output=True, text=True)
+                
+                if merge_res.returncode == 0:
+                    print(f"      [Merge] Fast-forward successful. Running presubmit...")
+                    cmd_list = presubmit_cmd.split()
+                    presubmit_res = subprocess.run(cmd_list, cwd=tmpdir, capture_output=True, text=True)
+                    if presubmit_res.returncode == 0:
+                        print(f"      [Merge] Presubmit passed! Pushing to local origin.")
+                        subprocess.run(["git", "push", "origin", "main"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        return True
+                    else:
+                        print(f"      [Merge] Presubmit failed after fast-forward.")
+                        failure_output = f"{presubmit_res.stdout}\n{presubmit_res.stderr}"
+                else:
+                    print(f"      [Merge] Fast-forward failed (diverged).")
+                    failure_output = f"{merge_res.stdout}\n{merge_res.stderr}"
+            else:
+                # Merge Agent Attempt
+                print(f"      [Merge] Spawning Merge Agent to resolve conflicts (Attempt {attempt}/{max_retries})...")
+                
+                # Reset to clean main before the agent tries
+                subprocess.run(["git", "reset", "--hard", "origin/main"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.run(["git", "clean", "-fd"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                
+                failure_ctx = dict(context)
+                failure_ctx["description_ctx"] += f"\n\n### PREVIOUS ATTEMPT FAILURE\nThe previous merge or presubmit failed with:\n```\n{failure_output}\n```\n"
+                
+                if not run_agent("Merge", "merge_task.md", root_dir, failure_ctx, tmpdir):
+                    print(f"      [!] Merge agent failed to cleanly exit.")
+                    continue
+                    
+                # The agent claims it's done. Let's verify.
+                print(f"      [Merge] Verifying agent's merge...")
+                cmd_list = presubmit_cmd.split()
+                presubmit_res = subprocess.run(cmd_list, cwd=tmpdir, capture_output=True, text=True)
+                
+                if presubmit_res.returncode == 0:
+                     print(f"      [Merge] Presubmit passed! Pushing to local origin.")
+                     subprocess.run(["git", "push", "origin", "main"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                     return True
+                else:
+                     failure_output = f"{presubmit_res.stdout}\n{presubmit_res.stderr}"
+                     print(f"      [Merge] Presubmit failed after agent merge.")
+                     
+        print(f"   -> [!] Failed to merge {task_id} after {max_retries} attempts.")
+        return False
+        
+    finally:
+        # Cleanup clone
+        print(f"      Cleaning up merge clone {tmpdir}...")
+        subprocess.run(["rm", "-rf", tmpdir])
+
 
 def get_ready_tasks(master_dag: Dict[str, List[str]], completed_tasks: List[str], active_tasks: List[str]) -> List[str]:
     """Returns a list of task IDs whose prerequisites are fully met and aren't already running or completed."""
@@ -300,12 +372,21 @@ def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str
                 try:
                     success = future.result()
                     if success:
-                        with state_lock:
-                            state["completed_tasks"].append(task_id)
-                            save_workflow_state(state_file, state)
-                        # TODO: Trigger DAG merge for this task/dependents
+                        print(f"   -> [Implementation] Task {task_id} completed successfully.")
+                        
+                        # Trigger DAG Merge Workflow immediately
+                        if merge_task(root_dir, task_id, presubmit_cmd):
+                            with state_lock:
+                                state["completed_tasks"].append(task_id)
+                                state["merged_tasks"].append(task_id)
+                                save_workflow_state(state_file, state)
+                            print(f"   -> [Success] Task {task_id} fully integrated into main.")
+                        else:
+                            print(f"\n[!] FATAL: Task {task_id} failed merging into main. Halting workflow.")
+                            executor.shutdown(wait=False, cancel_futures=True)
+                            sys.exit(1)
                     else:
-                        print(f"\n[!] FATAL: Task {task_id} failed. Halting workflow.")
+                        print(f"\n[!] FATAL: Task {task_id} failed implementation. Halting workflow.")
                         # Drain remaining futures and exit
                         executor.shutdown(wait=False, cancel_futures=True)
                         sys.exit(1)
