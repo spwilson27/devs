@@ -18,3 +18,6 @@ export * from "./orchestration/types.js";
 export * from "./git/GitClient.js";
 export * from "./git/GitIgnoreManager.js";
 export * from "./git/SnapshotManager.js";
+
+// Cyclical OrchestrationGraph — nodes, routing, and compiled StateGraph (TAS-103).
+export * from "./orchestration/graph.js";
