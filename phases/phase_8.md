@@ -1,0 +1,198 @@
+# Phase 8: Implementation - TDD Loop & Developer Agent
+
+## Objective
+Implement the autonomous `DeveloperAgent` and the core TDD implementation loop. This phase focuses on the "Red-Green-Refactor" cycle, where the agent establishing a failing test, implements the logic, and verifies it in a clean sandbox. This phase also includes sophisticated entropy detection to prevent infinite implementation loops and handles mid-task directive injection from the user.
+
+## Requirements Covered
+- [TAS-052]: Phase 4: TDD Implementation
+- [1_PRD-REQ-HITL-005]: Task failure hand-off requirement
+- [1_PRD-REQ-NEED-AGENT-03]: Determinism in Sandbox and Test Runner
+- [TAS-004]: Strict TDD-driven implementation
+- [TAS-039]: Persistence & inter-agent handoff
+- [TAS-064]: Entropy detection in implementation
+- [1_PRD-REQ-REL-001]: Entropy & loop detection
+- [1_PRD-REQ-REL-002]: Maximum turn & token budgets
+- [1_PRD-REQ-REL-005]: Strategy pivot logic
+- [1_PRD-REQ-GOAL-004]: Standardizing agent-ready software
+- [3_MCP-MCP-001]: Transparent by Design projects
+- [3_MCP-MCP-009]: Live profiling during refactor
+- [3_MCP-TAS-001]: Agentic observability & traceability
+- [3_MCP-TAS-087]: CommitNode implementation
+- [3_MCP-TAS-093]: Dependency collision mitigation
+- [3_MCP-TAS-094]: Git-SQLite synchronization
+- [TAS-041]: TDD verification & binary gate protocol
+- [TAS-079]: Agent suite (Researcher, Developer, Reviewer)
+- [TAS-098]: @devs/agents logic & prompts
+- [1_PRD-REQ-IMP-002]: Strict TDD cycle (Red -> Green -> Verify)
+- [1_PRD-REQ-IMP-003]: Agentic memory & decision logging
+- [1_PRD-REQ-IMP-004]: Git strategy & atomic commits
+- [1_PRD-REQ-IMP-005]: Entropy detection & automated backoff
+- [1_PRD-REQ-IMP-008]: Atomic commits with Task ID
+- [1_PRD-REQ-IMP-009]: Automated hand-off after 5 failures
+- [1_PRD-REQ-IMP-011]: Git repository management
+- [1_PRD-REQ-IMP-012]: Strategy shift after 3 failures
+- [1_PRD-REQ-IMP-013]: Deterministic execution engine
+- [1_PRD-REQ-GOAL-005]: Reliability via multi-agent verification
+- [1_PRD-REQ-PIL-003]: Strict TDD loop requirement
+- [3_MCP-REQ-GOAL-005]: Strict TDD loop (MCP)
+- [3_MCP-TAS-064]: Implementation cyclical graph orchestration
+- [3_MCP-TAS-082]: PlanNode logic (TaskStrategy)
+- [3_MCP-TAS-083]: TestNode (Red Phase) logic
+- [3_MCP-TAS-084]: CodeNode (Green Phase) logic
+- [3_MCP-TAS-085]: RefactorNode (Cleanup) logic
+- [2_TAS-REQ-004]: Execution Process (Developer transforms task to commit)
+- [2_TAS-REQ-020]: AgentFactory implementation
+- [2_TAS-REQ-021]: PromptManager for system instructions
+- [2_TAS-REQ-022]: ToolRegistry for agent scoping
+- [2_TAS-REQ-023]: ReasoningEngine for SAOP parsing
+- [9_ROADMAP-PHASE-006]: TDD Implementation Engine phase
+- [9_ROADMAP-TAS-601]: Implement the TDD loop
+- [9_ROADMAP-TAS-602]: Develop Developer Agent turn logic (SAOP)
+- [9_ROADMAP-TAS-605]: Implement "Strategy Pivot" logic
+- [9_ROADMAP-TAS-606]: Develop "Medium-term Memory" handoffs
+- [9_ROADMAP-REQ-011]: The Red-Phase Gate (fail first)
+- [9_ROADMAP-REQ-033]: TDD Fidelity benchmark
+- [9_ROADMAP-REQ-012]: Entropy detection via output hashing
+- [9_ROADMAP-REQ-035]: Entropy prevention (pause within 1 turn)
+- [9_ROADMAP-REQ-046]: Entropy Buffer (20% Research & Strategy)
+- [9_ROADMAP-REQ-039]: Self-host success (implement own minor feature)
+- [9_ROADMAP-DOD-P6]: Execution (The Hands) Done
+- [9_ROADMAP-TAS-604]: Build Entropy Detector (SHA-256 comparison)
+- [9_ROADMAP-TAS-206]: Implement surgical_edit tool
+- [5_SECURITY_DESIGN-REQ-SEC-STR-001]: Agent identity enforcement
+- [5_SECURITY_DESIGN-REQ-SEC-STR-003]: Persistent SAOP traces linked to Git
+- [5_SECURITY_DESIGN-REQ-SEC-SD-012]: Role-Based Scoping (RBAC) for tools
+- [5_SECURITY_DESIGN-REQ-SEC-SD-017]: Argument sanitization (Anti-injection)
+- [5_SECURITY_DESIGN-REQ-SEC-SD-020]: Zero-persistence secret policy
+- [5_SECURITY_DESIGN-REQ-SEC-SD-034]: Native keychain integration
+- [5_SECURITY_DESIGN-REQ-SEC-SD-035]: Zero-plaintext config
+- [5_SECURITY_DESIGN-REQ-SEC-SD-042]: Master key derivation (PBKDF2)
+- [5_SECURITY_DESIGN-REQ-SEC-SD-053]: Input redaction protection
+- [5_SECURITY_DESIGN-REQ-SEC-SD-054]: Zero-trust dependency management
+- [5_SECURITY_DESIGN-REQ-SEC-SD-055]: Mandatory lockfile enforcement
+- [5_SECURITY_DESIGN-REQ-SEC-SD-057]: Script execution blocking
+- [5_SECURITY_DESIGN-REQ-SEC-SD-059]: Atomic state persistence (WAL)
+- [5_SECURITY_DESIGN-REQ-SEC-SD-072]: Atomic task commits
+- [5_SECURITY_DESIGN-REQ-SEC-SD-074]: Git-DB correlation for rewind
+- [5_SECURITY_DESIGN-REQ-SEC-SD-080]: Entropy detection monitoring
+- [5_SECURITY_DESIGN-REQ-SEC-SD-081]: Deterministic loop detection (3 identical errors)
+- [5_SECURITY_DESIGN-REQ-SEC-SD-082]: Strategy pivot directive
+- [5_SECURITY_DESIGN-REQ-SEC-RSK-102]: Indirect tool invocation mitigation
+- [5_SECURITY_DESIGN-REQ-SEC-RSK-103]: Privilege escalation mitigation
+- [5_SECURITY_DESIGN-REQ-SEC-CRY-001]: Master key derivation strategy
+- [5_SECURITY_DESIGN-REQ-SEC-CRY-002]: Key wrapping (KEK)
+- [5_SECURITY_DESIGN-REQ-SEC-CRY-003]: Mandatory host keychain usage
+- [5_SECURITY_DESIGN-REQ-SEC-CRY-005]: No raw keys in LLM context
+- [5_SECURITY_DESIGN-REQ-SEC-CRY-007]: Default-secure generated crypto
+- [8_RISKS-REQ-002]: Deterministic entropy detection
+- [8_RISKS-REQ-003]: Strategy Pivot directive logic
+- [8_RISKS-REQ-004]: Hard turn limits (10 per task)
+- [8_RISKS-REQ-005]: Cost guardrails ($5.00 per task)
+- [8_RISKS-REQ-014]: TAS-Approved Library list enforcement
+- [8_RISKS-REQ-016]: Lockfile integrity enforcement
+- [8_RISKS-REQ-019]: Recursive decomposition for high complexity
+- [8_RISKS-REQ-020]: Multi-agent chain-of-thought (Shadow Architect)
+- [8_RISKS-REQ-024]: TAS Evolution workflow
+- [8_RISKS-REQ-029]: Tiered model failover (Flash for tests)
+- [8_RISKS-REQ-030]: Jittered exponential backoff
+- [8_RISKS-REQ-032]: Real-time resource gauges (CPU/OOM)
+- [8_RISKS-REQ-045]: Path normalization middleware
+- [8_RISKS-REQ-047]: File-level write locking
+- [8_RISKS-REQ-048]: Manifest serialization (package.json)
+- [8_RISKS-REQ-053]: Multi-model failover architecture
+- [8_RISKS-REQ-056]: Tiered model orchestration (Flash for linting)
+- [8_RISKS-REQ-060]: Mandatory TDD verification requirement
+- [8_RISKS-REQ-063]: Zero-data-retention option
+- [8_RISKS-REQ-064]: Origin traceability (Requirement to code)
+- [8_RISKS-REQ-067]: Idiomatic pattern enforcement
+- [8_RISKS-REQ-074]: Agent suspension on failure
+- [8_RISKS-REQ-075]: User intervention detection
+- [8_RISKS-REQ-076]: Contextual ingestion after resume
+- [8_RISKS-REQ-081]: Model failover logic (Service outage)
+- [8_RISKS-REQ-082]: State preservation across providers
+- [8_RISKS-REQ-087]: Soft rewind logic
+- [8_RISKS-REQ-088]: Re-implementation of regressive tasks
+- [8_RISKS-REQ-089]: Budget alert and pause (80%)
+- [8_RISKS-REQ-090]: Recovery workflow after budget hit
+- [8_RISKS-REQ-100]: Flakiness heuristics
+- [8_RISKS-REQ-108]: Agentic looping risk mitigation
+- [8_RISKS-REQ-116]: Flaky tests mitigation
+- [8_RISKS-REQ-118]: Model reasoning ceiling mitigation
+- [8_RISKS-REQ-119]: Dependency collision mitigation
+- [8_RISKS-REQ-120]: LLM API rate limiting mitigation
+- [8_RISKS-REQ-125]: Agent deadlock mitigation
+- [8_RISKS-REQ-131]: Ecosystem dependency risk
+- [8_RISKS-REQ-132]: Economic viability risk
+- [8_RISKS-REQ-138]: Multi-agent conflict risk
+- [4_USER_FEATURES-REQ-002]: Deterministic rewind (Time-Travel)
+- [4_USER_FEATURES-REQ-010]: Context injection (Whispering) UI
+- [4_USER_FEATURES-REQ-016]: Multi-agent cross-verification
+- [4_USER_FEATURES-REQ-022]: Entropy & Loop detection features
+- [4_USER_FEATURES-REQ-023]: Git-backed state integrity
+- [4_USER_FEATURES-REQ-032]: Pattern conflict dialog
+- [4_USER_FEATURES-REQ-036]: Active Task Card UI features
+- [4_USER_FEATURES-REQ-037]: TDD Test Status UI (Red/Green)
+- [4_USER_FEATURES-REQ-038]: Test hallucination verification
+- [4_USER_FEATURES-REQ-040]: Flaky test detection features
+- [4_USER_FEATURES-REQ-041]: Dirty workspace rewind block
+- [4_USER_FEATURES-REQ-043]: Graceful suspension on interruption
+- [4_USER_FEATURES-REQ-060]: RCA reports on task failure
+- [4_USER_FEATURES-REQ-061]: Interactive failure diffs
+- [4_USER_FEATURES-REQ-062]: Suspended Sandbox access feature
+- [4_USER_FEATURES-REQ-064]: Entropy pivot prompts
+- [4_USER_FEATURES-REQ-065]: Manual intervention thresholds
+- [4_USER_FEATURES-REQ-067]: Multi-choice resolution proposals
+- [4_USER_FEATURES-REQ-074]: Deterministic rollback implementation
+- [4_USER_FEATURES-REQ-076]: Short-term memory injection (Whisper)
+- [4_USER_FEATURES-REQ-077]: Strategy override feature
+- [4_USER_FEATURES-REQ-078]: Observation hashing monitoring
+- [4_USER_FEATURES-REQ-079]: Strategy pivot on loop
+- [4_USER_FEATURES-REQ-080]: Entropy pause feature
+- [1_PRD-REQ-UI-009]: Mid-task context injection
+- [1_PRD-REQ-UI-010]: Task skip & manual completion
+- [1_PRD-REQ-UI-011]: Project rewind (Time-Travel)
+- [1_PRD-REQ-UI-012]: Entropy pause (Max-retry)
+- [1_PRD-REQ-UI-014]: Token/Cost budgeting UI
+- [1_PRD-REQ-MET-001]: Task Autonomy Rate (TAR)
+- [1_PRD-REQ-MET-002]: Time-to-First-Commit (TTFC)
+- [1_PRD-REQ-MET-008]: Token-to-Value Ratio (TVR)
+- [1_PRD-REQ-MET-011]: Intervention frequency
+- [1_PRD-REQ-MET-012]: Decision transparency score
+- [1_PRD-REQ-MET-015]: Entropy detection accuracy
+- [1_PRD-REQ-NEED-ARCH-01]: Pattern enforcement requirement
+- [1_PRD-REQ-NEED-AGENT-02]: Tool-rich environment
+- [1_PRD-REQ-NEED-DEVS-02]: Time-travel debugging requirement
+- [9_ROADMAP-REQ-IMP-001]: Technical requirements for implementation
+- [9_ROADMAP-REQ-IMP-003]: Implementation milestones
+- [9_ROADMAP-REQ-IMP-005]: TDD loop requirements
+- [9_ROADMAP-REQ-049]: KPI: TAR > 85%, TTFC < 1hr
+- [9_ROADMAP-SPIKE-003]: Multi-agent parallelism spike
+- [9_ROADMAP-BLOCKER-002]: surgical_edit precision blocker
+- [9_ROADMAP-BLOCKER-003]: Dependency deadlock blocker
+- [9_ROADMAP-REQ-022]: Surgical precision benchmark
+
+## Detailed Deliverables & Components
+### DeveloperAgent TURN Logic
+- Develop the `DeveloperAgent` system prompt and turn-based logic using SAOP.
+- Implement the `PlanNode` to ingest PRD/TAS/Context and generate implementation strategies.
+- Build the `CodeNode` for modifying source code using the `surgical_edit` tool.
+
+### TDD Execution Engine
+- Implement the mandatory `TestNode` (Red Phase) where agents must establish a failing test in the sandbox.
+- Develop the `VerificationNode` (Green Phase) to verify implementation against established tests.
+- Build the `CommitNode` for atomic Git commits and SQLite status updates upon success.
+
+### Entropy & Pivot System
+- Implement the `EntropyDetector` using SHA-256 hashing of terminal outputs.
+- Develop the `StrategyPivotAgent` to force first-principles reasoning after 3 identical errors.
+- Build the `RootCauseAgent` to generate RCA reports and "Lessons Learned" for long-term memory.
+
+### Agentic Safeguards
+- Implement real-time USD/Token tracking and turn limits (10 per task).
+- Build the "Suspended Sandbox" preservation logic for failed implementation turns.
+- Develop the `FileLockManager` to prevent overlapping writes from parallel implementation streams.
+
+## Technical Considerations
+- Ensuring `surgical_edit` is precise enough to handle non-contiguous blocks in large files.
+- Managing model failover logic without losing agent reasoning context.
+- Balancing task autonomy (TAR) with necessary human intervention gates.

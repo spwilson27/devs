@@ -1,0 +1,119 @@
+{
+  "01_Project Infrastructure & Monorepo Setup": [
+    "TAS-060",
+    "TAS-005",
+    "TAS-006",
+    "TAS-096",
+    "TAS-040",
+    "TAS-104",
+    "TAS-061",
+    "TAS-076",
+    "1_PRD-REQ-INT-013",
+    "1_PRD-REQ-GOAL-002",
+    "1_PRD-REQ-NEED-MAKER-01",
+    "9_ROADMAP-REQ-041"
+  ],
+  "02_SQLite Schema & Persistence Layer": [
+    "TAS-066",
+    "TAS-010",
+    "TAS-105",
+    "TAS-106",
+    "TAS-107",
+    "TAS-108",
+    "TAS-109",
+    "TAS-110",
+    "TAS-111",
+    "TAS-112",
+    "TAS-113",
+    "9_ROADMAP-TAS-102",
+    "9_ROADMAP-REQ-017",
+    "2_TAS-REQ-017",
+    "4_USER_FEATURES-REQ-086"
+  ],
+  "03_ACID Transactions & State Integrity": [
+    "3_MCP-REQ-REL-004",
+    "TAS-067",
+    "TAS-070",
+    "9_ROADMAP-REQ-014",
+    "8_RISKS-REQ-041",
+    "8_RISKS-REQ-094",
+    "8_RISKS-REQ-115",
+    "8_RISKS-REQ-073",
+    "8_RISKS-REQ-093"
+  ],
+  "04_LangGraph Core Orchestration Engine": [
+    "9_ROADMAP-PHASE-001",
+    "TAS-097",
+    "9_ROADMAP-TAS-101",
+    "TAS-009",
+    "TAS-078",
+    "TAS-103",
+    "2_TAS-REQ-016",
+    "4_USER_FEATURES-REQ-013",
+    "8_RISKS-REQ-001"
+  ],
+  "05_State Checkpointing & Recovery": [
+    "9_ROADMAP-TAS-103",
+    "TAS-073",
+    "TAS-094",
+    "1_PRD-REQ-REL-003",
+    "1_PRD-REQ-SYS-002",
+    "TAS-002",
+    "TAS-047",
+    "1_PRD-REQ-CON-002",
+    "1_PRD-REQ-MET-014",
+    "TAS-069",
+    "8_RISKS-REQ-070"
+  ],
+  "06_Git Integration & Snapshot Strategy": [
+    "TAS-095",
+    "TAS-114",
+    "TAS-012",
+    "TAS-055",
+    "TAS-054",
+    "9_ROADMAP-REQ-015",
+    "UNKNOWN-601",
+    "UNKNOWN-602",
+    "8_RISKS-REQ-127",
+    "8_RISKS-REQ-085"
+  ],
+  "07_Audit Trails & Glass-Box Observability": [
+    "TAS-001",
+    "3_MCP-MCP-002",
+    "3_MCP-REQ-SYS-002",
+    "TAS-046",
+    "TAS-056",
+    "TAS-059",
+    "1_PRD-REQ-PIL-004",
+    "8_RISKS-REQ-083"
+  ],
+  "08_CLI Integration & State Control": [
+    "1_PRD-REQ-INT-001",
+    "1_PRD-REQ-INT-006",
+    "1_PRD-REQ-INT-005",
+    "1_PRD-REQ-INT-004",
+    "9_ROADMAP-REQ-037",
+    "2_TAS-REQ-018"
+  ],
+  "09_Determinism & Robustness Testing": [
+    "9_ROADMAP-REQ-016",
+    "9_ROADMAP-REQ-031",
+    "9_ROADMAP-REQ-038",
+    "TAS-082",
+    "TAS-083",
+    "TAS-075",
+    "8_RISKS-REQ-043",
+    "8_RISKS-REQ-072",
+    "8_RISKS-REQ-069",
+    "8_RISKS-REQ-084"
+  ],
+  "10_Lifecycle Management & Phase Milestones": [
+    "4_USER_FEATURES-REQ-001",
+    "9_ROADMAP-M-1",
+    "9_ROADMAP-M-2",
+    "9_ROADMAP-M-3",
+    "9_ROADMAP-PHASE-007",
+    "9_ROADMAP-PHASE-008",
+    "9_ROADMAP-DOD-P1"
+  ]
+}

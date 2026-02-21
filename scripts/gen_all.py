@@ -26,8 +26,18 @@ DOCS = [
     {"id": "9_project_roadmap", "type": "spec", "name": "Project Roadmap", "desc": "Create a Project Roadmap.", "prompt_file": "spec_project_roadmap.md"}
 ]
 
-class GeminiRunner:
-    """Wraps the actual subprocess call for testability"""
+class AIRunner:
+    """Abstract base for AI CLI runners."""
+    def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
+        raise NotImplementedError()
+
+    @property
+    def ignore_file_name(self) -> str:
+        raise NotImplementedError()
+
+
+class GeminiRunner(AIRunner):
+    """Wraps the gemini CLI subprocess call."""
     def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
         with open(ignore_file, "w", encoding="utf-8") as f:
             f.write(ignore_content)
@@ -39,21 +49,81 @@ class GeminiRunner:
             text=True
         )
 
+    @property
+    def ignore_file_name(self) -> str:
+        return ".geminiignore"
+
+
+class ClaudeRunner(AIRunner):
+    """Wraps the claude CLI subprocess call."""
+    def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
+        with open(ignore_file, "w", encoding="utf-8") as f:
+            f.write(ignore_content)
+        return subprocess.run(
+            ["claude", "-p", "--dangerously-skip-permissions"],
+            input=full_prompt,
+            cwd=cwd,
+            capture_output=True,
+            text=True
+        )
+
+    @property
+    def ignore_file_name(self) -> str:
+        return ".claudeignore"
+
+
+class CopilotRunner(AIRunner):
+    """Wraps the GitHub Copilot CLI subprocess call."""
+    def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
+        with open(ignore_file, "w", encoding="utf-8") as f:
+            f.write(ignore_content)
+
+        import tempfile
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", delete=True) as f:
+            f.write(full_prompt)
+            print(full_prompt)
+            prompt_file = f.name
+            candidates = [
+                ["copilot", "-p", f"Follow the instructions in @{prompt_file}", "--yolo"],
+            ]
+            last_exc = None
+            last_result = None
+            for cmd in candidates:
+                try:
+                    last_result = subprocess.run(cmd, input=full_prompt, cwd=cwd, capture_output=True, text=True)
+                    # If the command ran (found) and returned 0, return immediately.
+                    if last_result.returncode == 0:
+                        return last_result
+                except FileNotFoundError as e:
+                    last_exc = e
+                    continue
+
+        # If none succeeded, return the last result if available, else raise the FileNotFoundError
+        if last_result is not None:
+            return last_result
+        raise last_exc if last_exc is not None else RuntimeError("Failed to invoke copilot CLI")
+
+    @property
+    def ignore_file_name(self) -> str:
+        return ".copilotignore"
+
+
 class ProjectContext:
-    def __init__(self, root_dir: str, runner: Optional[GeminiRunner] = None):
+    def __init__(self, root_dir: str, runner: Optional[AIRunner] = None):
         self.root_dir = root_dir
         self.sandbox_dir = os.path.join(root_dir, ".sandbox")
         self.specs_dir = os.path.join(root_dir, "specs")
         self.research_dir = os.path.join(root_dir, "research")
         self.prompts_dir = os.path.join(root_dir, "scripts", "prompts")
         self.state_file = os.path.join(root_dir, "scripts", ".gen_state.json")
-        self.ignore_file = os.path.join(root_dir, ".geminiignore")
-        self.backup_ignore = os.path.join(root_dir, ".geminiignore.bak")
         self.desc_file = os.path.join(root_dir, "input", "description.md")
         
         self.requirements_dir = os.path.join(root_dir, "requirements")
         
         self.runner = runner or GeminiRunner()
+        
+        self.ignore_file = os.path.join(root_dir, self.runner.ignore_file_name)
+        self.backup_ignore = self.ignore_file + ".bak"
         
         # Ensures directories exist
         os.makedirs(self.sandbox_dir, exist_ok=True)
@@ -227,7 +297,7 @@ class ProjectContext:
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(new_content)
 
-    def run_gemini(self, full_prompt: str, ignore_content: str, allowed_files: Optional[List[str]] = None, sandbox: bool = True) -> subprocess.CompletedProcess:
+    def run_ai(self, full_prompt: str, ignore_content: str, allowed_files: Optional[List[str]] = None, sandbox: bool = True) -> subprocess.CompletedProcess:
         before = self.get_workspace_snapshot()
         result = self.runner.run(self.root_dir, full_prompt, ignore_content, self.ignore_file)
         if allowed_files is not None:
@@ -236,6 +306,10 @@ class ProjectContext:
             for f in allowed_files:
                 self.strip_thinking_tags(os.path.abspath(f))
         return result
+
+    # Legacy alias kept for backwards compat
+    def run_gemini(self, full_prompt: str, ignore_content: str, allowed_files: Optional[List[str]] = None, sandbox: bool = True) -> subprocess.CompletedProcess:
+        return self.run_ai(full_prompt, ignore_content, allowed_files, sandbox)
 
     def parse_markdown_headers(self, filepath: str) -> List[str]:
         headers = []
@@ -384,64 +458,57 @@ class Phase3FinalReview(BasePhase):
         print("Successfully completed the Final Alignment Review.")
 
 class Phase4AExtractRequirements(BasePhase):
+    def __init__(self, doc: dict):
+        self.doc = doc
+
     def execute(self, ctx: ProjectContext):
-        if ctx.state.get("requirements_extracted", False):
-            print("Requirements extraction already completed.")
+        if self.doc["type"] == "research":
+            print(f"   -> Skipping extraction for research doc: {self.doc['name']}...")
+            return
+
+        if self.doc["id"] in ctx.state.get("extracted_requirements", []):
             return
             
-        print("\n=> [Phase 4A: Extract Requirements] Extracting requirements from each document...")
-        prompt_tmpl = ctx.load_prompt("extract_requirements.md")
+        doc_path = ctx.get_document_path(self.doc)
+        if not os.path.exists(doc_path):
+            return
+            
+        target_path = f"requirements/{self.doc['id']}.md"
+        expected_file = os.path.join(ctx.requirements_dir, f"{self.doc['id']}.md")
         
-        for doc in DOCS:
-            if doc["type"] == "research":
-                print(f"   -> Skipping extraction for research doc: {doc['name']}...")
-                continue
-
-            if doc["id"] in ctx.state.get("extracted_requirements", []):
-                continue
-                
-            doc_path = ctx.get_document_path(doc)
-            if not os.path.exists(doc_path):
-                continue
-                
-            target_path = f"requirements/{doc['id']}.md"
-            expected_file = os.path.join(ctx.requirements_dir, f"{doc['id']}.md")
-            
-            doc_rel_path = f"{'specs' if doc['type'] == 'spec' else 'research'}/{doc['id']}.md"
-            
-            print(f"   -> Extracting from {doc['name']}...")
-            prompt = ctx.format_prompt(prompt_tmpl,
-                description_ctx=ctx.description_ctx,
-                document_name=doc['name'],
-                document_path=doc_rel_path,
-                target_path=target_path
-            )
-            
-            ignore_content = f"/*\n!/.sandbox/\n!/requirements/\n!/scripts/verify_requirements.py\n!/{doc_rel_path}\n"
-            allowed_files = [expected_file, doc_path]
-            result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
-            
-            if result.returncode != 0:
-                print(f"\n[!] Error extracting requirements from {doc['name']}.")
-                print(result.stdout)
-                print(result.stderr)
-                sys.exit(1)
-            
-            print(f"   -> Verifying extraction for {doc['name']}...")
-            verify_res = subprocess.run(
-                [sys.executable, "scripts/verify_requirements.py", "--verify-doc", doc_path, expected_file],
-                capture_output=True, text=True, cwd=ctx.root_dir
-            )
-            if verify_res.returncode != 0:
-                print(f"\n[!] Automated verification failed for {doc['name']}:")
-                print(verify_res.stdout)
-                sys.exit(1)
-            
-            ctx.stage_changes(allowed_files)
-            ctx.state.setdefault("extracted_requirements", []).append(doc["id"])
-            ctx.save_state()
-            
-        ctx.state["requirements_extracted"] = True
+        doc_rel_path = f"{'specs' if self.doc['type'] == 'spec' else 'research'}/{self.doc['id']}.md"
+        
+        print(f"\n=> [Phase 4A: Extract Requirements] Extracting from {self.doc['name']}...")
+        prompt_tmpl = ctx.load_prompt("extract_requirements.md")
+        prompt = ctx.format_prompt(prompt_tmpl,
+            description_ctx=ctx.description_ctx,
+            document_name=self.doc['name'],
+            document_path=doc_rel_path,
+            target_path=target_path
+        )
+        
+        ignore_content = f"/*\n!/.sandbox/\n!/requirements/\n!/scripts/verify_requirements.py\n!/{doc_rel_path}\n"
+        allowed_files = [expected_file, doc_path]
+        result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
+        
+        if result.returncode != 0:
+            print(f"\n[!] Error extracting requirements from {self.doc['name']}.")
+            print(result.stdout)
+            print(result.stderr)
+            sys.exit(1)
+        
+        print(f"   -> Verifying extraction for {self.doc['name']}...")
+        verify_res = subprocess.run(
+            [sys.executable, "scripts/verify_requirements.py", "--verify-doc", doc_path, expected_file],
+            capture_output=True, text=True, cwd=ctx.root_dir
+        )
+        if verify_res.returncode != 0:
+            print(f"\n[!] Automated verification failed for {self.doc['name']}:")
+            print(verify_res.stdout)
+            sys.exit(1)
+        
+        ctx.stage_changes(allowed_files)
+        ctx.state.setdefault("extracted_requirements", []).append(self.doc["id"])
         ctx.save_state()
 
 class Phase4BMergeRequirements(BasePhase):
@@ -775,7 +842,13 @@ class Orchestrator:
                 self.run_phase_with_retry(Phase2FleshOutDoc(doc))
 
             self.run_phase_with_retry(Phase3FinalReview())
-            self.run_phase_with_retry(Phase4AExtractRequirements())
+            
+            if not self.ctx.state.get("requirements_extracted", False):
+                for doc in DOCS:
+                    self.run_phase_with_retry(Phase4AExtractRequirements(doc))
+                self.ctx.state["requirements_extracted"] = True
+                self.ctx.save_state()
+                
             self.run_phase_with_retry(Phase4BMergeRequirements())
             self.run_phase_with_retry(Phase4COrderRequirements())
             self.run_phase_with_retry(Phase5GenerateEpics())
@@ -787,8 +860,51 @@ class Orchestrator:
         print("\nProject generation orchestration complete.")
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Multi-phase document generation orchestrator.")
+    parser.add_argument(
+        "--backend", choices=["gemini", "claude", "copilot"], default="gemini",
+        help="AI CLI backend to use (default: gemini)"
+    )
+    parser.add_argument(
+        "--phase", default=None,
+        help="Start from a specific phase, e.g. '4-merge' (skips earlier phases)"
+    )
+    parser.add_argument(
+        "--force", action="store_true",
+        help="Force re-run of the specified phase by clearing its completed state"
+    )
+    args = parser.parse_args()
+
+    runner: AIRunner
+    if args.backend == "claude":
+        runner = ClaudeRunner()
+        print("Using Claude CLI backend.")
+    elif args.backend == "copilot":
+        runner = CopilotRunner()
+        print("Using Copilot CLI backend.")
+    else:
+        runner = GeminiRunner()
+        print("Using Gemini CLI backend.")
+
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    ctx = ProjectContext(root_dir)
+    ctx = ProjectContext(root_dir, runner=runner)
+
+    if args.phase and args.force:
+        phase_state_keys = {
+            "4-merge": "requirements_merged",
+            "4-order": "requirements_ordered",
+            "5-epics": "phases_completed",
+            "6-tasks": "tasks_completed",
+        }
+        key = phase_state_keys.get(args.phase)
+        if key and ctx.state.get(key, False):
+            print(f"--force: Resetting state for phase '{args.phase}' ({key}).")
+            ctx.state[key] = False
+            ctx.save_state()
+        elif not key:
+            print(f"Warning: unknown phase '{args.phase}' for --force, ignoring.")
+
     orchestrator = Orchestrator(ctx)
     orchestrator.run()
 

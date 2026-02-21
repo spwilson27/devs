@@ -1,0 +1,378 @@
+# Phase 11: Interface - VSCode Extension & Webview
+
+## Objective
+Implement the primary visual interface for `devs` via a VSCode Extension. This phase focuses on the "Visual Glass-Box" philosophy, creating a data-rich Webview environment using React and D3. It enables architectural review, interactive roadmap visualization, and real-time monitoring of agent reasoning, ensuring the UI feels like a native extension of the VSCode environment.
+
+## Requirements Covered
+- [TAS-102]: User interface controllers (@devs/vscode)
+- [9_ROADMAP-DOD-P7]: Interface Definition of Done
+- [TAS-029]: React 18+ with Tailwind CSS for View Layer
+- [TAS-030]: vscode-webview-ui-toolkit integration
+- [1_PRD-REQ-INT-002]: VSCode Extension requirement
+- [1_PRD-REQ-INT-007]: VSCode Project Dashboard (Sidebar)
+- [1_PRD-REQ-INT-008]: VSCode Document Editor (Markdown preview)
+- [1_PRD-REQ-INT-009]: VSCode Agent Console (Thought/Action/Obs)
+- [1_PRD-REQ-INT-010]: VSCode Human-in-the-Loop Popups
+- [2_TAS-REQ-034]: ExtensionHost management
+- [9_ROADMAP-TAS-702]: Develop VSCode Extension (React/Tailwind)
+- [9_ROADMAP-TAS-704]: Build interactive task DAG visualization
+- [9_ROADMAP-TAS-705]: Implement "Directive Injection" UI
+- [9_ROADMAP-REQ-036]: Real-time streaming (60FPS target)
+- [6_UI_UX_ARCH-REQ-005]: Sub-second state hydration
+- [6_UI_UX_ARCH-REQ-006]: Message throttling (60FPS rule)
+- [7_UI_UX_DESIGN-REQ-UI-DES-002-1]: Level 1: Human Authority
+- [7_UI_UX_DESIGN-REQ-UI-DES-002-2]: Level 2: Agent Autonomy
+- [7_UI_UX_DESIGN-REQ-UI-DES-002-3]: Level 3: Environmental Fact
+- [7_UI_UX_DESIGN-REQ-UI-DES-003-1]: Fixed zones for telemetry
+- [7_UI_UX_DESIGN-REQ-UI-DES-003-2]: No-drawer policy for core state
+- [7_UI_UX_DESIGN-REQ-UI-DES-004-1]: Sparklines & status indicators
+- [7_UI_UX_DESIGN-REQ-UI-DES-004-2]: Technical conciseness in labels
+- [7_UI_UX_DESIGN-REQ-UI-DES-005-1]: Token compliance requirement
+- [7_UI_UX_DESIGN-REQ-UI-DES-005-2]: Codicon utilization requirement
+- [7_UI_UX_DESIGN-REQ-UI-DES-006-1]: Functional motion permitted
+- [7_UI_UX_DESIGN-REQ-UI-DES-006-2]: Anti-magic rule for transitions
+- [7_UI_UX_DESIGN-REQ-UI-DES-025-1]: Alpha-blending removal in HC
+- [7_UI_UX_DESIGN-REQ-UI-DES-025-2]: Border emphasis in HC
+- [7_UI_UX_DESIGN-REQ-UI-DES-025-3]: Text luminance verification
+- [7_UI_UX_DESIGN-REQ-UI-DES-027-1]: Developer agent color (Blue)
+- [7_UI_UX_DESIGN-REQ-UI-DES-027-2]: Reviewer agent color (Orange)
+- [7_UI_UX_DESIGN-REQ-UI-DES-027-3]: Architect agent color (Green)
+- [7_UI_UX_DESIGN-REQ-UI-DES-031-1]: Tiered font origin categorization
+- [7_UI_UX_DESIGN-REQ-UI-DES-031-2]: Narrative font (Serif)
+- [7_UI_UX_DESIGN-REQ-UI-DES-031-3]: Technical font (Mono)
+- [7_UI_UX_DESIGN-REQ-UI-DES-033-1]: Type scale: H1 (20px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-033-2]: Type scale: H2 (16px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-033-3]: Type scale: H3 (14px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-033-4]: Type scale: Body (13px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-033-5]: Type scale: Mono (12px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-033-6]: Type scale: Metadata (11px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-034-1]: Agentic reasoning font (Italic Serif)
+- [7_UI_UX_DESIGN-REQ-UI-DES-034-2]: Human directive font (Bold System)
+- [7_UI_UX_DESIGN-REQ-UI-DES-034-3]: Tool invocation font (Mono Bold)
+- [7_UI_UX_DESIGN-REQ-UI-DES-035-1]: Narrative block line-height (1.6)
+- [7_UI_UX_DESIGN-REQ-UI-DES-035-2]: Technical block line-height (1.4)
+- [7_UI_UX_DESIGN-REQ-UI-DES-035-3]: UI navigation line-height (1.2)
+- [7_UI_UX_DESIGN-REQ-UI-DES-036-1]: Subpixel rendering requirement
+- [7_UI_UX_DESIGN-REQ-UI-DES-036-2]: Webfont strategy (system serif)
+- [7_UI_UX_DESIGN-REQ-UI-DES-037-1]: Font weight alignment (450/500)
+- [7_UI_UX_DESIGN-REQ-UI-DES-037-2]: Font ligature support
+- [7_UI_UX_DESIGN-REQ-UI-DES-038-1]: CJK script fallback chain
+- [7_UI_UX_DESIGN-REQ-UI-DES-039-1]: Variable font size scaling
+- [7_UI_UX_DESIGN-REQ-UI-DES-039-2]: High contrast font weight increase
+- [7_UI_UX_DESIGN-REQ-UI-DES-044-1]: Cognitive anchoring: Health zone
+- [7_UI_UX_DESIGN-REQ-UI-DES-044-2]: Cognitive anchoring: Navigation zone
+- [7_UI_UX_DESIGN-REQ-UI-DES-045-1]: DAG performance: d3-force
+- [7_UI_UX_DESIGN-REQ-UI-DES-045-2]: DAG performance: SVG layers
+- [7_UI_UX_DESIGN-REQ-UI-DES-045-3]: DAG performance: Canvas fallback
+- [7_UI_UX_DESIGN-REQ-UI-DES-045-4]: DAG performance: Worker offloading
+- [7_UI_UX_DESIGN-REQ-UI-DES-046-1]: Node dimensions (180x64)
+- [7_UI_UX_DESIGN-REQ-UI-DES-046-2]: Node internal padding (8px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-046-3]: Edge weight (1px / 2.5px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-046-4]: Port spacing (centered)
+- [7_UI_UX_DESIGN-REQ-UI-DES-047-1]: Border radius (4px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-047-2]: Border width (1px solid)
+- [7_UI_UX_DESIGN-REQ-UI-DES-047-3]: Shadow requirements
+- [7_UI_UX_DESIGN-REQ-UI-DES-047-3-1]: shadow-sm implementation
+- [7_UI_UX_DESIGN-REQ-UI-DES-047-3-2]: shadow-md implementation
+- [7_UI_UX_DESIGN-REQ-UI-DES-048-1]: Min interactive target (24px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-048-2]: Standard button metrics
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-1]: Ultra-wide support (>1920px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-2]: Sidebar collapse (Ghost Rail)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-3]: Density scaling (>100 tasks)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-4]: Scrollbar metrics (slim 8px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-Z0]: Z-index: Base (0)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-Z1]: Z-index: Navigation (100)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-Z2]: Z-index: Overlays (200)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-Z3]: Z-index: Modals (300)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049-Z4]: Z-index: Critical (400)
+- [7_UI_UX_DESIGN-REQ-UI-DES-050]: Functional animation manifesto
+- [7_UI_UX_DESIGN-REQ-UI-DES-051-1]: Thought pulse visual (opacity)
+- [7_UI_UX_DESIGN-REQ-UI-DES-051-2]: Thought pulse timing (2000ms)
+- [7_UI_UX_DESIGN-REQ-UI-DES-051-3]: Thought pulse logic (start/stop)
+- [7_UI_UX_DESIGN-REQ-UI-DES-052-1]: Invocation shimmer (linear-gradient)
+- [7_UI_UX_DESIGN-REQ-UI-DES-052-2]: Active progress sweep (2px scan)
+- [7_UI_UX_DESIGN-REQ-UI-DES-052-3]: Completion pop (scale 1.02)
+- [7_UI_UX_DESIGN-REQ-UI-DES-052-4]: Failure shake (horizontal ±4px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-053-1]: Attention pulse visual (glow)
+- [7_UI_UX_DESIGN-REQ-UI-DES-053-2]: Phase stepper pulse (amber)
+- [7_UI_UX_DESIGN-REQ-UI-DES-053-3]: Attention pulse logic (termination)
+- [7_UI_UX_DESIGN-REQ-UI-DES-054-1]: Directive confirmation visual
+- [7_UI_UX_DESIGN-REQ-UI-DES-054-2]: Directive confirmation persistence
+- [7_UI_UX_DESIGN-REQ-UI-DES-054-3]: Agentic ingestion highlight
+- [7_UI_UX_DESIGN-REQ-UI-DES-055-1]: Node hover elevation (scale 1.05)
+- [7_UI_UX_DESIGN-REQ-UI-DES-055-2]: Selection anchor logic
+- [7_UI_UX_DESIGN-REQ-UI-DES-055-3]: Dependency flow highlighting
+- [7_UI_UX_DESIGN-REQ-UI-DES-056-1]: momentum scrolling physics
+- [7_UI_UX_DESIGN-REQ-UI-DES-056-2]: Semantic zoom thresholds
+- [7_UI_UX_DESIGN-REQ-UI-DES-057-1]: Distillation sweep visual (fly)
+- [7_UI_UX_DESIGN-REQ-UI-DES-057-2]: Distillation particle implementation
+- [7_UI_UX_DESIGN-REQ-UI-DES-057-3]: Distillation stagger timing
+- [7_UI_UX_DESIGN-REQ-UI-DES-058-1]: Rewind glitch visual
+- [7_UI_UX_DESIGN-REQ-UI-DES-058-2]: State restored feedback
+- [7_UI_UX_DESIGN-REQ-UI-DES-059-1]: 60FPS animation target
+- [7_UI_UX_DESIGN-REQ-UI-DES-059-2]: reduced motion support
+- [7_UI_UX_DESIGN-REQ-UI-DES-059-3]: Web worker threading logic
+- [7_UI_UX_DESIGN-REQ-UI-DES-062]: Layout mode definitions
+- [7_UI_UX_DESIGN-REQ-UI-DES-062-2]: Standard mode layout (25/75)
+- [7_UI_UX_DESIGN-REQ-UI-DES-062-3]: Wide mode layout (tri-pane)
+- [7_UI_UX_DESIGN-REQ-UI-DES-064-1]: Icon prefix requirement
+- [7_UI_UX_DESIGN-REQ-UI-DES-064-2]: Icon fallback requirement
+- [7_UI_UX_DESIGN-REQ-UI-DES-064-3]: Icon intent marker
+- [7_UI_UX_DESIGN-REQ-UI-DES-064-4]: Icon role differentiator
+- [7_UI_UX_DESIGN-REQ-UI-DES-064-5]: Icon status indicator
+- [7_UI_UX_DESIGN-REQ-UI-DES-064-6]: Icon action trigger
+- [7_UI_UX_DESIGN-REQ-UI-DES-068]: rendering memoization requirement
+- [7_UI_UX_DESIGN-REQ-UI-DES-068-1]: character-level data optimization
+- [7_UI_UX_DESIGN-REQ-UI-DES-081-1]: Mobile viewport optimization
+- [7_UI_UX_DESIGN-REQ-UI-DES-081-2]: Narrow sidebar mode
+- [7_UI_UX_DESIGN-REQ-UI-DES-081-3]: Main viewport centering
+- [7_UI_UX_DESIGN-REQ-UI-DES-081-4]: Overlay positioning logic
+- [7_UI_UX_DESIGN-REQ-UI-DES-081-5]: Resizable pane constraints
+- [7_UI_UX_DESIGN-REQ-UI-DES-082]: Bottom console minimization
+- [7_UI_UX_DESIGN-REQ-UI-DES-083-1]: DAG semantic zoom levels
+- [7_UI_UX_DESIGN-REQ-UI-DES-083-1-1]: LOD-3 (Close) nodes
+- [7_UI_UX_DESIGN-REQ-UI-DES-083-1-2]: LOD-2 (Mid) nodes
+- [7_UI_UX_DESIGN-REQ-UI-DES-083-1-3]: LOD-1 (Far) boxes
+- [7_UI_UX_DESIGN-REQ-UI-DES-083-2]: Log truncation logic
+- [7_UI_UX_DESIGN-REQ-UI-DES-083-2-1]: Narrow mode log button
+- [7_UI_UX_DESIGN-REQ-UI-DES-083-2-2]: Wide mode log side-by-side
+- [7_UI_UX_DESIGN-REQ-UI-DES-084-1]: Contrast ratio (4.5:1 / 7:1)
+- [7_UI_UX_DESIGN-REQ-UI-DES-084-2]: Focus ring persistence
+- [7_UI_UX_DESIGN-REQ-UI-DES-084-3]: Aria-live annunciation requirement
+- [7_UI_UX_DESIGN-REQ-UI-DES-085-1]: Disable sliding animations in reduced motion
+- [7_UI_UX_DESIGN-REQ-UI-DES-085-2]: Replace thinking pulse in reduced motion
+- [7_UI_UX_DESIGN-REQ-UI-DES-085-3]: Disable distillation sweep in reduced motion
+- [7_UI_UX_DESIGN-REQ-UI-DES-085-4]: Instant jump transitions in reduced motion
+- [7_UI_UX_DESIGN-REQ-UI-DES-086-1]: Skeleton shimmer logic
+- [7_UI_UX_DESIGN-REQ-UI-DES-086-2]: Disconnected mask visual
+- [7_UI_UX_DESIGN-REQ-UI-DES-086-3]: Optimistic state rollback logic
+- [7_UI_UX_DESIGN-REQ-UI-DES-087-1]: Battery saver mode throttling
+- [7_UI_UX_DESIGN-REQ-UI-DES-087-2]: GPU acceleration layer creation
+- [7_UI_UX_DESIGN-REQ-UI-DES-100-1]: injection trigger Cmd+K
+- [7_UI_UX_DESIGN-REQ-UI-DES-100-2]: injection autocomplete (@/#)
+- [7_UI_UX_DESIGN-REQ-UI-DES-100-3]: injection ghost text
+- [7_UI_UX_DESIGN-REQ-UI-DES-100-4]: injection priority toggle
+- [7_UI_UX_DESIGN-REQ-UI-DES-101-1]: diff view side-by-side
+- [7_UI_UX_DESIGN-REQ-UI-DES-101-2]: risk indicator badges
+- [7_UI_UX_DESIGN-REQ-UI-DES-110-1]: diagram auto-sync within 200ms
+- [7_UI_UX_DESIGN-REQ-UI-DES-110-2]: diagram pan/zoom controls
+- [7_UI_UX_DESIGN-REQ-UI-DES-110-3]: diagram agentic links (double-click)
+- [7_UI_UX_DESIGN-REQ-UI-DES-120]: glitch state visual cues
+- [7_UI_UX_DESIGN-REQ-UI-DES-120-1]: active thought pulse red
+- [7_UI_UX_DESIGN-REQ-UI-DES-120-2]: RCA report modal implementation
+- [7_UI_UX_DESIGN-REQ-UI-DES-121]: Connection lost blurred overlay
+- [7_UI_UX_DESIGN-REQ-UI-DES-122]: Sandbox breach alert red screen
+- [7_UI_UX_DESIGN-REQ-UI-DES-130-1]: module hover AOD summary
+- [6_UI_UX_ARCH-REQ-001]: VSCode Extension primary interface
+- [6_UI_UX_ARCH-REQ-003]: Interface-Core Decoupling (Thin UI)
+- [6_UI_UX_ARCH-REQ-004]: Theme-aware styling (No hardcoded colors)
+- [6_UI_UX_ARCH-REQ-007]: Webview bundle size optimization
+- [6_UI_UX_ARCH-REQ-008]: The Orchestrator Bridge (MCP Client)
+- [6_UI_UX_ARCH-REQ-009]: UI triggers for tool calls
+- [6_UI_UX_ARCH-REQ-010]: STATE_CHANGE event streaming
+- [6_UI_UX_ARCH-REQ-011]: Error propagation to UI
+- [6_UI_UX_ARCH-REQ-012]: Strict CSP for Webview
+- [6_UI_UX_ARCH-REQ-015]: ThoughtStreamer component
+- [6_UI_UX_ARCH-REQ-016]: Rendering logic (react-markdown)
+- [6_UI_UX_ARCH-REQ-017]: ThoughtStreamer styling (Serif/Italic)
+- [6_UI_UX_ARCH-REQ-018]: ThoughtStreamer virtual scrolling
+- [6_UI_UX_ARCH-REQ-019]: Requirement mapping badges in UI
+- [6_UI_UX_ARCH-REQ-020]: DAGCanvas implementation
+- [6_UI_UX_ARCH-REQ-021]: Engine: d3-force & react-zoom-pan-pinch
+- [6_UI_UX_ARCH-REQ-022]: Node states (PENDING, SUCCESS, etc.)
+- [6_UI_UX_ARCH-REQ-023]: Zoom/Pan interaction
+- [6_UI_UX_ARCH-REQ-024]: Focus interaction logic
+- [6_UI_UX_ARCH-REQ-025]: Massive graph LOD mode (> 300 tasks)
+- [6_UI_UX_ARCH-REQ-026]: MermaidHost environment
+- [6_UI_UX_ARCH-REQ-027]: Mermaid sandbox (iframe/controlled div)
+- [6_UI_UX_ARCH-REQ-028]: Mermaid error resilience
+- [6_UI_UX_ARCH-REQ-029]: Mermaid theme synchronization
+- [6_UI_UX_ARCH-REQ-030]: DirectiveWhisperer input field
+- [6_UI_UX_ARCH-REQ-031]: Context awareness (@file, #req)
+- [6_UI_UX_ARCH-REQ-032]: Priority toggle (Immediate Pivot)
+- [6_UI_UX_ARCH-REQ-033]: Directive submission state integration
+- [6_UI_UX_ARCH-REQ-034]: Shared logic hooks (@devs/ui-hooks)
+- [6_UI_UX_ARCH-REQ-036]: postMessage bottleneck mitigation (50ms batch)
+- [6_UI_UX_ARCH-REQ-037]: ResizeObserver for SVG viewport
+- [6_UI_UX_ARCH-REQ-038]: state.sqlite watcher for UI refresh
+- [6_UI_UX_ARCH-REQ-039]: Static SVG snapshots for complex traces
+- [6_UI_UX_ARCH-REQ-040]: Tier 0: Transient component state
+- [6_UI_UX_ARCH-REQ-041]: Tier 1: Global UI layout state (Zustand)
+- [6_UI_UX_ARCH-REQ-042]: Tier 2: Synchronized project mirror
+- [6_UI_UX_ARCH-REQ-043]: Tier 3: Persistent user preferences
+- [6_UI_UX_ARCH-REQ-044]: update batching (32ms interval)
+- [6_UI_UX_ARCH-REQ-045]: Selective reactivity (selector-based)
+- [6_UI_UX_ARCH-REQ-046]: Reasoning log windowing
+- [6_UI_UX_ARCH-REQ-047]: Log chunking (last 500 lines)
+- [6_UI_UX_ARCH-REQ-048]: DAG LOD calculation logic
+- [6_UI_UX_ARCH-REQ-049]: Disconnection resilience logic
+- [6_UI_UX_ARCH-REQ-050]: State desync detection (sequence_id)
+- [6_UI_UX_ARCH-REQ-051]: Webview crash recovery (vscode.getState)
+- [6_UI_UX_ARCH-REQ-052]: Router Provider implementation
+- [6_UI_UX_ARCH-REQ-053]: Multi-pane architecture support
+- [6_UI_UX_ARCH-REQ-054]: DASHBOARD View module
+- [6_UI_UX_ARCH-REQ-055]: RESEARCH_VIEW module
+- [6_UI_UX_ARCH-REQ-056]: SPEC_VIEW module
+- [6_UI_UX_ARCH-REQ-057]: ROADMAP View module
+- [6_UI_UX_ARCH-REQ-058]: CONSOLE View module
+- [6_UI_UX_ARCH-REQ-059]: SETTINGS View module
+- [6_UI_UX_ARCH-REQ-060]: Custom URI scheme handler
+- [6_UI_UX_ARCH-REQ-061]: Cross-document spec linking
+- [6_UI_UX_ARCH-REQ-062]: Incremental view unlocking
+- [6_UI_UX_ARCH-REQ-063]: Hard redirects for HITL gates
+- [6_UI_UX_ARCH-REQ-064]: Virtual history stack (Back/Forward)
+- [6_UI_UX_ARCH-REQ-065]: View state restoration logic
+- [6_UI_UX_ARCH-REQ-066]: Session re-hydration on reload
+- [6_UI_UX_ARCH-REQ-067]: Active task lock logic
+- [6_UI_UX_ARCH-REQ-068]: Invalid context recovery (DASHBOARD fallback)
+- [6_UI_UX_ARCH-REQ-070]: Tailwind CSS with Shadow DOM isolation
+- [6_UI_UX_ARCH-REQ-071]: VSCode theme variable mapping
+- [6_UI_UX_ARCH-REQ-073]: VSCode Codicons usage
+- [6_UI_UX_ARCH-REQ-074]: vscode-resource URI scheme requirement
+- [6_UI_UX_ARCH-REQ-075]: Vector-first visualization pipeline
+- [6_UI_UX_ARCH-REQ-076]: Font stack hierarchy implementation
+- [6_UI_UX_ARCH-REQ-077]: shiki/Prism syntax highlighting
+- [6_UI_UX_ARCH-REQ-078]: Heavy asset lazy loading
+- [6_UI_UX_ARCH-REQ-079]: Image redaction sanitation buffer
+- [6_UI_UX_ARCH-REQ-081]: Generated app CSS isolation
+- [6_UI_UX_ARCH-REQ-082]: Incremental Markdown rendering
+- [6_UI_UX_ARCH-REQ-083]: Semantic differentiators (serif/mono)
+- [6_UI_UX_ARCH-REQ-084]: Chain-of-thought visual links
+- [6_UI_UX_ARCH-REQ-085]: Temporal navigation timeline
+- [6_UI_UX_ARCH-REQ-086]: State delta highlighting (Diff)
+- [6_UI_UX_ARCH-REQ-087]: Spec sign-off component
+- [6_UI_UX_ARCH-REQ-088]: Roadmap DAG editor
+- [6_UI_UX_ARCH-REQ-089]: Global directive input field
+- [6_UI_UX_ARCH-REQ-090]: Contextual snippets (@file)
+- [6_UI_UX_ARCH-REQ-091]: Priority feedback badges
+- [6_UI_UX_ARCH-REQ-092]: UI task DAG model
+- [6_UI_UX_ARCH-REQ-093]: SAOP envelope UI model
+- [6_UI_UX_ARCH-REQ-094]: ConsoleView log virtualization
+- [6_UI_UX_ARCH-REQ-095]: Graph throttling debouncer
+- [6_UI_UX_ARCH-REQ-096]: Broken Mermaid handling fallback
+- [6_UI_UX_ARCH-REQ-097]: Massive log handling (Read More)
+- [6_UI_UX_ARCH-REQ-098]: Disconnected state overlay
+- [6_UI_UX_ARCH-REQ-099]: aria-live="polite" for thoughts
+- [6_UI_UX_ARCH-REQ-100]: Keyboard accessibility for nodes
+- [6_UI_UX_ARCH-REQ-101]: i18n Skeleton (i18next)
+- [6_UI_UX_ARCH-REQ-102]: Theme contrast logic for diagrams
+- [7_UI_UX_DESIGN-REQ-UI-DES-001]: Glass-Box philosophy implementation
+- [7_UI_UX_DESIGN-REQ-UI-DES-002]: Visual hierarchy of agency
+- [7_UI_UX_DESIGN-REQ-UI-DES-003]: Deterministic layout anchors
+- [7_UI_UX_DESIGN-REQ-UI-DES-004]: High-density SNR design
+- [7_UI_UX_DESIGN-REQ-UI-DES-005]: Platform-native "Ghost" integration
+- [7_UI_UX_DESIGN-REQ-UI-DES-006]: Meaningful & non-decorated motion
+- [7_UI_UX_DESIGN-REQ-UI-DES-007]: Agent-Ready visual contract
+- [7_UI_UX_DESIGN-REQ-UI-DES-008]: Technical unknowns handling
+- [7_UI_UX_DESIGN-REQ-UI-DES-010]: Token anchoring to VSCode
+- [7_UI_UX_DESIGN-REQ-UI-DES-011]: color-mix() glass-box effect
+- [7_UI_UX_DESIGN-REQ-UI-DES-012]: Adaptive agent backgrounds
+- [7_UI_UX_DESIGN-REQ-UI-DES-013]: Semantic intent persistence
+- [7_UI_UX_DESIGN-REQ-UI-DES-014]: Tiered font origin categorization
+- [7_UI_UX_DESIGN-REQ-UI-DES-015]: Narrative font intent
+- [7_UI_UX_DESIGN-REQ-UI-DES-016]: Technical font intent
+- [7_UI_UX_DESIGN-REQ-UI-DES-017]: Directive font intent
+- [7_UI_UX_DESIGN-REQ-UI-DES-018]: UI navigation font intent
+- [7_UI_UX_DESIGN-REQ-UI-DES-019]: ANSI palette mapping UX
+- [7_UI_UX_DESIGN-REQ-UI-DES-020]: CLI/Webview rendering consistency
+- [7_UI_UX_DESIGN-REQ-UI-DES-021]: Standard ANSI escape usage
+- [7_UI_UX_DESIGN-REQ-UI-DES-022]: cross-platform ANSI rendering
+- [7_UI_UX_DESIGN-REQ-UI-DES-023]: semantic palette consistency
+- [7_UI_UX_DESIGN-REQ-UI-DES-025]: HC mode overrides implementation
+- [7_UI_UX_DESIGN-REQ-UI-DES-026]: Theme switching latency (< 50ms)
+- [7_UI_UX_DESIGN-REQ-UI-DES-027]: Agentic differentiators (symbolIcons)
+- [7_UI_UX_DESIGN-REQ-UI-DES-028]: Red-screen security alert
+- [7_UI_UX_DESIGN-REQ-UI-DES-030]: Typography philosophy execution
+- [7_UI_UX_DESIGN-REQ-UI-DES-031]: Interface hierarchy tiered fonts
+- [7_UI_UX_DESIGN-REQ-UI-DES-032]: VSCode editor font inheritance
+- [7_UI_UX_DESIGN-REQ-UI-DES-033]: Standardized type scale
+- [7_UI_UX_DESIGN-REQ-UI-DES-034]: Font intent markers
+- [7_UI_UX_DESIGN-REQ-UI-DES-035]: Line height readability metrics
+- [7_UI_UX_DESIGN-REQ-UI-DES-036]: Font loading & anti-aliasing
+- [7_UI_UX_DESIGN-REQ-UI-DES-037]: Code block typography support
+- [7_UI_UX_DESIGN-REQ-UI-DES-038]: CJK & multi-script support
+- [7_UI_UX_DESIGN-REQ-UI-DES-039]: Variable font size scaling
+- [7_UI_UX_DESIGN-REQ-UI-DES-040]: 4px base grid alignment
+- [7_UI_UX_DESIGN-REQ-UI-DES-041]: डिवाइड UI zones
+- [7_UI_UX_DESIGN-REQ-UI-DES-042]: Resizable persistent zones
+- [7_UI_UX_DESIGN-REQ-UI-DES-043]: Zone hierarchy z-index
+- [7_UI_UX_DESIGN-REQ-UI-DES-044]: Cognitive anchoring zones
+- [7_UI_UX_DESIGN-REQ-UI-DES-045]: Performance sensitive DAG Canvas
+- [7_UI_UX_DESIGN-REQ-UI-DES-046]: DAG Node dimensions & edges
+- [7_UI_UX_DESIGN-REQ-UI-DES-047]: Card & container radius/shadows
+- [7_UI_UX_DESIGN-REQ-UI-DES-048]: Interactive target sizes (24px)
+- [7_UI_UX_DESIGN-REQ-UI-DES-049]: Depth perception layering
+- [7_UI_UX_DESIGN-REQ-UI-DES-080]: Adaptive layout engine logic
+- [7_UI_UX_DESIGN-REQ-UI-DES-081]: Viewport breakpoints (widths)
+- [7_UI_UX_DESIGN-REQ-UI-DES-083]: LOD scaling implementation
+- [7_UI_UX_DESIGN-REQ-UI-DES-084]: High-contrast resilience WCAG 2.1
+- [7_UI_UX_DESIGN-REQ-UI-DES-085]: Reduced motion media query support
+- [7_UI_UX_DESIGN-REQ-UI-DES-086]: Skeleton shimmer & loading states
+- [7_UI_UX_DESIGN-REQ-UI-DES-087]: GPU acceleration for visualizations
+- [7_UI_UX_DESIGN-REQ-UI-DES-090]: Dashboard layout implementation
+- [7_UI_UX_DESIGN-REQ-UI-DES-091]: Multi-pane discovery view
+- [7_UI_UX_DESIGN-REQ-UI-DES-092]: Gated spec review interface
+- [7_UI_UX_DESIGN-REQ-UI-DES-093]: Large-scale graph navigation
+- [7_UI_UX_DESIGN-REQ-UI-DES-094]: High-density development hub
+- [7_UI_UX_DESIGN-REQ-UI-DES-100]: Cmd+K context-aware injection
+- [7_UI_UX_DESIGN-REQ-UI-DES-101]: Transactional sign-off modal
+- [7_UI_UX_DESIGN-REQ-UI-DES-110]: Interactive blueprint rendering
+- [7_UI_UX_DESIGN-REQ-UI-DES-111]: Performance telemetry visualizations
+- [7_UI_UX_DESIGN-REQ-UI-DES-130]: Contextual guidance display (src)
+- [7_UI_UX_DESIGN-REQ-UI-DES-140]: Semantic annunciation buffer
+- [7_UI_UX_DESIGN-REQ-UI-DES-141]: Forced contrast mode AAA
+- [7_UI_UX_DESIGN-REQ-UI-RISK-001]: LOD toggle for fatigue
+- [7_UI_UX_DESIGN-REQ-UI-RISK-002]: Theme resilience implementation
+- [7_UI_UX_DESIGN-REQ-UI-RISK-003]: Accessibility font fallbacks
+- [7_UI_UX_DESIGN-REQ-UI-RISK-004]: Animation throttling logic
+- [7_UI_UX_DESIGN-REQ-UI-RISK-006]: Scroll lock for streaming
+- [7_UI_UX_DESIGN-REQ-UI-UNK-001]: Serif font critical marker
+- [7_UI_UX_DESIGN-REQ-UI-UNK-002]: Thinking pulse neutral marker
+- [7_UI_UX_DESIGN-REQ-UI-UNK-004]: Spacing rem scaling
+- [4_USER_FEATURES-REQ-006]: Multi-agent dashboard sidebar
+- [4_USER_FEATURES-REQ-008]: Blueprint & Spec previewer implementation
+- [4_USER_FEATURES-REQ-009]: Gated Autonomy UI features
+- [4_USER_FEATURES-REQ-029]: Review dashboard UI implementation
+- [4_USER_FEATURES-REQ-030]: Interactive SVG Mermaid diagrams
+- [4_USER_FEATURES-REQ-033]: Roadmap Viewer (Gantt/DAG) implementation
+- [4_USER_FEATURES-REQ-036]: Active Task Card UI
+- [4_USER_FEATURES-REQ-037]: TDD Test Status UI
+- [4_USER_FEATURES-REQ-044]: WCAG 2.1 Level AA compliance
+- [4_USER_FEATURES-REQ-045]: Screen Reader ARIA-Live optimization
+- [4_USER_FEATURES-REQ-047]: High-Contrast & color blindness support
+- [4_USER_FEATURES-REQ-048]: Responsive sizing & reflow
+- [4_USER_FEATURES-REQ-049]: Universal Unicode support
+- [4_USER_FEATURES-REQ-051]: Locale-aware formatting
+- [4_USER_FEATURES-REQ-052]: Language-specific model support UI
+- [4_USER_FEATURES-REQ-053]: Pluralization & gendered grammar
+- [4_USER_FEATURES-REQ-054]: Structural navigation & semantics
+- [4_USER_FEATURES-REQ-055]: Contextual focus management
+- [4_USER_FEATURES-REQ-056]: TTS compatibility mode
+- [4_USER_FEATURES-REQ-057]: Visual diagram text alternatives
+- [4_USER_FEATURES-REQ-058]: RTL layout support
+
+## Detailed Deliverables & Components
+### VSCode Extension Scaffolding
+- Develop the extension host logic in `@devs/vscode`.
+- Implement Webview lifecycle management and `vscode.getState` persistence.
+- Build the `postMessage` Batching Buffer to handle high-frequency agent thought streams.
+
+### Webview Routing & State (Zustand)
+- Implement the platform-agnostic Zustand store for global UI state.
+- Develop the `ViewRouter` to handle transitions between DASHBOARD, RESEARCH, SPEC, ROADMAP, and CONSOLE.
+- Build the "Incremental View Unlocking" logic that constraints navigation based on project phase.
+
+### Visual Glass-Box Components
+- Implement `ThoughtStreamer` with italic serif typography and virtual scrolling.
+- Build `DAGCanvas` using D3-force for layout and SVG for high-fidelity rendering.
+- Develop `MermaidHost` to render interactive architectural diagrams with theme synchronization.
+
+### Accessibility & Theme Support
+- Implement mandatory use of VSCode design tokens (`--vscode-*`).
+- Develop the "High Contrast Mode" overrides and WCAG 2.1 AA compliance layer.
+- Build the "Animation Throttler" and "Reduced Motion" logic.
+
+## Technical Considerations
+- Offloading heavy DAG layout calculations to a Web Worker to keep the UI responsive.
+- Using `Shadow DOM` isolation to prevent CSS collisions between VSCode and the extension.
+- Handling `vscode-resource://` URI schemes for secure asset loading.

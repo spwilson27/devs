@@ -1,0 +1,108 @@
+{
+  "01_CLI Foundation & Core Logic": [
+    "TAS-102",
+    "2_TAS-REQ-033",
+    "6_UI_UX_ARCH-REQ-002",
+    "1_PRD-REQ-INT-001",
+    "5_SECURITY_DESIGN-REQ-SEC-STR-006"
+  ],
+  "02_Headless Mode & IPC Parity": [
+    "1_PRD-REQ-INT-005",
+    "3_MCP-REQ-SYS-003",
+    "8_RISKS-REQ-054",
+    "6_UI_UX_ARCH-REQ-069",
+    "1_PRD-REQ-SYS-003"
+  ],
+  "03_CLI State Control & Commands": [
+    "1_PRD-REQ-INT-006",
+    "9_ROADMAP-TAS-706",
+    "4_USER_FEATURES-REQ-005",
+    "6_UI_UX_ARCH-REQ-035"
+  ],
+  "04_TUI Framework & Styling Foundations": [
+    "9_ROADMAP-TAS-701",
+    "6_UI_UX_ARCH-REQ-072",
+    "7_UI_UX_DESIGN-REQ-UI-DES-060",
+    "7_UI_UX_DESIGN-REQ-UI-DES-024",
+    "7_UI_UX_DESIGN-REQ-UI-DES-063"
+  ],
+  "05_TUI Core Semantic Palette": [
+    "7_UI_UX_DESIGN-REQ-UI-DES-024-1",
+    "7_UI_UX_DESIGN-REQ-UI-DES-024-2",
+    "7_UI_UX_DESIGN-REQ-UI-DES-024-3",
+    "7_UI_UX_DESIGN-REQ-UI-DES-024-4",
+    "7_UI_UX_DESIGN-REQ-UI-DES-024-5"
+  ],
+  "06_TUI Resilience & Platform Support": [
+    "7_UI_UX_DESIGN-REQ-UI-RISK-005",
+    "6_UI_UX_ARCH-REQ-013",
+    "6_UI_UX_ARCH-REQ-014"
+  ],
+  "07_TUI Fallbacks & Color Modes": [
+    "7_UI_UX_DESIGN-REQ-UI-DES-063-1",
+    "7_UI_UX_DESIGN-REQ-UI-DES-063-2",
+    "7_UI_UX_DESIGN-REQ-UI-DES-063-3",
+    "6_UI_UX_ARCH-REQ-080",
+    "7_UI_UX_DESIGN-REQ-UI-DES-064"
+  ],
+  "08_TUI Layout & Main Zones": [
+    "9_ROADMAP-REQ-UI-003",
+    "7_UI_UX_DESIGN-REQ-UI-DES-061",
+    "7_UI_UX_DESIGN-REQ-UI-DES-061-1",
+    "7_UI_UX_DESIGN-REQ-UI-DES-061-2",
+    "7_UI_UX_DESIGN-REQ-UI-DES-061-3"
+  ],
+  "09_TUI Footer & Layout Adaptability": [
+    "7_UI_UX_DESIGN-REQ-UI-DES-061-4",
+    "7_UI_UX_DESIGN-REQ-UI-DES-062-1"
+  ],
+  "10_TUI Block & Hierarchy Styling": [
+    "7_UI_UX_DESIGN-REQ-UI-DES-065",
+    "7_UI_UX_DESIGN-REQ-UI-DES-065-1",
+    "7_UI_UX_DESIGN-REQ-UI-DES-065-2"
+  ],
+  "11_TUI Primitive Components": [
+    "6_UI_UX_ARCH-REQ-103",
+    "6_UI_UX_ARCH-REQ-104",
+    "6_UI_UX_ARCH-REQ-106",
+    "6_UI_UX_ARCH-REQ-107"
+  ],
+  "12_TUI Log Streaming & Event Support": [
+    "TAS-038",
+    "9_ROADMAP-REQ-INT-003",
+    "6_UI_UX_ARCH-REQ-105",
+    "7_UI_UX_DESIGN-REQ-UI-DES-068-2",
+    "7_UI_UX_DESIGN-REQ-UI-DES-069"
+  ],
+  "13_TUI Progress & Status Dashboards": [
+    "9_ROADMAP-REQ-SYS-002",
+    "9_ROADMAP-REQ-UI-001",
+    "9_ROADMAP-REQ-UI-002",
+    "4_USER_FEATURES-REQ-025"
+  ],
+  "14_TUI Navigation & Hotkeys Foundation": [
+    "9_ROADMAP-REQ-UI-012",
+    "9_ROADMAP-REQ-UI-009",
+    "7_UI_UX_DESIGN-REQ-UI-DES-066",
+    "4_USER_FEATURES-REQ-046",
+    "7_UI_UX_DESIGN-REQ-UI-UNK-003"
+  ],
+  "15_TUI Specific Hotkeys & Focus": [
+    "7_UI_UX_DESIGN-REQ-UI-DES-066-1",
+    "7_UI_UX_DESIGN-REQ-UI-DES-066-3",
+    "7_UI_UX_DESIGN-REQ-UI-DES-066-4",
+    "7_UI_UX_DESIGN-REQ-UI-DES-067"
+  ],
+  "16_TUI Approval Gates & Interaction": [
+    "9_ROADMAP-REQ-INT-001",
+    "9_ROADMAP-REQ-INT-002",
+    "9_ROADMAP-REQ-UI-005",
+    "4_USER_FEATURES-REQ-004",
+    "7_UI_UX_DESIGN-REQ-UI-DES-066-2"
+  ],
+  "17_TUI Diff Reviewer": [
+    "7_UI_UX_DESIGN-REQ-UI-DES-070",
+    "7_UI_UX_DESIGN-REQ-UI-DES-070-1",
+    "7_UI_UX_DESIGN-REQ-UI-DES-070-2"
+  ]
+}

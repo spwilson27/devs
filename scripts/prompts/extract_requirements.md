@@ -32,6 +32,7 @@ Before generating the final document, plan your approach:
 # ANTI-PATTERNS (WHAT NOT TO DO)
 - Do not invent new requirements that are not present in the source document.
 - Do not group distinct, testable requirements into a single large paragraph.
+- Do not use phrases like "See source for details" in the description. The description MUST be a meaningful and self-contained summary of the requirement, as agents working from the requirements may not have the original document for context.
 
 # OUTPUT FORMAT
 - Must be a valid GitHub-Flavored Markdown document.

@@ -6,11 +6,13 @@ You are a Project Architect. Your job is to take the master `requirements.md` an
 
 # TASK
 1. Read `requirements.md`.
-2. Reorder the requirements into a logical sequence for development (e.g., core infrastructure before UI).
-3. Add a "Dependencies" section for each requirement or group of requirements where applicable.
-4. Write the reordered requirements to a NEW file named `ordered_requirements.md`.
-5. You MUST verify your work by running `python scripts/verify_requirements.py --verify-ordered requirements.md ordered_requirements.md`.
-6. If the script reports missing or extra requirements, you MUST continually fix `ordered_requirements.md` and run the validation again until it succeeds perfectly.
+2. Reorder the requirements into a logical sequence for development, specifically ordering them by dependency (e.g., core infrastructure before UI).
+3. You MUST perform this reordering manually. DO NOT use or write a script to simply reorder them.
+4. Because there may be many requirements, take multiple turns to do this (e.g., process a chunk of requirements, update the file, and continue in the next turn) so you do not run into output context limits.
+5. Add a "Dependencies" section for each requirement or group of requirements where applicable.
+6. Write the reordered requirements to a NEW file named `ordered_requirements.md`.
+7. You MUST verify your work by running `python scripts/verify_requirements.py --verify-ordered requirements.md ordered_requirements.md`.
+8. If the script reports missing or extra requirements, you MUST continually fix `ordered_requirements.md` and run the validation again until it succeeds perfectly.
 
 # CHAIN OF THOUGHT
 Before generating the final document, plan your approach:
@@ -26,6 +28,8 @@ Before generating the final document, plan your approach:
 # ANTI-PATTERNS (WHAT NOT TO DO)
 - Do not invent new requirements that were not in the master list.
 - Do not create circular dependencies.
+- Do not use or write scripts to reorder the requirements. It must be done manually.
+- Do not try to write the entire ordered requirements document in a single turn if it risks hitting output length limits. Write it in chunks.
 
 # OUTPUT FORMAT
 - Must be a valid GitHub-Flavored Markdown document.

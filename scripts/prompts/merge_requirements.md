@@ -31,6 +31,8 @@ Before generating the final document, plan your approach:
 # ANTI-PATTERNS (WHAT NOT TO DO)
 - Do not lose the `Source` references when merging duplicates. If REQ-001 and REQ-005 are identical, the merged requirement MUST list both source documents.
 - Do not silently ignore conflicts; resolve them definitively.
+- DO NOT group multiple removed or merged requirement IDs under a single generic block like `[MERGED_REDUNDANT_IDS]`. 
+- DO NOT create a separate block for every single merged source ID if they were all merged into the same target. Group them logically under the TARGET ID as defined below.
 
 # OUTPUT FORMAT for requirements.md
 - Must be a valid GitHub-Flavored Markdown document.
@@ -46,11 +48,19 @@ Before generating the final document, plan your approach:
 - **Dependencies:** None
 ```
 
-- For the "Removed or Modified Requirements" section, structure EACH item EXACTLY utilizing the following markdown format:
+- For the "Removed or Modified Requirements" section, structure EACH item EXACTLY utilizing one of the following markdown formats:
 
+**For Merged Requirements (Group by Target ID):**
 ```markdown
-### **[{REQ_ID}]** {Requirement Title}
-- **Original Source:** {Source document 1, Source document 2, etc.}
-- **Action:** {Removed | Modified}
-- **Rationale:** {Clear explanation for exactly why it was dropped or changed and how conflicts were resolved}
+### **[{TARGET_REQ_ID}]** {Target Requirement Title}
+- **Action:** Merged
+- **Merged Source IDs:** [{SRC_ID_1}], [{SRC_ID_2}], [{SRC_ID_3}]
+- **Rationale:** {Clear explanation for exactly why these source IDs were merged into this target ID, and how conflicts were resolved}
+```
+
+**For Removed Requirements:**
+```markdown
+### **[{REMOVED_REQ_ID}]** {Requirement Title}
+- **Action:** Removed
+- **Rationale:** {Clear explanation for exactly why it was dropped}
 ```
