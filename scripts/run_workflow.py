@@ -12,15 +12,40 @@ from typing import Dict, List, Any
 
 
 # Default CLI backends config for gemini/claude. Assumes same runner logic as gen_all.py
-def run_ai_command(prompt: str, cwd: str) -> subprocess.CompletedProcess:
+def run_ai_command(prompt: str, cwd: str, prefix: str = "") -> int:
     # Use gemini CLI by default, adapt if you prefer an existing `AIRunner` structure
-    return subprocess.run(
+    process = subprocess.Popen(
         ["gemini", "-y"],
-        input=prompt,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         cwd=cwd,
-        capture_output=True,
         text=True
     )
+
+    def write_input():
+        try:
+            if process.stdin:
+                process.stdin.write(prompt)
+        except Exception:
+            pass
+        finally:
+            if process.stdin:
+                process.stdin.close()
+            
+    writer = threading.Thread(target=write_input)
+    writer.start()
+
+    if process.stdout:
+        for line in iter(process.stdout.readline, ""):
+            if line:
+                print(f"{prefix}{line}", end="")
+                sys.stdout.flush()
+
+    process.wait()
+    writer.join()
+
+    return process.returncode
 
 
 def load_dags(tasks_dir: str) -> Dict[str, Dict[str, List[str]]]:
@@ -131,12 +156,16 @@ def run_agent(agent_type: str, prompt_file: str, root_dir: str, task_context: di
         prompt = prompt.replace(f"{{{k}}}", str(v))
 
     print(f"      [{agent_type}] Starting agent in {cwd}...")
-    result = run_ai_command(prompt, cwd)
+
+    phase_id = task_context.get("phase_filename", "phase")
+    task_name = task_context.get("task_name", "task")
+    short_task = task_name[:15] + ".." if len(task_name) > 15 else task_name
+    prefix = f"[{phase_id}/{short_task}] "
+
+    returncode = run_ai_command(prompt, cwd, prefix=prefix)
     
-    if result.returncode != 0:
-        print(f"      [{agent_type}] FATAL: Agent process failed with exit code {result.returncode}")
-        print(result.stdout)
-        print(result.stderr)
+    if returncode != 0:
+        print(f"      [{agent_type}] FATAL: Agent process failed with exit code {returncode}")
         return False
         
     return True
@@ -236,6 +265,8 @@ def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, max_retries: int
     
     try:
         context = {
+            "phase_filename": phase_part,
+            "task_name": name_part,
             "branches_list": branch_name,
             "description_ctx": get_project_context(root_dir)
         }
