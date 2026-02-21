@@ -94,6 +94,33 @@
 
 ---
 
+## Task: Phase 3 / 03_acid_transactions_state_integrity / 02_acid_state_repository
+
+**Status: PASSED — 1 fix applied. All 213 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implementation agent did a high quality job. Core logic is correct, the ACID invariants are sound, and the tests are comprehensive.
+- `packages/core/src/persistence/state_repository.ts` — `transaction<T>(cb)` delegates correctly to `db.transaction(cb)()`. Every write method (9 total, 8 previous + new `updateTaskStatus`) calls `this.transaction()` internally — no raw `stmt.run()` outside a transaction block. SAVEPOINT nesting semantics documented in both the file header and the class docblock.
+- `packages/core/test/persistence/StateRepository.test.ts` — 26 tests: basic commit/rollback (6), nested savepoints (3), `updateTaskStatus` lifecycle + atomicity (6), all-method rollback coverage (9), isolation (2). Every test is tightly scoped and asserts database state directly via raw SQL, not via `getProjectState`.
+- `docs/architecture/acid_transactions.md` — thorough ACID design guide: ACID properties table, WAL crash-recovery explanation, `transaction()` API, nested savepoint example with SQL annotations, no-raw-writes invariant table, parallel safety note, atomic task-start example.
+- `scripts/simulate_crash_during_write.ts` — 4-phase simulation: baseline insert, child process crash mid-transaction, WAL recovery verification (row count + value + crash_value absence + journal_mode), StateRepository ACID equivalence. 10 checks total.
+- `.agent/packages/core/persistence/state_repository.agent.md` — updated with full transaction API docs, savepoint nesting behaviour, and updated prepared-statement count (15 total: 9 write + 6 query).
+- **Fix applied:** `execFileSync` was imported from `node:child_process` but never used in `scripts/simulate_crash_during_write.ts`. Only `spawnSync` is needed. Removed the dead import. (`noUnusedLocals` is not in `tsconfig.json` so TypeScript does not flag this — it slips through silently.)
+
+### Key Discovery: `noUnusedLocals` is not enabled
+
+- Root `tsconfig.json` has `strict: true` but does NOT enable `noUnusedLocals` or `noUnusedParameters`.
+- Dead imports (like the removed `execFileSync`) will not be caught by `tsc --noEmit`.
+- A future phase should consider adding `noUnusedLocals: true` and `noUnusedParameters: true` to the root `tsconfig.json` to catch these automatically. Not done now to avoid scope creep.
+
+### Deferred Items (future phases)
+
+- `packages/core/src/index.ts` does not yet export `updateTaskStatus` or `StateRepository` entity types. A future phase should add barrel exports so consumers can `import { StateRepository } from '@devs/core'` directly.
+- `noUnusedLocals: true` would prevent future dead-import regressions. Consider adding when tightening TypeScript config.
+
+---
+
 ## Task: Phase 2 / 02_sqlite_schema_persistence_layer / 03_define_interaction_schemas
 
 **Status: PASSED — no fixes required. All presubmit checks pass (139 total: 105 infra + 34 unit tests).**

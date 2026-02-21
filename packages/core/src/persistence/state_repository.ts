@@ -5,10 +5,10 @@
  * to the SQLite state store.
  *
  * The StateRepository is the single authoritative interface for persisting
- * agent state. All multi-row write operations are wrapped in better-sqlite3
- * transactions to guarantee ACID semantics: either the entire batch commits or
- * nothing does. Individual write methods return the new row's primary-key id so
- * that callers can chain FK references without additional queries.
+ * agent state. ALL write operations are wrapped in better-sqlite3 transactions
+ * to guarantee ACID semantics: either the entire operation commits or nothing
+ * does. A public `transaction<T>()` method allows callers to compose multiple
+ * writes into a single atomic unit.
  *
  * Entity hierarchy (mirrors the DB schema):
  *   Project → Document / Requirement / Epic → Task → AgentLog / EntropyEvent
@@ -16,7 +16,19 @@
  * Query methods support state recovery after an interrupted run and provide
  * the audit trail required by the loop-detection subsystem.
  *
- * Requirements: 2_TAS-REQ-017, TAS-105 through TAS-111
+ * Design notes:
+ * - `transaction<T>(cb)` wraps `cb` in `db.transaction(cb)()`. When nested,
+ *   better-sqlite3 automatically uses SQLite SAVEPOINTs so the outer
+ *   transaction always wins: an inner failure only rolls back its savepoint
+ *   without touching the outer transaction.
+ * - Every write method calls `this.transaction()` internally, so individual
+ *   method calls are always atomic and callers can compose them into larger
+ *   atomic units without any extra ceremony.
+ * - No raw `stmt.run()` call outside of `this.transaction()` exists in this
+ *   module — this is the "no non-transactional writes" invariant.
+ *
+ * Requirements: 2_TAS-REQ-017, TAS-105 through TAS-111,
+ *               [TAS-067], [8_RISKS-REQ-115], [3_MCP-REQ-REL-004]
  */
 
 import type Database from "better-sqlite3";
@@ -131,9 +143,11 @@ export interface ProjectState {
  * Prepared statements are compiled once in the constructor and reused on
  * every method call, avoiding per-call parse overhead.
  *
- * All bulk write methods (`saveRequirements`, `saveEpics`, `saveTasks`) wrap
- * their inserts inside a `db.transaction()` so that any row-level error causes
- * a full rollback — no partial data is ever committed. [2_TAS-REQ-017]
+ * ALL write methods wrap their statements inside `this.transaction()` so
+ * that no raw, non-transactional writes can occur. [TAS-067]
+ *
+ * Use `transaction<T>(cb)` to compose multiple write methods into a single
+ * atomic operation. Nested calls automatically use SQLite SAVEPOINTs.
  */
 export class StateRepository {
   private readonly db: Database.Database;
@@ -147,6 +161,7 @@ export class StateRepository {
   private readonly _stmtInsertRequirement: Statement;
   private readonly _stmtInsertEpic: Statement;
   private readonly _stmtInsertTask: Statement;
+  private readonly _stmtUpdateTaskStatus: Statement;
   private readonly _stmtInsertAgentLog: Statement;
   private readonly _stmtInsertEntropyEvent: Statement;
 
@@ -200,6 +215,12 @@ export class StateRepository {
       VALUES (@epic_id, @title, @description, @status, @git_commit_hash)
     `);
 
+    // Status update for a single task — used by the orchestrator to transition
+    // task lifecycle states (pending → in_progress → completed / failed).
+    this._stmtUpdateTaskStatus = db.prepare(
+      "UPDATE tasks SET status = ? WHERE id = ?"
+    );
+
     this._stmtInsertAgentLog = db.prepare(`
       INSERT INTO agent_logs (task_id, agent_role, thread_id, thought, action, observation)
       VALUES (@task_id, @agent_role, @thread_id, @thought, @action, @observation)
@@ -246,6 +267,27 @@ export class StateRepository {
     );
   }
 
+  // ── Transaction manager ───────────────────────────────────────────────────
+
+  /**
+   * Wraps a callback in a SQLite transaction.
+   *
+   * On success the transaction is committed and the callback's return value is
+   * returned. On any thrown exception the transaction is automatically rolled
+   * back and the exception is re-thrown — no partial data is ever committed.
+   *
+   * When `transaction()` is called while another `transaction()` is already
+   * active on this connection, better-sqlite3 automatically demotes the inner
+   * call to a SAVEPOINT. The inner savepoint can be rolled back independently
+   * without affecting the outer transaction. [TAS-067, 8_RISKS-REQ-115]
+   *
+   * @param cb - The callback containing one or more write operations.
+   * @returns The value returned by `cb`.
+   */
+  transaction<T>(cb: () => T): T {
+    return this.db.transaction(cb)();
+  }
+
   // ── Write methods ─────────────────────────────────────────────────────────
 
   /**
@@ -259,24 +301,26 @@ export class StateRepository {
    * @returns The project's primary-key id.
    */
   upsertProject(project: Project): number {
-    if (project.id !== undefined) {
-      this._stmtUpsertProject.run({
-        id: project.id,
+    return this.transaction(() => {
+      if (project.id !== undefined) {
+        this._stmtUpsertProject.run({
+          id: project.id,
+          name: project.name,
+          status: project.status ?? "pending",
+          current_phase: project.current_phase ?? null,
+          metadata: project.metadata ?? null,
+        });
+        return project.id;
+      }
+
+      const result = this._stmtInsertProject.run({
         name: project.name,
         status: project.status ?? "pending",
         current_phase: project.current_phase ?? null,
         metadata: project.metadata ?? null,
       });
-      return project.id;
-    }
-
-    const result = this._stmtInsertProject.run({
-      name: project.name,
-      status: project.status ?? "pending",
-      current_phase: project.current_phase ?? null,
-      metadata: project.metadata ?? null,
+      return Number(result.lastInsertRowid);
     });
-    return Number(result.lastInsertRowid);
   }
 
   /**
@@ -285,14 +329,16 @@ export class StateRepository {
    * @returns The new document's primary-key id.
    */
   addDocument(doc: Document): number {
-    const result = this._stmtInsertDocument.run({
-      project_id: doc.project_id,
-      name: doc.name,
-      content: doc.content ?? null,
-      version: doc.version ?? 1,
-      status: doc.status ?? "draft",
+    return this.transaction(() => {
+      const result = this._stmtInsertDocument.run({
+        project_id: doc.project_id,
+        name: doc.name,
+        content: doc.content ?? null,
+        version: doc.version ?? 1,
+        status: doc.status ?? "draft",
+      });
+      return Number(result.lastInsertRowid);
     });
-    return Number(result.lastInsertRowid);
   }
 
   /**
@@ -302,10 +348,9 @@ export class StateRepository {
    * and the originating error is re-thrown. [2_TAS-REQ-017]
    */
   saveRequirements(reqs: Requirement[]): void {
-    const stmt = this._stmtInsertRequirement;
-    const runAll = this.db.transaction((requirements: Requirement[]) => {
-      for (const req of requirements) {
-        stmt.run({
+    this.transaction(() => {
+      for (const req of reqs) {
+        this._stmtInsertRequirement.run({
           project_id: req.project_id,
           description: req.description,
           priority: req.priority ?? "medium",
@@ -314,7 +359,6 @@ export class StateRepository {
         });
       }
     });
-    runAll(reqs);
   }
 
   /**
@@ -323,10 +367,9 @@ export class StateRepository {
    * If any row fails, the entire batch is rolled back. [2_TAS-REQ-017]
    */
   saveEpics(epics: Epic[]): void {
-    const stmt = this._stmtInsertEpic;
-    const runAll = this.db.transaction((epicList: Epic[]) => {
-      for (const epic of epicList) {
-        stmt.run({
+    this.transaction(() => {
+      for (const epic of epics) {
+        this._stmtInsertEpic.run({
           project_id: epic.project_id,
           name: epic.name,
           order_index: epic.order_index ?? 0,
@@ -334,7 +377,6 @@ export class StateRepository {
         });
       }
     });
-    runAll(epics);
   }
 
   /**
@@ -343,10 +385,9 @@ export class StateRepository {
    * If any row fails, the entire batch is rolled back. [2_TAS-REQ-017]
    */
   saveTasks(tasks: Task[]): void {
-    const stmt = this._stmtInsertTask;
-    const runAll = this.db.transaction((taskList: Task[]) => {
-      for (const task of taskList) {
-        stmt.run({
+    this.transaction(() => {
+      for (const task of tasks) {
+        this._stmtInsertTask.run({
           epic_id: task.epic_id,
           title: task.title,
           description: task.description ?? null,
@@ -355,7 +396,25 @@ export class StateRepository {
         });
       }
     });
-    runAll(tasks);
+  }
+
+  /**
+   * Updates the `status` field of a single task.
+   *
+   * Used by the orchestrator to transition task lifecycle states:
+   * `pending → in_progress → completed | failed`.
+   *
+   * The update is wrapped in `this.transaction()`, so it participates in any
+   * outer transaction the caller has opened (e.g. composing a task-start event
+   * with an agent log in one atomic write). [TAS-067]
+   *
+   * @param taskId - The task's primary-key id.
+   * @param status - The new status string.
+   */
+  updateTaskStatus(taskId: number, status: string): void {
+    this.transaction(() => {
+      this._stmtUpdateTaskStatus.run(status, taskId);
+    });
   }
 
   /**
@@ -364,15 +423,17 @@ export class StateRepository {
    * @returns The new log entry's primary-key id.
    */
   appendAgentLog(log: AgentLog): number {
-    const result = this._stmtInsertAgentLog.run({
-      task_id: log.task_id,
-      agent_role: log.agent_role,
-      thread_id: log.thread_id ?? null,
-      thought: log.thought ?? null,
-      action: log.action ?? null,
-      observation: log.observation ?? null,
+    return this.transaction(() => {
+      const result = this._stmtInsertAgentLog.run({
+        task_id: log.task_id,
+        agent_role: log.agent_role,
+        thread_id: log.thread_id ?? null,
+        thought: log.thought ?? null,
+        action: log.action ?? null,
+        observation: log.observation ?? null,
+      });
+      return Number(result.lastInsertRowid);
     });
-    return Number(result.lastInsertRowid);
   }
 
   /**
@@ -381,12 +442,14 @@ export class StateRepository {
    * @returns The new entropy event's primary-key id.
    */
   recordEntropyEvent(event: EntropyEvent): number {
-    const result = this._stmtInsertEntropyEvent.run({
-      task_id: event.task_id,
-      hash_chain: event.hash_chain,
-      error_output: event.error_output ?? null,
+    return this.transaction(() => {
+      const result = this._stmtInsertEntropyEvent.run({
+        task_id: event.task_id,
+        hash_chain: event.hash_chain,
+        error_output: event.error_output ?? null,
+      });
+      return Number(result.lastInsertRowid);
     });
-    return Number(result.lastInsertRowid);
   }
 
   // ── Query methods ─────────────────────────────────────────────────────────
