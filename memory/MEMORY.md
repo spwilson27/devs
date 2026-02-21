@@ -75,6 +75,25 @@
 
 ---
 
+## Task: Phase 2 / 02_sqlite_schema_persistence_layer / 04_implement_state_repository
+
+**Status: PASSED — 1 fix applied. All 147 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implementation agent did a high quality job. Core logic is correct, ACID-compliant, and well-tested.
+- `packages/core/src/persistence/state_repository.ts` — 14 prepared statements (8 write, 6 query) all now pre-compiled in constructor. Entity types well-documented with JSDoc. `upsertProject` correctly uses `ON CONFLICT(id) DO UPDATE SET` to preserve child rows. Bulk write methods all wrapped in `db.transaction()` for ACID rollback.
+- `packages/core/test/persistence/state_repository.test.ts` — 36 tests covering all 9 public methods, default field values, FK constraint enforcement, ACID rollback for all 3 bulk methods, cascade delete, and full lifecycle.
+- `scripts/db_stress_test.ts` — 11 checks: 1000 bulk requirement writes in single transaction, 1000 individual log appends, data integrity, WAL mode verified after 2000 operations.
+- AOD at `.agent/packages/core/persistence/state_repository.agent.md` — accurate, complete, includes usage example.
+- **Fix applied:** Query statements (`_stmtGetProject`, `_stmtGetRequirements`, `_stmtGetEpics`, `_stmtGetTasks`, `_stmtGetAgentLogs`, `_stmtGetTaskLogs`) were compiled inside `getProjectState()` and `getTaskLogs()` on every call. This was inconsistent with the class JSDoc claim ("Prepared statements are compiled once in the constructor and reused on every method call") and the established pattern for write statements. Moved all 6 query statements to the constructor as `private readonly` fields.
+
+### Deferred Items (future phases)
+
+- `packages/core/src/index.ts` does not yet re-export `StateRepository` or its entity types. A future phase should add these to the barrel so consumers can import from `@devs/core` directly.
+
+---
+
 ## Task: Phase 2 / 02_sqlite_schema_persistence_layer / 03_define_interaction_schemas
 
 **Status: PASSED — no fixes required. All presubmit checks pass (139 total: 105 infra + 34 unit tests).**
