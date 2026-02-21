@@ -27,3 +27,6 @@ export * from "./orchestration/ImplementationNode.js";
 
 // HITL approval gates — approveDesignNode, approveTaskDagNode, routing, and signal types (TAS-078).
 export * from "./orchestration/hitl.js";
+
+// LangGraph SQLiteSaver — ACID checkpoint persister for crash recovery (9_ROADMAP-REQ-014).
+export * from "./orchestration/SqliteSaver.js";
