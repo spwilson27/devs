@@ -84,6 +84,8 @@
 
 import { StateGraph, START, END, MemorySaver } from "@langchain/langgraph";
 import type { BaseCheckpointSaver } from "@langchain/langgraph";
+import type { RunnableConfig } from "@langchain/core/runnables";
+import type Database from "better-sqlite3";
 import {
   OrchestratorAnnotation,
   type GraphState,
@@ -101,8 +103,8 @@ import {
   checkTurnBudget,
   incrementTurnBudget,
   detectEntropy,
-  type ErrorRoute,
 } from "./robustness.js";
+import { SqliteSaver } from "./SqliteSaver.js";
 
 // ── Node implementations (stubs) ─────────────────────────────────────────────
 
@@ -342,5 +344,68 @@ export class OrchestrationGraph {
       // Full implementation will loop back to "implement" with a new strategy.
       .addEdge("pivot_agent", END)
       .compile({ checkpointer });
+  }
+
+  // ── Static factory helpers ─────────────────────────────────────────────────
+
+  /**
+   * Creates an `OrchestrationGraph` backed by SQLite persistence.
+   *
+   * This is the recommended factory for production use. Every node transition
+   * will write an ACID-committed checkpoint to the `checkpoints` table in the
+   * provided `better-sqlite3` database, enabling crash recovery and historical
+   * state inspection.
+   *
+   * @example
+   * ```ts
+   * import { createDatabase } from "@devs/core";
+   * import { OrchestrationGraph } from "@devs/core";
+   *
+   * const db = createDatabase({ dbPath: ".devs/state.sqlite" });
+   * const og = OrchestrationGraph.withSqlitePersistence(db);
+   * const config = OrchestrationGraph.configForProject("my-project-id");
+   * await og.graph.invoke(state, config);
+   * ```
+   *
+   * @param db - An open `better-sqlite3` Database instance. The caller is
+   *   responsible for the connection lifecycle (open / close).
+   * @returns A new `OrchestrationGraph` with `SqliteSaver` as the checkpointer.
+   */
+  static withSqlitePersistence(db: Database.Database): OrchestrationGraph {
+    return new OrchestrationGraph(new SqliteSaver(db));
+  }
+
+  /**
+   * Builds the LangGraph `RunnableConfig` for a project run.
+   *
+   * Sets `thread_id` to the `projectId` to provide per-project checkpoint
+   * isolation in the `checkpoints` table. All node transitions for this project
+   * are stored under the same `thread_id`, making it possible to resume an
+   * interrupted run by supplying the same config to a subsequent `invoke` call.
+   *
+   * Correlation mapping:
+   * - `thread_id`     → `projectId` (project-level checkpoint scope)
+   * - `checkpoint_id` → auto-generated UUID per checkpoint (managed by LangGraph)
+   *
+   * The `activeTaskId` is embedded within the serialized graph state at each
+   * checkpoint, making it recoverable via `getTuple()` on `SqliteSaver`.
+   *
+   * @example
+   * ```ts
+   * const config = OrchestrationGraph.configForProject("project-123");
+   * // → { configurable: { thread_id: "project-123" } }
+   *
+   * await og.graph.invoke(state, config);
+   *
+   * // Resume after crash:
+   * const newOg = OrchestrationGraph.withSqlitePersistence(recoveredDb);
+   * await newOg.graph.invoke(new Command({ resume: signal }), config);
+   * ```
+   *
+   * @param projectId - The unique identifier for the project.
+   * @returns A `RunnableConfig` with `thread_id` set to `projectId`.
+   */
+  static configForProject(projectId: string): RunnableConfig {
+    return { configurable: { thread_id: projectId } };
   }
 }

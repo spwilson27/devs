@@ -198,6 +198,31 @@
 
 ---
 
+## Task: Phase 1 / 04_langgraph_core_orchestration_engine / 03_integrate_sqlite_persistence
+
+**Status: PASSED — 2 fixes applied. All 502 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implementation agent did a high quality job. Core logic is correct and well-tested.
+- `graph.ts` — two static factory helpers added cleanly: `withSqlitePersistence(db)` and `configForProject(projectId)`. Both are well-documented with JSDoc and usage examples. No logic changes needed.
+- `packages/core/src/orchestration/__tests__/persistence.test.ts` — 16 integration tests covering WAL mode, checkpoint row count, thread_id isolation, factory helpers, requirement DAG serialization, crash recovery (3 scenarios), ACID table existence, and `deleteThread` cleanup. Test structure is correct: shared `beforeEach`/`afterEach` for DB lifecycle, explicit cleanup of WAL/SHM sidecar files, try/catch around `afterEach` close for crash-recovery test safety.
+- AOD at `.agent/packages/core/orchestration/graph.agent.md` — accurately updated with 16 persistence tests, two static methods, crash recovery pattern, and correlation mapping table.
+- **Fix 1:** `type ErrorRoute` was imported from `robustness.js` at line 107 in `graph.ts` but never used in the file. The previous phase's reviewer correctly removed the re-export of `ErrorRoute` from `graph.ts`, but left the import itself. Removed the dead type import.
+- **Fix 2:** `packages/core/vitest.config.ts` (per-package config) only included `test/**/*.test.ts`. The new persistence test lives at `src/orchestration/__tests__/persistence.test.ts`. Running `pnpm test packages/core` (which uses the per-package config) would have silently skipped all 16 persistence tests. Added `src/**/*.test.ts` to match the root vitest config pattern, ensuring per-package and root runners discover the same tests.
+
+### Key Architecture Confirmed
+
+- Test file location: persistence tests live in `src/orchestration/__tests__/` (co-located with source), not in `test/` (the integration test dir). Both the root and per-package vitest configs now pick this up correctly.
+- `SqliteSaver.close()` closes `this.db`. Calling `db.close()` afterward (in crash-recovery tests) is safe — better-sqlite3 treats it as a no-op on an already-closed connection.
+- `configForProject(projectId)` maps `projectId → thread_id` only. The `checkpoint_id` is UUID-managed by LangGraph; `activeTaskId` is embedded in the checkpoint state blob — no additional configuration needed for task-level recovery.
+
+### Brittle Area Discovered
+
+- **Per-package vitest config must mirror root config patterns:** When tests are added in `src/` subdirectories (co-located with source), both the root `vitest.config.ts` AND `packages/<pkg>/vitest.config.ts` must include a `src/**/*.test.ts` glob. If only the root is updated, `pnpm test packages/<pkg>` silently misses the co-located tests. This creates a class of tests that appear to pass in CI (root run) but are never executed by the per-package runner that developers use locally. Updated `packages/core/vitest.config.ts` to include `src/**/*.test.ts`.
+
+---
+
 ## Task: Phase 1 / 04_langgraph_core_orchestration_engine / 05_robustness_and_error_handling
 
 **Status: PASSED — 3 fixes applied. All 450 unit tests + all infra checks pass.**
