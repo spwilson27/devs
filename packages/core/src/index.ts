@@ -13,3 +13,8 @@ export * from "./persistence/SqliteManager.js";
 
 // Orchestration state types and LangGraph channel annotations (TAS-097).
 export * from "./orchestration/types.js";
+
+// Git integration: client wrapper, ignore policy, and snapshot strategy.
+export * from "./git/GitClient.js";
+export * from "./git/GitIgnoreManager.js";
+export * from "./git/SnapshotManager.js";
