@@ -194,7 +194,18 @@
         "phase_11/40_icon_status_actions",
         "phase_11/41_container_radius_shadow",
         "phase_11/42_shadow_task_cards",
-        "phase_11/43_interactive_targets"
+        "phase_11/43_interactive_targets",
+        "phase_11/45_performance_reactivity",
+        "phase_11/46_memoization_lazy_loading",
+        "phase_11/44_dashboard_sidebar_hub",
+        "phase_11/47_security_shield_csp",
+        "phase_11/48_motion_philosophy",
+        "phase_11/50_thought_pulse_logic",
+        "phase_11/49_animation_targets",
+        "phase_11/52_attention_pulses",
+        "phase_11/51_invocation_shimmer",
+        "phase_11/53_interaction_highlighting",
+        "phase_11/54_context_guidance_ui"
     ],
     "tdd_completed": false,
     "ordered_phases_generated": []
