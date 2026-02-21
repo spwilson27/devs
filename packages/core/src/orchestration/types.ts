@@ -160,13 +160,18 @@ export type EpicStatus = "pending" | "active" | "completed" | "failed";
 /**
  * Execution status for an atomic task.
  * Maps to the `status` column in the `tasks` SQLite table.
+ *
+ * - `"resumed"` — task was in-progress at crash time and has been flagged for
+ *   recovery audit. The orchestrator will re-execute the task from the
+ *   checkpointed LangGraph state.
  */
 export type TaskStatus =
   | "pending"
   | "in_progress"
   | "completed"
   | "failed"
-  | "blocked";
+  | "blocked"
+  | "resumed";
 
 // ── Data record interfaces ────────────────────────────────────────────────────
 

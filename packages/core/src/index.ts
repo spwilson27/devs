@@ -58,3 +58,7 @@ export * from "./audit/DecisionLogger.js";
 export * from "./events/types.js";
 export * from "./events/EventBus.js";
 export * from "./events/SharedEventBus.js";
+
+// Crash recovery engine — deterministic resume from last committed checkpoint.
+// Requirements: [1_PRD-REQ-REL-003], [1_PRD-REQ-SYS-002], [1_PRD-REQ-MET-014], [1_PRD-REQ-CON-002]
+export * from "./recovery/RecoveryManager.js";
