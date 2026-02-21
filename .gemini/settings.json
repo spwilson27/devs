@@ -7,14 +7,8 @@
         "previewFeatures": true,
         "enablePromptCompletion": true
     },
-    "telemetry": {
-        "enabled": true,
-        "target": "local",
-        "otlpEndpoint": "",
-        "outfile": "/Users/mrwilson/.gemini/telemetry.log"
-    },
     "mcpServers": {
-        "example-rs-rag": {
+        "local-rag-search": {
             "command": ".rag/mcp_server_wrapper.sh",
             "args": [],
             "env": {}

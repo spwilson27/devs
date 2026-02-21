@@ -1,10 +1,10 @@
 {
   "servers": [
     {
-      "id": "local-rag",
+      "id": "local-rag-search",
       "name": "Local RAG MCP",
       "protocol": "stdio",
-      "command": "/Users/mrwilson/Software/devs/.agent/worktrees/tester/.rag/mcp_server_wrapper.sh",
+      "command": ".rag/mcp_server_wrapper.sh",
       "args": [],
       "env": {}
     }
