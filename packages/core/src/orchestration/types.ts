@@ -42,6 +42,8 @@ export type { AgentId };
  * - `"paused_for_approval"` — waiting at a HITL approval gate.
  * - `"error"`               — an unhandled exception was caught by the global error node.
  * - `"strategy_pivot"`      — turn budget exceeded; agent awaits new strategy.
+ * - `"security_pause"`      — git integrity check failed; implementation halted
+ *                             until the workspace/object-store is remediated.
  */
 export type ProjectStatus =
   | "initializing"
@@ -53,7 +55,8 @@ export type ProjectStatus =
   | "failed"
   | "paused_for_approval"
   | "error"
-  | "strategy_pivot";
+  | "strategy_pivot"
+  | "security_pause";
 
 // ── Robustness / Error-recovery types ─────────────────────────────────────────
 

@@ -1,16 +1,17 @@
 /**
  * @devs/core — ImplementationNode unit tests
  *
- * Requirements: TAS-054, TAS-055
+ * Requirements: TAS-054, TAS-055, TAS-095, 9_ROADMAP-REQ-015, 8_RISKS-REQ-127
  *
- * `SnapshotManager` is injected as a mock to verify the node's behavior
- * without performing real git operations.
+ * `SnapshotManager`, `GitIntegrityChecker`, and `TaskRepository` are injected
+ * as mocks to verify the node's behavior without performing real git operations.
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createImplementationNode } from "./ImplementationNode.js";
 import { createInitialState } from "./types.js";
 import type { GraphState, ProjectConfig } from "./types.js";
+import type { IntegrityCheckResult, ObjectStoreCheckResult } from "../git/GitIntegrityChecker.js";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -40,6 +41,47 @@ function makeMockSnapshotManager(commitHash: string | null = "abc1234") {
     createTaskSnapshot: vi.fn().mockResolvedValue(commitHash),
     takeSnapshot: vi.fn().mockResolvedValue("sha"),
     getStatus: vi.fn().mockResolvedValue({ isClean: true, staged: [], unstaged: [], untracked: [] }),
+  };
+}
+
+function makePassingIntegrityResult(): IntegrityCheckResult {
+  return {
+    passed: true,
+    isDirty: false,
+    isDetachedHead: false,
+    headReachable: true,
+    violations: [],
+  };
+}
+
+function makeFailingIntegrityResult(kind: "dirty_workspace" | "detached_head" | "missing_head" | "object_store_corruption"): IntegrityCheckResult {
+  return {
+    passed: false,
+    isDirty: kind === "dirty_workspace",
+    isDetachedHead: kind === "detached_head",
+    headReachable: kind !== "missing_head",
+    violations: [{ kind, message: `Test violation: ${kind}` }],
+  };
+}
+
+function makePassingObjectStoreResult(): ObjectStoreCheckResult {
+  return { passed: true, violations: [] };
+}
+
+function makeFailingObjectStoreResult(): ObjectStoreCheckResult {
+  return {
+    passed: false,
+    violations: [{ kind: "object_store_corruption", message: "Object store is corrupt" }],
+  };
+}
+
+function makeMockIntegrityChecker(
+  workspaceResult: IntegrityCheckResult = makePassingIntegrityResult(),
+  objectStoreResult: ObjectStoreCheckResult = makePassingObjectStoreResult()
+) {
+  return {
+    verifyWorkspace: vi.fn().mockResolvedValue(workspaceResult),
+    checkObjectStoreIntegrity: vi.fn().mockResolvedValue(objectStoreResult),
   };
 }
 
@@ -385,6 +427,203 @@ describe("createImplementationNode", () => {
       // Should complete without error and still return updated state.
       const result = await node(makeState({ activeTaskId: "task-001" }));
       expect(result.tasks).toBeDefined();
+    });
+  });
+
+  // ── integrity check integration (8_RISKS-REQ-127) ────────────────────────
+
+  describe("integrity check integration", () => {
+    let mockIntegrityChecker: ReturnType<typeof makeMockIntegrityChecker>;
+
+    beforeEach(() => {
+      mockIntegrityChecker = makeMockIntegrityChecker();
+    });
+
+    it("skips integrity checks when integrityChecker is not provided", async () => {
+      // No integrityChecker → no calls to verifyWorkspace or checkObjectStoreIntegrity
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        // integrityChecker intentionally omitted
+      });
+
+      const result = await node(makeState({ activeTaskId: "task-001" }));
+      // Should behave as before: snapshot is taken, task's gitHash is updated
+      expect(result.tasks).toBeDefined();
+    });
+
+    it("calls verifyWorkspace before creating the snapshot", async () => {
+      const callOrder: string[] = [];
+      mockIntegrityChecker.verifyWorkspace.mockImplementation(async () => {
+        callOrder.push("verifyWorkspace");
+        return makePassingIntegrityResult();
+      });
+      mockSnapshot.createTaskSnapshot.mockImplementation(async () => {
+        callOrder.push("createTaskSnapshot");
+        return "abc1234";
+      });
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      await node(makeState({ activeTaskId: "task-001" }));
+      expect(callOrder.indexOf("verifyWorkspace")).toBeLessThan(
+        callOrder.indexOf("createTaskSnapshot")
+      );
+    });
+
+    it("calls checkObjectStoreIntegrity before creating the snapshot", async () => {
+      const callOrder: string[] = [];
+      mockIntegrityChecker.checkObjectStoreIntegrity.mockImplementation(
+        async () => {
+          callOrder.push("checkObjectStoreIntegrity");
+          return makePassingObjectStoreResult();
+        }
+      );
+      mockSnapshot.createTaskSnapshot.mockImplementation(async () => {
+        callOrder.push("createTaskSnapshot");
+        return "abc1234";
+      });
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      await node(makeState({ activeTaskId: "task-001" }));
+      expect(callOrder.indexOf("checkObjectStoreIntegrity")).toBeLessThan(
+        callOrder.indexOf("createTaskSnapshot")
+      );
+    });
+
+    it("returns security_pause status when workspace integrity check fails (dirty workspace)", async () => {
+      mockIntegrityChecker.verifyWorkspace.mockResolvedValue(
+        makeFailingIntegrityResult("dirty_workspace")
+      );
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      const state = makeState({ activeTaskId: "task-001" });
+      const result = await node(state);
+      expect(result.status).toBe("security_pause");
+    });
+
+    it("returns security_pause status when workspace integrity check fails (detached HEAD)", async () => {
+      mockIntegrityChecker.verifyWorkspace.mockResolvedValue(
+        makeFailingIntegrityResult("detached_head")
+      );
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      const state = makeState({ activeTaskId: "task-001" });
+      const result = await node(state);
+      expect(result.status).toBe("security_pause");
+    });
+
+    it("returns security_pause status when object store integrity check fails", async () => {
+      mockIntegrityChecker.checkObjectStoreIntegrity.mockResolvedValue(
+        makeFailingObjectStoreResult()
+      );
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      const state = makeState({ activeTaskId: "task-001" });
+      const result = await node(state);
+      expect(result.status).toBe("security_pause");
+    });
+
+    it("does NOT create a snapshot when workspace integrity check fails", async () => {
+      mockIntegrityChecker.verifyWorkspace.mockResolvedValue(
+        makeFailingIntegrityResult("dirty_workspace")
+      );
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      await node(makeState({ activeTaskId: "task-001" }));
+      expect(mockSnapshot.createTaskSnapshot).not.toHaveBeenCalled();
+    });
+
+    it("does NOT create a snapshot when object store integrity check fails", async () => {
+      mockIntegrityChecker.checkObjectStoreIntegrity.mockResolvedValue(
+        makeFailingObjectStoreResult()
+      );
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      await node(makeState({ activeTaskId: "task-001" }));
+      expect(mockSnapshot.createTaskSnapshot).not.toHaveBeenCalled();
+    });
+
+    it("proceeds with snapshot when both integrity checks pass", async () => {
+      // Both mocks return passing results (default)
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      const result = await node(makeState({ activeTaskId: "task-001" }));
+      expect(mockSnapshot.createTaskSnapshot).toHaveBeenCalledOnce();
+      expect(result.status).not.toBe("security_pause");
+    });
+
+    it("preserves projectConfig fields other than status when returning security_pause", async () => {
+      mockIntegrityChecker.verifyWorkspace.mockResolvedValue(
+        makeFailingIntegrityResult("dirty_workspace")
+      );
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      const projectConfig = makeProjectConfig();
+      const state = makeState({
+        activeTaskId: "task-001",
+        projectConfig,
+      });
+      const result = await node(state);
+      expect(result.projectConfig?.projectId).toBe(projectConfig.projectId);
+      expect(result.projectConfig?.name).toBe(projectConfig.name);
+    });
+
+    it("skips integrity checks when activeTaskId is null (no-op path unchanged)", async () => {
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        integrityChecker: mockIntegrityChecker as never,
+      });
+
+      await node(makeState({ activeTaskId: null }));
+      expect(mockIntegrityChecker.verifyWorkspace).not.toHaveBeenCalled();
+      expect(
+        mockIntegrityChecker.checkObjectStoreIntegrity
+      ).not.toHaveBeenCalled();
     });
   });
 });
