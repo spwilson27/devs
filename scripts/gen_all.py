@@ -755,7 +755,7 @@ class Phase6BreakDownTasks(BasePhase):
                     ctx.save_state()
                 return True
 
-            with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
                 futures = [
                     executor.submit(process_sub_epic, name, reqs)
                     for name, reqs in sorted(sub_epics.items())

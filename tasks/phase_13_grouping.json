@@ -1,0 +1,19 @@
+{
+  "01_Rewind Core Infrastructure": ["TAS-047", "1_PRD-REQ-REL-003", "3_MCP-REQ-REL-003", "9_ROADMAP-TAS-706", "2_TAS-REQ-008"],
+  "02_Filesystem State Restoration": ["8_RISKS-REQ-069", "8_RISKS-REQ-085", "5_SECURITY_DESIGN-REQ-SEC-SD-074", "8_RISKS-REQ-127", "8_RISKS-REQ-087"],
+  "03_Relational State Rollback": ["8_RISKS-REQ-070", "9_ROADMAP-REQ-014", "8_RISKS-REQ-073", "3_MCP-RISK-102", "8_RISKS-REQ-115"],
+  "04_Vector Memory Management": ["8_RISKS-REQ-071", "4_USER_FEATURES-REQ-075", "3_MCP-RISK-501", "3_MCP-RISK-502", "3_MCP-RISK-503"],
+  "05_Full Rewind Execution": ["3_MCP-TAS-095", "4_USER_FEATURES-REQ-002", "4_USER_FEATURES-REQ-074", "9_ROADMAP-REQ-038", "9_ROADMAP-REQ-047"],
+  "06_Crash Recovery and Resume": ["1_PRD-REQ-SYS-002", "TAS-069", "8_RISKS-REQ-042", "8_RISKS-REQ-095", "8_RISKS-REQ-043", "4_USER_FEATURES-REQ-013"],
+  "07_Dirty Workspace Detection": ["8_RISKS-REQ-072", "4_USER_FEATURES-REQ-041"],
+  "08_State Machine and Integrity": ["8_RISKS-REQ-001", "4_USER_FEATURES-REQ-071", "8_RISKS-REQ-083", "8_RISKS-REQ-084", "3_MCP-TAS-092"],
+  "09_Agent Error and Loop Handling": ["8_RISKS-REQ-074", "4_USER_FEATURES-REQ-043", "3_MCP-TAS-052", "4_USER_FEATURES-REQ-077", "4_USER_FEATURES-REQ-079"],
+  "10_Retry and Tool Error Protocol": ["3_MCP-TAS-090", "3_MCP-TAS-091", "3_MCP-TAS-073", "3_MCP-TAS-071", "3_MCP-TAS-072"],
+  "11_Sandbox and Failure Preservation": ["3_MCP-TAS-021", "UNKNOWN-802", "5_SECURITY_DESIGN-REQ-SEC-SD-076", "3_MCP-RISK-301", "RISK-401"],
+  "12_Model Failover and Provider Handling": ["8_RISKS-REQ-081", "8_RISKS-REQ-082", "3_MCP-RISK-201", "RISK-802"],
+  "13_Human-in-the-Loop Recovery": ["2_TAS-REQ-019", "8_RISKS-REQ-075", "8_RISKS-REQ-076", "9_ROADMAP-REQ-006"],
+  "14_Entropy Detection and Pivot": ["3_MCP-TAS-019", "4_USER_FEATURES-REQ-080"],
+  "15_CLI and UI State Controls": ["1_PRD-REQ-INT-006", "1_PRD-REQ-UI-011", "1_PRD-REQ-UI-012", "4_USER_FEATURES-REQ-064", "4_USER_FEATURES-REQ-066", "4_USER_FEATURES-REQ-067"],
+  "16_Budget Recovery and Redaction": ["8_RISKS-REQ-090", "5_SECURITY_DESIGN-REQ-SEC-RSK-902"],
+  "17_Infrastructure Risk Mitigation": ["3_MCP-RISK-302", "3_MCP-RISK-303", "RISK-402", "RISK-601", "RISK-602", "RISK-801", "9_ROADMAP-RISK-401"]
+}
