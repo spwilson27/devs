@@ -37,6 +37,8 @@
  * - `approveTaskDag`  — HITL gate: pauses for user review of task DAG.
  * - `implementNode`   — TDD implementation loop for a single task. Sets status → "implementing".
  * - `verifyNode`      — Final task verification and regression testing.
+ * - `errorNode`       — Global error recovery. Captures exceptions, logs to errorHistory.
+ * - `pivotAgentNode`  — Strategy pivot stub. Triggered after 3 consecutive errors or budget exceeded.
  *
  * ## HITL Gates
  *
@@ -92,6 +94,15 @@ import {
   routeAfterApproveDesign,
   routeAfterApproveTaskDag,
 } from "./hitl.js";
+import {
+  errorNode,
+  pivotAgentNode,
+  routeAfterError,
+  checkTurnBudget,
+  incrementTurnBudget,
+  detectEntropy,
+  type ErrorRoute,
+} from "./robustness.js";
 
 // ── Node implementations (stubs) ─────────────────────────────────────────────
 
@@ -143,11 +154,32 @@ export function distillNode(state: GraphState): Partial<GraphState> {
  * Stub: advances project status to "implementing". Full implementation will
  * execute the six-step TDD cycle (write tests → implement → review → verify →
  * document → run tests) for the task identified by `state.activeTaskId`.
+ *
+ * Robustness integration:
+ * - Checks the turn budget before starting; if exceeded, routes to pivot.
+ * - Checks entropy detection before starting; if loop detected, routes to pivot.
+ * - Increments `implementationTurns` on each normal (non-pivot) execution.
  */
 export function implementNode(state: GraphState): Partial<GraphState> {
+  // Turn budget check: if exceeded, signal pivot instead of implementing
+  const budgetExceeded = checkTurnBudget(state);
+  if (budgetExceeded !== null) {
+    return budgetExceeded;
+  }
+
+  // Entropy detection: if the agent is looping, signal pivot
+  if (detectEntropy(state)) {
+    return {
+      status: "strategy_pivot",
+      projectConfig: { ...state.projectConfig, status: "strategy_pivot" },
+      pendingRecoveryNode: "pivot_agent",
+    };
+  }
+
   return {
     status: "implementing",
     projectConfig: { ...state.projectConfig, status: "implementing" },
+    ...incrementTurnBudget(state),
   };
 }
 
@@ -176,11 +208,12 @@ export function verifyNode(state: GraphState): Partial<GraphState> {
 /**
  * The set of destinations that `routeAfterVerify` can return.
  *
- * - `"implement"` — retry the implementation loop (task failed).
- * - `"distill"`   — advance to the next task/epic (task passed, work remains).
- * - `END`         — terminate the pipeline (all work is complete).
+ * - `"implement"`    — retry the implementation loop (task failed).
+ * - `"distill"`      — advance to the next task/epic (task passed, work remains).
+ * - `"pivot_agent"`  — strategy pivot requested (turn budget exceeded or entropy detected).
+ * - `END`            — terminate the pipeline (all work is complete).
  */
-export type VerifyRoute = "implement" | "distill" | typeof END;
+export type VerifyRoute = "implement" | "distill" | "pivot_agent" | typeof END;
 
 /**
  * Routing function for the conditional edge after `verifyNode`.
@@ -196,13 +229,18 @@ export type VerifyRoute = "implement" | "distill" | typeof END;
  * @returns The name of the next node or `END`.
  */
 export function routeAfterVerify(state: GraphState): VerifyRoute {
-  // Priority 1: retry if the active task failed verification.
+  // Priority 1: strategy pivot if `pendingRecoveryNode` signals it.
+  if (state.pendingRecoveryNode === "pivot_agent") {
+    return "pivot_agent";
+  }
+
+  // Priority 2: retry if the active task failed verification.
   const activeTask = state.tasks.find((t) => t.taskId === state.activeTaskId);
   if (activeTask?.status === "failed") {
     return "implement";
   }
 
-  // Priority 2: advance if there are epics still in progress.
+  // Priority 3: advance if there are epics still in progress.
   const hasActiveEpics = state.epics.some(
     (e) => e.status !== "completed" && e.status !== "failed",
   );
@@ -210,11 +248,11 @@ export function routeAfterVerify(state: GraphState): VerifyRoute {
     return "distill";
   }
 
-  // Priority 3: terminate — all epics are complete or failed.
+  // Priority 4: terminate — all epics are complete or failed.
   return END;
 }
 
-// Re-export HITL node functions so test files can import them from graph.ts if needed.
+// Re-export HITL node functions for test access.
 export { approveDesignNode, approveTaskDagNode };
 
 // ── OrchestrationGraph ────────────────────────────────────────────────────────
@@ -279,6 +317,9 @@ export class OrchestrationGraph {
       .addNode("approveTaskDag", approveTaskDagNode)
       .addNode("implement", implementNode)
       .addNode("verify", verifyNode)
+      // ── Robustness nodes ────────────────────────────────────────────────────
+      .addNode("error", errorNode)
+      .addNode("pivot_agent", pivotAgentNode)
       // ── Linear edges ───────────────────────────────────────────────────────
       .addEdge(START, "research")
       .addEdge("research", "design")
@@ -292,8 +333,14 @@ export class OrchestrationGraph {
       .addConditionalEdges("approveTaskDag", routeAfterApproveTaskDag)
       .addEdge("implement", "verify")
       // ── Conditional routing from verify ────────────────────────────────────
-      // Returns: "implement" (retry) | "distill" (advance) | END (terminate)
+      // Returns: "implement" (retry) | "distill" (advance) | "pivot_agent" | END
       .addConditionalEdges("verify", routeAfterVerify)
+      // ── Error recovery routing ──────────────────────────────────────────────
+      // Returns: "pivot_agent" (3+ consecutive errors) | "implement" (retry)
+      .addConditionalEdges("error", routeAfterError)
+      // ── PivotAgent terminates the run (stub: END) ───────────────────────────
+      // Full implementation will loop back to "implement" with a new strategy.
+      .addEdge("pivot_agent", END)
       .compile({ checkpointer });
   }
 }

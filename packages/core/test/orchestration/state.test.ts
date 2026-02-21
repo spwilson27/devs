@@ -192,6 +192,21 @@ describe("createInitialState", () => {
     // If this assignment compiles, the return type is structurally correct.
     expect(state).toBeDefined();
   });
+
+  it("initializes errorHistory to an empty array", () => {
+    const state = createInitialState(validProjectConfig());
+    expect(state.errorHistory).toEqual([]);
+  });
+
+  it("initializes implementationTurns to 0", () => {
+    const state = createInitialState(validProjectConfig());
+    expect(state.implementationTurns).toBe(0);
+  });
+
+  it("initializes pendingRecoveryNode to null", () => {
+    const state = createInitialState(validProjectConfig());
+    expect(state.pendingRecoveryNode).toBeNull();
+  });
 });
 
 // ── ProjectConfig ─────────────────────────────────────────────────────────────
@@ -206,6 +221,9 @@ describe("ProjectConfig", () => {
       "implementing",
       "completed",
       "failed",
+      // Robustness statuses (Phase 1 / Task 05)
+      "error",
+      "strategy_pivot",
     ];
     for (const status of validStatuses) {
       const config: ProjectConfig = { ...validProjectConfig(), status };
@@ -466,6 +484,10 @@ describe("OrchestratorAnnotation — LangGraph channel definition", () => {
     expect(spec).toHaveProperty("status");
     expect(spec).toHaveProperty("hitlDecisions");
     expect(spec).toHaveProperty("pendingApprovalGate");
+    // Robustness channels (Phase 1 / Task 05)
+    expect(spec).toHaveProperty("errorHistory");
+    expect(spec).toHaveProperty("implementationTurns");
+    expect(spec).toHaveProperty("pendingRecoveryNode");
   });
 
   it("GraphState type is compatible with OrchestratorState (compile-time check)", () => {

@@ -198,6 +198,38 @@
 
 ---
 
+## Task: Phase 1 / 04_langgraph_core_orchestration_engine / 05_robustness_and_error_handling
+
+**Status: PASSED — 3 fixes applied. All 450 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implementation agent produced high-quality, well-structured work. Logic is correct and the 75-test suite has comprehensive coverage.
+- `robustness.ts` — clean separation of concerns: secret masking, error classification, error record building, consecutive count tracking, error node, turn budget utilities, pivot agent stub, entropy detection, chaos recovery. All are pure functions with no side effects.
+- `types.ts` — clean additions: `ErrorRecord`, `ErrorKind`, 2 new `ProjectStatus` values, 3 new `OrchestratorState` fields, all wired into `OrchestratorAnnotation` and `createInitialState`.
+- `graph.ts` — clean integration: `implementNode` correctly checks budget then entropy before executing; `routeAfterVerify` correctly prioritises pivot_agent routing above task-retry routing.
+- **Fix 1:** Removed dead `ERROR_SENTINEL` constant — exported but never imported anywhere. Its JSDoc described it as "stored in `pendingRecoveryNode`" but the code stores node names there, not the sentinel. Misleading dead code removed.
+- **Fix 2:** Removed `export { errorNode, pivotAgentNode, routeAfterError }` and `export type { ErrorRoute }` re-exports from `graph.ts`. `index.ts` already does `export * from robustness.js`, so these re-exports created barrel ambiguity (TypeScript silently drops ambiguous names from `export *` aggregators). No test imported these symbols from `graph.ts`.
+- **Fix 3:** Updated `robustness.agent.md` to document `ErrorRoute` and `StaleTaskInfo` exported types that were missing from the exports table.
+
+### Key Architecture Confirmed
+
+- `errorNode` contract: calling nodes must (1) catch exception, (2) set `pendingRecoveryNode` to their node name, (3) return that partial state, routing to `"error"`. The `errorNode` synthesizes a generic error from the node name. Real agent nodes in later phases MUST follow this pattern.
+- `checkTurnBudget` + `detectEntropy` are called at the START of `implementNode` — pivot happens proactively before consuming another turn, which is correct.
+- `routeAfterError` only inspects the `consecutiveCount` of the LAST error record (set by `buildErrorRecord` + `countConsecutiveErrors` in `errorNode`). This is correct — it's the snapshot at the time of the error.
+
+### Brittle Area Discovered
+
+- **Barrel ambiguity from `export *` chains**: when `graph.ts` re-exports symbols also exported by `robustness.ts`, and `index.ts` does `export * from graph.js` + `export * from robustness.js`, TypeScript silently drops the ambiguous names from the barrel (no compile error). This is a silent failure mode — consumers cannot import the ambiguous name from `@devs/core` even though `tsc --noEmit` passes. Pattern: always ensure a symbol is exported from exactly ONE file in the barrel chain. Added to `.agent/memory.md` brittle areas.
+
+### Deferred Items (future phases)
+
+- `pivotAgentNode` is a stub — full implementation (AI-agent strategy pivot) deferred to later phase.
+- `findStaleOrDirtyStates` returns data for the caller; `rewind`/`resume` UX not yet implemented.
+- Real pipeline nodes (research, design, distill, implement agents) must wrap their execution in try/catch and route to `"error"` on failure, following the documented error-routing pattern.
+
+---
+
 ## Task: Phase 2 / 02_sqlite_schema_persistence_layer / 03_define_interaction_schemas
 
 **Status: PASSED — no fixes required. All presubmit checks pass (139 total: 105 infra + 34 unit tests).**

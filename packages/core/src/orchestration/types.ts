@@ -39,8 +39,9 @@ export type { AgentId };
  * Lifecycle status for the top-level project.
  * Maps to the `status` column in the `projects` SQLite table.
  *
- * `"paused_for_approval"` is set when the orchestration pipeline reaches a
- * HITL approval gate and is waiting for a human decision before proceeding.
+ * - `"paused_for_approval"` — waiting at a HITL approval gate.
+ * - `"error"`               — an unhandled exception was caught by the global error node.
+ * - `"strategy_pivot"`      — turn budget exceeded; agent awaits new strategy.
  */
 export type ProjectStatus =
   | "initializing"
@@ -50,7 +51,48 @@ export type ProjectStatus =
   | "implementing"
   | "completed"
   | "failed"
-  | "paused_for_approval";
+  | "paused_for_approval"
+  | "error"
+  | "strategy_pivot";
+
+// ── Robustness / Error-recovery types ─────────────────────────────────────────
+
+/**
+ * Classification of errors captured by the global error node.
+ *
+ * - `"transient"` — likely recoverable by retry (network, timeout, rate-limit).
+ * - `"logic"`     — deterministic failure in agent logic; retry unlikely to help.
+ * - `"unknown"`   — unclassified; treated as transient for one retry.
+ */
+export type ErrorKind = "transient" | "logic" | "unknown";
+
+/**
+ * A single error capture record stored in `OrchestratorState.errorHistory`.
+ *
+ * Populated by the global `errorNode` whenever an unhandled exception is caught
+ * in any pipeline node. The stack trace is stored as-is (callers must apply
+ * secret masking before populating `stackTrace`).
+ *
+ * Requirements: [8_RISKS-REQ-001], [TAS-078], [9_ROADMAP-PHASE-001]
+ */
+export interface ErrorRecord {
+  /** Unique identifier for this error event. */
+  errorId: string;
+  /** ISO 8601 UTC timestamp when the error was captured. */
+  capturedAt: string;
+  /** The node name that was executing when the error occurred. */
+  sourceNode: string;
+  /** Human-readable error message (sensitive data must be masked). */
+  message: string;
+  /** Full stack trace (sensitive data must be masked). May be empty string. */
+  stackTrace: string;
+  /** Error classification for retry/pivot decisions. */
+  kind: ErrorKind;
+  /** How many consecutive times this error (by message) has occurred. */
+  consecutiveCount: number;
+  /** The task ID active at the time of the error, if any. */
+  taskId: string | null;
+}
 
 // ── HITL (Human-in-the-Loop) types ────────────────────────────────────────────
 
@@ -339,6 +381,32 @@ export interface OrchestratorState {
    * Used by external systems (CLI, VSCode) to prompt the user.
    */
   pendingApprovalGate: HitlGate | null;
+
+  // ── Robustness fields ────────────────────────────────────────────────────────
+
+  /**
+   * History of errors captured by the global `errorNode`.
+   * Each entry represents a single error event. The list is append-only.
+   * Used by retry logic and the `PivotAgent` to decide next steps.
+   */
+  errorHistory: readonly ErrorRecord[];
+
+  /**
+   * Number of implementation turns consumed for the currently active task.
+   * Reset to `0` when a new task is activated (`activeTaskId` changes).
+   * When this reaches `MAX_IMPLEMENTATION_TURNS`, the orchestrator transitions
+   * to `"strategy_pivot"` and invokes `pivotAgentNode`.
+   *
+   * Requirements: [1_PRD-REQ-REL-002]
+   */
+  implementationTurns: number;
+
+  /**
+   * The name of the node that should be executed next after a recovery action.
+   * Set by `errorNode` / `pivotAgentNode` to signal which node to route to.
+   * `null` means no overriding recovery routing is active.
+   */
+  pendingRecoveryNode: string | null;
 }
 
 // ── LangGraph channel annotations ─────────────────────────────────────────────
@@ -377,6 +445,10 @@ export const OrchestratorAnnotation = Annotation.Root({
   status: Annotation<ProjectStatus>(),
   hitlDecisions: Annotation<readonly HitlDecisionRecord[]>(),
   pendingApprovalGate: Annotation<HitlGate | null>(),
+  // Robustness channels
+  errorHistory: Annotation<readonly ErrorRecord[]>(),
+  implementationTurns: Annotation<number>(),
+  pendingRecoveryNode: Annotation<string | null>(),
 });
 
 /**
@@ -418,5 +490,8 @@ export function createInitialState(config: ProjectConfig): OrchestratorState {
     status: config.status,
     hitlDecisions: [],
     pendingApprovalGate: null,
+    errorHistory: [],
+    implementationTurns: 0,
+    pendingRecoveryNode: null,
   };
 }

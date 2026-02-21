@@ -36,3 +36,6 @@ export * from "./orchestration/GitAtomicManager.js";
 
 // Schema drift detection and reconciliation (8_RISKS-REQ-073).
 export * from "./persistence/SchemaReconciler.js";
+
+// State machine robustness and error recovery — errorNode, pivotAgentNode, turn budget, entropy detection.
+export * from "./orchestration/robustness.js";
