@@ -204,7 +204,7 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: 
     try:
         # Create worktree
         try:
-            subprocess.run(["git", "worktree", "add", "-B", branch_name, tmpdir, "main"], cwd=root_dir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            subprocess.run(["git", "worktree", "add", "-B", branch_name, tmpdir, "dev"], cwd=root_dir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         except subprocess.CalledProcessError as e:
             print(f"      [!] Failed to create worktree:\n{e.stderr.decode('utf-8')}")
             return False
@@ -282,11 +282,12 @@ def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, backend: str = "
     os.makedirs(worktrees_dir, exist_ok=True)
     tmpdir = tempfile.mkdtemp(prefix=f"merge_{safe_name_part}_", dir=worktrees_dir)
     
-    print(f"\n   => [Merge] Attempting to merge {task_id} into main...")
+    print(f"\n   => [Merge] Attempting to merge {task_id} into dev...")
     print(f"      Cloning repository to {tmpdir}...")
     
     # Clone the repo locally
     subprocess.run(["git", "clone", root_dir, tmpdir], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["git", "checkout", "dev"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
     try:
         context = {
@@ -311,7 +312,7 @@ def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, backend: str = "
                     presubmit_res = subprocess.run(cmd_list, cwd=tmpdir, capture_output=True, text=True)
                     if presubmit_res.returncode == 0:
                         print(f"      [Merge] Presubmit passed! Pushing to local origin.")
-                        subprocess.run(["git", "push", "origin", "main"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        subprocess.run(["git", "push", "origin", "dev"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                         return True
                     else:
                         print(f"      [Merge] Presubmit failed after fast-forward.")
@@ -323,8 +324,8 @@ def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, backend: str = "
                 # Merge Agent Attempt
                 print(f"      [Merge] Spawning Merge Agent to resolve conflicts (Attempt {attempt}/{max_retries})...")
                 
-                # Reset to clean main before the agent tries
-                subprocess.run(["git", "reset", "--hard", "origin/main"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                # Reset to clean dev before the agent tries
+                subprocess.run(["git", "reset", "--hard", "origin/dev"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 subprocess.run(["git", "clean", "-fd"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 
                 failure_ctx = dict(context)
@@ -341,7 +342,7 @@ def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, backend: str = "
                 
                 if presubmit_res.returncode == 0:
                      print(f"      [Merge] Presubmit passed! Pushing to local origin.")
-                     subprocess.run(["git", "push", "origin", "main"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                     subprocess.run(["git", "push", "origin", "dev"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                      return True
                 else:
                      failure_output = f"{presubmit_res.stdout}\n{presubmit_res.stderr}"
@@ -394,6 +395,11 @@ def get_ready_tasks(master_dag: Dict[str, List[str]], completed_tasks: List[str]
 
 def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str, Any], state_file: str, jobs: int, presubmit_cmd: str, backend: str = "gemini"):
     """Orchestrates the parallel execution of tasks according to the DAG."""
+    # Ensure dev branch exists
+    res = subprocess.run(["git", "rev-parse", "--verify", "dev"], cwd=root_dir, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if res.returncode != 0:
+        subprocess.run(["git", "branch", "dev", "main"], cwd=root_dir, check=True)
+
     active_tasks = set()
     state_lock = threading.Lock()
     
@@ -452,9 +458,11 @@ def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str
                                 state["completed_tasks"].append(task_id)
                                 state["merged_tasks"].append(task_id)
                                 save_workflow_state(state_file, state)
-                            print(f"   -> [Success] Task {task_id} fully integrated into main.")
+                            print(f"   -> [Success] Task {task_id} fully integrated into dev.")
+                            print(f"      Pushing dev to remote origin...")
+                            subprocess.run(["git", "push", "origin", "dev"], cwd=root_dir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                         else:
-                            print(f"\n[!] FATAL: Task {task_id} failed merging into main. Halting workflow.")
+                            print(f"\n[!] FATAL: Task {task_id} failed merging into dev. Halting workflow.")
                             executor.shutdown(wait=False, cancel_futures=True)
                             sys.exit(1)
                     else:
