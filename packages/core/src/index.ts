@@ -50,3 +50,6 @@ export * from "./orchestration/robustness.js";
 
 // Task-scoped git hash persistence and time-travel rewind lookup (TAS-095, 9_ROADMAP-REQ-015).
 export * from "./persistence/TaskRepository.js";
+
+// DecisionLogger: structured API for recording agent architectural decisions (TAS-059).
+export * from "./audit/DecisionLogger.js";
