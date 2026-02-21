@@ -34,6 +34,22 @@ export interface SnapshotOptions {
 }
 
 // ---------------------------------------------------------------------------
+// SnapshotContext
+// ---------------------------------------------------------------------------
+
+/**
+ * Optional contextual metadata passed to `createTaskSnapshot`.
+ * Does not affect the generated commit message — provided for diagnostic
+ * purposes and future extensibility (e.g., enriched commit trailers).
+ *
+ * Requirements: TAS-055
+ */
+export interface SnapshotContext {
+  /** Human-readable task name for diagnostic logging (optional). */
+  taskName?: string;
+}
+
+// ---------------------------------------------------------------------------
 // SnapshotManager
 // ---------------------------------------------------------------------------
 
@@ -76,6 +92,45 @@ export class SnapshotManager {
   async takeSnapshot(message: string): Promise<string> {
     await this.git.add(".");
     return this.git.commit(message);
+  }
+
+  /**
+   * Creates a task-completion snapshot commit.
+   *
+   * Implements the "Snapshot-at-Commit" strategy (TAS-054):
+   *  1. Checks the current workspace status.
+   *  2. If the workspace is clean (no changes), returns `null` — no commit
+   *     is created and the call is a no-op.
+   *  3. Stages all eligible project files via `git add .` (`.devs/` excluded
+   *     via `.gitignore` written during `initialize()`).
+   *  4. Creates a commit with the standard message:
+   *     `task: complete task {taskId}`
+   *  5. Returns the resulting commit SHA hash.
+   *
+   * `initialize()` MUST be called before `createTaskSnapshot()` to ensure
+   * that the git repository exists and `.gitignore` contains the `.devs/`
+   * exclusion. The `ImplementationNode` handles this sequencing.
+   *
+   * @param taskId  - The unique identifier of the completed task.
+   * @param context - Optional metadata for diagnostic purposes.
+   * @returns The commit SHA hash, or `null` if there were no changes to commit.
+   * @throws {GitError} If any git operation fails (e.g., repository not initialized).
+   *
+   * Requirements: TAS-054, TAS-055
+   */
+  async createTaskSnapshot(
+    taskId: string,
+    context: SnapshotContext
+  ): Promise<string | null> {
+    void context; // reserved for future use (e.g., enriched commit trailers)
+
+    const ws = await this.git.status();
+    if (ws.isClean) {
+      return null;
+    }
+
+    await this.git.add(".");
+    return this.git.commit(`task: complete task ${taskId}`);
   }
 
   /**

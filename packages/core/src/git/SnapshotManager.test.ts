@@ -189,6 +189,148 @@ describe("SnapshotManager", () => {
     });
   });
 
+  // ── createTaskSnapshot ───────────────────────────────────────────────────────
+
+  describe("createTaskSnapshot", () => {
+    it("calls add('.') when the workspace has changes", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-001", {});
+      expect(mockGit.add).toHaveBeenCalledWith(["."]);
+    });
+
+    it("calls commit when the workspace has changes", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-001", {});
+      expect(mockGit.commit).toHaveBeenCalled();
+    });
+
+    it("generates commit message containing the taskId", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-abc-123", {});
+      expect(mockGit.commit).toHaveBeenCalledWith(
+        expect.stringContaining("task-abc-123")
+      );
+    });
+
+    it("generates the standard commit message: 'task: complete task {taskId}'", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-007", {});
+      expect(mockGit.commit).toHaveBeenCalledWith(
+        "task: complete task task-007"
+      );
+    });
+
+    it("returns the commit hash from the underlying git operation", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+      mockGit.commit.mockResolvedValue({ commit: "deadbeef1234" });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      const hash = await sm.createTaskSnapshot("task-001", {});
+      expect(hash).toBe("deadbeef1234");
+    });
+
+    it("returns null when workspace is clean (no changes detected)", async () => {
+      // Default mockGit.status returns a clean workspace
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      const result = await sm.createTaskSnapshot("task-001", {});
+      expect(result).toBeNull();
+    });
+
+    it("does not call add or commit when workspace is clean", async () => {
+      // Default mockGit.status returns a clean workspace
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-001", {});
+      expect(mockGit.add).not.toHaveBeenCalled();
+      expect(mockGit.commit).not.toHaveBeenCalled();
+    });
+
+    it("propagates GitError when git operations fail (invalid state)", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+      mockGit.add.mockRejectedValue(new Error("not a git repository"));
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await expect(sm.createTaskSnapshot("task-001", {})).rejects.toThrow();
+    });
+
+    it("calls add before commit (ordering guarantee)", async () => {
+      const callOrder: string[] = [];
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+      mockGit.add.mockImplementation(async () => {
+        callOrder.push("add");
+      });
+      mockGit.commit.mockImplementation(async () => {
+        callOrder.push("commit");
+        return { commit: "sha123" };
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-001", {});
+      expect(callOrder).toEqual(["add", "commit"]);
+    });
+
+    it("accepts optional context with taskName (does not affect commit message)", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      const hash = await sm.createTaskSnapshot("task-001", {
+        taskName: "Setup Project",
+      });
+      // The commit message is still the standard format
+      expect(mockGit.commit).toHaveBeenCalledWith(
+        "task: complete task task-001"
+      );
+      expect(hash).toBe("abc1234");
+    });
+  });
+
   // ── getStatus ────────────────────────────────────────────────────────────────
 
   describe("getStatus", () => {

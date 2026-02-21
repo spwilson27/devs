@@ -121,6 +121,34 @@
 
 ---
 
+## Task: Phase 1 / 06_git_integration_snapshot_strategy / 02_task_commit_logic
+
+**Status: PASSED — 1 fix applied. All 259 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implementation agent produced clean, well-structured work. No logic changes required.
+- `packages/core/src/git/SnapshotManager.ts` — `SnapshotContext` interface and `createTaskSnapshot` method added correctly. `void context;` pattern is valid for reserving a parameter without unused-variable warnings. Clean / dirty branching logic is correct and matches TAS-054 spec.
+- `packages/core/src/orchestration/ImplementationNode.ts` — factory pattern enables clean DI for tests. `initialize()` correctly called before `createTaskSnapshot()`. `readonly TaskRecord[]` type on `updatedTasks` is compatible with `GraphState["tasks"]`. No-op path returns `{}` (not `null`) — correct for LangGraph partial state.
+- `packages/core/src/git/SnapshotManager.test.ts` — 23 tests (7 initialize + 4 takeSnapshot + 10 createTaskSnapshot + 2 getStatus). Mock pattern mirrors `GitClient.test.ts` consistently. Mock returns simple-git format (`isClean: () => boolean`) which is correctly processed by `GitClient.status()` before being consumed by `SnapshotManager`.
+- `packages/core/src/orchestration/ImplementationNode.test.ts` — 11 tests. Full coverage of all branches: null activeTaskId, dirty workspace, clean workspace, ordering guarantee, error propagation.
+- `packages/core/src/index.ts` — Both new exports present with correct `.js` extensions.
+- AOD files — accurate, well-formed YAML front-matter.
+- **Fix applied:** `ImplementationNode.agent.md` claimed "17 tests" but actual count is 11 (confirmed by vitest output and manual count of test file). Corrected to "11 tests". Also corrected the same count in `.agent/memory.md` changelog entry.
+
+### Key Architecture Confirmed
+
+- `createTaskSnapshot` returns `string | null` — `null` on clean workspace (not an error, a no-op signal). This is the correct semantic for the "Snapshot-at-Commit" strategy.
+- `ImplementationNode` uses the factory pattern (`createImplementationNode(config)`) rather than a class — enables DI of `snapshotManager` without needing a test subclass.
+- The `SnapshotContext` parameter is `context: SnapshotContext` (required, not optional) even though all its fields are optional. This is intentional — it forces the call site to pass an object, making future enrichment easier without a breaking API change.
+
+### Deferred Items (future phases)
+
+- `SnapshotContext.taskName` is currently unused in `createTaskSnapshot` — reserved for future commit trailer enrichment. The `void context;` expression suppresses unused-variable warnings.
+- `ImplementationNode` only updates `TaskRecord.gitHash`. Future phases may want to also transition the task status (e.g., `in_progress → complete`) in the same node return.
+
+---
+
 ## Task: Phase 2 / 02_sqlite_schema_persistence_layer / 03_define_interaction_schemas
 
 **Status: PASSED — no fixes required. All presubmit checks pass (139 total: 105 infra + 34 unit tests).**

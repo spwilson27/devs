@@ -21,3 +21,6 @@ export * from "./git/SnapshotManager.js";
 
 // Cyclical OrchestrationGraph — nodes, routing, and compiled StateGraph (TAS-103).
 export * from "./orchestration/graph.js";
+
+// LangGraph node: task snapshot integration (TAS-054, TAS-055).
+export * from "./orchestration/ImplementationNode.js";
