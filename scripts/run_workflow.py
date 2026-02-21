@@ -12,10 +12,20 @@ from typing import Dict, List, Any
 
 
 # Default CLI backends config for gemini/claude. Assumes same runner logic as gen_all.py
-def run_ai_command(prompt: str, cwd: str, prefix: str = "") -> int:
-    # Use gemini CLI by default, adapt if you prefer an existing `AIRunner` structure
+def run_ai_command(prompt: str, cwd: str, prefix: str = "", backend: str = "gemini") -> int:
+    cmd = ["gemini", "-y"]
+    tmp_file_name = None
+
+    if backend == "claude":
+        cmd = ["claude", "-p", "--dangerously-skip-permissions"]
+    elif backend == "copilot":
+        fd, tmp_file_name = tempfile.mkstemp(text=True)
+        with os.fdopen(fd, 'w', encoding='utf-8') as f:
+            f.write(prompt)
+        cmd = ["copilot", "-p", f"Follow the instructions in @{tmp_file_name}", "--yolo"]
+
     process = subprocess.Popen(
-        ["gemini", "-y"],
+        cmd,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -44,6 +54,12 @@ def run_ai_command(prompt: str, cwd: str, prefix: str = "") -> int:
 
     process.wait()
     writer.join()
+
+    if tmp_file_name:
+        try:
+            os.remove(tmp_file_name)
+        except OSError:
+            pass
 
     return process.returncode
 
@@ -144,7 +160,7 @@ def get_project_context(root_dir: str) -> str:
     return ""
 
 
-def run_agent(agent_type: str, prompt_file: str, root_dir: str, task_context: dict, cwd: str) -> bool:
+def run_agent(agent_type: str, prompt_file: str, root_dir: str, task_context: dict, cwd: str, backend: str = "gemini") -> bool:
     """Formats the prompt and executes the AI agent."""
     prompt_path = os.path.join(root_dir, "scripts", "prompts", prompt_file)
     with open(prompt_path, "r", encoding="utf-8") as f:
@@ -162,7 +178,7 @@ def run_agent(agent_type: str, prompt_file: str, root_dir: str, task_context: di
     short_task = task_name[:15] + ".." if len(task_name) > 15 else task_name
     prefix = f"[{phase_id}/{short_task}] "
 
-    returncode = run_ai_command(prompt, cwd, prefix=prefix)
+    returncode = run_ai_command(prompt, cwd, prefix=prefix, backend=backend)
     
     if returncode != 0:
         print(f"      [{agent_type}] FATAL: Agent process failed with exit code {returncode}")
@@ -171,7 +187,7 @@ def run_agent(agent_type: str, prompt_file: str, root_dir: str, task_context: di
     return True
 
 
-def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retries: int = 3) -> bool:
+def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: str = "gemini", max_retries: int = 3) -> bool:
     """Handles the lifecycle of a single task: worktree creation, agents, and commit."""
     phase_id, task_id = full_task_id.split("/", 1)
     safe_task_id = task_id.replace("/", "_").replace(".md", "")
@@ -200,11 +216,11 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
         }
 
         # 1. Implementation Agent
-        if not run_agent("Implementation", "implement_task.md", root_dir, context, tmpdir):
+        if not run_agent("Implementation", "implement_task.md", root_dir, context, tmpdir, backend):
             return False
 
         # 2. Review Agent
-        if not run_agent("Review", "review_task.md", root_dir, context, tmpdir):
+        if not run_agent("Review", "review_task.md", root_dir, context, tmpdir, backend):
             return False
 
         # 3. Verification Loop
@@ -233,7 +249,7 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
                  # Feed the failure back to the review agent
                  failure_ctx = dict(context)
                  failure_ctx["task_details"] += f"\n\n### PRESUBMIT FAILURE (Attempt {attempt})\nThe presubmit script failed with the following output. Please fix the code.\n\n```\n{presubmit_res.stdout}\n{presubmit_res.stderr}\n```\n"
-                 if not run_agent("Review (Retry)", "review_task.md", root_dir, failure_ctx, tmpdir):
+                 if not run_agent("Review (Retry)", "review_task.md", root_dir, failure_ctx, tmpdir, backend):
                      return False
                      
         print(f"   -> [!] Task {full_task_id} failed presubmit {max_retries} times. Aborting task.")
@@ -248,7 +264,7 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
             print(f"      [!] Task failed. Leaving worktree {tmpdir} and branch {branch_name} for investigation.")
 
 
-def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, max_retries: int = 3) -> bool:
+def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, backend: str = "gemini", max_retries: int = 3) -> bool:
     """Creates a clean clone of the repo, merges the task branch, and verifies presubmit."""
     phase_part, name_part = task_id.split("/", 1)
     safe_name_part = name_part.replace("/", "_").replace(".md", "")
@@ -305,7 +321,7 @@ def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, max_retries: int
                 failure_ctx = dict(context)
                 failure_ctx["description_ctx"] += f"\n\n### PREVIOUS ATTEMPT FAILURE\nThe previous merge or presubmit failed with:\n```\n{failure_output}\n```\n"
                 
-                if not run_agent("Merge", "merge_task.md", root_dir, failure_ctx, tmpdir):
+                if not run_agent("Merge", "merge_task.md", root_dir, failure_ctx, tmpdir, backend):
                     print(f"      [!] Merge agent failed to cleanly exit.")
                     continue
                     
@@ -367,7 +383,7 @@ def get_ready_tasks(master_dag: Dict[str, List[str]], completed_tasks: List[str]
     return ready
 
 
-def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str, Any], state_file: str, jobs: int, presubmit_cmd: str):
+def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str, Any], state_file: str, jobs: int, presubmit_cmd: str, backend: str = "gemini"):
     """Orchestrates the parallel execution of tasks according to the DAG."""
     active_tasks = set()
     state_lock = threading.Lock()
@@ -391,7 +407,7 @@ def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str
                 with state_lock:
                     active_tasks.add(task_id)
                     
-                future = executor.submit(process_task, root_dir, task_id, presubmit_cmd)
+                future = executor.submit(process_task, root_dir, task_id, presubmit_cmd, backend)
                 future_to_task[future] = task_id
             
             # If no tasks are running and none are ready, we are either done or deadlocked
@@ -422,7 +438,7 @@ def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str
                         print(f"   -> [Implementation] Task {task_id} completed successfully.")
                         
                         # Trigger DAG Merge Workflow immediately
-                        if merge_task(root_dir, task_id, presubmit_cmd):
+                        if merge_task(root_dir, task_id, presubmit_cmd, backend):
                             with state_lock:
                                 state["completed_tasks"].append(task_id)
                                 state["merged_tasks"].append(task_id)
@@ -448,6 +464,7 @@ def main():
     parser = argparse.ArgumentParser(description="Parallel development workflow orchestrator")
     parser.add_argument("--jobs", type=int, default=1, help="Number of parallel implementation agents")
     parser.add_argument("--presubmit-cmd", type=str, default="./do presubmit", help="Command to evaluate correctness")
+    parser.add_argument("--backend", choices=["gemini", "claude", "copilot"], default="gemini", help="AI CLI backend to use (default: gemini)")
     args = parser.parse_args()
 
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -458,7 +475,7 @@ def main():
     state = load_workflow_state(state_file)
     
     print(f"Loaded {len(master_dag)} tasks across all phases.")
-    execute_dag(root_dir, master_dag, state, state_file, args.jobs, args.presubmit_cmd)
+    execute_dag(root_dir, master_dag, state, state_file, args.jobs, args.presubmit_cmd, args.backend)
 
 if __name__ == "__main__":
     main()
