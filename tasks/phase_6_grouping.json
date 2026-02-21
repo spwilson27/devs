@@ -1,0 +1,14 @@
+{
+  "01_ArchitectAgent Core Implementation": ["TAS-050", "9_ROADMAP-PHASE-004", "9_ROADMAP-TAS-401", "2_TAS-REQ-002"],
+  "02_Architecture-Driven Development Setup": ["1_PRD-REQ-PIL-002", "3_MCP-REQ-GOAL-002"],
+  "03_PRD and TAS Document Generation": ["1_PRD-REQ-DOC-001", "1_PRD-REQ-DOC-002", "9_ROADMAP-REQ-DOC-001", "9_ROADMAP-REQ-DOC-002"],
+  "04_MCP and System Structure Documents": ["1_PRD-REQ-DOC-003", "1_PRD-REQ-DOC-006", "1_PRD-REQ-DOC-011", "TAS-044"],
+  "05_Security and UX Document Generation": ["1_PRD-REQ-DOC-004", "1_PRD-REQ-DOC-005", "9_ROADMAP-REQ-DOC-003", "8_RISKS-REQ-025", "9_ROADMAP-TAS-403"],
+  "06_Diagram Auto-Generation": ["1_PRD-REQ-DOC-007", "1_PRD-REQ-DOC-008", "1_PRD-REQ-DOC-009", "9_ROADMAP-TAS-402", "TAS-031"],
+  "07_Document Validation and Traceability": ["9_ROADMAP-REQ-027", "9_ROADMAP-REQ-028", "9_ROADMAP-REQ-029", "9_ROADMAP-TAS-405", "4_USER_FEATURES-REQ-031"],
+  "08_Document Integrity and Security": ["5_SECURITY_DESIGN-REQ-SEC-SD-023", "5_SECURITY_DESIGN-REQ-SEC-SD-060", "5_SECURITY_DESIGN-REQ-SEC-STR-002", "1_PRD-REQ-DOC-010"],
+  "09_Architectural Fidelity and Drift Mitigation": ["8_RISKS-REQ-097", "8_RISKS-REQ-110", "9_ROADMAP-DOD-P4"],
+  "10_Review Dashboard UI": ["4_USER_FEATURES-REQ-008", "4_USER_FEATURES-REQ-009", "4_USER_FEATURES-REQ-029", "4_USER_FEATURES-REQ-030", "4_USER_FEATURES-REQ-032"],
+  "11_Blueprint Gate Logic": ["9_ROADMAP-REQ-008", "9_ROADMAP-REQ-002", "9_ROADMAP-TAS-404", "8_RISKS-REQ-062"],
+  "12_HITL Approval Interface": ["1_PRD-REQ-UI-002", "1_PRD-REQ-UI-017", "1_PRD-REQ-HITL-002", "1_PRD-REQ-NEED-ARCH-02", "1_PRD-REQ-NEED-DOMAIN-03"]
+}

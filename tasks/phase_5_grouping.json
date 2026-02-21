@@ -1,0 +1,15 @@
+{
+  "01_Research Phase Foundation & Methodology": ["TAS-049", "1_PRD-REQ-PIL-001", "3_MCP-REQ-GOAL-001", "2_TAS-REQ-001", "9_ROADMAP-PHASE-003", "8_RISKS-REQ-065"],
+  "02_ResearchManager Agent Core": ["9_ROADMAP-TAS-301", "1_PRD-REQ-RES-007", "1_PRD-REQ-MAP-001", "1_PRD-REQ-MAP-006", "9_ROADMAP-REQ-024"],
+  "03_Search Integration Tools": ["TAS-027", "9_ROADMAP-TAS-302", "1_PRD-REQ-RES-006", "9_ROADMAP-REQ-025"],
+  "04_Content Extraction Tools": ["TAS-028", "9_ROADMAP-TAS-303", "9_ROADMAP-REQ-026"],
+  "05_Research Sandbox & Security Permissions": ["1_PRD-REQ-MAP-004", "5_SECURITY_DESIGN-REQ-SEC-SD-016", "5_SECURITY_DESIGN-REQ-SEC-SD-030"],
+  "06_Input Sanitization & Prompt Injection Mitigation": ["5_SECURITY_DESIGN-REQ-SEC-THR-002", "8_RISKS-REQ-017", "8_RISKS-REQ-018", "8_RISKS-REQ-113"],
+  "07_Market & User Research Domains": ["1_PRD-REQ-RES-001", "1_PRD-REQ-RES-003", "9_ROADMAP-REQ-RES-001", "9_ROADMAP-REQ-RES-003"],
+  "08_Technology & Adjacent Market Research": ["1_PRD-REQ-RES-002", "1_PRD-REQ-RES-004", "1_PRD-REQ-RES-005", "9_ROADMAP-REQ-RES-002", "9_ROADMAP-REQ-RES-004"],
+  "09_Source Verification & Fact-Checking": ["8_RISKS-REQ-050", "8_RISKS-REQ-051", "8_RISKS-REQ-052", "8_RISKS-REQ-126"],
+  "10_Report Generation Engine": ["9_ROADMAP-TAS-304", "9_ROADMAP-TAS-305", "1_PRD-REQ-MAP-002", "1_PRD-REQ-MAP-003", "1_PRD-REQ-NEED-DOMAIN-01", "9_ROADMAP-REQ-MAP-002"],
+  "11_User Interface & Progress Reporting": ["4_USER_FEATURES-REQ-024", "4_USER_FEATURES-REQ-025", "1_PRD-REQ-UI-013", "4_USER_FEATURES-REQ-026", "9_ROADMAP-REQ-UI-013"],
+  "12_Edge Case & Error Handling": ["4_USER_FEATURES-REQ-027", "4_USER_FEATURES-REQ-028", "4_USER_FEATURES-REQ-050"],
+  "13_HITL Gate & Phase Transition": ["1_PRD-REQ-UI-001", "1_PRD-REQ-HITL-001", "9_ROADMAP-REQ-001", "9_ROADMAP-REQ-007", "9_ROADMAP-DOD-P3"]
+}

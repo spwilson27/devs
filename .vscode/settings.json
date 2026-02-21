@@ -1,0 +1,11 @@
+{
+    "servers": {
+        "search": {
+            "type": "stdio",
+            "command": "bash",
+            "args": [
+                ".rag/mcp_server_wrapper.sh"
+            ]
+        }
+    }
+}

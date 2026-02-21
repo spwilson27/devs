@@ -1,0 +1,138 @@
+{
+  "01_MCP Protocol Foundation & Standards": [
+    "TAS-101",
+    "TAS-014",
+    "TAS-036",
+    "1_PRD-REQ-PIL-005",
+    "8_RISKS-REQ-055",
+    "9_ROADMAP-REQ-SYS-003",
+    "3_MCP-REQ-SYS-003"
+  ],
+  "02_SAOP Protocol Implementation": [
+    "TAS-035",
+    "3_MCP-TAS-035",
+    "3_MCP-TAS-070",
+    "3_MCP-TAS-088",
+    "3_MCP-TAS-089",
+    "9_ROADMAP-TAS-106",
+    "9_ROADMAP-REQ-018"
+  ],
+  "03_IPC Security & Authentication": [
+    "5_SECURITY_DESIGN-REQ-SEC-SD-014",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-031",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-032",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-033",
+    "5_SECURITY_DESIGN-REQ-SEC-CRY-004",
+    "5_SECURITY_DESIGN-REQ-SEC-CRY-006",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-026"
+  ],
+  "04_OrchestratorServer Core": [
+    "1_PRD-REQ-INT-003",
+    "3_MCP-TAS-036",
+    "2_TAS-REQ-030",
+    "4_USER_FEATURES-REQ-011",
+    "9_ROADMAP-REQ-023",
+    "3_MCP-TAS-078"
+  ],
+  "05_OrchestratorServer Tools": [
+    "3_MCP-TAS-077",
+    "2_TAS-REQ-006",
+    "2_TAS-REQ-007",
+    "2_TAS-REQ-008",
+    "2_TAS-REQ-013",
+    "1_PRD-REQ-INT-011",
+    "1_PRD-REQ-INT-012"
+  ],
+  "06_Tool Registry & Proxy": [
+    "2_TAS-REQ-032",
+    "9_ROADMAP-TAS-205",
+    "TAS-077",
+    "3_MCP-TAS-063",
+    "TAS-072",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-013",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-058",
+    "3_MCP-REQ-SEC-001"
+  ],
+  "07_Sandbox Bridge & Injection": [
+    "3_MCP-TAS-037",
+    "1_PRD-REQ-OBS-004",
+    "3_MCP-TAS-090",
+    "UNKNOWN-802",
+    "3_MCP-RISK-202"
+  ],
+  "08_ProjectServer Template": [
+    "2_TAS-REQ-031",
+    "3_MCP-TAS-043",
+    "3_MCP-TAS-003",
+    "TAS-043",
+    "TAS-062",
+    "9_ROADMAP-TAS-802",
+    "3_MCP-TAS-081",
+    "4_USER_FEATURES-REQ-012"
+  ],
+  "09_ProjectServer Introspection Tools": [
+    "3_MCP-TAS-066",
+    "3_MCP-TAS-074",
+    "3_MCP-TAS-079",
+    "3_MCP-TAS-080",
+    "2_TAS-REQ-009",
+    "2_TAS-REQ-010",
+    "2_TAS-REQ-011",
+    "1_PRD-REQ-SYS-004",
+    "1_PRD-REQ-OBS-005",
+    "1_PRD-REQ-NEED-DOMAIN-02",
+    "4_USER_FEATURES-REQ-042"
+  ],
+  "10_Observability & Real-Time Tracing": [
+    "1_PRD-REQ-NEED-DEVS-01",
+    "3_MCP-TAS-038",
+    "1_PRD-REQ-OBS-001",
+    "1_PRD-REQ-OBS-003",
+    "TAS-003",
+    "4_USER_FEATURES-REQ-007",
+    "8_RISKS-REQ-066",
+    "TAS-065"
+  ],
+  "11_Flight Recorder & Audit Logging": [
+    "3_MCP-TAS-075",
+    "3_MCP-TAS-076",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-062",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-065",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-066",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-067",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-068",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-073",
+    "8_RISKS-REQ-059",
+    "9_ROADMAP-REQ-SYS-004",
+    "4_USER_FEATURES-REQ-003",
+    "3_MCP-TAS-039"
+  ],
+  "12_Agent Turn Management & Error Recovery": [
+    "3_MCP-TAS-071",
+    "3_MCP-TAS-072",
+    "3_MCP-TAS-073",
+    "3_MCP-TAS-098",
+    "3_MCP-TAS-041",
+    "3_MCP-REQ-MCP-001"
+  ],
+  "13_Agent Autonomy & Reviewer Intelligence": [
+    "3_MCP-REQ-UI-001",
+    "3_MCP-REQ-UI-002",
+    "3_MCP-REQ-MET-009",
+    "3_MCP-REQ-MET-010",
+    "3_MCP-REQ-MET-008",
+    "3_MCP-RISK-201"
+  ],
+  "14_Multi-Agent & Distributed Execution": [
+    "3_MCP-UNKNOWN-101",
+    "3_MCP-UNKNOWN-201",
+    "3_MCP-UNKNOWN-302",
+    "UNKNOWN-801",
+    "3_MCP-REQ-SYS-004"
+  ],
+  "15_Risk Mitigations & Resilience": [
+    "3_MCP-RISK-101",
+    "3_MCP-RISK-102",
+    "RISK-801"
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "01_Core TypeScript Configuration": [
+    "TAS-005",
+    "TAS-006",
+    "TAS-063"
+  ],
+  "02_AI Model Integration and Tiered Orchestration": [
+    "TAS-007",
+    "TAS-008",
+    "TAS-026",
+    "1_PRD-REQ-PERF-002"
+  ],
+  "03_Rate Limiting and Cost Controls": [
+    "1_PRD-REQ-CON-001",
+    "8_RISKS-REQ-005",
+    "8_RISKS-REQ-031",
+    "8_RISKS-REQ-089",
+    "8_RISKS-REQ-120"
+  ],
+  "04_Non-Privileged User Context and Filesystem Hardening": [
+    "5_SECURITY_DESIGN-REQ-SEC-STR-001",
+    "5_SECURITY_DESIGN-REQ-SEC-STR-006",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-010",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-011",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-036"
+  ],
+  "05_TLS and Cryptographic Enforcement": [
+    "5_SECURITY_DESIGN-REQ-SEC-EDG-001",
+    "5_SECURITY_DESIGN-REQ-SEC-EDG-002",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-027",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-028",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-029"
+  ],
+  "06_Secret and Token Management": [
+    "5_SECURITY_DESIGN-REQ-SEC-SD-019",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-021",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-022",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-024",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-025"
+  ],
+  "07_Prompt Injection and Structured Prompting": [
+    "1_PRD-REQ-SEC-006",
+    "1_PRD-REQ-SEC-012",
+    "5_SECURITY_DESIGN-REQ-SEC-QST-901",
+    "5_SECURITY_DESIGN-REQ-SEC-THR-001"
+  ],
+  "08_Network Egress and Sandbox Isolation": [
+    "9_ROADMAP-TAS-203",
+    "8_RISKS-REQ-007",
+    "9_ROADMAP-REQ-020",
+    "5_SECURITY_DESIGN-REQ-SEC-RSK-001",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-063"
+  ],
+  "09_Sandbox Resource Quotas and Parallel Execution": [
+    "9_ROADMAP-TAS-207",
+    "5_SECURITY_DESIGN-REQ-SEC-STR-005",
+    "8_RISKS-REQ-009",
+    "1_PRD-REQ-PERF-003",
+    "5_SECURITY_DESIGN-REQ-SEC-RSK-901"
+  ],
+  "10_Vulnerability and Dependency Scanning": [
+    "1_PRD-REQ-SEC-007",
+    "1_PRD-REQ-SEC-008",
+    "1_PRD-REQ-SEC-013",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-056",
+    "8_RISKS-REQ-124"
+  ],
+  "11_Dependency Management Enforcement": [
+    "1_PRD-REQ-CON-005",
+    "5_SECURITY_DESIGN-REQ-SEC-QST-002",
+    "5_SECURITY_DESIGN-REQ-SEC-QST-902"
+  ],
+  "12_Audit Logging and Traceability": [
+    "TAS-071",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-064",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-077",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-078"
+  ],
+  "13_Data Minimization and Secure Deletion": [
+    "5_SECURITY_DESIGN-REQ-SEC-SD-086",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-087",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-044",
+    "8_RISKS-REQ-063",
+    "8_RISKS-REQ-033"
+  ],
+  "14_GDPR and Compliance Logging": [
+    "5_SECURITY_DESIGN-REQ-SEC-SD-079",
+    "9_ROADMAP-REQ-018",
+    "9_ROADMAP-REQ-040"
+  ],
+  "15_Off-Main-Thread Performance Optimization": [
+    "8_RISKS-REQ-035",
+    "8_RISKS-REQ-128",
+    "1_PRD-REQ-MET-010",
+    "9_ROADMAP-REQ-024"
+  ],
+  "16_Real-Time Streaming and State Synchronization": [
+    "9_ROADMAP-REQ-036",
+    "9_ROADMAP-REQ-037",
+    "9_ROADMAP-REQ-038",
+    "9_ROADMAP-REQ-047"
+  ],
+  "17_MCP Tool Implementation": [
+    "2_TAS-REQ-005",
+    "2_TAS-REQ-006",
+    "2_TAS-REQ-007",
+    "2_TAS-REQ-008",
+    "2_TAS-REQ-009"
+  ],
+  "18_MCP Scripts and Profiling Tools": [
+    "2_TAS-REQ-010",
+    "2_TAS-REQ-011",
+    "2_TAS-REQ-012",
+    "2_TAS-REQ-013",
+    "2_TAS-REQ-014"
+  ],
+  "19_System-Wide Profiling and TDD Loop": [
+    "1_PRD-REQ-NEED-DEVS-03",
+    "3_MCP-REQ-GOAL-005"
+  ],
+  "20_Security Alert Table and Escalation UI": [
+    "5_SECURITY_DESIGN-REQ-SEC-SD-075",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-083",
+    "8_RISKS-REQ-117",
+    "1_PRD-REQ-GOAL-003"
+  ],
+  "21_TDD and Global Validation Enforcement": [
+    "1_PRD-REQ-PIL-003",
+    "9_ROADMAP-REQ-042",
+    "9_ROADMAP-REQ-043"
+  ],
+  "22_Agent Identity and Conflict Resolution": [
+    "1_PRD-REQ-CON-003",
+    "5_SECURITY_DESIGN-REQ-SEC-RSK-101",
+    "5_SECURITY_DESIGN-REQ-SEC-RSK-002",
+    "5_SECURITY_DESIGN-REQ-SEC-RSK-201",
+    "5_SECURITY_DESIGN-REQ-SEC-THR-003"
+  ],
+  "23_Benchmarking Suite Core Metrics": [
+    "9_ROADMAP-TAS-803",
+    "9_ROADMAP-REQ-021",
+    "9_ROADMAP-REQ-022",
+    "9_ROADMAP-REQ-023",
+    "9_ROADMAP-REQ-025"
+  ],
+  "24_Benchmarking Suite Document and Quality Metrics": [
+    "9_ROADMAP-REQ-026",
+    "9_ROADMAP-REQ-027",
+    "9_ROADMAP-REQ-028",
+    "9_ROADMAP-REQ-029",
+    "9_ROADMAP-REQ-030"
+  ],
+  "25_Benchmarking Suite Process and Performance Metrics": [
+    "9_ROADMAP-REQ-031",
+    "9_ROADMAP-REQ-032",
+    "9_ROADMAP-REQ-033",
+    "9_ROADMAP-REQ-034",
+    "9_ROADMAP-REQ-035"
+  ],
+  "26_Benchmarking Suite Operational Metrics": [
+    "9_ROADMAP-REQ-041",
+    "1_PRD-REQ-MET-004",
+    "1_PRD-REQ-MET-013"
+  ],
+  "27_Self-Host and Agent-Ready Templates": [
+    "9_ROADMAP-TAS-804",
+    "9_ROADMAP-TAS-805",
+    "9_ROADMAP-REQ-039"
+  ],
+  "28_Sandbox Provisioning and Entropy KPIs": [
+    "1_PRD-REQ-MET-009",
+    "1_PRD-REQ-MET-016",
+    "9_ROADMAP-REQ-044",
+    "9_ROADMAP-REQ-046",
+    "1_PRD-REQ-GOAL-006"
+  ],
+  "29_Post-Quantum and Future Security Evaluation": [
+    "5_SECURITY_DESIGN-REQ-SEC-QST-001",
+    "5_SECURITY_DESIGN-REQ-SEC-QST-201"
+  ],
+  "30_Strategic Risk Mitigations": [
+    "8_RISKS-REQ-133",
+    "8_RISKS-REQ-134",
+    "8_RISKS-REQ-135",
+    "8_RISKS-REQ-136"
+  ],
+  "31_Project Goals and KPI Targets": [
+    "1_PRD-REQ-GOAL-001",
+    "1_PRD-REQ-GOAL-008",
+    "9_ROADMAP-REQ-045",
+    "9_ROADMAP-REQ-048",
+    "9_ROADMAP-REQ-049"
+  ]
+}

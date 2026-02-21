@@ -1,0 +1,20 @@
+{
+    "_comment": "RAG source configuration. Add one entry per directory you want indexed.",
+    "skip_dirs": [
+        ".git",
+        "target",
+        "node_modules",
+        ".venv",
+        "dist",
+        "__pycache__"
+    ],
+    "sources": [
+        {
+            "dir": "../",
+            "extensions": [
+                ".md"
+            ],
+            "label": "docs"
+        }
+    ]
+}

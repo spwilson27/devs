@@ -1,0 +1,115 @@
+{
+  "01_Module Foundation & Directory Structure": [
+    "9_ROADMAP-PHASE-002",
+    "TAS-099",
+    "TAS-042",
+    "TAS-045",
+    "2_TAS-REQ-012",
+    "2_TAS-REQ-014"
+  ],
+  "02_Sandbox Abstraction Layer": [
+    "TAS-080",
+    "2_TAS-REQ-024",
+    "TAS-013",
+    "1_PRD-REQ-IMP-001",
+    "1_PRD-REQ-IMP-010",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-045",
+    "9_ROADMAP-TAS-202"
+  ],
+  "03_Docker Driver Implementation": [
+    "2_TAS-REQ-025",
+    "9_ROADMAP-TAS-201",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-046",
+    "8_RISKS-REQ-006",
+    "8_RISKS-REQ-044",
+    "8_RISKS-REQ-079",
+    "8_RISKS-REQ-080",
+    "8_RISKS-REQ-112",
+    "8_RISKS-REQ-028"
+  ],
+  "04_WebContainer Driver Implementation": [
+    "2_TAS-REQ-026",
+    "9_ROADMAP-SPIKE-001",
+    "9_ROADMAP-RISK-SEC-01",
+    "UNKNOWN-401"
+  ],
+  "05_Filesystem Manager & Isolation": [
+    "TAS-080-1",
+    "1_PRD-REQ-SEC-003",
+    "1_PRD-REQ-SEC-009",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-047",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-041",
+    "8_RISKS-REQ-008",
+    "REQ-SEC-003"
+  ],
+  "06_Network Egress Control": [
+    "TAS-022",
+    "1_PRD-REQ-SEC-002",
+    "9_ROADMAP-TAS-203",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-048",
+    "9_ROADMAP-REQ-SEC-002",
+    "8_RISKS-REQ-007"
+  ],
+  "07_Resource Quotas & Constraints": [
+    "TAS-021",
+    "1_PRD-REQ-SEC-004",
+    "1_PRD-REQ-SEC-010",
+    "9_ROADMAP-TAS-207",
+    "3_MCP-REQ-SEC-002",
+    "8_RISKS-REQ-009",
+    "8_RISKS-REQ-034",
+    "8_RISKS-REQ-123"
+  ],
+  "08_Sandbox Lifecycle & Environment Management": [
+    "1_PRD-REQ-IMP-006",
+    "1_PRD-REQ-IMP-007",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-015",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-040",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-043",
+    "8_RISKS-REQ-046",
+    "8_RISKS-REQ-078",
+    "9_ROADMAP-REQ-SEC-001",
+    "1_PRD-REQ-SEC-001"
+  ],
+  "09_SecretMasker Middleware Core": [
+    "3_MCP-TAS-023",
+    "TAS-023",
+    "9_ROADMAP-TAS-204",
+    "1_PRD-REQ-SEC-005",
+    "1_PRD-REQ-SEC-011",
+    "5_SECURITY_DESIGN-REQ-SEC-STR-004",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-038",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-049",
+    "8_RISKS-REQ-091",
+    "8_RISKS-REQ-114",
+    "9_ROADMAP-REQ-SEC-003"
+  ],
+  "10_Redaction Pipeline Phases": [
+    "5_SECURITY_DESIGN-REQ-SEC-SD-050",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-051",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-052",
+    "8_RISKS-REQ-092",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-039",
+    "5_SECURITY_DESIGN-REQ-SEC-SD-070",
+    "4_USER_FEATURES-REQ-021"
+  ],
+  "11_Sandbox Security Monitoring & Breach Detection": [
+    "9_ROADMAP-REQ-SEC-004",
+    "4_USER_FEATURES-REQ-082",
+    "8_RISKS-REQ-109",
+    "8_RISKS-REQ-015",
+    "TAS-025",
+    "8_RISKS-REQ-130"
+  ],
+  "12_User-Facing Sandbox Features & Verification": [
+    "4_USER_FEATURES-REQ-020",
+    "4_USER_FEATURES-REQ-039",
+    "9_ROADMAP-REQ-020",
+    "1_PRD-REQ-MET-016",
+    "9_ROADMAP-REQ-021",
+    "8_RISKS-REQ-139"
+  ],
+  "13_Definition of Done": [
+    "9_ROADMAP-DOD-P2"
+  ]
+}

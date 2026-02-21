@@ -1,0 +1,42 @@
+{
+  "01_Out-of-Scope Manifest - Infrastructure & Deployment": [
+    "1_PRD-REQ-OOS-001",
+    "1_PRD-REQ-OOS-002",
+    "1_PRD-REQ-OOS-009",
+    "1_PRD-REQ-OOS-019",
+    "1_PRD-REQ-OOS-020"
+  ],
+  "02_Out-of-Scope Manifest - Platform & Runtime Services": [
+    "1_PRD-REQ-OOS-004",
+    "1_PRD-REQ-OOS-010",
+    "1_PRD-REQ-OOS-011",
+    "1_PRD-REQ-OOS-015",
+    "1_PRD-REQ-OOS-016"
+  ],
+  "03_Out-of-Scope Manifest - Content & Asset Generation": [
+    "1_PRD-REQ-OOS-003",
+    "1_PRD-REQ-OOS-005",
+    "1_PRD-REQ-OOS-006",
+    "1_PRD-REQ-OOS-007",
+    "1_PRD-REQ-OOS-017"
+  ],
+  "04_Out-of-Scope Manifest - Quality & Compliance": [
+    "1_PRD-REQ-OOS-008",
+    "1_PRD-REQ-OOS-012",
+    "1_PRD-REQ-OOS-013",
+    "1_PRD-REQ-OOS-014",
+    "1_PRD-REQ-OOS-018"
+  ],
+  "05_Future Roadmap Strategy": [
+    "9_ROADMAP-FUTURE-001",
+    "9_ROADMAP-FUTURE-002",
+    "9_ROADMAP-FUTURE-003",
+    "9_ROADMAP-FUTURE-004"
+  ],
+  "06_Architecture Governance Gate": [
+    "3_MCP-UNKNOWN-301"
+  ],
+  "07_Project Handover": [
+    "4_USER_FEATURES-REQ-087"
+  ]
+}

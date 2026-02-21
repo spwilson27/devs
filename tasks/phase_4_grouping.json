@@ -1,0 +1,20 @@
+{
+  "01_LanceDB_Vector_Store_Infrastructure": ["TAS-011", "TAS-091", "TAS-092", "TAS-093", "2_TAS-REQ-015"],
+  "02_LanceDB_Integration_and_Search": ["9_ROADMAP-TAS-104", "3_MCP-TAS-011", "2_TAS-REQ-027", "4_USER_FEATURES-REQ-019"],
+  "03_Tiered_Memory_Architecture": ["TAS-100", "TAS-081", "1_PRD-REQ-GOAL-007", "4_USER_FEATURES-REQ-017"],
+  "04_Short_and_Medium_Term_Memory": ["TAS-016", "TAS-017", "TAS-018", "3_MCP-TAS-016", "3_MCP-TAS-017"],
+  "05_Long_Term_Memory_Implementation": ["3_MCP-TAS-018", "TAS-028", "TAS-057", "3_MCP-TAS-097", "8_RISKS-REQ-013"],
+  "06_Context_Pruner_Core": ["TAS-024", "2_TAS-REQ-028", "9_ROADMAP-TAS-105", "9_ROADMAP-REQ-SYS-001", "8_RISKS-REQ-010"],
+  "07_Sliding_Relevance_Window": ["3_MCP-TAS-024", "3_MCP-TAS-047", "3_MCP-REQ-SYS-001", "REQ-SYS-001", "8_RISKS-REQ-012"],
+  "08_Context_Compression_and_Token_Management": ["3_MCP-TAS-049", "1_PRD-REQ-PERF-001", "1_PRD-REQ-CON-004", "1_PRD-REQ-SYS-001", "1_PRD-REQ-REL-006"],
+  "09_Active_File_Pinning_and_Context_Injection": ["3_MCP-TAS-048", "9_ROADMAP-REQ-010", "8_RISKS-REQ-031", "8_RISKS-REQ-111", "RISK-802"],
+  "10_Spec_Refresh_Protocol": ["3_MCP-TAS-050", "3_MCP-TAS-051", "8_RISKS-REQ-011", "5_SECURITY_DESIGN-REQ-SEC-SD-084", "9_ROADMAP-BLOCKER-001"],
+  "11_Memory_Refresher_and_Summarization": ["2_TAS-REQ-029", "1_PRD-REQ-PERF-004", "4_USER_FEATURES-REQ-018", "4_USER_FEATURES-REQ-083", "8_RISKS-REQ-104"],
+  "12_Strategy_Blacklist_and_Lesson_Learned": ["3_MCP-TAS-052", "8_RISKS-REQ-077", "4_USER_FEATURES-REQ-068"],
+  "13_User_Directive_and_Feedback": ["4_USER_FEATURES-REQ-072", "3_MCP-UNKNOWN-501", "3_MCP-UNKNOWN-502", "1_PRD-REQ-NEED-AGENT-01"],
+  "14_Memory_Rewind_and_Sync_Safety": ["4_USER_FEATURES-REQ-075", "8_RISKS-REQ-071", "8_RISKS-REQ-122", "8_RISKS-REQ-137", "8_RISKS-REQ-105"],
+  "15_Long_Term_Memory_Drift_Investigation": ["9_ROADMAP-SPIKE-002"],
+  "16_Vector_Memory_Security_and_Integrity": ["5_SECURITY_DESIGN-REQ-SEC-SD-037", "5_SECURITY_DESIGN-REQ-SEC-SD-061", "3_MCP-RISK-503"],
+  "17_Context_Drift_and_Semantic_Integrity": ["3_MCP-RISK-303", "3_MCP-RISK-501", "3_MCP-RISK-502"],
+  "18_Performance_and_Benchmarking": ["8_RISKS-REQ-037", "8_RISKS-REQ-058", "9_ROADMAP-REQ-019"]
+}
