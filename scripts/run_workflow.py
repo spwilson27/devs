@@ -8,6 +8,7 @@ import tempfile
 import threading
 import traceback
 import concurrent.futures
+import re
 from typing import Dict, List, Any
 
 
@@ -219,7 +220,8 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: 
             "target_dir": full_task_id,
             "task_details": task_details,
             "description_ctx": description_ctx,
-            "memory_ctx": memory_ctx
+            "memory_ctx": memory_ctx,
+            "worktree_dir": tmpdir
         }
 
         # 1. Implementation Agent
@@ -245,7 +247,11 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: 
                 # Only commit if there are changes
                 status = subprocess.run(["git", "status", "--porcelain"], cwd=tmpdir, capture_output=True, text=True)
                 if status.stdout.strip():
-                     subprocess.run(["git", "commit", "-m", f"{phase_id}:{task_id}: Standardized Implementation"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL)
+                     commit_msg = f"{phase_id}:{task_id}: Standardized Implementation"
+                     match = re.search(r'^#\s*Task:\s*(.*?)(?:\s*\(Sub-Epic:.*?\))?$', task_details, re.MULTILINE)
+                     if match and match.group(1).strip():
+                         commit_msg = f"{phase_id}:{task_id}: {match.group(1).strip()}"
+                     subprocess.run(["git", "commit", "-m", commit_msg], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL)
                 else:
                      print(f"      [Verification] No changes to commit for {full_task_id}.")
                 success = True
