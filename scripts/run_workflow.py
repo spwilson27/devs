@@ -192,16 +192,23 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: 
     phase_id, task_id = full_task_id.split("/", 1)
     safe_task_id = task_id.replace("/", "_").replace(".md", "")
     branch_name = f"ai-phase-{safe_task_id}"
-    tmpdir = tempfile.mkdtemp(prefix=f"ai_{safe_task_id}_")
+    
+    worktrees_dir = os.path.join(root_dir, ".agent", "worktrees")
+    os.makedirs(worktrees_dir, exist_ok=True)
+    tmpdir = tempfile.mkdtemp(prefix=f"ai_{safe_task_id}_", dir=worktrees_dir)
 
     print(f"\n   -> [Implementation] Starting {full_task_id}")
     print(f"      Creating git worktree at {tmpdir} on branch {branch_name}...")
     
-    # Create worktree
-    subprocess.run(["git", "worktree", "add", "-b", branch_name, tmpdir, "main"], cwd=root_dir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    
     success = False
     try:
+        # Create worktree
+        try:
+            subprocess.run(["git", "worktree", "add", "-B", branch_name, tmpdir, "main"], cwd=root_dir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+        except subprocess.CalledProcessError as e:
+            print(f"      [!] Failed to create worktree:\n{e.stderr.decode('utf-8')}")
+            return False
+
         task_details = get_task_details(root_dir, full_task_id)
         description_ctx = get_project_context(root_dir)
         memory_ctx = get_memory_context(root_dir)
@@ -271,7 +278,9 @@ def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, backend: str = "
     branch_name = f"ai-phase-{safe_name_part}"
     
     # We clone into a new tmpdir to avoid messing with the developer's main working tree
-    tmpdir = tempfile.mkdtemp(prefix=f"merge_{safe_name_part}_")
+    worktrees_dir = os.path.join(root_dir, ".agent", "worktrees")
+    os.makedirs(worktrees_dir, exist_ok=True)
+    tmpdir = tempfile.mkdtemp(prefix=f"merge_{safe_name_part}_", dir=worktrees_dir)
     
     print(f"\n   => [Merge] Attempting to merge {task_id} into main...")
     print(f"      Cloning repository to {tmpdir}...")
