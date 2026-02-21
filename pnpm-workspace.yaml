@@ -1,0 +1,8 @@
+packages:
+  - packages/core
+  - packages/agents
+  - packages/sandbox
+  - packages/memory
+  - packages/mcp
+  - packages/cli
+  - packages/vscode

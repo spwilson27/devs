@@ -1,0 +1,21 @@
+{
+  "name": "@devs/vscode",
+  "version": "0.1.0",
+  "description": "VSCode extension for devs. UI shell only: delegates all logic to @devs/core, contains no business logic.",
+  "type": "commonjs",
+  "main": "./src/extension.ts",
+  "engines": {
+    "node": ">=22",
+    "vscode": "^1.85.0"
+  },
+  "scripts": {
+    "build": "echo 'build: not yet configured'",
+    "test": "echo 'test: not yet configured'",
+    "lint": "echo 'lint: not yet configured'",
+    "fmt": "echo 'fmt: not yet configured'"
+  },
+  "dependencies": {
+    "@devs/core": "workspace:*"
+  },
+  "devDependencies": {}
+}

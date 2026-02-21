@@ -1,0 +1,18 @@
+{
+  "name": "@devs/sandbox",
+  "version": "0.1.0",
+  "description": "Isolated execution environment for AI-generated code. Strictly separated from core logic (TAS-096).",
+  "type": "module",
+  "main": "./src/index.ts",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "echo 'build: not yet configured'",
+    "test": "echo 'test: not yet configured'",
+    "lint": "echo 'lint: not yet configured'",
+    "fmt": "echo 'fmt: not yet configured'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

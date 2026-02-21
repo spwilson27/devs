@@ -5,38 +5,41 @@ import sys
 
 
 def run_command(command: list[str], step_name: str) -> bool:
-    print(f"\n=> Running {step_name}...")
+    print(f"\n=> Running {step_name}...", flush=True)
     result = subprocess.run(command)
     if result.returncode != 0:
-        print(f"\n[!] {step_name} failed with exit code {result.returncode}")
+        print(f"\n[!] {step_name} failed with exit code {result.returncode}", flush=True)
         return False
-    print(f"-> {step_name} completed successfully")
+    print(f"-> {step_name} completed successfully", flush=True)
     return True
 
 
 def do_fmt() -> bool:
-    # Update this with the appropriate formatting command (e.g., black, ruff, prettier)
-    return run_command(["echo", "Running formatter... (replace me)"], "Formatter")
+    # Phase 1 (infrastructure): no source files to format yet.
+    # Future phases will configure prettier for TypeScript packages.
+    return run_command(["echo", "fmt: no source files yet (infrastructure phase)"], "Formatter")
 
 
 def do_lint() -> bool:
-    # Update this with the appropriate linting command (e.g., flake8, eslint, mypy)
-    return run_command(["echo", "Running linter... (replace me)"], "Linter")
+    # Phase 1 (infrastructure): no source files to lint yet.
+    # Future phases will configure eslint for TypeScript packages.
+    return run_command(["echo", "lint: no source files yet (infrastructure phase)"], "Linter")
 
 
 def do_build() -> bool:
-    # Update this with the appropriate build command (e.g., tsc, webpack, make)
-    return run_command(["echo", "Running build... (replace me)"], "Build")
+    # Phase 1 (infrastructure): no TypeScript to compile yet.
+    # Future phases will configure tsc/tsup for packages.
+    return run_command(["echo", "build: no source files yet (infrastructure phase)"], "Build")
 
 
 def do_test() -> bool:
-    # Update this with the appropriate test command (e.g., pytest, jest)
-    return run_command(["echo", "Running tests... (replace me)"], "Tests")
+    return run_command(["bash", "tests/infrastructure/verify_monorepo.sh"], "Infrastructure Tests")
 
 
 def do_coverage() -> bool:
-    # Update this with the appropriate coverage command
-    return run_command(["echo", "Running coverage... (replace me)"], "Coverage")
+    # Phase 1 (infrastructure): coverage runs after source is implemented.
+    # Future phases will configure vitest --coverage.
+    return run_command(["echo", "coverage: no source files yet (infrastructure phase)"], "Coverage")
 
 
 def do_presubmit() -> bool:
@@ -51,7 +54,7 @@ def do_presubmit() -> bool:
         return False
     if not do_coverage():
         return False
-        
+
     print("\n=== Presubmit Checks Passed! ===")
     return True
 

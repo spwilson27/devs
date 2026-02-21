@@ -1,0 +1,39 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .: {}
+
+  packages/agents:
+    dependencies:
+      '@devs/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/cli:
+    dependencies:
+      '@devs/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/core: {}
+
+  packages/mcp:
+    dependencies:
+      '@devs/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/memory: {}
+
+  packages/sandbox: {}
+
+  packages/vscode:
+    dependencies:
+      '@devs/core':
+        specifier: workspace:*
+        version: link:../core

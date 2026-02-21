@@ -1,0 +1,20 @@
+{
+  "name": "@devs/agents",
+  "version": "0.1.0",
+  "description": "Specialized AI agent implementations: ResearchAgent, DesignerAgent, DeveloperAgent, ReviewerAgent.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "echo 'build: not yet configured'",
+    "test": "echo 'test: not yet configured'",
+    "lint": "echo 'lint: not yet configured'",
+    "fmt": "echo 'fmt: not yet configured'"
+  },
+  "dependencies": {
+    "@devs/core": "workspace:*"
+  },
+  "devDependencies": {}
+}

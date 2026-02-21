@@ -127,3 +127,19 @@ dmypy.json
 
 # AI Agent Working Data
 .agent/worktrees
+
+# Node.js / pnpm
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+
+# Build outputs
+dist/
+out/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local

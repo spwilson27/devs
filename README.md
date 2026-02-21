@@ -29,7 +29,39 @@ The primary tool for managing the project's development lifecycle locally is the
 
 > **Note:** The `do` script currently contains boilerplate placeholders (`echo`). Be sure to configure it with the physical tools chosen for your generated project (e.g., `black`/`ruff` for formatting, `pytest` for testing).
 
-## Project Structure
+## Monorepo Structure
+
+`devs` is a pnpm monorepo. All packages live under `packages/` and are scoped to `@devs/`.
+
+```
+devs/
+├── packages/
+│   ├── core/       @devs/core     — Orchestration logic, LangGraph state machine (headless-first)
+│   ├── agents/     @devs/agents   — AI agent implementations
+│   ├── sandbox/    @devs/sandbox  — Isolated execution environment
+│   ├── memory/     @devs/memory   — Agent memory layer (short/medium/long-term, SQLite-backed)
+│   ├── mcp/        @devs/mcp      — MCP server (debugging and profiling tools for AI agents)
+│   ├── cli/        @devs/cli      — CLI interface (UI shell; all logic in @devs/core)
+│   └── vscode/     @devs/vscode   — VSCode extension (UI shell; all logic in @devs/core)
+├── docs/
+│   ├── plan/           — AI-generated research, specs, requirements, phases, tasks
+│   └── infrastructure/ — Infrastructure and tooling documentation
+├── tests/
+│   └── infrastructure/ — Monorepo structure verification tests
+├── scripts/            — Orchestration and generation scripts
+├── pnpm-workspace.yaml — Workspace definition
+├── .nvmrc              — Node.js 22 (LTS)
+└── .npmrc              — pnpm settings (shamefully-hoist=false)
+```
+
+**Requirements:** Node.js >= 22.x, pnpm >= 9.x. See [docs/infrastructure/monorepo_setup.md](docs/infrastructure/monorepo_setup.md).
+
+```bash
+pnpm install   # install and link all workspace packages
+./do test      # verify monorepo structure
+```
+
+## Planning Documents
 
 - `docs/plan/` - Contains all AI-generated research, specifications, requirements, phases, and tasks.
 - `scripts/gen_all.py` - Orchestrates the generation of all documents, requirements, and tasks phases.

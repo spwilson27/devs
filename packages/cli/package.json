@@ -1,0 +1,22 @@
+{
+  "name": "@devs/cli",
+  "version": "0.1.0",
+  "description": "CLI interface for devs. Headless-first: delegates all logic to @devs/core, contains no business logic.",
+  "type": "module",
+  "bin": {
+    "devs": "./src/bin.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "echo 'build: not yet configured'",
+    "test": "echo 'test: not yet configured'",
+    "lint": "echo 'lint: not yet configured'",
+    "fmt": "echo 'fmt: not yet configured'"
+  },
+  "dependencies": {
+    "@devs/core": "workspace:*"
+  },
+  "devDependencies": {}
+}
