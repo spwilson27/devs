@@ -30,6 +30,8 @@ This file serves as a shared, long-term memory for all agents working on this pr
 
 - **Empty scaffold directories need `.gitkeep`:** `mcp-server/` and `src/` are scaffold-only (no source yet). Git does not track empty directories — always add a `.gitkeep` file to any new empty directory that must be present on fresh checkout. Forgetting this will cause `verify_folder_structure.sh` to fail in CI on a clean clone.
 
+- **Shell scripts in `tests/infrastructure/` must be executable:** All `.sh` scripts in `tests/infrastructure/` must have the executable bit set (`chmod +x`). The `./do` script invokes them via `bash <script>`, which bypasses the permission, but direct invocation (e.g. by a developer or CI tool) requires the bit. Convention: always `chmod +x` new shell scripts.
+
 ---
 
 ## 📝 Recent Changelog
@@ -39,5 +41,5 @@ This file serves as a shared, long-term memory for all agents working on this pr
 
 - **[2026-02-21] - Phase 1 / 01_setup_pnpm_monorepo:** Verified and confirmed complete pnpm monorepo setup. All 30 verification checks pass. Structure: root `package.json` (private, engines node>=22), `.nvmrc` (22), `.npmrc` (shamefully-hoist=false), `pnpm-workspace.yaml` (7 packages), individual `package.json` per package with `@devs/<name>` scoping, `tests/infrastructure/verify_monorepo.sh`, `README.md`, `docs/infrastructure/monorepo_setup.md`, and `./do` task runner. `pnpm install` resolves workspace links correctly.
 
-- **[2026-02-21] - Phase 1 / 03_setup_project_directories:** Established root directory scaffold: `.devs/` (Flight Recorder), `mcp-server/`, `src/`. `.devs/.gitignore` excludes runtime state (SQLite, LanceDB, logs). `.devs/POLICY.md` documents Developer Agent write-access prohibition. `docs/architecture/directory_structure.md` documents all top-level directory roles. `./do test` now runs both `verify_monorepo.sh` (30 checks) and `verify_folder_structure.sh` (11 checks). All 41 checks pass. Reviewer fixed: added `.gitkeep` to `mcp-server/` and `src/` so empty scaffold directories are tracked by git and present on fresh clone.
+- **[2026-02-21] - Phase 1 / 03_setup_project_directories:** Established root directory scaffold: `.devs/` (Flight Recorder), `mcp-server/`, `src/`. `.devs/.gitignore` excludes runtime state (SQLite, LanceDB, logs). `.devs/POLICY.md` documents Developer Agent write-access prohibition. `docs/architecture/directory_structure.md` documents all top-level directory roles. `./do test` now runs both `verify_monorepo.sh` (30 checks) and `verify_folder_structure.sh` (11 checks). All 41 checks pass. Reviewer fixed: added `.gitkeep` to `mcp-server/` and `src/` so empty scaffold directories are tracked by git and present on fresh clone. Reviewer fixed: `verify_folder_structure.sh` was missing executable bit (chmod +x) — all shell scripts under `tests/infrastructure/` must be executable for direct invocation consistency.
 
