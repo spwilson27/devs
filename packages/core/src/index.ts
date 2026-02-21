@@ -8,6 +8,9 @@ export * from "./persistence.js";
 export * from "./schemas/turn_envelope.js";
 export * from "./schemas/events.js";
 
+// Database connection factory and singleton (WAL + FK PRAGMAs).
+export * from "./persistence/database.js";
+
 // Hardened SQLite connection manager (WAL + 0600 permissions).
 export * from "./persistence/SqliteManager.js";
 

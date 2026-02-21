@@ -230,6 +230,25 @@
 
 ---
 
+## Task: Phase 5 / 05_state_checkpointing_recovery / 01_sqlite_saver_implementation
+
+**Status: PASSED — 1 fix applied. All 382 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implementation agent produced high-quality work. `SqliteSaver` was fully implemented in a prior phase; this task correctly identified that and added only the remaining deliverables (`scripts/verify_checkpoints.ts`, `packages/core/README.md`).
+- `scripts/verify_checkpoints.ts` — 16 checks across 4 scenarios: full graph run, node crash survival, ACID atomicity (mid-transaction failure simulation via `_stmtPutCheckpoint.run` spy), and disk visibility via raw BetterSqlite3 connection. `async function main() {} + main().catch()` pattern is correct for tsx scripts.
+- `packages/core/README.md` — well-structured, accurate schema table, clear ACID and WAL explanations, working code examples (after fix), verification script instructions. No AOD counterpart needed (markdown file, not a TypeScript source module).
+- **Fix applied:** `packages/core/src/index.ts` was missing the barrel export for `database.ts`. The README usage example claimed `import { createDatabase } from "@devs/core"` but `createDatabase` / `closeDatabase` were not re-exported from the barrel. Added `export * from "./persistence/database.js"` to `index.ts`. Both `createDatabase` (factory) and `closeDatabase` are now accessible via the package barrel.
+
+### Key Discovery: Barrel export gaps are silent failures
+
+- When a TypeScript module is importable via its direct file path but NOT in `index.ts`, there is no compile-time error. README examples referencing `@devs/core` imports that are missing from the barrel will fail at runtime with "Module has no exported member X".
+- Always cross-check README usage examples against `packages/core/src/index.ts` during review.
+- `schema.ts` and `state_repository.ts` are still not in the barrel — reserved for a future phase.
+
+---
+
 ## Task: Phase 2 / 02_sqlite_schema_persistence_layer / 03_define_interaction_schemas
 
 **Status: PASSED — no fixes required. All presubmit checks pass (139 total: 105 infra + 34 unit tests).**
