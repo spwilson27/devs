@@ -1,5 +1,37 @@
 # Reviewer Memory
 
+## Task: Phase 7 / 07_audit_trails_glass-box_observability / 01_define_agent_log_schemas
+
+**Status: PASSED — 2 fixes applied. All 582 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implementation agent did a high quality job. All 48 new tests in `audit_schemas.test.ts` pass. Schema correctness, FK constraints, indices, cascade delete, and idempotency are all well-verified.
+- `packages/core/src/persistence/audit_schema.ts` — clean module design. `AUDIT_TABLES` constant, `AuditTable` type, and `initializeAuditSchema(db)` function exported correctly. All DDL uses `IF NOT EXISTS` for idempotency. Both tables and indices wrapped in a single `db.transaction()` for atomicity.
+- `packages/core/src/persistence/schema.ts` — `agent_logs` DDL correctly updated to Glass-Box schema. Old columns (`agent_role`, `thread_id`, `thought`, `action`, `observation`) removed. New columns (`role`, `content_type` NOT NULL, `content` NOT NULL JSON blob, `epic_id` optional FK, `commit_hash` optional) added.
+- `packages/core/src/persistence/state_repository.ts` — `AgentLog` interface and `_stmtInsertAgentLog` correctly updated. All 16 prepared statements compile without issues.
+- `packages/core/test/persistence/audit_schemas.test.ts` — 48 tests covering schema structure, constraints, indices, data insertion, FK rejection, and cascade delete. Seed helper (`seedProjectHierarchy`) cleanly creates the project→epic→task hierarchy needed for FK-dependent inserts.
+- `packages/core/src/index.ts` — barrel export added correctly with `.js` extension.
+- AOD at `.agent/packages/core/persistence/audit_schema.agent.md` — accurate, well-structured YAML front-matter and markdown.
+
+### Fixes Applied
+
+1. **`db.exec()` → `db.prepare().run()` for index DDL**: `audit_schema.ts` used `db.exec(ddl)` for `CREATE INDEX` statements while `schema.ts` uses `db.prepare(ddl).run()` for all DDL. The inconsistency stemmed from an incorrect belief that `db.prepare().run()` doesn't support parameterless DDL like CREATE INDEX. In fact, `db.prepare().run()` works for any SQL statement. Changed all index DDL to use `db.prepare(ddl).run()` for consistency.
+
+2. **Test count corrected**: Memory changelog entry claimed "51 tests" but actual count is 48 (1+1+2+12+10+3+2+9+6+2). Updated `.agent/memory.md` to reflect the correct count and document the reviewer's fix.
+
+### Architecture Confirmed
+
+- `initializeAuditSchema(db)` MUST be called AFTER `initializeSchema(db)`. Calling it first will fail with "no such table: agent_logs" when creating indices, and "no such table: tasks" for the `decision_logs` FK. This call order requirement is documented in both modules and in `.agent/memory.md` brittle areas.
+- `decision_logs` deliberately has all content columns (`alternative_considered`, `reasoning_for_rejection`, `selected_option`) as nullable — allows incremental recording of decisions as they are made, before all information is available.
+- 5 performance indices cover all primary audit query patterns: task-scoped (2), epic-scoped (1), and time-range (2).
+
+### Key Pattern: test count discrepancy in implementation agent memory
+
+- The implementation agent consistently over-counts tests in memory entries (51 vs 48 here, 32 vs 26 for SchemaReconciler, 17 vs 11 for ImplementationNode). Always verify test counts against vitest output before writing memory, not by counting `it()` calls in isolation.
+
+---
+
 ## Task: Phase 1 / 06_git_integration/01_git_client_wrapper
 
 **Status: PASSED — 1 fix applied. All 34 unit tests + all infra checks pass.**

@@ -400,39 +400,39 @@ describe("StateRepository", () => {
     it("inserts an agent log and returns its id", () => {
       const id = repo.appendAgentLog({
         task_id: taskId,
-        agent_role: "implementer",
-        thought: "I need to write the function",
-        action: "write_file",
-        observation: "File written successfully",
+        role: "implementer",
+        content_type: "THOUGHT",
+        content: JSON.stringify({ thought: "I need to write the function" }),
       });
       expect(id).toBeGreaterThan(0);
     });
 
     it("stores all log fields correctly", () => {
+      const payload = JSON.stringify({ thought: "Reviewing code", action: "read_file", observation: "Code looks good" });
       const log: AgentLog = {
         task_id: taskId,
-        agent_role: "reviewer",
-        thread_id: "thread-42",
-        thought: "Reviewing code",
-        action: "read_file",
-        observation: "Code looks good",
+        role: "reviewer",
+        content_type: "OBSERVATION",
+        content: payload,
+        commit_hash: "abc123",
       };
       const id = repo.appendAgentLog(log);
       const row = db
         .prepare("SELECT * FROM agent_logs WHERE id = ?")
         .get(id) as AgentLog & { id: number };
       expect(row.task_id).toBe(taskId);
-      expect(row.agent_role).toBe("reviewer");
-      expect(row.thread_id).toBe("thread-42");
-      expect(row.thought).toBe("Reviewing code");
-      expect(row.action).toBe("read_file");
-      expect(row.observation).toBe("Code looks good");
+      expect(row.role).toBe("reviewer");
+      expect(row.content_type).toBe("OBSERVATION");
+      expect(row.content).toBe(payload);
+      expect(row.commit_hash).toBe("abc123");
     });
 
     it("auto-populates a timestamp when none is provided", () => {
       const id = repo.appendAgentLog({
         task_id: taskId,
-        agent_role: "implementer",
+        role: "implementer",
+        content_type: "THOUGHT",
+        content: "{}",
       });
       const row = db
         .prepare("SELECT timestamp FROM agent_logs WHERE id = ?")
@@ -442,15 +442,15 @@ describe("StateRepository", () => {
     });
 
     it("can append multiple log entries for the same task", () => {
-      repo.appendAgentLog({ task_id: taskId, agent_role: "implementer", thought: "step 1" });
-      repo.appendAgentLog({ task_id: taskId, agent_role: "implementer", thought: "step 2" });
-      repo.appendAgentLog({ task_id: taskId, agent_role: "reviewer", thought: "step 3" });
+      repo.appendAgentLog({ task_id: taskId, role: "implementer", content_type: "THOUGHT", content: '{"step":1}' });
+      repo.appendAgentLog({ task_id: taskId, role: "implementer", content_type: "ACTION", content: '{"step":2}' });
+      repo.appendAgentLog({ task_id: taskId, role: "reviewer", content_type: "OBSERVATION", content: '{"step":3}' });
       expect(rowCount(db, "agent_logs")).toBe(3);
     });
 
     it("rejects a log with a non-existent task_id (FK constraint)", () => {
       expect(() =>
-        repo.appendAgentLog({ task_id: 99999, agent_role: "implementer" })
+        repo.appendAgentLog({ task_id: 99999, role: "implementer", content_type: "THOUGHT", content: "{}" })
       ).toThrow();
     });
   });
@@ -551,8 +551,9 @@ describe("StateRepository", () => {
 
       repo.appendAgentLog({
         task_id: firstTaskId,
-        agent_role: "implementer",
-        thought: "Implementing task 1",
+        role: "implementer",
+        content_type: "THOUGHT",
+        content: JSON.stringify({ thought: "Implementing task 1" }),
       });
 
       // Retrieve state.
@@ -605,28 +606,32 @@ describe("StateRepository", () => {
     it("returns all logs for a task in insertion order", () => {
       repo.appendAgentLog({
         task_id: taskId,
-        agent_role: "implementer",
-        thought: "First thought",
-        thread_id: "t1",
+        role: "implementer",
+        content_type: "THOUGHT",
+        content: JSON.stringify({ thought: "First thought" }),
       });
       repo.appendAgentLog({
         task_id: taskId,
-        agent_role: "reviewer",
-        thought: "Review thought",
-        thread_id: "t1",
+        role: "reviewer",
+        content_type: "OBSERVATION",
+        content: JSON.stringify({ thought: "Review thought" }),
       });
       repo.appendAgentLog({
         task_id: taskId,
-        agent_role: "implementer",
-        thought: "Fix thought",
-        thread_id: "t2",
+        role: "implementer",
+        content_type: "THOUGHT",
+        content: JSON.stringify({ thought: "Fix thought" }),
       });
 
       const logs = repo.getTaskLogs(taskId);
       expect(logs).toHaveLength(3);
-      expect(logs[0]!.thought).toBe("First thought");
-      expect(logs[1]!.thought).toBe("Review thought");
-      expect(logs[2]!.thought).toBe("Fix thought");
+      // Verify ordering via role (insertion order)
+      expect(logs[0]!.role).toBe("implementer");
+      expect(logs[1]!.role).toBe("reviewer");
+      expect(logs[2]!.role).toBe("implementer");
+      expect(JSON.parse(logs[0]!.content).thought).toBe("First thought");
+      expect(JSON.parse(logs[1]!.content).thought).toBe("Review thought");
+      expect(JSON.parse(logs[2]!.content).thought).toBe("Fix thought");
     });
 
     it("only returns logs for the requested task, not other tasks", () => {
@@ -643,18 +648,20 @@ describe("StateRepository", () => {
 
       repo.appendAgentLog({
         task_id: taskId,
-        agent_role: "implementer",
-        thought: "My task log",
+        role: "implementer",
+        content_type: "THOUGHT",
+        content: JSON.stringify({ thought: "My task log" }),
       });
       repo.appendAgentLog({
         task_id: otherTaskId,
-        agent_role: "implementer",
-        thought: "Other task log",
+        role: "implementer",
+        content_type: "THOUGHT",
+        content: JSON.stringify({ thought: "Other task log" }),
       });
 
       const logs = repo.getTaskLogs(taskId);
       expect(logs).toHaveLength(1);
-      expect(logs[0]!.thought).toBe("My task log");
+      expect(JSON.parse(logs[0]!.content).thought).toBe("My task log");
     });
   });
 
@@ -716,11 +723,10 @@ describe("StateRepository", () => {
       ).id;
       repo.appendAgentLog({
         task_id: taskId,
-        agent_role: "implementer",
-        thread_id: "main",
-        thought: "Done",
-        action: "commit",
-        observation: "Committed abc123",
+        role: "implementer",
+        content_type: "ACTION",
+        content: JSON.stringify({ action: "commit", observation: "Committed abc123" }),
+        commit_hash: "abc123",
       });
 
       // 7. Record entropy event (simulate a run with loop detection).
@@ -742,8 +748,9 @@ describe("StateRepository", () => {
       // 9. Retrieve task logs.
       const logs = repo.getTaskLogs(taskId);
       expect(logs).toHaveLength(1);
-      expect(logs[0]!.agent_role).toBe("implementer");
-      expect(logs[0]!.action).toBe("commit");
+      expect(logs[0]!.role).toBe("implementer");
+      expect(logs[0]!.content_type).toBe("ACTION");
+      expect(logs[0]!.commit_hash).toBe("abc123");
     });
 
     it("verifies cascade delete: deleting a project removes all child rows", () => {
@@ -763,7 +770,7 @@ describe("StateRepository", () => {
           id: number;
         }
       ).id;
-      repo.appendAgentLog({ task_id: taskId, agent_role: "implementer" });
+      repo.appendAgentLog({ task_id: taskId, role: "implementer", content_type: "THOUGHT", content: "{}" });
 
       expect(rowCount(db, "requirements")).toBe(1);
       expect(rowCount(db, "epics")).toBe(1);

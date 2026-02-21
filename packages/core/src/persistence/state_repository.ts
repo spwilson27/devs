@@ -101,18 +101,31 @@ export interface Task {
   git_commit_hash?: string | null;
 }
 
-/** One reasoning step recorded by an agent for a task. [TAS-110] */
+/**
+ * One agent interaction step recorded in the Glass-Box audit trail. [TAS-110, TAS-046]
+ *
+ * The `content` field is a JSON blob that can represent any interaction type
+ * (thought, tool invocation, tool result, observation) without requiring
+ * schema changes. `content_type` is the discriminator that tells consumers
+ * how to parse `content`.
+ *
+ * Supported content_type values: 'THOUGHT', 'ACTION', 'OBSERVATION'
+ */
 export interface AgentLog {
   id?: number;
   task_id: number;
-  agent_role: string;
-  /** Groups all entries for a single agent invocation for full replay. */
-  thread_id?: string | null;
-  thought?: string | null;
-  action?: string | null;
-  observation?: string | null;
+  /** Optional direct FK to the parent epic for efficient epic-scoped queries. */
+  epic_id?: number | null;
   /** ISO-8601 timestamp; auto-populated by the DB default when omitted. */
   timestamp?: string;
+  /** Agent persona (e.g., 'researcher', 'developer', 'reviewer'). */
+  role: string;
+  /** Interaction type discriminator: 'THOUGHT' | 'ACTION' | 'OBSERVATION'. */
+  content_type: string;
+  /** JSON blob containing the interaction payload (thought text, tool call, result, etc.). */
+  content: string;
+  /** Optional git commit SHA linking the log entry to the current repository state. */
+  commit_hash?: string | null;
 }
 
 /** A repeating failure record used by the loop-prevention subsystem. [TAS-111] */
@@ -235,8 +248,8 @@ export class StateRepository {
     );
 
     this._stmtInsertAgentLog = db.prepare(`
-      INSERT INTO agent_logs (task_id, agent_role, thread_id, thought, action, observation)
-      VALUES (@task_id, @agent_role, @thread_id, @thought, @action, @observation)
+      INSERT INTO agent_logs (task_id, epic_id, role, content_type, content, commit_hash)
+      VALUES (@task_id, @epic_id, @role, @content_type, @content, @commit_hash)
     `);
 
     this._stmtInsertEntropyEvent = db.prepare(`
@@ -498,7 +511,11 @@ export class StateRepository {
   }
 
   /**
-   * Appends a single agent log entry for a task.
+   * Appends a single agent interaction log entry for a task.
+   *
+   * The `content` field is a JSON blob (serialize with `JSON.stringify()`).
+   * `content_type` is the discriminator: 'THOUGHT' | 'ACTION' | 'OBSERVATION'.
+   * `epic_id` and `commit_hash` are optional; pass `null` or omit them.
    *
    * @returns The new log entry's primary-key id.
    */
@@ -506,11 +523,11 @@ export class StateRepository {
     return this.transaction(() => {
       const result = this._stmtInsertAgentLog.run({
         task_id: log.task_id,
-        agent_role: log.agent_role,
-        thread_id: log.thread_id ?? null,
-        thought: log.thought ?? null,
-        action: log.action ?? null,
-        observation: log.observation ?? null,
+        epic_id: log.epic_id ?? null,
+        role: log.role,
+        content_type: log.content_type,
+        content: log.content,
+        commit_hash: log.commit_hash ?? null,
       });
       return Number(result.lastInsertRowid);
     });

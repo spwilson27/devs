@@ -263,7 +263,9 @@ describe("Core Tables Schema – initializeSchema()", () => {
   });
 
   // ── agent_logs columns ────────────────────────────────────────────────────
-  // [TAS-110]: detailed auditing of thoughts, strategies, tool calls, and observations.
+  // [TAS-110, TAS-046]: Glass-Box audit log with structured content JSON blob.
+  // Schema updated in Phase 7 to support full Glass-Box observability:
+  // role, content_type, content (JSON blob), epic_id, commit_hash.
 
   describe("agent_logs table", () => {
     it("has id as primary key", () => {
@@ -272,17 +274,17 @@ describe("Core Tables Schema – initializeSchema()", () => {
       expect(pk?.name).toBe("id");
     });
 
-    it("has mandatory columns: id, task_id, agent_role, thread_id, thought, action, observation, timestamp", () => {
+    it("has the new Glass-Box columns: id, task_id, epic_id, timestamp, role, content_type, content, commit_hash", () => {
       const names = getColumnNames(db, "agent_logs");
       expect(names).toContain("id");
       expect(names).toContain("task_id");
-      expect(names).toContain("agent_role");
-      // thread_id groups related log entries for a single agent invocation
-      expect(names).toContain("thread_id");
-      expect(names).toContain("thought");
-      expect(names).toContain("action");
-      expect(names).toContain("observation");
+      // epic_id provides a direct FK for efficient epic-scoped audit queries
+      expect(names).toContain("epic_id");
       expect(names).toContain("timestamp");
+      expect(names).toContain("role");
+      expect(names).toContain("content_type");
+      expect(names).toContain("content");
+      expect(names).toContain("commit_hash");
     });
 
     it("has a foreign key from task_id → tasks(id)", () => {
@@ -290,6 +292,13 @@ describe("Core Tables Schema – initializeSchema()", () => {
       const fk = fks.find((f) => f.from === "task_id");
       expect(fk).toBeDefined();
       expect(fk?.table).toBe("tasks");
+    });
+
+    it("has a foreign key from epic_id → epics(id)", () => {
+      const fks = getForeignKeys(db, "agent_logs");
+      const fk = fks.find((f) => f.from === "epic_id");
+      expect(fk).toBeDefined();
+      expect(fk?.table).toBe("epics");
     });
   });
 

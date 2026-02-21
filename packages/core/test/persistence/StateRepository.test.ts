@@ -338,8 +338,9 @@ describe("StateRepository — ACID Transactions", () => {
         repo.updateTaskStatus(taskId, "in_progress");
         repo.appendAgentLog({
           task_id: taskId,
-          agent_role: "implementer",
-          thought: "Starting task",
+          role: "implementer",
+          content_type: "THOUGHT",
+          content: JSON.stringify({ thought: "Starting task" }),
         });
       });
 
@@ -356,8 +357,9 @@ describe("StateRepository — ACID Transactions", () => {
           repo.updateTaskStatus(taskId, "in_progress");
           repo.appendAgentLog({
             task_id: taskId,
-            agent_role: "implementer",
-            thought: "Starting task",
+            role: "implementer",
+            content_type: "THOUGHT",
+            content: JSON.stringify({ thought: "Starting task" }),
           });
           throw new Error("crash during task start");
         });
@@ -455,8 +457,9 @@ describe("StateRepository — ACID Transactions", () => {
         repo.transaction(() => {
           repo.appendAgentLog({
             task_id: taskId,
-            agent_role: "implementer",
-            thought: "thinking",
+            role: "implementer",
+            content_type: "THOUGHT",
+            content: JSON.stringify({ thought: "thinking" }),
           });
           throw new Error("fail");
         });
@@ -527,8 +530,9 @@ describe("StateRepository — ACID Transactions", () => {
           repo.updateTaskStatus(taskId, "in_progress");
           repo.appendAgentLog({
             task_id: taskId,
-            agent_role: "implementer",
-            thought: "working",
+            role: "implementer",
+            content_type: "THOUGHT",
+            content: JSON.stringify({ thought: "working" }),
           });
           // Crash before commit.
           throw new Error("multi-method failure");

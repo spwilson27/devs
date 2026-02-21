@@ -14,11 +14,11 @@
  *   requirements    — atomic requirements with priority and trace [TAS-107]
  *   epics           — ordered epics (phases) per project [TAS-108]
  *   tasks           — atomic tasks with git commit correlation [TAS-109]
- *   agent_logs      — detailed agent audit: thoughts, tool calls, observations [TAS-110]
+ *   agent_logs      — Glass-Box audit log: role, content_type, content JSON blob [TAS-110, TAS-046]
  *   entropy_events  — repeating failure records for loop prevention [TAS-111]
  *
  * Requirements: TAS-105, TAS-106, TAS-107, TAS-108, TAS-109, TAS-110, TAS-111,
- *               9_ROADMAP-TAS-102, 9_ROADMAP-REQ-017
+ *               TAS-046, TAS-059, 9_ROADMAP-TAS-102, 9_ROADMAP-REQ-017
  */
 
 import type Database from "better-sqlite3";
@@ -109,18 +109,22 @@ const DDL_STATEMENTS: ReadonlyArray<string> = [
   )`,
 
   // ── agent_logs ────────────────────────────────────────────────────────────
-  // Per-task audit log capturing each agent reasoning step.
-  // thread_id groups all log entries for a single agent invocation so that
-  // the full thought→action→observation chain can be replayed. [TAS-110]
+  // Glass-Box audit log capturing each agent interaction step.
+  // Stores structured JSON in `content` to support any interaction type
+  // (thoughts, tool calls, observations) without schema changes.
+  // `content_type` is the discriminator; `role` identifies the agent persona.
+  // `epic_id` provides a direct FK for efficient epic-scoped audit queries.
+  // `commit_hash` links the log entry to the git state at the time of logging.
+  // [TAS-110, TAS-046, TAS-059]
   `CREATE TABLE IF NOT EXISTS agent_logs (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    task_id     INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
-    agent_role  TEXT    NOT NULL,
-    thread_id   TEXT,
-    thought     TEXT,
-    action      TEXT,
-    observation TEXT,
-    timestamp   TEXT    NOT NULL DEFAULT (datetime('now'))
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id      INTEGER NOT NULL REFERENCES tasks(id)  ON DELETE CASCADE,
+    epic_id      INTEGER          REFERENCES epics(id)  ON DELETE CASCADE,
+    timestamp    TEXT    NOT NULL DEFAULT (datetime('now')),
+    role         TEXT    NOT NULL,
+    content_type TEXT    NOT NULL,
+    content      TEXT    NOT NULL,
+    commit_hash  TEXT
   )`,
 
   // ── entropy_events ────────────────────────────────────────────────────────

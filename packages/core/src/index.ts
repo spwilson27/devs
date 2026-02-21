@@ -42,6 +42,9 @@ export * from "./orchestration/GitAtomicManager.js";
 // Schema drift detection and reconciliation (8_RISKS-REQ-073).
 export * from "./persistence/SchemaReconciler.js";
 
+// Audit schema: decision_logs table + performance indices for Glass-Box observability (TAS-046, TAS-059).
+export * from "./persistence/audit_schema.js";
+
 // State machine robustness and error recovery — errorNode, pivotAgentNode, turn budget, entropy detection.
 export * from "./orchestration/robustness.js";
 
