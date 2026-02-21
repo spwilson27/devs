@@ -1,5 +1,31 @@
 # Reviewer Memory
 
+## Task: Phase 1 / 06_git_integration/01_git_client_wrapper
+
+**Status: PASSED — 1 fix applied. All 34 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implementation agent did a high quality job. Core logic is correct and well-tested.
+- `packages/core/src/git/GitClient.ts` — clean thin wrapper. Named imports for `simple-git` correctly used. `upath` normalization applied consistently. `GitError` wraps all failures with `cause`. Idempotent `initRepository` uses `checkIsRepo`. `commit` injects local user identity defaults if missing. No logic changes needed.
+- `packages/core/src/git/GitClient.test.ts` — 34 tests, comprehensive coverage of all branches including error wrapping, user identity injection, and path normalization.
+- AOD files (`.agent/packages/core/git/`) — complete, well-formed YAML front-matter, accurate module documentation.
+- **Fix applied:** `vitest.config.ts` used `reporter: "verbose"` (singular, deprecated) instead of `reporters: ["verbose"]` (plural, array — the correct Vitest v4 API). Changed to `reporters`. Tests still pass in verbose mode.
+
+### Key Discovery: `vitest.config.ts` is NOT type-checked
+
+- Root `tsconfig.json` only includes `packages/**/*` and `src/**/*`.
+- `vitest.config.ts` at the repo root is OUTSIDE these paths.
+- TypeScript silently accepts any field name in `vitest.config.ts` — typos like `reporter` vs `reporters` are never caught by `tsc --noEmit`.
+- Memory updated with this as a Brittle Area.
+
+### Deferred Items (future phases)
+
+- `packages/core/package.json` has `"main": "./src/index.ts"` but `git/GitClient.ts` is not yet re-exported from `index.ts`. A future phase must add exports to `packages/core/src/index.ts`.
+- The `vitest.config.ts` file could be added to a separate `tsconfig.vitest.json` to enable type-checking for it — not required now but worth considering as the test suite grows.
+
+---
+
 ## Task: Phase 1 / 05_define_shared_state_manifest
 
 **Status: PASSED — no fixes required. All 59 presubmit checks pass.**

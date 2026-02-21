@@ -11,9 +11,15 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     environment: "node",
-    // Glob pattern relative to the monorepo root.
-    include: ["packages/*/test/**/*.test.ts"],
+    // Glob patterns relative to the monorepo root.
+    // test/ subdir: persistence and schema tests (Phase 2+)
+    // src/ subdir: unit tests co-located with source (Phase 1 git tests)
+    include: [
+      "packages/*/test/**/*.test.ts",
+      "packages/*/src/**/*.test.ts",
+    ],
     // Use forks pool for native addons (e.g. better-sqlite3).
     pool: "forks",
+    reporters: ["verbose"],
   },
 });
