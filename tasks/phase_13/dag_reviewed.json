@@ -1,0 +1,56 @@
+{
+  "01_rewind_core_infrastructure": [],
+  "02_filesystem_state_restoration": [
+    "01_rewind_core_infrastructure"
+  ],
+  "03_relational_state_rollback": [
+    "01_rewind_core_infrastructure"
+  ],
+  "04_vector_memory_management": [],
+  "05_full_rewind_execution": [
+    "02_filesystem_state_restoration",
+    "03_relational_state_rollback",
+    "04_vector_memory_management"
+  ],
+  "06_crash_recovery_and_resume": [
+    "02_filesystem_state_restoration",
+    "03_relational_state_rollback"
+  ],
+  "07_dirty_workspace_detection": [
+    "05_full_rewind_execution",
+    "06_crash_recovery_and_resume"
+  ],
+  "08_state_machine_and_integrity": [
+    "03_relational_state_rollback"
+  ],
+  "09_agent_error_and_loop_handling": [
+    "08_state_machine_and_integrity"
+  ],
+  "10_retry_and_tool_error_protocol": [
+    "13_human-in-the-loop_recovery"
+  ],
+  "11_sandbox_and_failure_preservation": [
+    "01_rewind_core_infrastructure"
+  ],
+  "12_model_failover_and_provider_handling": [],
+  "13_human-in-the-loop_recovery": [
+    "06_crash_recovery_and_resume",
+    "09_agent_error_and_loop_handling"
+  ],
+  "14_entropy_detection_and_pivot": [
+    "09_agent_error_and_loop_handling",
+    "13_human-in-the-loop_recovery"
+  ],
+  "15_cli_and_ui_state_controls": [
+    "07_dirty_workspace_detection",
+    "14_entropy_detection_and_pivot"
+  ],
+  "16_budget_recovery_and_redaction": [
+    "06_crash_recovery_and_resume"
+  ],
+  "17_infrastructure_risk_mitigation": [
+    "11_sandbox_and_failure_preservation",
+    "12_model_failover_and_provider_handling",
+    "13_human-in-the-loop_recovery"
+  ]
+}

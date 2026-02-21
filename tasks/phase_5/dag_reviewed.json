@@ -1,0 +1,52 @@
+{
+  "01_research_phase_foundation_methodology": [],
+  "02_researchmanager_agent_core": [
+    "01_research_phase_foundation_methodology"
+  ],
+  "03_search_integration_tools": [],
+  "04_content_extraction_tools": [
+    "02_researchmanager_agent_core"
+  ],
+  "05_research_sandbox_security_permissions": [
+    "03_search_integration_tools",
+    "04_content_extraction_tools"
+  ],
+  "06_input_sanitization_prompt_injection_mitigation": [
+    "04_content_extraction_tools",
+    "08_technology_adjacent_market_research"
+  ],
+  "07_market_user_research_domains": [
+    "02_researchmanager_agent_core",
+    "03_search_integration_tools",
+    "04_content_extraction_tools"
+  ],
+  "08_technology_adjacent_market_research": [
+    "02_researchmanager_agent_core",
+    "03_search_integration_tools",
+    "04_content_extraction_tools"
+  ],
+  "09_source_verification_fact-checking": [
+    "07_market_user_research_domains",
+    "08_technology_adjacent_market_research"
+  ],
+  "10_report_generation_engine": [
+    "07_market_user_research_domains",
+    "08_technology_adjacent_market_research"
+  ],
+  "11_user_interface_progress_reporting": [
+    "02_researchmanager_agent_core"
+  ],
+  "12_edge_case_error_handling": [
+    "04_content_extraction_tools",
+    "07_market_user_research_domains",
+    "08_technology_adjacent_market_research"
+  ],
+  "13_hitl_gate_phase_transition": [
+    "05_research_sandbox_security_permissions",
+    "06_input_sanitization_prompt_injection_mitigation",
+    "09_source_verification_fact-checking",
+    "10_report_generation_engine",
+    "11_user_interface_progress_reporting",
+    "12_edge_case_error_handling"
+  ]
+}

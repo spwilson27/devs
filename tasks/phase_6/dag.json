@@ -1,0 +1,31 @@
+{
+  "01_architectagent_core_implementation": [],
+  "02_architecture-driven_development_setup": [
+    "01_architectagent_core_implementation"
+  ],
+  "03_prd_and_tas_document_generation": [],
+  "04_mcp_and_system_structure_documents": [],
+  "05_security_and_ux_document_generation": [
+    "01_architectagent_core_implementation",
+    "04_mcp_and_system_structure_documents"
+  ],
+  "06_diagram_auto-generation": [],
+  "07_document_validation_and_traceability": [
+    "03_prd_and_tas_document_generation",
+    "04_mcp_and_system_structure_documents"
+  ],
+  "08_document_integrity_and_security": [
+    "02_architecture-driven_development_setup"
+  ],
+  "09_architectural_fidelity_and_drift_mitigation": [
+    "07_document_validation_and_traceability"
+  ],
+  "10_review_dashboard_ui": [],
+  "11_blueprint_gate_logic": [
+    "02_architecture-driven_development_setup"
+  ],
+  "12_hitl_approval_interface": [
+    "10_review_dashboard_ui",
+    "11_blueprint_gate_logic"
+  ]
+}

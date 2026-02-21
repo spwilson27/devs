@@ -1,0 +1,56 @@
+{
+  "01_cli_foundation_core_logic": [],
+  "02_headless_mode_ipc_parity": [
+    "01_cli_foundation_core_logic"
+  ],
+  "03_cli_state_control_commands": [
+    "02_headless_mode_ipc_parity"
+  ],
+  "04_tui_framework_styling_foundations": [
+    "01_cli_foundation_core_logic"
+  ],
+  "05_tui_core_semantic_palette": [
+    "04_tui_framework_styling_foundations"
+  ],
+  "06_tui_resilience_platform_support": [
+    "04_tui_framework_styling_foundations"
+  ],
+  "07_tui_fallbacks_color_modes": [
+    "05_tui_core_semantic_palette",
+    "06_tui_resilience_platform_support"
+  ],
+  "08_tui_layout_main_zones": [
+    "05_tui_core_semantic_palette"
+  ],
+  "09_tui_footer_layout_adaptability": [
+    "08_tui_layout_main_zones"
+  ],
+  "10_tui_block_hierarchy_styling": [
+    "12_tui_log_streaming_event_support"
+  ],
+  "11_tui_primitive_components": [
+    "07_tui_fallbacks_color_modes"
+  ],
+  "12_tui_log_streaming_event_support": [
+    "08_tui_layout_main_zones",
+    "11_tui_primitive_components"
+  ],
+  "13_tui_progress_status_dashboards": [
+    "08_tui_layout_main_zones",
+    "11_tui_primitive_components"
+  ],
+  "14_tui_navigation_hotkeys_foundation": [
+    "08_tui_layout_main_zones"
+  ],
+  "15_tui_specific_hotkeys_focus": [
+    "11_tui_primitive_components",
+    "14_tui_navigation_hotkeys_foundation"
+  ],
+  "16_tui_approval_gates_interaction": [
+    "11_tui_primitive_components",
+    "14_tui_navigation_hotkeys_foundation"
+  ],
+  "17_tui_diff_reviewer": [
+    "16_tui_approval_gates_interaction"
+  ]
+}

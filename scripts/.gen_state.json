@@ -457,8 +457,8 @@
         "phase_9/14_fact-checking_benchmarking",
         "phase_9/13_full_system_audits"
     ],
-    "dag_completed": false,
-    "dag_reviewed": false,
+    "dag_completed": true,
+    "dag_reviewed": true,
     "tdd_completed": false,
     "ordered_phases_generated": []
 }

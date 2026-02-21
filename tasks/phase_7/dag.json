@@ -1,0 +1,36 @@
+{
+  "01_distiller_core_extraction": [],
+  "02_decomposition_and_orchestration": [
+    "01_distiller_core_extraction"
+  ],
+  "03_task_dag_generation": [
+    "02_decomposition_and_orchestration"
+  ],
+  "04_rti_and_coverage": [
+    "02_decomposition_and_orchestration"
+  ],
+  "05_task_constraints_and_planning": [
+    "03_task_dag_generation",
+    "04_rti_and_coverage"
+  ],
+  "06_roadmap_planner_and_gates": [
+    "05_task_constraints_and_planning"
+  ],
+  "07_cost_estimation_and_budgeting": [
+    "05_task_constraints_and_planning"
+  ],
+  "08_roadmap_visualization_ui": [
+    "06_roadmap_planner_and_gates",
+    "10_approval_and_checkpoints"
+  ],
+  "09_risk_mitigation_and_monitoring": [
+    "04_rti_and_coverage",
+    "10_approval_and_checkpoints"
+  ],
+  "10_approval_and_checkpoints": [
+    "06_roadmap_planner_and_gates"
+  ],
+  "11_technical_requirements_and_feedback": [
+    "01_distiller_core_extraction"
+  ]
+}

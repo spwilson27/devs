@@ -1,0 +1,371 @@
+{
+  "01_vscode_extension_core": [],
+  "02_webview_stack_scaffolding": [
+    "01_vscode_extension_core"
+  ],
+  "03_interface_core_decoupling": [
+    "02_webview_stack_scaffolding"
+  ],
+  "04_event_streaming_bridge": [
+    "03_interface_core_decoupling"
+  ],
+  "05_ui_interaction_triggers": [
+    "03_interface_core_decoupling"
+  ],
+  "06_global_state_tiers": [
+    "03_interface_core_decoupling"
+  ],
+  "07_state_watchers_sync": [
+    "06_global_state_tiers"
+  ],
+  "08_persistence_recovery": [
+    "06_global_state_tiers"
+  ],
+  "09_view_routing_arch": [
+    "06_global_state_tiers"
+  ],
+  "10_view_lifecycle_policy": [
+    "09_view_routing_arch"
+  ],
+  "11_dashboard_research_views": [
+    "09_view_routing_arch"
+  ],
+  "12_spec_roadmap_views": [
+    "09_view_routing_arch"
+  ],
+  "13_console_settings_views": [
+    "09_view_routing_arch"
+  ],
+  "14_theme_variable_mapping": [
+    "02_webview_stack_scaffolding"
+  ],
+  "15_glass_box_effects": [
+    "14_theme_variable_mapping"
+  ],
+  "16_typography_philosophy": [
+    "14_theme_variable_mapping"
+  ],
+  "17_font_inheritance_stack": [
+    "16_typography_philosophy"
+  ],
+  "18_font_loading_antialiasing": [
+    "17_font_inheritance_stack"
+  ],
+  "19_narrative_font_intent": [
+    "16_typography_philosophy"
+  ],
+  "20_technical_font_intent": [
+    "16_typography_philosophy"
+  ],
+  "21_directive_nav_fonts": [
+    "16_typography_philosophy"
+  ],
+  "22_type_scale_h1_h3": [
+    "16_typography_philosophy"
+  ],
+  "23_type_scale_body_mono": [
+    "16_typography_philosophy",
+    "22_type_scale_h1_h3"
+  ],
+  "24_font_weight_ligatures": [
+    "16_typography_philosophy"
+  ],
+  "25_variable_scaling_rem": [
+    "16_typography_philosophy"
+  ],
+  "26_agent_reasoning_fonts": [
+    "16_typography_philosophy"
+  ],
+  "27_agent_hierarchy_authority": [
+    "14_theme_variable_mapping"
+  ],
+  "28_agent_role_colors": [
+    "14_theme_variable_mapping"
+  ],
+  "29_ansi_palette_consistency": [
+    "14_theme_variable_mapping"
+  ],
+  "30_layout_grid_z_index": [
+    "14_theme_variable_mapping"
+  ],
+  "31_layered_z_index": [
+    "30_layout_grid_z_index"
+  ],
+  "32_zone_anchoring_rules": [
+    "30_layout_grid_z_index"
+  ],
+  "33_persistent_zones_nav": [
+    "30_layout_grid_z_index",
+    "09_view_routing_arch"
+  ],
+  "34_adaptive_breakpoints": [
+    "30_layout_grid_z_index"
+  ],
+  "35_viewport_constraints": [
+    "34_adaptive_breakpoints"
+  ],
+  "36_high_density_snr": [
+    "34_adaptive_breakpoints"
+  ],
+  "37_layout_modes_scaling": [
+    "36_high_density_snr"
+  ],
+  "38_iconography_standards": [
+    "02_webview_stack_scaffolding"
+  ],
+  "39_icon_intent_roles": [
+    "38_iconography_standards"
+  ],
+  "40_icon_status_actions": [
+    "39_icon_intent_roles"
+  ],
+  "41_container_radius_shadow": [
+    "14_theme_variable_mapping"
+  ],
+  "42_shadow_task_cards": [
+    "41_container_radius_shadow"
+  ],
+  "43_interactive_targets": [
+    "14_theme_variable_mapping"
+  ],
+  "44_dashboard_sidebar_hub": [
+    "11_dashboard_research_views",
+    "42_shadow_task_cards"
+  ],
+  "45_performance_reactivity": [
+    "06_global_state_tiers",
+    "04_event_streaming_bridge"
+  ],
+  "46_memoization_lazy_loading": [
+    "09_view_routing_arch"
+  ],
+  "47_security_shield_csp": [
+    "01_vscode_extension_core"
+  ],
+  "48_motion_philosophy": [
+    "14_theme_variable_mapping"
+  ],
+  "49_animation_targets": [
+    "48_motion_philosophy"
+  ],
+  "50_thought_pulse_logic": [
+    "48_motion_philosophy"
+  ],
+  "51_invocation_shimmer": [
+    "48_motion_philosophy"
+  ],
+  "52_attention_pulses": [
+    "48_motion_philosophy"
+  ],
+  "53_interaction_highlighting": [
+    "14_theme_variable_mapping"
+  ],
+  "54_context_guidance_ui": [
+    "09_view_routing_arch"
+  ],
+  "55_distillation_particles": [
+    "48_motion_philosophy"
+  ],
+  "56_glitch_state_visuals": [
+    "48_motion_philosophy",
+    "14_theme_variable_mapping"
+  ],
+  "57_thoughtstreamer_component": [
+    "13_console_settings_views",
+    "04_event_streaming_bridge"
+  ],
+  "58_thought_connectivity": [
+    "57_thoughtstreamer_component",
+    "95_requirement_saop_models"
+  ],
+  "59_log_windowing_core": [
+    "57_thoughtstreamer_component"
+  ],
+  "60_log_ui_presentation": [
+    "59_log_windowing_core"
+  ],
+  "61_markdown_preview_engine": [
+    "12_spec_roadmap_views"
+  ],
+  "62_blueprint_spec_views": [
+    "12_spec_roadmap_views",
+    "61_markdown_preview_engine"
+  ],
+  "100_shared_logic_svg_hooks": [
+    "02_webview_stack_scaffolding"
+  ],
+  "63_dag_visualization_engine": [
+    "12_spec_roadmap_views",
+    "100_shared_logic_svg_hooks"
+  ],
+  "64_dag_performance_base": [
+    "63_dag_visualization_engine"
+  ],
+  "65_dag_layering_strategy": [
+    "63_dag_visualization_engine"
+  ],
+  "66_visual_acceleration": [
+    "64_dag_performance_base"
+  ],
+  "67_dag_pan_zoom_logic": [
+    "63_dag_visualization_engine"
+  ],
+  "68_dag_node_state_models": [
+    "63_dag_visualization_engine"
+  ],
+  "69_dag_edge_metrics": [
+    "68_dag_node_state_models"
+  ],
+  "70_dag_lod_scaling": [
+    "69_dag_edge_metrics"
+  ],
+  "71_massive_graph_lod": [
+    "70_dag_lod_scaling"
+  ],
+  "72_mermaid_interactive_host": [
+    "61_markdown_preview_engine",
+    "100_shared_logic_svg_hooks"
+  ],
+  "73_mermaid_resilience": [
+    "72_mermaid_interactive_host"
+  ],
+  "74_roadmap_gantt_dag": [
+    "63_dag_visualization_engine",
+    "12_spec_roadmap_views"
+  ],
+  "75_blueprint_auto_sync": [
+    "72_mermaid_interactive_host",
+    "74_roadmap_gantt_dag"
+  ],
+  "76_directive_injection_core": [
+    "05_ui_interaction_triggers"
+  ],
+  "77_injection_autocomplete": [
+    "76_directive_injection_core"
+  ],
+  "78_directive_whisperer_input": [
+    "76_directive_injection_core"
+  ],
+  "79_directive_context_snippets": [
+    "77_injection_autocomplete",
+    "78_directive_whisperer_input"
+  ],
+  "80_priority_toggle_feedback": [
+    "79_directive_context_snippets",
+    "58_thought_connectivity"
+  ],
+  "81_directive_visual_confirm": [
+    "80_priority_toggle_feedback"
+  ],
+  "82_hitl_gating_interface": [
+    "12_spec_roadmap_views",
+    "05_ui_interaction_triggers"
+  ],
+  "83_transactional_signoff_diff": [
+    "82_hitl_gating_interface"
+  ],
+  "84_state_delta_highlighting": [
+    "83_transactional_signoff_diff"
+  ],
+  "85_accessibility_wcag_base": [
+    "14_theme_variable_mapping"
+  ],
+  "86_high_contrast_overrides": [
+    "85_accessibility_wcag_base"
+  ],
+  "87_contrast_risk_resilience": [
+    "86_high_contrast_overrides"
+  ],
+  "88_screen_reader_optimization": [
+    "57_thoughtstreamer_component",
+    "85_accessibility_wcag_base"
+  ],
+  "89_focus_keyboard_control": [
+    "38_iconography_standards",
+    "85_accessibility_wcag_base"
+  ],
+  "90_reduced_motion_media": [
+    "48_motion_philosophy"
+  ],
+  "91_reduced_motion_transitions": [
+    "90_reduced_motion_media"
+  ],
+  "92_i18n_skeleton_core": [
+    "02_webview_stack_scaffolding"
+  ],
+  "93_global_script_fallbacks": [
+    "16_typography_philosophy"
+  ],
+  "94_language_pluralization_ui": [
+    "92_i18n_skeleton_core"
+  ],
+  "95_requirement_saop_models": [
+    "03_interface_core_decoupling"
+  ],
+  "96_diagram_alt_text_contrast": [
+    "73_mermaid_resilience",
+    "87_contrast_risk_resilience"
+  ],
+  "97_diagnostics_rca_metrics": [
+    "56_glitch_state_visuals"
+  ],
+  "98_disconnection_overlays": [
+    "04_event_streaming_bridge"
+  ],
+  "99_resilience_skeleton_rollback": [
+    "98_disconnection_overlays",
+    "80_priority_toggle_feedback"
+  ],
+  "101_interface_dod_polish": [
+    "07_state_watchers_sync",
+    "08_persistence_recovery",
+    "10_view_lifecycle_policy",
+    "15_glass_box_effects",
+    "18_font_loading_antialiasing",
+    "19_narrative_font_intent",
+    "20_technical_font_intent",
+    "21_directive_nav_fonts",
+    "23_type_scale_body_mono",
+    "24_font_weight_ligatures",
+    "25_variable_scaling_rem",
+    "26_agent_reasoning_fonts",
+    "27_agent_hierarchy_authority",
+    "28_agent_role_colors",
+    "29_ansi_palette_consistency",
+    "31_layered_z_index",
+    "32_zone_anchoring_rules",
+    "33_persistent_zones_nav",
+    "35_viewport_constraints",
+    "37_layout_modes_scaling",
+    "40_icon_status_actions",
+    "43_interactive_targets",
+    "44_dashboard_sidebar_hub",
+    "45_performance_reactivity",
+    "46_memoization_lazy_loading",
+    "47_security_shield_csp",
+    "49_animation_targets",
+    "50_thought_pulse_logic",
+    "51_invocation_shimmer",
+    "52_attention_pulses",
+    "53_interaction_highlighting",
+    "54_context_guidance_ui",
+    "55_distillation_particles",
+    "60_log_ui_presentation",
+    "62_blueprint_spec_views",
+    "65_dag_layering_strategy",
+    "66_visual_acceleration",
+    "67_dag_pan_zoom_logic",
+    "71_massive_graph_lod",
+    "75_blueprint_auto_sync",
+    "81_directive_visual_confirm",
+    "84_state_delta_highlighting",
+    "88_screen_reader_optimization",
+    "89_focus_keyboard_control",
+    "91_reduced_motion_transitions",
+    "93_global_script_fallbacks",
+    "94_language_pluralization_ui",
+    "96_diagram_alt_text_contrast",
+    "97_diagnostics_rca_metrics",
+    "99_resilience_skeleton_rollback"
+  ]
+}

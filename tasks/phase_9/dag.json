@@ -1,0 +1,46 @@
+{
+  "01_reviewer_agent_core_initialization": [],
+  "02_reviewer_agent_prompting_identity": [
+    "01_reviewer_agent_core_initialization"
+  ],
+  "03_cross-verification_validation_logic": [
+    "01_reviewer_agent_core_initialization"
+  ],
+  "04_automated_code_auditing": [
+    "03_cross-verification_validation_logic"
+  ],
+  "05_security_sast_integration": [
+    "03_cross-verification_validation_logic"
+  ],
+  "06_test_suite_integrity_flakiness": [],
+  "07_documentation_auditing_aod_": [
+    "03_cross-verification_validation_logic"
+  ],
+  "08_aod_edge_cases_details": [
+    "07_documentation_auditing_aod_"
+  ],
+  "09_root_cause_analysis_rca_debugging": [
+    "06_test_suite_integrity_flakiness",
+    "10_human-in-the-loop_gates"
+  ],
+  "10_human-in-the-loop_gates": [
+    "03_cross-verification_validation_logic"
+  ],
+  "11_escalation_checkpoints": [
+    "03_cross-verification_validation_logic",
+    "06_test_suite_integrity_flakiness"
+  ],
+  "12_global_validation_infrastructure": [
+    "06_test_suite_integrity_flakiness"
+  ],
+  "13_full_system_audits": [
+    "12_global_validation_infrastructure"
+  ],
+  "14_fact-checking_benchmarking": [
+    "03_cross-verification_validation_logic"
+  ],
+  "15_quality_metrics_definition": [
+    "12_global_validation_infrastructure",
+    "14_fact-checking_benchmarking"
+  ]
+}

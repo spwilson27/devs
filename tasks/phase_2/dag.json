@@ -1,0 +1,42 @@
+{
+  "01_module_foundation_directory_structure": [],
+  "02_sandbox_abstraction_layer": [
+    "01_module_foundation_directory_structure"
+  ],
+  "03_docker_driver_implementation": [
+    "02_sandbox_abstraction_layer"
+  ],
+  "04_webcontainer_driver_implementation": [
+    "02_sandbox_abstraction_layer"
+  ],
+  "05_filesystem_manager_isolation": [
+    "03_docker_driver_implementation",
+    "04_webcontainer_driver_implementation"
+  ],
+  "06_network_egress_control": [
+    "03_docker_driver_implementation",
+    "04_webcontainer_driver_implementation"
+  ],
+  "07_resource_quotas_constraints": [
+    "05_filesystem_manager_isolation"
+  ],
+  "08_sandbox_lifecycle_environment_management": [
+    "05_filesystem_manager_isolation"
+  ],
+  "09_secretmasker_middleware_core": [],
+  "10_redaction_pipeline_phases": [
+    "09_secretmasker_middleware_core"
+  ],
+  "11_sandbox_security_monitoring_breach_detection": [
+    "06_network_egress_control",
+    "07_resource_quotas_constraints",
+    "08_sandbox_lifecycle_environment_management"
+  ],
+  "12_user-facing_sandbox_features_verification": [
+    "10_redaction_pipeline_phases",
+    "11_sandbox_security_monitoring_breach_detection"
+  ],
+  "13_definition_of_done": [
+    "12_user-facing_sandbox_features_verification"
+  ]
+}

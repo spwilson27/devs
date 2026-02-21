@@ -121,8 +121,9 @@ class CopilotRunner(AIRunner):
 
 
 class ProjectContext:
-    def __init__(self, root_dir: str, runner: Optional[AIRunner] = None):
+    def __init__(self, root_dir: str, runner: Optional[AIRunner] = None, jobs: int = 1):
         self.root_dir = root_dir
+        self.jobs = jobs
         self.sandbox_dir = os.path.join(root_dir, ".sandbox")
         self.specs_dir = os.path.join(root_dir, "specs")
         self.research_dir = os.path.join(root_dir, "research")
@@ -757,7 +758,7 @@ class Phase6BreakDownTasks(BasePhase):
                     ctx.save_state()
                 return True
 
-            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=ctx.jobs) as executor:
                 futures = [
                     executor.submit(process_sub_epic, name, reqs)
                     for name, reqs in sorted(sub_epics.items())
@@ -839,19 +840,20 @@ class Phase7ADAGGeneration(BasePhase):
             sys.exit(1)
 
         dag_prompt_tmpl = ctx.load_prompt("dag_tasks.md")
+        state_lock = threading.Lock()
 
-        for phase_id in sorted(phase_dirs):
+        def process_phase_dag(phase_id):
             phase_dir_path = os.path.join(tasks_dir, phase_id)
             dag_file_path = os.path.join(phase_dir_path, "dag.json")
             
             if os.path.exists(dag_file_path):
                  print(f"   -> Skipping DAG Generation for {phase_id} (already exists).")
-                 continue
+                 return True
                  
             # Gather tasks
             sub_epics = [d for d in os.listdir(phase_dir_path) if os.path.isdir(os.path.join(phase_dir_path, d))]
             if not sub_epics:
-                continue
+                return True
                 
             tasks_content = ""
             for sub_epic in sorted(sub_epics):
@@ -879,20 +881,35 @@ class Phase7ADAGGeneration(BasePhase):
                 tasks_content=tasks_content
             )
 
+            #print(prompt)
             ignore_content = f"/*\n!/.sandbox/\n!/tasks/{phase_id}/dag.json\n"
             allowed_files = [dag_file_path]
             
-            result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
-            
-            if result.returncode != 0:
-                print(f"\n[!] Error generating DAG for {phase_id}.")
-                print(result.stdout)
-                print(result.stderr)
-                sys.exit(1)
+            for attempt in range(1, 4):
+                result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
                 
-            if not os.path.exists(dag_file_path):
-                print(f"\n[!] Error: Agent failed to generate DAG JSON file {dag_file_path}.")
-                sys.exit(1)
+                if result.returncode == 0 and os.path.exists(dag_file_path):
+                    return True
+                    
+                print(f"\n[!] Error generating DAG for {phase_id} (Attempt {attempt}/3).")
+                if result.returncode != 0:
+                    print(result.stdout)
+                    print(result.stderr)
+                elif not os.path.exists(dag_file_path):
+                    print(f"\n[!] Error: Agent failed to generate DAG JSON file {dag_file_path}.")
+                    
+            return False
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=ctx.jobs) as executor:
+            futures = [
+                executor.submit(process_phase_dag, phase_id)
+                for phase_id in sorted(phase_dirs)
+            ]
+            
+            for future in concurrent.futures.as_completed(futures):
+                if not future.result():
+                    print("\n[!] Error encountered in parallel DAG generation. Exiting.")
+                    os._exit(1)
 
         ctx.stage_changes([tasks_dir])
         ctx.state["dag_completed"] = True
@@ -915,17 +932,17 @@ class Phase7BDAGReview(BasePhase):
         phase_dirs = [d for d in os.listdir(tasks_dir) if os.path.isdir(os.path.join(tasks_dir, d)) and d.startswith("phase_")]
         review_prompt_tmpl = ctx.load_prompt("dag_tasks_review.md")
 
-        for phase_id in sorted(phase_dirs):
+        def process_phase_review(phase_id):
             phase_dir_path = os.path.join(tasks_dir, phase_id)
             dag_file_path = os.path.join(phase_dir_path, "dag.json")
             reviewed_dag_file_path = os.path.join(phase_dir_path, "dag_reviewed.json")
             
             if not os.path.exists(dag_file_path):
-                continue
+                return True
                 
             if os.path.exists(reviewed_dag_file_path):
                  print(f"   -> Skipping DAG Review for {phase_id} (already reviewed).")
-                 continue
+                 return True
 
             with open(dag_file_path, "r", encoding="utf-8") as f:
                 proposed_dag = f.read()
@@ -956,17 +973,31 @@ class Phase7BDAGReview(BasePhase):
             ignore_content = f"/*\n!/.sandbox/\n!/tasks/{phase_id}/dag_reviewed.json\n"
             allowed_files = [reviewed_dag_file_path]
             
-            result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
-            
-            if result.returncode != 0:
-                print(f"\n[!] Error reviewing DAG for {phase_id}.")
-                print(result.stdout)
-                print(result.stderr)
-                sys.exit(1)
+            for attempt in range(1, 4):
+                result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
                 
-            if not os.path.exists(reviewed_dag_file_path):
-                print(f"\n[!] Error: Agent failed to generate reviewed DAG JSON file {reviewed_dag_file_path}.")
-                sys.exit(1)
+                if result.returncode == 0 and os.path.exists(reviewed_dag_file_path):
+                    return True
+                    
+                print(f"\n[!] Error reviewing DAG for {phase_id} (Attempt {attempt}/3).")
+                if result.returncode != 0:
+                    print(result.stdout)
+                    print(result.stderr)
+                elif not os.path.exists(reviewed_dag_file_path):
+                    print(f"\n[!] Error: Agent failed to generate reviewed DAG JSON file {reviewed_dag_file_path}.")
+                    
+            return False
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=ctx.jobs) as executor:
+            futures = [
+                executor.submit(process_phase_review, phase_id)
+                for phase_id in sorted(phase_dirs)
+            ]
+            
+            for future in concurrent.futures.as_completed(futures):
+                if not future.result():
+                    print("\n[!] Error encountered in parallel DAG review. Exiting.")
+                    os._exit(1)
 
         ctx.stage_changes([tasks_dir])
         ctx.state["dag_reviewed"] = True
@@ -1059,6 +1090,10 @@ def main():
         help="Start from a specific phase, e.g. '4-merge' (skips earlier phases)"
     )
     parser.add_argument(
+        "--jobs", type=int, default=1,
+        help="Maximum number of parallel AI agents/jobs to run concurrently (default: 1)"
+    )
+    parser.add_argument(
         "--force", action="store_true",
         help="Force re-run of the specified phase by clearing its completed state"
     )
@@ -1076,7 +1111,7 @@ def main():
         print("Using Gemini CLI backend.")
 
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    ctx = ProjectContext(root_dir, runner=runner)
+    ctx = ProjectContext(root_dir, runner=runner, jobs=args.jobs)
 
     if args.phase and args.force:
         phase_state_keys = {

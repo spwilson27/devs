@@ -1,0 +1,293 @@
+#!/usr/bin/env python3
+import os
+import sys
+import json
+import argparse
+import subprocess
+import tempfile
+import threading
+import concurrent.futures
+from typing import Dict, List, Any
+
+
+# Default CLI backends config for gemini/claude. Assumes same runner logic as gen_all.py
+def run_ai_command(prompt: str, cwd: str) -> subprocess.CompletedProcess:
+    # Use gemini CLI by default, adapt if you prefer an existing `AIRunner` structure
+    return subprocess.run(
+        ["gemini", "-y"],
+        input=prompt,
+        cwd=cwd,
+        capture_output=True,
+        text=True
+    )
+
+
+def load_dags(tasks_dir: str) -> Dict[str, Dict[str, List[str]]]:
+    """Loads all dag_reviewed.json files from the tasks directories."""
+    master_dag = {}
+    if not os.path.exists(tasks_dir):
+        return master_dag
+
+    for phase_dir in os.listdir(tasks_dir):
+        phase_path = os.path.join(tasks_dir, phase_dir)
+        if not os.path.isdir(phase_path) or not phase_dir.startswith("phase_"):
+            continue
+
+        dag_file = os.path.join(phase_path, "dag_reviewed.json")
+        if os.path.exists(dag_file):
+            with open(dag_file, "r", encoding="utf-8") as f:
+                try:
+                    phase_dag = json.load(f)
+                    for task_id, prerequisites in phase_dag.items():
+                        # DAG task_ids are usually relative like "01_project_infrastructure_monorepo_setup"
+                        # We key them by their fully qualified path: phase_X/task_id
+                        full_task_id = f"{phase_dir}/{task_id}"
+                        master_dag[full_task_id] = [f"{phase_dir}/{p}" for p in prerequisites]
+                except json.JSONDecodeError as e:
+                    print(f"Error parsing {dag_file}: {e}")
+    return master_dag
+
+
+def load_workflow_state(state_file: str) -> Dict[str, Any]:
+    state = {"completed_tasks": [], "merged_tasks": []}
+    if os.path.exists(state_file):
+        with open(state_file, "r", encoding="utf-8") as f:
+            try:
+                state.update(json.load(f))
+            except json.JSONDecodeError:
+                pass
+    return state
+
+
+def save_workflow_state(state_file: str, state: Dict[str, Any]):
+    with open(state_file, "w", encoding="utf-8") as f:
+        json.dump(state, f, indent=4)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Parallel development workflow orchestrator")
+    parser.add_argument("--jobs", type=int, default=1, help="Number of parallel implementation agents")
+    parser.add_argument("--presubmit-cmd", type=str, default="./do presubmit", help="Command to evaluate correctness")
+    args = parser.parse_args()
+
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    tasks_dir = os.path.join(root_dir, "tasks")
+    state_file = os.path.join(root_dir, "scripts", ".workflow_state.json")
+
+    master_dag = load_dags(tasks_dir)
+    state = load_workflow_state(state_file)
+    
+def get_task_details(root_dir: str, full_task_id: str) -> str:
+    """Reads all markdown files for a given task and returns them as a single context string."""
+    task_dir = os.path.join(root_dir, "tasks", full_task_id)
+    content = ""
+    if os.path.exists(task_dir):
+        for f in os.listdir(task_dir):
+            if f.endswith(".md"):
+                with open(os.path.join(task_dir, f), "r", encoding="utf-8") as file:
+                    content += file.read() + "\n\n"
+    return content
+
+
+def get_project_context(root_dir: str) -> str:
+    desc_file = os.path.join(root_dir, "input", "description.md")
+    if os.path.exists(desc_file):
+        with open(desc_file, "r", encoding="utf-8") as f:
+            return f.read()
+    return ""
+
+
+def run_agent(agent_type: str, prompt_file: str, root_dir: str, task_context: dict, cwd: str) -> bool:
+    """Formats the prompt and executes the AI agent."""
+    prompt_path = os.path.join(root_dir, "scripts", "prompts", prompt_file)
+    with open(prompt_path, "r", encoding="utf-8") as f:
+        prompt_tmpl = f.read()
+
+    # Simple template replacement
+    prompt = prompt_tmpl
+    for k, v in task_context.items():
+        prompt = prompt.replace(f"{{{k}}}", str(v))
+
+    print(f"      [{agent_type}] Starting agent in {cwd}...")
+    result = run_ai_command(prompt, cwd)
+    
+    if result.returncode != 0:
+        print(f"      [{agent_type}] FATAL: Agent process failed with exit code {result.returncode}")
+        print(result.stdout)
+        print(result.stderr)
+        return False
+        
+    return True
+
+
+def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retries: int = 3) -> bool:
+    """Handles the lifecycle of a single task: worktree creation, agents, and commit."""
+    phase_id, task_id = full_task_id.split("/")
+    branch_name = f"ai-phase-{task_id}"
+    tmpdir = tempfile.mkdtemp(prefix=f"ai_{task_id}_")
+
+    print(f"\n   -> [Implementation] Starting {full_task_id}")
+    print(f"      Creating git worktree at {tmpdir} on branch {branch_name}...")
+    
+    # Create worktree
+    subprocess.run(["git", "worktree", "add", "-b", branch_name, tmpdir, "main"], cwd=root_dir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    
+    try:
+        task_details = get_task_details(root_dir, full_task_id)
+        description_ctx = get_project_context(root_dir)
+        
+        context = {
+            "phase_filename": phase_id,
+            "task_name": task_id,
+            "target_dir": full_task_id,
+            "task_details": task_details,
+            "description_ctx": description_ctx
+        }
+
+        # 1. Implementation Agent
+        if not run_agent("Implementation", "implement_task.md", root_dir, context, tmpdir):
+            return False
+
+        # 2. Review Agent
+        if not run_agent("Review", "review_task.md", root_dir, context, tmpdir):
+            return False
+
+        # 3. Verification Loop
+        for attempt in range(1, max_retries + 1):
+            print(f"      [Verification] Running presubmit (Attempt {attempt}/{max_retries})...")
+            # We split the command string into a list for subprocess
+            cmd_list = presubmit_cmd.split()
+            presubmit_res = subprocess.run(cmd_list, cwd=tmpdir, capture_output=True, text=True)
+            
+            if presubmit_res.returncode == 0:
+                print(f"      [Verification] Presubmit passed!")
+                
+                # Commit the changes
+                subprocess.run(["git", "add", "-A"], cwd=tmpdir, check=True)
+                # Only commit if there are changes
+                status = subprocess.run(["git", "status", "--porcelain"], cwd=tmpdir, capture_output=True, text=True)
+                if status.stdout.strip():
+                     subprocess.run(["git", "commit", "-m", f"{phase_id}:{task_id}: Standardized Implementation"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL)
+                else:
+                     print(f"      [Verification] No changes to commit for {full_task_id}.")
+                return True
+            
+            print(f"      [Verification] Presubmit failed.")
+            if attempt < max_retries:
+                 # Feed the failure back to the review agent
+                 failure_ctx = dict(context)
+                 failure_ctx["task_details"] += f"\n\n### PRESUBMIT FAILURE (Attempt {attempt})\nThe presubmit script failed with the following output. Please fix the code.\n\n```\n{presubmit_res.stdout}\n{presubmit_res.stderr}\n```\n"
+                 if not run_agent("Review (Retry)", "review_task.md", root_dir, failure_ctx, tmpdir):
+                     return False
+                     
+        print(f"   -> [!] Task {full_task_id} failed presubmit {max_retries} times. Aborting task.")
+        return False
+        
+    finally:
+        # Cleanup worktree
+        print(f"      Cleaning up worktree {tmpdir}...")
+        subprocess.run(["git", "worktree", "remove", "-f", tmpdir], cwd=root_dir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        # Also delete the branch if it failed so we don't leave dangling broken branches, unless it succeeded (then we want to merge it)
+
+
+def get_ready_tasks(master_dag: Dict[str, List[str]], completed_tasks: List[str], active_tasks: List[str]) -> List[str]:
+    """Returns a list of task IDs whose prerequisites are fully met and aren't already running or completed."""
+    ready = []
+    completed_set = set(completed_tasks)
+    
+    for task_id, prereqs in master_dag.items():
+        if task_id in completed_set or task_id in active_tasks:
+            continue
+            
+        # Check if all prerequisites are in the completed set
+        if all(prereq in completed_set for prereq in prereqs):
+            ready.append(task_id)
+            
+    return ready
+
+
+def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str, Any], state_file: str, jobs: int, presubmit_cmd: str):
+    """Orchestrates the parallel execution of tasks according to the DAG."""
+    active_tasks = set()
+    state_lock = threading.Lock()
+    
+    print("\n=> Starting Parallel DAG Execution Loop...")
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as executor:
+        # Dictionary to keep track of futures mapping to task_id
+        future_to_task = {}
+        
+        while True:
+            # Check for newly ready tasks
+            with state_lock:
+                ready_tasks = get_ready_tasks(master_dag, state["completed_tasks"], list(active_tasks))
+            
+            # Submit ready tasks if we have capacity
+            for task_id in ready_tasks:
+                if len(active_tasks) >= jobs:
+                    break
+                    
+                with state_lock:
+                    active_tasks.add(task_id)
+                    
+                future = executor.submit(process_task, root_dir, task_id, presubmit_cmd)
+                future_to_task[future] = task_id
+            
+            # If no tasks are running and none are ready, we are either done or deadlocked
+            if not future_to_task:
+                with state_lock:
+                    if len(state["completed_tasks"]) == len(master_dag):
+                        print("\n=> All implementation tasks completed successfully!")
+                        break
+                    else:
+                        print("\n[!] FATAL: DAG deadlock or unrecoverable error. No tasks running and none ready.")
+                        print(f"    Completed: {len(state['completed_tasks'])} / {len(master_dag)}")
+                        sys.exit(1)
+            
+            # Wait for at least one future to complete
+            done, not_done = concurrent.futures.wait(
+                future_to_task.keys(), 
+                return_when=concurrent.futures.FIRST_COMPLETED
+            )
+            
+            for future in done:
+                task_id = future_to_task.pop(future)
+                with state_lock:
+                    active_tasks.remove(task_id)
+                    
+                try:
+                    success = future.result()
+                    if success:
+                        with state_lock:
+                            state["completed_tasks"].append(task_id)
+                            save_workflow_state(state_file, state)
+                        # TODO: Trigger DAG merge for this task/dependents
+                    else:
+                        print(f"\n[!] FATAL: Task {task_id} failed. Halting workflow.")
+                        # Drain remaining futures and exit
+                        executor.shutdown(wait=False, cancel_futures=True)
+                        sys.exit(1)
+                except Exception as exc:
+                    print(f"\n[!] FATAL: Task {task_id} generated an exception: {exc}")
+                    executor.shutdown(wait=False, cancel_futures=True)
+                    sys.exit(1)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Parallel development workflow orchestrator")
+    parser.add_argument("--jobs", type=int, default=1, help="Number of parallel implementation agents")
+    parser.add_argument("--presubmit-cmd", type=str, default="./do presubmit", help="Command to evaluate correctness")
+    args = parser.parse_args()
+
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    tasks_dir = os.path.join(root_dir, "tasks")
+    state_file = os.path.join(root_dir, "scripts", ".workflow_state.json")
+
+    master_dag = load_dags(tasks_dir)
+    state = load_workflow_state(state_file)
+    
+    print(f"Loaded {len(master_dag)} tasks across all phases.")
+    execute_dag(root_dir, master_dag, state, state_file, args.jobs, args.presubmit_cmd)
+
+if __name__ == "__main__":
+    main()

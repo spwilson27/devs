@@ -1,0 +1,43 @@
+{
+  "01_real-time_event_bus_infrastructure": [],
+  "02_trace_streaming_and_agent_console_core": [],
+  "03_agent_console_ui_components": [
+    "02_trace_streaming_and_agent_console_core"
+  ],
+  "04_safety_and_control_ui": [
+    "01_real-time_event_bus_infrastructure"
+  ],
+  "05_dag_visualization_and_task_graph": [],
+  "06_dag_canvas_interactions": [
+    "05_dag_visualization_and_task_graph"
+  ],
+  "07_project_dashboard_modules": [
+    "01_real-time_event_bus_infrastructure"
+  ],
+  "08_cost_and_token_monitoring": [
+    "01_real-time_event_bus_infrastructure",
+    "07_project_dashboard_modules"
+  ],
+  "09_system_health_and_performance_profiling": [
+    "01_real-time_event_bus_infrastructure",
+    "07_project_dashboard_modules"
+  ],
+  "10_research_and_document_review_panels": [],
+  "11_document_approval_and_requirement_linking": [
+    "10_research_and_document_review_panels"
+  ],
+  "12_animation_system_and_ux_feedback": [
+    "03_agent_console_ui_components",
+    "04_safety_and_control_ui",
+    "05_dag_visualization_and_task_graph",
+    "07_project_dashboard_modules"
+  ],
+  "13_animation_performance_and_guardrails": [
+    "12_animation_system_and_ux_feedback"
+  ],
+  "14_loop_detection_and_accessibility": [
+    "01_real-time_event_bus_infrastructure",
+    "03_agent_console_ui_components",
+    "05_dag_visualization_and_task_graph"
+  ]
+}

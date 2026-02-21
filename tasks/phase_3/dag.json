@@ -1,0 +1,52 @@
+{
+  "01_mcp_protocol_foundation_standards": [],
+  "02_saop_protocol_implementation": [],
+  "03_ipc_security_authentication": [
+    "01_mcp_protocol_foundation_standards",
+    "04_orchestratorserver_core"
+  ],
+  "04_orchestratorserver_core": [
+    "01_mcp_protocol_foundation_standards"
+  ],
+  "05_orchestratorserver_tools": [
+    "04_orchestratorserver_core"
+  ],
+  "06_tool_registry_proxy": [
+    "01_mcp_protocol_foundation_standards"
+  ],
+  "07_sandbox_bridge_injection": [
+    "06_tool_registry_proxy"
+  ],
+  "08_projectserver_template": [
+    "01_mcp_protocol_foundation_standards"
+  ],
+  "09_projectserver_introspection_tools": [
+    "08_projectserver_template"
+  ],
+  "10_observability_real-time_tracing": [
+    "02_saop_protocol_implementation",
+    "04_orchestratorserver_core"
+  ],
+  "11_flight_recorder_audit_logging": [
+    "10_observability_real-time_tracing"
+  ],
+  "12_agent_turn_management_error_recovery": [
+    "02_saop_protocol_implementation",
+    "07_sandbox_bridge_injection"
+  ],
+  "13_agent_autonomy_reviewer_intelligence": [
+    "04_orchestratorserver_core",
+    "11_flight_recorder_audit_logging"
+  ],
+  "14_multi-agent_distributed_execution": [
+    "02_saop_protocol_implementation",
+    "06_tool_registry_proxy",
+    "08_projectserver_template",
+    "11_flight_recorder_audit_logging"
+  ],
+  "15_risk_mitigations_resilience": [
+    "02_saop_protocol_implementation",
+    "06_tool_registry_proxy",
+    "11_flight_recorder_audit_logging"
+  ]
+}

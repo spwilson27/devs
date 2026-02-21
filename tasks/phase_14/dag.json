@@ -1,0 +1,102 @@
+{
+  "01_core_typescript_configuration": [],
+  "02_ai_model_integration_and_tiered_orchestration": [
+    "01_core_typescript_configuration"
+  ],
+  "03_rate_limiting_and_cost_controls": [
+    "02_ai_model_integration_and_tiered_orchestration"
+  ],
+  "04_non-privileged_user_context_and_filesystem_hardening": [
+    "01_core_typescript_configuration"
+  ],
+  "05_tls_and_cryptographic_enforcement": [
+    "04_non-privileged_user_context_and_filesystem_hardening"
+  ],
+  "06_secret_and_token_management": [
+    "01_core_typescript_configuration"
+  ],
+  "07_prompt_injection_and_structured_prompting": [
+    "02_ai_model_integration_and_tiered_orchestration"
+  ],
+  "08_network_egress_and_sandbox_isolation": [
+    "04_non-privileged_user_context_and_filesystem_hardening"
+  ],
+  "09_sandbox_resource_quotas_and_parallel_execution": [
+    "08_network_egress_and_sandbox_isolation"
+  ],
+  "10_vulnerability_and_dependency_scanning": [
+    "08_network_egress_and_sandbox_isolation"
+  ],
+  "11_dependency_management_enforcement": [
+    "10_vulnerability_and_dependency_scanning"
+  ],
+  "12_audit_logging_and_traceability": [
+    "06_secret_and_token_management"
+  ],
+  "13_data_minimization_and_secure_deletion": [
+    "12_audit_logging_and_traceability"
+  ],
+  "14_gdpr_and_compliance_logging": [
+    "13_data_minimization_and_secure_deletion"
+  ],
+  "15_off-main-thread_performance_optimization": [
+    "07_prompt_injection_and_structured_prompting",
+    "12_audit_logging_and_traceability"
+  ],
+  "16_real-time_streaming_and_state_synchronization": [
+    "12_audit_logging_and_traceability"
+  ],
+  "17_mcp_tool_implementation": [
+    "06_secret_and_token_management",
+    "16_real-time_streaming_and_state_synchronization"
+  ],
+  "18_mcp_scripts_and_profiling_tools": [
+    "17_mcp_tool_implementation"
+  ],
+  "19_system-wide_profiling_and_tdd_loop": [
+    "17_mcp_tool_implementation"
+  ],
+  "20_security_alert_table_and_escalation_ui": [
+    "19_system-wide_profiling_and_tdd_loop",
+    "16_real-time_streaming_and_state_synchronization"
+  ],
+  "21_tdd_and_global_validation_enforcement": [
+    "19_system-wide_profiling_and_tdd_loop",
+    "20_security_alert_table_and_escalation_ui"
+  ],
+  "22_agent_identity_and_conflict_resolution": [
+    "19_system-wide_profiling_and_tdd_loop"
+  ],
+  "23_benchmarking_suite_core_metrics": [
+    "03_rate_limiting_and_cost_controls",
+    "22_agent_identity_and_conflict_resolution"
+  ],
+  "24_benchmarking_suite_document_and_quality_metrics": [
+    "23_benchmarking_suite_core_metrics"
+  ],
+  "25_benchmarking_suite_process_and_performance_metrics": [
+    "24_benchmarking_suite_document_and_quality_metrics"
+  ],
+  "26_benchmarking_suite_operational_metrics": [
+    "25_benchmarking_suite_process_and_performance_metrics"
+  ],
+  "27_self-host_and_agent-ready_templates": [
+    "18_mcp_scripts_and_profiling_tools",
+    "21_tdd_and_global_validation_enforcement"
+  ],
+  "28_sandbox_provisioning_and_entropy_kpis": [
+    "09_sandbox_resource_quotas_and_parallel_execution",
+    "26_benchmarking_suite_operational_metrics"
+  ],
+  "29_post-quantum_and_future_security_evaluation": [
+    "05_tls_and_cryptographic_enforcement"
+  ],
+  "30_strategic_risk_mitigations": [
+    "21_tdd_and_global_validation_enforcement",
+    "22_agent_identity_and_conflict_resolution"
+  ],
+  "31_project_goals_and_kpi_targets": [
+    "28_sandbox_provisioning_and_entropy_kpis",
+    "30_strategic_risk_mitigations"
+  ]
+}

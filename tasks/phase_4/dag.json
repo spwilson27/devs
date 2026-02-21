@@ -1,0 +1,64 @@
+{
+  "01_lancedb_vector_store_infrastructure": [],
+  "02_lancedb_integration_and_search": [
+    "01_lancedb_vector_store_infrastructure"
+  ],
+  "03_tiered_memory_architecture": [
+    "02_lancedb_integration_and_search"
+  ],
+  "04_short_and_medium_term_memory": [
+    "03_tiered_memory_architecture"
+  ],
+  "05_long_term_memory_implementation": [
+    "04_short_and_medium_term_memory"
+  ],
+  "06_context_pruner_core": [
+    "04_short_and_medium_term_memory"
+  ],
+  "07_sliding_relevance_window": [
+    "06_context_pruner_core"
+  ],
+  "08_context_compression_and_token_management": [
+    "07_sliding_relevance_window"
+  ],
+  "09_active_file_pinning_and_context_injection": [
+    "08_context_compression_and_token_management",
+    "04_short_and_medium_term_memory"
+  ],
+  "10_spec_refresh_protocol": [
+    "08_context_compression_and_token_management",
+    "09_active_file_pinning_and_context_injection",
+    "05_long_term_memory_implementation"
+  ],
+  "11_memory_refresher_and_summarization": [
+    "10_spec_refresh_protocol",
+    "05_long_term_memory_implementation",
+    "08_context_compression_and_token_management"
+  ],
+  "12_strategy_blacklist_and_lesson_learned": [
+    "04_short_and_medium_term_memory",
+    "11_memory_refresher_and_summarization"
+  ],
+  "13_user_directive_and_feedback": [
+    "12_strategy_blacklist_and_lesson_learned"
+  ],
+  "14_memory_rewind_and_sync_safety": [
+    "13_user_directive_and_feedback",
+    "11_memory_refresher_and_summarization",
+    "17_context_drift_and_semantic_integrity"
+  ],
+  "15_long_term_memory_drift_investigation": [
+    "14_memory_rewind_and_sync_safety"
+  ],
+  "16_vector_memory_security_and_integrity": [
+    "05_long_term_memory_implementation",
+    "15_long_term_memory_drift_investigation"
+  ],
+  "17_context_drift_and_semantic_integrity": [
+    "10_spec_refresh_protocol",
+    "16_vector_memory_security_and_integrity"
+  ],
+  "18_performance_and_benchmarking": [
+    "17_context_drift_and_semantic_integrity"
+  ]
+}

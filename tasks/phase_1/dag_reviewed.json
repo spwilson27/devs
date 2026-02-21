@@ -1,0 +1,34 @@
+{
+  "01_project_infrastructure_monorepo_setup": [],
+  "02_sqlite_schema_persistence_layer": [
+    "01_project_infrastructure_monorepo_setup"
+  ],
+  "03_acid_transactions_state_integrity": [
+    "02_sqlite_schema_persistence_layer"
+  ],
+  "04_langgraph_core_orchestration_engine": [
+    "03_acid_transactions_state_integrity"
+  ],
+  "05_state_checkpointing_recovery": [
+    "04_langgraph_core_orchestration_engine"
+  ],
+  "06_git_integration_snapshot_strategy": [
+    "02_sqlite_schema_persistence_layer",
+    "04_langgraph_core_orchestration_engine"
+  ],
+  "07_audit_trails_glass-box_observability": [
+    "04_langgraph_core_orchestration_engine"
+  ],
+  "08_cli_integration_state_control": [
+    "06_git_integration_snapshot_strategy",
+    "07_audit_trails_glass-box_observability",
+    "10_lifecycle_management_phase_milestones"
+  ],
+  "09_determinism_robustness_testing": [
+    "05_state_checkpointing_recovery",
+    "08_cli_integration_state_control"
+  ],
+  "10_lifecycle_management_phase_milestones": [
+    "04_langgraph_core_orchestration_engine"
+  ]
+}
