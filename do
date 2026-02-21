@@ -35,7 +35,9 @@ def do_build() -> bool:
 def do_test() -> bool:
     if not run_command(["bash", "tests/infrastructure/verify_monorepo.sh"], "Monorepo Verification"):
         return False
-    return run_command(["bash", "tests/infrastructure/verify_folder_structure.sh"], "Folder Structure Verification")
+    if not run_command(["bash", "tests/infrastructure/verify_folder_structure.sh"], "Folder Structure Verification"):
+        return False
+    return run_command(["bash", "tests/infrastructure/verify_shared_state.sh"], "Shared State Manifest Verification")
 
 
 def do_coverage() -> bool:

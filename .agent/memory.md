@@ -19,6 +19,8 @@ This file serves as a shared, long-term memory for all agents working on this pr
 
 - **2026-02-21 - Flight Recorder Design (Phase 1, Task 03):** `.devs/` is the Flight Recorder. SQLite (via `better-sqlite3`) and LanceDB (via `vectordb`) runtime state managed exclusively by `@devs/core` and `@devs/memory`. Developer Agents have NO write access to `.devs/` — prevents state tampering and loop-counter manipulation. Runtime files are gitignored via `.devs/.gitignore`; only `POLICY.md` and `.gitignore` are tracked in VCS.
 
+- **2026-02-21 - Shared State Manifest & STATE_FILE_PATH (Phase 1, Task 05):** `STATE_FILE_PATH = ".devs/state.sqlite"` is the canonical constant defined in `packages/core/src/constants.ts`. All packages MUST import this constant — never hardcode the path. `resolveStatePath(fromDir?)` and `findProjectRoot(dir)` in `packages/core/src/persistence.ts` resolve the absolute state path by walking up to the nearest `private: true` `package.json`. Root `package.json` now has a `devs` metadata field: `{ version: "1.0.0", status: "development", architecture: "monorepo" }`. State sharing documented at `docs/architecture/state_sharing.md`.
+
 ---
 
 ## ⚠️ Brittle Areas (Proceed with Caution)
@@ -42,4 +44,6 @@ This file serves as a shared, long-term memory for all agents working on this pr
 - **[2026-02-21] - Phase 1 / 01_setup_pnpm_monorepo:** Verified and confirmed complete pnpm monorepo setup. All 30 verification checks pass. Structure: root `package.json` (private, engines node>=22), `.nvmrc` (22), `.npmrc` (shamefully-hoist=false), `pnpm-workspace.yaml` (7 packages), individual `package.json` per package with `@devs/<name>` scoping, `tests/infrastructure/verify_monorepo.sh`, `README.md`, `docs/infrastructure/monorepo_setup.md`, and `./do` task runner. `pnpm install` resolves workspace links correctly.
 
 - **[2026-02-21] - Phase 1 / 03_setup_project_directories:** Established root directory scaffold: `.devs/` (Flight Recorder), `mcp-server/`, `src/`. `.devs/.gitignore` excludes runtime state (SQLite, LanceDB, logs). `.devs/POLICY.md` documents Developer Agent write-access prohibition. `docs/architecture/directory_structure.md` documents all top-level directory roles. `./do test` now runs both `verify_monorepo.sh` (30 checks) and `verify_folder_structure.sh` (11 checks). All 41 checks pass. Reviewer fixed: added `.gitkeep` to `mcp-server/` and `src/` so empty scaffold directories are tracked by git and present on fresh clone. Reviewer fixed: `verify_folder_structure.sh` was missing executable bit (chmod +x) — all shell scripts under `tests/infrastructure/` must be executable for direct invocation consistency.
+
+- **[2026-02-21] - Phase 1 / 05_define_shared_state_manifest:** Added `devs` metadata field to root `package.json`. Created `packages/core/src/constants.ts` (STATE_FILE_PATH, DEVS_DIR, MANIFEST_SCHEMA_VERSION) and `packages/core/src/persistence.ts` (findProjectRoot, resolveStatePath, resolveDevsDir). Added `tests/infrastructure/verify_shared_state.sh` (18 checks). `./do test` now runs 3 scripts: 59 total checks pass. Created `docs/architecture/state_sharing.md`.
 

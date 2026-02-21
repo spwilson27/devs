@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "description": "Agentic AI system that generates complete, tested greenfield software projects.",
+  "devs": {
+    "version": "1.0.0",
+    "status": "development",
+    "architecture": "monorepo"
+  },
   "engines": {
     "node": ">=22",
     "pnpm": ">=9"
