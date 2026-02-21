@@ -24,3 +24,6 @@ export * from "./orchestration/graph.js";
 
 // LangGraph node: task snapshot integration (TAS-054, TAS-055).
 export * from "./orchestration/ImplementationNode.js";
+
+// HITL approval gates — approveDesignNode, approveTaskDagNode, routing, and signal types (TAS-078).
+export * from "./orchestration/hitl.js";

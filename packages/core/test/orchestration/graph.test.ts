@@ -19,7 +19,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { END } from "@langchain/langgraph";
+import { END, MemorySaver, Command, isInterrupted } from "@langchain/langgraph";
 import {
   OrchestrationGraph,
   researchNode,
@@ -36,6 +36,7 @@ import {
   type TaskRecord,
   type EpicRecord,
 } from "../../src/orchestration/types.js";
+import type { HitlApprovalSignal } from "../../src/orchestration/hitl.js";
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 
@@ -92,14 +93,18 @@ describe("OrchestrationGraph — compilation", () => {
     expect(og.graph).toBeDefined();
   });
 
-  it("compiled graph has all 5 required nodes", () => {
+  it("compiled graph has all 7 required nodes (including HITL approval gates)", () => {
     const og = new OrchestrationGraph();
     const nodeKeys = Object.keys(og.graph.nodes);
+    // Core pipeline nodes
     expect(nodeKeys).toContain("research");
     expect(nodeKeys).toContain("design");
     expect(nodeKeys).toContain("distill");
     expect(nodeKeys).toContain("implement");
     expect(nodeKeys).toContain("verify");
+    // HITL approval gate nodes
+    expect(nodeKeys).toContain("approveDesign");
+    expect(nodeKeys).toContain("approveTaskDag");
   });
 
   it("graph instances are independent (not shared state)", () => {
@@ -350,36 +355,79 @@ describe("routeAfterVerify — routing logic", () => {
   });
 });
 
-// ── Full graph integration — end-to-end execution ─────────────────────────────
+// ── Full graph integration — HITL-aware end-to-end execution ─────────────────
 
-describe("OrchestrationGraph — full pipeline execution", () => {
-  it("executes the full pipeline (research→design→distill→implement→verify) and terminates", async () => {
-    const og = new OrchestrationGraph();
-    // Initial state: no epics, no tasks → verifyNode will route to END after first pass
+/**
+ * Helper: create a fresh approval signal for testing.
+ */
+function testApproval(): HitlApprovalSignal {
+  return { approved: true, approvedAt: "2026-02-21T10:00:00.000Z" };
+}
+
+describe("OrchestrationGraph — full pipeline execution (HITL)", () => {
+  it("graph suspends at design approval gate on first invocation", async () => {
+    const og = new OrchestrationGraph(new MemorySaver());
     const initial = createInitialState(validProjectConfig()) as GraphState;
+    const config = { configurable: { thread_id: "graph-test-pipeline-001" } };
 
-    const result = await og.graph.invoke(initial);
+    const result = await og.graph.invoke(initial, config);
+
+    // Graph must be suspended at the design approval gate — not fully executed
+    expect(isInterrupted(result)).toBe(true);
+  });
+
+  it("executes full pipeline (research→design→approveDesign→distill→approveTaskDag→implement→verify) with two approvals", async () => {
+    const og = new OrchestrationGraph(new MemorySaver());
+    const initial = createInitialState(validProjectConfig()) as GraphState;
+    const config = { configurable: { thread_id: "graph-test-pipeline-002" } };
+    const approval = testApproval();
+
+    // Step 1: Run to design approval gate
+    await og.graph.invoke(initial, config);
+
+    // Step 2: Approve design → run to DAG approval gate
+    await og.graph.invoke(new Command({ resume: approval }), config);
+
+    // Step 3: Approve DAG → run to completion
+    const result = await og.graph.invoke(
+      new Command({ resume: approval }),
+      config,
+    );
 
     // The last status-updating node is implementNode → "implementing"
     expect(result.status).toBe("implementing");
   });
 
   it("final state has projectConfig.status matching the pipeline end status", async () => {
-    const og = new OrchestrationGraph();
+    const og = new OrchestrationGraph(new MemorySaver());
     const initial = createInitialState(validProjectConfig()) as GraphState;
+    const config = { configurable: { thread_id: "graph-test-pipeline-003" } };
+    const approval = testApproval();
 
-    const result = await og.graph.invoke(initial);
+    await og.graph.invoke(initial, config);
+    await og.graph.invoke(new Command({ resume: approval }), config);
+    const result = await og.graph.invoke(
+      new Command({ resume: approval }),
+      config,
+    );
 
     // projectConfig is updated by each node in sequence:
-    // initializing → researching → specifying → planning → implementing
+    // initializing → researching → specifying → [paused] → planning → [paused] → implementing
     expect(result.projectConfig.status).toBe("implementing");
   });
 
   it("final state preserves all original state fields that no node modified", async () => {
-    const og = new OrchestrationGraph();
+    const og = new OrchestrationGraph(new MemorySaver());
     const initial = createInitialState(validProjectConfig()) as GraphState;
+    const config = { configurable: { thread_id: "graph-test-pipeline-004" } };
+    const approval = testApproval();
 
-    const result = await og.graph.invoke(initial);
+    await og.graph.invoke(initial, config);
+    await og.graph.invoke(new Command({ resume: approval }), config);
+    const result = await og.graph.invoke(
+      new Command({ resume: approval }),
+      config,
+    );
 
     // Fields not modified by any stub node remain as initialized
     expect(result.activeEpicId).toBeNull();
@@ -390,13 +438,20 @@ describe("OrchestrationGraph — full pipeline execution", () => {
     expect(result.entropy).toEqual([]);
   });
 
-  it("graph invoke returns an OrchestratorState-compatible object", async () => {
-    const og = new OrchestrationGraph();
+  it("graph invoke returns an OrchestratorState-compatible object after full run", async () => {
+    const og = new OrchestrationGraph(new MemorySaver());
     const initial = createInitialState(validProjectConfig()) as GraphState;
+    const config = { configurable: { thread_id: "graph-test-pipeline-005" } };
+    const approval = testApproval();
 
-    const result = await og.graph.invoke(initial);
+    await og.graph.invoke(initial, config);
+    await og.graph.invoke(new Command({ resume: approval }), config);
+    const result = await og.graph.invoke(
+      new Command({ resume: approval }),
+      config,
+    );
 
-    // Shape check — all top-level fields must be present
+    // Shape check — all top-level fields must be present (including HITL fields)
     expect(result).toHaveProperty("projectConfig");
     expect(result).toHaveProperty("documents");
     expect(result).toHaveProperty("requirements");
@@ -407,5 +462,25 @@ describe("OrchestrationGraph — full pipeline execution", () => {
     expect(result).toHaveProperty("activeEpicId");
     expect(result).toHaveProperty("activeTaskId");
     expect(result).toHaveProperty("status");
+    expect(result).toHaveProperty("hitlDecisions");
+    expect(result).toHaveProperty("pendingApprovalGate");
+  });
+
+  it("final state records both HITL approval decisions", async () => {
+    const og = new OrchestrationGraph(new MemorySaver());
+    const initial = createInitialState(validProjectConfig()) as GraphState;
+    const config = { configurable: { thread_id: "graph-test-pipeline-006" } };
+    const approval = testApproval();
+
+    await og.graph.invoke(initial, config);
+    await og.graph.invoke(new Command({ resume: approval }), config);
+    const result = await og.graph.invoke(
+      new Command({ resume: approval }),
+      config,
+    );
+
+    expect(result.hitlDecisions).toHaveLength(2);
+    expect(result.hitlDecisions[0].gate).toBe("design_approval");
+    expect(result.hitlDecisions[1].gate).toBe("dag_approval");
   });
 });

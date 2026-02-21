@@ -464,6 +464,8 @@ describe("OrchestratorAnnotation — LangGraph channel definition", () => {
     expect(spec).toHaveProperty("activeEpicId");
     expect(spec).toHaveProperty("activeTaskId");
     expect(spec).toHaveProperty("status");
+    expect(spec).toHaveProperty("hitlDecisions");
+    expect(spec).toHaveProperty("pendingApprovalGate");
   });
 
   it("GraphState type is compatible with OrchestratorState (compile-time check)", () => {

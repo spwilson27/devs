@@ -1,8 +1,8 @@
 ---
 module: packages/core/src/orchestration/graph.ts
 phase: 1
-task: "04_langgraph_core_orchestration_engine/02_implement_cyclical_graph"
-requirements: ["9_ROADMAP-TAS-101", "TAS-009", "TAS-103", "2_TAS-REQ-016", "9_ROADMAP-PHASE-001"]
+task: "04_langgraph_core_orchestration_engine/04_implement_hitl_gates"
+requirements: ["9_ROADMAP-TAS-101", "TAS-009", "TAS-103", "TAS-078", "2_TAS-REQ-016", "9_ROADMAP-PHASE-001"]
 exports:
   classes:
     - OrchestrationGraph
@@ -13,11 +13,14 @@ exports:
     - implementNode
     - verifyNode
     - routeAfterVerify
+    - approveDesignNode
+    - approveTaskDagNode
   types:
     - VerifyRoute
 dependencies:
   internal:
     - packages/core/src/orchestration/types.ts
+    - packages/core/src/orchestration/hitl.ts
   external:
     - "@langchain/langgraph"
 ---
@@ -25,32 +28,62 @@ dependencies:
 # `packages/core/src/orchestration/graph.ts`
 
 Implements the devs `OrchestrationGraph` — a cyclical LangGraph `StateGraph`
-that drives the full pipeline from project discovery through TDD implementation.
+that drives the full pipeline from project discovery through TDD implementation,
+with mandatory HITL approval gates.
 
 ## Graph Topology
 
 ```
-START → researchNode → designNode → distillNode → implementNode → verifyNode
-                                         ↑              ↑               │
-                                         └──────────────┼─── distill ◄──┤  (task passed, epics remain)
-                                                        └──── implement ◄┤  (task failed — retry)
-                                                                         │
-                                                                        END  (all epics complete)
+START → research → design → approveDesign ─────────────────────────────────────┐
+                                 │ approved                                      │ rejected
+                                 ↓                                              │
+                            distill → approveTaskDag ────────────────────────   │
+                                 ↑          │ approved                      │ rejected
+                                 │          ↓                               │
+                                 │     implement → verify                   │
+                                 │          ↑         │                     │
+                                 └──────────┼── distill ◄─(epics remain)    │
+                                            └── implement ◄─(task failed)   │
+                                                         │                  │
+                                                        END (all complete)  │
+                                                                            (loop back)
 ```
 
 ## Nodes
 
-All node implementations are **stubs** in Phase 1. They perform the minimal state
-updates needed to advance the pipeline and verify graph topology. Full implementations
-will be added in later phases as the agent system is built out.
+All pipeline node implementations are **stubs** in Phase 1. They perform the minimal
+state updates needed to advance the pipeline and verify graph topology.
 
-| Node            | Status Update         | Full Implementation (future)                                         |
-|-----------------|-----------------------|----------------------------------------------------------------------|
-| `researchNode`  | `"researching"`       | Invoke research agents → market/competitive/tech/user reports        |
-| `designNode`    | `"specifying"`        | Invoke architect agent → PRD, TAS, MCP Design, Security, UI/UX docs  |
-| `distillNode`   | `"planning"`          | Distill specs → `RequirementRecord[]` + `TaskRecord[]` with DAG      |
-| `implementNode` | `"implementing"`      | Execute 6-step TDD cycle for `state.activeTaskId`                    |
-| `verifyNode`    | marks task completed  | Run full test suite, validate acceptance criteria, update task status |
+| Node               | Status Update           | Full Implementation (future)                                         |
+|--------------------|-------------------------|----------------------------------------------------------------------|
+| `researchNode`     | `"researching"`         | Invoke research agents → market/competitive/tech/user reports        |
+| `designNode`       | `"specifying"`          | Invoke architect agent → PRD, TAS, MCP Design, Security, UI/UX docs  |
+| `approveDesignNode`| (interrupt — no update) | HITL gate: suspend for design document review                        |
+| `distillNode`      | `"planning"`            | Distill specs → `RequirementRecord[]` + `TaskRecord[]` with DAG      |
+| `approveTaskDagNode`| (interrupt — no update)| HITL gate: suspend for task DAG review                               |
+| `implementNode`    | `"implementing"`        | Execute 6-step TDD cycle for `state.activeTaskId`                    |
+| `verifyNode`       | marks task completed    | Run full test suite, validate acceptance criteria, update task status |
+
+## HITL Approval Gates
+
+The graph has two mandatory Human-in-the-Loop gates. The pipeline **cannot** advance
+past these gates without an explicit human approval via `Command({ resume: signal })`.
+
+| Gate           | Node              | Position                   | Resume routes to |
+|----------------|-------------------|----------------------------|-----------------|
+| Design review  | `approveDesign`   | After `design`             | `distill` (approved) or `design` (rejected) |
+| DAG review     | `approveTaskDag`  | After `distill`            | `implement` (approved) or `distill` (rejected) |
+
+## Checkpointer
+
+`OrchestrationGraph` accepts an optional `BaseCheckpointSaver` parameter.
+Default: `new MemorySaver()`. Always supply a `thread_id` in the invocation config:
+
+```ts
+const og = new OrchestrationGraph(new MemorySaver());
+const config = { configurable: { thread_id: "project-123" } };
+const result = await og.graph.invoke(state, config);
+```
 
 ## Conditional Routing — `routeAfterVerify`
 
@@ -67,39 +100,42 @@ Priority: **failed task check first**, then active epics check, then terminate.
 ## State Mutation Contract
 
 - All node functions receive the **full `GraphState`** and return **`Partial<GraphState>`**.
-- Nodes return only the fields they modify — LangGraph merges the partial update.
-- State is **not mutated in place**: nodes use object spread to create new values.
-- `verifyNode` updates `tasks[]` (maps over existing tasks); all other stubs update
-  `status` and `projectConfig.status`.
+- HITL nodes (`approveDesignNode`, `approveTaskDagNode`) return state only AFTER resume.
+  Before resume, `interrupt()` throws `GraphInterrupt` — no state update is applied.
+- Non-HITL nodes: return only the fields they modify.
+- State is **not mutated in place**: nodes use object spread.
 
 ## TypeScript Type Enforcement
 
-The graph is constructed with `OrchestratorAnnotation` (a typed `Annotation.Root`),
-which enforces that all node functions receive `GraphState` and return
-`Partial<GraphState>`. This satisfies the "TypedGraph" requirement (TAS-103).
+The graph is constructed with `OrchestratorAnnotation` (typed `Annotation.Root`),
+enforcing that all node functions receive `GraphState` and return `Partial<GraphState>`.
 
 ## `OrchestrationGraph` Class
 
-`OrchestrationGraph` is the entry point for graph execution. It compiles the graph
-once in the constructor and exposes the compiled graph via `readonly graph`.
-
 ```ts
 import { OrchestrationGraph, createInitialState } from "@devs/core";
+import { MemorySaver, Command, isInterrupted } from "@langchain/langgraph";
 
-const orchestrator = new OrchestrationGraph();
-const result = await orchestrator.graph.invoke(createInitialState(projectConfig));
+const og = new OrchestrationGraph(new MemorySaver());
+const config = { configurable: { thread_id: "project-id" } };
+
+// Run to first gate
+const r1 = await og.graph.invoke(createInitialState(config_obj), config);
+
+// Approve design
+const approval = { approved: true, approvedAt: new Date().toISOString() };
+const r2 = await og.graph.invoke(new Command({ resume: approval }), config);
+
+// Approve DAG
+const r3 = await og.graph.invoke(new Command({ resume: approval }), config);
+console.log(r3.status); // "implementing"
 ```
-
-## Cyclical Design (TAS-103)
-
-The graph is cyclical via the `verify → implement` edge:
-- `verifyNode` → (conditional) → `implementNode` creates a retry loop for failed tasks.
-- `verifyNode` → (conditional) → `distillNode` creates an advancement loop for new tasks.
-- The loop terminates when `routeAfterVerify` returns `END` (all epics complete).
 
 ## Notes
 
-- `VerifyRoute` is exported as a string union type for use in tests and future tooling.
-- The `graph` property type is intentionally left as the inferred `compile()` return type
-  so callers benefit from full LangGraph type inference without importing `CompiledGraph<...>`.
+- `VerifyRoute` is exported as a string union type for use in tests and tooling.
+- `approveDesignNode` and `approveTaskDagNode` are re-exported from `graph.ts`
+  for convenience; they are also exported from `hitl.ts` (canonical location).
 - Node functions are exported individually to allow unit testing without graph compilation.
+- `og.graph.nodes` (internal LangGraph API) used in tests to verify node registration.
+  Monitor on LangGraph upgrades.

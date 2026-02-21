@@ -38,6 +38,9 @@ export type { AgentId };
 /**
  * Lifecycle status for the top-level project.
  * Maps to the `status` column in the `projects` SQLite table.
+ *
+ * `"paused_for_approval"` is set when the orchestration pipeline reaches a
+ * HITL approval gate and is waiting for a human decision before proceeding.
  */
 export type ProjectStatus =
   | "initializing"
@@ -46,7 +49,50 @@ export type ProjectStatus =
   | "planning"
   | "implementing"
   | "completed"
-  | "failed";
+  | "failed"
+  | "paused_for_approval";
+
+// ── HITL (Human-in-the-Loop) types ────────────────────────────────────────────
+
+/**
+ * Identifies a HITL approval gate in the orchestration pipeline.
+ *
+ * - `"design_approval"` — gate after PRD/TAS generation, before distillation.
+ * - `"dag_approval"`    — gate after requirement distillation, before implementation.
+ */
+export type HitlGate = "design_approval" | "dag_approval";
+
+/**
+ * The approval/rejection signal provided by a human reviewer.
+ *
+ * Passed as the `resume` value in a LangGraph `Command` to unblock a
+ * suspended approval gate node.
+ */
+export interface HitlApprovalSignal {
+  /** Whether the human approved this stage. */
+  approved: boolean;
+  /** Optional human-readable feedback or revision notes. */
+  feedback?: string;
+  /** Identity of the approver (CLI user, VSCode user, etc.). */
+  approvedBy?: string;
+  /** ISO 8601 UTC timestamp of the approval/rejection decision. */
+  approvedAt: string;
+}
+
+/**
+ * A persisted record of a HITL gate decision.
+ *
+ * Stored in `OrchestratorState.hitlDecisions` for audit trail and routing.
+ * Corresponds conceptually to the `agent_logs` / Decision Logs table requirement.
+ */
+export interface HitlDecisionRecord {
+  /** Which approval gate this decision belongs to. */
+  gate: HitlGate;
+  /** The approval/rejection signal provided by the human reviewer. */
+  signal: HitlApprovalSignal;
+  /** ISO 8601 UTC timestamp when the decision was recorded in state. */
+  decidedAt: string;
+}
 
 /**
  * Review / approval status for a generated document.
@@ -281,6 +327,18 @@ export interface OrchestratorState {
    * without destructuring.
    */
   status: ProjectStatus;
+  /**
+   * Audit log of all HITL approval/rejection decisions made during this run.
+   * Entries are appended by approval gate nodes after each human decision.
+   * Corresponds to Decision Logs / `agent_logs` table in the persistence layer.
+   */
+  hitlDecisions: readonly HitlDecisionRecord[];
+  /**
+   * The currently active HITL gate awaiting human review.
+   * Set to `null` when no approval is pending.
+   * Used by external systems (CLI, VSCode) to prompt the user.
+   */
+  pendingApprovalGate: HitlGate | null;
 }
 
 // ── LangGraph channel annotations ─────────────────────────────────────────────
@@ -317,6 +375,8 @@ export const OrchestratorAnnotation = Annotation.Root({
   activeEpicId: Annotation<string | null>(),
   activeTaskId: Annotation<string | null>(),
   status: Annotation<ProjectStatus>(),
+  hitlDecisions: Annotation<readonly HitlDecisionRecord[]>(),
+  pendingApprovalGate: Annotation<HitlGate | null>(),
 });
 
 /**
@@ -356,5 +416,7 @@ export function createInitialState(config: ProjectConfig): OrchestratorState {
     activeEpicId: null,
     activeTaskId: null,
     status: config.status,
+    hitlDecisions: [],
+    pendingApprovalGate: null,
   };
 }

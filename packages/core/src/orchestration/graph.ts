@@ -7,25 +7,61 @@
  * ## Pipeline topology
  *
  * ```
- * START → researchNode → designNode → distillNode → implementNode → verifyNode
- *                                          ↑              ↑               │
- *                                          └──────────────┼─── distill ◄──┤  (task passed, epics remain)
- *                                                         └──── implement ◄┤  (task failed — retry)
- *                                                                          │
- *                                                                         END  (all epics complete)
+ * START → researchNode → designNode → approveDesign ──────────────────────────────┐
+ *                             ↑               │ approved                           │ rejected
+ *                             └───────────────┘                                   │
+ *                                             ↓                                   │
+ *                                        distillNode → approveTaskDag ────────────┤
+ *                                             ↑               │ approved          │ rejected
+ *                                             └───────────────┘                   │
+ *                                                             ↓                   │
+ *                                                        implementNode → verifyNode
+ *                                                             ↑               │
+ *                                                             └── implement ◄──┤  (task failed — retry)
+ *                                                                              │
+ *                                                                   distill ◄──┤  (task passed, epics remain)
+ *                                                                              │
+ *                                                                             END  (all epics complete)
  * ```
  *
- * ## Nodes (stubs)
+ * ## Nodes
  *
  * All node implementations are stubs that perform the minimal state updates
  * needed to advance the pipeline. Full implementations will be added in
  * later phases as the agent system is built out.
  *
- * - `researchNode`  — Discovery and report generation. Sets status → "researching".
- * - `designNode`    — PRD/TAS blueprinting. Sets status → "specifying".
- * - `distillNode`   — Requirement extraction and task DAG generation. Sets status → "planning".
- * - `implementNode` — TDD implementation loop for a single task. Sets status → "implementing".
- * - `verifyNode`    — Final task verification and regression testing. Updates task status.
+ * - `researchNode`    — Discovery and report generation. Sets status → "researching".
+ * - `designNode`      — PRD/TAS blueprinting. Sets status → "specifying".
+ * - `approveDesign`   — HITL gate: pauses for user review of design documents.
+ * - `distillNode`     — Requirement extraction and task DAG generation. Sets status → "planning".
+ * - `approveTaskDag`  — HITL gate: pauses for user review of task DAG.
+ * - `implementNode`   — TDD implementation loop for a single task. Sets status → "implementing".
+ * - `verifyNode`      — Final task verification and regression testing.
+ *
+ * ## HITL Gates
+ *
+ * The graph has two mandatory Human-in-the-Loop approval gates:
+ *
+ * 1. `approveDesign` — after `designNode`, before `distillNode`.
+ *    Suspended state: `isInterrupted(result) === true`, `result[INTERRUPT][0].value.gate === "design_approval"`.
+ *    Resume: `graph.invoke(new Command({ resume: HitlApprovalSignal }), { configurable: { thread_id } })`
+ *
+ * 2. `approveTaskDag` — after `distillNode`, before `implementNode`.
+ *    Suspended state: `isInterrupted(result) === true`, `result[INTERRUPT][0].value.gate === "dag_approval"`.
+ *    Resume: `graph.invoke(new Command({ resume: HitlApprovalSignal }), { configurable: { thread_id } })`
+ *
+ * ## Checkpointer Requirement
+ *
+ * The graph is compiled with a `MemorySaver` checkpointer by default. This is
+ * required for LangGraph's `interrupt()` resume mechanism to work. Pass a custom
+ * `BaseCheckpointSaver` to the constructor to use a different checkpointer
+ * (e.g., an SQLite-backed saver in production).
+ *
+ * When using the default `MemorySaver`, always supply a `thread_id` in the
+ * invocation config so the graph can save and retrieve state between interrupts:
+ * ```ts
+ * await graph.invoke(state, { configurable: { thread_id: "my-project-id" } });
+ * ```
  *
  * ## Conditional routing (verifyNode → next)
  *
@@ -41,14 +77,21 @@
  * boundaries. Node functions receive `GraphState` and return `Partial<GraphState>`.
  *
  * Requirements: [9_ROADMAP-TAS-101], [TAS-009], [TAS-103],
- *               [2_TAS-REQ-016], [9_ROADMAP-PHASE-001]
+ *               [TAS-078], [2_TAS-REQ-016], [9_ROADMAP-PHASE-001]
  */
 
-import { StateGraph, START, END } from "@langchain/langgraph";
+import { StateGraph, START, END, MemorySaver } from "@langchain/langgraph";
+import type { BaseCheckpointSaver } from "@langchain/langgraph";
 import {
   OrchestratorAnnotation,
   type GraphState,
 } from "./types.js";
+import {
+  approveDesignNode,
+  approveTaskDagNode,
+  routeAfterApproveDesign,
+  routeAfterApproveTaskDag,
+} from "./hitl.js";
 
 // ── Node implementations (stubs) ─────────────────────────────────────────────
 
@@ -171,28 +214,50 @@ export function routeAfterVerify(state: GraphState): VerifyRoute {
   return END;
 }
 
+// Re-export HITL node functions so test files can import them from graph.ts if needed.
+export { approveDesignNode, approveTaskDagNode };
+
 // ── OrchestrationGraph ────────────────────────────────────────────────────────
 
 /**
  * OrchestrationGraph wraps the compiled LangGraph `StateGraph` for the devs
  * orchestration pipeline.
  *
- * Instantiate once per process and call `graph.invoke(initialState)` to run
- * the full pipeline. The graph is cyclical: `verifyNode` can loop back to
- * `implementNode` on failure or to `distillNode` when more work remains.
+ * ## Usage
  *
- * The `graph` property exposes the compiled `CompiledGraph` for direct use
- * with all LangGraph APIs (invoke, stream, etc.).
- *
- * @example
+ * For standard single-run usage (no checkpointing):
  * ```ts
- * import { OrchestrationGraph } from "@devs/core";
- * import { createInitialState } from "@devs/core";
- *
- * const orchestrator = new OrchestrationGraph();
- * const result = await orchestrator.graph.invoke(createInitialState(projectConfig));
- * console.log(result.status); // "implementing" (or whatever the final state is)
+ * const og = new OrchestrationGraph();
  * ```
+ *
+ * For HITL-capable usage (with checkpointing and resume support):
+ * ```ts
+ * import { MemorySaver, Command, isInterrupted } from "@langchain/langgraph";
+ *
+ * const og = new OrchestrationGraph(new MemorySaver());
+ * const config = { configurable: { thread_id: "project-id" } };
+ *
+ * // Run to first HITL gate
+ * const r1 = await og.graph.invoke(state, config);
+ * if (isInterrupted(r1)) {
+ *   const gate = r1[INTERRUPT][0].value.gate; // "design_approval"
+ *   // Prompt user, collect decision...
+ *   const signal: HitlApprovalSignal = { approved: true, approvedAt: new Date().toISOString() };
+ *   await og.graph.invoke(new Command({ resume: signal }), config);
+ * }
+ * ```
+ *
+ * ## HITL Gates
+ *
+ * The graph has two mandatory approval gates:
+ * 1. `approveDesign` (after `design`, before `distill`)
+ * 2. `approveTaskDag` (after `distill`, before `implement`)
+ *
+ * Both gates use LangGraph's `interrupt()` mechanism. The `MemorySaver`
+ * checkpointer is required for resumption.
+ *
+ * @param checkpointer - Optional checkpointer. Defaults to a new `MemorySaver`
+ *   instance. Pass a custom checkpointer for production use (e.g., SQLite-backed).
  */
 export class OrchestrationGraph {
   /**
@@ -204,23 +269,31 @@ export class OrchestrationGraph {
    */
   readonly graph;
 
-  constructor() {
+  constructor(checkpointer: BaseCheckpointSaver = new MemorySaver()) {
     this.graph = new StateGraph(OrchestratorAnnotation)
       // ── Nodes ──────────────────────────────────────────────────────────────
       .addNode("research", researchNode)
       .addNode("design", designNode)
+      .addNode("approveDesign", approveDesignNode)
       .addNode("distill", distillNode)
+      .addNode("approveTaskDag", approveTaskDagNode)
       .addNode("implement", implementNode)
       .addNode("verify", verifyNode)
       // ── Linear edges ───────────────────────────────────────────────────────
       .addEdge(START, "research")
       .addEdge("research", "design")
-      .addEdge("design", "distill")
-      .addEdge("distill", "implement")
+      .addEdge("design", "approveDesign")
+      // ── Design approval gate (conditional) ─────────────────────────────────
+      // Returns: "distill" (approved) | "design" (rejected — loop back for revision)
+      .addConditionalEdges("approveDesign", routeAfterApproveDesign)
+      .addEdge("distill", "approveTaskDag")
+      // ── DAG approval gate (conditional) ────────────────────────────────────
+      // Returns: "implement" (approved) | "distill" (rejected — loop back for revision)
+      .addConditionalEdges("approveTaskDag", routeAfterApproveTaskDag)
       .addEdge("implement", "verify")
       // ── Conditional routing from verify ────────────────────────────────────
       // Returns: "implement" (retry) | "distill" (advance) | END (terminate)
       .addConditionalEdges("verify", routeAfterVerify)
-      .compile();
+      .compile({ checkpointer });
   }
 }
