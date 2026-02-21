@@ -204,19 +204,47 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
             print(f"      [!] Task failed. Leaving worktree {tmpdir} and branch {branch_name} for investigation.")
 
 
+def phase_sort_key(tid: str):
+    try:
+        phase_str, task_name = tid.split("/", 1)
+        phase_num = int(phase_str.replace("phase_", ""))
+        return (phase_num, task_name)
+    except ValueError:
+        return (999, tid)
+
 def get_ready_tasks(master_dag: Dict[str, List[str]], completed_tasks: List[str], active_tasks: List[str]) -> List[str]:
     """Returns a list of task IDs whose prerequisites are fully met and aren't already running or completed."""
     ready = []
     completed_set = set(completed_tasks)
     
+    # 1. First, find all tasks that are ready regardless of phase
+    all_ready = []
     for task_id, prereqs in master_dag.items():
         if task_id in completed_set or task_id in active_tasks:
             continue
             
         # Check if all prerequisites are in the completed set
         if all(prereq in completed_set for prereq in prereqs):
-            ready.append(task_id)
+            all_ready.append(task_id)
+
+    if not all_ready:
+        return []
+
+    # 2. Find the lowest (earliest) phase among all incomplete tasks to act as a barrier
+    incomplete_tasks = [tid for tid in master_dag.keys() if tid not in completed_set]
+    if not incomplete_tasks:
+         return []
+         
+    incomplete_tasks.sort(key=phase_sort_key)
+    active_phase_num = phase_sort_key(incomplete_tasks[0])[0]
+
+    # 3. Filter ready tasks to only allow tasks from the active phase
+    for task_id in all_ready:
+         if phase_sort_key(task_id)[0] == active_phase_num:
+             ready.append(task_id)
             
+    # Sort the final ready list
+    ready.sort(key=phase_sort_key)
     return ready
 
 
