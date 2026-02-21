@@ -30,6 +30,9 @@ synchronous pragma configuration for the Flight Recorder SQLite state store.
   VSCode Extension — readers are never blocked by a writer.
 - **`synchronous = NORMAL`**: flushes at critical checkpoints only; avoids
   excessive fsync calls while maintaining durability on normal shutdown.
+- **`foreign_keys = ON`**: SQLite disables FK enforcement by default; this
+  PRAGMA must be set per connection. Applied in `createDatabase()` so all
+  callers get referential integrity automatically (added in Phase 1, Task 02).
 - **`dbPath` override**: intended exclusively for tests that write to isolated
   temp directories. When provided, project-root resolution via `resolveStatePath`
   is skipped entirely.

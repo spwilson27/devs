@@ -77,6 +77,10 @@ export function createDatabase(
   // NORMAL synchronous: flush at critical checkpoints, not after every write.
   db.pragma("synchronous = NORMAL");
 
+  // Enable foreign key constraint enforcement. SQLite disables FK checks by
+  // default; this PRAGMA must be set per connection. [TAS-105 through TAS-111]
+  db.pragma("foreign_keys = ON");
+
   return db;
 }
 
