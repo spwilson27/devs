@@ -81,7 +81,7 @@ class CopilotRunner(AIRunner):
         import tempfile
         with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", delete=True) as f:
             f.write(full_prompt)
-            print(full_prompt)
+            #print(full_prompt)
             prompt_file = f.name
             candidates = [
                 ["copilot", "-p", f"Follow the instructions in @{prompt_file}", "--yolo"],

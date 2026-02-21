@@ -184,7 +184,13 @@
         "phase_11/30_layout_grid_z_index",
         "phase_11/31_layered_z_index",
         "phase_11/32_zone_anchoring_rules",
-        "phase_11/33_persistent_zones_nav"
+        "phase_11/33_persistent_zones_nav",
+        "phase_11/34_adaptive_breakpoints",
+        "phase_11/35_viewport_constraints",
+        "phase_11/36_high_density_snr",
+        "phase_11/37_layout_modes_scaling",
+        "phase_11/38_iconography_standards",
+        "phase_11/39_icon_intent_roles"
     ],
     "tdd_completed": false,
     "ordered_phases_generated": []
