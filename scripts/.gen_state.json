@@ -190,7 +190,11 @@
         "phase_11/36_high_density_snr",
         "phase_11/37_layout_modes_scaling",
         "phase_11/38_iconography_standards",
-        "phase_11/39_icon_intent_roles"
+        "phase_11/39_icon_intent_roles",
+        "phase_11/40_icon_status_actions",
+        "phase_11/41_container_radius_shadow",
+        "phase_11/42_shadow_task_cards",
+        "phase_11/43_interactive_targets"
     ],
     "tdd_completed": false,
     "ordered_phases_generated": []

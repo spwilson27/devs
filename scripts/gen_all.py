@@ -6,6 +6,10 @@ import shutil
 import json
 import re
 from typing import List, Dict, Any, Optional
+import threading
+import concurrent.futures
+
+ignore_file_lock = threading.Lock()
 
 DOCS = [
     # Research
@@ -28,6 +32,17 @@ DOCS = [
 
 class AIRunner:
     """Abstract base for AI CLI runners."""
+    def write_ignore_file(self, ignore_file: str, ignore_content: str):
+        with ignore_file_lock:
+            should_write = True
+            if os.path.exists(ignore_file):
+                with open(ignore_file, "r", encoding="utf-8") as f:
+                    if f.read() == ignore_content:
+                        should_write = False
+            if should_write:
+                with open(ignore_file, "w", encoding="utf-8") as f:
+                    f.write(ignore_content)
+
     def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
         raise NotImplementedError()
 
@@ -39,8 +54,7 @@ class AIRunner:
 class GeminiRunner(AIRunner):
     """Wraps the gemini CLI subprocess call."""
     def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
-        with open(ignore_file, "w", encoding="utf-8") as f:
-            f.write(ignore_content)
+        self.write_ignore_file(ignore_file, ignore_content)
         return subprocess.run(
             ["gemini", "-y"],
             input=full_prompt,
@@ -57,8 +71,7 @@ class GeminiRunner(AIRunner):
 class ClaudeRunner(AIRunner):
     """Wraps the claude CLI subprocess call."""
     def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
-        with open(ignore_file, "w", encoding="utf-8") as f:
-            f.write(ignore_content)
+        self.write_ignore_file(ignore_file, ignore_content)
         return subprocess.run(
             ["claude", "-p", "--dangerously-skip-permissions"],
             input=full_prompt,
@@ -75,8 +88,7 @@ class ClaudeRunner(AIRunner):
 class CopilotRunner(AIRunner):
     """Wraps the GitHub Copilot CLI subprocess call."""
     def run(self, cwd: str, full_prompt: str, ignore_content: str, ignore_file: str) -> subprocess.CompletedProcess:
-        with open(ignore_file, "w", encoding="utf-8") as f:
-            f.write(ignore_content)
+        self.write_ignore_file(ignore_file, ignore_content)
 
         import tempfile
         with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", delete=True) as f:
@@ -697,19 +709,22 @@ class Phase6BreakDownTasks(BasePhase):
             print(f"   -> Found {len(sub_epics)} Sub-Epic groupings for {phase_filename}.")
             
             # 2. Lead Developer Pass: Iterative Detail Generation
-            for sub_epic_name, reqs in sorted(sub_epics.items()):
+            state_lock = threading.Lock()
+
+            def process_sub_epic(sub_epic_name, reqs):
                 if not isinstance(reqs, list):
-                    continue
+                    return True
                     
                 # Create a filesystem safe name for the sub-epic
                 safe_name = re.sub(r'[^a-zA-Z0-9_\-]+', '_', sub_epic_name.lower())
                 # E.g. tasks/phase_1/01_project_planning/
                 target_dir = os.path.join(phase_id, f"{safe_name}")
                 
-                if target_dir in ctx.state["tasks_generated"]:
-                    print(f"      -> Skipping task generation for {target_dir} (already generated).")
-                    continue
-                    
+                with state_lock:
+                    if target_dir in ctx.state["tasks_generated"]:
+                        print(f"      -> Skipping task generation for {target_dir} (already generated).")
+                        return True
+                        
                 print(f"      -> Breaking down '{sub_epic_name}' ({len(reqs)} reqs) into {target_dir}/...")
                 
                 # Ensure the subdirectory exists
@@ -733,10 +748,23 @@ class Phase6BreakDownTasks(BasePhase):
                     print(f"\n[!] Error generating tasks for {target_dir}.")
                     print(result.stdout)
                     print(result.stderr)
-                    sys.exit(1)
+                    return False
                     
-                ctx.state["tasks_generated"].append(target_dir)
-                ctx.save_state()
+                with state_lock:
+                    ctx.state["tasks_generated"].append(target_dir)
+                    ctx.save_state()
+                return True
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+                futures = [
+                    executor.submit(process_sub_epic, name, reqs)
+                    for name, reqs in sorted(sub_epics.items())
+                ]
+                
+                for future in concurrent.futures.as_completed(futures):
+                    if not future.result():
+                        print("\n[!] Error encountered in parallel task generation. Exiting.")
+                        os._exit(1)
             
         print("\n   -> Verifying tasks/ covers all requirements from phases/...")
         verify_res = subprocess.run(
