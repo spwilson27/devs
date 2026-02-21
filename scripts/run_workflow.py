@@ -6,6 +6,7 @@ import argparse
 import subprocess
 import tempfile
 import threading
+import traceback
 import concurrent.futures
 from typing import Dict, List, Any
 
@@ -64,27 +65,40 @@ def save_workflow_state(state_file: str, state: Dict[str, Any]):
         json.dump(state, f, indent=4)
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Parallel development workflow orchestrator")
-    parser.add_argument("--jobs", type=int, default=1, help="Number of parallel implementation agents")
-    parser.add_argument("--presubmit-cmd", type=str, default="./do presubmit", help="Command to evaluate correctness")
-    args = parser.parse_args()
-
-    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    tasks_dir = os.path.join(root_dir, "docs", "plan", "tasks")
-    state_file = os.path.join(root_dir, "scripts", ".workflow_state.json")
-
-    master_dag = load_dags(tasks_dir)
-    state = load_workflow_state(state_file)
+def phase_sort_key(task_id: str):
+    """Parses task ID (e.g., 'phase_1/01_foo') to return a sortable tuple (phase_num, task_num)."""
+    parts = task_id.split("/")
+    if len(parts) >= 2:
+        phase_part = parts[0]
+        task_part = parts[1]
+        
+        phase_num = 0
+        if phase_part.startswith("phase_"):
+            try:
+                phase_num = int(phase_part.split("_")[1])
+            except ValueError:
+                pass
+                
+        task_num = 0
+        try:
+            task_num = int(task_part.split("_")[0])
+        except ValueError:
+            pass
+            
+        return (phase_num, task_num)
+    return (999, 999)
     
 def get_task_details(root_dir: str, full_task_id: str) -> str:
     """Reads all markdown files for a given task and returns them as a single context string."""
-    task_dir = os.path.join(root_dir, "docs", "plan", "tasks", full_task_id)
+    task_path = os.path.join(root_dir, "docs", "plan", "tasks", full_task_id)
     content = ""
-    if os.path.exists(task_dir):
-        for f in os.listdir(task_dir):
+    if os.path.isfile(task_path):
+        with open(task_path, "r", encoding="utf-8") as file:
+            content += file.read() + "\n\n"
+    elif os.path.isdir(task_path):
+        for f in os.listdir(task_path):
             if f.endswith(".md"):
-                with open(os.path.join(task_dir, f), "r", encoding="utf-8") as file:
+                with open(os.path.join(task_path, f), "r", encoding="utf-8") as file:
                     content += file.read() + "\n\n"
     return content
 
@@ -130,9 +144,10 @@ def run_agent(agent_type: str, prompt_file: str, root_dir: str, task_context: di
 
 def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retries: int = 3) -> bool:
     """Handles the lifecycle of a single task: worktree creation, agents, and commit."""
-    phase_id, task_id = full_task_id.split("/")
-    branch_name = f"ai-phase-{task_id}"
-    tmpdir = tempfile.mkdtemp(prefix=f"ai_{task_id}_")
+    phase_id, task_id = full_task_id.split("/", 1)
+    safe_task_id = task_id.replace("/", "_").replace(".md", "")
+    branch_name = f"ai-phase-{safe_task_id}"
+    tmpdir = tempfile.mkdtemp(prefix=f"ai_{safe_task_id}_")
 
     print(f"\n   -> [Implementation] Starting {full_task_id}")
     print(f"      Creating git worktree at {tmpdir} on branch {branch_name}...")
@@ -206,11 +221,12 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
 
 def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, max_retries: int = 3) -> bool:
     """Creates a clean clone of the repo, merges the task branch, and verifies presubmit."""
-    phase_part, name_part = task_id.split("/")
-    branch_name = f"ai-phase-{name_part}"
+    phase_part, name_part = task_id.split("/", 1)
+    safe_name_part = name_part.replace("/", "_").replace(".md", "")
+    branch_name = f"ai-phase-{safe_name_part}"
     
     # We clone into a new tmpdir to avoid messing with the developer's main working tree
-    tmpdir = tempfile.mkdtemp(prefix=f"merge_{name_part}_")
+    tmpdir = tempfile.mkdtemp(prefix=f"merge_{safe_name_part}_")
     
     print(f"\n   => [Merge] Attempting to merge {task_id} into main...")
     print(f"      Cloning repository to {tmpdir}...")
@@ -391,7 +407,8 @@ def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str
                         executor.shutdown(wait=False, cancel_futures=True)
                         sys.exit(1)
                 except Exception as exc:
-                    print(f"\n[!] FATAL: Task {task_id} generated an exception: {exc}")
+                    print(f"\n[!] FATAL: Task {task_id} generated an exception:")
+                    traceback.print_exc()
                     executor.shutdown(wait=False, cancel_futures=True)
                     sys.exit(1)
 
