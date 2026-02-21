@@ -13,7 +13,9 @@ This file serves as a shared, long-term memory for all agents working on this pr
 
 - **2026-02-21 - Headless-First Design (Phase 1, Task 01):** `@devs/cli` and `@devs/vscode` are UI shells only — all business logic must live in `@devs/core`. This separation is intentional and must be maintained through all future phases.
 
-- **2026-02-21 - `./do` Script Pattern:** The `./do` Python script is the project task runner. In Phase 1, `fmt`, `lint`, `build`, and `coverage` steps are stubs (no source files yet). `./do test` executes both `verify_monorepo.sh` and `verify_folder_structure.sh`. Future phases must configure real tools (TypeScript compiler, ESLint, Prettier, Vitest) in `./do`.
+- **2026-02-21 - `./do` Script Pattern:** The `./do` Python script is the project task runner. `./do build` runs `pnpm exec tsc --noEmit` (type check, no output). `./do test` runs `verify_monorepo.sh`, `verify_folder_structure.sh`, and `verify_typescript_strict.sh`. `fmt`, `lint`, and `coverage` remain stubs until real tools are configured in future phases.
+
+- **2026-02-21 - TypeScript Strict Configuration (Phase 1, Task 02):** TypeScript 5.9.3 installed as root devDependency. Root `tsconfig.json`: `strict: true`, `target: ES2022`, `module: NodeNext`, `moduleResolution: NodeNext`, `esModuleInterop: true`, `forceConsistentCasingInFileNames: true`, `skipLibCheck: true`. Each package has `packages/<name>/tsconfig.json` extending `../../tsconfig.json` with `outDir: ./dist`, `rootDir: ./src`. Minimal `src/index.ts` stubs created per package for `tsc --noEmit` to work without errors. Authoritative documentation at `docs/infrastructure/typescript_standard.md`.
 
 - **2026-02-21 - Root Directory Structure (Phase 1, Task 03):** Eight required top-level directories: `.devs/` (Flight Recorder/observability), `.agent/` (agent docs/memory), `mcp-server/` (MCP server entry), `src/` (root entry points), `tests/` (infra + integration tests), `docs/` (documentation), `scripts/` (admin scripts), `packages/` (monorepo packages). Authoritative description at `docs/architecture/directory_structure.md`.
 
@@ -26,7 +28,9 @@ This file serves as a shared, long-term memory for all agents working on this pr
 ## ⚠️ Brittle Areas (Proceed with Caution)
 *Note parts of the codebase that are prone to breaking, have complex undocumented dependencies, or should generally not be refactored without extreme care.*
 
-- **pnpm-workspace.yaml package list:** Adding or renaming packages requires updating both `pnpm-workspace.yaml` AND `tests/infrastructure/verify_monorepo.sh` (the `REQUIRED_PKGS` array). Failure to do both will cause the infrastructure test to fail.
+- **pnpm-workspace.yaml package list:** Adding or renaming packages requires updating both `pnpm-workspace.yaml` AND `tests/infrastructure/verify_monorepo.sh` (the `REQUIRED_PKGS` array) AND creating a `packages/<name>/tsconfig.json` AND a `packages/<name>/src/index.ts` stub. `verify_typescript_strict.sh` uses the same hardcoded `PACKAGES` array and must also be updated.
+
+- **`module: NodeNext` import requirement:** All relative TypeScript imports MUST use `.js` extension (e.g., `import { foo } from './utils.js'`). This is enforced by `moduleResolution: NodeNext`. Omitting the extension causes TS errors at compile time and runtime resolution failures.
 
 - **`.devs/` is gitignored at runtime:** Only `POLICY.md` and `.gitignore` inside `.devs/` are committed. All SQLite/LanceDB/log files are excluded. Do not add `.devs/` to the root `.gitignore` — only the runtime subdirs inside it are excluded via `.devs/.gitignore`.
 
@@ -46,4 +50,6 @@ This file serves as a shared, long-term memory for all agents working on this pr
 - **[2026-02-21] - Phase 1 / 03_setup_project_directories:** Established root directory scaffold: `.devs/` (Flight Recorder), `mcp-server/`, `src/`. `.devs/.gitignore` excludes runtime state (SQLite, LanceDB, logs). `.devs/POLICY.md` documents Developer Agent write-access prohibition. `docs/architecture/directory_structure.md` documents all top-level directory roles. `./do test` now runs both `verify_monorepo.sh` (30 checks) and `verify_folder_structure.sh` (11 checks). All 41 checks pass. Reviewer fixed: added `.gitkeep` to `mcp-server/` and `src/` so empty scaffold directories are tracked by git and present on fresh clone. Reviewer fixed: `verify_folder_structure.sh` was missing executable bit (chmod +x) — all shell scripts under `tests/infrastructure/` must be executable for direct invocation consistency.
 
 - **[2026-02-21] - Phase 1 / 05_define_shared_state_manifest:** Added `devs` metadata field to root `package.json`. Created `packages/core/src/constants.ts` (STATE_FILE_PATH, DEVS_DIR, MANIFEST_SCHEMA_VERSION) and `packages/core/src/persistence.ts` (findProjectRoot, resolveStatePath, resolveDevsDir). Added `tests/infrastructure/verify_shared_state.sh` (18 checks). `./do test` now runs 3 scripts: 59 total checks pass. Created `docs/architecture/state_sharing.md`.
+
+- **[2026-02-21] - Phase 1 / 02_configure_typescript_strict:** Installed TypeScript 5.9.3 as root devDependency. Created root `tsconfig.json` (strict, ES2022, NodeNext), per-package `tsconfig.json` for all 7 packages (extends root, outDir/rootDir), minimal `packages/*/src/index.ts` stubs. `./do build` now runs `pnpm exec tsc --noEmit`. `./do test` now includes `verify_typescript_strict.sh` (27 checks). All 68 total presubmit checks pass. `docs/infrastructure/typescript_standard.md` created. Reviewer fixed: corrected documentation bug in `typescript_standard.md` — "Adding a New Package" incorrectly claimed verify script auto-discovers packages from `pnpm-workspace.yaml`; both verification scripts hardcode the package list and must be manually updated.
 

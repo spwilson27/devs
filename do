@@ -27,9 +27,9 @@ def do_lint() -> bool:
 
 
 def do_build() -> bool:
-    # Phase 1 (infrastructure): no TypeScript to compile yet.
-    # Future phases will configure tsc/tsup for packages.
-    return run_command(["echo", "build: no source files yet (infrastructure phase)"], "Build")
+    # Phase 1 (infrastructure): type-check the whole monorepo without emitting output.
+    # Future phases will configure tsup/tsc --build with project references per package.
+    return run_command(["pnpm", "exec", "tsc", "--noEmit"], "TypeScript Type Check")
 
 
 def do_test() -> bool:
@@ -37,7 +37,9 @@ def do_test() -> bool:
         return False
     if not run_command(["bash", "tests/infrastructure/verify_folder_structure.sh"], "Folder Structure Verification"):
         return False
-    return run_command(["bash", "tests/infrastructure/verify_shared_state.sh"], "Shared State Manifest Verification")
+    if not run_command(["bash", "tests/infrastructure/verify_shared_state.sh"], "Shared State Manifest Verification"):
+        return False
+    return run_command(["bash", "tests/infrastructure/verify_typescript_strict.sh"], "TypeScript Strict Verification")
 
 
 def do_coverage() -> bool:
