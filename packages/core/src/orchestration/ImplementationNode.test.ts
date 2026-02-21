@@ -302,4 +302,89 @@ describe("createImplementationNode", () => {
       ).rejects.toThrow("nothing to commit");
     });
   });
+
+  // ── DB persistence (taskRepository + dbTaskId) ────────────────────────────
+
+  describe("when taskRepository and dbTaskId are provided", () => {
+    it("calls taskRepository.updateGitHash with dbTaskId and commit hash", async () => {
+      mockSnapshot.createTaskSnapshot.mockResolvedValue("deadbeef1234");
+
+      const mockTaskRepo = {
+        updateGitHash: vi.fn(),
+        getTask: vi.fn(),
+        getTaskByGitHash: vi.fn(),
+      };
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        taskRepository: mockTaskRepo as never,
+        dbTaskId: 42,
+      });
+
+      await node(makeState({ activeTaskId: "task-001" }));
+
+      expect(mockTaskRepo.updateGitHash).toHaveBeenCalledOnce();
+      expect(mockTaskRepo.updateGitHash).toHaveBeenCalledWith(42, "deadbeef1234");
+    });
+
+    it("does NOT call updateGitHash when workspace is clean (no commit)", async () => {
+      mockSnapshot.createTaskSnapshot.mockResolvedValue(null);
+
+      const mockTaskRepo = {
+        updateGitHash: vi.fn(),
+        getTask: vi.fn(),
+        getTaskByGitHash: vi.fn(),
+      };
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        taskRepository: mockTaskRepo as never,
+        dbTaskId: 42,
+      });
+
+      await node(makeState({ activeTaskId: "task-001" }));
+
+      expect(mockTaskRepo.updateGitHash).not.toHaveBeenCalled();
+    });
+
+    it("does NOT call updateGitHash when only taskRepository is provided (no dbTaskId)", async () => {
+      mockSnapshot.createTaskSnapshot.mockResolvedValue("sha123");
+
+      const mockTaskRepo = {
+        updateGitHash: vi.fn(),
+        getTask: vi.fn(),
+        getTaskByGitHash: vi.fn(),
+      };
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        taskRepository: mockTaskRepo as never,
+        // dbTaskId intentionally omitted
+      });
+
+      await node(makeState({ activeTaskId: "task-001" }));
+
+      expect(mockTaskRepo.updateGitHash).not.toHaveBeenCalled();
+    });
+
+    it("does NOT call updateGitHash when only dbTaskId is provided (no taskRepository)", async () => {
+      // This just exercises the no-op path — no mock to assert on,
+      // but the node should not throw.
+      mockSnapshot.createTaskSnapshot.mockResolvedValue("sha456");
+
+      const node = createImplementationNode({
+        projectPath: "/test/project",
+        snapshotManager: mockSnapshot as never,
+        dbTaskId: 99,
+        // taskRepository intentionally omitted
+      });
+
+      // Should complete without error and still return updated state.
+      const result = await node(makeState({ activeTaskId: "task-001" }));
+      expect(result.tasks).toBeDefined();
+    });
+  });
 });

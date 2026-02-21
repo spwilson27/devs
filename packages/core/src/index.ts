@@ -43,3 +43,6 @@ export * from "./persistence/SchemaReconciler.js";
 
 // State machine robustness and error recovery — errorNode, pivotAgentNode, turn budget, entropy detection.
 export * from "./orchestration/robustness.js";
+
+// Task-scoped git hash persistence and time-travel rewind lookup (TAS-095, 9_ROADMAP-REQ-015).
+export * from "./persistence/TaskRepository.js";
