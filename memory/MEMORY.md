@@ -46,3 +46,26 @@
 
 - `packages/core/src/index.ts` remains a stub (`export {}`). The database module is consumed via its direct path (`persistence/database.js`). A future phase must add proper subpath exports via `exports` in `package.json`.
 - `scripts/verify_db_init.ts` is a manual utility (requires the database to exist before running). It is not part of `./do presubmit` — intentional design choice to avoid a chicken-and-egg problem.
+
+---
+
+## Task: Phase 2 / 02_sqlite_schema_persistence_layer / 03_define_interaction_schemas
+
+**Status: PASSED — no fixes required. All presubmit checks pass (139 total: 105 infra + 34 unit tests).**
+
+### Review Notes
+
+- Implementation agent did a high quality job. No refactoring needed.
+- `packages/core/src/schemas/turn_envelope.ts` — well-structured Zod v4 schema with clear section separation (enum → content → metadata → root). Proper `.js` import extension. Inline JSDoc is thorough and accurate.
+- `packages/core/src/schemas/events.ts` — five event payload schemas correctly defined as discriminated union on `"type"`. `z.record(z.string(), z.unknown())` correctly uses two-arg form (Zod v4 requirement). `EventSchema` wraps payload with UUID-validated `event_id`.
+- `packages/core/test/schemas/interaction.test.ts` — 34 tests; comprehensive coverage of valid and invalid inputs for all schemas. Rejection tests use destructuring to remove fields cleanly.
+- `packages/core/src/index.ts` — barrel exports all schema symbols. Correct `.js` extensions throughout.
+- `.agent/packages/core/schemas/` — AOD 1:1 ratio maintained: two `.agent.md` files for two production modules.
+- `docs/architecture/saop_protocol.md` — thorough, includes mermaid sequence diagram, persistence mapping table, extensibility guide, and field rationale table.
+- `vitest.config.ts` — minimal and correct; `include` glob matches test file layout.
+- Root `package.json` has `vitest` as devDependency; `packages/core/package.json` has `zod` as production dependency.
+
+### Deferred Items (future phases)
+
+- `packages/core/package.json` still uses `"main": "./src/index.ts"` (TypeScript source, not compiled output). A future phase will configure the TypeScript compiler output and update `main`/`exports` to point to `./dist/index.js`.
+- The `from_state`/`to_state` fields in `TaskTransitionPayloadSchema` are `z.string()`. A future phase should consider narrowing these to a `z.enum()` of known task lifecycle states once those states are formally defined in the TAS.
