@@ -30,3 +30,6 @@ export * from "./orchestration/hitl.js";
 
 // LangGraph SQLiteSaver — ACID checkpoint persister for crash recovery (9_ROADMAP-REQ-014).
 export * from "./orchestration/SqliteSaver.js";
+
+// Git-Atomic coordinator: binds SQLite task-state updates to git commits atomically.
+export * from "./orchestration/GitAtomicManager.js";

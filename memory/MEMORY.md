@@ -121,6 +121,27 @@
 
 ---
 
+## Task: Phase 3 / 03_acid_transactions_state_integrity / 04_git_atomic_manager
+
+**Status: PASSED — implementation complete. All 328 unit tests + all infra checks pass.**
+
+### Review Notes
+
+- Implemented `GitAtomicManager` in `packages/core/src/orchestration/GitAtomicManager.ts`.
+- Extended `StateRepository` with `transactionAsync<T>()` (SAVEPOINT-based async transaction primitive) and `updateTaskGitCommitHash()` (16th prepared statement).
+- `commitTaskChange(taskId, commitMessage)` runs inside one SAVEPOINT: updateTaskStatus('completed') → await gitClient.commit() → updateTaskGitCommitHash(hash). SAVEPOINT rollback on any failure.
+- 10 unit tests (6 mock-based + 4 integration with real SQLite). All pass.
+- `scripts/simulate_git_failure.ts` (13 checks, 3 scenarios) verifies rollback invariant end-to-end.
+- AOD at `.agent/packages/core/orchestration/GitAtomicManager.agent.md`.
+
+### Key Design Decision: SAVEPOINT for async-SQLite bridging
+
+- `db.exec('SAVEPOINT "name"')` is used instead of `db.exec('BEGIN')` to avoid conflicting with better-sqlite3's internal transaction tracking. `db.inTransaction` reads `sqlite3_get_autocommit()` which returns 0 for SAVEPOINT, so nested `db.transaction(cb)()` calls correctly detect the open transaction.
+- Rolling back the outer SAVEPOINT undoes all inner changes including those from already-RELEASEd inner SAVEPOINTs — SQLite guarantees this. This is the critical property that ensures full atomicity across the async git boundary.
+- Concurrency note: must NOT be called concurrently on same connection (documented in JSDoc).
+
+---
+
 ## Task: Phase 1 / 06_git_integration_snapshot_strategy / 02_task_commit_logic
 
 **Status: PASSED — 1 fix applied. All 259 unit tests + all infra checks pass.**

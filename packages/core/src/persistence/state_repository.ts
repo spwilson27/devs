@@ -21,6 +21,11 @@
  *   better-sqlite3 automatically uses SQLite SAVEPOINTs so the outer
  *   transaction always wins: an inner failure only rolls back its savepoint
  *   without touching the outer transaction.
+ * - `transactionAsync<T>(cb)` provides async-safe transaction management via
+ *   explicit SQLite SAVEPOINT commands. This allows async operations (e.g.,
+ *   git commits) to be included in a single atomic unit alongside synchronous
+ *   DB writes. Any exception from `cb` — including async failures — triggers
+ *   a ROLLBACK TO SAVEPOINT before the error is re-thrown. [8_RISKS-REQ-041]
  * - Every write method calls `this.transaction()` internally, so individual
  *   method calls are always atomic and callers can compose them into larger
  *   atomic units without any extra ceremony.
@@ -28,7 +33,8 @@
  *   module — this is the "no non-transactional writes" invariant.
  *
  * Requirements: 2_TAS-REQ-017, TAS-105 through TAS-111,
- *               [TAS-067], [8_RISKS-REQ-115], [3_MCP-REQ-REL-004]
+ *               [TAS-067], [8_RISKS-REQ-115], [3_MCP-REQ-REL-004],
+ *               [8_RISKS-REQ-041], [8_RISKS-REQ-094]
  */
 
 import type Database from "better-sqlite3";
@@ -162,6 +168,7 @@ export class StateRepository {
   private readonly _stmtInsertEpic: Statement;
   private readonly _stmtInsertTask: Statement;
   private readonly _stmtUpdateTaskStatus: Statement;
+  private readonly _stmtUpdateTaskGitHash: Statement;
   private readonly _stmtInsertAgentLog: Statement;
   private readonly _stmtInsertEntropyEvent: Statement;
 
@@ -219,6 +226,12 @@ export class StateRepository {
     // task lifecycle states (pending → in_progress → completed / failed).
     this._stmtUpdateTaskStatus = db.prepare(
       "UPDATE tasks SET status = ? WHERE id = ?"
+    );
+
+    // Git commit hash update — records the SHA of the commit that implements
+    // this task once the Git-Atomic transaction succeeds. [8_RISKS-REQ-041]
+    this._stmtUpdateTaskGitHash = db.prepare(
+      "UPDATE tasks SET git_commit_hash = ? WHERE id = ?"
     );
 
     this._stmtInsertAgentLog = db.prepare(`
@@ -286,6 +299,54 @@ export class StateRepository {
    */
   transaction<T>(cb: () => T): T {
     return this.db.transaction(cb)();
+  }
+
+  /**
+   * Wraps an async callback in a SQLite SAVEPOINT, enabling async operations
+   * (such as git commits) to be included in a single atomic database unit.
+   *
+   * On success the SAVEPOINT is RELEASED (committed into the enclosing
+   * transaction or the implicit outer transaction). On any exception — whether
+   * synchronous or asynchronous — the SAVEPOINT is rolled back and then
+   * released, and the exception is re-thrown.
+   *
+   * Why SAVEPOINT instead of BEGIN:
+   *  - SAVEPOINT is nesting-safe: when called inside an active `transaction()`
+   *    it creates a nested savepoint rather than conflicting with the outer
+   *    BEGIN. At the top level, SQLite promotes a SAVEPOINT to a full
+   *    transaction (autocommit disabled until RELEASE).
+   *  - SQLite's `sqlite3_get_autocommit()` — used by better-sqlite3's
+   *    `db.inTransaction` getter — returns 0 while a SAVEPOINT is active, so
+   *    any inner `db.transaction(cb)()` calls will correctly detect the open
+   *    transaction and use nested SAVEPOINTs.
+   *  - Rolling back the outer SAVEPOINT also rolls back any changes made by
+   *    inner savepoints that have already been RELEASEd, preserving full
+   *    atomicity across the async boundary.
+   *
+   * Concurrency note: this method must NOT be called concurrently on the same
+   * connection. Node.js is single-threaded and better-sqlite3 is synchronous,
+   * so concurrent calls on the same DB connection are not possible in normal
+   * usage. However, reentrant calls (calling transactionAsync from within an
+   * async callback that is already inside a transactionAsync) ARE safe because
+   * they nest as inner SAVEPOINTs.
+   *
+   * @param cb - The async callback containing write operations.
+   * @returns The value returned by `cb`.
+   *
+   * Requirements: [8_RISKS-REQ-041], [8_RISKS-REQ-094]
+   */
+  async transactionAsync<T>(cb: () => Promise<T>): Promise<T> {
+    const name = `sp_async_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    this.db.exec(`SAVEPOINT "${name}"`);
+    try {
+      const result = await cb();
+      this.db.exec(`RELEASE "${name}"`);
+      return result;
+    } catch (err) {
+      this.db.exec(`ROLLBACK TO SAVEPOINT "${name}"`);
+      this.db.exec(`RELEASE "${name}"`);
+      throw err;
+    }
   }
 
   // ── Write methods ─────────────────────────────────────────────────────────
@@ -414,6 +475,25 @@ export class StateRepository {
   updateTaskStatus(taskId: number, status: string): void {
     this.transaction(() => {
       this._stmtUpdateTaskStatus.run(status, taskId);
+    });
+  }
+
+  /**
+   * Records the git commit SHA that implements this task.
+   *
+   * Called by `GitAtomicManager.commitTaskChange()` after a successful git
+   * commit, inside the same `transactionAsync()` block that updated the task
+   * status. This guarantees that the `git_commit_hash` column is never
+   * populated unless both the status update AND the git commit succeeded.
+   *
+   * @param taskId - The task's primary-key id.
+   * @param hash   - The full SHA-1 hash of the git commit.
+   *
+   * Requirements: [8_RISKS-REQ-041]
+   */
+  updateTaskGitCommitHash(taskId: number, hash: string): void {
+    this.transaction(() => {
+      this._stmtUpdateTaskGitHash.run(hash, taskId);
     });
   }
 
