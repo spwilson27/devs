@@ -1,0 +1,35 @@
+# .devs/.gitignore
+# The .devs/ directory is the Flight Recorder for the devs system.
+# All runtime state (SQLite databases, LanceDB indexes, logs, traces) is
+# generated at runtime and must NOT be committed to version control.
+#
+# EXCEPTION: Committed files in .devs/ (POLICY.md, this .gitignore) ARE
+# tracked so that the directory structure and access policy is preserved.
+
+# SQLite databases (flight recorder, task state)
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# LanceDB vector index data
+*.lance/
+lancedb/
+
+# Runtime logs and traces
+*.log
+*.trace
+traces/
+logs/
+
+# Temporary and intermediate files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Generated reports (ephemeral analysis outputs)
+reports/
+
+# Do NOT ignore: POLICY.md, .gitignore (this file) — they are tracked.
