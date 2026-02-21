@@ -41,7 +41,9 @@ def do_test() -> bool:
         return False
     if not run_command(["bash", "tests/infrastructure/verify_aod_ratio.sh"], "AOD Ratio Verification"):
         return False
-    return run_command(["bash", "tests/infrastructure/verify_typescript_strict.sh"], "TypeScript Strict Verification")
+    if not run_command(["bash", "tests/infrastructure/verify_typescript_strict.sh"], "TypeScript Strict Verification"):
+        return False
+    return run_command(["bash", "tests/infrastructure/verify_scaffold_utility.sh"], "Scaffolding Utility Verification")
 
 
 def do_coverage() -> bool:

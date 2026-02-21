@@ -25,6 +25,8 @@ This file serves as a shared, long-term memory for all agents working on this pr
 
 - **2026-02-21 - Shared State Manifest & STATE_FILE_PATH (Phase 1, Task 05):** `STATE_FILE_PATH = ".devs/state.sqlite"` is the canonical constant defined in `packages/core/src/constants.ts`. All packages MUST import this constant — never hardcode the path. `resolveStatePath(fromDir?)` and `findProjectRoot(dir)` in `packages/core/src/persistence.ts` resolve the absolute state path by walking up to the nearest `private: true` `package.json`. Root `package.json` now has a `devs` metadata field: `{ version: "1.0.0", status: "development", architecture: "monorepo" }`. State sharing documented at `docs/architecture/state_sharing.md`.
 
+- **2026-02-21 - Scaffolding Utility (Phase 1, Task 06):** `scripts/scaffold_project.py` implements the `init-project <path>` command. Creates the full TAS-040/TAS-104 directory structure for any new devs project: `.devs/`, `.agent/`, `mcp-server/`, `src/`, `tests/`, `docs/`, `scripts/`, `.github/`. Root files: `.gitignore`, `.env.example`, `README.md`, `package.json` (with `devs.project_id` UUID, `devs.version`, `devs.generated_by`). AOD files: `.agent/index.agent.md`, `.agent/catalog.json`, `.agent/modules/`. Flight Recorder init: `.devs/.gitignore` (excludes `*.sqlite`, LanceDB, logs), `.devs/POLICY.md`. Safety: refuses non-empty target directories. Usage documented at `docs/usage/project_scaffolding.md`.
+
 ---
 
 ## ⚠️ Brittle Areas (Proceed with Caution)
@@ -42,6 +44,8 @@ This file serves as a shared, long-term memory for all agents working on this pr
 
 - **Shell scripts in `tests/infrastructure/` must be executable:** All `.sh` scripts in `tests/infrastructure/` must have the executable bit set (`chmod +x`). The `./do` script invokes them via `bash <script>`, which bypasses the permission, but direct invocation (e.g. by a developer or CI tool) requires the bit. Convention: always `chmod +x` new shell scripts.
 
+- **Scaffolded projects: every empty leaf directory needs a `.gitkeep`:** `scripts/scaffold_project.py` creates a tree of directories, several of which are initially empty. Git silently drops empty directories. When adding new directories to the scaffold layout in `scaffold_project.py`, always pair them with a `write("<dir>/.gitkeep", "")` call. Forgetting this means the subdirectory disappears after the user's first `git init && git add . && git commit`, corrupting the standard project structure.
+
 ---
 
 ## 📝 Recent Changelog
@@ -58,4 +62,6 @@ This file serves as a shared, long-term memory for all agents working on this pr
 - **[2026-02-21] - Phase 1 / 05_define_shared_state_manifest:** Added `devs` metadata field to root `package.json`. Created `packages/core/src/constants.ts` (STATE_FILE_PATH, DEVS_DIR, MANIFEST_SCHEMA_VERSION) and `packages/core/src/persistence.ts` (findProjectRoot, resolveStatePath, resolveDevsDir). Added `tests/infrastructure/verify_shared_state.sh` (18 checks). `./do test` now runs 3 scripts: 59 total checks pass. Created `docs/architecture/state_sharing.md`.
 
 - **[2026-02-21] - Phase 1 / 02_configure_typescript_strict:** Installed TypeScript 5.9.3 as root devDependency. Created root `tsconfig.json` (strict, ES2022, NodeNext), per-package `tsconfig.json` for all 7 packages (extends root, outDir/rootDir), minimal `packages/*/src/index.ts` stubs. `./do build` now runs `pnpm exec tsc --noEmit`. `./do test` now includes `verify_typescript_strict.sh` (27 checks). All 68 total presubmit checks pass. `docs/infrastructure/typescript_standard.md` created. Reviewer fixed: corrected documentation bug in `typescript_standard.md` — "Adding a New Package" incorrectly claimed verify script auto-discovers packages from `pnpm-workspace.yaml`; both verification scripts hardcode the package list and must be manually updated.
+
+- **[2026-02-21] - Phase 1 / 06_implement_scaffolding_utility:** Created `scripts/scaffold_project.py` (Python CLI, `init-project <path>` command). Creates full TAS-040/TAS-104 project layout with AOD, Flight Recorder init, and `devs` metadata in `package.json`. Added `tests/infrastructure/verify_scaffold_utility.sh` (26 checks). `./do test` now runs 4 scripts: 85 total checks pass. Created `docs/usage/project_scaffolding.md`. Reviewer fixes: (1) added `.gitkeep` to all empty leaf subdirectories in scaffolded project (`.agent/modules/`, `mcp-server/src/{tools,resources,prompts}/`, `tests/{unit,integration,e2e,agent}/`, `docs/{research,specs}/`, `.github/workflows/`) so they survive a git round-trip; (2) added `is_file()` guard in `_cmd_init_project` for the edge case where the target path is an existing file; (3) removed misleading `.gitkeep` content string for `mcp-server/` (was wrongly claiming entry point is in mcp-server root); (4) made `scripts/scaffold_project.py` executable (has shebang line).
 
