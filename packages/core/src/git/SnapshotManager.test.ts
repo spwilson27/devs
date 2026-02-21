@@ -233,7 +233,23 @@ describe("SnapshotManager", () => {
       );
     });
 
-    it("generates the standard commit message: 'task: complete task {taskId}'", async () => {
+    it("generates a commit message with title 'task: complete {taskId}'", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-007", {});
+      // The commit message starts with the conventional commit title
+      expect(mockGit.commit).toHaveBeenCalledWith(
+        expect.stringMatching(/^task: complete task-007/)
+      );
+    });
+
+    it("generates a commit message with TASK-ID footer line", async () => {
       mockGit.status.mockResolvedValue({
         isClean: () => false,
         staged: [],
@@ -244,7 +260,39 @@ describe("SnapshotManager", () => {
       const sm = new SnapshotManager({ projectPath: tmpDir });
       await sm.createTaskSnapshot("task-007", {});
       expect(mockGit.commit).toHaveBeenCalledWith(
-        "task: complete task task-007"
+        expect.stringContaining("TASK-ID: task-007")
+      );
+    });
+
+    it("generates a commit message with devs-state-snapshot footer line", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-007", {});
+      expect(mockGit.commit).toHaveBeenCalledWith(
+        expect.stringContaining("devs-state-snapshot:")
+      );
+    });
+
+    it("embeds the stateSnapshot hash in the commit footer when provided", async () => {
+      mockGit.status.mockResolvedValue({
+        isClean: () => false,
+        staged: [],
+        modified: ["src/index.ts"],
+        not_added: [],
+      });
+
+      const sm = new SnapshotManager({ projectPath: tmpDir });
+      await sm.createTaskSnapshot("task-007", {
+        stateSnapshot: { hash: "sha256:abc123" },
+      });
+      expect(mockGit.commit).toHaveBeenCalledWith(
+        expect.stringContaining("devs-state-snapshot: sha256:abc123")
       );
     });
 
@@ -311,7 +359,7 @@ describe("SnapshotManager", () => {
       expect(callOrder).toEqual(["add", "commit"]);
     });
 
-    it("accepts optional context with taskName (does not affect commit message)", async () => {
+    it("accepts optional context with taskName (does not appear in commit footer snapshot)", async () => {
       mockGit.status.mockResolvedValue({
         isClean: () => false,
         staged: [],
@@ -320,14 +368,18 @@ describe("SnapshotManager", () => {
       });
 
       const sm = new SnapshotManager({ projectPath: tmpDir });
-      const hash = await sm.createTaskSnapshot("task-001", {
+      const sha = await sm.createTaskSnapshot("task-001", {
         taskName: "Setup Project",
       });
-      // The commit message is still the standard format
+      // The title still follows the standard format
       expect(mockGit.commit).toHaveBeenCalledWith(
-        "task: complete task task-001"
+        expect.stringMatching(/^task: complete task-001/)
       );
-      expect(hash).toBe("abc1234");
+      // taskName does NOT appear in the commit message
+      expect(mockGit.commit).toHaveBeenCalledWith(
+        expect.not.stringContaining("Setup Project")
+      );
+      expect(sha).toBe("abc1234");
     });
   });
 

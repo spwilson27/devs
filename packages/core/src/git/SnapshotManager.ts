@@ -23,6 +23,10 @@
 
 import { GitClient, type WorkspaceStatus } from "./GitClient.js";
 import { GitIgnoreManager } from "./GitIgnoreManager.js";
+import {
+  CommitMessageGenerator,
+  type StateSnapshotData,
+} from "./CommitMessageGenerator.js";
 
 // ---------------------------------------------------------------------------
 // SnapshotOptions
@@ -39,14 +43,19 @@ export interface SnapshotOptions {
 
 /**
  * Optional contextual metadata passed to `createTaskSnapshot`.
- * Does not affect the generated commit message — provided for diagnostic
- * purposes and future extensibility (e.g., enriched commit trailers).
  *
- * Requirements: TAS-055
+ * Requirements: TAS-055, 8_RISKS-REQ-085
  */
 export interface SnapshotContext {
   /** Human-readable task name for diagnostic logging (optional). */
   taskName?: string;
+  /**
+   * Compact state snapshot embedded in the commit footer.
+   * Either a pre-computed `hash` of the SQLite state, or compact fields
+   * (projects, requirements, etc.) serialized as JSON.
+   * Defaults to `{}` (empty snapshot) when not provided.
+   */
+  stateSnapshot?: StateSnapshotData;
 }
 
 // ---------------------------------------------------------------------------
@@ -122,15 +131,18 @@ export class SnapshotManager {
     taskId: string,
     context: SnapshotContext
   ): Promise<string | null> {
-    void context; // reserved for future use (e.g., enriched commit trailers)
-
     const ws = await this.git.status();
     if (ws.isClean) {
       return null;
     }
 
+    const message = CommitMessageGenerator.generate(
+      taskId,
+      context.stateSnapshot ?? {}
+    );
+
     await this.git.add(".");
-    return this.git.commit(`task: complete task ${taskId}`);
+    return this.git.commit(message);
   }
 
   /**
