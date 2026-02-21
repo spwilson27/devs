@@ -209,9 +209,6 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: 
     safe_task_id = task_id.replace("/", "_").replace(".md", "")
     branch_name = f"ai-phase-{safe_task_id}"
     
-    worktrees_dir = os.path.join(root_dir, ".agent", "worktrees")
-    os.makedirs(worktrees_dir, exist_ok=True)
-
     print(f"\n   -> [Implementation] Starting {full_task_id}")
     
     tmpdir = ""
@@ -228,7 +225,7 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: 
                 print(f"      [!] Failed to reset existing worktree:\n{e.stderr.decode('utf-8')}")
                 return False
         else:
-            tmpdir = tempfile.mkdtemp(prefix=f"ai_{safe_task_id}_", dir=worktrees_dir)
+            tmpdir = tempfile.mkdtemp(prefix=f"ai_{safe_task_id}_")
             print(f"      Creating git worktree at {tmpdir} on branch {branch_name}...")
             try:
                 subprocess.run(["git", "worktree", "add", "-B", branch_name, tmpdir, "dev"], cwd=root_dir, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
@@ -310,9 +307,7 @@ def merge_task(root_dir: str, task_id: str, presubmit_cmd: str, backend: str = "
     branch_name = f"ai-phase-{safe_name_part}"
     
     # We clone into a new tmpdir to avoid messing with the developer's main working tree
-    worktrees_dir = os.path.join(root_dir, ".agent", "worktrees")
-    os.makedirs(worktrees_dir, exist_ok=True)
-    tmpdir = tempfile.mkdtemp(prefix=f"merge_{safe_name_part}_", dir=worktrees_dir)
+    tmpdir = tempfile.mkdtemp(prefix=f"merge_{safe_name_part}_")
     
     print(f"\n   => [Merge] Attempting to merge {task_id} into dev...")
     print(f"      Cloning repository to {tmpdir}...")
