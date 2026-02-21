@@ -53,3 +53,8 @@ export * from "./persistence/TaskRepository.js";
 
 // DecisionLogger: structured API for recording agent architectural decisions (TAS-059).
 export * from "./audit/DecisionLogger.js";
+
+// Cross-process EventBus — typed pub/sub over Unix Domain Sockets (2_TAS-REQ-018, 1_PRD-REQ-INT-004).
+export * from "./events/types.js";
+export * from "./events/EventBus.js";
+export * from "./events/SharedEventBus.js";
