@@ -39,6 +39,8 @@ def do_test() -> bool:
         return False
     if not run_command(["bash", "tests/infrastructure/verify_shared_state.sh"], "Shared State Manifest Verification"):
         return False
+    if not run_command(["bash", "tests/infrastructure/verify_aod_ratio.sh"], "AOD Ratio Verification"):
+        return False
     return run_command(["bash", "tests/infrastructure/verify_typescript_strict.sh"], "TypeScript Strict Verification")
 
 
