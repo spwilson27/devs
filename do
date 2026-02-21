@@ -43,7 +43,9 @@ def do_test() -> bool:
         return False
     if not run_command(["bash", "tests/infrastructure/verify_typescript_strict.sh"], "TypeScript Strict Verification"):
         return False
-    return run_command(["bash", "tests/infrastructure/verify_scaffold_utility.sh"], "Scaffolding Utility Verification")
+    if not run_command(["bash", "tests/infrastructure/verify_scaffold_utility.sh"], "Scaffolding Utility Verification"):
+        return False
+    return run_command(["pnpm", "exec", "vitest", "run"], "Unit Tests (Vitest)")
 
 
 def do_coverage() -> bool:

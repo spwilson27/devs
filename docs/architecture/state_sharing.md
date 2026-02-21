@@ -81,12 +81,41 @@ Per `.devs/POLICY.md`:
 
 The CLI and VSCode extension pass all state queries through `@devs/core` APIs — they never open the SQLite database directly.
 
+## Database Connection Manager
+
+The `createDatabase()` factory in `packages/core/src/persistence/database.ts`
+opens and configures the SQLite connection:
+
+```typescript
+import { createDatabase, getDatabase, closeDatabase } from "@devs/core/persistence/database";
+
+// Create a new database instance (typically done once at startup)
+const db = createDatabase();           // uses project-root auto-resolution
+const db = createDatabase({ dbPath: "/abs/path/.devs/state.sqlite" });  // explicit path
+
+// Singleton pattern for long-running processes
+const db = getDatabase();              // returns the same instance each call
+closeDatabase();                       // disposes the singleton (for testing/shutdown)
+```
+
+PRAGMA settings applied at initialisation:
+
+| PRAGMA | Value | Reason |
+|---|---|---|
+| `journal_mode` | `WAL` | Concurrent reads + writes for CLI and VSCode Extension |
+| `synchronous` | `NORMAL` (1) | Flush at critical checkpoints; avoids excessive `fsync` calls |
+
+The `.devs/` directory is created automatically by `ensureDirSync` if it does not exist.
+
 ## Requirements Satisfied
 
 | Requirement | Description |
 |---|---|
 | `1_PRD-REQ-INT-013` | Real-time state sharing between CLI and VSCode extension enabled by consistent `STATE_FILE_PATH` constant and shared resolver. |
 | `TAS-076` | Version manifest initialized in root `package.json` under the `devs` metadata field. |
+| `TAS-066` | Persistence layer initialised with better-sqlite3, WAL mode, NORMAL synchronous. |
+| `TAS-010` | `better-sqlite3` used as the SQLite library (zero-dependency, synchronous API). |
+| `4_USER_FEATURES-REQ-086` | No external cloud dependencies; all state stored locally in `.devs/state.sqlite`. |
 
 ## Diagram
 
@@ -103,5 +132,7 @@ graph TD
     VSCODE -->|"depends on workspace:*"| CORE
     CORE --> PERSISTENCE
     PERSISTENCE --> CONSTANTS
-    PERSISTENCE -->|"reads/writes"| SQLITE
+    CORE --> DATABASE
+    DATABASE["persistence/database.ts<br/>createDatabase() / getDatabase()"]
+    DATABASE -->|"opens + configures<br/>(WAL, NORMAL)"| SQLITE
 ```
