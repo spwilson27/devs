@@ -71,7 +71,7 @@ def main():
     args = parser.parse_args()
 
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    tasks_dir = os.path.join(root_dir, "tasks")
+    tasks_dir = os.path.join(root_dir, "docs", "plan", "tasks")
     state_file = os.path.join(root_dir, "scripts", ".workflow_state.json")
 
     master_dag = load_dags(tasks_dir)
@@ -79,7 +79,7 @@ def main():
     
 def get_task_details(root_dir: str, full_task_id: str) -> str:
     """Reads all markdown files for a given task and returns them as a single context string."""
-    task_dir = os.path.join(root_dir, "tasks", full_task_id)
+    task_dir = os.path.join(root_dir, "docs", "plan", "tasks", full_task_id)
     content = ""
     if os.path.exists(task_dir):
         for f in os.listdir(task_dir):
@@ -89,8 +89,16 @@ def get_task_details(root_dir: str, full_task_id: str) -> str:
     return content
 
 
+def get_memory_context(root_dir: str) -> str:
+    memory_file = os.path.join(root_dir, ".agent", "memory.md")
+    if os.path.exists(memory_file):
+        with open(memory_file, "r", encoding="utf-8") as f:
+            return f.read()
+    return ""
+
+
 def get_project_context(root_dir: str) -> str:
-    desc_file = os.path.join(root_dir, "input", "description.md")
+    desc_file = os.path.join(root_dir, "docs", "plan", "input", "description.md")
     if os.path.exists(desc_file):
         with open(desc_file, "r", encoding="utf-8") as f:
             return f.read()
@@ -132,16 +140,19 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
     # Create worktree
     subprocess.run(["git", "worktree", "add", "-b", branch_name, tmpdir, "main"], cwd=root_dir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
+    success = False
     try:
         task_details = get_task_details(root_dir, full_task_id)
         description_ctx = get_project_context(root_dir)
+        memory_ctx = get_memory_context(root_dir)
         
         context = {
             "phase_filename": phase_id,
             "task_name": task_id,
             "target_dir": full_task_id,
             "task_details": task_details,
-            "description_ctx": description_ctx
+            "description_ctx": description_ctx,
+            "memory_ctx": memory_ctx
         }
 
         # 1. Implementation Agent
@@ -170,6 +181,7 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
                      subprocess.run(["git", "commit", "-m", f"{phase_id}:{task_id}: Standardized Implementation"], cwd=tmpdir, check=True, stdout=subprocess.DEVNULL)
                 else:
                      print(f"      [Verification] No changes to commit for {full_task_id}.")
+                success = True
                 return True
             
             print(f"      [Verification] Presubmit failed.")
@@ -184,10 +196,12 @@ def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, max_retri
         return False
         
     finally:
-        # Cleanup worktree
-        print(f"      Cleaning up worktree {tmpdir}...")
-        subprocess.run(["git", "worktree", "remove", "-f", tmpdir], cwd=root_dir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        # Also delete the branch if it failed so we don't leave dangling broken branches, unless it succeeded (then we want to merge it)
+        if success:
+            # Cleanup worktree
+            print(f"      Cleaning up worktree {tmpdir}...")
+            subprocess.run(["git", "worktree", "remove", "-f", tmpdir], cwd=root_dir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            print(f"      [!] Task failed. Leaving worktree {tmpdir} and branch {branch_name} for investigation.")
 
 
 def get_ready_tasks(master_dag: Dict[str, List[str]], completed_tasks: List[str], active_tasks: List[str]) -> List[str]:
@@ -280,7 +294,7 @@ def main():
     args = parser.parse_args()
 
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    tasks_dir = os.path.join(root_dir, "tasks")
+    tasks_dir = os.path.join(root_dir, "docs", "plan", "tasks")
     state_file = os.path.join(root_dir, "scripts", ".workflow_state.json")
 
     master_dag = load_dags(tasks_dir)

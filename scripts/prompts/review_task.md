@@ -19,6 +19,11 @@ Your task is to review, refactor, and fix code submitted by an implementation ag
 {description_ctx}
 </context>
 
+## Architectural Memory
+<memory>
+{memory_ctx}
+</memory>
+
 ## Presubmit Information
 <presubmit>
 The verification script is `./do presubmit`. It runs formatting, linting, building, testing, and coverage checks.
@@ -37,7 +42,10 @@ You are operating inside of a git worktree checked out specifically for you. The
     - Run `./do presubmit`.
     - If it fails, fix the code or the tests until it passes perfectly.
 4.  **Append to Memory:**
-    - Append your own notes to `/.agent/memory.md` detaling the changes and refactors you made.
+    - Update `/.agent/memory.md` with:
+      - Any new **Architectural Decisions** you made (patterns, conventions).
+      - Any **Brittle Areas** you discovered.
+      - A brief description of what you broke/fixed/added to the **Recent Changelog**.
 
 # CONSTRAINTS
 - ALWAYS end your turn when your code review & refactoring is complete and `./do presubmit` passes.

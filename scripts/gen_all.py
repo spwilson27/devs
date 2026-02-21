@@ -125,13 +125,14 @@ class ProjectContext:
         self.root_dir = root_dir
         self.jobs = jobs
         self.sandbox_dir = os.path.join(root_dir, ".sandbox")
-        self.specs_dir = os.path.join(root_dir, "specs")
-        self.research_dir = os.path.join(root_dir, "research")
+        self.plan_dir = os.path.join(root_dir, "docs", "plan")
+        self.specs_dir = os.path.join(self.plan_dir, "specs")
+        self.research_dir = os.path.join(self.plan_dir, "research")
         self.prompts_dir = os.path.join(root_dir, "scripts", "prompts")
         self.state_file = os.path.join(root_dir, "scripts", ".gen_state.json")
-        self.desc_file = os.path.join(root_dir, "input", "description.md")
+        self.desc_file = os.path.join(self.plan_dir, "input", "description.md")
         
-        self.requirements_dir = os.path.join(root_dir, "requirements")
+        self.requirements_dir = os.path.join(self.plan_dir, "requirements")
         
         self.runner = runner or GeminiRunner()
         
@@ -212,10 +213,10 @@ class ProjectContext:
 
     def get_document_path(self, doc: dict) -> str:
         out_folder = "specs" if doc["type"] == "spec" else "research"
-        return os.path.join(self.root_dir, out_folder, f"{doc['id']}.md")
+        return os.path.join(self.plan_dir, out_folder, f"{doc['id']}.md")
 
     def get_target_path(self, doc: dict) -> str:
-        out_folder = "specs" if doc["type"] == "spec" else "research"
+        out_folder = "docs/plan/specs" if doc["type"] == "spec" else "docs/plan/research"
         return f"{out_folder}/{doc['id']}.md"
 
     def get_accumulated_context(self, current_doc: dict) -> str:
@@ -373,8 +374,8 @@ class Phase1GenerateDoc(BasePhase):
             f"4. You MUST end your turn immediately after writing the file.\n"
         )
         
-        ignore_content = f"/*\n!/.sandbox/\n!/{out_folder}/\n"
-        print(f"\n=> [Phase 1: Generate] {self.doc['name']} into {out_folder}/{self.doc['id']}.md ...")
+        ignore_content = f"/*\n!/.sandbox/\n!/docs/plan/{out_folder}/\n"
+        print(f"\n=> [Phase 1: Generate] {self.doc['name']} into docs/plan/{out_folder}/{self.doc['id']}.md ...")
         
         allowed_files = [expected_file]
         result = ctx.run_gemini(full_prompt, ignore_content, allowed_files=allowed_files)
@@ -429,7 +430,7 @@ class Phase2FleshOutDoc(BasePhase):
                 accumulated_context=accumulated_context
             )
             
-            ignore_content = f"/*\n!/.sandbox/\n!/{out_folder}/\n"
+            ignore_content = f"/*\n!/.sandbox/\n!/docs/plan/{out_folder}/\n"
             allowed_files = [expected_file]
             result = ctx.run_gemini(flesh_prompt, ignore_content, allowed_files=allowed_files)
             
@@ -455,7 +456,7 @@ class Phase3FinalReview(BasePhase):
         print("\n=> [Phase 3: Final Alignment Review] Reviewing all documents for consistency...")
         final_prompt_tmpl = ctx.load_prompt("final_review.md")
         final_prompt = ctx.format_prompt(final_prompt_tmpl, description_ctx=ctx.description_ctx)
-        ignore_content = "/*\n!/.sandbox/\n!/specs/\n!/research/\n"
+        ignore_content = "/*\n!/.sandbox/\n!/docs/plan/specs/\n!/docs/plan/research/\n"
         
         # Final review can modify all existing specs and research files
         allowed_files = [ctx.get_document_path(d) for d in DOCS]
@@ -488,10 +489,10 @@ class Phase4AExtractRequirements(BasePhase):
         if not os.path.exists(doc_path):
             return
             
-        target_path = f"requirements/{self.doc['id']}.md"
+        target_path = f"docs/plan/requirements/{self.doc['id']}.md"
         expected_file = os.path.join(ctx.requirements_dir, f"{self.doc['id']}.md")
         
-        doc_rel_path = f"{'specs' if self.doc['type'] == 'spec' else 'research'}/{self.doc['id']}.md"
+        doc_rel_path = f"docs/plan/{'specs' if self.doc['type'] == 'spec' else 'research'}/{self.doc['id']}.md"
         
         print(f"\n=> [Phase 4A: Extract Requirements] Extracting from {self.doc['name']}...")
         prompt_tmpl = ctx.load_prompt("extract_requirements.md")
@@ -502,7 +503,7 @@ class Phase4AExtractRequirements(BasePhase):
             target_path=target_path
         )
         
-        ignore_content = f"/*\n!/.sandbox/\n!/requirements/\n!/scripts/verify_requirements.py\n!/{doc_rel_path}\n"
+        ignore_content = f"/*\n!/.sandbox/\n!/docs/plan/requirements/\n!/scripts/verify_requirements.py\n!/{doc_rel_path}\n"
         allowed_files = [expected_file, doc_path]
         result = ctx.run_gemini(prompt, ignore_content, allowed_files=allowed_files)
         
@@ -536,8 +537,8 @@ class Phase4BMergeRequirements(BasePhase):
         prompt_tmpl = ctx.load_prompt("merge_requirements.md")
         prompt = ctx.format_prompt(prompt_tmpl, description_ctx=ctx.description_ctx)
         
-        # This phase can modify requirements.md AND any source doc in specs/
-        ignore_content = "/*\n!/.sandbox/\n!/requirements/\n!/requirements.md\n!/specs/\n!/scripts/verify_requirements.py\n"
+        # This phase can modify requirements.md AND any source doc in docs/plan/specs/
+        ignore_content = "/*\n!/.sandbox/\n!/docs/plan/requirements/\n!/requirements.md\n!/docs/plan/specs/\n!/scripts/verify_requirements.py\n"
         
         # Allowed files include the final requirements.md and specs for potential conflict resolution
         allowed_files = [os.path.join(ctx.root_dir, "requirements.md")]
@@ -615,9 +616,9 @@ class Phase5GenerateEpics(BasePhase):
         print("\n=> [Phase 5: Generate Epics] Generating detailed phases/")
         phases_prompt_tmpl = ctx.load_prompt("phases.md")
         phases_prompt = ctx.format_prompt(phases_prompt_tmpl, description_ctx=ctx.description_ctx)
-        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/phases/\n!/scripts/verify_requirements.py\n"
+        ignore_content = "/*\n!/.sandbox/\n!/requirements.md\n!/docs/plan/phases/\n!/scripts/verify_requirements.py\n"
         
-        phases_dir = os.path.join(ctx.root_dir, "phases")
+        phases_dir = os.path.join(ctx.plan_dir, "phases")
         os.makedirs(phases_dir, exist_ok=True)
         # Adding trailing slash allows creating content inside it
         allowed_files = [phases_dir + os.sep]
@@ -631,7 +632,7 @@ class Phase5GenerateEpics(BasePhase):
             
         print("\n   -> Verifying phases/ covers all requirements...")
         verify_res = subprocess.run(
-            [sys.executable, "scripts/verify_requirements.py", "--verify-phases", "requirements.md", "phases/"],
+            [sys.executable, "scripts/verify_requirements.py", "--verify-phases", "requirements.md", "docs/plan/phases/"],
             capture_output=True, text=True, cwd=ctx.root_dir
         )
         if verify_res.returncode != 0:
@@ -652,8 +653,8 @@ class Phase6BreakDownTasks(BasePhase):
             
         print("\n=> [Phase 6: Break Down Tasks] Generating detailed tasks using Sub-Epic Grouping/")
         
-        phases_dir = os.path.join(ctx.root_dir, "phases")
-        tasks_dir = os.path.join(ctx.root_dir, "tasks")
+        phases_dir = os.path.join(ctx.plan_dir, "phases")
+        tasks_dir = os.path.join(ctx.plan_dir, "tasks")
         os.makedirs(tasks_dir, exist_ok=True)
         
         if not os.path.exists(phases_dir):
@@ -682,7 +683,7 @@ class Phase6BreakDownTasks(BasePhase):
                                              phase_filename=phase_filename,
                                              group_filename=group_filename)
             
-            ignore_content = f"/*\n!/.sandbox/\n!/phases/\n!/tasks/\n!/scripts/verify_requirements.py\n"
+            ignore_content = f"/*\n!/.sandbox/\n!/docs/plan/phases/\n!/docs/plan/tasks/\n!/scripts/verify_requirements.py\n"
             group_filepath = os.path.join(tasks_dir, group_filename)
             allowed_files = [group_filepath]
             
@@ -742,7 +743,7 @@ class Phase6BreakDownTasks(BasePhase):
                                                  sub_epic_reqs=reqs_str,
                                                  target_dir=target_dir)
                 
-                ignore_content = f"/*\n!/.sandbox/\n!/requirements.md\n!/phases/\n!/tasks/\n!/scripts/verify_requirements.py\n"
+                ignore_content = f"/*\n!/.sandbox/\n!/requirements.md\n!/docs/plan/phases/\n!/docs/plan/tasks/\n!/scripts/verify_requirements.py\n"
                 
                 allowed_files = [phase_task_dir + os.sep]
                 result = ctx.run_gemini(tasks_prompt, ignore_content, allowed_files=allowed_files, sandbox=False)
@@ -771,7 +772,7 @@ class Phase6BreakDownTasks(BasePhase):
             
         print("\n   -> Verifying tasks/ covers all requirements from phases/...")
         verify_res = subprocess.run(
-            [sys.executable, "scripts/verify_requirements.py", "--verify-tasks", "phases/", "tasks/"],
+            [sys.executable, "scripts/verify_requirements.py", "--verify-tasks", "docs/plan/phases/", "docs/plan/tasks/"],
             capture_output=True, text=True, cwd=ctx.root_dir
         )
         if verify_res.returncode != 0:
@@ -792,7 +793,7 @@ class Phase7TDDLoop(BasePhase):
         print("\n=> [Phase 7: TDD Implementation Loop] Launching implementation agents...")
         print("   (Press Ctrl+C to interrupt the loop at any time)")
         while not ctx.state.get("tdd_completed", False):
-            tasks_file = os.path.join(ctx.root_dir, "tasks.md")
+            tasks_file = os.path.join(ctx.plan_dir, "tasks.md")
             if os.path.exists(tasks_file):
                 with open(tasks_file, "r", encoding="utf-8") as f:
                     content = f.read()
@@ -829,7 +830,7 @@ class Phase7ADAGGeneration(BasePhase):
 
         print("\n=> [Phase 7A: DAG Generation] Creating dependency graphs for tasks...")
         
-        tasks_dir = os.path.join(ctx.root_dir, "tasks")
+        tasks_dir = os.path.join(ctx.plan_dir, "tasks")
         if not os.path.exists(tasks_dir):
             print("\n[!] Error: tasks directory does not exist. Run Phase 6 first.")
             sys.exit(1)
@@ -876,13 +877,13 @@ class Phase7ADAGGeneration(BasePhase):
             prompt = ctx.format_prompt(
                 dag_prompt_tmpl,
                 phase_filename=phase_id,
-                target_path=f"tasks/{phase_id}/dag.json",
+                target_path=f"docs/plan/tasks/{phase_id}/dag.json",
                 description_ctx=ctx.description_ctx,
                 tasks_content=tasks_content
             )
 
             #print(prompt)
-            ignore_content = f"/*\n!/.sandbox/\n!/tasks/{phase_id}/dag.json\n"
+            ignore_content = f"/*\n!/.sandbox/\n!/docs/plan/tasks/{phase_id}/dag.json\n"
             allowed_files = [dag_file_path]
             
             for attempt in range(1, 4):
@@ -925,7 +926,7 @@ class Phase7BDAGReview(BasePhase):
 
         print("\n=> [Phase 7B: DAG Review] Reviewing and refining dependency graphs...")
         
-        tasks_dir = os.path.join(ctx.root_dir, "tasks")
+        tasks_dir = os.path.join(ctx.plan_dir, "tasks")
         if not os.path.exists(tasks_dir):
             sys.exit(0)
 
@@ -964,13 +965,13 @@ class Phase7BDAGReview(BasePhase):
             prompt = ctx.format_prompt(
                 review_prompt_tmpl,
                 phase_filename=phase_id,
-                target_path=f"tasks/{phase_id}/dag_reviewed.json",
+                target_path=f"docs/plan/tasks/{phase_id}/dag_reviewed.json",
                 description_ctx=ctx.description_ctx,
                 tasks_content=tasks_content,
                 proposed_dag=proposed_dag
             )
 
-            ignore_content = f"/*\n!/.sandbox/\n!/tasks/{phase_id}/dag_reviewed.json\n"
+            ignore_content = f"/*\n!/.sandbox/\n!/docs/plan/tasks/{phase_id}/dag_reviewed.json\n"
             allowed_files = [reviewed_dag_file_path]
             
             for attempt in range(1, 4):

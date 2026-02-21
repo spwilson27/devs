@@ -244,12 +244,12 @@ def main():
     elif args.verify_master:
         # Default paths relative to project root
         master_file = "requirements.md"
-        requirements_dir = "requirements"
+        requirements_dir = "docs/plan/requirements"
         
         # Check if we are inside scripts/ folder and adjust paths if needed
         if os.path.basename(os.getcwd()) == "scripts":
             master_file = "../requirements.md"
-            requirements_dir = "../requirements"
+            requirements_dir = "../docs/plan/requirements"
             
         exit_code = verify_master(master_file, requirements_dir)
         
