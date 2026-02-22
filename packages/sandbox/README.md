@@ -62,3 +62,20 @@ Verify digest matches Dockerfile:
 
 node -e "const m = require('./docker/base/image-manifest.json'); const fs = require('fs'); const df = fs.readFileSync('./docker/base/Dockerfile','utf8'); if(!df.includes(m.digest)) process.exit(1);"
 
+## Testing
+
+This package organizes tests into three tiers:
+
+- unit: fast unit tests mirroring src/ submodules (tests/unit/)
+- integration: integration tests for drivers and external interactions (tests/integration/)
+- agent: agent-driven end-to-end behavioural tests (tests/agent/)
+
+Run individual tiers:
+- pnpm --filter @devs/sandbox test --project unit
+- pnpm --filter @devs/sandbox test --project integration
+- pnpm --filter @devs/sandbox test --project agent
+
+Run coverage:
+- pnpm --filter @devs/sandbox test:coverage
+
+Coverage targets: lines >= 80%

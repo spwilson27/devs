@@ -16,6 +16,7 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:integration": "RUN_INTEGRATION=true vitest -t @integration",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint src tests --ext .ts",
     "typecheck": "tsc --noEmit",
     "build:base-image": "docker build -t devs-sandbox-base:latest ./docker/base",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "typescript": "^5.4.0",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "@vitest/coverage-v8": "^1.0.0"
   }
 }
