@@ -47,4 +47,8 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - **Presubmit toolchain fragility:** Presubmit previously assumed tsc and vitest present in the environment; missing tooling caused presubmit to fail unexpectedly. Consider documenting required dev tooling or vendor-install devDeps in CI images.
 
+- **[2026-02-22] - StateTransitionGuard:** Implemented a minimal StateTransitionGuard in @devs/core/orchestration and added a unit test packages/core/test/audit/acid_guard.test.ts that verifies a PRE_TOOL_EXECUTION DB write is flushed to state.sqlite before a tool is executed and that tool execution is skipped if the DB write fails.
 
+- **[2026-02-22] - AOD doc fix:** Added missing AOD documentation `.agent/packages/core/orchestration/StateTransitionGuard.agent.md` to satisfy the AOD 1:1 ratio presubmit check and ensure CI passes.
+
+- **Brittle area noted:** The AOD invariant (every new .ts module requires a corresponding `.agent.md`) caused the presubmit failure; maintainers should remember to add AOD files when adding source modules.
