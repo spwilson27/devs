@@ -33,3 +33,23 @@ export interface SandboxConfig {
   pidLimit?: number; // limit on number of PIDs in the container
   nofileLimit?: number; // ulimit nofile value (per-process file descriptor limit)
 }
+
+export interface TaskManifest {
+  id: string;
+  name: string;
+  description?: string;
+  inputs?: Record<string, any>;
+  [key: string]: any;
+}
+
+export interface McpConfig {
+  serverUrl: string;
+  apiKey?: string;
+  [key: string]: any;
+}
+
+export interface PreflightOptions {
+  projectRoot: string;
+  task: TaskManifest;
+  mcpConfig: McpConfig;
+}

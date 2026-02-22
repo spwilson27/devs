@@ -59,3 +59,6 @@ _Last updated: 2026-02-22T22:19:08Z_
 - [2026-02-22 Reviewer] Added CI workflow `.github/workflows/sandbox-e2e.yml` to run the network e2e suite (job: network-egress-e2e); verified E2E tests pass locally with `E2E=true` and Docker sub-tests are gated via `DOCKER_INTEGRATION=true`. This verifies end-to-end enforcement of the allow-list, DNS resolver stub behavior, and audit metrics collection.
 
 - [2026-02-22 Reviewer] Minor test hardening: added JSDoc `@group e2e` tag to `packages/sandbox/src/network/__e2e__/egressPolicy.e2e.test.ts` and wrapped `afterAll` cleanup in a try/finally to ensure resources are released even when stop logic throws.
+
+- [2026-02-22 Reviewer] Fixed preflight tests: aligned MockProvider to provider types (cpuPercent/memoryBytes, createdAt as ISO string) so TypeScript checks pass and preflight unit tests succeed.
+- [2026-02-22 Reviewer] Minimal test refactor only; no runtime behavior changed in PreflightService.

@@ -17,4 +17,6 @@ export * from './audit/DependencyAuditor';
 export * from './audit/PostInstallHook';
 export * from './filesystem/TempDirManager';
 
+export * from './preflight/PreflightService';
+export * from './preflight/PreflightError';
 

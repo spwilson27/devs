@@ -475,3 +475,8 @@ These E2E network tests are gated and do not run during normal unit test executi
 - WebContainer sub-tests (optional) are gated by: WEBCONTAINER_INTEGRATION=true
 
 The E2E tests start an in-process EgressProxy, an IsolatedDnsResolver stub, and a ProxyAuditLogger (sinkType: console). The acceptance criteria assert allowed vs blocked CONNECT responses and that audit metrics reflect the decisions.
+
+## Pre-flight Injection
+
+The PreflightService injects project files, task manifest, and MCP config into a sandbox workspace (see /workspace constants in source).
+Invoke PreflightService.runPreflight(sandboxId, { projectRoot, task, mcpConfig }) to perform the injection; the service writes the task manifest to /workspace/.devs/task.json and MCP config to /workspace/.devs/mcp_config.json.
