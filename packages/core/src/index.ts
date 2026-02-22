@@ -70,3 +70,9 @@ export * from "./recovery/RecoveryManager.js";
 export * from "./orchestration/DAGValidator.js";
 export * from "./git/GitManager.js";
 export * from "./orchestration/Orchestrator.js";
+export * from "./Orchestrator.js";
+
+// Input ingestion and locality enforcement utilities (phase_1 tasks)
+export * from "./InputIngestor.js";
+export * from "./LocalityGuard.js";
+

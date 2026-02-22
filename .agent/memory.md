@@ -77,3 +77,24 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **[2026-02-22] - AOD coverage for Rewind modules:** `packages/core/src/Orchestrator.ts` and `packages/core/src/persistence/RelationalRollback.ts` should have corresponding AOD `.agent.md` files to satisfy the AOD 1:1 invariant and avoid CI warnings.
 
 - **[2026-02-22 Reviewer] - Dirty Workspace Review:** Reviewed `packages/core/src/git/GitManager.ts` and `packages/core/src/orchestration/Orchestrator.ts`; confirmed `GitManager.isWorkspaceDirty()` inspects staged, modified, and untracked files via `simple-git` and filters `.devs/` and `.agent/`; `Orchestrator.startTask()` enforces dirty checks unless `force` is true or `stash` is provided, and throws `DirtyWorkspaceError` in headless mode. Ran integration test `tests/integration/dirty_workspace.test.ts` and `./do presubmit` locally; no code changes required.
+
+## [2026-02-22] - Input Ingestor & LocalityGuard Added (Phase 1 Task 09-07)
+
+- Implemented a minimal InputIngestor (packages/core/src/InputIngestor.ts) which accepts a project brief and user journeys and persists them into the Flight Recorder (`projects` + `documents`).
+- Implemented a LocalityGuard middleware (packages/core/src/LocalityGuard.ts) that scans agent instances before/after a turn, persists ephemeral `findings`/`state` into `documents`, and clears those properties from the agent to enforce data locality.
+
+## Architectural Decisions (Appended)
+
+- Data Locality Enforcement: all agents must not retain ephemeral findings/state on their instance between turns; instead agents must return structured results and LocalityGuard will persist findings to the Flight Recorder. This is enforced by LocalityGuard but should be elevated to a project-wide TAS decision.
+
+## Brittle Areas (Appended)
+
+- AOD Invariant: Adding source modules requires corresponding `.agent.md` documentation under `.agent/packages/core/`; the presubmit runner only warns but CI may fail — remember to add these files when adding modules.
+- LocalityGuard Persistence: Current LocalityGuard persists ephemeral data as `documents` with minimal metadata; for production use the persistence should use structured `agent_logs` with task-scoped FK and richer content types.
+
+## Recent Changelog (Appended)
+
+- **[2026-02-22] - Added InputIngestor & LocalityGuard:** Wrote tests and minimal implementations to satisfy Phase 1 determinism & robustness task: input ingestion and data-locality enforcement. Presubmit passed locally (unit tests were skipped in this environment).
+
+- **[2026-02-22 Reviewer] - AOD docs added:** Created .agent AOD files for InputIngestor, LocalityGuard, Orchestrator, AuditTrailReconstructor, and RelationalRollback to satisfy AOD 1:1 invariant and silence presubmit advisory.
+- **[2026-02-22 Reviewer] - Note:** No functional code changes were made; presubmit verified and passed.
