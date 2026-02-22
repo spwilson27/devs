@@ -1,20 +1,16 @@
 #!/usr/bin/env node
 
 /* Minimal CLI entrypoint. Keeps dependencies small for Phase 1.
-   Recognises: devs init [--force|-f]
+   Recognises: devs init [--force|-f], status, pause, resume, skip, rewind
 */
 
-<<<<<<< HEAD
-import { init, status } from "./index.js";
-=======
-import { init, pause, resume, skip } from "./index.js";
->>>>>>> af488ca (phase_1:08_cli_integration_state_control/03_cli_state_control_commands.md: Implement Orchestrator Control Commands (`pause`, `resume`, `skip`))
+import { init, status, pause, resume, skip, rewind } from "./index.js";
 
 async function main() {
   const args = process.argv.slice(2);
   const cmd = args[0];
   if (!cmd || cmd === "help" || cmd === "--help") {
-    console.log("devs — available commands: init, pause, resume, skip");
+    console.log("devs — available commands: init, status, pause, resume, skip, rewind");
     process.exit(0);
   }
 
@@ -29,7 +25,6 @@ async function main() {
     }
   }
 
-<<<<<<< HEAD
   if (cmd === "status") {
     const json = args.includes("--json");
     const projectDir = process.cwd();
@@ -74,7 +69,10 @@ async function main() {
       } else {
         console.error(err);
       }
-=======
+      process.exit(1);
+    }
+  }
+
   if (cmd === "pause") {
     try {
       const rc = await pause({ projectDir: process.cwd() });
@@ -101,7 +99,26 @@ async function main() {
       process.exit(typeof rc === "number" ? rc : 0);
     } catch (err) {
       console.error(err);
->>>>>>> af488ca (phase_1:08_cli_integration_state_control/03_cli_state_control_commands.md: Implement Orchestrator Control Commands (`pause`, `resume`, `skip`))
+      process.exit(1);
+    }
+  }
+
+  if (cmd === "rewind") {
+    const id = args[1];
+    if (!id) {
+      console.error("Usage: devs rewind <task_id>");
+      process.exit(2);
+    }
+    const taskId = Number(id);
+    if (Number.isNaN(taskId)) {
+      console.error("Invalid task id");
+      process.exit(2);
+    }
+    try {
+      const rc = await rewind({ projectDir: process.cwd(), taskId });
+      process.exit(typeof rc === "number" ? rc : 0);
+    } catch (err) {
+      console.error(err);
       process.exit(1);
     }
   }

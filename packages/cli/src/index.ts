@@ -2,6 +2,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { execSync } from "node:child_process";
 import { getDatabase } from "../../core/src/persistence/database.js";
 import { initializeSchema } from "../../core/src/persistence/schema.js";
 import { StateRepository } from "../../core/src/persistence/state_repository.js";
@@ -72,7 +73,6 @@ export async function init(opts: { projectDir?: string; force?: boolean } = {}) 
   return 0;
 }
 
-<<<<<<< HEAD
 export async function status(opts: { projectDir?: string } = {}) {
   const projectDir = opts.projectDir ?? process.cwd();
 
@@ -155,8 +155,6 @@ export async function status(opts: { projectDir?: string } = {}) {
   };
 }
 
-export default { init, status };
-=======
 export async function pause(opts: { projectDir?: string; reason?: string } = {}) {
   const projectDir = opts.projectDir ?? process.cwd();
   const db = getDatabase({ fromDir: projectDir });
@@ -287,5 +285,92 @@ export async function skip(opts: { projectDir?: string } = {}) {
   return 0;
 }
 
-export default { init, pause, resume, skip };
->>>>>>> af488ca (phase_1:08_cli_integration_state_control/03_cli_state_control_commands.md: Implement Orchestrator Control Commands (`pause`, `resume`, `skip`))
+export async function rewind(opts: { projectDir?: string; taskId?: number } = {}) {
+  const projectDir = opts.projectDir ?? process.cwd();
+  if (opts.taskId === undefined || opts.taskId === null) {
+    console.error("devs: missing taskId");
+    return 2;
+  }
+
+  const db = getDatabase({ fromDir: projectDir });
+  try {
+    initializeSchema(db);
+  } catch (err) {
+    // ignore
+  }
+
+  const taskRow = db.prepare("SELECT id, git_commit_hash FROM tasks WHERE id = ?").get(opts.taskId);
+  if (!taskRow) {
+    console.error("devs: task not found");
+    return 2;
+  }
+  const hash = taskRow.git_commit_hash;
+  if (!hash) {
+    console.error("devs: task has no associated git_commit_hash");
+    return 2;
+  }
+
+  // Prevent destructive action if there are uncommitted changes
+  try {
+    const status = execSync("git status --porcelain", { cwd: projectDir }).toString().trim();
+    if (status) {
+      console.error("devs: uncommitted changes present; commit or stash before rewinding");
+      return 3;
+    }
+  } catch (err) {
+    console.error("devs: git error checking status:", err?.message ?? err);
+    return 4;
+  }
+
+  // Verify commit exists and perform hard reset
+  try {
+    execSync(`git rev-parse --verify ${hash}`, { cwd: projectDir });
+  } catch (err) {
+    console.error("devs: commit hash not found in repository:", hash);
+    return 4;
+  }
+
+  try {
+    execSync(`git reset --hard ${hash}`, { cwd: projectDir });
+  } catch (err) {
+    console.error("devs: git reset failed:", err?.message ?? err);
+    return 5;
+  }
+
+  const repo = new StateRepository(db);
+
+  // Mark subsequent tasks as pending and set target to in_progress
+  const later = db.prepare("SELECT id FROM tasks WHERE id > ? ORDER BY id").all(opts.taskId) as { id: number }[];
+  for (const r of later) {
+    repo.updateTaskStatus(r.id, "pending");
+  }
+
+  repo.updateTaskStatus(opts.taskId, "in_progress");
+
+  // Update project metadata to record current task
+  const proj = db.prepare("SELECT id, name, status, metadata FROM projects ORDER BY id LIMIT 1").get();
+  if (proj) {
+    let meta: any = {};
+    try {
+      meta = proj.metadata ? JSON.parse(proj.metadata) : {};
+    } catch (e) {
+      meta = { _raw_metadata: proj.metadata };
+    }
+    meta.current_task = opts.taskId;
+    repo.upsertProject({ id: proj.id, name: proj.name, status: proj.status, metadata: JSON.stringify(meta) });
+  }
+
+  try {
+    const socketPath = path.join(resolveDevsDir(projectDir), EVENTBUS_SOCKET_NAME);
+    const bus = await SharedEventBus.createClient(socketPath);
+    bus.publish("REWIND", { requestedBy: "cli", taskId: opts.taskId, commit: hash, timestamp: new Date().toISOString() });
+    await bus.close();
+  } catch (err) {
+    // No bus available — non-fatal
+  }
+
+  console.log("Rewound to task", opts.taskId, "commit", hash);
+  return 0;
+}
+
+export default { init, status, pause, resume, skip, rewind };
