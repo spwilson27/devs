@@ -160,3 +160,7 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 
 - [2026-02-22 Reviewer] - CLI control review: Verified pause/resume/skip implementation in packages/cli/src/index.ts; ensured idempotency and ACID writes via StateRepository; minimal changes required and tests present in repo.
+
+- [2026-02-22] Added @devs/sandbox package: initialized package.json, tsconfig, tests, and README.
+
+- [2026-02-22 Reviewer] - Sandbox review: Verified package.json and tsconfig match task requirements; ran `./do presubmit` and confirmed all presubmit checks passed (no code changes required).
