@@ -2,7 +2,7 @@
  * Provider-specific types for the Sandbox abstraction.
  */
 
-import type { SandboxExecResult, SandboxProvisionOptions } from '../types';
+import type { SandboxExecResult, SandboxProvisionOptions } from '../types/index';
 
 export type { SandboxExecResult, SandboxProvisionOptions };
 

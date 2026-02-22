@@ -1,5 +1,5 @@
 import type { SandboxContext, ExecOptions, ExecResult, ResourceStats } from './types';
-import type { SandboxProvisionOptions } from '../types';
+import type { SandboxProvisionOptions } from '../types/index';
 
 export abstract class SandboxProvider {
   /**
