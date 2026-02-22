@@ -23,6 +23,8 @@ This file captures the project's most important architectural decisions, recurri
 - Outcome: `./do presubmit` passes locally (2026-02-22).
 - [2026-02-22 Reviewer] Implemented and verified network allowlist enforcement: added/validated AllowlistEngine and EgressProxy allowlist integration tests; created docs/security/network-egress-policy.md listing canonical allowed domains; all targeted tests passed.
 
+- [2026-02-22 Reviewer] Implemented per-call execution timeout across sandbox drivers: added `packages/sandbox/src/utils/execution-timeout.ts` exporting `DEFAULT_TOOL_CALL_TIMEOUT_MS = 300_000`, `ExecutionTimeoutError`, and `withExecutionTimeout`; applied `withExecutionTimeout` in both `DockerDriver.exec()` and `WebContainerDriver.exec()` and ensured `DockerDriver.forceStop()` is called with the correct container id before re-throwing timeouts; added unit tests in `packages/sandbox/src/__tests__/execution-timeout.test.ts` and `packages/sandbox/src/__tests__/docker-driver-timeout.test.ts` to validate behavior and timer cleanup.
+
 ## Next steps
 1. Add missing `.agent` AOD docs flagged by the linter.
 2. Stabilize Docker integration tests and ensure CI images include prebuilt native dependencies or build tooling.

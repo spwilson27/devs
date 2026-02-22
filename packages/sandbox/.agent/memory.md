@@ -19,3 +19,4 @@
   - [2026-02-22] Added DockerDriver security hardening: buildHostConfig, SecurityConfigError, DockerDriverSecurity.spec.ts, verify-security-config.ts, and documentation updates to DockerDriver.agent.md and README.
   - Added ImageResolver and ImageRebuilder for image fallback and local reconstruction (phase_2 task).
   - [2026-02-22] Phase 2 decision: Non-JS runtimes (Python, Go, Rust) are not supported in WebContainerDriver. RuntimeCompatibilityChecker gates exec() calls and throws UnsupportedRuntimeError. Fallback to DockerDriver is the recommended path.
+  - [2026-02-22] Implemented per-call execution timeout (1_PRD-REQ-SEC-010) via withExecutionTimeout in src/utils/execution-timeout.ts; default is 300_000 ms (5 minutes).

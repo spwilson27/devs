@@ -15,3 +15,6 @@ The `src/types/index.ts` barrel is the single source of truth for all cross-cutt
 ## Decision 004
 
 Docker sandbox resource limits are enforced via `--cpus` and `--memory` flags (not cgroup v2 directly) to maintain compatibility with Docker Desktop on macOS/Windows. Defaults: 2 vCPUs, 4 GB RAM; configurable via `DEFAULT_SANDBOX_CONFIG` in `packages/sandbox/src/config.ts`.
+
+Execution timeouts are enforced in-application via a shared utility (withExecutionTimeout) rather than relying solely on Docker `--stop-timeout`; this ensures consistent cross-driver timeout semantics and allows drivers to perform remediation (force-stop) on timeouts.
+

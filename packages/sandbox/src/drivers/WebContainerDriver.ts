@@ -4,6 +4,7 @@ import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError, Sa
 import { WebContainerPackageInstaller } from './webcontainer/package-installer';
 import type { PackageInstallResult } from './webcontainer/package-installer';
 import { NativeDependencyChecker } from './webcontainer/native-dependency-checker';
+import { withExecutionTimeout, ExecutionTimeoutError, DEFAULT_TOOL_CALL_TIMEOUT_MS } from '../utils/execution-timeout';
 
 export interface WebContainerDriverConfig {
   workdir?: string;
@@ -60,10 +61,7 @@ export class WebContainerDriver extends SandboxProvider {
     const exitPromise: Promise<number> =
       proc.exit instanceof Promise ? proc.exit : typeof proc.exit === 'function' ? proc.exit() : Promise.resolve(0);
 
-    const timeoutMs = opts?.timeoutMs;
-    const race = timeoutMs
-      ? Promise.race([exitPromise, new Promise<never>((_, reject) => setTimeout(() => reject(new SandboxExecTimeoutError(timeoutMs)), timeoutMs))])
-      : exitPromise;
+    const race = withExecutionTimeout(() => exitPromise, opts?.timeoutMs ?? DEFAULT_TOOL_CALL_TIMEOUT_MS);
 
     try {
       const exitCode = (await race) as number;
@@ -95,7 +93,7 @@ export class WebContainerDriver extends SandboxProvider {
 
       return { stdout: stdout ?? '', stderr: stderr ?? '', exitCode: exitCode ?? 0, durationMs: duration };
     } catch (err: any) {
-      if (err instanceof SandboxExecTimeoutError) throw err;
+      if (err instanceof ExecutionTimeoutError) throw err;
       if (err instanceof SandboxExecError) throw err;
       throw new SandboxExecError(err?.message ?? String(err));
     }

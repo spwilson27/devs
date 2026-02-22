@@ -10,7 +10,8 @@ vi.mock('child_process', () => ({
 
 import { DockerDriver } from '../drivers/DockerDriver';
 import { SandboxProvider } from '../SandboxProvider';
-import { SandboxProvisionError, SandboxExecTimeoutError } from '../errors';
+import { SandboxProvisionError } from '../errors';
+import { ExecutionTimeoutError } from '../utils/execution-timeout';
 import type { SandboxContext } from '../types';
 
 describe('DockerDriver (unit)', () => {
@@ -104,6 +105,6 @@ describe('DockerDriver (unit)', () => {
 
     const driver = new DockerDriver({});
     const ctx: SandboxContext = { id: 'container-timeout', workdir: '/workspace', status: 'running', createdAt: new Date() };
-    await expect(driver.exec(ctx, 'sleep', ['10'], { timeoutMs: 10 })).rejects.toThrow(SandboxExecTimeoutError);
+    await expect(driver.exec(ctx, 'sleep', ['10'], { timeoutMs: 10 })).rejects.toThrow(ExecutionTimeoutError);
   });
 });

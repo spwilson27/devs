@@ -5,6 +5,7 @@ import { SandboxProvider } from '../SandboxProvider';
 import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError, ConfigValidationError, MissingResourceConfigError } from '../errors';
 import { DockerNetworkManager } from '../network/DockerNetworkManager';
 import { isIP } from 'net';
+import { withExecutionTimeout, ExecutionTimeoutError, DEFAULT_TOOL_CALL_TIMEOUT_MS } from '../utils/execution-timeout';
 
 const execFile = promisify(_execFile);
 
@@ -158,24 +159,33 @@ export class DockerDriver extends SandboxProvider {
     if (!id) throw new Error('No container id available for exec');
     const start = Date.now();
     try {
-      const execPromise = execFile('docker', ['exec', id, cmd, ...args] as any, { env: opts?.env, cwd: opts?.cwd }) as Promise<{ stdout: string; stderr: string }>;
-
-      if (opts?.timeoutMs) {
-        const timeoutMs = opts.timeoutMs;
-        const timeoutPromise = new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new SandboxExecTimeoutError(timeoutMs)), timeoutMs);
-        });
-        const res = await Promise.race([execPromise, timeoutPromise]);
-        const duration = Date.now() - start;
-        return { stdout: (res as any).stdout ?? '', stderr: (res as any).stderr ?? '', exitCode: 0, durationMs: duration };
-      } else {
-        const res = await execPromise;
-        const duration = Date.now() - start;
-        return { stdout: res.stdout ?? '', stderr: res.stderr ?? '', exitCode: 0, durationMs: duration };
-      }
+      const res = await withExecutionTimeout(
+        () => execFile('docker', ['exec', id, cmd, ...args] as any, { env: opts?.env, cwd: opts?.cwd }) as Promise<{ stdout: string; stderr: string }> ,
+        opts?.timeoutMs ?? DEFAULT_TOOL_CALL_TIMEOUT_MS
+      );
+      const duration = Date.now() - start;
+      return { stdout: (res as any).stdout ?? '', stderr: (res as any).stderr ?? '', exitCode: 0, durationMs: duration };
     } catch (err: any) {
+      if (err instanceof ExecutionTimeoutError) {
+        try {
+          await this.forceStop(id);
+        } catch (e) {
+          // ignore force stop errors
+        }
+        throw err;
+      }
       if (err instanceof SandboxExecTimeoutError) throw err;
       throw new Error(err?.message ?? String(err));
+    }
+  }
+
+  private async forceStop(containerId?: string): Promise<void> {
+    const id = containerId ?? this.containerId;
+    if (!id) return;
+    try {
+      await execFile('docker', ['stop', '--time=0', id] as any, {});
+    } catch (e) {
+      // ignore
     }
   }
 

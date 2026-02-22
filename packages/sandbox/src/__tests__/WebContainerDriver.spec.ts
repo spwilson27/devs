@@ -37,7 +37,7 @@ vi.mock('@webcontainer/api', () => {
 
 import { WebContainerDriver } from '../drivers/WebContainerDriver';
 import { SandboxProvider } from '../SandboxProvider';
-import { SandboxExecTimeoutError } from '../errors';
+import { ExecutionTimeoutError } from '../utils/execution-timeout';
 import type { SandboxContext } from '../types';
 
 describe('WebContainerDriver (unit)', () => {
@@ -71,7 +71,7 @@ describe('WebContainerDriver (unit)', () => {
   it('exec respects timeout and throws SandboxExecTimeoutError', async () => {
     const driver = new WebContainerDriver({});
     const ctx = await driver.provision();
-    await expect(driver.exec(ctx, 'sleep', ['10'], { timeoutMs: 10 })).rejects.toThrow(SandboxExecTimeoutError);
+    await expect(driver.exec(ctx, 'sleep', ['10'], { timeoutMs: 10 })).rejects.toThrow(ExecutionTimeoutError);
   });
 
   it('destroy() calls teardown and stops context', async () => {

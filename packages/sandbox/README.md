@@ -450,6 +450,10 @@ These invariants are enforced by runtime validation in the DockerDriver implemen
 
 - **[2026-02-22] - Security verification script added:** Created `packages/sandbox/scripts/verify-security-config.ts` to validate DockerDriver HostConfig invariants and added a `verify:security` npm script in `packages/sandbox/package.json` to run it in CI.
 
+## Timeouts
+
+This package enforces a per-tool-call execution timeout via src/utils/execution-timeout.ts. DEFAULT_TOOL_CALL_TIMEOUT_MS defaults to 300_000 (300 seconds / 5 minutes). Drivers (DockerDriver, WebContainerDriver) wrap long-running execs with withExecutionTimeout(fn, opts?.timeoutMs ?? DEFAULT_TOOL_CALL_TIMEOUT_MS); callers can override the per-call timeout by passing { timeoutMs } in ExecOptions.
+
 ## TempDirManager
 
 TempDirManager provides a small, secure API for creating and managing per-session temporary directories used by sandboxed agents.
