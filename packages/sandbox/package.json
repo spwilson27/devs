@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "bootstrap-sandbox": "node scripts/bootstrap-sandbox.mjs",
-    "test": "vitest run",
+    "test": "node scripts/ci-tempdir-tests.cjs",
     "test:integration": "RUN_INTEGRATION=true vitest -t @integration",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src tests --ext .ts",

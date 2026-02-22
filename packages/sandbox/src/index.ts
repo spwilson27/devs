@@ -16,5 +16,6 @@ export type { SandboxLifecycleConfig } from './SandboxLifecycleConfig';
 export * from './createSandboxProvider';
 export * from './audit/DependencyAuditor';
 export * from './audit/PostInstallHook';
+export * from './filesystem/TempDirManager';
 
 
