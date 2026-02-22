@@ -86,3 +86,19 @@ export class DigestMismatchError extends Error {
     this.name = 'DigestMismatchError';
   }
 }
+
+export class SandboxError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Sandbox error');
+    this.name = 'SandboxError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export class MissingResourceConfigError extends SandboxError {
+  constructor(field: string, message?: string) {
+    super(message ?? `Missing required resource configuration: ${field}`);
+    this.name = 'MissingResourceConfigError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}

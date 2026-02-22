@@ -2,11 +2,30 @@ import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
 import type { SandboxContext, ExecOptions, ExecResult, SandboxConfig } from '../types';
 import { SandboxProvider } from '../SandboxProvider';
-import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError, ConfigValidationError } from '../errors';
+import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError, ConfigValidationError, MissingResourceConfigError } from '../errors';
 import { DockerNetworkManager } from '../network/DockerNetworkManager';
 import { isIP } from 'net';
 
 const execFile = promisify(_execFile);
+
+export function buildDockerRunArgs(config: SandboxConfig): string[] {
+  if (!config || typeof config.cpuCores !== 'number' || config.cpuCores <= 0) {
+    throw new MissingResourceConfigError('cpuCores', 'cpuCores must be a positive number');
+  }
+  if (!config || typeof config.memoryGb !== 'number' || config.memoryGb <= 0) {
+    throw new MissingResourceConfigError('memoryGb', 'memoryGb must be a positive number');
+  }
+  const pidLimit = config.pidLimit ?? 512;
+  const nofile = config.nofileLimit ?? 1024;
+  return [
+    `--cpus=${config.cpuCores}`,
+    `--memory=${config.memoryGb}g`,
+    `--memory-swap=${config.memoryGb}g`,
+    `--pids-limit=${pidLimit}`,
+    '--ulimit',
+    `nofile=${nofile}:${nofile}`,
+  ];
+}
 
 export interface DockerDriverConfig {
   image?: string;
@@ -76,7 +95,7 @@ export class DockerDriver extends SandboxProvider {
    */
   async provision(): Promise<SandboxContext> {
     try {
-      const memFlag = this.memoryFlag();
+      const resourceArgs = buildDockerRunArgs({ hostProjectPath: this.config.workdir, cpuCores: this.config.cpuCount, memoryGb: Math.round(this.config.memoryMb / 1024) });
       const args = [
         'run',
         '-d',
@@ -84,8 +103,7 @@ export class DockerDriver extends SandboxProvider {
         '--security-opt=no-new-privileges',
         '--read-only',
         '--network=none',
-        `--memory=${memFlag}`,
-        `--cpus=${this.config.cpuCount}`,
+        ...resourceArgs,
         '--rm',
         '-w',
         this.config.workdir,
