@@ -138,7 +138,7 @@ mcp = FastMCP(
 )
 
 
-def _detect_agent_cli() -> str | None:
+def _detect_agent_cli() -> (str, List[str]) | None:
     """Detect if we are running as a subprocess of gemini, claude, or copilot."""
     try:
         p = psutil.Process(os.getpid())
@@ -149,11 +149,11 @@ def _detect_agent_cli() -> str | None:
                     continue
                 cmd_str = " ".join(cmdline).lower()
                 if "gemini" in cmdline[0].lower() or "gemini" in cmd_str:
-                    return "gemini"
+                    return "gemini", []
                 if "claude" in cmdline[0].lower() or "claude" in cmd_str:
-                    return "claude"
+                    return "claude", []
                 if "copilot" in cmdline[0].lower() or "copilot" in cmd_str:
-                    return "copilot"
+                    return "copilot", ["--model", "gpt-5-mini"]
             except Exception:
                 pass
     except Exception:
@@ -192,11 +192,11 @@ def query(question: str, top_k: int = 5) -> str:
         f"CRITICAL INSTRUCTION: Do NOT use any tools to answer this. Synthesize the answer immediately from the context provided above."
     )
 
-    agent = _detect_agent_cli()
+    agent, args = _detect_agent_cli()
     if agent:
         try:
             print(f"[mcp_server] Detected parent agent '{agent}', synthesizing answer via subprocess...", file=sys.stderr)
-            result = subprocess.run([agent, "-p", prompt], capture_output=True, text=True, check=True)
+            result = subprocess.run([agent] + args + ["-p", prompt], capture_output=True, text=True, check=True)
             return result.stdout.strip()
         except Exception as e:
             print(f"[mcp_server] Subprocess synthesis (using {agent}) failed: {e}", file=sys.stderr)

@@ -96,7 +96,7 @@ class CopilotRunner(AIRunner):
             #print(full_prompt)
             prompt_file = f.name
             candidates = [
-                ["copilot", "-p", f"Follow the instructions in @{prompt_file}", "--yolo"],
+                ["copilot", "--model", "gpt-5-mini", "-p", f"Follow the instructions in @{prompt_file}", "--yolo"],
             ]
             last_exc = None
             last_result = None

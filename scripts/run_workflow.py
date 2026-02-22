@@ -23,7 +23,7 @@ def run_ai_command(prompt: str, cwd: str, prefix: str = "", backend: str = "gemi
         fd, tmp_file_name = tempfile.mkstemp(text=True)
         with os.fdopen(fd, 'w', encoding='utf-8') as f:
             f.write(prompt)
-        cmd = ["copilot", "-p", f"Follow the instructions in @{tmp_file_name}", "--yolo"]
+        cmd = ["copilot", "--model", "gpt-5-mini", "-p", f"Follow the instructions in @{tmp_file_name}", "--yolo"]
 
     process = subprocess.Popen(
         cmd,
