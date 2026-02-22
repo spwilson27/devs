@@ -21,6 +21,7 @@ This file captures the project's most important architectural decisions, recurri
 - Persistence fixes: standardized createDatabase/initializeSchema usage and hardened reconstructor with buffered write + fsync + retries to avoid zero-byte `.devs/state.sqlite`.
 - Tests: made vi.mock factories hoist-safe, removed async callbacks from setInterval sampling, and adjusted flaky tests to use short real-time intervals.
 - Outcome: `./do presubmit` passes locally (2026-02-22).
+- [2026-02-22 Reviewer] Implemented and verified network allowlist enforcement: added/validated AllowlistEngine and EgressProxy allowlist integration tests; created docs/security/network-egress-policy.md listing canonical allowed domains; all targeted tests passed.
 
 ## Next steps
 1. Add missing `.agent` AOD docs flagged by the linter.

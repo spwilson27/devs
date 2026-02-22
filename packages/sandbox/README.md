@@ -181,6 +181,8 @@ Config shape (EgressProxyConfig):
 
 Default-deny policy: By default the proxy denies all targets. CONNECT requests and plain HTTP requests return 403 (Forbidden) unless explicitly allowed via the allowList configuration. The allowList is configured via EgressProxyConfig.allowList and can be updated at runtime via proxy.updateAllowList([...]). Allow-list matching is an exact FQDN match (case-insensitive); there is no wildcard or sub-domain expansion by default.
 
+Canonical default-allowed domains: registry.npmjs.org, pypi.org, github.com.
+
 
 
 The DockerDriver enforces the following HostConfig runtime flags for all provisioned containers:
