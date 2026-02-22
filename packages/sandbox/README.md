@@ -196,3 +196,11 @@ These invariants are enforced by runtime validation in the DockerDriver implemen
 ## Recent Changelog (Appended)
 
 - **[2026-02-22] - Security verification script added:** Created `packages/sandbox/scripts/verify-security-config.ts` to validate DockerDriver HostConfig invariants and added a `verify:security` npm script in `packages/sandbox/package.json` to run it in CI.
+
+## Docker Security Configuration
+
+- --read-only: Enforces a read-only root filesystem to reduce attack surface and satisfy 5_SECURITY_DESIGN-REQ-SEC-SD-047.
+- --tmpfs /tmp:rw,noexec,nosuid,nodev,size=256m: Provides a writable but non-executable temporary filesystem for processes; prevents execution from /tmp.
+- --tmpfs /run:rw,noexec,nosuid,nodev,size=64m: Provides a small tmpfs for runtime sockets and transient files.
+- Project workspace is mounted read-only at /workspace to avoid allowing container processes to write to the host project; .git and .devs are explicitly excluded from mounts.
+
