@@ -97,4 +97,9 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **[2026-02-22] - Added InputIngestor & LocalityGuard:** Wrote tests and minimal implementations to satisfy Phase 1 determinism & robustness task: input ingestion and data-locality enforcement. Presubmit passed locally (unit tests were skipped in this environment).
 
 - **[2026-02-22 Reviewer] - AOD docs added:** Created .agent AOD files for InputIngestor, LocalityGuard, Orchestrator, AuditTrailReconstructor, and RelationalRollback to satisfy AOD 1:1 invariant and silence presubmit advisory.
-- **[2026-02-22 Reviewer] - Note:** No functional code changes were made; presubmit verified and passed.
+
+- **[2026-02-22 Reviewer] - Lifecycle enums/schema review:** Inspected `packages/core/src/types/lifecycle.ts` and confirmed exported ProjectStatus and ProjectPhase enums and the `validateTransition` helper; verified persistence columns `status`, `current_phase`, and `last_milestone` exist in `packages/core/src/persistence/schema.ts` and are used by `StateRepository` (`packages/core/src/persistence/state_repository.ts`). All tests for lifecycle enums exist at `packages/core/test/lifecycle/ProjectState.test.ts` and are consistent with the implementation.
+
+- **[2026-02-22 Reviewer] - Brittle Areas Discovered:** AOD 1:1 advisory remains (some source modules lack corresponding `.agent.md` files); local `./do presubmit` may skip `tsc`/`vitest` when those tools are not installed in the ephemeral environment—CI must run the full toolchain to avoid masking issues.
+
+- **[2026-02-22 Reviewer] - Recent Changelog:** Verified lifecycle enums, state schema, and persistence tests; executed `./do presubmit` and confirmed all presubmit checks passed locally (warnings only); no code changes were required.

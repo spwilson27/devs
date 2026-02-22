@@ -58,6 +58,7 @@ const DDL_STATEMENTS: ReadonlyArray<string> = [
     name          TEXT    NOT NULL,
     status        TEXT    NOT NULL DEFAULT 'pending',
     current_phase TEXT,
+    last_milestone TEXT,
     metadata      TEXT
   )`,
 

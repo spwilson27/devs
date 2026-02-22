@@ -50,6 +50,7 @@ export interface Project {
   /** Defaults to 'pending' on insert. */
   status?: string;
   current_phase?: string | null;
+  last_milestone?: string | null;
   /** JSON-serialised arbitrary metadata. */
   metadata?: string | null;
 }
@@ -200,19 +201,20 @@ export class StateRepository {
     // Using INSERT INTO ... ON CONFLICT(id) DO UPDATE SET avoids the DELETE+re-INSERT
     // that INSERT OR REPLACE would perform, which would cascade-delete child rows.
     this._stmtUpsertProject = db.prepare(`
-      INSERT INTO projects (id, name, status, current_phase, metadata)
-      VALUES (@id, @name, @status, @current_phase, @metadata)
+      INSERT INTO projects (id, name, status, current_phase, last_milestone, metadata)
+      VALUES (@id, @name, @status, @current_phase, @last_milestone, @metadata)
       ON CONFLICT(id) DO UPDATE SET
         name          = excluded.name,
         status        = excluded.status,
         current_phase = excluded.current_phase,
+        last_milestone = excluded.last_milestone,
         metadata      = excluded.metadata
     `);
 
     // Insert for new projects (id not known yet — let AUTOINCREMENT assign it).
     this._stmtInsertProject = db.prepare(`
-      INSERT INTO projects (name, status, current_phase, metadata)
-      VALUES (@name, @status, @current_phase, @metadata)
+      INSERT INTO projects (name, status, current_phase, last_milestone, metadata)
+      VALUES (@name, @status, @current_phase, @last_milestone, @metadata)
     `);
 
     this._stmtInsertDocument = db.prepare(`
@@ -382,6 +384,7 @@ export class StateRepository {
           name: project.name,
           status: project.status ?? "pending",
           current_phase: project.current_phase ?? null,
+          last_milestone: project.last_milestone ?? null,
           metadata: project.metadata ?? null,
         });
         return project.id;
@@ -391,6 +394,7 @@ export class StateRepository {
         name: project.name,
         status: project.status ?? "pending",
         current_phase: project.current_phase ?? null,
+        last_milestone: project.last_milestone ?? null,
         metadata: project.metadata ?? null,
       });
       return Number(result.lastInsertRowid);
