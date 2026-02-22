@@ -59,7 +59,8 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - **Brittle area noted:** The AOD invariant (every new .ts module requires a corresponding `.agent.md`) caused the presubmit failure; maintainers should remember to add AOD files when adding source modules.
 
-## 📝 Recent Changelog (Appended)
+- **2026-02-22 - Roadmap Reconstruction (Phase 1/09):** Added initial integration test for roadmap reconstruction and a minimal RoadmapReconstructor stub in `@devs/core/persistence` that creates a placeholder `.devs/state.sqlite` and logs a `roadmap_reconstruct` event to `.devs/agent_logs.log`. This is intentionally minimal to allow TDD iteration in environments without native addons or dev tooling installed.
+
 
 - **[2026-02-22 Reviewer] - Presubmit verification:** Executed `./do presubmit` in this worktree; all verification checks passed (Monorepo, Folder Structure, Shared State, AOD advisory). Noted the AOD advisory (RelationalRollback missing .agent) and confirmed no commits were made by the reviewer.
 
