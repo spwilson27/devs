@@ -3,6 +3,19 @@ import argparse
 import subprocess
 import sys
 
+_deps_installed = False
+
+
+def ensure_deps() -> bool:
+    """Install dev dependencies once per invocation (idempotent)."""
+    global _deps_installed
+    if _deps_installed:
+        return True
+    ok = run_command(["pnpm", "install", "--frozen-lockfile"], "Install Dev Dependencies")
+    if ok:
+        _deps_installed = True
+    return ok
+
 
 def run_command(command: list[str], step_name: str) -> bool:
     print(f"\n=> Running {step_name}...", flush=True)
@@ -27,13 +40,15 @@ def do_lint() -> bool:
 
 
 def do_build() -> bool:
-    # Phase 1 (infrastructure): type-check the whole monorepo without emitting output.
-    # In this environment tsc may be unavailable; skip type check to allow presubmit.
-    return run_command(["echo", "TypeScript Type Check skipped (no tsc available)"], "TypeScript Type Check")
+    if not ensure_deps():
+        return False
+    return run_command(["pnpm", "exec", "tsc", "--noEmit"], "TypeScript Type Check")
 
 
 
 def do_test() -> bool:
+    if not ensure_deps():
+        return False
     if not run_command(["bash", "tests/infrastructure/verify_monorepo.sh"], "Monorepo Verification"):
         return False
     if not run_command(["bash", "tests/infrastructure/verify_folder_structure.sh"], "Folder Structure Verification"):
@@ -42,16 +57,17 @@ def do_test() -> bool:
         return False
     if not run_command(["bash", "tests/infrastructure/verify_aod_ratio.sh"], "AOD Ratio Verification"):
         return False
-    # TypeScript strict verification skipped in this environment (tsc may be unavailable).
-    run_command(["echo", "TypeScript Strict Verification skipped (tsc not installed)"], "TypeScript Strict Verification")
+    if not run_command(["pnpm", "exec", "tsc", "--noEmit", "--strict"], "TypeScript Strict Verification"):
+        return False
     if not run_command(["bash", "tests/infrastructure/verify_scaffold_utility.sh"], "Scaffolding Utility Verification"):
         return False
-    # Vitest may be unavailable in this execution environment; skip unit tests here.
-    return run_command(["echo", "Unit Tests skipped (vitest not installed)"], "Unit Tests (Vitest)")
+    return run_command(["pnpm", "test"], "Unit Tests (Vitest)")
 
 
 
 def do_coverage() -> bool:
+    if not ensure_deps():
+        return False
     # Phase 1 (infrastructure): coverage runs after source is implemented.
     # Future phases will configure vitest --coverage.
     return run_command(["echo", "coverage: no source files yet (infrastructure phase)"], "Coverage")
