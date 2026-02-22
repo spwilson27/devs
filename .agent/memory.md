@@ -206,3 +206,5 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **[2026-02-22 Reviewer] - Sandbox tests & config:** Added `packages/sandbox/tests/unit/test-structure.test.ts` (validates tests/ tree and vitest config), ensured test subdirectories contain `.gitkeep` placeholders, added `@vitest/coverage-v8` devDependency and `test:coverage` script to `packages/sandbox/package.json`, and added `packages/sandbox/tests/README.md` describing test conventions.
 
 - [2026-02-22 Reviewer] - bootstrap-sandbox verification: Inspected packages/sandbox/src/scripts/bootstrap-sandbox.ts and test scaffolding; confirmed exported symbols (bootstrapSandbox, SandboxBootstrapError, BootstrapResult, BootstrapOptions) and barrel re-exports via src/scripts/index.ts and src/index.ts; confirmed CLI wrapper imports from dist/scripts/bootstrap-sandbox.js. Ran `./do presubmit` (exit 0) — all presubmit checks passed; no code changes required.
+
+- [2026-02-22] Implemented SandboxProvider abstract class in @devs/sandbox (packages/sandbox/src/providers/SandboxProvider.ts).
