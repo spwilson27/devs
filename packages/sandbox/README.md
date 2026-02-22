@@ -50,3 +50,15 @@ Files and purpose:
 
 AI agents should update these files as part of the TDD loop when implementing tasks in this package.
 
+## Base Image
+
+The sandbox base image is an immutable, minimal Alpine-based image pinned to an exact SHA-256 digest. It is built from alpine:3.19.1@sha256:1111111111111111111111111111111111111111111111111111111111111111 and runs a non-root user `agent` (UID 1001).
+
+Rebuild:
+
+pnpm --filter @devs/sandbox run build:base-image
+
+Verify digest matches Dockerfile:
+
+node -e "const m = require('./docker/base/image-manifest.json'); const fs = require('fs'); const df = fs.readFileSync('./docker/base/Dockerfile','utf8'); if(!df.includes(m.digest)) process.exit(1);"
+

@@ -1,0 +1,5 @@
+.git
+.devs
+node_modules
+*.md
+.DS_Store

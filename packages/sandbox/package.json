@@ -15,8 +15,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
+    "test:integration": "RUN_INTEGRATION=true vitest -t @integration",
     "lint": "eslint src tests --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:base-image": "docker build -t devs-sandbox-base:latest ./docker/base",
+    "push:base-image": "docker tag devs-sandbox-base:latest ghcr.io/devs-project/sandbox-base:latest && docker push ghcr.io/devs-project/sandbox-base:latest"
   },
   "peerDependencies": {
     "@devs/core": "workspace:*"
