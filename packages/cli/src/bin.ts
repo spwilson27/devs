@@ -32,17 +32,42 @@ async function main() {
 <<<<<<< HEAD
   if (cmd === "status") {
     const json = args.includes("--json");
-    try {
-      const state = await status({ projectDir: process.cwd() });
+    const projectDir = process.cwd();
+
+    const printState = (s) => {
       if (json) {
-        console.log(JSON.stringify(state));
+        console.log(JSON.stringify(s));
       } else {
-        console.log(`Project: ${state.project.name} (status: ${state.project.status})`);
-        if (state.active_epic) console.log(`Active epic: ${state.active_epic.name} (status: ${state.active_epic.status})`);
-        if (state.active_task) console.log(`Active task: ${state.active_task.title} (status: ${state.active_task.status})`);
-        console.log(`Progress: ${state.progress.completed}/${state.progress.total} (${state.progress.percent}%)`);
+        console.log(`Project: ${s.project.name} (status: ${s.project.status})`);
+        if (s.active_epic) console.log(`Active epic: ${s.active_epic.name} (status: ${s.active_epic.status})`);
+        if (s.active_task) console.log(`Active task: ${s.active_task.title} (status: ${s.active_task.status})`);
+        console.log(`Progress: ${s.progress.completed}/${s.progress.total} (${s.progress.percent}%)`);
       }
-      process.exit(0);
+    };
+
+    try {
+      // Print initial state
+      let state = await status({ projectDir });
+      printState(state);
+      let lastTotal = state?.progress?.total ?? 0;
+
+      // Simple polling fallback to detect external state changes (50ms interval)
+      const interval = setInterval(async () => {
+        try {
+          const newState = await status({ projectDir });
+          const newTotal = newState?.progress?.total ?? 0;
+          if (newTotal !== lastTotal) {
+            lastTotal = newTotal;
+            printState(newState);
+          }
+        } catch (err) {
+          // Best-effort: ignore transient read errors
+        }
+      }, 50);
+
+      // Keep process alive until killed externally
+      process.on("SIGINT", () => { clearInterval(interval); process.exit(0); });
+      process.on("SIGTERM", () => { clearInterval(interval); process.exit(0); });
     } catch (err) {
       if (json) {
         console.log(JSON.stringify({ error: err && (err.message || String(err)) }));

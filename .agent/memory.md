@@ -151,5 +151,15 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - Recent Changelog: Ran `./do presubmit` in this worktree and confirmed all presubmit checks passed (advisories only for missing AOD docs). Added this reviewer note and recommendations to memory; no code changes were required during the review.
 
+## [2026-02-22] - CLI Live Watch Update
+
+- Implemented a simple polling-based LiveWatcher in `packages/cli/src/bin.ts` to refresh `devs status` output when the underlying `.devs/state.sqlite` changes. The watcher polls the `status()` API every 50ms and prints an updated status when the task count changes; this is a conservative fallback to achieve near-zero visible desync while the EventBus integration is finalized.
+
+- Architectural Decision: CLI will include a fallback polling LiveWatcher for interactive `status` so UI shells remain responsive without requiring the EventBus; plan to replace with `@devs/core` EventBus subscription and a lightweight debounce (e.g., 10-50ms) when EventBus is available.
+
+- Brittle Areas: The polling approach increases DB read frequency which may impact embedded SQLite performance under heavy load; it also duplicates refresh logic in the CLI rather than centralizing in `@devs/core`. Add notes to migrate to SharedEventBus and consider chokidar for file-change fallback.
+
+- Recent Changelog: [2026-02-22] Added polling LiveWatcher in CLI `bin.ts` to support integration test `packages/cli/tests/sync.spec.ts`. This was a minimal, tactical fix to ensure immediate visibility of state changes; a follow-up task should implement EventBus subscription and add `--no-watch` flag for scripting ergonomics.
+
 
 - [2026-02-22 Reviewer] - CLI control review: Verified pause/resume/skip implementation in packages/cli/src/index.ts; ensured idempotency and ACID writes via StateRepository; minimal changes required and tests present in repo.
