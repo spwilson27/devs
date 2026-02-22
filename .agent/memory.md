@@ -6,6 +6,8 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 ## 🏛️ Architectural Decisions
 
+- **2026-02-22 - run_shell_monitored decision:** Using `pidusage` for cross-platform process stats sampling in run_shell_monitored to support macOS/Windows compatibility.
+
 - **pnpm Monorepo Structure:** Established workspace with 7 packages under `packages/` (`core`, `agents`, `sandbox`, `memory`, `mcp`, `cli`, `vscode`). Node.js >= 22. `shamefully-hoist=false`. `@devs/core` is the logic hub and must NEVER depend on `@devs/sandbox`.
 - **Headless-First & Task Runner:** UI shells (`cli`, `vscode`) are thin layers over `@devs/core`. `./do` (Python) is the unified task runner for build, test, and audit.
 - **TypeScript Standard:** Strict TS 5.9.3 with `NodeNext` resolution. All relative imports MUST use `.js` extension. Packages extend root `tsconfig.json`.

@@ -14,7 +14,8 @@
     "fmt": "echo 'fmt: not yet configured'"
   },
   "dependencies": {
-    "@devs/core": "workspace:*"
+    "@devs/core": "workspace:*",
+    "pidusage": "^3.0.0"
   },
   "devDependencies": {}
 }
