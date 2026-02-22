@@ -68,5 +68,5 @@ export * from "./recovery/RecoveryManager.js";
 
 // DAG cycle detection and refinement flow validation (9_ROADMAP-REQ-031, TAS-083).
 export * from "./orchestration/DAGValidator.js";
-
-export * from "./Orchestrator.js";
+export * from "./git/GitManager.js";
+export * from "./orchestration/Orchestrator.js";
