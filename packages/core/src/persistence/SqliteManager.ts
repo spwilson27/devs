@@ -129,6 +129,9 @@ export class SqliteManager {
     // 6. NORMAL synchronous: flush at critical checkpoints only.
     this._db.pragma("synchronous = NORMAL");
 
+    // Run an initial WAL checkpoint to merge any pending WAL into the main DB (recovery handler).
+    this._db.pragma("wal_checkpoint(TRUNCATE)");
+
     return this._db;
   }
 
