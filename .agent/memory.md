@@ -300,3 +300,11 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - Recent Changelog (Reviewer): Added runtime compatibility matrix, compatibility checker, native dependency checker, and documentation at `packages/sandbox/docs/webcontainer-compatibility.md`. Ran targeted unit tests for syscall-compat (passed for related assertions); presubmit run in this ephemeral environment flagged unrelated test failures (tsconfig integrity and child_process mocking) which are outside the scope of this review.
 
+## [2026-02-22 Reviewer] - EgressProxy skeleton review
+
+- Architectural Decision: EgressProxy skeleton uses Node built-in `http` and `net` modules (no third-party proxy libs); `start()` / `stop()` return `Promise<void>` and resolve only when the server is bound/closed; default-deny policy is enforced by returning `407` for CONNECT and `403` for plain HTTP, and every denied request emits a structured log entry including `host` and `reason: "default-deny"`.
+
+- Brittle Areas: Missing AOD file for network/EgressProxy (`.agent/packages/sandbox/network/EgressProxy.agent.md`) — add before CI to satisfy AOD 1:1 invariant; future allow-list implementation must document and enforce case-insensitive FQDN matching and CIDR parsing; unit tests depend on Vitest availability in CI.
+
+- Recent Changelog: Verified `packages/sandbox/src/network/EgressProxy.ts` and `EgressProxy.test.ts` exist and align with task requirements; executed `./do presubmit` (passed) and appended this reviewer note; no code changes were required.
+

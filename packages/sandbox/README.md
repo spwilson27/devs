@@ -164,6 +164,20 @@ The WebContainerDriver supports NodeJS-related commands (node, npm, npx) but doe
 
 ## Security
 
+## Network Egress Proxy
+
+Purpose: Lightweight HTTP/HTTPS egress proxy skeleton used to enforce a default-deny egress policy from sandboxes.
+
+Config shape (EgressProxyConfig):
+
+- port: number — TCP port to bind to (0 = OS-assigned ephemeral port)
+- allowList: string[] — FQDNs / CIDR blocks (populated in a later task)
+- dnsResolver?: string — Optional upstream DNS resolver IP
+
+Default-deny policy: By default the proxy denies all targets. CONNECT requests return 407 (Proxy Authentication Required) and plain HTTP requests return 403 (Forbidden). Allow-list enforcement will be implemented in a follow-up task.
+
+
+
 The DockerDriver enforces the following HostConfig runtime flags for all provisioned containers:
 
 - CapDrop: ["ALL"] — drops all Linux capabilities to prevent privilege escalation.
