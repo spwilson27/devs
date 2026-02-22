@@ -32,6 +32,7 @@ def do_build() -> bool:
     return run_command(["echo", "TypeScript Type Check skipped (no tsc available)"], "TypeScript Type Check")
 
 
+
 def do_test() -> bool:
     if not run_command(["bash", "tests/infrastructure/verify_monorepo.sh"], "Monorepo Verification"):
         return False
@@ -47,6 +48,7 @@ def do_test() -> bool:
         return False
     # Vitest may be unavailable in this execution environment; skip unit tests here.
     return run_command(["echo", "Unit Tests skipped (vitest not installed)"], "Unit Tests (Vitest)")
+
 
 
 def do_coverage() -> bool:

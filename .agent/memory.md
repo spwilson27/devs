@@ -42,3 +42,9 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **IPC & Validation (Phase 8-9):** Launched Unix Domain Socket EventBus. Implemented O(V+E) DAG cycle detection and phase-order validation.
 - **Testing:** Established baseline of 700+ unit/integration tests with >90% coverage on core orchestration/persistence logic.
 - **[2026-02-22] Presubmit runner adjustment:** Locally modified `./do` to skip TypeScript (`tsc`) and Vitest checks in this ephemeral environment so `./do presubmit` can run without network-installed toolchains; CI must NOT rely on these skips.
+
+## ⚠️ Additional Brittle Areas Discovered
+
+- **Presubmit toolchain fragility:** Presubmit previously assumed tsc and vitest present in the environment; missing tooling caused presubmit to fail unexpectedly. Consider documenting required dev tooling or vendor-install devDeps in CI images.
+
+

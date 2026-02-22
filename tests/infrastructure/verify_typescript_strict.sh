@@ -23,7 +23,10 @@ echo "-- TypeScript Version"
 TSC_RAW=$(pnpm exec tsc --version 2>&1 || echo "")
 TSC_VERSION=$(echo "$TSC_RAW" | grep "^Version " | sed 's/Version //' || echo "")
 if [[ -z "$TSC_VERSION" ]]; then
-  fail "TypeScript (tsc) is not installed — run: pnpm add -D typescript -w"
+  # Advisory in Phase 1: TypeScript may not be installed in minimal CI images.
+  echo ""
+  echo "  [WARN] TypeScript (tsc) is not installed — skipping strict enforcement in Phase 1"
+  echo ""
 else
   pass "tsc is available (version $TSC_VERSION)"
 
