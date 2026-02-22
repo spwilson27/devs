@@ -6,6 +6,7 @@ export * from './filesystem';
 export * from './network';
 export * from './utils';
 export * from './scripts';
+export * from './docker/DockerDriver';
 
 export * from './SandboxLifecycleManager';
 export type { SandboxLifecycleConfig } from './SandboxLifecycleConfig';

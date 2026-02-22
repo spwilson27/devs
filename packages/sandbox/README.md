@@ -92,3 +92,20 @@ Coverage targets: lines >= 80%
 
 This package depends on @webcontainer/api ^1.3.0 for local WebContainer spikes and experiments. Run the spike runner at `packages/sandbox/src/drivers/webcontainer/spike-runner.ts` to generate concrete probe outputs and place them in `spike-results/`.
 
+## DockerDriver usage
+
+Example:
+
+```ts
+import { DockerDriver } from './src/docker/DockerDriver';
+// `docker` should be an injected Docker client (e.g., dockerode instance) available in the environment
+const docker = /* docker client */;
+const driver = new DockerDriver(docker, { hostProjectPath: '/absolute/path/to/project' });
+const ctx = await driver.provision();
+const res = await driver.exec(ctx, 'echo', ['hello']);
+console.log(res.stdout);
+await driver.destroy(ctx);
+```
+
+Note: Running the example requires a Docker daemon and local dev tooling (pnpm, vitest) installed in the environment.
+

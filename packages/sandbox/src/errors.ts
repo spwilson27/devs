@@ -1,6 +1,6 @@
 export class SandboxProvisionError extends Error {
-  constructor(msg: string) {
-    super(msg);
+  constructor(message?: string) {
+    super(message);
     this.name = 'SandboxProvisionError';
   }
 }
@@ -13,8 +13,15 @@ export class SandboxExecTimeoutError extends Error {
 }
 
 export class SandboxDestroyError extends Error {
-  constructor(msg: string) {
-    super(msg);
+  constructor(message?: string) {
+    super(message);
     this.name = 'SandboxDestroyError';
+  }
+}
+
+export class SandboxDestroyedError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = 'SandboxDestroyedError';
   }
 }
