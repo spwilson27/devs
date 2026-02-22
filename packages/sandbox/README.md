@@ -109,3 +109,12 @@ await driver.destroy(ctx);
 
 Note: Running the example requires a Docker daemon and local dev tooling (pnpm, vitest) installed in the environment.
 
+## Drivers
+
+### WebContainerDriver
+
+- Browser requirements: Requires cross-origin isolation (window.crossOriginIsolated === true). COOP + COEP headers must be served to enable WebContainers.
+- Known limitations: WebContainers do not support native binaries or raw syscalls; they run Node.js/JavaScript and WebAssembly-based runtimes. Non-JS languages require a WASM wrapper or fallback to DockerDriver.
+- Usage: Use isWebContainerSupported() to detect support in the current environment before creating a WebContainerDriver. Prefer using createSandboxProvider() which auto-selects WebContainerDriver when supported or falls back to DockerDriver.
+
+

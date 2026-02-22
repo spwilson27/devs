@@ -238,3 +238,13 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - **[2026-02-22] - DockerDriver implementation added (work-in-progress):** Added unit tests at packages/sandbox/src/docker/__tests__/DockerDriver.spec.ts and implementation at packages/sandbox/src/docker/DockerDriver.ts with SandboxProvisionError and SandboxDestroyedError in packages/sandbox/src/errors.ts. Tests use an injected mocked docker client and verify provision/exec/destroy/getStatus flows; running tests locally requires dev tooling (pnpm, vitest) to be installed in the environment.
 
+- **[2026-02-22 Reviewer] - Next steps:** If implementing DockerDriver now, ensure `dockerode` is added to `@devs/sandbox` deps, the default image uses a pinned tag/digest (no `latest`), and that all hardened flags `--cap-drop=ALL`, `--security-opt=no-new-privileges`, `--read-only`, `--network=none`, `--memory=4g`, `--cpus=2`, and `--rm` are present in run invocations. Also ensure `destroy()` is documented to be called in a `finally` block by callers; add AOD docs for new driver files.
+
+## [2026-02-22] - WebContainerDriver added
+
+- Architectural Decision: WebContainerDriver is the VSCode Web sandbox driver; it requires window.crossOriginIsolated === true (COOP + COEP). It supports Node.js/JavaScript workloads and WebAssembly only; native binaries/raw syscalls are unsupported — fallback to DockerDriver recommended.
+
+- Brittle Areas: WebContainerDriver depends on browser cross-origin isolation headers and @webcontainer/api being available at runtime; tests that import @webcontainer/api must mock it to run in Node-based CI.
+
+- Recent Changelog: Implemented WebContainerDriver with dynamic import guard for @webcontainer/api, createSandboxProvider auto-detection, unit tests with mocked API, and added optional peerDependency for @webcontainer/api.
+

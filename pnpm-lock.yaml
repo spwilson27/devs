@@ -83,6 +83,9 @@ importers:
       '@devs/core':
         specifier: workspace:*
         version: link:../core
+      '@webcontainer/api':
+        specifier: ^1.2.0
+        version: 1.6.1
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^1.0.0
@@ -847,6 +850,9 @@ packages:
 
   '@vitest/utils@4.0.18':
     resolution: {integrity: sha512-msMRKLMVLWygpK3u2Hybgi4MNjcYJvwTb0Ru09+fOyCXIgT5raYP041DRRdiJiI3k/2U6SEbAETB3YtBrUkCFA==}
+
+  '@webcontainer/api@1.6.1':
+    resolution: {integrity: sha512-2RS2KiIw32BY1Icf6M1DvqSmcon9XICZCDgS29QJb2NmF12ZY2V5Ia+949hMKB3Wno+P/Y8W+sPP59PZeXSELg==}
 
   ansi-escapes@4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==}
@@ -3072,6 +3078,8 @@ snapshots:
     dependencies:
       '@vitest/pretty-format': 4.0.18
       tinyrainbow: 3.0.3
+
+  '@webcontainer/api@1.6.1': {}
 
   ansi-escapes@4.3.2:
     dependencies:

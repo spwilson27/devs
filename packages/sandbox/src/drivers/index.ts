@@ -6,3 +6,5 @@ export * from './webcontainer/errors';
 // Export concrete drivers here.
 export { DockerDriver } from './DockerDriver';
 export type { DockerDriverConfig } from './DockerDriver';
+export { WebContainerDriver } from './WebContainerDriver';
+export type { WebContainerDriverConfig } from './WebContainerDriver';

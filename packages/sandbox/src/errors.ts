@@ -25,3 +25,11 @@ export class SandboxDestroyedError extends Error {
     this.name = 'SandboxDestroyedError';
   }
 }
+
+export class SandboxExecError extends Error {
+  constructor(msg: string) {
+    super(msg);
+    this.name = 'SandboxExecError';
+  }
+}
+

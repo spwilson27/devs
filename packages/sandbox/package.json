@@ -26,12 +26,15 @@
     "validate-all": "node scripts/validate-all.mjs"
   },
   "peerDependencies": {
-    "@devs/core": "workspace:*"
+    "@devs/core": "workspace:*",
+    "@webcontainer/api": "^1.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@webcontainer/api": { "optional": true }
   },
   "dependencies": {
-    "@webcontainer/api": "^1.3.0",
     "dockerode": "^4.0.0"
-  },
+  }
   "devDependencies": {
     "typescript": "^5.9.3",
     "vitest": "^4.0.18",
