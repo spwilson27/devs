@@ -6,6 +6,7 @@ import simpleGit from 'simple-git';
 import { createDatabase } from '../persistence/database.js';
 import { initializeSchema } from '../persistence/schema.js';
 import { StateRepository } from '../persistence/state_repository.js';
+import { FoundationValidator } from './validators/FoundationValidator.js';
 
 export type ProjectStatus = 'ACTIVE' | 'PAUSED' | 'UNKNOWN';
 
@@ -138,5 +139,15 @@ export class ProjectManager {
       progress: 0,
       logs: [],
     };
+  }
+
+  /**
+   * Validate a milestone using the FoundationValidator.
+   * @param milestoneId - e.g., 'M1'
+   * @param options - optional { dbPath, fromDir }
+   */
+  async validateMilestone(milestoneId = 'M1', options?: { dbPath?: string; fromDir?: string }) {
+    const validator = new FoundationValidator();
+    return await validator.validate({ dbPath: options?.dbPath, fromDir: options?.fromDir, milestone: milestoneId });
   }
 }

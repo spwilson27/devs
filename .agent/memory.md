@@ -109,3 +109,21 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - [2026-02-22] Review: Verified the `@devs/cli` init implementation and integration test; ran `./do presubmit` and all checks passed (exit code 0).
 - [2026-02-22] Follow-up: AOD 1:1 doc missing reported by AOD lint for `packages/cli/src/bin.ts`. Add `.agent/packages/cli/bin.agent.md` (and other missing AOD docs listed by presubmit) to resolve violations in a follow-up task.
 
+## [2026-02-22] - Foundation DoD validator added
+
+- Added FoundationValidator class at `packages/core/src/lifecycle/validators/FoundationValidator.ts` which verifies `.devs/state.sqlite` presence, core table schema, git integrity (HEAD reachable, not detached, clean workspace), monorepo package presence (`@devs/core`, `@devs/cli`), and that all Phase 1 & 2 tasks are `completed` (M1).
+- Added `ProjectManager.validateMilestone(milestoneId, options)` to delegate milestone validation to the FoundationValidator.
+- Added unit tests at `tests/lifecycle/FoundationDoD.test.ts` and documentation at `docs/milestones/foundation_dod.md`.
+- Brittle area: The validator requires a reachable git HEAD and a project root with a private package.json; CI and local dev images must include `git`, `tsc`, and `vitest` so these checks and tests run reliably.
+
+## [2026-02-22 Reviewer] - Foundation DoD Review & Presubmit Verification
+
+- Reviewed `packages/core/src/lifecycle/validators/FoundationValidator.ts`, `packages/core/src/lifecycle/ProjectManager.ts`, and the unit tests at `tests/lifecycle/FoundationDoD.test.ts` for correctness and clarity; validator already provides detailed failure messages for missing DB, tables, git violations, missing packages, and incomplete tasks.
+
+- Architectural Decision: Keep milestone validation centralized via `ProjectManager.validateMilestone` delegating to specialized validators (e.g., FoundationValidator) so phase-gate logic is reusable and consistent across milestone checks.
+
+- Brittle Areas Discovered: The FoundationValidator depends on an actual git workspace and filesystem state which can make tests fragile in CI; recommend adding test helpers or mocks for GitIntegrityChecker and allowing an option to bypass git checks in ephemeral test runs.
+
+- Recent Changelog: Ran `./do presubmit` in this worktree and confirmed all presubmit checks passed (advisories only for missing AOD docs). Added this reviewer note and recommendations to memory; no code changes were required during the review.
+
+
