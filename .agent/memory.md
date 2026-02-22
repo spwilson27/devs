@@ -52,3 +52,6 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **[2026-02-22] - AOD doc fix:** Added missing AOD documentation `.agent/packages/core/orchestration/StateTransitionGuard.agent.md` to satisfy the AOD 1:1 ratio presubmit check and ensure CI passes.
 
 - **Brittle area noted:** The AOD invariant (every new .ts module requires a corresponding `.agent.md`) caused the presubmit failure; maintainers should remember to add AOD files when adding source modules.
+
+- **[2026-02-22] Heuristic State Reconstruction (TAS-069):** Implemented HeuristicReconstructor and integrated a best-effort reconstruction into the DB initialization path so a missing `.devs/state.sqlite` can be rebuilt from `.agent/` docs and `src/` code comments; reconstructed state is marked via project metadata `{ reconstructed: true, method: "HEURISTICALLY_RECONSTRUCTED" }` for transparency.
+- **[2026-02-22] HeuristicReconstructor AOD added:** Created missing `.agent` AOD file at `.agent/packages/core/recovery/HeuristicReconstructor.agent.md` to document the module and satisfy the AOD invariant.
