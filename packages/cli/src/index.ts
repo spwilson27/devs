@@ -71,4 +71,86 @@ export async function init(opts: { projectDir?: string; force?: boolean } = {}) 
   return 0;
 }
 
-export default { init };
+export async function status(opts: { projectDir?: string } = {}) {
+  const projectDir = opts.projectDir ?? process.cwd();
+
+  // Resolve .devs directory; fallback to projectDir/.devs if resolution fails
+  let devsDir: string;
+  try {
+    devsDir = resolveDevsDir(projectDir);
+  } catch (err) {
+    devsDir = path.resolve(projectDir, ".devs");
+  }
+
+  const dbPath = path.join(devsDir, "state.sqlite");
+  if (!fs.existsSync(devsDir) || !fs.existsSync(dbPath)) {
+    throw new Error(`devs: not initialized at ${devsDir}`);
+  }
+
+  const db = getDatabase({ fromDir: projectDir });
+  const repo = new StateRepository(db);
+
+  // Find the most-recent project row
+  let projectRow: any;
+  try {
+    projectRow = db.prepare("SELECT * FROM projects ORDER BY id DESC LIMIT 1").get();
+  } catch (err) {
+    throw new Error(`devs: failed to read project metadata: ${err && err.message ? err.message : String(err)}`);
+  }
+
+  if (!projectRow) {
+    throw new Error("devs: no project metadata found in state store");
+  }
+
+  const projectId = Number(projectRow.id);
+  const state = repo.getProjectState(projectId);
+  if (!state) {
+    throw new Error("devs: failed to load project state");
+  }
+
+  const epics = state.epics ?? [];
+  const tasks = state.tasks ?? [];
+
+  let activeEpic: any = null;
+  let activeTask: any = null;
+
+  for (const epic of epics) {
+    const epicTasks = tasks.filter((t: any) => t.epic_id === epic.id);
+    const nonCompleted = epicTasks.find((t: any) => t.status !== "completed") ?? epicTasks[0];
+    if (nonCompleted) {
+      activeEpic = epic;
+      activeTask = nonCompleted;
+      break;
+    }
+  }
+
+  if (!activeEpic && epics.length > 0) {
+    activeEpic = epics[0];
+    const epicTasks = tasks.filter((t: any) => t.epic_id === activeEpic.id);
+    activeTask = epicTasks[0] ?? null;
+  }
+
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter((t: any) => t.status === "completed").length;
+  const percent = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+
+  return {
+    project: {
+      id: projectRow.id,
+      name: projectRow.name,
+      status: projectRow.status,
+      current_phase: projectRow.current_phase,
+      last_milestone: projectRow.last_milestone,
+      metadata: projectRow.metadata,
+    },
+    active_epic: activeEpic
+      ? { id: activeEpic.id, name: activeEpic.name, status: activeEpic.status }
+      : null,
+    active_task: activeTask
+      ? { id: activeTask.id, epic_id: activeTask.epic_id, title: activeTask.title, status: activeTask.status }
+      : null,
+    progress: { total: totalTasks, completed: completedTasks, percent },
+  };
+}
+
+export default { init, status };

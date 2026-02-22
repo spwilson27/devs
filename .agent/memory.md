@@ -105,12 +105,21 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **Recommendation:** Add a corresponding AOD file `.agent/packages/core/lifecycle/MilestoneService.agent.md` and ensure CI images/install steps include `tsc` and `vitest` so unit tests are executed in presubmit environments.
 ## [2026-02-22] - CLI scaffolding
 
+- **[2026-02-22] - Added CLI status command and initial tests:** Implemented `devs status` command with programmatic `status()` API and `--json` support; added `packages/cli/tests/status.spec.ts` covering uninitialized directory errors, normal status output, and JSON output shape.
+
 - Added `@devs/cli` package with `init` command to initialize the Flight Recorder `.devs/` directory and SQLite state store.
 - Created integration test `packages/cli/tests/init.spec.ts` and CLI implementation at `packages/cli/src/`.
 - Note: CLI imports core persistence modules from source; CI must ensure a TypeScript runtime loader (e.g., tsx or ts-node) is available so the CLI and tests can execute directly from TypeScript source.
 
 - [2026-02-22] Review: Verified the `@devs/cli` init implementation and integration test; ran `./do presubmit` and all checks passed (exit code 0).
 - [2026-02-22] Follow-up: AOD 1:1 doc missing reported by AOD lint for `packages/cli/src/bin.ts`. Add `.agent/packages/cli/bin.agent.md` (and other missing AOD docs listed by presubmit) to resolve violations in a follow-up task.
+
+## [2026-02-22 Reviewer] - CLI Status Review
+
+- Verified `packages/cli/src/index.ts` implements `status()` returning a structured project state and the CLI entrypoint (`packages/cli/src/bin.ts`) correctly supports `--json` output and JSON-formatted errors; no functional code changes were required.
+- Observed `./do presubmit` passes locally, but unit tests are skipped in this ephemeral environment because `vitest` is not installed; recommend documenting the required local dev toolchain (e.g., `tsc`, `vitest`) and ensuring CI images install dev dependencies so CLI tests run in presubmit.
+- Architectural note: Keep CLI as a thin shell and centralize formatting/serialization logic in `@devs/core` to preserve the headless-first design and make it easier for other UIs (VSCode/MCP) to reuse the same formatting logic.
+
 
 ## [2026-02-22] - Foundation DoD validator added
 
