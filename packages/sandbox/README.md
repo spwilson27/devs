@@ -36,3 +36,17 @@ One-line descriptions:
 - network: Network egress components and policies.
 - types: Shared interfaces like SandboxExecResult and SandboxProvisionOptions.
 - utils: Internal helpers not exported to consumers.
+
+## .agent
+
+Agent-Oriented Documentation (AOD) lives in `packages/sandbox/.agent` and provides module context, architectural decisions, hard constraints, dependency mappings, and a progress tracker for the package.
+
+Files and purpose:
+- `CONTEXT.md` — module purpose, phase context, public surface, integration points.
+- `DECISIONS.md` — numbered, immutable architectural decisions.
+- `CONSTRAINTS.md` — hard constraints that must be followed.
+- `DEPENDENCIES.md` — upstream/downstream and driver-level external deps.
+- `PROGRESS.md` — task progress tracker for the sub-epic.
+
+AI agents should update these files as part of the TDD loop when implementing tasks in this package.
+

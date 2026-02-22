@@ -58,6 +58,8 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - **[2026-02-22 Reviewer] - Presubmit verification:** Executed `./do presubmit` in this worktree; all verification checks passed (Monorepo, Folder Structure, Shared State, AOD advisory). Noted the AOD advisory (RelationalRollback missing .agent) and confirmed no commits were made by the reviewer.
 
+- **[2026-02-22 Reviewer] - Code review complete:** Verified @devs/sandbox AOD docs and unit test `aod-structure.test.ts` exist and are non-empty; ran `./do presubmit` which passed all checks; no code changes required.
+
 - **[2026-02-22 Reviewer] - Recommendation:** Add a short CONTRIBUTING.md checklist documenting the required local dev toolchain (tsc, vitest) and the AOD 1:1 invariant so future contributors don't accidentally omit `.agent.md` files.
 
 - **[2026-02-22] - Rewind Review:** Performed a code review of `Orchestrator.rewind`, `GitClient.checkout`, and `RelationalRollback`. Confirmed the correct ordering: Git checkout (filesystem restore) is executed before any DB mutation, and relational rollback is performed inside a single ACID transaction. Ran `./do presubmit` — all presubmit checks passed (warnings only for AOD docs).

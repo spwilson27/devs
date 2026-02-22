@@ -126,7 +126,6 @@ dmypy.json
 .pyre/
 
 # AI Agent Working Data
-.agent/worktrees
 
 # Node.js / pnpm
 node_modules/
