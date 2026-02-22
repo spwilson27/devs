@@ -166,6 +166,25 @@ The WebContainerDriver supports NodeJS-related commands (node, npm, npx) but doe
 
 ## Network Egress Proxy
 
+### Proxy Audit Logging
+
+ProxyAuditLogger supports three sink types: `console`, `file`, and `custom`.
+
+- console: logs allowed entries at INFO and blocked at WARN to the console.
+- file: opens an append-only WriteStream (flags: 'a'); entries are written as JSON lines and are also synchronously appended to disk to ensure durability for short-lived processes.
+- custom: a user-provided sink function `(entry: AuditEntry) => void` is called synchronously for each entry.
+
+AuditEntry schema:
+
+- event: `egress_allowed` | `egress_blocked`
+- host: string
+- method: string
+- timestampMs: number
+
+Read egress metrics via `logger.getMetrics()` which returns `{ allowedCount, blockedCount }` for the lifetime of the logger.
+
+## Network Egress Proxy
+
 ### Docker Network Isolation
 
 Sandbox containers use an Internal Docker bridge network created per-sandbox. The orchestrator starts an EgressProxy on the host and containers are attached to the isolated bridge with DNS and HTTP_PROXY/HTTPS_PROXY environment variables pointing at the proxy. The network is created on sandbox start and removed on sandbox stop to avoid leftover bridges; the bridge is created with Docker's Internal: true setting so containers have no direct default route to the internet.

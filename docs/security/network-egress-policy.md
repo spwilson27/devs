@@ -30,3 +30,7 @@ Key points:
 - The allowlist matching is case-insensitive and performed against the request hostname (port is ignored).
 - Structured audit logs are emitted for blocked requests (e.g., { event: 'webcontainer_egress_blocked', host, url }).
 - This approach enforces policy for HTTP/HTTPS fetches but cannot control non-fetch egress (e.g., WebSocket raw sockets or other runtime-specific transports).
+
+### Audit Logging
+
+All egress decisions (allowed and blocked) are audited via ProxyAuditLogger. Audit entries contain only `host`, `method`, and `timestampMs` to avoid logging full URLs or request paths that could leak sensitive data. File sinks are append-only and write entries as newline-delimited JSON.

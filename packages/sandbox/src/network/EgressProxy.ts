@@ -1,11 +1,13 @@
 import http from 'http';
 import net from 'net';
 import { AllowlistEngine } from './AllowlistEngine';
+import { ProxyAuditLogger } from './ProxyAuditLogger';
 
 export interface EgressProxyConfig {
   port: number;           // 0 = OS-assigned ephemeral port
   allowList: string[];    // FQDNs / CIDR blocks (populated later)
   dnsResolver?: string;   // upstream DNS IP (optional, wired in task 03)
+  auditLogger?: ProxyAuditLogger;
   logger?: Logger;
 }
 
@@ -22,11 +24,13 @@ export default class EgressProxy {
   private _running = false;
   private _port = 0;
   private logger: Logger;
+  private auditLogger?: ProxyAuditLogger;
   private allowlistEngine: AllowlistEngine;
 
   constructor(config: EgressProxyConfig) {
     this.config = config;
     this.logger = config.logger ?? console;
+    this.auditLogger = config.auditLogger;
     this.allowlistEngine = new AllowlistEngine(config.allowList || []);
   }
 
@@ -45,6 +49,7 @@ export default class EgressProxy {
       // Default-deny for all plain HTTP requests in this skeleton task.
       const host = (req.headers.host as string) || req.url || '';
       this.logger.warn?.('egress_proxy_denied', { host, reason: 'default-deny', method: req.method });
+      this.auditLogger?.logRequest({ host, allowed: false, method: req.method || 'GET', timestampMs: Date.now() });
       res.writeHead(403, { 'Content-Type': 'text/plain' });
       res.end('Forbidden');
     });
@@ -65,11 +70,13 @@ export default class EgressProxy {
         } catch (err) {
           clientSocket.destroy();
         }
+        this.auditLogger?.logRequest({ host: hostOnly, allowed: false, method: 'CONNECT', timestampMs: Date.now() });
         return;
       }
 
       try {
         // Allowed: acknowledge the tunnel (200). Full tunnelling/forwarding is out of scope for this test.
+        this.auditLogger?.logRequest({ host: hostOnly, allowed: true, method: 'CONNECT', timestampMs: Date.now() });
         clientSocket.write('HTTP/1.1 200 Connection Established\r\n\r\n');
         clientSocket.end();
       } catch (err) {
