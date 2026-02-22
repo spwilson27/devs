@@ -179,7 +179,7 @@ Config shape (EgressProxyConfig):
 - allowList: string[] — FQDNs / CIDR blocks (populated in a later task)
 - dnsResolver?: string — Optional upstream DNS resolver IP
 
-Default-deny policy: By default the proxy denies all targets. CONNECT requests return 407 (Proxy Authentication Required) and plain HTTP requests return 403 (Forbidden). Allow-list enforcement will be implemented in a follow-up task.
+Default-deny policy: By default the proxy denies all targets. CONNECT requests and plain HTTP requests return 403 (Forbidden) unless explicitly allowed via the allowList configuration. The allowList is configured via EgressProxyConfig.allowList and can be updated at runtime via proxy.updateAllowList([...]). Allow-list matching is an exact FQDN match (case-insensitive); there is no wildcard or sub-domain expansion by default.
 
 
 

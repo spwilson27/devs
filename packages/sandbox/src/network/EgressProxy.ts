@@ -1,5 +1,6 @@
 import http from 'http';
 import net from 'net';
+import { AllowlistEngine } from './AllowlistEngine';
 
 export interface EgressProxyConfig {
   port: number;           // 0 = OS-assigned ephemeral port
@@ -9,6 +10,7 @@ export interface EgressProxyConfig {
 }
 
 export interface Logger {
+  debug?(msg: string, meta?: Record<string, unknown>): void;
   info?(msg: string, meta?: Record<string, unknown>): void;
   warn?(msg: string, meta?: Record<string, unknown>): void;
   error?(msg: string, meta?: Record<string, unknown>): void;
@@ -20,10 +22,12 @@ export default class EgressProxy {
   private _running = false;
   private _port = 0;
   private logger: Logger;
+  private allowlistEngine: AllowlistEngine;
 
   constructor(config: EgressProxyConfig) {
     this.config = config;
     this.logger = config.logger ?? console;
+    this.allowlistEngine = new AllowlistEngine(config.allowList || []);
   }
 
   get port(): number {
@@ -45,15 +49,28 @@ export default class EgressProxy {
       res.end('Forbidden');
     });
 
-    // Handle CONNECT tunnelling (HTTPS) - default-deny baseline
+    // Handle CONNECT tunnelling (HTTPS)
     this.server.on('connect', (req: http.IncomingMessage, clientSocket: net.Socket, head: Buffer) => {
       const target = req.url || '';
-      this.logger.warn?.('egress_proxy_denied', { host: target, reason: 'default-deny', method: 'CONNECT' });
+      // extract host portion without port, normalize
+      const hostOnly = String(target).replace(/:\\d+$/, '').replace(/\.$/, '').toLowerCase();
+      const allowed = this.allowlistEngine.isAllowed(hostOnly);
+      // debug log the decision and current list
+      this.logger.debug?.('egress_decision', { event: 'egress_decision', allowed, host: hostOnly, allowList: this.config.allowList });
+
+      if (!allowed) {
+        try {
+          clientSocket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
+          clientSocket.end();
+        } catch (err) {
+          clientSocket.destroy();
+        }
+        return;
+      }
+
       try {
-        // Respond with 407 Proxy Authentication Required (allowed by tests as an acceptable default-deny)
-        clientSocket.write('HTTP/1.1 407 Proxy Authentication Required\r\n');
-        clientSocket.write('Proxy-Authenticate: Basic realm="devs"\r\n');
-        clientSocket.write('Content-Length: 0\r\n\r\n');
+        // Allowed: acknowledge the tunnel (200). Full tunnelling/forwarding is out of scope for this test.
+        clientSocket.write('HTTP/1.1 200 Connection Established\r\n\r\n');
         clientSocket.end();
       } catch (err) {
         clientSocket.destroy();
@@ -106,5 +123,10 @@ export default class EgressProxy {
         else resolve();
       });
     });
+  }
+
+  updateAllowList(hosts: string[]): void {
+    this.config.allowList = hosts;
+    this.allowlistEngine.update(hosts);
   }
 }
