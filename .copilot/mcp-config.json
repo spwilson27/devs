@@ -4,7 +4,7 @@
       "id": "local-rag-search",
       "name": "Local RAG MCP",
       "protocol": "stdio",
-      "command": ".rag/mcp_server_wrapper.sh",
+      "command": ".rag/mcp_server_wrapper.py",
       "args": [],
       "env": {}
     }

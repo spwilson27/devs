@@ -2,7 +2,7 @@
 	"servers": {
 		"local-rag": {
 			"type": "stdio",
-			"command": ".rag/mcp_server_wrapper.sh",
+			"command": ".rag/mcp_server_wrapper.py",
 			"args": []
 		}
 	},

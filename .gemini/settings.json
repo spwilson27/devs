@@ -9,7 +9,7 @@
     },
     "mcpServers": {
         "local-rag-search": {
-            "command": ".rag/mcp_server_wrapper.sh",
+            "command": ".rag/mcp_server_wrapper.py",
             "args": [],
             "env": {}
         }
