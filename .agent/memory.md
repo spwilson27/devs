@@ -196,6 +196,7 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 
 
+
 ## Recent Changelog (Appended)
 
 - **[2026-02-22] - Hardened sandbox base image added:** Created `packages/sandbox/docker/base/Dockerfile` pinned to `alpine:3.19.1@sha256:1111111111111111111111111111111111111111111111111111111111111111`, added `image-manifest.json`, `base-image.agent.md`, tests in `packages/sandbox/src/docker/__tests__/base-image.spec.ts`, and scripts `build:base-image` / `push:base-image` in `packages/sandbox/package.json`.
@@ -203,3 +204,5 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **Recommendation:** Replace placeholder digest (`1111111111111111111111111111111111111111111111111111111111111111`) with the official Alpine 3.19.1 SHA256 from the upstream manifest; standardize `image-manifest.json.digest` to the bare hex digest (without an additional leading `@sha256:` prefix) for clearer machine parsing; ensure integration tests run in CI with Docker available to validate runtime assertions.
 - **Action taken:** Executed `./do presubmit` in this worktree; all presubmit checks passed locally (unit tests were skipped in this ephemeral environment).
 - **[2026-02-22 Reviewer] - Sandbox tests & config:** Added `packages/sandbox/tests/unit/test-structure.test.ts` (validates tests/ tree and vitest config), ensured test subdirectories contain `.gitkeep` placeholders, added `@vitest/coverage-v8` devDependency and `test:coverage` script to `packages/sandbox/package.json`, and added `packages/sandbox/tests/README.md` describing test conventions.
+
+- [2026-02-22 Reviewer] - bootstrap-sandbox verification: Inspected packages/sandbox/src/scripts/bootstrap-sandbox.ts and test scaffolding; confirmed exported symbols (bootstrapSandbox, SandboxBootstrapError, BootstrapResult, BootstrapOptions) and barrel re-exports via src/scripts/index.ts and src/index.ts; confirmed CLI wrapper imports from dist/scripts/bootstrap-sandbox.js. Ran `./do presubmit` (exit 0) — all presubmit checks passed; no code changes required.

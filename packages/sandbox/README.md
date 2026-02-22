@@ -21,7 +21,7 @@ src/
 │   └── index.ts
 ├── filesystem/        # FilesystemManager barrel
 │   └── index.ts
-├── network/           # Network egress components
+├── network/           # Network egress components and policies
 │   └── index.ts
 ├── types/             # Shared TypeScript types and interfaces
 │   └── index.ts
@@ -79,3 +79,10 @@ Run coverage:
 - pnpm --filter @devs/sandbox test:coverage
 
 Coverage targets: lines >= 80%
+
+## Scripts
+
+- pnpm --filter @devs/sandbox run bootstrap-sandbox [docker|webcontainer] — run preflight bootstrap checks for the sandbox; defaults to "docker".
+- On success: prints "Bootstrap OK (<driver>) in <duration>ms" and exits with code 0.
+- On failure: prints "Bootstrap FAILED: <message>" and exits with code 1.
+- Environment prerequisites: Docker daemon running for the "docker" driver; Node.js >= 22 for the "webcontainer" driver.

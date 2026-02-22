@@ -5,5 +5,5 @@
 - [x] `src/` directory structure created
 - [x] `tests/` directory structure created
 - [x] `.agent/` AOD directory populated
-- [ ] `bootstrap-sandbox` script implemented
+- [x] `bootstrap-sandbox` script implemented
 - [ ] `validate-all` script implemented
