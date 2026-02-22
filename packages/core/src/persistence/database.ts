@@ -21,6 +21,7 @@ import { dirname } from "node:path";
 import Database from "better-sqlite3";
 import { ensureDirSync } from "fs-extra";
 import { resolveStatePath } from "../persistence.js";
+import { reconstructStateFromProject } from "../recovery/HeuristicReconstructor.js";
 
 // ── Public types ──────────────────────────────────────────────────────────────
 
@@ -58,6 +59,8 @@ export interface DatabaseOptions {
  * @param options - Optional path overrides.
  * @returns An open, configured `Database` instance.
  */
+import { existsSync, openSync, closeSync } from "node:fs";
+
 export function createDatabase(
   options: DatabaseOptions = {}
 ): Database.Database {
@@ -65,6 +68,25 @@ export function createDatabase(
     options.dbPath !== undefined
       ? options.dbPath
       : resolveStatePath(options.fromDir);
+
+  // If the database file does not exist yet, attempt heuristic reconstruction
+  // from project documents and comments. This creates a populated state.sqlite
+  // when possible so the orchestrator can continue operating without manual
+  // initialization.
+  if (!existsSync(dbPath)) {
+    try {
+      // Pre-create the parent .devs directory so the reconstructor can write files.
+      ensureDirSync(dirname(dbPath));
+      // Call the reconstructor (best-effort). It will create and initialize the DB.
+      // The reconstructor is statically imported at module top to avoid dynamic import
+      // complexity and to keep this function synchronous.
+
+      // Use provided fromDir or process.cwd() as the starting point.
+      reconstructStateFromProject(options.fromDir ?? process.cwd());
+    } catch (err) {
+      // Silently ignore reconstruction failures and fall back to creating an empty DB.
+    }
+  }
 
   // Guarantee the .devs/ directory (or whatever parent dir) exists.
   ensureDirSync(dirname(dbPath));
