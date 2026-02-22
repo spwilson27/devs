@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
-import { getDatabase } from "../../core/src/persistence/database.js";
+import { createDatabase } from "../../core/src/persistence/database.js";
 import { initializeSchema } from "../../core/src/persistence/schema.js";
 import { StateRepository } from "../../core/src/persistence/state_repository.js";
 import { resolveDevsDir } from "../../core/src/persistence.js";
@@ -15,7 +15,7 @@ export async function init(opts: { projectDir?: string; force?: boolean } = {}) 
   let devsDir: string;
   try {
     devsDir = resolveDevsDir(projectDir);
-  } catch (err) {
+  } catch (err: any) {
     devsDir = path.resolve(projectDir, ".devs");
   }
 
@@ -40,15 +40,15 @@ export async function init(opts: { projectDir?: string; force?: boolean } = {}) 
         fs.appendFileSync(gitignorePath, "\n# devs runtime state\n.devs\n");
       }
     }
-  } catch (err) {
+  } catch (err: any) {
     // Non-fatal: continue even if gitignore cannot be written
   }
 
   // Initialize the SQLite state via @devs/core persistence
-  const db = getDatabase({ fromDir: projectDir });
+  const db = createDatabase({ fromDir: projectDir });
   try {
     initializeSchema(db);
-  } catch (err) {
+  } catch (err: any) {
     console.error("devs: failed to initialise schema:", err);
     return 1;
   }
@@ -64,7 +64,7 @@ export async function init(opts: { projectDir?: string; force?: boolean } = {}) 
       // ignore
     }
     repo.upsertProject({ name: projectName, metadata: JSON.stringify({ createdBy: "@devs/cli", createdAt: new Date().toISOString() }) });
-  } catch (err) {
+  } catch (err: any) {
     console.error("devs: failed to populate initial project metadata:", err);
     // Not fatal
   }
@@ -73,14 +73,14 @@ export async function init(opts: { projectDir?: string; force?: boolean } = {}) 
   return 0;
 }
 
-export async function status(opts: { projectDir?: string } = {}) {
+export async function status(opts: { projectDir?: string; json?: boolean } = {}) {
   const projectDir = opts.projectDir ?? process.cwd();
 
   // Resolve .devs directory; fallback to projectDir/.devs if resolution fails
   let devsDir: string;
   try {
     devsDir = resolveDevsDir(projectDir);
-  } catch (err) {
+  } catch (err: any) {
     devsDir = path.resolve(projectDir, ".devs");
   }
 
@@ -89,14 +89,14 @@ export async function status(opts: { projectDir?: string } = {}) {
     throw new Error(`devs: not initialized at ${devsDir}`);
   }
 
-  const db = getDatabase({ fromDir: projectDir });
+  const db = createDatabase({ fromDir: projectDir });
   const repo = new StateRepository(db);
 
   // Find the most-recent project row
   let projectRow: any;
   try {
     projectRow = db.prepare("SELECT * FROM projects ORDER BY id DESC LIMIT 1").get();
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(`devs: failed to read project metadata: ${err && err.message ? err.message : String(err)}`);
   }
 
@@ -157,15 +157,15 @@ export async function status(opts: { projectDir?: string } = {}) {
 
 export async function pause(opts: { projectDir?: string; reason?: string } = {}) {
   const projectDir = opts.projectDir ?? process.cwd();
-  const db = getDatabase({ fromDir: projectDir });
+  const db = createDatabase({ fromDir: projectDir });
   try {
     initializeSchema(db);
-  } catch (err) {
+  } catch (err: any) {
     console.error("devs: failed to initialise schema:", err);
     return 1;
   }
 
-  const projectRow = db.prepare("SELECT id, name, status, metadata FROM projects ORDER BY id LIMIT 1").get();
+  const projectRow: any = db.prepare("SELECT id, name, status, metadata FROM projects ORDER BY id LIMIT 1").get();
   if (!projectRow) {
     console.error("devs: no project found; run 'devs init' first");
     return 2;
@@ -184,7 +184,7 @@ export async function pause(opts: { projectDir?: string; reason?: string } = {})
     const bus = await SharedEventBus.createClient(socketPath);
     bus.publish("PAUSE", { requestedBy: "cli", reason: opts.reason, timestamp: new Date().toISOString() });
     await bus.close();
-  } catch (err) {
+  } catch (err: any) {
     // No bus server running; warn but continue
     console.warn("devs: warning: could not publish PAUSE event:", err?.message ?? err);
   }
@@ -195,15 +195,15 @@ export async function pause(opts: { projectDir?: string; reason?: string } = {})
 
 export async function resume(opts: { projectDir?: string } = {}) {
   const projectDir = opts.projectDir ?? process.cwd();
-  const db = getDatabase({ fromDir: projectDir });
+  const db = createDatabase({ fromDir: projectDir });
   try {
     initializeSchema(db);
-  } catch (err) {
+  } catch (err: any) {
     console.error("devs: failed to initialise schema:", err);
     return 1;
   }
 
-  const projectRow = db.prepare("SELECT id, name, status, metadata FROM projects ORDER BY id LIMIT 1").get();
+  const projectRow: any = db.prepare("SELECT id, name, status, metadata FROM projects ORDER BY id LIMIT 1").get();
   if (!projectRow) {
     console.error("devs: no project found; run 'devs init' first");
     return 2;
@@ -222,7 +222,7 @@ export async function resume(opts: { projectDir?: string } = {}) {
     const bus = await SharedEventBus.createClient(socketPath);
     bus.publish("RESUME", { requestedBy: "cli", timestamp: new Date().toISOString() });
     await bus.close();
-  } catch (err) {
+  } catch (err: any) {
     console.warn("devs: warning: could not publish RESUME event:", err?.message ?? err);
   }
 
@@ -232,15 +232,15 @@ export async function resume(opts: { projectDir?: string } = {}) {
 
 export async function skip(opts: { projectDir?: string } = {}) {
   const projectDir = opts.projectDir ?? process.cwd();
-  const db = getDatabase({ fromDir: projectDir });
+  const db = createDatabase({ fromDir: projectDir });
   try {
     initializeSchema(db);
-  } catch (err) {
+  } catch (err: any) {
     console.error("devs: failed to initialise schema:", err);
     return 1;
   }
 
-  const proj = db.prepare("SELECT id FROM projects ORDER BY id LIMIT 1").get();
+  const proj: any = db.prepare("SELECT id FROM projects ORDER BY id LIMIT 1").get();
   if (!proj) {
     console.error("devs: no project found; run 'devs init' first");
     return 2;
@@ -249,7 +249,7 @@ export async function skip(opts: { projectDir?: string } = {}) {
 
   const repo = new StateRepository(db);
 
-  let task = db.prepare(`
+  let task: any = db.prepare(`
     SELECT t.id, t.status FROM tasks t
     JOIN epics e ON t.epic_id = e.id
     WHERE e.project_id = ? AND t.status = 'in_progress'
@@ -277,7 +277,7 @@ export async function skip(opts: { projectDir?: string } = {}) {
     const bus = await SharedEventBus.createClient(socketPath);
     bus.publish("STATE_CHANGE", { entityType: 'task', entityId: task.id, previousStatus: task.status, newStatus: 'SKIPPED', timestamp: new Date().toISOString() });
     await bus.close();
-  } catch (err) {
+  } catch (err: any) {
     console.warn("devs: warning: could not publish STATE_CHANGE event:", err?.message ?? err);
   }
 
@@ -292,14 +292,14 @@ export async function rewind(opts: { projectDir?: string; taskId?: number } = {}
     return 2;
   }
 
-  const db = getDatabase({ fromDir: projectDir });
+  const db = createDatabase({ fromDir: projectDir });
   try {
     initializeSchema(db);
-  } catch (err) {
+  } catch (err: any) {
     // ignore
   }
 
-  const taskRow = db.prepare("SELECT id, git_commit_hash FROM tasks WHERE id = ?").get(opts.taskId);
+  const taskRow: any = db.prepare("SELECT id, git_commit_hash FROM tasks WHERE id = ?").get(opts.taskId);
   if (!taskRow) {
     console.error("devs: task not found");
     return 2;
@@ -317,7 +317,7 @@ export async function rewind(opts: { projectDir?: string; taskId?: number } = {}
       console.error("devs: uncommitted changes present; commit or stash before rewinding");
       return 3;
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error("devs: git error checking status:", err?.message ?? err);
     return 4;
   }
@@ -325,14 +325,14 @@ export async function rewind(opts: { projectDir?: string; taskId?: number } = {}
   // Verify commit exists and perform hard reset
   try {
     execSync(`git rev-parse --verify ${hash}`, { cwd: projectDir });
-  } catch (err) {
+  } catch (err: any) {
     console.error("devs: commit hash not found in repository:", hash);
     return 4;
   }
 
   try {
     execSync(`git reset --hard ${hash}`, { cwd: projectDir });
-  } catch (err) {
+  } catch (err: any) {
     console.error("devs: git reset failed:", err?.message ?? err);
     return 5;
   }
@@ -340,7 +340,7 @@ export async function rewind(opts: { projectDir?: string; taskId?: number } = {}
   const repo = new StateRepository(db);
 
   // Mark subsequent tasks as pending and set target to in_progress
-  const later = db.prepare("SELECT id FROM tasks WHERE id > ? ORDER BY id").all(opts.taskId) as { id: number }[];
+  const later: any = db.prepare("SELECT id FROM tasks WHERE id > ? ORDER BY id").all(opts.taskId) as { id: number }[];
   for (const r of later) {
     repo.updateTaskStatus(r.id, "pending");
   }
@@ -363,9 +363,9 @@ export async function rewind(opts: { projectDir?: string; taskId?: number } = {}
   try {
     const socketPath = path.join(resolveDevsDir(projectDir), EVENTBUS_SOCKET_NAME);
     const bus = await SharedEventBus.createClient(socketPath);
-    bus.publish("REWIND", { requestedBy: "cli", taskId: opts.taskId, commit: hash, timestamp: new Date().toISOString() });
+    bus.publish("REWIND" as any, { requestedBy: "cli", taskId: opts.taskId, commit: hash, timestamp: new Date().toISOString() });
     await bus.close();
-  } catch (err) {
+  } catch (err: any) {
     // No bus available — non-fatal
   }
 

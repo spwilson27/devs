@@ -72,3 +72,17 @@ export class ConfigValidationError extends Error {
     this.name = 'ConfigValidationError';
   }
 }
+
+export class RegistryUnavailableError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Registry unavailable');
+    this.name = 'RegistryUnavailableError';
+  }
+}
+
+export class DigestMismatchError extends Error {
+  constructor(message?: string, details?: any) {
+    super(message ? (details ? `${message}: ${String(details)}` : message) : 'Image digest mismatch');
+    this.name = 'DigestMismatchError';
+  }
+}

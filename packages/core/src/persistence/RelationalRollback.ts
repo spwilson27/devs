@@ -78,16 +78,27 @@ export class RelationalRollback {
       //    agent_logs newer than the checkpoint.
       try {
         this._stmtDeleteTasksByUpdatedAt.run(projectId, snapshotTs);
-      } catch {
-        // Missing updated_at column or other schema mismatch — use fallback.
-        this._stmtDeleteTasksViaLogs.run(projectId, snapshotTs);
+      } catch (err) {
+        const msg = String((err as Error)?.message ?? err);
+        if (/no such column/i.test(msg) || /has no column/i.test(msg) || /no such table/i.test(msg)) {
+          // Missing updated_at column or older schema — use fallback deletion path.
+          this._stmtDeleteTasksViaLogs.run(projectId, snapshotTs);
+        } else {
+          // Unexpected error — rethrow to abort the transaction.
+          throw err;
+        }
       }
 
       // 3) Remove requirements created after the checkpoint (best-effort).
       try {
         this._stmtDeleteRequirementsByCreatedAt.run(projectId, snapshotTs);
-      } catch {
-        // Ignore if requirements.created_at does not exist on older schemas.
+      } catch (err) {
+        const msg = String((err as Error)?.message ?? err);
+        if (/no such column/i.test(msg) || /no such table/i.test(msg)) {
+          // Ignore if requirements.created_at does not exist on older schemas.
+        } else {
+          throw err;
+        }
       }
 
       // NOTE: Restoring prior task statuses and the project's status requires

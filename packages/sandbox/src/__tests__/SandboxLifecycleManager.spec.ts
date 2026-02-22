@@ -56,7 +56,7 @@ describe('SandboxLifecycleManager', () => {
 
   it('propagates provision errors and does not destroy', async () => {
     class BadProvider extends MockSandboxProvider {
-      async provision() {
+      async provision(): Promise<SandboxContext> {
         throw new SandboxProvisionError('fail');
       }
     }

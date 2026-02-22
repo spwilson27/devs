@@ -28,7 +28,7 @@ function makeCheckpoint(overrides: Partial<Checkpoint> = {}): Checkpoint {
 
 function makeMetadata(overrides: Partial<CheckpointMetadata> = {}): CheckpointMetadata {
   return {
-    source: "test",
+    source: "test" as any,
     step: 1,
     parents: {},
     ...overrides,

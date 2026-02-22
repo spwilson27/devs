@@ -7,12 +7,14 @@ vi.mock('dockerode', () => {
   const createNetwork = vi.fn().mockResolvedValue({ id: 'fake-network-id' });
   const removeMock = vi.fn().mockResolvedValue(undefined);
   const networkObj = { remove: removeMock };
-  const getNetwork = vi.fn().mockImplementation(() => networkObj);
+  const getNetwork = vi.fn().mockImplementation(function () { return networkObj; });
 
-  const DockerMock = vi.fn().mockImplementation(() => ({
-    createNetwork,
-    getNetwork,
-  }));
+  const DockerMock = vi.fn().mockImplementation(function () {
+    return {
+      createNetwork,
+      getNetwork,
+    };
+  });
 
   // Expose mocks for assertions via the constructor mock
   return { default: DockerMock };

@@ -1,10 +1,11 @@
 import fs from 'fs';
 import { describe, it, expect } from 'vitest';
 import { execSync } from 'child_process';
+import path from 'path';
 
-const dockerfilePath = new URL('../../../docker/base/Dockerfile', import.meta.url);
-const manifestPath = new URL('../../../docker/base/image-manifest.json', import.meta.url);
-const pkgRoot = new URL('../../../', import.meta.url);
+const dockerfilePath = path.resolve(__dirname, '../../../docker/base/Dockerfile');
+const manifestPath = path.resolve(__dirname, '../../../docker/base/image-manifest.json');
+const pkgRoot = path.resolve(__dirname, '../../../');
 
 function firstNonCommentLine(content: string) {
   return content
@@ -59,17 +60,17 @@ describe('Docker base image', () => {
   const runIntegration = Boolean(process.env.RUN_INTEGRATION);
 
   (runIntegration ? it : it.skip)('@integration docker build of the base image succeeds', () => {
-    execSync('docker build --no-cache -t devs-sandbox-base:test ./docker/base', { cwd: pkgRoot.pathname, stdio: 'inherit' });
+    execSync('docker build --no-cache -t devs-sandbox-base:test ./docker/base', { cwd: pkgRoot, stdio: 'inherit' });
   });
 
   (runIntegration ? it : it.skip)('@integration built image does not run as root', () => {
-    const out = execSync('docker run --rm devs-sandbox-base:test whoami', { cwd: pkgRoot.pathname }).toString().trim();
+    const out = execSync('docker run --rm devs-sandbox-base:test whoami', { cwd: pkgRoot }).toString().trim();
     expect(out).toBe('agent');
   });
 
   (runIntegration ? it : it.skip)('@integration built image has minimal surface: no bash, no curl by default', () => {
     try {
-      execSync('docker run --rm devs-sandbox-base:test bash', { cwd: pkgRoot.pathname, stdio: 'pipe' });
+      execSync('docker run --rm devs-sandbox-base:test bash', { cwd: pkgRoot, stdio: 'pipe' });
       // If bash exists, fail
       throw new Error('bash present');
     } catch (err: any) {

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { describe, it, expect } from 'vitest';
-const ts = JSON.parse(fs.readFileSync(new URL('../../tsconfig.json', import.meta.url), 'utf8'));
+import path from 'path';
+const ts = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../tsconfig.json'), 'utf8'));
 
 describe('tsconfig.json integrity', () => {
   it('extends root config and has strict compiler options', () => {

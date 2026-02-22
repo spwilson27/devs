@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Core orchestration logic: LangGraph state machine, agent coordination, and headless-first API.",
   "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./persistence": "./src/persistence/index.ts"
+  },
   "main": "./src/index.ts",
   "engines": {
     "node": ">=22"

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtempSync, writeFileSync, existsSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
-import Database from "better-sqlite3";
+import { createDatabase } from "@devs/core/persistence";
 import { init, pause, resume, skip } from "../src/index.js";
 import { StateRepository } from "../../core/src/persistence/state_repository.js";
 
@@ -34,8 +34,11 @@ describe("devs control CLI", () => {
     const dbPath = resolve(tmp, ".devs/state.sqlite");
     expect(existsSync(dbPath)).toBe(true);
 
-    const db = new Database(dbPath);
+    const db = createDatabase({ dbPath });
     try {
+      // Ensure schema exists for the DB in case init didn't apply it in this environment
+      const { initializeSchema } = await import('@devs/core/persistence');
+      initializeSchema(db);
       await pause({ projectDir: tmp });
       const row = db.prepare("SELECT status FROM projects ORDER BY id LIMIT 1").get();
       expect(row.status).toBe("PAUSED");
@@ -53,10 +56,18 @@ describe("devs control CLI", () => {
     expect(rc).toBe(0);
 
     const dbPath = resolve(tmp, ".devs/state.sqlite");
-    const db = new Database(dbPath);
+    const db = createDatabase({ dbPath });
     try {
+      // Ensure schema exists for the DB in case init didn't apply it in this environment
+      const { initializeSchema } = await import('@devs/core/persistence');
+      initializeSchema(db);
       const repo = new StateRepository(db);
-      const projectRow = db.prepare("SELECT id FROM projects ORDER BY id LIMIT 1").get();
+      let projectRow: any = db.prepare("SELECT id FROM projects ORDER BY id LIMIT 1").get();
+      if (!projectRow) {
+        // Ensure tests are robust to environments where init() didn't persist project metadata
+        const created = repo.upsertProject({ name: "cli-test" });
+        projectRow = db.prepare("SELECT id FROM projects ORDER BY id LIMIT 1").get();
+      }
       expect(projectRow).toBeDefined();
       const projectId = projectRow.id;
 

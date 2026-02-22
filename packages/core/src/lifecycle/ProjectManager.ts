@@ -118,7 +118,7 @@ export class ProjectManager {
     const gitDir = path.join(resolvedRoot, '.git');
     if (!fs.existsSync(gitDir)) {
       try {
-        const git = simpleGit(resolvedRoot as any);
+        const git = (simpleGit as any)(resolvedRoot as any);
         await git.init();
       } catch (err) {
         // Non-fatal: git init failure should not block project initialization

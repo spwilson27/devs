@@ -19,7 +19,7 @@ async function main() {
     try {
       const rc = await init({ projectDir: process.cwd(), force });
       process.exit(typeof rc === "number" ? rc : 0);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       process.exit(1);
     }
@@ -29,7 +29,7 @@ async function main() {
     const json = args.includes("--json");
     const projectDir = process.cwd();
 
-    const printState = (s) => {
+    const printState = (s: any) => {
       if (json) {
         console.log(JSON.stringify(s));
       } else {
@@ -55,7 +55,7 @@ async function main() {
             lastTotal = newTotal;
             printState(newState);
           }
-        } catch (err) {
+        } catch (err: any) {
           // Best-effort: ignore transient read errors
         }
       }, 50);
@@ -63,7 +63,7 @@ async function main() {
       // Keep process alive until killed externally
       process.on("SIGINT", () => { clearInterval(interval); process.exit(0); });
       process.on("SIGTERM", () => { clearInterval(interval); process.exit(0); });
-    } catch (err) {
+    } catch (err: any) {
       if (json) {
         console.log(JSON.stringify({ error: err && (err.message || String(err)) }));
       } else {
@@ -77,7 +77,7 @@ async function main() {
     try {
       const rc = await pause({ projectDir: process.cwd() });
       process.exit(typeof rc === "number" ? rc : 0);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       process.exit(1);
     }
@@ -87,7 +87,7 @@ async function main() {
     try {
       const rc = await resume({ projectDir: process.cwd() });
       process.exit(typeof rc === "number" ? rc : 0);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       process.exit(1);
     }
@@ -97,7 +97,7 @@ async function main() {
     try {
       const rc = await skip({ projectDir: process.cwd() });
       process.exit(typeof rc === "number" ? rc : 0);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       process.exit(1);
     }
@@ -117,7 +117,7 @@ async function main() {
     try {
       const rc = await rewind({ projectDir: process.cwd(), taskId });
       process.exit(typeof rc === "number" ? rc : 0);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       process.exit(1);
     }

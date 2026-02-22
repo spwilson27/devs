@@ -1,27 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Readable } from 'stream';
 
-const mockBoot = vi.fn();
-const mockTeardown = vi.fn();
-const mockSpawn = vi.fn();
-
 vi.mock('@webcontainer/api', () => {
-  return {
-    WebContainer: {
-      boot: mockBoot,
-    },
+  const WebContainer = {
+    boot: vi.fn(),
   };
+  return { WebContainer };
 });
 
+import { WebContainer } from '@webcontainer/api';
 import { WebContainerDriver } from '../webcontainer-driver';
 import { SandboxProvider } from '../../../SandboxProvider';
 import { SandboxBootError, SandboxExecError, SandboxTimeoutError, SandboxNotBootedError, SandboxTeardownError } from '../errors';
 
 describe('WebContainerDriver (unit)', () => {
   beforeEach(() => {
-    mockBoot.mockReset();
-    mockSpawn.mockReset();
-    mockTeardown.mockReset();
+    WebContainer.boot.mockReset();
   });
 
   it('extends SandboxProvider and can be instantiated', () => {
@@ -30,20 +24,24 @@ describe('WebContainerDriver (unit)', () => {
   });
 
   it('provision() calls WebContainer.boot() and returns context', async () => {
+    const mockSpawn = vi.fn();
+    const mockTeardown = vi.fn();
     const wc = { spawn: mockSpawn, teardown: mockTeardown };
-    mockBoot.mockResolvedValueOnce(wc);
+    WebContainer.boot.mockResolvedValueOnce(wc);
 
     const driver = new WebContainerDriver({ defaultTimeoutMs: 1000, workdirPath: '/workspace' });
     const ctx = await driver.provision();
 
-    expect(mockBoot).toHaveBeenCalledTimes(1);
+    expect(WebContainer.boot).toHaveBeenCalledTimes(1);
     expect(ctx.workdir).toBe('/workspace');
     expect(ctx.status).toBe('running');
   });
 
   it('exec() calls spawn and returns ExecResult', async () => {
+    const mockSpawn = vi.fn();
+    const mockTeardown = vi.fn();
     const wc = { spawn: mockSpawn, teardown: mockTeardown };
-    mockBoot.mockResolvedValueOnce(wc);
+    WebContainer.boot.mockResolvedValueOnce(wc);
 
     const driver = new WebContainerDriver({});
     const ctx = await driver.provision();
@@ -70,8 +68,10 @@ describe('WebContainerDriver (unit)', () => {
   });
 
   it('exec() throws SandboxExecError if spawn throws', async () => {
+    const mockSpawn = vi.fn();
+    const mockTeardown = vi.fn();
     const wc = { spawn: mockSpawn, teardown: mockTeardown };
-    mockBoot.mockResolvedValueOnce(wc);
+    WebContainer.boot.mockResolvedValueOnce(wc);
 
     const driver = new WebContainerDriver({});
     const ctx = await driver.provision();
@@ -84,8 +84,10 @@ describe('WebContainerDriver (unit)', () => {
   });
 
   it('exec() times out and kills process', async () => {
+    const mockSpawn = vi.fn();
+    const mockTeardown = vi.fn();
     const wc = { spawn: mockSpawn, teardown: mockTeardown };
-    mockBoot.mockResolvedValueOnce(wc);
+    WebContainer.boot.mockResolvedValueOnce(wc);
 
     const driver = new WebContainerDriver({});
     const ctx = await driver.provision();
@@ -101,8 +103,10 @@ describe('WebContainerDriver (unit)', () => {
   });
 
   it('destroy() calls teardown() exactly once and is idempotent', async () => {
+    const mockSpawn = vi.fn();
+    const mockTeardown = vi.fn();
     const wc = { spawn: mockSpawn, teardown: mockTeardown };
-    mockBoot.mockResolvedValueOnce(wc);
+    WebContainer.boot.mockResolvedValueOnce(wc);
     mockTeardown.mockResolvedValueOnce(undefined);
 
     const driver = new WebContainerDriver({});

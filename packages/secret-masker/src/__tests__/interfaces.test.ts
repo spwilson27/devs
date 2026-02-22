@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { SecretMaskerFactory, SecretMasker } from '../index';
 import { ISecretMasker, IRedactionResult, IRedactionHit } from '../types';
 

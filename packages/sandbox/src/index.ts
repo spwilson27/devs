@@ -7,7 +7,6 @@ export * from './filesystem';
 export * from './network';
 export * from './utils';
 export * from './scripts';
-export * from './docker/DockerDriver';
 export * from './docker/ImageResolver';
 export * from './docker/ImageRebuilder';
 

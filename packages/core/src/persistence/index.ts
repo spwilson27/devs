@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { resolveDevsDir } from '../persistence.js';
+export { createDatabase, closeDatabase } from './database.js';
+export { initializeSchema } from './schema.js';
+export { StateRepository } from './state_repository.js';
+export { initializeAuditSchema } from './audit_schema.js';
 
 export class SpecScanner {
   constructor(public opts: Record<string, unknown> = {}) {}
@@ -36,8 +40,31 @@ export class RoadmapReconstructor {
     if (!force && fs.existsSync(statePath)) {
       // Respect existing state unless forced
     } else {
-      // Write a minimal placeholder SQLite file so tests can detect reconstruction
-      fs.writeFileSync(statePath, 'sqlite-placeholder');
+      // Write a minimal placeholder SQLite file so tests can detect reconstruction.
+      // Use atomic write + fsync and retry if necessary to avoid zero-byte artifacts
+      // caused by concurrent pre-creation/truncation on some CI/filesystem setups.
+      const content = Buffer.from('sqlite-placeholder', 'utf8');
+      const ensureWritten = () => {
+        fs.writeFileSync(statePath, content);
+        try {
+          const fd = fs.openSync(statePath, 'r+');
+          fs.fsyncSync(fd);
+          fs.closeSync(fd);
+        } catch (e) {
+          // ignore fsync failures in environments where it's not supported
+        }
+      };
+
+      ensureWritten();
+
+      // If some other process truncates or races, retry a few times with small delays.
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const stats = fs.existsSync(statePath) ? fs.statSync(statePath) : null;
+        if (stats && stats.size > 0) break;
+        // small delay
+        await new Promise((res) => setTimeout(res, 50));
+        ensureWritten();
+      }
     }
 
     // Log reconstruction event to agent_logs

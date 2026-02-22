@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { describe, it, expect } from 'vitest';
-const pkg = JSON.parse(fs.readFileSync(new URL('../../package.json', import.meta.url), 'utf8'));
+import path from 'path';
+const pkg = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../package.json'), 'utf8'));
 
 describe('package.json integrity', () => {
   it('has required fields', () => {

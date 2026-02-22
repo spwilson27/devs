@@ -28,7 +28,7 @@ describe("devs status live sync (integration)", () => {
     }
   });
 
-  it("reflects state changes after a manual state update and event emit", async () => {
+  it("reflects state changes after a manual state update and event emit", { timeout: 10000 }, async () => {
     const rc = await init({ projectDir: tmp, force: true });
     expect(rc).toBe(0);
 
@@ -78,5 +78,5 @@ describe("devs status live sync (integration)", () => {
     } finally {
       db.close();
     }
-  }, { timeout: 10000 });
+  });
 });

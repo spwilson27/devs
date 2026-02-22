@@ -1,26 +1,23 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const mockBoot = vi.fn();
-const mockTeardown = vi.fn();
+vi.mock('@webcontainer/api', () => {
+  const WebContainer = { boot: vi.fn() };
+  return { WebContainer };
+});
 
-vi.mock('@webcontainer/api', () => ({
-  WebContainer: {
-    boot: mockBoot,
-  },
-}));
-
+import { WebContainer } from '@webcontainer/api';
 import { WebContainerDriver } from '../webcontainer-driver';
 import { UnsupportedRuntimeError } from '../errors';
 
 // Skipped in unit CI
 describe.skip('WebContainerDriver (integration) - syscall compatibility', () => {
   beforeEach(() => {
-    mockBoot.mockReset();
+    WebContainer.boot.mockReset();
   });
 
   it('exec rejects with UnsupportedRuntimeError for python3', async () => {
-    const wc = { spawn: vi.fn(), teardown: mockTeardown };
-    mockBoot.mockResolvedValueOnce(wc);
+    const wc = { spawn: vi.fn(), teardown: vi.fn() };
+    WebContainer.boot.mockResolvedValueOnce(wc);
 
     const driver = new WebContainerDriver({});
     const ctx = await driver.provision();

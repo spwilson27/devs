@@ -1,11 +1,12 @@
 import fs from 'fs';
+import path from 'path';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import * as IR from '../../src/docker/ImageResolver';
 import { ImageRebuilder } from '../../src/docker/ImageRebuilder';
 import { RegistryUnavailableError, DigestMismatchError } from '../../src/errors';
 import { Readable } from 'stream';
 
-const manifestPath = new URL('../../docker/base/image-manifest.json', import.meta.url);
+const manifestPath = path.resolve(__dirname, '../../docker/base/image-manifest.json');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 const digest = String(manifest.digest).startsWith('@') ? String(manifest.digest).slice(1) : manifest.digest;
 

@@ -4,11 +4,8 @@ import { resolve, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import type Database from "better-sqlite3";
 
-import { createDatabase, closeDatabase } from "../../src/persistence/database.js";
-import { initializeSchema } from "../../src/persistence/schema.js";
-import { StateRepository } from "../../src/persistence/state_repository.js";
-import { InputIngestor } from "../../src/InputIngestor.js";
-import { LocalityGuard } from "../../src/LocalityGuard.js";
+import { createDatabase, closeDatabase, initializeSchema, StateRepository } from "@devs/core/persistence";
+import { InputIngestor, LocalityGuard } from "@devs/core";
 
 function makeTestDbPath(): string {
   const unique = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -21,7 +18,7 @@ function rowCount(db: Database.Database, table: string): number {
 
 describe("InputIngestor and LocalityGuard", () => {
   let db: Database.Database;
-  let repo: StateRepository;
+  let repo: any;
   let testDbPath: string;
 
   beforeEach(() => {

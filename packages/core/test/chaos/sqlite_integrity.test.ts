@@ -32,7 +32,7 @@ const runChaos = process.env.RUN_CHAOS_TEST === 'true';
 
     // force kill
     try {
-      process.kill(child.pid, 'SIGKILL');
+      if (child.pid !== undefined) process.kill(child.pid, 'SIGKILL');
     } catch (e) {}
 
     // wait for process exit (with a short fallback)

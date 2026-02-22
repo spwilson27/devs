@@ -1,4 +1,8 @@
-import { spawn } from 'child_process';
+import * as child_process from 'child_process';
+
+export function spawnProc(command: string, options?: any) {
+  return (child_process as any).spawn(command, options);
+}
 import pidusage from 'pidusage';
 
 export interface MonitoredShellOptions {
@@ -27,7 +31,7 @@ export async function runShellMonitored(
   const cpuSustainedMs = opts.cpuSustainedMs ?? 10_000;
   const pollIntervalMs = opts.pollIntervalMs ?? 1_000;
 
-  const child = spawn(command, { shell: true });
+  const child = spawnProc(command, { shell: true });
 
   let stdout = '';
   let stderr = '';
@@ -63,39 +67,44 @@ export async function runShellMonitored(
     child.on('exit', (code: number | null) => onExit(code));
     child.on('error', onError);
 
-    interval = setInterval(async () => {
-      try {
-        const stats = (await pidusage(child.pid)) as { cpu: number; memory: number };
-
-        if (stats.memory > rssLimitBytes) {
-          stopInterval();
+    interval = setInterval(() => {
+      const pid = child.pid as number;
+      (pidusage as any)(pid)
+        .then((stats: { cpu: number; memory: number }) => {
           try {
-            child.kill('SIGKILL');
-          } catch (e) {
-            // ignore
-          }
-          settled = true;
-          reject(new ResourceLimitExceededError(child.pid, 'rss', stats.memory, rssLimitBytes));
-          return;
-        }
+            if (stats.memory > rssLimitBytes) {
+              stopInterval();
+              try {
+                child.kill('SIGKILL');
+              } catch (e) {
+                // ignore
+              }
+              settled = true;
+              reject(new ResourceLimitExceededError(pid, 'rss', stats.memory, rssLimitBytes));
+              return;
+            }
 
-        if (stats.cpu >= 100) {
-          cpuOverCount++;
-          if (cpuOverCount * pollIntervalMs >= cpuSustainedMs) {
-            stopInterval();
-            try {
-              child.kill('SIGKILL');
-            } catch (e) {}
-            settled = true;
-            reject(new ResourceLimitExceededError(child.pid, 'cpu', stats.cpu, 100));
-            return;
+            if (stats.cpu >= 100) {
+              cpuOverCount++;
+              if (cpuOverCount * pollIntervalMs >= cpuSustainedMs) {
+                stopInterval();
+                try {
+                  child.kill('SIGKILL');
+                } catch (e) {}
+                settled = true;
+                reject(new ResourceLimitExceededError(pid, 'cpu', stats.cpu, 100));
+                return;
+              }
+            } else {
+              cpuOverCount = 0;
+            }
+          } catch (err) {
+            // ignore sampling errors
           }
-        } else {
-          cpuOverCount = 0;
-        }
-      } catch (err) {
-        // ignore sampling errors
-      }
+        })
+        .catch(() => {
+          // ignore sampling errors
+        });
     }, pollIntervalMs);
   });
 }
