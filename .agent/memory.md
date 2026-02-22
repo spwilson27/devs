@@ -164,3 +164,13 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - [2026-02-22] Added @devs/sandbox package: initialized package.json, tsconfig, tests, and README.
 
 - [2026-02-22 Reviewer] - Sandbox review: Verified package.json and tsconfig match task requirements; ran `./do presubmit` and confirmed all presubmit checks passed (no code changes required).
+
+## [2026-02-22] - secret-masker package added
+
+- Created package @devs/secret-masker with interface definitions and a stub SecretMasker implementation (mask, maskStream) under packages/secret-masker/src. Added tests at packages/secret-masker/src/__tests__/interfaces.test.ts, package config, tsconfig, and jest config.
+- Architectural decision: Secret masking should be provided as a standalone package exposing ISecretMasker and IRedaction types to allow injection into streaming pipelines (maskStream) and discrete redaction (mask).
+- Brittle Areas: New packages must include .agent AOD files and be registered in pnpm-workspace.yaml and tests/infrastructure/verify_monorepo.sh to pass presubmit checks.
+
+- Recent Changelog: Added secret-masker package scaffolding and tests; updated pnpm-workspace.yaml and monorepo verification script to register the package.
+
+- **[2026-02-22 Reviewer] - SecretMasker review:** Inspected packages/secret-masker; confirmed interfaces in `src/types.ts` (ISecretMasker, IRedactionResult, IRedactionHit); `SecretMasker` implements `ISecretMasker`; `SecretMaskerFactory.create()` returns a `SecretMasker` instance. Tests present at `packages/secret-masker/src/__tests__/interfaces.test.ts` exercise runtime shapes and factory creation. Ran `./do presubmit` (exit 0). Recommendation: run `pnpm --filter @devs/secret-masker test` and `pnpm --filter @devs/secret-masker build` in CI or a developer environment with devDependencies installed to validate runtime test execution (jest/ts-jest) and TypeScript emit; add package-level `.agent.md` if additional agent docs are needed.

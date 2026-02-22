@@ -100,7 +100,7 @@ echo ""
 echo "-- pnpm-workspace.yaml"
 
 WORKSPACE="$ROOT_DIR/pnpm-workspace.yaml"
-REQUIRED_PKGS=(core agents sandbox memory mcp cli vscode)
+REQUIRED_PKGS=(core agents sandbox memory mcp cli vscode secret-masker)
 
 if [[ -f "$WORKSPACE" ]]; then
   pass "pnpm-workspace.yaml exists"

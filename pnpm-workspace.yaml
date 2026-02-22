@@ -6,3 +6,4 @@ packages:
   - packages/mcp
   - packages/cli
   - packages/vscode
+  - packages/secret-masker
