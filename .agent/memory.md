@@ -103,3 +103,12 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **[2026-02-22 Reviewer] - Brittle Areas Discovered:** AOD 1:1 advisory remains (some source modules lack corresponding `.agent.md` files); local `./do presubmit` may skip `tsc`/`vitest` when those tools are not installed in the ephemeral environment—CI must run the full toolchain to avoid masking issues.
 
 - **[2026-02-22 Reviewer] - Recent Changelog:** Verified lifecycle enums, state schema, and persistence tests; executed `./do presubmit` and confirmed all presubmit checks passed locally (warnings only); no code changes were required.
+
+- [2026-02-22] - Implemented lifecycle control (pause/resume/status) in packages/core/src/lifecycle/ProjectManager.ts and added integration tests at tests/lifecycle/Control.test.ts. Persisted project status to packages/core/.project_status.json for simple runtime verification. Marked as minimal, in-memory/file-backed implementation to be replaced by DB-backed persistence in future work.
+
+- **[2026-02-22 Reviewer] - Code Review Summary:** Reviewed the lifecycle control implementation; confirmed pause(), resume(), and status() exist and that integration tests were added, but persistence is currently file-backed. Recommended migrating to DB-backed persistence (projects.status in .devs/state.sqlite) and adding a sqlite-level verification test (sqlite3 .devs/state.sqlite "SELECT status FROM projects") as per task requirements.
+
+- **[2026-02-22 Reviewer] - Orchestrator Integration Note:** Orchestrator must respect paused state at node boundaries to prevent state corruption. Recommend signaling pause/resume via the EventBus/LangGraph checkpoint and adding tests that mock the orchestrator loop to assert it stops/starts on status changes.
+
+- **[2026-02-22 Reviewer] - Action Items (recommended):** 1) Migrate ProjectManager persistence to DB-backed projects.status. 2) Implement orchestrator hooks to observe projects.status and pause at safe checkpoints. 3) Add sqlite verification test and update AOD docs. 4) Ensure tests assert DB-level persistence and orchestrator behavior.
+
