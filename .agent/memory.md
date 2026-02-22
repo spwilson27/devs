@@ -55,3 +55,7 @@ _Last updated: 2026-02-22T21:53:46Z_
 - [2026-02-22 Reviewer] Created `packages/sandbox/dist/TempDirManager.cjs` shim to satisfy ci-tempdir-tests and enable presubmit checks in minimal environments without installing devDependencies.
 
 _Last updated: 2026-02-22T22:19:08Z_
+
+- [2026-02-22 Reviewer] Added CI workflow `.github/workflows/sandbox-e2e.yml` to run the network e2e suite (job: network-egress-e2e); verified E2E tests pass locally with `E2E=true` and Docker sub-tests are gated via `DOCKER_INTEGRATION=true`. This verifies end-to-end enforcement of the allow-list, DNS resolver stub behavior, and audit metrics collection.
+
+- [2026-02-22 Reviewer] Minor test hardening: added JSDoc `@group e2e` tag to `packages/sandbox/src/network/__e2e__/egressPolicy.e2e.test.ts` and wrapped `afterAll` cleanup in a try/finally to ensure resources are released even when stop logic throws.

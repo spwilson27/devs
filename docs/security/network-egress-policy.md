@@ -34,3 +34,8 @@ Key points:
 ### Audit Logging
 
 All egress decisions (allowed and blocked) are audited via ProxyAuditLogger. Audit entries contain only `host`, `method`, and `timestampMs` to avoid logging full URLs or request paths that could leak sensitive data. File sinks are append-only and write entries as newline-delimited JSON.
+
+## Verification
+
+The end-to-end network tests validate the egress policy by starting an in-process EgressProxy, an IsolatedDnsResolver (stub in CI), and a ProxyAuditLogger. The tests assert that an HTTP CONNECT to registry.npmjs.org:443 returns 200, while CONNECTs to files.pythonhosted.org:443 and evil.com:443 return 403. The tests are gated by the E2E=true environment variable; Docker and WebContainer subtests are gated by DOCKER_INTEGRATION=true and WEBCONTAINER_INTEGRATION=true respectively.
+

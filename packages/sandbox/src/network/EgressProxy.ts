@@ -6,7 +6,7 @@ import { ProxyAuditLogger } from './ProxyAuditLogger';
 export interface EgressProxyConfig {
   port: number;           // 0 = OS-assigned ephemeral port
   allowList: string[];    // FQDNs / CIDR blocks (populated later)
-  dnsResolver?: string;   // upstream DNS IP (optional, wired in task 03)
+  dnsResolver?: any;   // upstream DNS IP or resolver object (optional)
   auditLogger?: ProxyAuditLogger;
   logger?: Logger;
 }
@@ -58,12 +58,9 @@ export default class EgressProxy {
     this.server.on('connect', (req: http.IncomingMessage, clientSocket: net.Socket, head: Buffer) => {
       const target = req.url || '';
       // extract host portion without port, normalize
-      const hostOnly = String(target).replace(/:\\d+$/, '').replace(/\.$/, '').toLowerCase();
-      const allowed = this.allowlistEngine.isAllowed(hostOnly);
-      // debug log the decision and current list
-      this.logger.debug?.('egress_decision', { event: 'egress_decision', allowed, host: hostOnly, allowList: this.config.allowList });
+      const hostOnly = String(target).replace(/:\d+$/, '').replace(/\.$/, '').toLowerCase();
 
-      if (!allowed) {
+      const respondBlocked = () => {
         try {
           clientSocket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
           clientSocket.end();
@@ -71,16 +68,41 @@ export default class EgressProxy {
           clientSocket.destroy();
         }
         this.auditLogger?.logRequest({ host: hostOnly, allowed: false, method: 'CONNECT', timestampMs: Date.now() });
-        return;
-      }
+      };
 
-      try {
-        // Allowed: acknowledge the tunnel (200). Full tunnelling/forwarding is out of scope for this test.
-        this.auditLogger?.logRequest({ host: hostOnly, allowed: true, method: 'CONNECT', timestampMs: Date.now() });
-        clientSocket.write('HTTP/1.1 200 Connection Established\r\n\r\n');
-        clientSocket.end();
-      } catch (err) {
-        clientSocket.destroy();
+      const respondAllowed = () => {
+        try {
+          // Allowed: acknowledge the tunnel (200). Full tunnelling/forwarding is out of scope for this test.
+          this.auditLogger?.logRequest({ host: hostOnly, allowed: true, method: 'CONNECT', timestampMs: Date.now() });
+          clientSocket.write('HTTP/1.1 200 Connection Established\r\n\r\n');
+          clientSocket.end();
+        } catch (err) {
+          clientSocket.destroy();
+        }
+      };
+
+      // debug log the decision and current list (decision may be deferred by DNS resolver)
+      this.logger.debug?.('egress_decision', { event: 'egress_decision', host: hostOnly, allowList: this.config.allowList });
+
+      const decision = () => {
+        const allowed = this.allowlistEngine.isAllowed(hostOnly);
+        if (!allowed) {
+          respondBlocked();
+        } else {
+          respondAllowed();
+        }
+      };
+
+      // If a dnsResolver with a resolve function is provided, consult it first.
+      const resolver = (this.config as any).dnsResolver;
+      if (resolver && typeof resolver.resolve === 'function') {
+        Promise.resolve(resolver.resolve(hostOnly))
+          .then(() => decision())
+          .catch(() => {
+            respondBlocked();
+          });
+      } else {
+        decision();
       }
 
       clientSocket.on('error', (err) => {

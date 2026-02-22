@@ -464,3 +464,14 @@ TempDirManager provides a small, secure API for creating and managing per-sessio
 - Automatic exit cleanup: A best-effort synchronous cleanup runs on process exit using `fs.rmSync(..., { recursive: true, force: true })` to remove tracked temp directories.
 
 
+
+## Running E2E Network Tests
+
+These E2E network tests are gated and do not run during normal unit test execution.
+
+- Enable the E2E test suite: E2E=true pnpm --filter @devs/sandbox test:e2e
+- Run only the network-focused E2E suite: E2E=true pnpm --filter @devs/sandbox test:e2e:network
+- Docker sub-tests (optional) are gated by: DOCKER_INTEGRATION=true
+- WebContainer sub-tests (optional) are gated by: WEBCONTAINER_INTEGRATION=true
+
+The E2E tests start an in-process EgressProxy, an IsolatedDnsResolver stub, and a ProxyAuditLogger (sinkType: console). The acceptance criteria assert allowed vs blocked CONNECT responses and that audit metrics reflect the decisions.
