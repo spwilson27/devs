@@ -29,6 +29,7 @@ export interface SandboxConfig {
   // Resource limits (optional; validated where required)
   cpuCores: number; // number of CPU cores to allocate
   memoryGb: number; // memory in GB
+  storageLimitGb?: number; // storage limit in GB for the workspace
   pidLimit?: number; // limit on number of PIDs in the container
   nofileLimit?: number; // ulimit nofile value (per-process file descriptor limit)
 }

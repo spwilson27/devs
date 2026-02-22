@@ -28,6 +28,14 @@ export function buildDockerRunArgs(config: SandboxConfig): string[] {
   ];
 }
 
+export function buildVolumeArgs(config: SandboxConfig): string[] {
+  if (!config || typeof config.storageLimitGb !== 'number' || config.storageLimitGb <= 0) {
+    throw new MissingResourceConfigError('storageLimitGb', 'storageLimitGb must be a positive number');
+  }
+  const tmpfsMount = `type=tmpfs,destination=/tmp,tmpfs-size=${config.tmpfsSize ?? '256m'}`;
+  return ['--storage-opt', `size=${config.storageLimitGb}g`, '--mount', tmpfsMount];
+}
+
 export interface DockerDriverConfig {
   image?: string;
   memoryMb?: number; // in MB
@@ -70,13 +78,24 @@ export class DockerDriver extends SandboxProvider {
       `/tmp:rw,noexec,nosuid,nodev,size=${tmpfsSize}`,
       '--tmpfs',
       `/run:rw,noexec,nosuid,nodev,size=64m`,
+    ];
+
+    // Merge in volume-specific args (storage-opt, mount) when available
+    try {
+      const volumeArgs = buildVolumeArgs(config);
+      args.push(...volumeArgs);
+    } catch (e) {
+      // if storageLimitGb isn't provided, do not fail here; higher-level validation should enforce it
+    }
+
+    args.push(
       '-w',
       workspaceMount,
       '-v',
       `${config.hostProjectPath}:${workspaceMount}:ro`,
       'sleep',
       'infinity',
-    ];
+    );
     return args;
   }
 

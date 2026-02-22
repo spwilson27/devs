@@ -6,6 +6,7 @@ export const DEFAULT_SANDBOX_CONFIG: SandboxConfig = {
   tmpfsSize: '256m',
   cpuCores: 2,
   memoryGb: 4,
+  storageLimitGb: 2,
   pidLimit: 512,
   nofileLimit: 1024,
 };
