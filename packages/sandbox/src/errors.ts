@@ -39,3 +39,17 @@ export class SecurityConfigError extends Error {
     this.name = 'SecurityConfigError';
   }
 }
+
+export class RegistryUnavailableError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'No registry reachable and no local image available');
+    this.name = 'RegistryUnavailableError';
+  }
+}
+
+export class DigestMismatchError extends Error {
+  constructor(expected: string, actual?: string) {
+    super(`Digest mismatch. expected=${expected} actual=${actual ?? 'none'}`);
+    this.name = 'DigestMismatchError';
+  }
+}

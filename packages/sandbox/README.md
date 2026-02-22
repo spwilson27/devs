@@ -130,6 +130,24 @@ await driver.destroy(ctx);
 
 Note: Running the example requires a Docker daemon and local dev tooling (pnpm, vitest) installed in the environment.
 
+Fallback registry mechanism:
+
+- The sandbox uses a three-tier image resolution strategy: primary registry → secondary mirror → local Docker cache. This is implemented by ImageResolver which reads the authoritative image-manifest.json (single source of truth) and attempts a fast HEAD check (≤5s timeout) against the primary and secondary registries before falling back to a locally cached image tag.
+- To configure and use the resolver with the Docker driver:
+
+```ts
+import { ImageResolver } from './src/docker/ImageResolver';
+const resolver = new ImageResolver({
+  primaryRegistry: 'ghcr.io/devs-project/sandbox-base',
+  secondaryRegistry: 'registry.hub.docker.com/devs-project/sandbox-base',
+  localCacheTag: 'devs-sandbox-base:latest',
+  imageManifestPath: new URL('./docker/base/image-manifest.json', import.meta.url),
+});
+const driver = new DockerDriver(dockerClient, { hostProjectPath: '/proj' }, resolver);
+```
+
+The resolution order is strict and not configurable at runtime to ensure fast failover behavior and predictable sourcing.
+
 ## Drivers
 
 ### WebContainerDriver

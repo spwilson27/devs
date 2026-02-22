@@ -12,6 +12,9 @@
   - Ensure providers implement provision()/exec()/destroy() correctly; provider.destroy must be safe to call even after partial failures.
   - Changing CapDrop/SecurityOpt/Privileged requires a formal security review; these are hard constraints enforced by runtime validation.
 
+  - Image resolution relies on an external registry; ensure registry timeouts are enforced to avoid long provisioning delays.
+
 - Recent Changelog:
   - Implemented SandboxLifecycleManager, SandboxLifecycleConfig, errors (SandboxPreFlightError, SandboxTimeoutError), and unit tests for lifecycle behaviour.
   - [2026-02-22] Added DockerDriver security hardening: buildHostConfig, SecurityConfigError, DockerDriverSecurity.spec.ts, verify-security-config.ts, and documentation updates to DockerDriver.agent.md and README.
+  - Added ImageResolver and ImageRebuilder for image fallback and local reconstruction (phase_2 task).

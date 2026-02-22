@@ -31,10 +31,12 @@ export class DockerDriver extends SandboxProvider {
   private docker: any;
   private defaultConfig: Required<DockerDriverConfig>;
   private containers: Map<string, any> = new Map();
+  private imageResolver?: any;
 
-  constructor(dockerClient: any, config?: Partial<DockerDriverConfig>) {
+  constructor(dockerClient: any, config?: Partial<DockerDriverConfig>, imageResolver?: any) {
     super();
     this.docker = dockerClient;
+    this.imageResolver = imageResolver;
     this.defaultConfig = {
       image: config?.image ?? 'devs-sandbox-base:latest',
       hostProjectPath: config?.hostProjectPath ?? process.cwd(),
@@ -60,8 +62,10 @@ export class DockerDriver extends SandboxProvider {
       const hostConfig = buildHostConfig(cfg);
       this.validateSecurityConfig(hostConfig);
 
+      const imageToUse = this.imageResolver ? await this.imageResolver.resolve() : cfg.image;
+
       const createOpts: any = {
-        Image: cfg.image,
+        Image: imageToUse,
         HostConfig: hostConfig,
         WorkingDir: '/workspace',
         Cmd: ['/bin/sh', '-lc', 'while true; do sleep 1; done'],

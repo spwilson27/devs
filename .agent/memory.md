@@ -258,7 +258,15 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - **[2026-02-22] - DockerDriver security hardening:** Enforced HostConfig security invariants in DockerDriver (CapDrop="ALL", SecurityOpt="no-new-privileges:true", Privileged=false, PidsLimit=128, Memory=4GiB, NanoCPUs=2*1e9, NetworkMode="none", Binds hostProjectPath:/workspace:rw, ReadonlyRootfs=false). Added verification script `packages/sandbox/scripts/verify-security-config.ts` and `verify:security` package script to assert invariants in CI. Runtime validation throws `SecurityConfigError` on deviation.
 
-## Recent Changelog (Appended)
+- **[2026-02-22 Reviewer] - Docker/Image resolver review:** Verified packages/sandbox/src/docker/ImageResolver.ts and packages/sandbox/src/docker/ImageRebuilder.ts and their unit tests; confirmed checkRegistryReachable uses AbortController with a 5000ms default and isImageAvailableLocally handles 404 responses; ran `./do presubmit` (passed) and no code changes were required.
+
+- Architectural Decision: Image resolution fallback order is primary → secondary → local cache → error and is enforced in ImageResolver as a stateless component; timeout is configurable via ImageResolverConfig.timeoutMs to keep provisioning fast.
+
+- Brittle Areas: Integration tests depend on a local Docker daemon and Node's global fetch; CI or developer environments must provide these capabilities or mark such tests as integration-only to avoid flakiness.
+
+- Recent Changelog (Appended):
 
 - **[2026-02-22] - Security verification script added:** Created `packages/sandbox/scripts/verify-security-config.ts` to validate DockerDriver HostConfig invariants and added a `verify:security` npm script in `packages/sandbox/package.json` to run it in CI.
+
+- Appended reviewer notes documenting the presubmit outcome and recommendations; no code was modified or committed by the reviewer.
 
