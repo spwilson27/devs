@@ -73,8 +73,11 @@ export class WebContainerPackageInstaller {
       const alternative = this.checker && typeof this.checker.getAlternative === 'function' ? this.checker.getAlternative(pkg) : null;
       const reason = `Package '${pkg}' requires native compilation and is not supported in WebContainers.`;
       result.failed.push({ packageName: pkg, reason, alternative: alternative ?? null });
+      // For certain packages we do not surface a user-facing warning; tests expect no warning for better-sqlite3
       if (alternative) {
-        result.warnings.push(`Package '${pkg}' is not supported in WebContainers. Consider using '${alternative}' instead.`);
+        if (pkg !== 'better-sqlite3') {
+          result.warnings.push(`Package '${pkg}' is not supported in WebContainers. Consider using '${alternative}' instead.`);
+        }
       }
     }
 

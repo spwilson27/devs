@@ -1,6 +1,9 @@
 import type { SandboxContext, ExecOptions, ExecResult } from '../types';
 import { SandboxProvider } from '../SandboxProvider';
 import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError, SandboxExecError } from '../errors';
+import { WebContainerPackageInstaller } from './webcontainer/package-installer';
+import type { PackageInstallResult } from './webcontainer/package-installer';
+import { NativeDependencyChecker } from './webcontainer/native-dependency-checker';
 
 export interface WebContainerDriverConfig {
   workdir?: string;
@@ -38,6 +41,12 @@ export class WebContainerDriver extends SandboxProvider {
     } catch (err: any) {
       throw new SandboxProvisionError(err?.message ?? String(err));
     }
+  }
+
+  async installPackages(packages: string[]): Promise<PackageInstallResult> {
+    if (!this.wc) throw new SandboxExecError('WebContainer not provisioned');
+    const installer = new WebContainerPackageInstaller(this.wc, new NativeDependencyChecker());
+    return installer.install(packages);
   }
 
   async exec(ctx: SandboxContext, cmd: string, args: string[] = [], opts?: ExecOptions): Promise<ExecResult> {

@@ -13,3 +13,5 @@ export type { WebContainerDriverConfig } from './WebContainerDriver';
 export { RuntimeCompatibilityChecker } from './webcontainer/runtime-compat-checker';
 export { RUNTIME_COMPAT_MATRIX } from './webcontainer/runtime-compat-matrix';
 export { NativeDependencyChecker, NATIVE_PACKAGES } from './webcontainer/native-dependency-checker';
+export { WebContainerPackageInstaller } from './webcontainer/package-installer';
+export type { PackageInstallResult } from './webcontainer/package-installer';

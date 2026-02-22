@@ -28,4 +28,14 @@ This file captures the project's most important architectural decisions, recurri
 2. Stabilize Docker integration tests and ensure CI images include prebuilt native dependencies or build tooling.
 3. Finish remaining small todos tracked in session DB (see session todos table).
 
-_Last updated: 2026-02-22T19:33:02Z_
+
+## Architectural Decisions (recent addition)
+- 2026-02-22 - WebContainerPackageInstaller gates native npm packages before install; blocked packages are reported with a non-empty reason and an optional alternative to avoid network traffic and failed native compilation inside WebContainers.
+
+## Brittle Areas (recent discovery)
+- WebContainer verification and some package-level tests rely on prebuilt CommonJS artifacts in packages/sandbox/dist (e.g., TempDirManager.cjs). CI must run the build step or include shims for Node-run checks.
+
+## Recent Changelog (append)
+- [2026-02-22] Added packages/sandbox/dist/TempDirManager.cjs as a small CommonJS shim so CI tempdir checks run without a full build; verified WebContainerPackageInstaller implementation and its integration point on WebContainerDriver (installPackages).
+
+_Last updated: 2026-02-22T20:13:54Z_
