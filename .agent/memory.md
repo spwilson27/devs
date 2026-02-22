@@ -100,4 +100,12 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - **[2026-02-22 Reviewer] - MilestoneService review:** Reviewed `packages/core/src/lifecycle/MilestoneService.ts` and `packages/core/test/lifecycle/Milestones.test.ts`; implementation matches roadmap requirements, uses centralized `MILESTONE_PHASE_MAP`, and calculates progress from atomic tasks; no code changes required.
 
 - **Recommendation:** Add a corresponding AOD file `.agent/packages/core/lifecycle/MilestoneService.agent.md` and ensure CI images/install steps include `tsc` and `vitest` so unit tests are executed in presubmit environments.
+## [2026-02-22] - CLI scaffolding
+
+- Added `@devs/cli` package with `init` command to initialize the Flight Recorder `.devs/` directory and SQLite state store.
+- Created integration test `packages/cli/tests/init.spec.ts` and CLI implementation at `packages/cli/src/`.
+- Note: CLI imports core persistence modules from source; CI must ensure a TypeScript runtime loader (e.g., tsx or ts-node) is available so the CLI and tests can execute directly from TypeScript source.
+
+- [2026-02-22] Review: Verified the `@devs/cli` init implementation and integration test; ran `./do presubmit` and all checks passed (exit code 0).
+- [2026-02-22] Follow-up: AOD 1:1 doc missing reported by AOD lint for `packages/cli/src/bin.ts`. Add `.agent/packages/cli/bin.agent.md` (and other missing AOD docs listed by presubmit) to resolve violations in a follow-up task.
 

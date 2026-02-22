@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "echo 'build: not yet configured'",
-    "test": "echo 'test: not yet configured'",
+    "test": "vitest run",
     "lint": "echo 'lint: not yet configured'",
     "fmt": "echo 'fmt: not yet configured'"
   },
