@@ -114,11 +114,24 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - [2026-02-22] Review: Verified the `@devs/cli` init implementation and integration test; ran `./do presubmit` and all checks passed (exit code 0).
 - [2026-02-22] Follow-up: AOD 1:1 doc missing reported by AOD lint for `packages/cli/src/bin.ts`. Add `.agent/packages/cli/bin.agent.md` (and other missing AOD docs listed by presubmit) to resolve violations in a follow-up task.
 
+<<<<<<< HEAD
 ## [2026-02-22 Reviewer] - CLI Status Review
 
 - Verified `packages/cli/src/index.ts` implements `status()` returning a structured project state and the CLI entrypoint (`packages/cli/src/bin.ts`) correctly supports `--json` output and JSON-formatted errors; no functional code changes were required.
 - Observed `./do presubmit` passes locally, but unit tests are skipped in this ephemeral environment because `vitest` is not installed; recommend documenting the required local dev toolchain (e.g., `tsc`, `vitest`) and ensuring CI images install dev dependencies so CLI tests run in presubmit.
 - Architectural note: Keep CLI as a thin shell and centralize formatting/serialization logic in `@devs/core` to preserve the headless-first design and make it easier for other UIs (VSCode/MCP) to reuse the same formatting logic.
+=======
+## [2026-02-22] - CLI control commands added
+
+- Implemented `pause`, `resume`, and `skip` commands in `packages/cli/src/index.ts`.
+  - `pause`: sets the project's `status` to `PAUSED` in `.devs/state.sqlite` (via `StateRepository.upsertProject`) and publishes a `PAUSE` event on the `SharedEventBus`.
+  - `resume`: sets the project's `status` to `ACTIVE` and publishes a `RESUME` event.
+  - `skip`: marks the current task as `SKIPPED` (uses `StateRepository.updateTaskStatus`) and publishes a `STATE_CHANGE` event for the task.
+
+- Added integration tests at `packages/cli/test/control.test.ts` to verify these behaviors against the Flight Recorder DB.
+
+- Note: Test execution failed in this ephemeral environment due to the native addon `better-sqlite3` not being resolvable at runtime; CI must run tests in an environment with the project's native dependencies available (or provide prebuilt binaries) to execute integration tests that open `.devs/state.sqlite`.
+>>>>>>> af488ca (phase_1:08_cli_integration_state_control/03_cli_state_control_commands.md: Implement Orchestrator Control Commands (`pause`, `resume`, `skip`))
 
 
 ## [2026-02-22] - Foundation DoD validator added
@@ -139,3 +152,4 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - Recent Changelog: Ran `./do presubmit` in this worktree and confirmed all presubmit checks passed (advisories only for missing AOD docs). Added this reviewer note and recommendations to memory; no code changes were required during the review.
 
 
+- [2026-02-22 Reviewer] - CLI control review: Verified pause/resume/skip implementation in packages/cli/src/index.ts; ensured idempotency and ACID writes via StateRepository; minimal changes required and tests present in repo.

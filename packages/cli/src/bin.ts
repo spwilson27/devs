@@ -4,13 +4,17 @@
    Recognises: devs init [--force|-f]
 */
 
+<<<<<<< HEAD
 import { init, status } from "./index.js";
+=======
+import { init, pause, resume, skip } from "./index.js";
+>>>>>>> af488ca (phase_1:08_cli_integration_state_control/03_cli_state_control_commands.md: Implement Orchestrator Control Commands (`pause`, `resume`, `skip`))
 
 async function main() {
   const args = process.argv.slice(2);
   const cmd = args[0];
   if (!cmd || cmd === "help" || cmd === "--help") {
-    console.log("devs — available commands: init");
+    console.log("devs — available commands: init, pause, resume, skip");
     process.exit(0);
   }
 
@@ -25,6 +29,7 @@ async function main() {
     }
   }
 
+<<<<<<< HEAD
   if (cmd === "status") {
     const json = args.includes("--json");
     try {
@@ -44,6 +49,34 @@ async function main() {
       } else {
         console.error(err);
       }
+=======
+  if (cmd === "pause") {
+    try {
+      const rc = await pause({ projectDir: process.cwd() });
+      process.exit(typeof rc === "number" ? rc : 0);
+    } catch (err) {
+      console.error(err);
+      process.exit(1);
+    }
+  }
+
+  if (cmd === "resume") {
+    try {
+      const rc = await resume({ projectDir: process.cwd() });
+      process.exit(typeof rc === "number" ? rc : 0);
+    } catch (err) {
+      console.error(err);
+      process.exit(1);
+    }
+  }
+
+  if (cmd === "skip") {
+    try {
+      const rc = await skip({ projectDir: process.cwd() });
+      process.exit(typeof rc === "number" ? rc : 0);
+    } catch (err) {
+      console.error(err);
+>>>>>>> af488ca (phase_1:08_cli_integration_state_control/03_cli_state_control_commands.md: Implement Orchestrator Control Commands (`pause`, `resume`, `skip`))
       process.exit(1);
     }
   }

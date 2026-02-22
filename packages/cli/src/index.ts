@@ -6,6 +6,7 @@ import { getDatabase } from "../../core/src/persistence/database.js";
 import { initializeSchema } from "../../core/src/persistence/schema.js";
 import { StateRepository } from "../../core/src/persistence/state_repository.js";
 import { resolveDevsDir } from "../../core/src/persistence.js";
+import { SharedEventBus, EVENTBUS_SOCKET_NAME } from "../../core/src/events/SharedEventBus.js";
 
 export async function init(opts: { projectDir?: string; force?: boolean } = {}) {
   const projectDir = opts.projectDir ?? process.cwd();
@@ -71,6 +72,7 @@ export async function init(opts: { projectDir?: string; force?: boolean } = {}) 
   return 0;
 }
 
+<<<<<<< HEAD
 export async function status(opts: { projectDir?: string } = {}) {
   const projectDir = opts.projectDir ?? process.cwd();
 
@@ -154,3 +156,136 @@ export async function status(opts: { projectDir?: string } = {}) {
 }
 
 export default { init, status };
+=======
+export async function pause(opts: { projectDir?: string; reason?: string } = {}) {
+  const projectDir = opts.projectDir ?? process.cwd();
+  const db = getDatabase({ fromDir: projectDir });
+  try {
+    initializeSchema(db);
+  } catch (err) {
+    console.error("devs: failed to initialise schema:", err);
+    return 1;
+  }
+
+  const projectRow = db.prepare("SELECT id, name, status, metadata FROM projects ORDER BY id LIMIT 1").get();
+  if (!projectRow) {
+    console.error("devs: no project found; run 'devs init' first");
+    return 2;
+  }
+
+  const repo = new StateRepository(db);
+  if (projectRow.status === "PAUSED") {
+    console.log("Project already paused");
+    return 0;
+  }
+
+  repo.upsertProject({ id: projectRow.id, name: projectRow.name, status: "PAUSED", metadata: projectRow.metadata });
+
+  try {
+    const socketPath = path.join(resolveDevsDir(projectDir), EVENTBUS_SOCKET_NAME);
+    const bus = await SharedEventBus.createClient(socketPath);
+    bus.publish("PAUSE", { requestedBy: "cli", reason: opts.reason, timestamp: new Date().toISOString() });
+    await bus.close();
+  } catch (err) {
+    // No bus server running; warn but continue
+    console.warn("devs: warning: could not publish PAUSE event:", err?.message ?? err);
+  }
+
+  console.log("Project Paused");
+  return 0;
+}
+
+export async function resume(opts: { projectDir?: string } = {}) {
+  const projectDir = opts.projectDir ?? process.cwd();
+  const db = getDatabase({ fromDir: projectDir });
+  try {
+    initializeSchema(db);
+  } catch (err) {
+    console.error("devs: failed to initialise schema:", err);
+    return 1;
+  }
+
+  const projectRow = db.prepare("SELECT id, name, status, metadata FROM projects ORDER BY id LIMIT 1").get();
+  if (!projectRow) {
+    console.error("devs: no project found; run 'devs init' first");
+    return 2;
+  }
+
+  const repo = new StateRepository(db);
+  if (projectRow.status === "ACTIVE") {
+    console.log("Project already running");
+    return 0;
+  }
+
+  repo.upsertProject({ id: projectRow.id, name: projectRow.name, status: "ACTIVE", metadata: projectRow.metadata });
+
+  try {
+    const socketPath = path.join(resolveDevsDir(projectDir), EVENTBUS_SOCKET_NAME);
+    const bus = await SharedEventBus.createClient(socketPath);
+    bus.publish("RESUME", { requestedBy: "cli", timestamp: new Date().toISOString() });
+    await bus.close();
+  } catch (err) {
+    console.warn("devs: warning: could not publish RESUME event:", err?.message ?? err);
+  }
+
+  console.log("Resuming Orchestration");
+  return 0;
+}
+
+export async function skip(opts: { projectDir?: string } = {}) {
+  const projectDir = opts.projectDir ?? process.cwd();
+  const db = getDatabase({ fromDir: projectDir });
+  try {
+    initializeSchema(db);
+  } catch (err) {
+    console.error("devs: failed to initialise schema:", err);
+    return 1;
+  }
+
+  const proj = db.prepare("SELECT id FROM projects ORDER BY id LIMIT 1").get();
+  if (!proj) {
+    console.error("devs: no project found; run 'devs init' first");
+    return 2;
+  }
+  const projectId = proj.id;
+
+  const repo = new StateRepository(db);
+
+  let task = db.prepare(`
+    SELECT t.id, t.status FROM tasks t
+    JOIN epics e ON t.epic_id = e.id
+    WHERE e.project_id = ? AND t.status = 'in_progress'
+    ORDER BY t.id LIMIT 1
+  `).get(projectId);
+
+  if (!task) {
+    task = db.prepare(`
+      SELECT t.id, t.status FROM tasks t
+      JOIN epics e ON t.epic_id = e.id
+      WHERE e.project_id = ? AND t.status = 'pending'
+      ORDER BY t.id LIMIT 1
+    `).get(projectId);
+  }
+
+  if (!task) {
+    console.log("No active task to skip");
+    return 0;
+  }
+
+  repo.updateTaskStatus(task.id, "SKIPPED");
+
+  try {
+    const socketPath = path.join(resolveDevsDir(projectDir), EVENTBUS_SOCKET_NAME);
+    const bus = await SharedEventBus.createClient(socketPath);
+    bus.publish("STATE_CHANGE", { entityType: 'task', entityId: task.id, previousStatus: task.status, newStatus: 'SKIPPED', timestamp: new Date().toISOString() });
+    await bus.close();
+  } catch (err) {
+    console.warn("devs: warning: could not publish STATE_CHANGE event:", err?.message ?? err);
+  }
+
+  console.log("Task skipped:", task.id);
+  return 0;
+}
+
+export default { init, pause, resume, skip };
+>>>>>>> af488ca (phase_1:08_cli_integration_state_control/03_cli_state_control_commands.md: Implement Orchestrator Control Commands (`pause`, `resume`, `skip`))
