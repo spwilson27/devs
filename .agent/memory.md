@@ -248,3 +248,12 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - Recent Changelog: Implemented WebContainerDriver with dynamic import guard for @webcontainer/api, createSandboxProvider auto-detection, unit tests with mocked API, and added optional peerDependency for @webcontainer/api.
 
+## [2026-02-22] - Phase 2 Decisions (WebContainerDriver)
+
+- Implemented: WebContainerDriver uses AbortSignal.timeout for exec timeouts (default 300000 ms).
+
+- Created ADR: docs/decisions/phase_2_adr.md (ADR-WC-002).
+
+- Created agent memo: .agent/phase_2_decisions.md.
+
+

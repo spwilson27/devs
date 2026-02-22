@@ -34,3 +34,52 @@ export class NativeDependencyError extends Error {
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
+
+// WebContainer-specific sandbox error hierarchy
+export class SandboxError extends Error {
+  constructor(msg?: string) {
+    super(msg ?? 'Sandbox error');
+    this.name = 'SandboxError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export class SandboxBootError extends SandboxError {
+  constructor(msg?: string) {
+    super(msg ?? 'Sandbox boot failed');
+    this.name = 'SandboxBootError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export class SandboxExecError extends SandboxError {
+  constructor(msg?: string) {
+    super(msg ?? 'Sandbox exec failed');
+    this.name = 'SandboxExecError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export class SandboxTimeoutError extends SandboxError {
+  constructor(timeoutMs?: number) {
+    super(`Sandbox process timed out after ${timeoutMs ?? 'unknown'}ms`);
+    this.name = 'SandboxTimeoutError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export class SandboxNotBootedError extends SandboxError {
+  constructor() {
+    super('Sandbox not booted');
+    this.name = 'SandboxNotBootedError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export class SandboxTeardownError extends SandboxError {
+  constructor(msg?: string) {
+    super(msg ?? 'Sandbox teardown failed');
+    this.name = 'SandboxTeardownError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}

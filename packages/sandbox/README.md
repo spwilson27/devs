@@ -107,6 +107,28 @@ console.log(res.stdout);
 await driver.destroy(ctx);
 ```
 
+## Drivers
+
+The sandbox package provides driver implementations for different sandbox runtimes. Example usage with WebContainerDriver:
+
+```ts
+import { WebContainerDriver } from '@devs/sandbox';
+
+const driver = new WebContainerDriver();
+const ctx = await driver.provision();
+const res = await driver.exec(ctx, 'echo', ['hello']);
+console.log(res.stdout);
+await driver.destroy(ctx);
+```
+
+Note: Running the Docker example requires a Docker daemon and local dev tooling (pnpm, vitest) installed in the environment.
+const ctx = await driver.provision();
+const res = await driver.exec(ctx, 'echo', ['hello']);
+console.log(res.stdout);
+await driver.destroy(ctx);
+```
+
+<<<<<<< HEAD
 Note: Running the example requires a Docker daemon and local dev tooling (pnpm, vitest) installed in the environment.
 
 ## Drivers
@@ -118,3 +140,5 @@ Note: Running the example requires a Docker daemon and local dev tooling (pnpm, 
 - Usage: Use isWebContainerSupported() to detect support in the current environment before creating a WebContainerDriver. Prefer using createSandboxProvider() which auto-selects WebContainerDriver when supported or falls back to DockerDriver.
 
 
+=======
+>>>>>>> bb77797 (phase_2:04_webcontainer_driver_implementation/02_webcontainer_driver_core_implementation.md: WebContainerDriver Core Implementation – Lifecycle & SandboxProvider Contract)
