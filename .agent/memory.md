@@ -40,4 +40,6 @@ This file captures the project's most important architectural decisions, recurri
 
 - [2026-02-22 Reviewer] Reviewed WebContainerDriver tests and helpers: confirmed contract + e2e tests present and correct; helpers located at packages/sandbox/src/drivers/webcontainer/__tests__/helpers are test-only and not exported; drainStream correctly uses ReadableStreamDefaultReader and awaits read() to handle backpressure; boot-driver registers afterEach to call teardown ensuring teardown idempotency; no code fixes required. Presubmit: ./do presubmit passed locally (2026-02-22).
 
+- 2026-02-22 - WebContainer egress controlled by patching globalThis.fetch; same AllowlistEngine logic applied; no TCP-level proxy available in WebContainer context.
+
 _Last updated: 2026-02-22T21:53:46Z_

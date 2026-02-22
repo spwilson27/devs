@@ -14,6 +14,7 @@ import { RuntimeCompatibilityChecker } from './runtime-compat-checker';
 import { WebContainerPackageInstaller } from './package-installer';
 import type { PackageInstallResult } from './package-installer';
 import { NativeDependencyChecker } from './native-dependency-checker';
+import { WebContainerNetworkShim } from '../../network/WebContainerNetworkShim';
 
 export interface WebContainerDriverOptions {
   /** Timeout in milliseconds. Default: 300000 (5 minutes). */
@@ -39,6 +40,12 @@ export class WebContainerDriver extends SandboxProvider {
   async boot(): Promise<void> {
     try {
       this._wc = await (WebContainer as any).boot();
+      // Install network shim to control WebContainer egress (best-effort)
+      try {
+        WebContainerNetworkShim.install(this._wc, { allowedHosts: [] });
+      } catch (_) {
+        // ignore if installation fails (optional dependency/runtime)
+      }
       this._booted = true;
     } catch (err: any) {
       throw new SandboxBootError(err?.message ?? String(err));

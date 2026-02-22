@@ -20,3 +20,13 @@ Sandbox containers are attached to a per-sandbox Docker bridge network created w
 ### Runtime updates
 
 - The EgressProxy exposes updateAllowList(hosts: string[]) to mutate the allow-list at runtime; calls are applied synchronously.
+
+### WebContainer Integration
+
+WebContainers do not provide a TCP-level proxy capability from inside the browser-like environment. To enforce egress policies within WebContainers, the project patches the in-context global fetch (globalThis.fetch) with a shim that implements the same allowlist-based logic used by the host-level egress proxy/AllowlistEngine.
+
+Key points:
+- The shim captures the original fetch implementation before patching and delegates allowed requests to it; blocked requests are returned immediately with a 403 response and a short, human-readable body ("Egress blocked by policy").
+- The allowlist matching is case-insensitive and performed against the request hostname (port is ignored).
+- Structured audit logs are emitted for blocked requests (e.g., { event: 'webcontainer_egress_blocked', host, url }).
+- This approach enforces policy for HTTP/HTTPS fetches but cannot control non-fetch egress (e.g., WebSocket raw sockets or other runtime-specific transports).
