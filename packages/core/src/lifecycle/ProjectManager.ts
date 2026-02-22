@@ -10,6 +10,18 @@ import { FoundationValidator } from './validators/FoundationValidator.js';
 
 export type ProjectStatus = 'ACTIVE' | 'PAUSED' | 'UNKNOWN';
 
+export const DEFAULT_ROADMAP = [
+  { phase_id: 'P1', milestone_id: 'M1', name: 'Foundation' },
+  { phase_id: 'P2', milestone_id: 'M2', name: 'Execution' },
+  { phase_id: 'P3', milestone_id: 'M3', name: 'Discovery' },
+  { phase_id: 'P4', milestone_id: 'M4', name: 'Synthesis' },
+  { phase_id: 'P5', milestone_id: 'M5', name: 'Planning' },
+  { phase_id: 'P6', milestone_id: 'M6', name: 'Implementation' },
+  { phase_id: 'P7', milestone_id: 'M7', name: 'Interface' },
+  { phase_id: 'P8', milestone_id: 'M8', name: 'Optimization' },
+];
+
+
 export class ProjectManager {
   private persistencePath: string;
 
@@ -74,13 +86,26 @@ export class ProjectManager {
       // Ensure core schema exists (idempotent)
       initializeSchema(db);
 
-      // Persist initial Project row inside StateRepository (transactional)
+      // Persist initial Project row inside StateRepository (transactional) and seed default roadmap epics
       const repo = new StateRepository(db);
-      repo.upsertProject({
+      const projectId = repo.upsertProject({
         name: brief,
         status: 'INITIALIZING',
         metadata: JSON.stringify({ journeys }),
       });
+
+      // Seed default epics (ordered)
+      const epicsToSave = DEFAULT_ROADMAP.map((e, idx) => {
+        const phaseNum = parseInt((e.phase_id || '').replace(/^P/, ''), 10) || (idx + 1);
+        return {
+          project_id: projectId,
+          name: `${e.phase_id} - ${e.name}`,
+          order_index: idx,
+          status: phaseNum > 2 ? 'LOCKED' : 'PENDING',
+        };
+      });
+      repo.saveEpics(epicsToSave);
+
     } finally {
       try {
         db.close();

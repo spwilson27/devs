@@ -38,6 +38,9 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - Implemented lifecycle control (pause/resume/status) in `packages/core/src/lifecycle/ProjectManager.ts` as a minimal file-backed implementation for runtime verification.
 - Implemented `ProjectManager.init` to scaffold a project, create the Flight Recorder `.devs/state.sqlite`, initialize schema, and persist an initial project row with status `INITIALIZING`.
+- Seeded `DEFAULT_ROADMAP` (P1-P8) into the `epics` table from `packages/core/src/lifecycle/ProjectManager.ts` and added test `tests/persistence/RoadmapSetup.test.ts` to verify phases P3-P8 are present and ordered.
+- Standardized epic lifecycle status values to uppercase `PENDING`/`LOCKED` in `ProjectManager.init` to match roadmap docs and downstream view expectations.
+- Architectural decision: Epics are named using the pattern `P# - <Name>` and persisted with an explicit `order_index` to preserve roadmap ordering across migrations and queries.
 
 ## ⚠️ Additional Notes
 
