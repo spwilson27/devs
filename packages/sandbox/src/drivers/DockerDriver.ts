@@ -1,6 +1,6 @@
 import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
-import type { SandboxContext, ExecOptions, ExecResult } from '../types';
+import type { SandboxContext, ExecOptions, ExecResult, SandboxConfig } from '../types';
 import { SandboxProvider } from '../SandboxProvider';
 import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError } from '../errors';
 
@@ -26,6 +26,35 @@ export class DockerDriver extends SandboxProvider {
       workdir: '/workspace',
       ...cfg,
     } as Required<DockerDriverConfig>;
+  }
+
+  static buildRunArgs(config: SandboxConfig): string[] {
+    if (!config?.hostProjectPath) throw new Error('hostProjectPath is required');
+    if (config.hostProjectPath.endsWith('.git') || config.hostProjectPath.endsWith('.devs')) {
+      throw new Error('hostProjectPath must not end with .git or .devs');
+    }
+    const workspaceMount = config.workspaceMount ?? '/workspace';
+    const tmpfsSize = config.tmpfsSize ?? '256m';
+    // --read-only: enforces 5_SECURITY_DESIGN-REQ-SEC-SD-047
+    const args: string[] = [
+      'run',
+      '-d',
+      '--cap-drop=ALL', // prevents privilege escalation
+      '--security-opt=no-new-privileges',
+      '--read-only',
+      '--network=none',
+      '--tmpfs',
+      `/tmp:rw,noexec,nosuid,nodev,size=${tmpfsSize}`,
+      '--tmpfs',
+      `/run:rw,noexec,nosuid,nodev,size=64m`,
+      '-w',
+      workspaceMount,
+      '-v',
+      `${config.hostProjectPath}:${workspaceMount}:ro`,
+      'sleep',
+      'infinity',
+    ];
+    return args;
   }
 
   private memoryFlag(): string {
