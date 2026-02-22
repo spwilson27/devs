@@ -59,6 +59,18 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - **Brittle area noted:** The AOD invariant (every new .ts module requires a corresponding `.agent.md`) caused the presubmit failure; maintainers should remember to add AOD files when adding source modules.
 
+## 📝 Recent Changelog (Appended)
+
 - **[2026-02-22 Reviewer] - Presubmit verification:** Executed `./do presubmit` in this worktree; all verification checks passed (Monorepo, Folder Structure, Shared State, AOD advisory). Noted the AOD advisory (RelationalRollback missing .agent) and confirmed no commits were made by the reviewer.
 
 - **[2026-02-22 Reviewer] - Recommendation:** Add a short CONTRIBUTING.md checklist documenting the required local dev toolchain (tsc, vitest) and the AOD 1:1 invariant so future contributors don't accidentally omit `.agent.md` files.
+
+- **[2026-02-22] - Rewind Review:** Performed a code review of `Orchestrator.rewind`, `GitClient.checkout`, and `RelationalRollback`. Confirmed the correct ordering: Git checkout (filesystem restore) is executed before any DB mutation, and relational rollback is performed inside a single ACID transaction. Ran `./do presubmit` — all presubmit checks passed (warnings only for AOD docs).
+
+- **[2026-02-22] - Architectural Decision (Rewind):** Enforce Git-first rewinds: always perform `git checkout --force` and verify head hash before committing DB changes. Do NOT auto-delete untracked files by default; require an explicit `--clean`/`--force-clean` option to remove untracked files and document this behavior in the User Guide and CLI docs.
+
+## ⚠️ New Brittle Areas Discovered
+
+- **[2026-02-22] - Rewind: untracked-file policy:** The current implementation does not run `git clean -fd` and therefore preserves untracked files even when a forced checkout is performed. This can lead to workspace divergence between expected snapshot and actual files; recommend a clear policy and corresponding tests (and a user confirmation prompt) before enabling auto-clean.
+
+- **[2026-02-22] - AOD coverage for Rewind modules:** `packages/core/src/Orchestrator.ts` and `packages/core/src/persistence/RelationalRollback.ts` should have corresponding AOD `.agent.md` files to satisfy the AOD 1:1 invariant and avoid CI warnings.

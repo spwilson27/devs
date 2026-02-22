@@ -171,6 +171,21 @@ export class GitClient {
     }
   }
 
+  /**
+   * Checkout a specific ref (commit or branch). When `force` is true, passes
+   * `--force` to git to discard local changes.
+   */
+  async checkout(ref: string, force: boolean = false): Promise<void> {
+    try {
+      const args = force ? ["checkout", ref, "--force"] : ["checkout", ref];
+      // Use raw to ensure we can pass arbitrary flags compatible across simple-git versions.
+      await this.git.raw(args as any);
+    } catch (err) {
+      if (err instanceof GitError) throw err;
+      throw new GitError(`Failed to checkout '${ref}'`, { cause: err as Error });
+    }
+  }
+
   // ── private helpers ──────────────────────────────────────────────────────
 
   /**
