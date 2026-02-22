@@ -6,8 +6,10 @@ export * from './webcontainer/errors';
 // Export concrete drivers here.
 export { DockerDriver } from './DockerDriver';
 export type { DockerDriverConfig } from './DockerDriver';
-// Export concrete drivers here.
-export { DockerDriver } from './DockerDriver';
-export type { DockerDriverConfig } from './DockerDriver';
 export { WebContainerDriver } from './WebContainerDriver';
 export type { WebContainerDriverConfig } from './WebContainerDriver';
+
+// Runtime & native compatibility helpers
+export { RuntimeCompatibilityChecker } from './webcontainer/runtime-compat-checker';
+export { RUNTIME_COMPAT_MATRIX } from './webcontainer/runtime-compat-matrix';
+export { NativeDependencyChecker, NATIVE_PACKAGES } from './webcontainer/native-dependency-checker';

@@ -8,7 +8,9 @@ import {
   SandboxTimeoutError,
   SandboxNotBootedError,
   SandboxTeardownError,
+  UnsupportedRuntimeError,
 } from './errors';
+import { RuntimeCompatibilityChecker } from './runtime-compat-checker';
 
 export interface WebContainerDriverOptions {
   /** Timeout in milliseconds. Default: 300000 (5 minutes). */
@@ -87,6 +89,13 @@ export class WebContainerDriver extends SandboxProvider {
   async exec(ctx: SandboxContext, cmd: string, args: string[] = [], opts?: ExecOptions): Promise<ExecResult> {
     if (!this._booted || !this._wc) throw new SandboxNotBootedError();
 
+    // Check runtime compatibility before attempting to spawn in the WebContainer
+    const checker = new RuntimeCompatibilityChecker();
+    if (!checker.isRuntimeSupported(cmd)) {
+      const reason = checker.getUnsupportedReason(cmd) ?? 'Unsupported runtime for WebContainerDriver';
+      throw new UnsupportedRuntimeError(cmd, reason);
+    }
+
     let proc: any;
     try {
       proc = await this._wc.spawn(cmd, args);
@@ -145,4 +154,3 @@ export class WebContainerDriver extends SandboxProvider {
   }
 }
 
-export type { WebContainerDriverOptions };

@@ -290,3 +290,13 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - Brittle Areas: Agent-Oriented Documentation (AOD) missing for `packages/sandbox/src/audit/*` and several other modules (see presubmit advisory); unit tests were skipped locally because Vitest is not available in this environment; Docker integration tests require a Docker daemon and network access in CI.
 - Recent Changelog: Ran `./do presubmit` (passed). Reviewed and validated the audit implementation and PostInstallHook integration in DockerDriver; appended this reviewer summary to memory.
 
+## [2026-02-22 Reviewer] - WebContainer runtime compatibility review
+
+- Verified RUNTIME_COMPAT_MATRIX (`packages/sandbox/src/drivers/webcontainer/runtime-compat-matrix.ts`), RuntimeCompatibilityChecker (`runtime-compat-checker.ts`), NativeDependencyChecker (`native-dependency-checker.ts`), and errors (`errors.ts`) meet the Phase 2 requirements: checkers are stateless, the matrix is a const, and UnsupportedRuntimeError includes a human-readable reason.
+
+- Confirmed integration: WebContainerDriver.exec() performs runtime compatibility checks before calling the WebContainer spawn API and throws UnsupportedRuntimeError when a runtime is unsupported; getFallbackDriver returns a docker fallback when specified.
+
+- Brittle Areas: Non-JS runtimes (Python, Go, Rust) are intentionally unsupported in WebContainerDriver; callers should prefer DockerDriver for those workloads. Tests importing `@webcontainer/api` must mock the API in Node-based CI to avoid runtime failures.
+
+- Recent Changelog (Reviewer): Added runtime compatibility matrix, compatibility checker, native dependency checker, and documentation at `packages/sandbox/docs/webcontainer-compatibility.md`. Ran targeted unit tests for syscall-compat (passed for related assertions); presubmit run in this ephemeral environment flagged unrelated test failures (tsconfig integrity and child_process mocking) which are outside the scope of this review.
+

@@ -156,6 +156,11 @@ The resolution order is strict and not configurable at runtime to ensure fast fa
 - Known limitations: WebContainers do not support native binaries or raw syscalls; they run Node.js/JavaScript and WebAssembly-based runtimes. Non-JS languages require a WASM wrapper or fallback to DockerDriver.
 - Usage: Use isWebContainerSupported() to detect support in the current environment before creating a WebContainerDriver. Prefer using createSandboxProvider() which auto-selects WebContainerDriver when supported or falls back to DockerDriver.
 
+#### Runtime Limitations
+
+The WebContainerDriver supports NodeJS-related commands (node, npm, npx) but does not support native, POSIX-dependent runtimes such as Python (python3), Go, or Rust. When a requested runtime is unsupported, the driver will throw an UnsupportedRuntimeError with a human-readable reason; the recommended fallback is to use the DockerDriver for those workloads.
+
+
 
 ## Security
 

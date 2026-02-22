@@ -3,7 +3,6 @@
  * Probes a WebContainer instance for runtime support (Node, Python, Go, Rust) and native NPM support.
  */
 
-import type { WebContainer } from '@webcontainer/api';
 import { UnsupportedRuntimeError, NativeDependencyError } from './errors';
 
 /**
@@ -30,7 +29,7 @@ export interface CompatibilityReport {
  * @throws UnsupportedRuntimeError When a requested runtime is explicitly unavailable
  * @throws NativeDependencyError When a native dependency cannot be installed
  */
-export async function runCompatibilityProbe(wc: WebContainer): Promise<CompatibilityReport> {
+export async function runCompatibilityProbe(wc: any): Promise<CompatibilityReport> {
   const report: CompatibilityReport = {
     nodeSupported: false,
     pythonSupported: false,

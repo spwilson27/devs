@@ -13,7 +13,6 @@ export * from './docker/ImageRebuilder';
 
 export * from './SandboxLifecycleManager';
 export type { SandboxLifecycleConfig } from './SandboxLifecycleConfig';
-export * from './errors';
 export * from './createSandboxProvider';
 export * from './audit/DependencyAuditor';
 export * from './audit/PostInstallHook';

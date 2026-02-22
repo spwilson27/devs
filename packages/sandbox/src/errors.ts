@@ -44,3 +44,17 @@ export class DependencyAuditError extends Error {
   }
 }
 
+// Compatibility aliases for legacy consumers/tests
+export class SandboxPreFlightError extends Error {
+  constructor(cmd?: string, args?: any[], exitCode?: number) {
+    super(cmd ? `Pre-flight command failed: ${cmd} ${Array.isArray(args) ? args.join(' ') : ''} (exit ${exitCode})` : 'Pre-flight failed');
+    this.name = 'SandboxPreFlightError';
+  }
+}
+
+export class SandboxTimeoutError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Sandbox timed out');
+    this.name = 'SandboxTimeoutError';
+  }
+}
