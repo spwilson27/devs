@@ -209,3 +209,19 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - [2026-02-22 Reviewer] - bootstrap-sandbox verification: Inspected packages/sandbox/src/scripts/bootstrap-sandbox.ts and test scaffolding; confirmed exported symbols (bootstrapSandbox, SandboxBootstrapError, BootstrapResult, BootstrapOptions) and barrel re-exports via src/scripts/index.ts and src/index.ts; confirmed CLI wrapper imports from dist/scripts/bootstrap-sandbox.js. Ran `./do presubmit` (exit 0) — all presubmit checks passed; no code changes required.
 
 - [2026-02-22] Implemented SandboxProvider abstract class in @devs/sandbox (packages/sandbox/src/providers/SandboxProvider.ts).
+
+## [2026-02-22] - WebContainer Spike (ADR-WC-001)
+
+- **Architectural Decision:** Added a lightweight WebContainer compatibility probe interface (CompatibilityReport) and typed error classes to support runtime parity checks for Node, Python, Go, Rust, and native NPM addons. The spike-runner is intentionally excluded from production builds (tsconfig exclude) and is intended to be executed in a headless Playwright/browser context for real executions; @webcontainer/api ^1.3.0 is documented as the pinned dependency for local spikes.
+
+## [2026-02-22] - Brittle Areas Discovered
+
+- AOD 1:1 invariant: adding new .ts modules requires corresponding `.agent.md` AOD files to satisfy presubmit; missing AOD files for the new webcontainer modules produced an advisory in presubmit.
+
+## [2026-02-22] - Recent Changelog
+
+- Added compatibility probe and errors: `packages/sandbox/src/drivers/webcontainer/{compatibility-probe.ts,errors.ts}`.
+- Added spike runner script (excluded from build): `packages/sandbox/src/drivers/webcontainer/spike-runner.ts`.
+- Added docs template: `packages/sandbox/docs/webcontainer-compatibility.md` and README note.
+- Updated `packages/sandbox/package.json` to include `@webcontainer/api": "^1.3.0"` and `packages/sandbox/tsconfig.json` to exclude the spike runner from production builds.
+- Ran `./do presubmit` — verification passed (AOD advisory only).

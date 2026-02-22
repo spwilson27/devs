@@ -87,3 +87,8 @@ Coverage targets: lines >= 80%
 - On success: prints "Bootstrap OK (<driver>) in <duration>ms" and exits with code 0.
 - On failure: prints "Bootstrap FAILED: <message>" and exits with code 1.
 - Environment prerequisites: Docker daemon running for the "docker" driver; Node.js >= 22 for the "webcontainer" driver.
+
+## WebContainer Compatibility
+
+This package depends on @webcontainer/api ^1.3.0 for local WebContainer spikes and experiments. Run the spike runner at `packages/sandbox/src/drivers/webcontainer/spike-runner.ts` to generate concrete probe outputs and place them in `spike-results/`.
+

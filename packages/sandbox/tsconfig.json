@@ -8,5 +8,6 @@
     "strict": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests", "**/__tests__/**"]
+  "exclude": ["node_modules", "dist", "tests", "**/__tests__/**", "src/drivers/webcontainer/spike-runner.ts"]
 }
+
