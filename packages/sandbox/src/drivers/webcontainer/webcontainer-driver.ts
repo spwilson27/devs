@@ -11,6 +11,9 @@ import {
   UnsupportedRuntimeError,
 } from './errors';
 import { RuntimeCompatibilityChecker } from './runtime-compat-checker';
+import { WebContainerPackageInstaller } from './package-installer';
+import type { PackageInstallResult } from './package-installer';
+import { NativeDependencyChecker } from './native-dependency-checker';
 
 export interface WebContainerDriverOptions {
   /** Timeout in milliseconds. Default: 300000 (5 minutes). */
@@ -151,6 +154,24 @@ export class WebContainerDriver extends SandboxProvider {
     } catch (err: any) {
       throw new SandboxTeardownError(err?.message ?? String(err));
     }
+  }
+
+  // Backwards-compatible alias used by tests and external consumers in some tasks.
+  async teardown(): Promise<void> {
+    if (!this._booted) return;
+    try {
+      await this._wc?.teardown();
+      this._wc = null;
+      this._booted = false;
+    } catch (err: any) {
+      throw new SandboxTeardownError(err?.message ?? String(err));
+    }
+  }
+
+  async installPackages(packages: string[]): Promise<PackageInstallResult> {
+    if (!this._booted || !this._wc) throw new SandboxExecError('WebContainer not provisioned');
+    const installer = new WebContainerPackageInstaller(this._wc, new NativeDependencyChecker());
+    return installer.install(packages);
   }
 }
 

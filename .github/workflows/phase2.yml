@@ -1,0 +1,20 @@
+name: Phase 2 CI
+
+on: [push, pull_request]
+
+jobs:
+  webcontainer-e2e:
+    name: WebContainer E2E Tests (webcontainer)
+    runs-on: ubuntu-latest
+    # Continue-on-error while WebContainer CI support is stabilised; remove this flag once stable
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run sandbox e2e tests
+        run: pnpm --filter @devs/sandbox test:e2e
