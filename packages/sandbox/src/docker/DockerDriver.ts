@@ -1,8 +1,10 @@
 import { Readable } from 'stream';
 import { SandboxProvider } from '../SandboxProvider';
 import type { SandboxContext, ExecOptions, ExecResult, SandboxStatus } from '../types';
-import { SandboxProvisionError, SandboxDestroyedError, DependencyAuditError } from '../errors';
+import { SandboxProvisionError, SandboxDestroyedError, DependencyAuditError, ConfigValidationError, SecurityConfigError } from '../errors';
 import { runPostInstallAudit } from '../audit/PostInstallHook';
+import { DockerNetworkManager } from '../network/DockerNetworkManager';
+import { isIP } from 'net';
 
 export interface DockerDriverConfig {
   image?: string;
@@ -10,6 +12,7 @@ export interface DockerDriverConfig {
   memoryLimitBytes?: number;
   pidsLimit?: number;
   auditConfig?: any;
+  egressProxyIp?: string;
 }
 
 export class DockerDriver extends SandboxProvider {
@@ -47,11 +50,28 @@ export class DockerDriver extends SandboxProvider {
         Labels: { 'devs.sandbox': 'true' },
       };
 
+      let networkId: string | undefined;
+      if (cfg.egressProxyIp) {
+        // validate the provided proxy IP
+        if (!isIP(cfg.egressProxyIp)) {
+          throw new ConfigValidationError('SandboxConfig.egressProxyIp must be a valid IP address');
+        }
+        // create an isolated bridge network for this sandbox
+        const sandboxId = `devs-sandbox-${Math.random().toString(36).slice(2, 8)}`;
+        networkId = await DockerNetworkManager.createIsolatedNetwork(sandboxId);
+        const proxyOpts = DockerNetworkManager.getProxyContainerOptions(cfg.egressProxyIp, networkId as string) as any;
+        // merge HostConfig and NetworkingConfig
+        createOpts.HostConfig = { ...(createOpts.HostConfig ?? {}), ...(proxyOpts.HostConfig ?? {}) };
+        createOpts.Env = [...(createOpts.Env ?? []), ...(proxyOpts.Env ?? [])];
+        if (proxyOpts.dns) createOpts.Dns = proxyOpts.dns;
+        if (proxyOpts.NetworkingConfig) createOpts.NetworkingConfig = { ...(createOpts.NetworkingConfig ?? {}), ...(proxyOpts.NetworkingConfig ?? {}) };
+      }
+
       const container = await this.docker.createContainer(createOpts);
       if (!container) throw new Error('createContainer returned no container');
       if (typeof container.start === 'function') await container.start();
       const id = container.id ?? container.Id ?? Math.random().toString(36).slice(2);
-      const ctx: SandboxContext = { id, workdir: '/workspace', status: 'running', createdAt: new Date() };
+      const ctx: SandboxContext = { id, workdir: '/workspace', status: 'running', createdAt: new Date(), networkId };
       this.containers.set(id, container);
       return ctx;
     } catch (err: any) {
@@ -133,17 +153,23 @@ export class DockerDriver extends SandboxProvider {
     const container = this.containers.get(ctx.id);
     if (!container) return;
     try {
-      if (typeof container.stop === 'function') await container.stop({ t: 10 });
+      try {
+        if (typeof container.stop === 'function') await container.stop({ t: 10 });
+        if (typeof container.remove === 'function') await container.remove({ force: true, v: true });
+      } finally {
+        this.containers.delete(ctx.id);
+        ctx.status = 'stopped';
+        if (ctx.networkId) {
+          try {
+            await DockerNetworkManager.removeNetwork(ctx.networkId);
+          } catch (e) {
+            // ignore network remove errors
+          }
+        }
+      }
     } catch (e) {
-      // ignore stop errors
+      // swallow errors as destroy should be best-effort
     }
-    try {
-      if (typeof container.remove === 'function') await container.remove({ force: true, v: true });
-    } catch (e) {
-      // ignore remove errors
-    }
-    this.containers.delete(ctx.id);
-    ctx.status = 'stopped';
   }
 
   async getStatus(ctx: SandboxContext): Promise<SandboxStatus> {

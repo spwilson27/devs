@@ -608,3 +608,11 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
   - Added packages/sandbox/dist/TempDirManager.cjs and packages/sandbox/scripts/ci-tempdir-tests.cjs to enable running TempDirManager behavioural checks without installing devDependencies.
   - Updated packages/sandbox/package.json test script to run the CI test runner; executed locally and confirmed ALL TESTS PASSED and ./do presubmit succeeded (unit tests skipped because vitest not installed in this environment).
   - Brittle: CI shim bypasses Vitest; ensure devDependencies (vitest) are installed in CI for full test coverage.
+
+## [2026-02-22] - Docker sandbox network isolation
+
+- Decision: Docker sandbox containers use Internal bridge network; HTTP_PROXY and DNS env vars point to orchestrator-hosted EgressProxy; no direct internet route exists inside container.
+
+- Changes: Implemented DockerNetworkManager usage in docker/DockerDriver to create/remove isolated network when egressProxyIp provided; merged proxy container options into createOpts; added ConfigValidationError and SecurityConfigError; added docs and README section.
+
+- Brittle: Ensure network cleanup on failure; network creation depends on Docker daemon availability and proper IP in config.

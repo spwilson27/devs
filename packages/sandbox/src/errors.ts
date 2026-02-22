@@ -58,3 +58,17 @@ export class SandboxTimeoutError extends Error {
     this.name = 'SandboxTimeoutError';
   }
 }
+
+export class SecurityConfigError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Invalid Docker security configuration');
+    this.name = 'SecurityConfigError';
+  }
+}
+
+export class ConfigValidationError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Configuration validation failed');
+    this.name = 'ConfigValidationError';
+  }
+}

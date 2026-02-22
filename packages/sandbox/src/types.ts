@@ -5,6 +5,7 @@ export interface SandboxContext {
   workdir: string;
   status: SandboxStatus;
   createdAt: Date;
+  networkId?: string;
 }
 
 export interface ExecOptions {
@@ -24,4 +25,5 @@ export interface SandboxConfig {
   hostProjectPath: string; // absolute path to the project on the host; must not be empty
   workspaceMount?: string; // defaults to '/workspace'
   tmpfsSize?: string; // defaults to '256m'
+  egressProxyIp?: string; // optional: IP address of the orchestrator egress proxy
 }

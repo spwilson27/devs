@@ -2,7 +2,9 @@ import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
 import type { SandboxContext, ExecOptions, ExecResult, SandboxConfig } from '../types';
 import { SandboxProvider } from '../SandboxProvider';
-import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError } from '../errors';
+import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError, ConfigValidationError } from '../errors';
+import { DockerNetworkManager } from '../network/DockerNetworkManager';
+import { isIP } from 'net';
 
 const execFile = promisify(_execFile);
 
@@ -11,6 +13,7 @@ export interface DockerDriverConfig {
   memoryMb?: number; // in MB
   cpuCount?: number;
   workdir?: string;
+  egressProxyIp?: string; // optional orchestrator proxy IP
 }
 
 export class DockerDriver extends SandboxProvider {
@@ -86,10 +89,39 @@ export class DockerDriver extends SandboxProvider {
         '--rm',
         '-w',
         this.config.workdir,
-        this.config.image,
-        'sleep',
-        'infinity',
+        // image will be inserted later
       ];
+
+      // Insert proxy/network options when configured
+      let networkId: string | undefined;
+      if (this.config.egressProxyIp) {
+        if (!isIP(this.config.egressProxyIp)) {
+          throw new ConfigValidationError('egressProxyIp must be a valid IP address');
+        }
+        const sandboxId = `devs-sandbox-${Math.random().toString(36).slice(2, 8)}`;
+        networkId = await DockerNetworkManager.createIsolatedNetwork(sandboxId);
+        // replace --network=none with the created network
+        const nwIdx = args.findIndex(a => a.startsWith('--network'));
+        if (nwIdx !== -1) args[nwIdx] = `--network=${networkId}`;
+        // DNS and proxy envs will be added before the image
+      }
+
+      // image and command
+      args.push(this.config.image, 'sleep', 'infinity');
+
+      // If proxy options exist, insert env and dns flags before image
+      if (networkId && this.config.egressProxyIp) {
+        const proxyIp = this.config.egressProxyIp;
+        // find the index of the image in args
+        const imgIdx = args.indexOf(this.config.image);
+        const proxyFlags = [
+          '--dns', proxyIp,
+          '-e', `HTTP_PROXY=http://${proxyIp}:3128`,
+          '-e', `HTTPS_PROXY=http://${proxyIp}:3128`,
+          '-e', `NO_PROXY=`,
+        ];
+        if (imgIdx !== -1) args.splice(imgIdx, 0, ...proxyFlags);
+      }
 
       const { stdout, stderr } = await execFile('docker', args as any);
       const id = (stdout ?? '').toString().trim();
@@ -97,7 +129,7 @@ export class DockerDriver extends SandboxProvider {
         throw new SandboxProvisionError(`docker run did not return a container id. stderr: ${stderr}`);
       }
       this.containerId = id;
-      return { id, workdir: this.config.workdir, status: 'running', createdAt: new Date() };
+      return { id, workdir: this.config.workdir, status: 'running', createdAt: new Date(), networkId };
     } catch (err: any) {
       throw new SandboxProvisionError(err?.message ?? String(err));
     }
@@ -133,8 +165,18 @@ export class DockerDriver extends SandboxProvider {
     const id = ctx.id ?? this.containerId;
     if (!id) return;
     try {
-      await execFile('docker', ['rm', '-f', id] as any);
-      ctx.status = 'stopped';
+      try {
+        await execFile('docker', ['rm', '-f', id] as any);
+        ctx.status = 'stopped';
+      } finally {
+        if (ctx.networkId) {
+          try {
+            await DockerNetworkManager.removeNetwork(ctx.networkId);
+          } catch (e) {
+            // ignore network removal errors
+          }
+        }
+      }
     } catch (err: any) {
       throw new SandboxDestroyError(err?.message ?? String(err));
     }
