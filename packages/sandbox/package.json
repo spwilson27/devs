@@ -21,7 +21,8 @@
     "lint": "eslint src tests --ext .ts",
     "typecheck": "tsc --noEmit",
     "build:base-image": "docker build -t devs-sandbox-base:latest ./docker/base",
-    "push:base-image": "docker tag devs-sandbox-base:latest ghcr.io/devs-project/sandbox-base:latest && docker push ghcr.io/devs-project/sandbox-base:latest"
+    "push:base-image": "docker tag devs-sandbox-base:latest ghcr.io/devs-project/sandbox-base:latest && docker push ghcr.io/devs-project/sandbox-base:latest",
+    "validate-all": "node scripts/validate-all.mjs"
   },
   "peerDependencies": {
     "@devs/core": "workspace:*"

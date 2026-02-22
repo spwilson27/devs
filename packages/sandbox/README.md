@@ -74,6 +74,7 @@ Run individual tiers:
 - pnpm --filter @devs/sandbox test --project unit
 - pnpm --filter @devs/sandbox test --project integration
 - pnpm --filter @devs/sandbox test --project agent
+- pnpm --filter @devs/sandbox validate-all [--skip-integration]  # runs lint, typecheck, build, and unit tests (integration only when DEVS_INTEGRATION_TESTS=1)
 
 Run coverage:
 - pnpm --filter @devs/sandbox test:coverage

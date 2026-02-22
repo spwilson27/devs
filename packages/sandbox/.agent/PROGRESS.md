@@ -6,4 +6,4 @@
 - [x] `tests/` directory structure created
 - [x] `.agent/` AOD directory populated
 - [x] `bootstrap-sandbox` script implemented
-- [ ] `validate-all` script implemented
+- [x] `validate-all` script implemented
