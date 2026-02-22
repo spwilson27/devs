@@ -75,4 +75,5 @@ export * from "./Orchestrator.js";
 // Input ingestion and locality enforcement utilities (phase_1 tasks)
 export * from "./InputIngestor.js";
 export * from "./LocalityGuard.js";
+export * from "./lifecycle/MilestoneService.js";
 
