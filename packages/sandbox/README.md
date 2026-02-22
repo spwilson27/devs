@@ -128,7 +128,6 @@ console.log(res.stdout);
 await driver.destroy(ctx);
 ```
 
-<<<<<<< HEAD
 Note: Running the example requires a Docker daemon and local dev tooling (pnpm, vitest) installed in the environment.
 
 ## Drivers
@@ -140,5 +139,42 @@ Note: Running the example requires a Docker daemon and local dev tooling (pnpm, 
 - Usage: Use isWebContainerSupported() to detect support in the current environment before creating a WebContainerDriver. Prefer using createSandboxProvider() which auto-selects WebContainerDriver when supported or falls back to DockerDriver.
 
 
-=======
->>>>>>> bb77797 (phase_2:04_webcontainer_driver_implementation/02_webcontainer_driver_core_implementation.md: WebContainerDriver Core Implementation – Lifecycle & SandboxProvider Contract)
+## Security
+
+The DockerDriver enforces the following HostConfig runtime flags for all provisioned containers:
+
+- CapDrop: ["ALL"] — drops all Linux capabilities to prevent privilege escalation.
+- SecurityOpt: ["no-new-privileges:true"] — prevents processes from gaining new privileges via exec/setuid.
+- PidsLimit: 128 — limits the number of PIDs in the container to mitigate fork-bomb style attacks.
+- Memory: 4 * 1024 * 1024 * 1024 (4 GiB) — defaults to a memory limit for containers.
+- NanoCPUs: 2 * 1e9 — defaults to 2 CPU cores (specified in NanoCPUs).
+- NetworkMode: "none" — containers are network-isolated by default and must opt-in to egress.
+- Privileged: false — privileged mode is explicitly disabled for all provisioned containers.
+- Binds: <hostProjectPath>:/workspace:rw — workspace is mounted read-write while rootfs remains writable as configured.
+- ReadonlyRootfs: false — the root filesystem is not globally set to read-only to allow workspace writes; workspace bind is rw.
+
+These invariants are enforced by runtime validation in the DockerDriver implementation and should not be changed without a security review.
+
+- **[2026-02-22 Reviewer] - Next steps:** If implementing DockerDriver now, ensure `dockerode` is added to `@devs/sandbox` deps, the default image uses a pinned tag/digest (no `latest`), and that all hardened flags `--cap-drop=ALL`, `--security-opt=no-new-privileges`, `--read-only`, `--network=none`, `--memory=4g`, `--cpus=2`, and `--rm` are present in run invocations. Also ensure `destroy()` is documented to be called in a `finally` block by callers; add AOD docs for new driver files.
+
+## [2026-02-22] - WebContainerDriver added
+
+- Architectural Decision: WebContainerDriver is the VSCode Web sandbox driver; it requires window.crossOriginIsolated === true (COOP + COEP). It supports Node.js/JavaScript workloads and WebAssembly only; native binaries/raw syscalls are unsupported — fallback to DockerDriver recommended.
+
+- Brittle Areas: WebContainerDriver depends on browser cross-origin isolation headers and @webcontainer/api being available at runtime; tests that import @webcontainer/api must mock it to run in Node-based CI.
+
+- Recent Changelog: Implemented WebContainerDriver with dynamic import guard for @webcontainer/api, createSandboxProvider auto-detection, unit tests with mocked API, and added optional peerDependency for @webcontainer/api.
+
+## [2026-02-22] - Phase 2 Decisions (WebContainerDriver)
+
+- Implemented: WebContainerDriver uses AbortSignal.timeout for exec timeouts (default 300000 ms).
+
+- Created ADR: docs/decisions/phase_2_adr.md (ADR-WC-002).
+
+- Created agent memo: .agent/phase_2_decisions.md.
+
+- **[2026-02-22] - DockerDriver security hardening:** Enforced HostConfig security invariants in DockerDriver (CapDrop="ALL", SecurityOpt="no-new-privileges:true", Privileged=false, PidsLimit=128, Memory=4GiB, NanoCPUs=2*1e9, NetworkMode="none", Binds hostProjectPath:/workspace:rw, ReadonlyRootfs=false). Added verification script `packages/sandbox/scripts/verify-security-config.ts` and `verify:security` package script to assert invariants in CI. Runtime validation throws `SecurityConfigError` on deviation.
+
+## Recent Changelog (Appended)
+
+- **[2026-02-22] - Security verification script added:** Created `packages/sandbox/scripts/verify-security-config.ts` to validate DockerDriver HostConfig invariants and added a `verify:security` npm script in `packages/sandbox/package.json` to run it in CI.

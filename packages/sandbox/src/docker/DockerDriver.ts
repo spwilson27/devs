@@ -1,14 +1,30 @@
 import { Readable } from 'stream';
 import { SandboxProvider } from '../SandboxProvider';
 import type { SandboxContext, ExecOptions, ExecResult, SandboxStatus } from '../types';
-import { SandboxProvisionError, SandboxDestroyedError } from '../errors';
+import { SandboxProvisionError, SandboxDestroyedError, SecurityConfigError } from '../errors';
 
 export interface DockerDriverConfig {
   image?: string;
   hostProjectPath: string;
   memoryLimitBytes?: number;
-  cpuQuota?: number;
   pidsLimit?: number;
+  cpuCores?: number;
+  networkMode?: 'none' | 'bridge' | string;
+}
+
+/** @internal Builds the HostConfig used for container creation. Exported for verification scripts. */
+export function buildHostConfig(config: Required<DockerDriverConfig>) {
+  return {
+    CapDrop: ['ALL'],
+    SecurityOpt: ['no-new-privileges:true'],
+    PidsLimit: config.pidsLimit ?? 128,
+    Memory: config.memoryLimitBytes ?? 4 * 1024 * 1024 * 1024,
+    NanoCPUs: (config.cpuCores ?? 2) * 1e9,
+    NetworkMode: config.networkMode ?? 'none',
+    Privileged: false,
+    Binds: [`${config.hostProjectPath}:/workspace:rw`],
+    ReadonlyRootfs: false,
+  } as any;
 }
 
 export class DockerDriver extends SandboxProvider {
@@ -23,22 +39,30 @@ export class DockerDriver extends SandboxProvider {
       image: config?.image ?? 'devs-sandbox-base:latest',
       hostProjectPath: config?.hostProjectPath ?? process.cwd(),
       memoryLimitBytes: config?.memoryLimitBytes ?? 4 * 1024 * 1024 * 1024,
-      cpuQuota: config?.cpuQuota ?? 200000,
       pidsLimit: config?.pidsLimit ?? 128,
-    };
+      cpuCores: config?.cpuCores ?? 2,
+      networkMode: config?.networkMode ?? 'none',
+    } as Required<DockerDriverConfig>;
+  }
+
+  private validateSecurityConfig(hostConfig: any): void {
+    if (!hostConfig?.CapDrop || !Array.isArray(hostConfig.CapDrop) || !hostConfig.CapDrop.includes('ALL')) {
+      throw new SecurityConfigError('HostConfig.CapDrop must include "ALL"');
+    }
+    if (!hostConfig?.SecurityOpt || !Array.isArray(hostConfig.SecurityOpt) || !hostConfig.SecurityOpt.includes('no-new-privileges:true')) {
+      throw new SecurityConfigError('HostConfig.SecurityOpt must include "no-new-privileges:true"');
+    }
   }
 
   async provision(config?: DockerDriverConfig): Promise<SandboxContext> {
-    const cfg = { ...this.defaultConfig, ...config } as Required<DockerDriverConfig>;
+    const cfg = { ...this.defaultConfig, ...(config ?? {}) } as Required<DockerDriverConfig>;
     try {
+      const hostConfig = buildHostConfig(cfg);
+      this.validateSecurityConfig(hostConfig);
+
       const createOpts: any = {
         Image: cfg.image,
-        HostConfig: {
-          Binds: [`${cfg.hostProjectPath}:/workspace:rw`],
-          Memory: cfg.memoryLimitBytes,
-          CpuQuota: cfg.cpuQuota,
-          PidsLimit: cfg.pidsLimit,
-        },
+        HostConfig: hostConfig,
         WorkingDir: '/workspace',
         Cmd: ['/bin/sh', '-lc', 'while true; do sleep 1; done'],
         Labels: { 'devs.sandbox': 'true' },
@@ -52,6 +76,7 @@ export class DockerDriver extends SandboxProvider {
       this.containers.set(id, container);
       return ctx;
     } catch (err: any) {
+      if (err instanceof SecurityConfigError) throw err;
       throw new SandboxProvisionError(`Failed to provision container: ${err?.message ?? String(err)}`);
     }
   }

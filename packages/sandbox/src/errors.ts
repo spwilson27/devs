@@ -33,3 +33,9 @@ export class SandboxExecError extends Error {
   }
 }
 
+export class SecurityConfigError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = 'SecurityConfigError';
+  }
+}

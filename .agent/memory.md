@@ -256,4 +256,9 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - Created agent memo: .agent/phase_2_decisions.md.
 
+- **[2026-02-22] - DockerDriver security hardening:** Enforced HostConfig security invariants in DockerDriver (CapDrop="ALL", SecurityOpt="no-new-privileges:true", Privileged=false, PidsLimit=128, Memory=4GiB, NanoCPUs=2*1e9, NetworkMode="none", Binds hostProjectPath:/workspace:rw, ReadonlyRootfs=false). Added verification script `packages/sandbox/scripts/verify-security-config.ts` and `verify:security` package script to assert invariants in CI. Runtime validation throws `SecurityConfigError` on deviation.
+
+## Recent Changelog (Appended)
+
+- **[2026-02-22] - Security verification script added:** Created `packages/sandbox/scripts/verify-security-config.ts` to validate DockerDriver HostConfig invariants and added a `verify:security` npm script in `packages/sandbox/package.json` to run it in CI.
 

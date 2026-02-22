@@ -22,3 +22,28 @@ Known Constraints:
 Notes:
 - Unit tests use an injected mocked Docker client to avoid depending on a live Docker daemon.
 - For integration tests, ensure Docker is installed and the current user can pull/run containers.
+
+
+Security Configuration
+
+The DockerDriver enforces the following HostConfig runtime flags for all provisioned containers:
+
+- CapDrop: ["ALL"] — drops all Linux capabilities to prevent privilege escalation. (Req: 5_SECURITY_DESIGN-REQ-SEC-SD-046)
+- SecurityOpt: ["no-new-privileges:true"] — prevents processes from gaining new privileges via execve/setuid binaries.
+- PidsLimit: 128 — limits the number of PIDs in the container to mitigate fork-bomb style attacks.
+- Memory: 4 * 1024 * 1024 * 1024 — defaults to 4GiB memory limit.
+- NanoCPUs: 2 * 1e9 — defaults to 2 CPU cores.
+- NetworkMode: "none" — containers are network-isolated by default and must opt-in to egress.
+- Privileged: false — privileged mode is explicitly disabled.
+- Binds: <hostProjectPath>:/workspace:rw — workspace is mounted read-write while the rootfs is read-only.
+- ReadonlyRootfs: false — the root filesystem is not marked read-only to allow workspace writes, but workspace is mounted rw.
+
+Security Invariants
+
+The following flags MUST NOT be changed without a security review:
+
+- CapDrop
+- SecurityOpt
+- Privileged
+
+These invariants are enforced via runtime validation in the DockerDriver implementation. Any deviation will throw a SecurityConfigError and abort provisioning.

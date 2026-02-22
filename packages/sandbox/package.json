@@ -23,8 +23,10 @@
     "type:test": "tsd",
     "build:base-image": "docker build -t devs-sandbox-base:latest ./docker/base",
     "push:base-image": "docker tag devs-sandbox-base:latest ghcr.io/devs-project/sandbox-base:latest && docker push ghcr.io/devs-project/sandbox-base:latest",
+    "verify:security": "ts-node scripts/verify-security-config.ts",
     "validate-all": "node scripts/validate-all.mjs"
   },
+
   "peerDependencies": {
     "@devs/core": "workspace:*",
     "@webcontainer/api": "^1.2.0"
