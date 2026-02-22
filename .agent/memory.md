@@ -176,3 +176,18 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 - Recent Changelog: Added secret-masker package scaffolding and tests; updated pnpm-workspace.yaml and monorepo verification script to register the package.
 
 - **[2026-02-22 Reviewer] - SecretMasker review:** Inspected packages/secret-masker; confirmed interfaces in `src/types.ts` (ISecretMasker, IRedactionResult, IRedactionHit); `SecretMasker` implements `ISecretMasker`; `SecretMaskerFactory.create()` returns a `SecretMasker` instance. Tests present at `packages/secret-masker/src/__tests__/interfaces.test.ts` exercise runtime shapes and factory creation. Ran `./do presubmit` (exit 0). Recommendation: run `pnpm --filter @devs/secret-masker test` and `pnpm --filter @devs/secret-masker build` in CI or a developer environment with devDependencies installed to validate runtime test execution (jest/ts-jest) and TypeScript emit; add package-level `.agent.md` if additional agent docs are needed.
+- [2026-02-22] Phase 2 / 01_module_foundation: Established @devs/sandbox src/ directory structure with foundational barrels and type interfaces (SandboxExecResult, SandboxProvisionOptions).
+
+- Architectural Decision: @devs/sandbox exports only barrel re-exports from src/index.ts; concrete implementations live in drivers/providers submodules to preserve separation of concerns and headless-first design.
+
+- Brittle Areas: Adding source modules requires corresponding .agent AOD files to satisfy the AOD 1:1 invariant; forgetting these will trigger presubmit warnings/failures.
+
+- Recent Changelog: Added src structure, foundational type stubs, and unit test packages/sandbox/tests/unit/src-structure.test.ts to verify layout.
+
+- [2026-02-22 Reviewer] - Sandbox verification: Performed a focused code review of @devs/sandbox, verified barrel files and types, and executed `./do presubmit`; all presubmit checks passed (no code changes required).
+
+- Architectural Decision: Keep @devs/sandbox as a barrel-only public surface (src/index.ts) with concrete implementations isolated under drivers/ and providers/ to maintain separation of concerns and headless-first design.
+
+- Brittle Areas: AOD 1:1 advisory remains — each new source module in @devs/sandbox should be accompanied by a corresponding `.agent.md` doc under `.agent/packages/sandbox/` to satisfy the AOD invariant and avoid presubmit advisories.
+
+- Recent Changelog: Verified src structure, executed presubmit, and updated agent memory to record verification and decisions.
