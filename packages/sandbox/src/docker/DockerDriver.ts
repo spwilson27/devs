@@ -1,35 +1,20 @@
 import { Readable } from 'stream';
 import { SandboxProvider } from '../SandboxProvider';
 import type { SandboxContext, ExecOptions, ExecResult, SandboxStatus } from '../types';
-import { SandboxProvisionError, SandboxDestroyedError, SecurityConfigError } from '../errors';
+import { SandboxProvisionError, SandboxDestroyedError, DependencyAuditError } from '../errors';
+import { runPostInstallAudit } from '../audit/PostInstallHook';
 
 export interface DockerDriverConfig {
   image?: string;
   hostProjectPath: string;
   memoryLimitBytes?: number;
   pidsLimit?: number;
-  cpuCores?: number;
-  networkMode?: 'none' | 'bridge' | string;
-}
-
-/** @internal Builds the HostConfig used for container creation. Exported for verification scripts. */
-export function buildHostConfig(config: Required<DockerDriverConfig>) {
-  return {
-    CapDrop: ['ALL'],
-    SecurityOpt: ['no-new-privileges:true'],
-    PidsLimit: config.pidsLimit ?? 128,
-    Memory: config.memoryLimitBytes ?? 4 * 1024 * 1024 * 1024,
-    NanoCPUs: (config.cpuCores ?? 2) * 1e9,
-    NetworkMode: config.networkMode ?? 'none',
-    Privileged: false,
-    Binds: [`${config.hostProjectPath}:/workspace:rw`],
-    ReadonlyRootfs: false,
-  } as any;
+  auditConfig?: any;
 }
 
 export class DockerDriver extends SandboxProvider {
   private docker: any;
-  private defaultConfig: Required<DockerDriverConfig>;
+  private defaultConfig: any;
   private containers: Map<string, any> = new Map();
   private imageResolver?: any;
 
@@ -42,18 +27,8 @@ export class DockerDriver extends SandboxProvider {
       hostProjectPath: config?.hostProjectPath ?? process.cwd(),
       memoryLimitBytes: config?.memoryLimitBytes ?? 4 * 1024 * 1024 * 1024,
       pidsLimit: config?.pidsLimit ?? 128,
-      cpuCores: config?.cpuCores ?? 2,
-      networkMode: config?.networkMode ?? 'none',
-    } as Required<DockerDriverConfig>;
-  }
-
-  private validateSecurityConfig(hostConfig: any): void {
-    if (!hostConfig?.CapDrop || !Array.isArray(hostConfig.CapDrop) || !hostConfig.CapDrop.includes('ALL')) {
-      throw new SecurityConfigError('HostConfig.CapDrop must include "ALL"');
-    }
-    if (!hostConfig?.SecurityOpt || !Array.isArray(hostConfig.SecurityOpt) || !hostConfig.SecurityOpt.includes('no-new-privileges:true')) {
-      throw new SecurityConfigError('HostConfig.SecurityOpt must include "no-new-privileges:true"');
-    }
+      auditConfig: config?.auditConfig ?? undefined,
+    };
   }
 
   async provision(config?: DockerDriverConfig): Promise<SandboxContext> {
@@ -130,7 +105,25 @@ export class DockerDriver extends SandboxProvider {
       const inspectRes = typeof execInstance.inspect === 'function' ? await execInstance.inspect() : { ExitCode: 0 };
       const stdout = Buffer.concat(stdoutChunks).toString('utf-8');
       const stderr = Buffer.concat(stderrChunks).toString('utf-8');
-      return { exitCode: inspectRes.ExitCode ?? 0, stdout, stderr, durationMs: 0 };
+      const result = { exitCode: inspectRes.ExitCode ?? 0, stdout, stderr, durationMs: 0 };
+
+      // If this was an npm install/ci, run post-install audit if configured
+      try {
+        const firstArg = args && args.length > 0 ? args[0] : undefined;
+        if ((cmd === 'npm' || (Array.isArray(cmdArr) && cmdArr[0] === 'npm')) && (firstArg === 'install' || firstArg === 'ci')) {
+          if (this.defaultConfig?.auditConfig) {
+            await runPostInstallAudit(undefined, this.defaultConfig.auditConfig);
+          } else {
+            // eslint-disable-next-line no-console
+            console.warn('DockerDriver: auditConfig not set; skipping post-install audit');
+          }
+        }
+      } catch (err) {
+        // Bubble up audit errors
+        throw err;
+      }
+
+      return result;
     } catch (err: any) {
       throw err;
     }

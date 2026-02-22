@@ -33,23 +33,14 @@ export class SandboxExecError extends Error {
   }
 }
 
-export class SecurityConfigError extends Error {
-  constructor(message?: string) {
+export class DependencyAuditError extends Error {
+  public blocking: any[];
+  public rawOutput?: string;
+  constructor(message: string, options?: { blocking?: any[]; rawOutput?: string }) {
     super(message);
-    this.name = 'SecurityConfigError';
+    this.name = 'DependencyAuditError';
+    this.blocking = options?.blocking ?? [];
+    this.rawOutput = options?.rawOutput;
   }
 }
 
-export class RegistryUnavailableError extends Error {
-  constructor(message?: string) {
-    super(message ?? 'No registry reachable and no local image available');
-    this.name = 'RegistryUnavailableError';
-  }
-}
-
-export class DigestMismatchError extends Error {
-  constructor(expected: string, actual?: string) {
-    super(`Digest mismatch. expected=${expected} actual=${actual ?? 'none'}`);
-    this.name = 'DigestMismatchError';
-  }
-}

@@ -270,3 +270,23 @@ Keep the file clean and relevant. Remove outdated information. If the file gets 
 
 - Appended reviewer notes documenting the presubmit outcome and recommendations; no code was modified or committed by the reviewer.
 
+
+## [2026-02-22] - Dependency Vulnerability Scanning (Added)
+
+- Implemented `DependencyAuditor` and `PostInstallHook` in `packages/sandbox/src/audit/` to run `npm audit --json` and enforce a package whitelist as a supply-chain protection measure.
+- Integrated `PostInstallHook` into `packages/sandbox/src/docker/DockerDriver.ts` so that after `npm install`/`npm ci` the audit runs when `auditConfig` is provided; failures throw `DependencyAuditError` to block the task pipeline.
+
+## Brittle Areas (Discovered)
+
+- AOD docs missing for the new audit modules (`packages/sandbox/src/audit/*`) — add `.agent/packages/sandbox/audit/*.agent.md` to satisfy AOD 1:1 invariant and silence presubmit advisories.
+
+## Recent Changelog
+
+- Added `DependencyAuditor`, `PostInstallHook`, `DependencyAuditError`, and unit tests at `packages/sandbox/src/docker/__tests__/DependencyAudit.spec.ts`.
+
+## [2026-02-22 Reviewer] - Code Review & Validation
+
+- Architectural Decision: Verified DependencyAuditor enforces whitelist using package-lock.json, performs `npm audit --json` as a read-only operation (no `--fix`), compares whitelist entries case-insensitively to prevent typosquatting, uses `spawn` with `{ shell: false }` to avoid shell injection, and includes the structured list of `blocking` vulnerabilities in `DependencyAuditError` (exposed via a `cause`/meta property) for the orchestrator to surface without re-parsing logs.
+- Brittle Areas: Agent-Oriented Documentation (AOD) missing for `packages/sandbox/src/audit/*` and several other modules (see presubmit advisory); unit tests were skipped locally because Vitest is not available in this environment; Docker integration tests require a Docker daemon and network access in CI.
+- Recent Changelog: Ran `./do presubmit` (passed). Reviewed and validated the audit implementation and PostInstallHook integration in DockerDriver; appended this reviewer summary to memory.
+
