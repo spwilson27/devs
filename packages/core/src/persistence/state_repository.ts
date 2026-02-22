@@ -578,6 +578,19 @@ export class StateRepository {
   }
 
   /**
+   * Reloads the project context from persistent state.
+   *
+   * This is a thin wrapper around `getProjectState` provided for consumers
+   * that expect a `reloadProjectContext(projectId)` API. It returns the same
+   * `ProjectState` structure used by the rest of the persistence layer.
+   *
+   * @param projectId - The project's primary-key id.
+   */
+  reloadProjectContext(projectId: number): ProjectState | null {
+    return this.getProjectState(projectId);
+  }
+
+  /**
    * Retrieves all agent log entries for a specific task, ordered by insertion
    * time (ascending id) so the thought→action→observation chain can be replayed.
    *
