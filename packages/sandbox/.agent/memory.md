@@ -31,3 +31,17 @@
 
 - Recent Changelog:
   - [2026-02-23] Added EnvironmentSanitizer (src/env/EnvironmentSanitizer.ts), unit and property-based tests (src/__tests__/envSanitizer.test.ts), integrated sanitizer into DockerDriver.provision and WebContainerDriver.boot, added agent docs (src/env/env_sanitizer.agent.md) and README section for Host Environment Sanitization.
+
+
+- Architectural Decision: Session key rotation uses an ephemeral 128-bit key generated with Node.js crypto.randomBytes(16). The SessionKeyManager (src/keys/SessionKeyManager.ts) is a process-scoped singleton (exported as `sessionKeyManager`) that manages keys in-memory via a Map<string, Buffer> and enforces explicit register -> revoke semantics to avoid accidental overwrites.
+  - generateKey(): Buffer uses crypto.randomBytes(16) as the sole entropy source.
+  - registerKey(sandboxId, key): throws if a key already exists for the sandboxId.
+  - revokeKey(sandboxId): zeroes the Buffer using Buffer.fill(0) before deleting the entry and emits structured log `{ event: 'session_key_rotated', sandboxId }` (the key value is never logged).
+  - DEVS_SESSION_KEY is passed to sandboxes via SecretInjector as a hex-encoded string (injected via stdin or ephemeral file), never as a command-line argument.
+
+- Brittle Areas:
+  - Zeroing memory with Buffer.fill reduces exposure but cannot guarantee that previous copies don't exist elsewhere (V8 may move/copy buffers). For stronger guarantees consider using native secure-zero APIs in a future phase.
+  - Secret delivery relies on provider implementations of execWithStdin and ephemeral-file semantics; ensure providers do not echo or log secrets and that ephemeral files are removed promptly.
+
+- Recent Changelog:
+  - [2026-02-23] Implemented SessionKeyManager (src/keys/SessionKeyManager.ts), added unit and integration tests (src/__tests__/sessionKey.test.ts), integrated key generation/injection in PreflightService and revocation in SandboxLifecycleManager, and added session_key.agent.md and README updates describing the DEVS_SESSION_KEY contract.

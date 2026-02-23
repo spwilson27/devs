@@ -3,6 +3,7 @@ import type { SandboxProvider } from '../providers';
 import type { FilesystemManager } from '../filesystem';
 import { PreflightError } from './PreflightError';
 import { SecretInjector } from '../secrets/SecretInjector';
+import { sessionKeyManager } from '../keys/SessionKeyManager';
 import type { TaskManifest, McpConfig, PreflightOptions } from '../types';
 
 export class PreflightService {
@@ -44,8 +45,22 @@ export class PreflightService {
 
       const ctx = { id: sandboxId, workdir: SANDBOX_PATHS.workspace, status: 'running', createdAt: new Date() } as any;
       if ((opts as any)?.secrets) {
+        // Generate and register an ephemeral 128-bit session key
+        const key = sessionKeyManager.generateKey();
+        try {
+          sessionKeyManager.registerKey(sandboxId, key);
+        } catch (err: any) {
+          throw new PreflightError(`Failed to register session key: ${err?.message ?? String(err)}`, sandboxId, 'session_key_registration');
+        }
+        const mergedSecrets = { ...(opts as any).secrets, DEVS_SESSION_KEY: key.toString('hex') } as any;
         const injector = new SecretInjector(this.provider);
-        await injector.inject(sandboxId, (opts as any).secrets, 'ephemeral_file');
+        try {
+          await injector.inject(sandboxId, mergedSecrets, 'ephemeral_file');
+        } catch (err: any) {
+          // Revoke key immediately on injection failure
+          try { sessionKeyManager.revokeKey(sandboxId); } catch (_) {}
+          throw err;
+        }
       }
       await this.provider.exec(ctx, 'sh', ['-lc', 'echo preflight-ready']);
     } catch (err: any) {

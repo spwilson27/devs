@@ -27,3 +27,5 @@ export * from './cleanup/SandboxCleanupService';
 export * from './cleanup/VolumeManager';
 export type { TeardownOutcome } from './cleanup/SandboxCleanupService';
 
+export * from './keys/SessionKeyManager';
+

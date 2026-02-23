@@ -507,4 +507,8 @@ The sandbox supports secure secret injection via two methods implemented by Secr
 
 Security guarantees: secret values are never placed into command-line arguments or logged by the injector; DEVS_SECRETS_PATH is the agreed contract for locating injected secrets inside the sandbox.
 
+## Session Key Rotation
+
+Session keys are ephemeral 128-bit values generated using Node.js crypto.randomBytes(16). The SessionKeyManager (src/keys/SessionKeyManager.ts) manages key lifecycle: generate -> register -> use -> revoke. Keys are injected into sandboxes via SecretInjector under the DEVS_SESSION_KEY contract (hex-encoded) using ephemeral files or stdin; keys are never passed on the command line. On revoke the key buffer is zeroed in memory before deletion and a structured log `{ event: 'session_key_rotated', sandboxId }` is emitted.
+
 

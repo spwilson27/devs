@@ -8,6 +8,8 @@ This file captures the project's most important architectural decisions, recurri
 - Persistence: SQLite (better-sqlite3) with WAL; StateRepository provides ACID transactions and savepoints.
 - Testing conventions: create isolated DBs per test (createDatabase + initializeSchema), use hoist-safe vi.mock factories, and prefer real timers for async sampling where needed.
 - Agent-Oriented Documentation (AOD): 1:1 module → `.agent/*.agent.md` invariant enforced by AOD linter.
+- [2026-02-23] Session Key Rotation: Added SessionKeyManager in @devs/sandbox to manage ephemeral 128-bit session keys (crypto.randomBytes(16)). Keys are registered per-sandboxId, injected via SecretInjector as DEVS_SESSION_KEY (hex), and zeroed in memory on revocation; SessionKeyManager is in-memory only and emits `{ event: 'session_key_rotated', sandboxId }` on revoke.
+
 
 ## Brittle Areas
 - Missing `.js` extensions in imports (NodeNext resolver) and type/ambient mismatches.

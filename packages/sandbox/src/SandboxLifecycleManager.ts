@@ -3,6 +3,7 @@ import type { SandboxProvider } from './SandboxProvider';
 import type { SandboxContext } from './types';
 import type { SandboxLifecycleConfig } from './SandboxLifecycleConfig';
 import { SandboxPreFlightError, SandboxTimeoutError } from './errors';
+import { sessionKeyManager } from './keys/SessionKeyManager';
 import type { TeardownOutcome } from './cleanup/SandboxCleanupService';
 
 export class SandboxLifecycleManager extends EventEmitter {
@@ -52,6 +53,11 @@ export class SandboxLifecycleManager extends EventEmitter {
           // swallow destroy errors - ensure we always emit destroyed event
         } finally {
           destroyed = true;
+          try {
+            sessionKeyManager.revokeKey(ctx.id);
+          } catch (_) {
+            // ignore
+          }
           this.emit('sandbox:destroyed', { taskLabel, ctx, reason: exitReason });
         }
       }
