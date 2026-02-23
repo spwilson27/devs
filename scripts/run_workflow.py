@@ -11,6 +11,23 @@ import concurrent.futures
 import re
 from typing import Dict, List, Any
 
+class Logger(object):
+    def __init__(self, terminal, log_stream, lock):
+        self.terminal = terminal
+        self.log_stream = log_stream
+        self.lock = lock
+
+    def write(self, message):
+        with self.lock:
+            self.terminal.write(message)
+            self.log_stream.write(message)
+            self.log_stream.flush()
+
+    def flush(self):
+        with self.lock:
+            self.terminal.flush()
+            self.log_stream.flush()
+
 
 # Default CLI backends config for gemini/claude. Assumes same runner logic as gen_all.py
 def run_ai_command(prompt: str, cwd: str, prefix: str = "", backend: str = "gemini") -> int:
@@ -65,18 +82,22 @@ def run_ai_command(prompt: str, cwd: str, prefix: str = "", backend: str = "gemi
     return process.returncode
 
 
-def load_dags(tasks_dir: str) -> Dict[str, Dict[str, List[str]]]:
-    """Loads all dag_reviewed.json files from the tasks directories."""
+def load_dags(tasks_dir: str) -> Dict[str, List[str]]:
+    """Loads all dag_reviewed.json or dag.json files from the tasks directories."""
     master_dag = {}
     if not os.path.exists(tasks_dir):
         return master_dag
 
-    for phase_dir in os.listdir(tasks_dir):
+    for phase_dir in sorted(os.listdir(tasks_dir)):
         phase_path = os.path.join(tasks_dir, phase_dir)
         if not os.path.isdir(phase_path) or not phase_dir.startswith("phase_"):
             continue
 
+        # Try reviewed DAG first, then fallback to unreviewed
         dag_file = os.path.join(phase_path, "dag_reviewed.json")
+        if not os.path.exists(dag_file):
+            dag_file = os.path.join(phase_path, "dag.json")
+
         if os.path.exists(dag_file):
             with open(dag_file, "r", encoding="utf-8") as f:
                 try:
@@ -195,9 +216,16 @@ def get_existing_worktree(root_dir: str, branch_name: str) -> str:
         current_wt = None
         for line in res.stdout.splitlines():
             if line.startswith("worktree "):
-                current_wt = line[9:]
+                current_wt = line[9:].strip()
             elif line.startswith("branch ") and line[7:].endswith(f"refs/heads/{branch_name}"):
-                return current_wt
+                if current_wt and os.path.isdir(current_wt):
+                    return current_wt
+                else:
+                    # Stale worktree detected, prune it
+                    print(f"      Cleaning stale worktree metadata for {branch_name}...")
+                    subprocess.run(["git", "worktree", "prune"], cwd=root_dir, check=False)
+                    # Also try to delete the branch if it's not merged, or just let add -B handle it
+                    return None
     except subprocess.CalledProcessError:
         pass
     return None
@@ -522,6 +550,13 @@ def main():
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     tasks_dir = os.path.join(root_dir, "docs", "plan", "tasks")
     state_file = os.path.join(root_dir, "scripts", ".workflow_state.json")
+    log_file = os.path.join(root_dir, "run_workflow.log")
+
+    # Redirect stdout and stderr to both terminal and log file
+    log_stream = open(log_file, "a", encoding="utf-8")
+    log_lock = threading.Lock()
+    sys.stdout = Logger(sys.stdout, log_stream, log_lock)
+    sys.stderr = Logger(sys.stderr, log_stream, log_lock)
 
     master_dag = load_dags(tasks_dir)
     state = load_workflow_state(state_file)
