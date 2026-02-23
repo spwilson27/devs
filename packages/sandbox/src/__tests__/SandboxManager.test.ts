@@ -19,7 +19,7 @@ describe('SandboxManager', () => {
 
     (spawn as any).mockImplementation(() => fakeProc);
 
-    const { SandboxManager } = await import('../SandboxManager');
+    const { SandboxManager } = await import('../SandboxManager.js');
 
     const handler = { onOomKill: vi.fn(async (id: string) => {}) };
     const mgr = new SandboxManager(handler as any);

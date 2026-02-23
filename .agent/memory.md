@@ -73,3 +73,8 @@ _Last updated: 2026-02-22T22:19:08Z_
   - Architectural Decision: Provide a safe default implementation for getResourceStats to reduce test boilerplate for mocks and prevent TypeScript errors in test-only mock providers.
   - Brittle Areas: Defaulting resource stats may mask misconfigured drivers that don't report metrics; add driver-level tests to ensure drivers override the default when real metrics are available.
   - Recent Changelog: Patched SandboxProvider and added EnvironmentSanitizer; ran ./do presubmit — all checks passed (2026-02-23).
+
+- [2026-02-23 Reviewer] Fix: Resolved TypeScript node16 moduleResolution error by updating dynamic import in SandboxManager.test.ts to use explicit runtime extension: import('../SandboxManager.js'). This small change ensures TypeScript (node16/nodenext) accepts the ESM-style relative import and maps to the emitted .js at runtime.
+  - Outcome: Ran ./do presubmit; all checks pass locally (unit tests and presubmit suite completed successfully).
+
+_Last updated: 2026-02-23T01:56:46Z_
