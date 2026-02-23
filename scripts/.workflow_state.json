@@ -79,7 +79,18 @@
         "phase_2/04_webcontainer_driver_implementation/03_webcontainer_syscall_compatibility_layer.md",
         "phase_2/06_network_egress_control/01_core_proxy_server_skeleton.md",
         "phase_2/05_filesystem_manager_isolation/03_temporary_directory_lifecycle_and_permissions.md",
-        "phase_2/06_network_egress_control/04_docker_network_bridge_integration.md"
+        "phase_2/06_network_egress_control/04_docker_network_bridge_integration.md",
+        "phase_2/06_network_egress_control/02_domain_allowlist_enforcement_engine.md",
+        "phase_2/04_webcontainer_driver_implementation/04_webcontainer_native_dependency_fallback.md",
+        "phase_2/04_webcontainer_driver_implementation/05_webcontainer_driver_integration_tests.md",
+        "phase_2/06_network_egress_control/05_webcontainer_network_shim.md",
+        "phase_2/06_network_egress_control/03_isolated_dns_resolver.md",
+        "phase_2/06_network_egress_control/06_proxy_audit_logging_and_observability.md",
+        "phase_2/07_resource_quotas_constraints/01_configure_docker_cpu_ram_cgroup_limits.md",
+        "phase_2/07_resource_quotas_constraints/02_implement_execution_time_cap.md",
+        "phase_2/07_resource_quotas_constraints/04_enforce_writable_volume_disk_quotas.md",
+        "phase_2/06_network_egress_control/07_e2e_egress_policy_validation_ci_gate.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/01_preflight_sandbox_injection.md"
     ],
     "merged_tasks": [
         "phase_1/01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md",
@@ -161,6 +172,17 @@
         "phase_2/04_webcontainer_driver_implementation/03_webcontainer_syscall_compatibility_layer.md",
         "phase_2/06_network_egress_control/01_core_proxy_server_skeleton.md",
         "phase_2/05_filesystem_manager_isolation/03_temporary_directory_lifecycle_and_permissions.md",
-        "phase_2/06_network_egress_control/04_docker_network_bridge_integration.md"
+        "phase_2/06_network_egress_control/04_docker_network_bridge_integration.md",
+        "phase_2/06_network_egress_control/02_domain_allowlist_enforcement_engine.md",
+        "phase_2/04_webcontainer_driver_implementation/04_webcontainer_native_dependency_fallback.md",
+        "phase_2/04_webcontainer_driver_implementation/05_webcontainer_driver_integration_tests.md",
+        "phase_2/06_network_egress_control/05_webcontainer_network_shim.md",
+        "phase_2/06_network_egress_control/03_isolated_dns_resolver.md",
+        "phase_2/06_network_egress_control/06_proxy_audit_logging_and_observability.md",
+        "phase_2/07_resource_quotas_constraints/01_configure_docker_cpu_ram_cgroup_limits.md",
+        "phase_2/07_resource_quotas_constraints/02_implement_execution_time_cap.md",
+        "phase_2/07_resource_quotas_constraints/04_enforce_writable_volume_disk_quotas.md",
+        "phase_2/06_network_egress_control/07_e2e_egress_policy_validation_ci_gate.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/01_preflight_sandbox_injection.md"
     ]
 }
