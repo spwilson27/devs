@@ -28,4 +28,7 @@ export * from './cleanup/VolumeManager';
 export type { TeardownOutcome } from './cleanup/SandboxCleanupService';
 
 export * from './keys/SessionKeyManager';
+export * from './orchestrator/SandboxOrchestrator';
+export type { RunTaskOptions, TaskResult } from './orchestrator/SandboxOrchestrator';
+
 

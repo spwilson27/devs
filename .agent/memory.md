@@ -93,3 +93,13 @@ _Last updated: 2026-02-23T04:03:44Z_
 - Notes & Fixes: Verified PATTERNS length >= 100, confirmed unique IDs and that each regex is defined with the `g` flag. Confirmed SecretMasker.mask() resets `regex.lastIndex = 0` before use to avoid stateful global-regex bugs. No code changes were required in this review.
 
 _Last updated: 2026-02-23T04:04:32.700Z_
+
+- [2026-02-23] Added `SandboxOrchestrator` implementation in `packages/sandbox/src/orchestrator/SandboxOrchestrator.ts`, unit tests in `packages/sandbox/src/__tests__/orchestrator.test.ts`, and agent docs `orchestrator.agent.md`.
+  - Decision: Orchestrator generates a per-run cryptographic sandboxId and ensures try/finally cleanup + session key revocation.
+  - Brittle: Provider API mismatch (create vs provision) requires orchestrator to support both `provider.create(sandboxId, ...)` and `provider.provision()` fallbacks; this should be resolved by aligning provider drivers in a follow-up task.
+  - Changelog: Added unit tests validating unique sandboxId per run, lifecycle sequencing, and preflight failure behavior; docs appended to package README.
+
+ - [2026-02-23 Reviewer] Verified SandboxOrchestrator: confirmed env sanitization is applied before create, session key registration and revocation occur, try/finally covers post-create steps so teardown always runs, lifecycle events emitted as structured JSON, and no sandboxId caching between runs; unit tests pass locally.
+  - Follow-up: Normalize provider API to a single provision/create contract to remove dual-path complexity.
+
+_Last updated: 2026-02-23T04:31:26Z_
