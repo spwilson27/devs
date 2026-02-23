@@ -159,7 +159,12 @@
         "phase_3/06_tool_registry_proxy/03_json_schema_validation_and_argument_enforcement.md",
         "phase_3/06_tool_registry_proxy/04_path_sanitization_and_access_control.md",
         "phase_3/06_tool_registry_proxy/05_tool_proxy_sandbox_bridge.md",
-        "phase_3/07_sandbox_bridge_injection/01_implement_tool_proxy_sandbox_bridge.md"
+        "phase_3/07_sandbox_bridge_injection/01_implement_tool_proxy_sandbox_bridge.md",
+        "phase_3/07_sandbox_bridge_injection/02_implement_sandbox_retry_protocol.md",
+        "phase_3/07_sandbox_bridge_injection/03_implement_state_pollution_prevention.md",
+        "phase_3/08_projectserver_template/01_project_server_template_scaffold.md",
+        "phase_3/08_projectserver_template/02_mcp_server_entry_point_and_transport.md",
+        "phase_3/08_projectserver_template/03_introspection_tools_implementation.md"
     ],
     "merged_tasks": [
         "phase_1/01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md",
@@ -321,6 +326,11 @@
         "phase_3/06_tool_registry_proxy/03_json_schema_validation_and_argument_enforcement.md",
         "phase_3/06_tool_registry_proxy/04_path_sanitization_and_access_control.md",
         "phase_3/06_tool_registry_proxy/05_tool_proxy_sandbox_bridge.md",
-        "phase_3/07_sandbox_bridge_injection/01_implement_tool_proxy_sandbox_bridge.md"
+        "phase_3/07_sandbox_bridge_injection/01_implement_tool_proxy_sandbox_bridge.md",
+        "phase_3/07_sandbox_bridge_injection/02_implement_sandbox_retry_protocol.md",
+        "phase_3/07_sandbox_bridge_injection/03_implement_state_pollution_prevention.md",
+        "phase_3/08_projectserver_template/01_project_server_template_scaffold.md",
+        "phase_3/08_projectserver_template/02_mcp_server_entry_point_and_transport.md",
+        "phase_3/08_projectserver_template/03_introspection_tools_implementation.md"
     ]
 }
