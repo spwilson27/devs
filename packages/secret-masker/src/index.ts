@@ -1,5 +1,6 @@
 export { ISecretMasker, IRedactionResult, IRedactionHit, PatternDefinition } from './types';
 export { SecretMasker } from './SecretMasker';
 export { SecretMaskerFactory } from './SecretMaskerFactory';
-export { EntropyScanner, IEntropyHit } from './entropy';
+export { EntropyScanner, IEntropyHit } from './entropy/index';
+export { calculateShannonEntropy, isHighEntropySecret } from './entropy';
 export { PATTERNS } from './patterns';

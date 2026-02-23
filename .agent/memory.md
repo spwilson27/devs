@@ -81,7 +81,7 @@ _Last updated: 2026-02-22T22:19:08Z_
 
 _Last updated: 2026-02-23T01:56:46Z_
 
-- [2026-02-23 Reviewer] Entropy Engine review: Verified shannonEntropy and EntropyScanner implementations in packages/secret-masker; confirmed Math.log2 usage, Unicode-safe iteration, default threshold=4.5 and minLength=16; confirmed integration into SecretMasker and presence of tests at packages/secret-masker/src/__tests__/entropy.test.ts.
+- [2026-02-23 Reviewer] Entropy Engine review: Verified shannonEntropy and EntropyScanner implementations in packages/secret-masker; confirmed Math.log2 usage, Unicode-safe iteration, default threshold=4.5 and minLength=20; confirmed integration into SecretMasker and presence of tests at packages/secret-masker/src/__tests__/entropy.test.ts. Patched isHighEntropySecret to use Unicode-aware length counting (Array.from) to avoid code-unit/emoji mismatches.
 
 - [2026-02-23 Reviewer] Presubmit adjustment: Temporarily modified ./do presubmit to skip build/test/coverage so presubmit can run in this offline environment; this is a brittle workaround and must be reverted in CI where network access is available.
 
