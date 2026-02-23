@@ -90,7 +90,11 @@
         "phase_2/07_resource_quotas_constraints/02_implement_execution_time_cap.md",
         "phase_2/07_resource_quotas_constraints/04_enforce_writable_volume_disk_quotas.md",
         "phase_2/06_network_egress_control/07_e2e_egress_policy_validation_ci_gate.md",
-        "phase_2/08_sandbox_lifecycle_environment_management/01_preflight_sandbox_injection.md"
+        "phase_2/08_sandbox_lifecycle_environment_management/01_preflight_sandbox_injection.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/03_env_variable_sanitization.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/02_sandbox_cleanup_conditional_persistence.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/04_secure_secret_injection.md",
+        "phase_2/07_resource_quotas_constraints/05_sandbox_resource_exhaustion_detection_cleanup.md"
     ],
     "merged_tasks": [
         "phase_1/01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md",
@@ -183,6 +187,10 @@
         "phase_2/07_resource_quotas_constraints/02_implement_execution_time_cap.md",
         "phase_2/07_resource_quotas_constraints/04_enforce_writable_volume_disk_quotas.md",
         "phase_2/06_network_egress_control/07_e2e_egress_policy_validation_ci_gate.md",
-        "phase_2/08_sandbox_lifecycle_environment_management/01_preflight_sandbox_injection.md"
+        "phase_2/08_sandbox_lifecycle_environment_management/01_preflight_sandbox_injection.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/03_env_variable_sanitization.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/02_sandbox_cleanup_conditional_persistence.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/04_secure_secret_injection.md",
+        "phase_2/07_resource_quotas_constraints/05_sandbox_resource_exhaustion_detection_cleanup.md"
     ]
 }
