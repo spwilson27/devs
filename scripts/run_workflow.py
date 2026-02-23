@@ -233,6 +233,9 @@ def get_existing_worktree(root_dir: str, branch_name: str) -> str:
 
 def process_task(root_dir: str, full_task_id: str, presubmit_cmd: str, backend: str = "gemini", max_retries: int = 3) -> bool:
     """Handles the lifecycle of a single task: worktree creation, agents, and commit."""
+    # Since copilot is free and unreliable, we'll give it more retries
+    if backend == 'copilot':
+        max_retries += 2
     phase_id, task_id = full_task_id.split("/", 1)
     safe_task_id = task_id.replace("/", "_").replace(".md", "")
     branch_name = f"ai-phase-{safe_task_id}"
