@@ -19,3 +19,8 @@ This package includes a Shannon entropy-based detector for identifying high-entr
 - Defaults: minLength = 20, entropyThreshold = 4.5 (bits).
 - Usage: import { calculateShannonEntropy, isHighEntropySecret } from '@devs/secret-masker' and call with a candidate string. Override the defaults by passing minLength and entropyThreshold to isHighEntropySecret.
 
+## Supported Secret Types
+
+This package ships a large library of secret/token regexes. See `packages/secret-masker/docs/patterns.md` for examples and the canonical list (redacted examples).
+
+
