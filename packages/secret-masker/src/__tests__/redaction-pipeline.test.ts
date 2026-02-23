@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { SecretMaskerFactory, PATTERNS } from '../index';
-import { EntropyScanner } from '../entropy';
+import { EntropyScanner } from '../entropy/EntropyScanner';
 import { identifySecrets, validateHits, replaceHits } from '../pipeline'; // pipeline not yet implemented (tests should fail initially)
 
 describe('Three-Phase Redaction Pipeline', () => {

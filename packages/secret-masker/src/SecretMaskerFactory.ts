@@ -1,7 +1,7 @@
 import { SecretMasker } from './SecretMasker';
 import { ISecretMasker, PatternDefinition } from './types';
 import { PATTERNS } from './patterns';
-import { EntropyScanner } from './entropy';
+import { EntropyScanner } from './entropy/EntropyScanner';
 
 export class SecretMaskerFactory {
   static create(patterns: PatternDefinition[] = PATTERNS, entropyScanner?: EntropyScanner): ISecretMasker {

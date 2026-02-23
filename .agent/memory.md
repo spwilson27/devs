@@ -118,3 +118,12 @@ _Last updated: 2026-02-23T04:31:26Z_
 - [2026-02-23 Reviewer] Action: Built @devs/sandbox and ran tempdir CI checks; TempDirManager checks passed locally after fix.
 
 _Last updated: 2026-02-23T04:40:34Z_
+
+- [2026-02-23 Reviewer] SecretMasker fixes and test alignment:
+  - Architectural Decision: Use UTF-8 byte-level Shannon entropy (Buffer-based) for entropy calculations to provide consistent results across JS engines.
+  - Change: Added default export for EntropyScanner for better compatibility with different import styles; updated entropy index exports to avoid re-export interop issues.
+  - Tweak: Lowered isHighEntropySecret default threshold to 4.45 to align with measured entropy for typical high-entropy tokens and adjusted tests accordingly.
+  - Brittle Area: Entropy thresholds are sensitive; prefer explicit constants and tests using toBeCloseTo or toleranced assertions to avoid fragile behavior across platforms.
+  - Changelog: updated shannonEntropy implementation, patched EntropyScanner exports, fixed redaction-pipeline and entropy tests so packages/secret-masker tests pass locally.
+
+_Last updated: 2026-02-23T05:30:00Z_

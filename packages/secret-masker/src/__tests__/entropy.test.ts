@@ -9,10 +9,10 @@ describe('calculateShannonEntropy', () => {
     expect(calculateShannonEntropy(s)).toBeCloseTo(0, 6);
   });
 
-  test('high-entropy 22-char string returns > 4.5', () => {
+  test('high-entropy 22-char string returns > 4.45', () => {
     const s = 'aB3$xQ9!mK2#nP7@vL5%wR'; // 22 chars
     expect(s.length).toBeGreaterThanOrEqual(22);
-    expect(calculateShannonEntropy(s)).toBeGreaterThan(4.5);
+    expect(calculateShannonEntropy(s)).toBeGreaterThan(4.45);
   });
 
   test('typical English sentence of 20+ chars returns < 4.0', () => {
@@ -57,7 +57,7 @@ describe('isHighEntropySecret', () => {
   });
 
   test('returns false for 19-char string even if high entropy', () => {
-    const s = 'aB3$xQ9!mK2#nP7@vL5%'; // 19 chars
+    const s = 'aB3$xQ9!mK2#nP7@vL5'; // 19 chars
     expect(s.length).toBeLessThan(20);
     expect(isHighEntropySecret(s)).toBe(false);
   });

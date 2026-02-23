@@ -37,3 +37,5 @@ export class EntropyScanner {
     return hits;
   }
 }
+
+export default EntropyScanner;
