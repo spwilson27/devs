@@ -65,12 +65,14 @@
 import type Database from "better-sqlite3";
 import type { Statement } from "better-sqlite3";
 import type { RunnableConfig } from "@langchain/core/runnables";
+import { EventEmitter } from "events";
 import {
   BaseCheckpointSaver,
   type Checkpoint,
   type CheckpointMetadata,
   type CheckpointTuple,
 } from "@langchain/langgraph";
+import { SecretMaskerFactory, type ISecretMasker } from "../../../secret-masker/src/index.js";
 
 // Local type aliases for checkpoint types not re-exported by @langchain/langgraph.
 // These are structurally compatible with the definitions in @langchain/langgraph-checkpoint.
@@ -164,6 +166,12 @@ interface CheckpointRow {
  */
 export class SqliteSaver extends BaseCheckpointSaver {
   private readonly db: Database.Database;
+  private readonly masker: ISecretMasker;
+  private readonly _emitter = new EventEmitter();
+
+  public get emitter() {
+    return this._emitter;
+  }
 
   // ── Prepared statements ──────────────────────────────────────────────────
 
@@ -180,6 +188,7 @@ export class SqliteSaver extends BaseCheckpointSaver {
   constructor(db: Database.Database) {
     super();
     this.db = db;
+    this.masker = SecretMaskerFactory.create();
 
     // Create tables (idempotent).
     db.transaction(() => {
@@ -224,6 +233,7 @@ export class SqliteSaver extends BaseCheckpointSaver {
       LIMIT ?
     `);
 
+    // SECURITY: checkpoint_writes.value is redacted via SecretMasker before persistence (see SqliteSaver.redactBeforeSave).
     this._stmtPutWrite = db.prepare(`
       INSERT OR REPLACE INTO checkpoint_writes
         (thread_id, checkpoint_ns, checkpoint_id, task_id, idx, channel, type, value)
@@ -300,6 +310,45 @@ export class SqliteSaver extends BaseCheckpointSaver {
   }
 
   // ── BaseCheckpointSaver interface ─────────────────────────────────────────
+
+  /**
+   * Redacts a value before it is saved to SQLite.
+   * - Returns null for null/undefined inputs.
+   * - Converts non-string values to string (Buffer -> utf8) before masking.
+   */
+  private redactBeforeSave(value: unknown): string | null {
+    if (value === null || typeof value === "undefined") {
+      return null;
+    }
+
+    let s: string;
+    if (typeof value === "string") {
+      s = value;
+    } else if (value instanceof Buffer) {
+      s = value.toString("utf8");
+    } else {
+      try {
+        s = String(value);
+      } catch {
+        s = "";
+      }
+    }
+
+    const result = this.masker.mask(s) as any;
+    const hitCount: number = result.hitCount ?? (Array.isArray(result.hits) ? result.hits.length : 0);
+
+    if (hitCount > 0) {
+      const patterns = Array.isArray(result.hits) ? result.hits.map((h: any) => h.pattern) : [];
+      this._emitter.emit("secret-redacted", {
+        table: "checkpoint_writes",
+        column: "value",
+        hitCount,
+        patterns,
+      });
+    }
+
+    return result.masked ?? s;
+  }
 
   /**
    * Loads the latest (or a specific) checkpoint for the given thread.
@@ -442,7 +491,8 @@ export class SqliteSaver extends BaseCheckpointSaver {
         const [channel, value] = writes[idx]!;
         // Serialize the channel value; ignore the returned type string since
         // the value is trivially JSON-compatible for the built-in serde.
-        const serialized = JSON.stringify(value);
+        const redacted = this.redactBeforeSave(value);
+        const serialized = redacted === null ? null : JSON.stringify(redacted);
         this._stmtPutWrite.run({
           thread_id: threadId,
           checkpoint_ns: ns,

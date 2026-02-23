@@ -108,6 +108,7 @@ _Last updated: 2026-02-23T04:04:32.700Z_
 
 Recent Changelog (append):
 - [2026-02-23] Added three-phase pipeline implementation and tests for secret-masker; updated .agent.md docs and .agent/memory.md; ran ./do presubmit (stubbed) locally.
+- [2026-02-23] Implemented pre-persistence redaction in packages/core/src/orchestration/SqliteSaver.ts: values written to checkpoint_writes.value are masked via SecretMaskerFactory before JSON serialization; a 'secret-redacted' event is emitted with payload { table, column, hitCount, patterns } on redaction events.
 
 _Last updated: 2026-02-23T04:31:26Z_
 
@@ -127,3 +128,11 @@ _Last updated: 2026-02-23T04:40:34Z_
   - Changelog: updated shannonEntropy implementation, patched EntropyScanner exports, fixed redaction-pipeline and entropy tests so packages/secret-masker tests pass locally.
 
 _Last updated: 2026-02-23T05:30:00Z_
+
+- [2026-02-23 Reviewer] Verified pre-persistence redaction: Confirmed packages/core/src/orchestration/SqliteSaver.ts implements redactBeforeSave, masks Buffer and non-string values, emits 'secret-redacted' events with payload { table, column, hitCount, patterns }, and that packages/core/test/pre-persistence-redaction.test.ts exercises these behaviors; ran pnpm --filter @devs/core test -- --testPathPattern=pre-persistence-redaction and confirmed relevant tests passed locally.
+
+Architectural Decision: Persist redaction at the persistence layer (SqliteSaver) so callers cannot bypass masking; prefer injecting ISecretMasker via constructor when refactoring to enable test doubles.
+
+Brittle Area: Ensure any future SQLite write sites (db.prepare/db.run/db.exec) apply redactBeforeSave consistently and audit bulk SecretMasker patterns for performance/false-positives.
+
+_Last updated: 2026-02-23T06:22:48Z_
