@@ -426,6 +426,7 @@ def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str
         subprocess.run(["git", "branch", "dev", "main"], cwd=root_dir, check=True)
 
     active_tasks = set()
+    failed_tasks = set()
     state_lock = threading.Lock()
     
     print("\n=> Starting Parallel DAG Execution Loop...")
@@ -453,13 +454,16 @@ def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str
             # If no tasks are running and none are ready, we are either done or deadlocked
             if not future_to_task:
                 with state_lock:
+                    if failed_tasks:
+                        break
+                    
                     if len(state["completed_tasks"]) == len(master_dag):
                         print("\n=> All implementation tasks completed successfully!")
                         break
                     else:
                         print("\n[!] FATAL: DAG deadlock or unrecoverable error. No tasks running and none ready.")
                         print(f"    Completed: {len(state['completed_tasks'])} / {len(master_dag)}")
-                        sys.exit(1)
+                        os._exit(1)
             
             # Wait for at least one future to complete
             done, not_done = concurrent.futures.wait(
@@ -487,19 +491,25 @@ def execute_dag(root_dir: str, master_dag: Dict[str, List[str]], state: Dict[str
                             print(f"      Pushing dev to remote origin...")
                             subprocess.run(["git", "push", "origin", "dev"], cwd=root_dir, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                         else:
-                            print(f"\n[!] FATAL: Task {task_id} failed merging into dev. Halting workflow.")
-                            executor.shutdown(wait=False, cancel_futures=True)
-                            sys.exit(1)
+                            with state_lock:
+                                failed_tasks.add(f"Task {task_id} failed merging into dev.")
+                            executor.shutdown(wait=True, cancel_futures=True)
                     else:
-                        print(f"\n[!] FATAL: Task {task_id} failed implementation. Halting workflow.")
-                        # Drain remaining futures and exit
-                        executor.shutdown(wait=False, cancel_futures=True)
-                        sys.exit(1)
+                        with state_lock:
+                            failed_tasks.add(f"Task {task_id} failed implementation.")
+                        executor.shutdown(wait=True, cancel_futures=True)
                 except Exception as exc:
-                    print(f"\n[!] FATAL: Task {task_id} generated an exception:")
                     traceback.print_exc()
-                    executor.shutdown(wait=False, cancel_futures=True)
-                    sys.exit(1)
+                    with state_lock:
+                        failed_tasks.add(f"Task {task_id} generated an exception.")
+                    executor.shutdown(wait=True, cancel_futures=True)
+
+    if failed_tasks:
+        print("\n" + "="*80)
+        for err in failed_tasks:
+            print(f"[!] FATAL: {err} Halting workflow.")
+        print("="*80 + "\n")
+        sys.exit(1)
 
 
 def main():
