@@ -484,3 +484,11 @@ The E2E tests start an in-process EgressProxy, an IsolatedDnsResolver stub, and 
 
 The PreflightService injects project files, task manifest, and MCP config into a sandbox workspace (see /workspace constants in source).
 Invoke PreflightService.runPreflight(sandboxId, { projectRoot, task, mcpConfig }) to perform the injection; the service writes the task manifest to /workspace/.devs/task.json and MCP config to /workspace/.devs/mcp_config.json.
+
+## Sandbox Cleanup
+
+Sandbox cleanup differentiates between success and failure teardown:
+
+- Success: containers are removed (provider.destroy), ephemeral volumes registered with the VolumeManager are removed, and the sandbox entry is removed from the internal registry.
+- Failure: containers are stopped but preserved for debugging; a structured warning `{ event: 'sandbox_preserved', sandboxId, reason: 'task_failure' }` is emitted and the sandbox is marked `PRESERVED` for inspection.
+

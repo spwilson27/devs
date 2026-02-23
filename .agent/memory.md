@@ -67,3 +67,4 @@ _Last updated: 2026-02-22T22:19:08Z_
   - Architectural Decision: Use EnvironmentSanitizer to strip sensitive host environment variables before spawning any sandbox runtime; drivers must pass a sanitized env copy and never log values.
   - Brittle Areas: Regex-based denylist may miss non-obvious secret names; maintainers should expand patterns and prefer explicit additionalDenylist entries for special cases; ensure sanitize operates on a copy and never mutates process.env.
   - Recent Changelog: Verified tests and integration; ran ./do presubmit and all checks passed (2026-02-23).
+  - Implementation: Added packages/sandbox/src/env/EnvironmentSanitizer.ts implementing DEFAULT_SENSITIVE_KEY_PATTERNS and EnvironmentSanitizer.sanitize(); fixed missing import causing TypeScript errors and ensured tests pass locally by running ./do presubmit.

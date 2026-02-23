@@ -21,3 +21,7 @@ export * from './preflight/PreflightService';
 export * from './preflight/PreflightError';
 export * from './env/EnvironmentSanitizer';
 
+export * from './cleanup/SandboxCleanupService';
+export * from './cleanup/VolumeManager';
+export type { TeardownOutcome } from './cleanup/SandboxCleanupService';
+
