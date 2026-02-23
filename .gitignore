@@ -104,6 +104,8 @@ celerybeat.pid
 env/
 venv/
 ENV/
+!packages/sandbox/src/env/
+!packages/sandbox/src/env/**
 env.bak/
 venv.bak/
 
