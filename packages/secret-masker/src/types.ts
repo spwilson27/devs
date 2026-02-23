@@ -20,6 +20,14 @@ export interface PatternDefinition {
   severity: PatternSeverity;
 }
 
+export interface IRawHit {
+  value: string;
+  start: number;
+  end: number;
+  source: 'regex' | 'entropy';
+  patternId: string;
+}
+
 export interface ISecretMasker {
   mask(input: string): IRedactionResult;
   maskStream(stream: NodeJS.ReadableStream): NodeJS.ReadableStream;

@@ -5,7 +5,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "jest --config jest.config.ts --passWithNoTests"
+    "test": "vitest --run"
   },
   "devDependencies": {
     "typescript": "^5.0.0",

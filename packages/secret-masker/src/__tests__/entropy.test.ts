@@ -1,4 +1,7 @@
+import { describe, test, expect } from 'vitest';
 import { calculateShannonEntropy, isHighEntropySecret } from '../entropy';
+import { shannonEntropy } from '../entropy/shannonEntropy';
+import { EntropyScanner } from '../entropy/EntropyScanner';
 
 describe('calculateShannonEntropy', () => {
   test('low-entropy string of 22 identical chars returns ~0', () => {
@@ -20,6 +23,30 @@ describe('calculateShannonEntropy', () => {
 
   test('empty string returns 0', () => {
     expect(calculateShannonEntropy('')).toBe(0);
+  });
+});
+
+describe('shannonEntropy (compat)', () => {
+  test('AWS-like key has high entropy', () => {
+    expect(shannonEntropy('AKIA4EXAMPLE12345678')).toBeGreaterThan(3.8);
+  });
+
+  test('normal sentence has low entropy', () => {
+    expect(shannonEntropy('hello world this is a normal sentence')).toBeLessThan(3.8);
+  });
+});
+
+describe('EntropyScanner.scan', () => {
+  test('detects single high-entropy token', () => {
+    const scanner = new EntropyScanner();
+    const token = 'AKIA4EXAMPLE12345678';
+    const input = 'token=' + token;
+    const hits = scanner.scan(input);
+    expect(hits.length).toBe(1);
+    expect(hits[0].token).toBe(token);
+    expect(hits[0].entropy).toBeGreaterThan(3.8);
+    expect(hits[0].start).toBe(input.indexOf(token));
+    expect(hits[0].end).toBe(input.indexOf(token) + token.length);
   });
 });
 
@@ -45,4 +72,3 @@ describe('isHighEntropySecret', () => {
     expect(isHighEntropySecret('')).toBe(false);
   });
 });
-

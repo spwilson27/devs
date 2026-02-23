@@ -12,7 +12,7 @@ export class EntropyScanner {
   minLength: number;
 
   constructor(options?: { threshold?: number; minLength?: number }) {
-    this.threshold = options?.threshold ?? 4.5;
+    this.threshold = options?.threshold ?? 3.8;
     this.minLength = options?.minLength ?? 16;
   }
 

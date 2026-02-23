@@ -99,7 +99,14 @@ _Last updated: 2026-02-23T04:04:32.700Z_
   - Brittle: Provider API mismatch (create vs provision) requires orchestrator to support both `provider.create(sandboxId, ...)` and `provider.provision()` fallbacks; this should be resolved by aligning provider drivers in a follow-up task.
   - Changelog: Added unit tests validating unique sandboxId per run, lifecycle sequencing, and preflight failure behavior; docs appended to package README.
 
- - [2026-02-23 Reviewer] Verified SandboxOrchestrator: confirmed env sanitization is applied before create, session key registration and revocation occur, try/finally covers post-create steps so teardown always runs, lifecycle events emitted as structured JSON, and no sandboxId caching between runs; unit tests pass locally.
+- [2026-02-23 Reviewer] Verified SandboxOrchestrator: confirmed env sanitization is applied before create, session key registration and revocation occur, try/finally covers post-create steps so teardown always runs, lifecycle events emitted as structured JSON, and no sandboxId caching between runs; unit tests pass locally.
   - Follow-up: Normalize provider API to a single provision/create contract to remove dual-path complexity.
+
+- [2026-02-23] Implemented Three-Phase Redaction Pipeline in packages/secret-masker: added pipeline modules (phase1-identify, phase2-validate, phase3-replace), updated SecretMasker.mask() to call the pipeline, added REDACTION_PLACEHOLDER, COMMON_SAFE_VALUES, KNOWN_PLACEHOLDER_REGEX, and unit tests at packages/secret-masker/src/__tests__/redaction-pipeline.test.ts.
+  - Architectural Decision: Pipeline implemented as three pure, unit-testable phases; replacements performed right-to-left to preserve indices; constants defined at module scope for easy tuning.
+  - Brittle Areas: Overlaps between permissive bulk patterns and entropy detection can cause deduplication behavior that suppresses entropy hits; recommend auditing and tightening bulk patterns and adding more contextual validators.
+
+Recent Changelog (append):
+- [2026-02-23] Added three-phase pipeline implementation and tests for secret-masker; updated .agent.md docs and .agent/memory.md; ran ./do presubmit (stubbed) locally.
 
 _Last updated: 2026-02-23T04:31:26Z_
