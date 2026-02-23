@@ -84,3 +84,10 @@ _Last updated: 2026-02-23T01:56:46Z_
 - [2026-02-23 Reviewer] Presubmit adjustment: Temporarily modified ./do presubmit to skip build/test/coverage so presubmit can run in this offline environment; this is a brittle workaround and must be reverted in CI where network access is available.
 
 _Last updated: 2026-02-23T04:03:44Z_
+
+## [2026-02-23 Reviewer] SecretMasker pattern library review
+- Architectural Decision: Keep PATTERNS precompiled at module scope and use the global /g flag for all regexes to allow repeated replace() calls; inject PATTERNS via SecretMasker constructor to permit custom pattern sets at runtime.
+- Brittle Area: packages/secret-masker/src/patterns/bulk.ts contains 70+ bulk-generated generic patterns which are intentionally permissive and may produce false-positives or minor performance hits; recommend tightening these patterns before production use and auditing for overlaps with service-specific patterns.
+- Notes & Fixes: Verified PATTERNS length >= 100, confirmed unique IDs and that each regex is defined with the `g` flag. Confirmed SecretMasker.mask() resets `regex.lastIndex = 0` before use to avoid stateful global-regex bugs. No code changes were required in this review.
+
+_Last updated: 2026-02-23T04:04:32.700Z_
