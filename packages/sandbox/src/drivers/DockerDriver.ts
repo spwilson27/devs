@@ -2,6 +2,7 @@ import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
 import type { SandboxContext, ExecOptions, ExecResult, SandboxConfig } from '../types';
 import { SandboxProvider } from '../SandboxProvider';
+import { EnvironmentSanitizer } from '../env/EnvironmentSanitizer';
 import { SandboxProvisionError, SandboxExecTimeoutError, SandboxDestroyError, ConfigValidationError, MissingResourceConfigError } from '../errors';
 import { DockerNetworkManager } from '../network/DockerNetworkManager';
 import { isIP } from 'net';
@@ -161,7 +162,8 @@ export class DockerDriver extends SandboxProvider {
         if (imgIdx !== -1) args.splice(imgIdx, 0, ...proxyFlags);
       }
 
-      const { stdout, stderr } = await execFile('docker', args as any);
+      const sanitizedEnv = new EnvironmentSanitizer().sanitize(process.env);
+      const { stdout, stderr } = await execFile('docker', args as any, { env: sanitizedEnv } as any);
       const id = (stdout ?? '').toString().trim();
       if (!id) {
         throw new SandboxProvisionError(`docker run did not return a container id. stderr: ${stderr}`);

@@ -20,3 +20,12 @@
   - Added ImageResolver and ImageRebuilder for image fallback and local reconstruction (phase_2 task).
   - [2026-02-22] Phase 2 decision: Non-JS runtimes (Python, Go, Rust) are not supported in WebContainerDriver. RuntimeCompatibilityChecker gates exec() calls and throws UnsupportedRuntimeError. Fallback to DockerDriver is the recommended path.
   - [2026-02-22] Implemented per-call execution timeout (1_PRD-REQ-SEC-010) via withExecutionTimeout in src/utils/execution-timeout.ts; default is 300_000 ms (5 minutes).
+
+- Architectural Decision: EnvironmentSanitizer will be used to sanitize host environment variables before any sandbox runtime is booted; DockerDriver.provision passes a sanitized env to the docker CLI, and WebContainerDriver.boot runs with a temporarily sanitized process.env to avoid exposing host secrets to in-process runtimes.
+
+- Brittle Areas:
+  - Temporarily swapping process.env for WebContainer boot is a pragmatic mitigation but may interact badly with modules that read environment variables at import-time; prefer passing env explicitly to children when possible.
+  - Ensure any future changes that call external CLIs (docker, docker-compose, other shell tools) use a sanitized environment to avoid accidental leakage of host secrets into command arguments or child processes.
+
+- Recent Changelog:
+  - [2026-02-23] Added EnvironmentSanitizer (src/env/EnvironmentSanitizer.ts), unit and property-based tests (src/__tests__/envSanitizer.test.ts), integrated sanitizer into DockerDriver.provision and WebContainerDriver.boot, added agent docs (src/env/env_sanitizer.agent.md) and README section for Host Environment Sanitization.

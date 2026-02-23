@@ -62,3 +62,8 @@ _Last updated: 2026-02-22T22:19:08Z_
 
 - [2026-02-22 Reviewer] Fixed preflight tests: aligned MockProvider to provider types (cpuPercent/memoryBytes, createdAt as ISO string) so TypeScript checks pass and preflight unit tests succeed.
 - [2026-02-22 Reviewer] Minimal test refactor only; no runtime behavior changed in PreflightService.
+
+- [2026-02-23 Reviewer] EnvironmentSanitizer review and verification: reviewed src/env/EnvironmentSanitizer.ts, its unit/property tests, and integration points in DockerDriver and WebContainerDriver.
+  - Architectural Decision: Use EnvironmentSanitizer to strip sensitive host environment variables before spawning any sandbox runtime; drivers must pass a sanitized env copy and never log values.
+  - Brittle Areas: Regex-based denylist may miss non-obvious secret names; maintainers should expand patterns and prefer explicit additionalDenylist entries for special cases; ensure sanitize operates on a copy and never mutates process.env.
+  - Recent Changelog: Verified tests and integration; ran ./do presubmit and all checks passed (2026-02-23).

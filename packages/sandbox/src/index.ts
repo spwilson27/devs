@@ -19,4 +19,5 @@ export * from './filesystem/TempDirManager';
 
 export * from './preflight/PreflightService';
 export * from './preflight/PreflightError';
+export * from './env/EnvironmentSanitizer';
 

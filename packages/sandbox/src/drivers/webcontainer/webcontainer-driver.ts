@@ -1,5 +1,6 @@
 import { Readable } from 'stream';
 import { SandboxProvider } from '../../SandboxProvider';
+import { EnvironmentSanitizer } from '../../env/EnvironmentSanitizer';
 import type { SandboxContext, ExecOptions, ExecResult } from '../../types';
 import { WebContainer } from '@webcontainer/api';
 import {
@@ -39,7 +40,15 @@ export class WebContainerDriver extends SandboxProvider {
 
   async boot(): Promise<void> {
     try {
-      this._wc = await (WebContainer as any).boot();
+      const sanitizer = new EnvironmentSanitizer();
+      const sanitizedEnv = sanitizer.sanitize(process.env);
+      const originalEnv = process.env;
+      try {
+        (process as any).env = sanitizedEnv;
+        this._wc = await (WebContainer as any).boot();
+      } finally {
+        (process as any).env = originalEnv;
+      }
       // Install network shim to control WebContainer egress (best-effort)
       try {
         WebContainerNetworkShim.install(this._wc, { allowedHosts: [] });

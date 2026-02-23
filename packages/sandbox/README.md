@@ -164,6 +164,10 @@ The WebContainerDriver supports NodeJS-related commands (node, npm, npx) but doe
 
 ## Security
 
+### Host Environment Sanitization
+
+All sensitive host environment variables are stripped before any sandbox is spawned. See src/env/EnvironmentSanitizer.ts for the default denylist and extension API (additionalDenylist). Values of stripped keys are never logged.
+
 ## Network Egress Proxy
 
 ### Proxy Audit Logging
