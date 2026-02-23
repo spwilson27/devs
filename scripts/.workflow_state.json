@@ -94,7 +94,16 @@
         "phase_2/08_sandbox_lifecycle_environment_management/03_env_variable_sanitization.md",
         "phase_2/08_sandbox_lifecycle_environment_management/02_sandbox_cleanup_conditional_persistence.md",
         "phase_2/08_sandbox_lifecycle_environment_management/04_secure_secret_injection.md",
-        "phase_2/07_resource_quotas_constraints/05_sandbox_resource_exhaustion_detection_cleanup.md"
+        "phase_2/07_resource_quotas_constraints/05_sandbox_resource_exhaustion_detection_cleanup.md",
+        "phase_2/09_secretmasker_middleware_core/03_shannon_entropy_engine_implementation.md",
+        "phase_2/09_secretmasker_middleware_core/02_regex_pattern_library_implementation.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/05_ephemeral_session_key_rotation.md",
+        "phase_2/10_redaction_pipeline_phases/01_shannon_entropy_detector.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/06_sandbox_orchestrator_fresh_ephemeral_lifecycle.md",
+        "phase_2/09_secretmasker_middleware_core/04_three_phase_redaction_pipeline.md",
+        "phase_2/10_redaction_pipeline_phases/02_regex_pattern_library.md",
+        "phase_2/11_sandbox_security_monitoring_breach_detection/01_sandbox_monitor_core.md",
+        "phase_2/09_secretmasker_middleware_core/05_toolproxy_stream_integration.md"
     ],
     "merged_tasks": [
         "phase_1/01_project_infrastructure_monorepo_setup/01_setup_pnpm_monorepo.md",
@@ -191,6 +200,15 @@
         "phase_2/08_sandbox_lifecycle_environment_management/03_env_variable_sanitization.md",
         "phase_2/08_sandbox_lifecycle_environment_management/02_sandbox_cleanup_conditional_persistence.md",
         "phase_2/08_sandbox_lifecycle_environment_management/04_secure_secret_injection.md",
-        "phase_2/07_resource_quotas_constraints/05_sandbox_resource_exhaustion_detection_cleanup.md"
+        "phase_2/07_resource_quotas_constraints/05_sandbox_resource_exhaustion_detection_cleanup.md",
+        "phase_2/09_secretmasker_middleware_core/03_shannon_entropy_engine_implementation.md",
+        "phase_2/09_secretmasker_middleware_core/02_regex_pattern_library_implementation.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/05_ephemeral_session_key_rotation.md",
+        "phase_2/10_redaction_pipeline_phases/01_shannon_entropy_detector.md",
+        "phase_2/08_sandbox_lifecycle_environment_management/06_sandbox_orchestrator_fresh_ephemeral_lifecycle.md",
+        "phase_2/09_secretmasker_middleware_core/04_three_phase_redaction_pipeline.md",
+        "phase_2/10_redaction_pipeline_phases/02_regex_pattern_library.md",
+        "phase_2/11_sandbox_security_monitoring_breach_detection/01_sandbox_monitor_core.md",
+        "phase_2/09_secretmasker_middleware_core/05_toolproxy_stream_integration.md"
     ]
 }
