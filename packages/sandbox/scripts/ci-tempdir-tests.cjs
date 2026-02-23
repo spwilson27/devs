@@ -6,7 +6,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const os = require('os');
 
-const { TempDirManager } = require('../dist/TempDirManager.cjs');
+const { TempDirManager } = require('../dist/filesystem/TempDirManager');
 
 async function exists(p) {
   try {

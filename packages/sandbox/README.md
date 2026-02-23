@@ -539,3 +539,16 @@ Lifecycle events (structured JSON):
 - sandbox_torn_down: { event: 'sandbox_torn_down', sandboxId, outcome, timestampMs }
 
 Events MUST be emitted as JSON strings (console.info(JSON.stringify(obj))) so the monitoring subsystem can parse them reliably.
+
+## SandboxMonitor
+
+### Purpose
+Lightweight monitor that polls a sandbox process for security breaches, emits structured SecurityEvent objects, and transitions state to SECURITY_PAUSE on breach.
+
+### API
+- start(): begin polling
+- stop(): halt polling
+- Emits 'breach' events with payload: { eventType, sandboxId, timestamp, reason, pid }
+
+### Notes
+Uses SIGKILL to ensure immediate termination on breach and logs events to an in-memory ring buffer (max 1000 entries).

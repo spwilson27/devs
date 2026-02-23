@@ -7,3 +7,5 @@
 - WebContainer egress controlled by patching globalThis.fetch; same AllowlistEngine logic applied; no TCP-level proxy available in WebContainer context.
 
 - [2026-02-22] - Network Egress E2E: Added E2E test harness that starts EgressProxy + IsolatedDnsResolver (stub) + ProxyAuditLogger; Docker sub-tests gated by DOCKER_INTEGRATION to avoid CI Docker dependency.
+
+- 2026-02-23 - SandboxMonitor uses SIGKILL on breach and transitions state to SECURITY_PAUSE. The SecurityEventLog is a capped ring buffer (1000 entries).

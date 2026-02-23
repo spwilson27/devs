@@ -110,3 +110,11 @@ Recent Changelog (append):
 - [2026-02-23] Added three-phase pipeline implementation and tests for secret-masker; updated .agent.md docs and .agent/memory.md; ran ./do presubmit (stubbed) locally.
 
 _Last updated: 2026-02-23T04:31:26Z_
+
+- [2026-02-23] SandboxMonitor uses SIGKILL on breach and transitions state to SECURITY_PAUSE. The SecurityEventLog is a capped ring buffer (1000 entries).
+
+- [2026-02-23 Reviewer] Fix: Adjusted packages/sandbox/scripts/ci-tempdir-tests.cjs to require('../dist/filesystem/TempDirManager') instead of '../dist/TempDirManager.cjs' to match compiled artifacts; removed need for TempDirManager.cjs shim.
+
+- [2026-02-23 Reviewer] Action: Built @devs/sandbox and ran tempdir CI checks; TempDirManager checks passed locally after fix.
+
+_Last updated: 2026-02-23T04:40:34Z_
