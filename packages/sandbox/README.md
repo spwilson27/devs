@@ -492,3 +492,14 @@ Sandbox cleanup differentiates between success and failure teardown:
 - Success: containers are removed (provider.destroy), ephemeral volumes registered with the VolumeManager are removed, and the sandbox entry is removed from the internal registry.
 - Failure: containers are stopped but preserved for debugging; a structured warning `{ event: 'sandbox_preserved', sandboxId, reason: 'task_failure' }` is emitted and the sandbox is marked `PRESERVED` for inspection.
 
+## Secret Injection
+
+The sandbox supports secure secret injection via two methods implemented by SecretInjector:
+
+- Ephemeral file (default): Secrets are written to a host-side temp file with 0o400 permissions and mounted into the sandbox at /run/secrets/devs_secrets. The host-side file is deleted immediately after the sandbox consumes it (or after a short TTL). The sandbox is given DEVS_SECRETS_PATH=/run/secrets/devs_secrets so agents can discover the file location.
+
+- Stdin: Secrets are piped over stdin into a small bootstrap helper inside the sandbox (devs-secret-loader). This method never places secret values on the command line.
+
+Security guarantees: secret values are never placed into command-line arguments or logged by the injector; DEVS_SECRETS_PATH is the agreed contract for locating injected secrets inside the sandbox.
+
+

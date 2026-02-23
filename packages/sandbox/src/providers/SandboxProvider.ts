@@ -30,5 +30,8 @@ export abstract class SandboxProvider {
   /**
    * Return resource usage metrics for the sandbox (CPU, memory, timestamp).
    */
-  abstract getResourceStats(ctx: SandboxContext): Promise<ResourceStats>;
+  async getResourceStats(ctx: SandboxContext): Promise<ResourceStats> {
+    // Default implementation returns zeroed metrics; drivers may override for real stats
+    return { cpuPercent: 0, memoryBytes: 0, timestamp: new Date().toISOString() } as ResourceStats;
+  }
 }

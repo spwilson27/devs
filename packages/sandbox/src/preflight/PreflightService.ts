@@ -2,6 +2,7 @@ import { SANDBOX_PATHS } from '../config';
 import type { SandboxProvider } from '../providers';
 import type { FilesystemManager } from '../filesystem';
 import { PreflightError } from './PreflightError';
+import { SecretInjector } from '../secrets/SecretInjector';
 import type { TaskManifest, McpConfig, PreflightOptions } from '../types';
 
 export class PreflightService {
@@ -42,6 +43,10 @@ export class PreflightService {
       await this.injectMcpTools(sandboxId, opts.mcpConfig);
 
       const ctx = { id: sandboxId, workdir: SANDBOX_PATHS.workspace, status: 'running', createdAt: new Date() } as any;
+      if ((opts as any)?.secrets) {
+        const injector = new SecretInjector(this.provider);
+        await injector.inject(sandboxId, (opts as any).secrets, 'ephemeral_file');
+      }
       await this.provider.exec(ctx, 'sh', ['-lc', 'echo preflight-ready']);
     } catch (err: any) {
       if (err instanceof PreflightError) throw err;

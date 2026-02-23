@@ -20,6 +20,8 @@ export * from './filesystem/TempDirManager';
 export * from './preflight/PreflightService';
 export * from './preflight/PreflightError';
 export * from './env/EnvironmentSanitizer';
+export * from './secrets/SecretInjector';
+export * from './secrets/SecretInjectionError';
 
 export * from './cleanup/SandboxCleanupService';
 export * from './cleanup/VolumeManager';
