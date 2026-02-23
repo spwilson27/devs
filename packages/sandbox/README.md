@@ -168,6 +168,11 @@ The WebContainerDriver supports NodeJS-related commands (node, npm, npx) but doe
 
 All sensitive host environment variables are stripped before any sandbox is spawned. See src/env/EnvironmentSanitizer.ts for the default denylist and extension API (additionalDenylist). Values of stripped keys are never logged.
 
+### Resource Exhaustion & Cleanup
+
+The sandbox package provides a ResourceExhaustionHandler (src/handlers/resource-exhaustion-handler.ts) which emits `sandbox:oom`, `sandbox:disk_quota`, and `sandbox:cleanup_complete` events when an OOM kill or disk quota exceedance is detected. A lightweight SandboxManager (src/SandboxManager.ts) listens to Docker events (`docker events --filter event=oom --format '{{.ID}}'`) and invokes the handler; the manager implements exponential backoff restart (max 3 retries) and a graceful stop() method. Implementations should subscribe to these events to track and surface cleanup activity in higher-level orchestration services.
+
+
 ## Network Egress Proxy
 
 ### Proxy Audit Logging

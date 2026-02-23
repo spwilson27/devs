@@ -20,6 +20,8 @@
   - Added ImageResolver and ImageRebuilder for image fallback and local reconstruction (phase_2 task).
   - [2026-02-22] Phase 2 decision: Non-JS runtimes (Python, Go, Rust) are not supported in WebContainerDriver. RuntimeCompatibilityChecker gates exec() calls and throws UnsupportedRuntimeError. Fallback to DockerDriver is the recommended path.
   - [2026-02-22] Implemented per-call execution timeout (1_PRD-REQ-SEC-010) via withExecutionTimeout in src/utils/execution-timeout.ts; default is 300_000 ms (5 minutes).
+  - [2026-02-23] Implemented ResourceExhaustionHandler (src/handlers/resource-exhaustion-handler.ts) and added SandboxManager (src/SandboxManager.ts) with unit tests; ResourceExhaustionHandler emits sandbox:oom and sandbox:cleanup_complete and performs forced container stop + tmpdir cleanup. Marked resource-exhaustion detection & ephemeral cleanup as partially implemented; wiring to DockerDriver and additional SandboxManager tests remain as next steps.
+
 
 - Architectural Decision: EnvironmentSanitizer will be used to sanitize host environment variables before any sandbox runtime is booted; DockerDriver.provision passes a sanitized env to the docker CLI, and WebContainerDriver.boot runs with a temporarily sanitized process.env to avoid exposing host secrets to in-process runtimes.
 

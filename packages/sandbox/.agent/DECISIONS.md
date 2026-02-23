@@ -18,3 +18,8 @@ Docker sandbox resource limits are enforced via `--cpus` and `--memory` flags (n
 
 Execution timeouts are enforced in-application via a shared utility (withExecutionTimeout) rather than relying solely on Docker `--stop-timeout`; this ensures consistent cross-driver timeout semantics and allows drivers to perform remediation (force-stop) on timeouts.
 
+## Decision 005
+
+Implement sandbox-level resource-exhaustion detection and ephemeral cleanup: add ResourceExhaustionHandler to emit sandbox:oom and sandbox:disk_quota events and perform forced container stop + ephemeral host tmpdir purge; provide SandboxManager to listen to `docker events --filter event=oom` and invoke the handler, with exponential backoff restart (max 3 retries) and graceful stop() method.
+
+
