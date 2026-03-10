@@ -1,21 +1,36 @@
 # Project Description
 
-<project> is designed from the ground up to support agentic development. It uses a
-"Glass-Box" philosophy, supporting runtime use, development, debugging, and
-testing via MCP server.
+devs is an AI Agent workflow definer and orchestrator. Users leverage an API to
+define stages and prompts, conditions and decision trees to build out complex
+agentic-development workflows.
+
+It leverages many different available AI agent CLI tools to spawn agents and
+complete work. It runs as a headless server that supports client TUI, CLI, MCP
+interfaces (and a post-MVP GUI) to interact with, and view the state of agents.
+"Agent Pools" can be configured in order to leverage different agents for
+different tasks or enable graceful fallback in the event of service outages or
+to workaround API limits.
+
+devs itself is designed from the ground up to support agentic development. It
+uses a "Glass-Box" philosophy, supporting runtime use, development, debugging,
+and testing via MCP server.
 
 ## High Level Features
 
-- TODO
-- MCP Server for AI agents to debug, profile, test, and interact with the applicaiton
+- An interactable TUI dashboard view of all active agents
+  - Debug menu to follow an agent's progress and see the diff of their working directory
+- MCP Server for AI agents to debug, profile, test, and interact with the application
+- Rust builder API to define agent workflow graphs
 
 ## Non-Goals
 
-- TODO
+- No GUI implemented in MVP
 
 ## Tech Stack
 
-- TODO
+- Rust Server
+- Rust TUI Client
+- Rust MCP Server and CLI interface
 
 ## User Journeys
 
