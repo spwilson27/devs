@@ -560,11 +560,14 @@ features.
 **Development standards:**
 
 - All verification is automated through unit and E2E tests.
-- TUI verification uses interaction and state assertions (not pixel snapshots).
+- TUI verification uses interaction, state assertions, and UI text-snapshots (not pixel snapshots).
 - Every requirement is verified by an automated test.
 - All code is auto-formatted and linted.
 - All code is documented with doc comments.
-- All code achieves 90% line coverage from tests.
+- All code achieves 90% line coverage from unit tests.
+- All code achieves at least 80% line coverage through E2E tests (separately from unit test coverage).
+  - E2E tests are defined as test which must go through the external user interfaces (CLI, TUI, and MCP).
+  - Each interface (TUI, CLI, MCP) must individually achieve at least 50% line coverage through E2E tests.
 
 **Entrypoint script** (`./do`) is available from the first commit:
 
