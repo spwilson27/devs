@@ -1,0 +1,9 @@
+[
+  "# TAS: devs \u2014 Technical Architecture Specification",
+  "## 1. Architecture Overview",
+  "## 2. Technology Stack & Toolchain",
+  "## 3. Data Model & Database Schema",
+  "## 4. Component Hierarchy & Core Modules",
+  "# per-project; defined in project registry, not here",
+  "## 5. API Design & Protocols"
+]

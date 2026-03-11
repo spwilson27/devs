@@ -1,0 +1,9 @@
+[
+  "# Security Design: `devs` AI Agent Workflow Orchestrator",
+  "## Table of Contents",
+  "## 1. Threat Model & Attack Surface",
+  "## 2. Authentication & Authorization Policies",
+  "## 3. Data at Rest & Data in Transit Encryption",
+  "## 4. Application Security Controls",
+  "## 5. Logging, Monitoring & Audit Trails"
+]
