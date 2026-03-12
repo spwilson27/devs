@@ -211,7 +211,7 @@ This report identifies **three distinct segments** requiring tailored value prop
 | Competitive Analysis | LangSmith provides one-way telemetry only; no runtime control over running agents |
 
 **Product Design Decision:**
-- **Glass-Box MCP server must be MVP core feature:** Dedicated port (8765) exposes full internal state; AI agents can observe, debug, profile, test, and control system via MCP tools
+- **Glass-Box MCP server must be MVP core feature:** Dedicated port (7891) exposes full internal state; AI agents can observe, debug, profile, test, and control system via MCP tools
 - **TUI Debug tab for human users:** Follow specific agent progress; inspect working directory diffs; send cancel/pause/resume signals
 
 ---
@@ -254,7 +254,7 @@ This report identifies **three distinct segments** requiring tailored value prop
 **Scenario:** Developing new feature using exclusively agentic AI tools. Workflow includes plan, implement-api, implement-ui, review, and merge stages with automatic parallel execution when dependencies satisfied.
 
 **Preconditions:**
-- `devs` server running on local machine (port 50051)
+- `devs` server running on local machine (port 7890)
 - Agent pool configured with Claude (code-gen), Gemini (review), OpenCode (fallback)
 - Project repository cloned locally with `.devs/` directory initialized
 
@@ -410,7 +410,7 @@ sequenceDiagram
 
 **Preconditions:**
 - `devs` server deployed on-prem in air-gapped environment (no external network access)
-- MCP stdio bridge configured for local agent connections; Glass-Box MCP server exposed via localhost port 8765
+- MCP stdio bridge configured for local agent connections; Glass-Box MCP server exposed via localhost port 7891
 - Compliance documentation templates prepared for EU AI Act and NIST AI RMF mapping
 
 ```mermaid
@@ -441,7 +441,7 @@ sequenceDiagram
     Note over E,Audit: NIST AI RMF "Measure" Function Operationalized via Glass-Box MCP
     
     par Real-Time Monitoring of Agent Decision Points
-        E->>MCP: Query internal state via MCP stdio bridge (localhost:8765)
+        E->>MCP: Query internal state via MCP stdio bridge (localhost:7891)
         MCP-->>E: Return structured output showing agent decision points, confidence scores, fallback chain status
         E->>NIST: Map observed metrics to NIST AI RMF "Measure" function requirements
     end
@@ -501,7 +501,7 @@ sequenceDiagram
 | **Server Framework** | gRPC with Tonic + tokio | High performance (~50ns context switch overhead; 1M+ connection scalability) |
 | **TUI Client** | Ratatui | Native Rust terminal UI framework for consistent cross-platform experience |
 | **Git Operations** | libgit2 | Safe, idiomatic Rust bindings for Git repository manipulation |
-| **Agent Adapters** | Custom CLI adapters + MCP stdio bridge | Vendor-neutral routing with bidirectional control via Glass-Box MCP server (port 8765) |
+| **Agent Adapters** | Custom CLI adapters + MCP stdio bridge | Vendor-neutral routing with bidirectional control via Glass-Box MCP server (port 7891) |
 | **Checkpoint Persistence** | `.devs/` directory committed to project repo; configurable branch (working or dedicated `devs/state`) | Git-backed checkpoints enable reproducibility and EU AI Act compliance |
 | **Execution Targets** | `tempdir`, `docker`, `remote` (SSH with full `ssh_config`) | Configurable per-stage execution environment for heterogeneous deployment targets |
 

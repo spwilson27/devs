@@ -109,7 +109,7 @@ enum Commands {
 sequenceDiagram
     participant Agent as AI Agent Process
     participant Bridge as MCP stdio Bridge
-    participant Server as MCP Server Port (8765)
+    participant Server as MCP Server Port (7891)
     
     Agent->>Bridge: Spawn child process via spawn()
     Agent->>Bridge: Write JSON-RPC request to stdin
@@ -242,8 +242,8 @@ async fn persist_checkpoint(run_id: &str, state: WorkflowState) -> Result<Commit
 ```toml
 # Main config: devs.toml
 [server]
-listen_addr = "127.0.0.1:50051"
-mcp_port = 8765
+listen_addr = "127.0.0.1:7890"
+mcp_port = 7891
 
 [scheduling]
 policy = "weighted_fair_queuing"  # or "strict_priority_queue"
@@ -531,7 +531,7 @@ flowchart TD
 **Well-Known File Format:**
 ```
 # ~/.config/devs/server.addr
-127.0.0.1:50051
+127.0.0.1:7890
 ```
 
 ### Webhook Notification System

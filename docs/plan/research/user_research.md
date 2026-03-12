@@ -177,7 +177,7 @@ This section synthesizes pain points from all three personas, cross-referenced w
 | **[ASSUMPTION]** | Derived from common developer complaints about debugging hanging agent processes in experimental frameworks |
 
 **Impact on Product Design:**
-- **Glass-Box MCP server must be MVP core feature:** Dedicated port (8765) exposes full internal state; AI agents can observe, debug, profile, test, and control system via MCP tools
+- **Glass-Box MCP server must be MVP core feature:** Dedicated port (7891) exposes full internal state; AI agents can observe, debug, profile, test, and control system via MCP tools
 - **TUI Debug tab for human users:** Follow specific agent progress; inspect working directory diffs; send cancel/pause/resume signals
 
 #### 5. Rate-Limit Failures Without Automatic Fallback
@@ -222,7 +222,7 @@ Each persona has a primary user journey that demonstrates how they interact with
 **Scenario:** Alex is developing a new feature for `devs` using exclusively agentic AI tools. The workflow includes plan, implement-api, implement-ui, review, and merge stages with automatic parallel execution when dependencies are satisfied.
 
 **Preconditions:**
-- `devs` server running on local machine (port 50051)
+- `devs` server running on local machine (port 7890)
 - Agent pool configured with Claude (code-gen), Gemini (review), OpenCode (fallback)
 - Project repository cloned locally with `.devs/` directory initialized
 

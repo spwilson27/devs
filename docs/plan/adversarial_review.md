@@ -63,7 +63,7 @@ Mermaid sequence diagram showing multi-developer shared pool management, "team-d
 **Action:** Journey 2 removed entirely.
 
 **2d. Journey 3: Dr. Elena Vasquez — Enterprise Compliance & Auditability**
-Journey included non-MVP CLI commands (`devs logs --export-format=pdf`, `devs submit --from-snapshot=...`, `devs export compliance-report --framework=SOC2-Type-II`). None of these commands appear in the original MVP CLI list. Also referenced MCP port 8765 (inconsistent with port 7891 defined in 2_tas.md).
+Journey included non-MVP CLI commands (`devs logs --export-format=pdf`, `devs submit --from-snapshot=...`, `devs export compliance-report --framework=SOC2-Type-II`). None of these commands appear in the original MVP CLI list. Also referenced MCP port 7891 (inconsistent with port 7891 defined in 2_tas.md).
 **Action:** Journey 3 removed entirely.
 
 ### JUSTIFIED

@@ -9,54 +9,54 @@
 
 ## Resolutions
 
-### Conflict 1: Default gRPC Port (50051 vs 7890)
+### Conflict 1: Default gRPC Port (7890 vs 7890)
 - **Documents:** `docs/plan/specs/1_prd.md` vs `docs/plan/specs/2_tas.md`
-- **Conflict:** `1_prd.md` used port `50051` as the default/example gRPC listen address in multiple places (config examples, topology diagrams, discovery file examples). `2_tas.md` defines the default gRPC port as `7890`.
+- **Conflict:** `1_prd.md` used port `7890` as the default/example gRPC listen address in multiple places (config examples, topology diagrams, discovery file examples). `2_tas.md` defines the default gRPC port as `7890`.
 - **Winner:** `docs/plan/specs/2_tas.md` (TAS is the authoritative source for implementation-level defaults)
-- **Resolution:** All occurrences of `50051` in `1_prd.md` replaced with `7890`. All occurrences of `50051` in `2_tas.md` (discovery file format table and example) replaced with `7890`.
+- **Resolution:** All occurrences of `7890` in `1_prd.md` replaced with `7890`. All occurrences of `7890` in `2_tas.md` (discovery file format table and example) replaced with `7890`.
 - **Priority Rule Applied:** PRD (2) > TAS (3) for WHAT to build; but TAS (3) is authoritative for HOW (implementation defaults). Port defaults are an implementation detail → TAS wins. Both documents now agree on 7890.
 
 ---
 
 ### Conflict 2: MCP Tool Namespace Prefix
 - **Documents:** `docs/plan/specs/1_prd.md` (§B.8.2) vs `docs/plan/specs/3_mcp_design.md`
-- **Conflict:** `1_prd.md` listed all MCP tools with a `devs.` namespace prefix (e.g., `devs.get_run`, `devs.list_runs`, `devs.cancel_run`). `3_mcp_design.md` defines the canonical tool names without any namespace prefix (e.g., `get_run`, `list_runs`, `cancel_run`).
+- **Conflict:** `1_prd.md` listed all MCP tools with a `devs.` namespace prefix (e.g., `get_run`, `list_runs`, `cancel_run`). `3_mcp_design.md` defines the canonical tool names without any namespace prefix (e.g., `get_run`, `list_runs`, `cancel_run`).
 - **Winner:** `docs/plan/specs/3_mcp_design.md` (MCP Design is the authoritative wire-level protocol definition)
 - **Resolution:** The `devs.` prefix was removed from all MCP tool names in `1_prd.md` §B.8.2, §B.8.3, §B.8.4, §B.8.5, and §B acceptance criteria.
 - **Priority Rule Applied:** MCP Design (3) > PRD appendix B for wire-level tool naming conventions.
 
 ---
 
-### Conflict 3: MCP Tool Name — `get_pool_status` vs `get_pool_state`
+### Conflict 3: MCP Tool Name — `get_pool_state` vs `get_pool_state`
 - **Documents:** `docs/plan/specs/1_prd.md` vs `docs/plan/specs/3_mcp_design.md`
-- **Conflict:** `1_prd.md` §B.8.2 listed the pool observation tool as `devs.get_pool_status`. `3_mcp_design.md` [MCP-012] defines the canonical name as `get_pool_state`.
+- **Conflict:** `1_prd.md` §B.8.2 listed the pool observation tool as `get_pool_state`. `3_mcp_design.md` [MCP-012] defines the canonical name as `get_pool_state`.
 - **Winner:** `docs/plan/specs/3_mcp_design.md`
 - **Resolution:** Renamed to `get_pool_state` in `1_prd.md`.
 - **Priority Rule Applied:** MCP Design (3) > PRD appendix B for tool naming.
 
 ---
 
-### Conflict 4: MCP Tool Name — `register_workflow` / `get_workflow` vs `write_workflow_definition` / `get_workflow_definition`
+### Conflict 4: MCP Tool Name — `write_workflow_definition` / `get_workflow_definition` vs `write_workflow_definition` / `get_workflow_definition`
 - **Documents:** `docs/plan/specs/1_prd.md` vs `docs/plan/specs/3_mcp_design.md`
-- **Conflict:** `1_prd.md` used `devs.register_workflow` and `devs.get_workflow`. `3_mcp_design.md` [MCP-019] defines these as `write_workflow_definition` and `get_workflow_definition`.
+- **Conflict:** `1_prd.md` used `write_workflow_definition` and `get_workflow_definition`. `3_mcp_design.md` [MCP-019] defines these as `write_workflow_definition` and `get_workflow_definition`.
 - **Winner:** `docs/plan/specs/3_mcp_design.md`
 - **Resolution:** Renamed both tools in `1_prd.md` §B.8.2 and all cross-references.
 - **Priority Rule Applied:** MCP Design (3) > PRD appendix B for tool naming.
 
 ---
 
-### Conflict 5: MCP Tool Name — `complete_stage` vs `signal_completion`
+### Conflict 5: MCP Tool Name — `signal_completion` vs `signal_completion`
 - **Documents:** `docs/plan/specs/1_prd.md` vs `docs/plan/specs/3_mcp_design.md`
-- **Conflict:** `1_prd.md` §B.8.2 listed the stage completion signal tool as `devs.complete_stage`. `3_mcp_design.md` [MCP-023] defines the canonical name as `signal_completion`.
+- **Conflict:** `1_prd.md` §B.8.2 listed the stage completion signal tool as `signal_completion`. `3_mcp_design.md` [MCP-023] defines the canonical name as `signal_completion`.
 - **Winner:** `docs/plan/specs/3_mcp_design.md`
 - **Resolution:** Renamed to `signal_completion` in `1_prd.md` §B.8.2 and §B.8.3 protocol example.
 - **Priority Rule Applied:** MCP Design (3) > PRD appendix B for tool naming.
 
 ---
 
-### Conflict 6: MCP Tool Names — `inject_test_input` / `assert_stage_status` vs Canonical Names
+### Conflict 6: MCP Tool Names — `inject_stage_input` / `assert_stage_output` vs Canonical Names
 - **Documents:** `docs/plan/specs/1_prd.md` vs `docs/plan/specs/3_mcp_design.md`
-- **Conflict:** `1_prd.md` §B.8.2 listed testing tools as `devs.inject_test_input` and `devs.assert_stage_status`. `3_mcp_design.md` [MCP-020], [MCP-021] define these as `inject_stage_input` and `assert_stage_output`.
+- **Conflict:** `1_prd.md` §B.8.2 listed testing tools as `inject_stage_input` and `assert_stage_output`. `3_mcp_design.md` [MCP-020], [MCP-021] define these as `inject_stage_input` and `assert_stage_output`.
 - **Winner:** `docs/plan/specs/3_mcp_design.md`
 - **Resolution:** Renamed both tools in `1_prd.md` §B.8.2 and all acceptance criteria references.
 - **Priority Rule Applied:** MCP Design (3) > PRD appendix B for tool naming.
@@ -65,9 +65,9 @@
 
 ### Conflict 7: MCP Tool Count (Claimed 17 vs Actual 20)
 - **Documents:** `docs/plan/specs/3_mcp_design.md` (internal inconsistency)
-- **Conflict:** `3_mcp_design.md` repeatedly claimed "17 MCP tools" in its table of contents, summary table, and acceptance criteria (AC-2.01), but the document's own enumerated tool list [MCP-008] through [MCP-027] defines 20 tools.
+- **Conflict:** `3_mcp_design.md` repeatedly claimed "20 MCP tools" in its table of contents, summary table, and acceptance criteria (AC-2.01), but the document's own enumerated tool list [MCP-008] through [MCP-027] defines 20 tools.
 - **Winner:** The actual enumerated tool definitions within `3_mcp_design.md`
-- **Resolution:** Changed all "17 tools" references to "20 tools" in `3_mcp_design.md` (TOC entry, summary table, AC-2.01, cross-reference table).
+- **Resolution:** Changed all "20 tools" references to "20 tools" in `3_mcp_design.md` (TOC entry, summary table, AC-2.01, cross-reference table).
 - **Priority Rule Applied:** Internal consistency; actual specification content overrides stale summary counts.
 
 ---
@@ -83,7 +83,7 @@
 
 ### Conflict 9: Presubmit Step Order (lint before format)
 - **Documents:** `docs/plan/specs/4_user_features.md` (FEAT-BR-035) vs Original Project Description
-- **Conflict:** `4_user_features.md` showed the presubmit sequence as `setup → lint → test → coverage` (format missing, lint before where format would be). The original project description defines: `setup → format → lint → test → coverage → ci`.
+- **Conflict:** `4_user_features.md` showed the presubmit sequence as `setup → format → lint → test → coverage → ci` (format missing, lint before where format would be). The original project description defines: `setup → format → lint → test → coverage → ci`.
 - **Winner:** Original Project Description (absolute authority)
 - **Resolution:** Updated `4_user_features.md` FEAT-BR-035 step table to `setup → format → lint → test → coverage → ci` (two occurrences).
 - **Priority Rule Applied:** Original Project Description > all spec documents.
@@ -92,7 +92,7 @@
 
 ### Conflict 10: Presubmit Step Enum Ordering in Roadmap
 - **Documents:** `docs/plan/specs/9_project_roadmap.md` vs Original Project Description
-- **Conflict:** `9_project_roadmap.md` listed the `./do presubmit` step enum as `setup, lint, format, ...` (lint before format). The canonical sequence from the original description is `setup, format, lint, ...`.
+- **Conflict:** `9_project_roadmap.md` listed the `./do presubmit` step enum as `setup, format, lint, ...` (lint before format). The canonical sequence from the original description is `setup, format, lint, ...`.
 - **Winner:** Original Project Description
 - **Resolution:** Updated `9_project_roadmap.md` to list `setup, format, lint, ...` preserving the canonical ordering.
 - **Priority Rule Applied:** Original Project Description > all spec documents.
@@ -101,9 +101,9 @@
 
 ### Conflict 11: Discovery File Example Port in 2_tas.md
 - **Documents:** `docs/plan/specs/2_tas.md` vs `docs/plan/specs/2_tas.md` (internal inconsistency with its own default port definition)
-- **Conflict:** `2_tas.md` §1.5 defined the default port as `7890` in the port field description but showed example discovery file content using `127.0.0.1:50051`.
+- **Conflict:** `2_tas.md` §1.5 defined the default port as `7890` in the port field description but showed example discovery file content using `127.0.0.1:7890`.
 - **Winner:** `2_tas.md`'s own default port declaration (7890)
-- **Resolution:** Updated the discovery file format table example in `2_tas.md` §1.5 from `50051` to `7890`.
+- **Resolution:** Updated the discovery file format table example in `2_tas.md` §1.5 from `7890` to `7890`.
 - **Priority Rule Applied:** Internal consistency within TAS; the explicit default definition overrides the stale example value.
 
 ---

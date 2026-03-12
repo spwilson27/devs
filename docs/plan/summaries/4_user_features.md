@@ -15,7 +15,7 @@ This document is the authoritative user-facing contract for the `devs` workflow 
 | Sub-Role | Permitted MCP Tools | Spawning |
 |---|---|---|
 | **Orchestrated Agent** (stage subprocess) | `report_progress`, `signal_completion`, `report_rate_limit` only | `devs-executor` via pool dispatch |
-| **Observing/Controlling Agent** (external) | All 17 MCP tools + Filesystem MCP | External process |
+| **Observing/Controlling Agent** (external) | All 20 MCP tools + Filesystem MCP | External process |
 
 - **[FEAT-BR-004]** Orchestrated agent MUST call `signal_completion` before exiting if `completion=mcp_tool_call`; else exit-code fallback applies
 - **[FEAT-BR-005]** Orchestrated agent MUST write `.devs_output.json` with boolean `"success"` field if `completion=structured_output`; string `"true"` → `Failed`
@@ -41,7 +41,7 @@ This document is the authoritative user-facing contract for the `devs` workflow 
 | 5 | Log Access | CLI `devs logs`, MCP `stream_logs/get_stage_output` | TUI Logs tab |
 | 6 | Pool Observation | TUI Pools tab, MCP `get_pool_state` | gRPC `WatchPoolState` |
 | 7 | Development Lifecycle | `./do` script | GitLab CI |
-| 8 | Agentic Development | All 17 MCP tools + Filesystem MCP | TUI Debug tab |
+| 8 | Agentic Development | All 20 MCP tools + Filesystem MCP | TUI Debug tab |
 | 9 | Server Configuration | `devs.toml`, `devs project add/remove` | CLI flags, env vars |
 
 - **[FEAT-BR-012]** Category 9 is prerequisite for all others; server MUST NOT accept connections until config valid
@@ -177,7 +177,7 @@ Cancel timing: `t+0s` `devs:cancel\n` → `t+5s` SIGTERM → `t+10s` SIGKILL →
 | `./do lint` | `cargo fmt --check` + `cargo clippy -D warnings` + `cargo doc` + dep audit all exit 0 | None |
 | `./do format` | `cargo fmt --all` exits 0 | Modified source files |
 | `./do coverage` | All 5 QG gates pass; `report.json` `overall_passed:true` | `target/coverage/report.json` |
-| `./do presubmit` | setup→lint→test→coverage within 15 min | `target/presubmit_timings.jsonl` |
+| `./do presubmit` | setup → format → lint → test → coverage → ci within 15 min | `target/presubmit_timings.jsonl` |
 | `./do ci` | GitLab pipeline passes on all 3 platforms within 30 min | None |
 
 - **[FEAT-BR-035]** 15-min timeout measured from first step start; all children killed on timeout; exit 1
@@ -328,7 +328,7 @@ Events: `run.started/completed/failed/cancelled`, `stage.started/completed/faile
 - Concurrent observation calls: fully parallel; control calls serialized (≤5s wait)
 - `stream_logs` does NOT hold `SchedulerState` lock
 
-### All 17 MCP Tools
+### All 20 MCP tools
 **Observation:** `list_runs`, `get_run`, `get_stage_output`, `stream_logs`, `get_pool_state`, `get_workflow_definition`, `list_checkpoints`
 
 **Control:** `submit_run` (7-step atomic validation), `cancel_run` (single atomic checkpoint), `cancel_stage`, `pause_run`, `resume_run`, `pause_stage`, `resume_stage`, `write_workflow_definition` (validate-then-write)
@@ -416,4 +416,4 @@ No match → stage fails immediately with `TemplateError::UnknownVariable`; neve
 Key coverage obligations per interface:
 - **CLI E2E (QG-003):** `devs submit/list/status/logs/cancel/pause/resume` via binary
 - **TUI E2E (QG-004):** `ratatui::backend::TestBackend` 200×50; `insta` text snapshots in `crates/devs-tui/tests/snapshots/*.txt`; no pixel comparison
-- **MCP E2E (QG-005):** `POST /mcp/v1/call` via `DEVS_MCP_ADDR`; all 17 tools exercised
+- **MCP E2E (QG-005):** `POST /mcp/v1/call` via `DEVS_MCP_ADDR`; all 20 tools exercised

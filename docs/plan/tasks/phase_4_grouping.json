@@ -1,0 +1,95 @@
+{
+  "01_MCP Tool Reliability & Recovery": [
+    "3_MCP_DESIGN-REQ-046",
+    "3_MCP_DESIGN-REQ-047",
+    "3_MCP_DESIGN-REQ-048",
+    "3_MCP_DESIGN-REQ-049",
+    "3_MCP_DESIGN-REQ-050"
+  ],
+  "02_MCP Escalation & Connection Recovery": [
+    "3_MCP_DESIGN-REQ-051",
+    "3_MCP_DESIGN-REQ-052",
+    "3_MCP_DESIGN-REQ-053"
+  ],
+  "03_MCP Execution Control & Atoms": [
+    "3_MCP_DESIGN-REQ-087",
+    "3_MCP_DESIGN-REQ-089",
+    "3_MCP_DESIGN-REQ-090",
+    "3_MCP_DESIGN-REQ-091"
+  ],
+  "04_MCP Run & Workflow Observation": [
+    "3_MCP_DESIGN-REQ-006",
+    "3_MCP_DESIGN-REQ-058",
+    "3_MCP_DESIGN-REQ-080",
+    "3_MCP_DESIGN-REQ-081",
+    "3_MCP_DESIGN-REQ-AC-1.19"
+  ],
+  "05_MCP List & Filter Operations": [
+    "3_MCP_DESIGN-REQ-054",
+    "3_MCP_DESIGN-REQ-079",
+    "3_MCP_DESIGN-REQ-AC-1.01",
+    "3_MCP_DESIGN-REQ-085",
+    "3_MCP_DESIGN-REQ-086"
+  ],
+  "06_MCP Logging & Stage Output": [
+    "3_MCP_DESIGN-REQ-039",
+    "3_MCP_DESIGN-REQ-083",
+    "3_MCP_DESIGN-REQ-084",
+    "3_MCP_DESIGN-REQ-040",
+    "3_MCP_DESIGN-REQ-AC-5.10"
+  ],
+  "07_Agent Diagnostic Behaviors": [
+    "3_MCP_DESIGN-REQ-027",
+    "3_MCP_DESIGN-REQ-028",
+    "3_MCP_DESIGN-REQ-029",
+    "3_MCP_DESIGN-REQ-030",
+    "3_MCP_DESIGN-REQ-BR-004"
+  ],
+  "08_Agent Self-Correction & Fix Logic": [
+    "3_MCP_DESIGN-REQ-041",
+    "3_MCP_DESIGN-REQ-BR-003",
+    "3_MCP_DESIGN-REQ-BR-007",
+    "3_MCP_DESIGN-REQ-BR-008"
+  ],
+  "09_Agent Failure Classification": [
+    "3_MCP_DESIGN-REQ-BR-009",
+    "3_MCP_DESIGN-REQ-BR-010",
+    "3_MCP_DESIGN-REQ-BR-011",
+    "3_MCP_DESIGN-REQ-BR-012",
+    "3_MCP_DESIGN-REQ-BR-018"
+  ],
+  "10_Agent TDD Loop Enforcement": [
+    "3_MCP_DESIGN-REQ-031",
+    "3_MCP_DESIGN-REQ-032",
+    "3_MCP_DESIGN-REQ-033",
+    "3_MCP_DESIGN-REQ-034",
+    "3_MCP_DESIGN-REQ-035"
+  ],
+  "11_Agent Traceability & Submission": [
+    "3_MCP_DESIGN-REQ-036",
+    "3_MCP_DESIGN-REQ-037",
+    "3_MCP_DESIGN-REQ-038"
+  ],
+  "12_Roadmap Dependency Verification": [
+    "ROAD-P4-DEP-001",
+    "ROAD-P4-DEP-002",
+    "ROAD-P4-DEP-003"
+  ],
+  "13_Roadmap Phase 4 Infrastructure": [
+    "AC-ROAD-P4-001",
+    "AC-ROAD-P4-002",
+    "AC-ROAD-P4-003"
+  ],
+  "14_Roadmap Phase 4 Validation": [
+    "AC-ROAD-P4-004",
+    "AC-ROAD-P4-005",
+    "AC-ROAD-P4-006"
+  ],
+  "15_TDD Lifecycle Roadmap": [
+    "AC-RLOOP-001",
+    "AC-RLOOP-002",
+    "AC-RLOOP-003",
+    "AC-RLOOP-004",
+    "AC-RLOOP-005"
+  ]
+}

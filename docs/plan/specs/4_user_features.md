@@ -18,8 +18,8 @@ and verifiability requirements that gate every commit.
 requirement, business rule, and acceptance criterion in this document must be covered by at least one
 automated test annotated with the corresponding ID (e.g., `// Covers: FEAT-BR-001`).
 
-**Normative status:** All `[FEAT-*]` tags are normative requirements. Descriptive prose is
-explanatory context. When prose and a `[FEAT-*]` tag conflict, the tag governs.
+**Normative status:** All `[4_USER_FEATURES-FEAT-*]` tags are normative requirements. Descriptive prose is
+explanatory context. When prose and a `[4_USER_FEATURES-FEAT-*]` tag conflict, the tag governs.
 
 ---
 
@@ -167,7 +167,7 @@ consuming `"result"`. See §5.3 for the full table.
      - [7.1.6 `devs pause`](#716-devs-pause) — --stage option for per-stage pause
      - [7.1.7 `devs resume`](#717-devs-resume) — --stage option for per-stage resume
    - [7.2 MCP Tool Reference](#72-mcp-tool-reference)
-     — HTTP POST `/mcp/v1/call`; JSON-RPC 2.0; all 17 tools with parameter and result schemas
+     — HTTP POST `/mcp/v1/call`; JSON-RPC 2.0; all 20 tools with parameter and result schemas
      - [7.2.1 `list_runs`](#721-list_runs) — project_id, status, limit, offset filters
      - [7.2.2 `get_run`](#722-get_run) — full WorkflowRun; every field always present
      - [7.2.3 `get_stage_output`](#723-get_stage_output) — stdout/stderr up to 1 MiB; truncated from beginning
@@ -238,27 +238,27 @@ consuming `"result"`. See §5.3 for the full table.
 
 The following rules apply to the document itself and to all implementations derived from it:
 
-**[TOC-BR-001]** Every `[FEAT-*]` tag in this document is a normative requirement. Implementation
+**[4_USER_FEATURES-TOC-BR-001]** Every `[4_USER_FEATURES-FEAT-*]` tag in this document is a normative requirement. Implementation
 is not complete until all tagged requirements are covered by automated tests.
 
-**[TOC-BR-002]** Every `[FEAT-BR-*]` tag denotes a business rule stated as a concrete, testable
+**[4_USER_FEATURES-TOC-BR-002]** Every `[4_USER_FEATURES-FEAT-BR-*]` tag denotes a business rule stated as a concrete, testable
 assertion. Business rules in subsections override any contradicting descriptive prose.
 
-**[TOC-BR-003]** The Quick-Reference tables in this ToC are informational summaries. The normative
+**[4_USER_FEATURES-TOC-BR-003]** The Quick-Reference tables in this ToC are informational summaries. The normative
 definitions are in §6 (Data Models) and §7 (API Contracts). On conflict, §6/§7 govern.
 
-**[TOC-BR-004]** All schemas in §6 and §7 define the complete set of fields. No field may be added
-to a response without a corresponding update to the schema and a new `[FEAT-*]` tag.
+**[4_USER_FEATURES-TOC-BR-004]** All schemas in §6 and §7 define the complete set of fields. No field may be added
+to a response without a corresponding update to the schema and a new `[4_USER_FEATURES-FEAT-*]` tag.
 
-**[TOC-BR-005]** All acceptance criteria in §10 must have a corresponding automated test reachable
+**[4_USER_FEATURES-TOC-BR-005]** All acceptance criteria in §10 must have a corresponding automated test reachable
 through at least one external interface (CLI, TUI, or MCP). Tests that exercise internal Rust
 functions directly do not satisfy acceptance criteria for E2E coverage gates QG-003, QG-004, QG-005.
 
-**[TOC-BR-006]** The state machine diagrams in §8 are normative. Every arrow represents a legal
+**[4_USER_FEATURES-TOC-BR-006]** The state machine diagrams in §8 are normative. Every arrow represents a legal
 transition; any transition not shown is illegal and MUST be rejected by `StateMachine::transition()`
 returning `TransitionError::IllegalTransition`.
 
-**[TOC-BR-007]** This document tracks all user-facing requirements. Implementation-internal
+**[4_USER_FEATURES-TOC-BR-007]** This document tracks all user-facing requirements. Implementation-internal
 constraints (crate boundaries, lock ordering, concurrency model) are specified in `2_TAS.md`.
 When this document and `2_TAS.md` conflict on a user-observable behavior, this document governs.
 
@@ -273,7 +273,7 @@ document expand each category into concrete API contracts, state machines, and a
 
 ### 1.1 User Personas
 
-**[FEAT-001]** The system serves two distinct user personas whose interaction patterns and trust
+**[4_USER_FEATURES-FEAT-001]** The system serves two distinct user personas whose interaction patterns and trust
 levels differ fundamentally:
 
 | Persona | Description | Primary Interfaces |
@@ -308,15 +308,15 @@ The Human Developer interacts with `devs` in three primary contexts:
 
 **Cross-Platform Requirements:**
 
-**[FEAT-BR-001]** The Human Developer's experience MUST be identical on Linux, macOS, and Windows
+**[4_USER_FEATURES-FEAT-BR-001]** The Human Developer's experience MUST be identical on Linux, macOS, and Windows
 (Git Bash). All `./do` script commands MUST produce identical exit codes and output formats on all
 three platforms. Platform-specific behavior that alters exit codes or output schemas is a defect.
 
-**[FEAT-BR-002]** The TUI MUST operate correctly in any terminal that supports ANSI escape codes at
+**[4_USER_FEATURES-FEAT-BR-002]** The TUI MUST operate correctly in any terminal that supports ANSI escape codes at
 a minimum size of 80 columns × 24 rows. Rendering MUST NOT depend on Unicode-only box characters;
 all stage boxes and DAG connectors MUST use ASCII characters only.
 
-**[FEAT-BR-003]** The Human Developer MUST NOT be required to have any agent CLI binary (claude,
+**[4_USER_FEATURES-FEAT-BR-003]** The Human Developer MUST NOT be required to have any agent CLI binary (claude,
 gemini, opencode, qwen, copilot) installed on their local machine when they are using `devs` only
 as a scheduler connected to remote execution environments. Agent binaries are required only on the
 machine where stages execute.
@@ -333,7 +333,7 @@ machine where stages execute.
 
 #### 1.1.2 AI Agent Client Persona
 
-**[FEAT-002]** AI Agent Clients are software processes — not humans — that interact with `devs`
+**[4_USER_FEATURES-FEAT-002]** AI Agent Clients are software processes — not humans — that interact with `devs`
 programmatically. All communication is machine-to-machine via MCP JSON-RPC or CLI. AI Agent Clients
 have two sub-roles that are distinguished by their execution context and have strictly separated
 tool access:
@@ -341,7 +341,7 @@ tool access:
 | Sub-Role | Description | Permitted MCP Tools | Spawning Mechanism |
 |---|---|---|---|
 | **Orchestrated Agent** | Spawned as a workflow stage subprocess; executes a bounded task | `report_progress`, `signal_completion`, `report_rate_limit` | `devs-executor` via pool dispatch |
-| **Observing/Controlling Agent** | Connects independently to observe and control the system; implements `devs` itself | All 17 MCP tools + Filesystem MCP | External process; connects to MCP port |
+| **Observing/Controlling Agent** | Connects independently to observe and control the system; implements `devs` itself | All 20 MCP tools + Filesystem MCP | External process; connects to MCP port |
 
 **Orchestrated Agent Characteristics:**
 
@@ -350,19 +350,19 @@ stage. It is a short-lived process (bounded by `stage.timeout_secs`) with a narr
 The agent discovers the MCP server address exclusively from the `DEVS_MCP_ADDR` environment
 variable injected by the executor; it MUST NOT use the discovery file mechanism.
 
-**[FEAT-BR-004]** An Orchestrated Agent MUST call `signal_completion` before exiting if the
+**[4_USER_FEATURES-FEAT-BR-004]** An Orchestrated Agent MUST call `signal_completion` before exiting if the
 stage's `completion` field is `mcp_tool_call`. Exiting without this call causes the stage to be
 evaluated by exit code fallback, which may produce an incorrect outcome.
 
-**[FEAT-BR-005]** An Orchestrated Agent MUST write `.devs_output.json` with `{"success": <bool>}`
+**[4_USER_FEATURES-FEAT-BR-005]** An Orchestrated Agent MUST write `.devs_output.json` with `{"success": <bool>}`
 before exiting if the stage's `completion` field is `structured_output`. Writing a file that omits
 the `"success"` key or uses a non-boolean value (e.g., `"true"` as a string) causes the stage to
 transition to `Failed`.
 
-**[FEAT-BR-006]** An Orchestrated Agent MUST exit within 10 seconds of receiving `devs:cancel\n`
+**[4_USER_FEATURES-FEAT-BR-006]** An Orchestrated Agent MUST exit within 10 seconds of receiving `devs:cancel\n`
 on stdin. Failure to exit within this window triggers SIGTERM followed by SIGKILL.
 
-**[FEAT-BR-007]** An Orchestrated Agent MUST NOT use `submit_run`, `cancel_run`, `pause_run`,
+**[4_USER_FEATURES-FEAT-BR-007]** An Orchestrated Agent MUST NOT use `submit_run`, `cancel_run`, `pause_run`,
 `resume_run`, `write_workflow_definition`, `inject_stage_input`, or `assert_stage_output`. These
 tools are reserved for Observing/Controlling Agents. Calling them from within a stage subprocess is
 a usage error; the MCP server does not enforce this restriction at the transport layer, but the
@@ -372,16 +372,16 @@ calling agent must not rely on this.
 
 An Observing/Controlling Agent is an externally invoked AI agent (e.g., a Claude Code instance
 launched by the developer) that connects to `devs` via the MCP bridge or directly to the MCP HTTP
-port. It has access to all 17 MCP tools plus the Filesystem MCP server. This agent implements
+port. It has access to all 20 MCP tools plus the Filesystem MCP server. This agent implements
 `devs` by following a Red-Green-Refactor TDD loop, submitting `presubmit-check` workflow runs, and
 diagnosing failures through `get_stage_output` and `stream_logs`.
 
-**[FEAT-BR-008]** An Observing/Controlling Agent MUST check `list_runs` for existing non-terminal
+**[4_USER_FEATURES-FEAT-BR-008]** An Observing/Controlling Agent MUST check `list_runs` for existing non-terminal
 runs before calling `submit_run` for the same workflow. Submitting a duplicate run name returns
 `already_exists:` and the agent MUST handle this error without creating ambiguity about which run
 is active.
 
-**[FEAT-BR-009]** An Observing/Controlling Agent MUST use `stream_logs` with `follow: true` to
+**[4_USER_FEATURES-FEAT-BR-009]** An Observing/Controlling Agent MUST use `stream_logs` with `follow: true` to
 monitor active stages. Polling `get_run` in a loop with intervals shorter than 1 second is
 prohibited. If `stream_logs` fails, the agent MAY fall back to polling `get_run` with a minimum
 1-second interval and a maximum of 120 polls before treating the stage as unresolvable.
@@ -411,7 +411,7 @@ Execution context indicators:
   → Permitted tools: all 17 + Filesystem MCP
 ```
 
-**[FEAT-BR-011]** The MCP server MUST NOT enforce tool-level restrictions based on agent role at
+**[4_USER_FEATURES-FEAT-BR-011]** The MCP server MUST NOT enforce tool-level restrictions based on agent role at
 MVP. Role enforcement is a behavioral contract for implementing agents, not a server-side access
 control mechanism. Post-MVP authentication may introduce enforcement.
 
@@ -419,7 +419,7 @@ control mechanism. Post-MVP authentication may introduce enforcement.
 
 ### 1.2 Feature Categories
 
-**[FEAT-003]** Features are grouped into nine categories. Each category is delivered through
+**[4_USER_FEATURES-FEAT-003]** Features are grouped into nine categories. Each category is delivered through
 specific interfaces and has bounded scope. The table below is the authoritative mapping; no feature
 may span categories without an explicit cross-reference in both.
 
@@ -432,7 +432,7 @@ may span categories without an explicit cross-reference in both.
 | 5 | **Log Access** | CLI `devs logs`, MCP `stream_logs`/`get_stage_output` | TUI Logs tab; gRPC `StreamLogs` | Streaming and fetching per-stage stdout/stderr |
 | 6 | **Pool Observation** | TUI Pools tab, MCP `get_pool_state` | gRPC `WatchPoolState` | Viewing agent pool utilization, capability routing, and fallback events |
 | 7 | **Development Lifecycle** | `./do` script | GitLab CI pipeline | Building, testing, linting, coverage, and presubmit enforcement |
-| 8 | **Agentic Development** | MCP (all 17 tools + Filesystem MCP) | TUI Debug tab | AI-driven TDD loop, self-modification, debugging, session management |
+| 8 | **Agentic Development** | MCP (all 20 tools + Filesystem MCP) | TUI Debug tab | AI-driven TDD loop, self-modification, debugging, session management |
 | 9 | **Server Configuration** | `devs.toml`, `devs project add/remove` | CLI flags, env vars | Setting up the server, pools, projects, and webhook targets |
 
 #### 1.2.1 Category Dependency Map
@@ -457,11 +457,11 @@ graph TD
     SC --> DL
 ```
 
-**[FEAT-BR-012]** Category 9 (Server Configuration) is a prerequisite for all other categories.
+**[4_USER_FEATURES-FEAT-BR-012]** Category 9 (Server Configuration) is a prerequisite for all other categories.
 The server MUST NOT accept connections until configuration parsing and port binding complete
 successfully. If configuration is invalid, no other category is accessible.
 
-**[FEAT-BR-013]** Category 7 (Development Lifecycle) operates independently of the running server
+**[4_USER_FEATURES-FEAT-BR-013]** Category 7 (Development Lifecycle) operates independently of the running server
 for `./do build`, `./do lint`, and `./do format`. Only `./do test` (E2E tests) and `./do coverage`
 require a running server instance. The `./do` script MUST manage its own server lifecycle for E2E
 test execution.
@@ -480,14 +480,14 @@ completion signal types, and configuring execution environments.
 | YAML | File loaded at server startup from `workflow_dirs` | No | Yes, via `write_workflow_definition` MCP tool |
 | Rust builder API | Compiled against `devs` library crate | Yes | No (requires server restart) |
 
-**[FEAT-BR-014]** TOML and YAML workflow definitions MUST be functionally equivalent; every field
+**[4_USER_FEATURES-FEAT-BR-014]** TOML and YAML workflow definitions MUST be functionally equivalent; every field
 available in TOML is available in YAML with identical semantics. No feature is exclusive to one
 declarative format.
 
-**[FEAT-BR-015]** The Rust builder API produces a `WorkflowDefinition` value identical in schema
+**[4_USER_FEATURES-FEAT-BR-015]** The Rust builder API produces a `WorkflowDefinition` value identical in schema
 to one parsed from TOML/YAML. There is no builder-exclusive field or behavior.
 
-**[FEAT-BR-016]** A workflow definition file MUST be validated in full before any stage in that
+**[4_USER_FEATURES-FEAT-BR-016]** A workflow definition file MUST be validated in full before any stage in that
 workflow is dispatched. Validation runs all 13 checks listed in §6.1 in a single pass, collecting
 all errors before returning. Partial validation (stopping at first error) is prohibited.
 
@@ -517,16 +517,16 @@ the definition's declared parameter schema, and enqueues the run with the DAG sc
 | CLI | `devs submit <workflow> [--name <n>] [--input k=v ...]` | `key=value` pairs on command line | Auto-slug if `--name` omitted | Full 7-step atomic validation |
 | MCP | `submit_run` | JSON object `{workflow_name, project_id, run_name?, inputs:{}}` | Auto-slug if `run_name` omitted | Full 7-step atomic validation |
 
-**[FEAT-BR-017]** Submission validation is atomic and all-or-nothing: all 7 validation steps
+**[4_USER_FEATURES-FEAT-BR-017]** Submission validation is atomic and all-or-nothing: all 7 validation steps
 (workflow exists, inputs valid, no active duplicate name, inputs type-coerced, no extra input keys,
 required inputs present, server not shutting down) complete before any run record is created. A
 failure in any step produces no side effects.
 
-**[FEAT-BR-018]** Run name uniqueness is scoped to a project. Two runs with the same name in
+**[4_USER_FEATURES-FEAT-BR-018]** Run name uniqueness is scoped to a project. Two runs with the same name in
 different projects are permitted. Two runs with the same name in the same project are rejected
 unless the existing run is in `Cancelled` status.
 
-**[FEAT-BR-019]** If `--name` is not provided at submission, the server generates a slug in the
+**[4_USER_FEATURES-FEAT-BR-019]** If `--name` is not provided at submission, the server generates a slug in the
 format `<workflow-name>-<YYYYMMDD>-<4 random lowercase alphanum>`, maximum 128 characters, matching
 `[a-z0-9-]+`. The slug is auto-generated once and is included in the successful submission response.
 
@@ -564,15 +564,15 @@ WorkflowRun
         └── exit_code (integer or null)
 ```
 
-**[FEAT-BR-020]** Every field in the monitoring data hierarchy MUST be present in every API
+**[4_USER_FEATURES-FEAT-BR-020]** Every field in the monitoring data hierarchy MUST be present in every API
 response. Fields that are not yet populated (e.g., `completed_at` for a running stage) MUST be
 JSON `null`, not absent from the response object.
 
-**[FEAT-BR-021]** The TUI Dashboard MUST re-render within 50 milliseconds of receiving a
+**[4_USER_FEATURES-FEAT-BR-021]** The TUI Dashboard MUST re-render within 50 milliseconds of receiving a
 `RunEvent` from the server's `StreamRunEvents` gRPC stream. Rendering is event-driven, not
 timer-driven.
 
-**[FEAT-BR-022]** `devs list` without filters returns the 100 most-recently-created runs across
+**[4_USER_FEATURES-FEAT-BR-022]** `devs list` without filters returns the 100 most-recently-created runs across
 all projects, sorted by `created_at` descending. The response does NOT embed `stage_runs`; use
 `devs status <run-id>` to retrieve stage detail.
 
@@ -597,7 +597,7 @@ Status abbreviations:
 | `Cancelled` | `CANC` |
 | `Paused` | `PAUS` |
 
-**[FEAT-BR-023]** Stage boxes MUST be connected by ASCII arrows (`──►`) that reflect the
+**[4_USER_FEATURES-FEAT-BR-023]** Stage boxes MUST be connected by ASCII arrows (`──►`) that reflect the
 `depends_on` relationships. A stage with no `depends_on` is drawn at the leftmost column. Stages
 that share a common dependency are drawn on the same column tier.
 
@@ -628,18 +628,18 @@ persisted to the checkpoint before any event is emitted.
 | Resume run | `devs resume <run>` | `resume_run` | All paused stages | `devs:resume\n` via stdin | Paused → `Running`; held Eligible → dispatched |
 | Resume stage | `devs resume <run> --stage <s>` | `resume_stage` | Single stage | `devs:resume\n` via stdin | Stage → `Running` |
 
-**[FEAT-BR-024]** `cancel_run` MUST transition all non-terminal `StageRun` records to `Cancelled`
+**[4_USER_FEATURES-FEAT-BR-024]** `cancel_run` MUST transition all non-terminal `StageRun` records to `Cancelled`
 in a single atomic checkpoint write. It is not permissible to transition stages one-by-one across
 multiple checkpoint writes.
 
-**[FEAT-BR-025]** `pause_run` sends `devs:pause\n` to all currently `Running` stage processes via
+**[4_USER_FEATURES-FEAT-BR-025]** `pause_run` sends `devs:pause\n` to all currently `Running` stage processes via
 stdin. Stages in `Eligible` or `Waiting` state are held (not dispatched) until the run is resumed.
 The run status transitions to `Paused`.
 
-**[FEAT-BR-026]** `resume_run` sends `devs:resume\n` to all `Paused` stage processes and resumes
+**[4_USER_FEATURES-FEAT-BR-026]** `resume_run` sends `devs:resume\n` to all `Paused` stage processes and resumes
 dispatching for all `Eligible` stages that were held. The run status transitions back to `Running`.
 
-**[FEAT-BR-027]** Control tools MUST reject illegal state transitions with
+**[4_USER_FEATURES-FEAT-BR-027]** Control tools MUST reject illegal state transitions with
 `failed_precondition: <current-state> cannot transition to <target-state>`. The state is not
 modified on rejection.
 
@@ -664,18 +664,18 @@ Logs are persisted to the checkpoint git repository under
 `.devs/logs/<run-id>/<stage-name>/attempt_<N>/stdout.log` and `stderr.log`. They are also held
 in memory (up to 10,000 lines per stage in the TUI, up to 1 MiB per stream in `StageOutput`).
 
-**[FEAT-BR-028]** `devs logs <run> [<stage>]` without `--follow` prints all available log lines
+**[4_USER_FEATURES-FEAT-BR-028]** `devs logs <run> [<stage>]` without `--follow` prints all available log lines
 for the run or stage to stdout, then exits with code 0.
 
-**[FEAT-BR-029]** `devs logs <run> [<stage>] --follow` streams log lines as they are produced.
+**[4_USER_FEATURES-FEAT-BR-029]** `devs logs <run> [<stage>] --follow` streams log lines as they are produced.
 When the run (or stage) reaches a terminal state, the stream is closed. Exit code is 0 if the run
 `Completed`, 1 if the run `Failed` or `Cancelled`.
 
-**[FEAT-BR-030]** `get_stage_output` returns `stdout` and `stderr` as UTF-8 strings, each capped
+**[4_USER_FEATURES-FEAT-BR-030]** `get_stage_output` returns `stdout` and `stderr` as UTF-8 strings, each capped
 at 1 MiB (1,048,576 bytes). If truncated, `truncated: true` is set. Truncation removes the
 beginning of the stream (oldest output), preserving the most recent content.
 
-**[FEAT-BR-031]** `stream_logs` with `follow: true` on a stage in `Pending`, `Waiting`, or
+**[4_USER_FEATURES-FEAT-BR-031]** `stream_logs` with `follow: true` on a stage in `Pending`, `Waiting`, or
 `Eligible` state holds the HTTP connection open until the stage starts running. If the stage never
 starts (e.g., cancelled before dispatch), the server returns `{"done": true, "truncated": false,
 "total_lines": 0}`.
@@ -695,16 +695,16 @@ starts (e.g., cancelled before dispatch), the server returns `{"done": true, "tr
 Pool Observation provides real-time visibility into the agent pool: how many agents are active,
 how many stages are queued, which agents are rate-limited, and when pool exhaustion events occur.
 
-**[FEAT-BR-032]** `get_pool_state` returns a snapshot of pool state at the instant of the call.
+**[4_USER_FEATURES-FEAT-BR-032]** `get_pool_state` returns a snapshot of pool state at the instant of the call.
 The snapshot includes, for each pool: `name`, `max_concurrent`, `active_count`, `queued_count`,
 and for each agent: `tool`, `capabilities`, `fallback`, `pty`, `rate_limited_until` (RFC 3339 or
 null).
 
-**[FEAT-BR-033]** The TUI Pools tab MUST display pool utilization as a live view, updated on each
+**[4_USER_FEATURES-FEAT-BR-033]** The TUI Pools tab MUST display pool utilization as a live view, updated on each
 `WatchPoolState` gRPC event. At minimum, it shows: pool name, active/max ratio, queued count, and
 per-agent availability.
 
-**[FEAT-BR-034]** A `pool.exhausted` webhook event fires at most once per exhaustion episode.
+**[4_USER_FEATURES-FEAT-BR-034]** A `pool.exhausted` webhook event fires at most once per exhaustion episode.
 An exhaustion episode begins when the last available agent becomes unavailable (rate-limited or
 failed). The episode ends when at least one agent becomes available. Only one `pool.exhausted`
 event is fired per episode regardless of how many stages are queued.
@@ -736,23 +736,23 @@ These are the mechanisms through which the developer validates all code changes 
 <!-- Resolved: aligned with project description -->
 | `./do ci` | None | GitLab pipeline passes on all 3 platforms | Pipeline fails or times out (30 min) | Pushes temp branch; cleans up on completion |
 
-**[FEAT-BR-035]** `./do presubmit` enforces a hard 15-minute wall-clock timeout. If any step does
+**[4_USER_FEATURES-FEAT-BR-035]** `./do presubmit` enforces a hard 15-minute wall-clock timeout. If any step does
 not complete within 15 minutes total, all child processes are killed and the script exits with
 code 1. The timeout is measured from the first step starting, not from when the script is invoked.
 
-**[FEAT-BR-036]** `./do setup` is idempotent. Running it multiple times MUST produce the same
+**[4_USER_FEATURES-FEAT-BR-036]** `./do setup` is idempotent. Running it multiple times MUST produce the same
 result as running it once. It MUST NOT fail if the required tools are already at the correct
 version.
 
-**[FEAT-BR-037]** `./do test` generates `target/traceability.json` and exits non-zero if
+**[4_USER_FEATURES-FEAT-BR-037]** `./do test` generates `target/traceability.json` and exits non-zero if
 `overall_passed` is false, even when all `cargo test` tests pass. Requirement coverage failures
 are reported as test failures.
 
-**[FEAT-BR-038]** `./do coverage` generates `target/coverage/report.json` with exactly five gates
+**[4_USER_FEATURES-FEAT-BR-038]** `./do coverage` generates `target/coverage/report.json` with exactly five gates
 (QG-001 through QG-005). The file's `overall_passed` field is the logical AND of all five
 individual gate `passed` fields.
 
-**[FEAT-BR-039]** `./do lint` includes a dependency audit that verifies all crates in the
+**[4_USER_FEATURES-FEAT-BR-039]** `./do lint` includes a dependency audit that verifies all crates in the
 workspace match the authoritative version table in §2 of the TAS. An undocumented crate dependency
 causes `./do lint` to exit non-zero.
 
@@ -773,24 +773,24 @@ implement `devs` using `devs` itself. This category is the realization of the Gl
 every internal entity is observable and controllable via MCP, enabling AI agents to run a TDD loop,
 diagnose failures, and self-modify the system.
 
-**[FEAT-BR-040]** The Glass-Box MCP server MUST be operational from the first commit at which the
+**[4_USER_FEATURES-FEAT-BR-040]** The Glass-Box MCP server MUST be operational from the first commit at which the
 server binary can start. No feature flag controls MCP availability; it is always active when the
 server is running with a bound MCP port.
 
-**[FEAT-BR-041]** Every internal entity (runs, stages, pools, workflow definitions, checkpoints)
+**[4_USER_FEATURES-FEAT-BR-041]** Every internal entity (runs, stages, pools, workflow definitions, checkpoints)
 MUST be fully observable via MCP tools with no field omitted or summarized. The MCP view is
 identical to the in-process `Arc<RwLock<ServerState>>`; there is no separate representation.
 
-**[FEAT-BR-042]** AI agents implementing `devs` MUST follow the Red-Green-Refactor TDD loop:
+**[4_USER_FEATURES-FEAT-BR-042]** AI agents implementing `devs` MUST follow the Red-Green-Refactor TDD loop:
 (1) write a failing test with a `// Covers: <REQ-ID>` annotation, (2) verify the test fails
 (exit code 1), (3) implement the minimum code to make it pass, (4) run `presubmit-check` workflow,
 (5) proceed only after all gates pass.
 
-**[FEAT-BR-043]** Standard workflow definitions for agentic development (`tdd-red`, `tdd-green`,
+**[4_USER_FEATURES-FEAT-BR-043]** Standard workflow definitions for agentic development (`tdd-red`, `tdd-green`,
 `presubmit-check`, `build-only`, `unit-test-crate`, `e2e-all`) MUST be stored in
 `.devs/workflows/` and MUST be usable from the first server-startable commit.
 
-**[FEAT-BR-044]** E2E tests for MCP tools MUST call the MCP server via `POST /mcp/v1/call` using
+**[4_USER_FEATURES-FEAT-BR-044]** E2E tests for MCP tools MUST call the MCP server via `POST /mcp/v1/call` using
 the `DEVS_MCP_ADDR` environment variable. Direct invocation of Rust functions implementing MCP
 tool logic does not satisfy the E2E coverage requirement for QG-005.
 
@@ -822,23 +822,23 @@ devs.toml                          (static; immutable after startup)
         └── [[project.webhook]]   (url, events, secret, timeout_secs, max_retries)
 ```
 
-**[FEAT-BR-045]** `devs.toml` is parsed once at startup. Changes to `devs.toml` while the server
+**[4_USER_FEATURES-FEAT-BR-045]** `devs.toml` is parsed once at startup. Changes to `devs.toml` while the server
 is running have no effect until restart. The only live-update exception is the project registry
 (`projects.toml`), which is updated atomically by `devs project add/remove`.
 
-**[FEAT-BR-046]** Configuration override precedence is strictly: CLI flag > environment variable
+**[4_USER_FEATURES-FEAT-BR-046]** Configuration override precedence is strictly: CLI flag > environment variable
 (`DEVS_` prefix) > `devs.toml` > built-in default. A CLI flag that sets a value MUST always win
 over the environment variable for the same key.
 
-**[FEAT-BR-047]** API keys and tokens in `devs.toml` trigger a startup `WARN` log entry: `WARNING:
+**[4_USER_FEATURES-FEAT-BR-047]** API keys and tokens in `devs.toml` trigger a startup `WARN` log entry: `WARNING:
 credentials found in config file; prefer environment variables`. No startup failure is triggered by
 this condition, but the warning MUST appear.
 
-**[FEAT-BR-048]** `devs project add` validates that the `repo_path` is an existing git repository
+**[4_USER_FEATURES-FEAT-BR-048]** `devs project add` validates that the `repo_path` is an existing git repository
 before writing to the project registry. A `repo_path` that does not contain a `.git` directory (or
 is not a bare repository) is rejected.
 
-**[FEAT-BR-049]** When a project is removed with `devs project remove` while active runs exist,
+**[4_USER_FEATURES-FEAT-BR-049]** When a project is removed with `devs project remove` while active runs exist,
 the project's status is set to `"removing"` in the registry. Active runs continue to completion.
 No new submissions are accepted for a project in `"removing"` status. The project entry is
 physically deleted from the registry only after all runs reach terminal state.
@@ -870,10 +870,10 @@ per-interface coverage gates (QG-003, QG-004, QG-005).
 | 5. Log Access | `devs logs`, `devs logs --follow` ✓ | Logs tab ✓ | `stream_logs`, `get_stage_output` ✓ |
 | 6. Pool Observation | — | Pools tab ✓ | `get_pool_state` ✓ |
 | 7. Development Lifecycle | `./do` commands ✓ | — | — |
-| 8. Agentic Development | — | — | All 17 tools ✓ |
+| 8. Agentic Development | — | — | All 20 tools ✓ |
 | 9. Server Configuration | `devs project add/remove` ✓ | — | — |
 
-**[FEAT-BR-050]** Every cell marked `✓` in the matrix above MUST have at least one E2E test that
+**[4_USER_FEATURES-FEAT-BR-050]** Every cell marked `✓` in the matrix above MUST have at least one E2E test that
 exercises the feature through that interface boundary. Tests that call internal Rust functions
 directly do not count toward the interface-specific coverage gates.
 
@@ -884,42 +884,42 @@ directly do not count toward the interface-specific coverage gates.
 The following acceptance criteria are testable assertions that verify the behavioral contracts
 defined in §1. Each criterion MUST have an automated test annotated `// Covers: AC-FEAT-1-NNN`.
 
-- **[AC-FEAT-1-001]** GIVEN a running server, WHEN an Orchestrated Agent calls `signal_completion`
+- **[4_USER_FEATURES-AC-FEAT-1-001]** GIVEN a running server, WHEN an Orchestrated Agent calls `signal_completion`
   twice for the same stage, THEN the first call succeeds and the second returns a
   `failed_precondition` error with no state change.
 
-- **[AC-FEAT-1-002]** GIVEN a running server, WHEN two concurrent `submit_run` calls use the same
+- **[4_USER_FEATURES-AC-FEAT-1-002]** GIVEN a running server, WHEN two concurrent `submit_run` calls use the same
   `run_name` for the same project, THEN exactly one returns a successful `run_id` and the other
   returns `already_exists`.
 
-- **[AC-FEAT-1-003]** GIVEN a workflow with a cycle (A→B→A), WHEN the workflow definition is
+- **[4_USER_FEATURES-AC-FEAT-1-003]** GIVEN a workflow with a cycle (A→B→A), WHEN the workflow definition is
   submitted, THEN the server returns `invalid_argument: cycle detected` with `"cycle": ["A","B","A"]`
   and no run is created.
 
-- **[AC-FEAT-1-004]** GIVEN a Human Developer running `./do presubmit` that takes more than 15
+- **[4_USER_FEATURES-AC-FEAT-1-004]** GIVEN a Human Developer running `./do presubmit` that takes more than 15
   minutes, WHEN the timeout fires, THEN all child processes are killed and the script exits with
   code 1 within 5 seconds of the timeout.
 
-- **[AC-FEAT-1-005]** GIVEN a running server with an active run, WHEN `cancel_run` is called,
+- **[4_USER_FEATURES-AC-FEAT-1-005]** GIVEN a running server with an active run, WHEN `cancel_run` is called,
   THEN all non-terminal stages transition to `Cancelled` in a single checkpoint commit and a
   subsequent `get_run` returns all stages as `cancelled`.
 
-- **[AC-FEAT-1-006]** GIVEN a stage producing more than 1 MiB of stdout, WHEN `get_stage_output`
+- **[4_USER_FEATURES-AC-FEAT-1-006]** GIVEN a stage producing more than 1 MiB of stdout, WHEN `get_stage_output`
   is called, THEN `stdout` is exactly 1,048,576 bytes, `truncated` is `true`, and the content is
   the last (most recent) 1,048,576 bytes.
 
-- **[AC-FEAT-1-007]** GIVEN `devs.toml` with `server.listen` and `server.mcp_port` set to the
+- **[4_USER_FEATURES-AC-FEAT-1-007]** GIVEN `devs.toml` with `server.listen` and `server.mcp_port` set to the
   same value, WHEN the server starts, THEN it exits with a config validation error before binding
   any port.
 
-- **[AC-FEAT-1-008]** GIVEN a project in `"removing"` status, WHEN `devs submit` is called for
+- **[4_USER_FEATURES-AC-FEAT-1-008]** GIVEN a project in `"removing"` status, WHEN `devs submit` is called for
   that project, THEN the server returns `failed_precondition: project is being removed` and no run
   is created.
 
-- **[AC-FEAT-1-009]** GIVEN a TUI connected to a server, WHEN a `RunEvent` is emitted by the
+- **[4_USER_FEATURES-AC-FEAT-1-009]** GIVEN a TUI connected to a server, WHEN a `RunEvent` is emitted by the
   server, THEN the TUI re-renders within 50 milliseconds.
 
-- **[AC-FEAT-1-010]** GIVEN `./do test` with a `// Covers: FEAT-BR-999` annotation in a test file
+- **[4_USER_FEATURES-AC-FEAT-1-010]** GIVEN `./do test` with a `// Covers: FEAT-BR-999` annotation in a test file
   where `FEAT-BR-999` does not exist in any spec document, WHEN `./do test` runs, THEN
   `target/traceability.json` contains `FEAT-BR-999` in `stale_annotations` and `./do test` exits
   with code 1.
@@ -929,14 +929,14 @@ defined in §1. Each criterion MUST have an automated test annotated `// Covers:
 ## 2. Detailed User Journeys
 
 Each journey in this section is normative: the depicted sequence is the required behavior. Business
-rules are tagged `[FEAT-BR-1NN]` and acceptance criteria are tagged `[AC-FEAT-2-NNN]`. All
+rules are tagged `[4_USER_FEATURES-FEAT-BR-1NN]` and acceptance criteria are tagged `[4_USER_FEATURES-AC-FEAT-2-NNN]`. All
 acceptance criteria require an automated test annotated `// Covers: AC-FEAT-2-NNN`.
 
 ---
 
 ### 2.1 Journey: Server Startup and Discovery
 
-**[FEAT-004]** A user starts the `devs` server and a client locates it automatically.
+**[4_USER_FEATURES-FEAT-004]** A user starts the `devs` server and a client locates it automatically.
 
 ```mermaid
 sequenceDiagram
@@ -963,7 +963,7 @@ sequenceDiagram
     end
 ```
 
-**[FEAT-005]** A client (TUI, CLI, or MCP bridge) locates the server:
+**[4_USER_FEATURES-FEAT-005]** A client (TUI, CLI, or MCP bridge) locates the server:
 
 ```mermaid
 flowchart TD
@@ -1018,25 +1018,25 @@ A `Running` stage with all `depends_on` stages already `Completed` is recovered 
 
 #### 2.1.2 Business Rules
 
-**[FEAT-BR-100]** The server MUST collect ALL `devs.toml` validation errors and report them to
+**[4_USER_FEATURES-FEAT-BR-100]** The server MUST collect ALL `devs.toml` validation errors and report them to
 stderr before exiting. Stopping at the first error and omitting subsequent errors is a defect. Zero
 ports are bound when any configuration error is present.
 
-**[FEAT-BR-101]** If the gRPC port is already in use (`EADDRINUSE`), the server MUST exit
+**[4_USER_FEATURES-FEAT-BR-101]** If the gRPC port is already in use (`EADDRINUSE`), the server MUST exit
 immediately without binding any port and without writing the discovery file.
 
-**[FEAT-BR-102]** If the MCP port is already in use after the gRPC port has been bound, the server
+**[4_USER_FEATURES-FEAT-BR-102]** If the MCP port is already in use after the gRPC port has been bound, the server
 MUST release the gRPC port before exiting. No discovery file is written. The server exits non-zero.
 
-**[FEAT-BR-103]** The discovery file MUST be written atomically: content is written to a `.tmp`
+**[4_USER_FEATURES-FEAT-BR-103]** The discovery file MUST be written atomically: content is written to a `.tmp`
 sibling file, then `rename(2)` is called to replace the target path. A partially written discovery
 file MUST NOT be visible to clients at any point.
 
-**[FEAT-BR-104]** On `SIGTERM` (or `Ctrl+C`), the server MUST delete the discovery file before
+**[4_USER_FEATURES-FEAT-BR-104]** On `SIGTERM` (or `Ctrl+C`), the server MUST delete the discovery file before
 exiting. Clients that read a stale discovery file after server exit receive connection refusal and
 MUST exit with code 3.
 
-**[FEAT-BR-105]** Per-project checkpoint recovery failures are non-fatal: the server logs `ERROR`
+**[4_USER_FEATURES-FEAT-BR-105]** Per-project checkpoint recovery failures are non-fatal: the server logs `ERROR`
 for the failing project and continues startup. A project whose checkpoints cannot be loaded is
 marked `Unrecoverable`; its runs are not resumed.
 
@@ -1053,21 +1053,21 @@ marked `Unrecoverable`; its runs are not resumed.
 
 #### 2.1.4 Acceptance Criteria
 
-- **[AC-FEAT-2-001]** GIVEN `devs.toml` with two distinct validation errors, WHEN the server
+- **[4_USER_FEATURES-AC-FEAT-2-001]** GIVEN `devs.toml` with two distinct validation errors, WHEN the server
   starts, THEN both errors appear on stderr before exit, zero ports are bound, and the process
   exits non-zero.
 
-- **[AC-FEAT-2-002]** GIVEN a running server, WHEN SIGTERM is sent, THEN the discovery file is
+- **[4_USER_FEATURES-AC-FEAT-2-002]** GIVEN a running server, WHEN SIGTERM is sent, THEN the discovery file is
   deleted before the process exits and the exit code is 0.
 
-- **[AC-FEAT-2-003]** GIVEN gRPC port already in use, WHEN the server starts, THEN it exits
+- **[4_USER_FEATURES-AC-FEAT-2-003]** GIVEN gRPC port already in use, WHEN the server starts, THEN it exits
   non-zero, the MCP port is never bound, and no discovery file is written.
 
-- **[AC-FEAT-2-004]** GIVEN a client with `DEVS_DISCOVERY_FILE` set to a custom path, WHEN the
+- **[4_USER_FEATURES-AC-FEAT-2-004]** GIVEN a client with `DEVS_DISCOVERY_FILE` set to a custom path, WHEN the
   server writes its discovery file to that path, THEN the client connects to the gRPC address in
   that file and operates normally.
 
-- **[AC-FEAT-2-005]** GIVEN a checkpoint with a `Running` stage, WHEN the server restarts and
+- **[4_USER_FEATURES-AC-FEAT-2-005]** GIVEN a checkpoint with a `Running` stage, WHEN the server restarts and
   recovers that checkpoint, THEN `get_run` shows the stage as `eligible` (or `running` once
   re-dispatched), not `running` with a stale process reference.
 
@@ -1075,7 +1075,7 @@ marked `Unrecoverable`; its runs are not resumed.
 
 ### 2.2 Journey: Workflow Authoring (Declarative TOML/YAML)
 
-**[FEAT-006]** A developer authors a new workflow in TOML format.
+**[4_USER_FEATURES-FEAT-006]** A developer authors a new workflow in TOML format.
 
 ```mermaid
 flowchart TD
@@ -1109,7 +1109,7 @@ timeout_secs = 3600          # optional; workflow-level cap
 name     = "task_file"       # required; [a-z0-9_]+, max 64 chars
 type     = "path"            # required; string | path | integer | boolean
 required = true              # required
-# default = "TASK.md"        # optional; must match declared type
+# default = "TASK.md"        # optional; must be absent when required = true; must match declared type
 
 [[stage]]
 name       = "plan"          # required; unique within workflow
@@ -1205,11 +1205,11 @@ restarting the server:
 }
 ```
 
-**[FEAT-BR-106]** `write_workflow_definition` MUST validate the incoming definition through all 13
+**[4_USER_FEATURES-FEAT-BR-106]** `write_workflow_definition` MUST validate the incoming definition through all 13
 checks before writing any file. On validation failure, the definition file on disk MUST remain
 unchanged.
 
-**[FEAT-BR-107]** A workflow updated via `write_workflow_definition` while a run is active takes
+**[4_USER_FEATURES-FEAT-BR-107]** A workflow updated via `write_workflow_definition` while a run is active takes
 effect only for new submissions. Active runs continue using their immutable `definition_snapshot`.
 
 #### 2.2.4 Edge Cases
@@ -1224,19 +1224,19 @@ effect only for new submissions. Active runs continue using their immutable `def
 
 #### 2.2.5 Acceptance Criteria
 
-- **[AC-FEAT-2-006]** GIVEN a TOML definition with a cycle `A→B→A`, WHEN `write_workflow_definition`
+- **[4_USER_FEATURES-AC-FEAT-2-006]** GIVEN a TOML definition with a cycle `A→B→A`, WHEN `write_workflow_definition`
   is called, THEN the response contains `"error"` with `"cycle detected"` and the `"cycle"` array
   `["A","B","A"]`, and the file on disk is unmodified.
 
-- **[AC-FEAT-2-007]** GIVEN a TOML definition with two simultaneous errors (duplicate stage name
+- **[4_USER_FEATURES-AC-FEAT-2-007]** GIVEN a TOML definition with two simultaneous errors (duplicate stage name
   and missing depends_on target), WHEN validation runs, THEN BOTH errors appear in the response
   before any file write.
 
-- **[AC-FEAT-2-008]** GIVEN a workflow with `workflow.timeout_secs = 60` and a stage with
+- **[4_USER_FEATURES-AC-FEAT-2-008]** GIVEN a workflow with `workflow.timeout_secs = 60` and a stage with
   `timeout_secs = 61`, WHEN the definition is submitted, THEN validation returns
   `invalid_argument` and no run is created.
 
-- **[AC-FEAT-2-009]** GIVEN a workflow definition updated via `write_workflow_definition` while
+- **[4_USER_FEATURES-AC-FEAT-2-009]** GIVEN a workflow definition updated via `write_workflow_definition` while
   a run is active, WHEN `get_run` is called on the active run, THEN `definition_snapshot` reflects
   the definition at the time the run was submitted, not the updated definition.
 
@@ -1244,7 +1244,7 @@ effect only for new submissions. Active runs continue using their immutable `def
 
 ### 2.3 Journey: Submitting a Workflow Run (CLI)
 
-**[FEAT-007]** A developer submits a workflow run via the CLI.
+**[4_USER_FEATURES-FEAT-007]** A developer submits a workflow run via the CLI.
 
 ```mermaid
 sequenceDiagram
@@ -1344,15 +1344,15 @@ run submitted: feature-20260311-a3f9 (run_id: a1b2c3d4-...)
 
 #### 2.3.3 Business Rules
 
-**[FEAT-BR-108]** `devs submit` with `--project` absent and the current working directory
+**[4_USER_FEATURES-FEAT-BR-108]** `devs submit` with `--project` absent and the current working directory
 resolving to zero or more than one registered project MUST exit with code 4 and print
 `invalid_argument: --project required; cwd matches N projects`.
 
-**[FEAT-BR-109]** The auto-generated slug format is `<workflow-name>-<YYYYMMDD>-<4 random
+**[4_USER_FEATURES-FEAT-BR-109]** The auto-generated slug format is `<workflow-name>-<YYYYMMDD>-<4 random
 lowercase alphanum>`, maximum 128 characters, matching `[a-z0-9-]+`. If the workflow name portion
 would cause the slug to exceed 128 characters, the workflow name is truncated from the right to fit.
 
-**[FEAT-BR-110]** Input values on the CLI are provided as `key=value` strings. The `=` character
+**[4_USER_FEATURES-FEAT-BR-110]** Input values on the CLI are provided as `key=value` strings. The `=` character
 splits on the first occurrence; a value containing `=` is permitted (e.g., `--input expr=a=b`
 sets `expr` to `"a=b"`).
 
@@ -1368,22 +1368,22 @@ sets `expr` to `"a=b"`).
 
 #### 2.3.5 Acceptance Criteria
 
-- **[AC-FEAT-2-010]** GIVEN a valid workflow with one required input, WHEN `devs submit` is called
+- **[4_USER_FEATURES-AC-FEAT-2-010]** GIVEN a valid workflow with one required input, WHEN `devs submit` is called
   without that input, THEN the CLI exits with code 4 and stderr contains
   `invalid_argument: input '<name>' is required`.
 
-- **[AC-FEAT-2-011]** GIVEN a successful `devs submit`, WHEN `devs status <slug>` is called
+- **[4_USER_FEATURES-AC-FEAT-2-011]** GIVEN a successful `devs submit`, WHEN `devs status <slug>` is called
   immediately after, THEN the run status is `pending` or `running` and the `run_id` matches the
   submission response.
 
-- **[AC-FEAT-2-012]** GIVEN `devs submit --format json` is called, WHEN validation fails, THEN
+- **[4_USER_FEATURES-AC-FEAT-2-012]** GIVEN `devs submit --format json` is called, WHEN validation fails, THEN
   stdout contains a JSON object with `"error"` and `"code"` fields, and stderr is empty.
 
 ---
 
 ### 2.4 Journey: Submitting a Workflow Run (MCP)
 
-**[FEAT-008]** An observing/controlling AI agent submits a workflow run via MCP.
+**[4_USER_FEATURES-FEAT-008]** An observing/controlling AI agent submits a workflow run via MCP.
 
 ```mermaid
 sequenceDiagram
@@ -1464,10 +1464,10 @@ sequenceDiagram
 | `integer` | JSON number `42` or decimal string `"42"` | `"42.5"`, booleans, `"0x1A"` |
 | `boolean` | JSON `true`/`false` or strings `"true"`/`"false"` | `"1"`, `"0"`, `"yes"`, `"no"` |
 
-**[FEAT-BR-111]** Input type coercion runs during validation step 4 (before duplicate name check
+**[4_USER_FEATURES-FEAT-BR-111]** Input type coercion runs during validation step 4 (before duplicate name check
 in step 5). All coercion errors are collected and returned together with other validation errors.
 
-**[FEAT-BR-112]** `path`-typed inputs are stored as-is (not resolved to absolute paths at
+**[4_USER_FEATURES-FEAT-BR-112]** `path`-typed inputs are stored as-is (not resolved to absolute paths at
 submission time). Resolution is deferred to execution time when the prompt template is expanded.
 
 #### 2.4.3 Edge Cases
@@ -1482,14 +1482,14 @@ submission time). Resolution is deferred to execution time when the prompt templ
 
 #### 2.4.4 Acceptance Criteria
 
-- **[AC-FEAT-2-013]** GIVEN two concurrent `submit_run` calls with the same `run_name` for the
+- **[4_USER_FEATURES-AC-FEAT-2-013]** GIVEN two concurrent `submit_run` calls with the same `run_name` for the
   same project, WHEN both complete, THEN exactly one returns a `run_id` and the other returns
   `already_exists`; `list_runs` shows exactly one run with that name.
 
-- **[AC-FEAT-2-014]** GIVEN `inputs` with `"flag": "true"` for a `boolean`-typed input, WHEN
+- **[4_USER_FEATURES-AC-FEAT-2-014]** GIVEN `inputs` with `"flag": "true"` for a `boolean`-typed input, WHEN
   `submit_run` is called, THEN the input is coerced to `true` and the run is created successfully.
 
-- **[AC-FEAT-2-015]** GIVEN `inputs` with `"flag": "yes"` for a `boolean`-typed input, WHEN
+- **[4_USER_FEATURES-AC-FEAT-2-015]** GIVEN `inputs` with `"flag": "yes"` for a `boolean`-typed input, WHEN
   `submit_run` is called, THEN the response contains `"error"` with `invalid_argument` and no run
   is created.
 
@@ -1497,7 +1497,7 @@ submission time). Resolution is deferred to execution time when the prompt templ
 
 ### 2.5 Journey: Monitoring a Run in the TUI
 
-**[FEAT-009]** A developer opens the TUI to monitor an active workflow run.
+**[4_USER_FEATURES-FEAT-009]** A developer opens the TUI to monitor an active workflow run.
 
 ```mermaid
 sequenceDiagram
@@ -1612,18 +1612,18 @@ closes the stream with gRPC status `OK`.
 
 #### 2.5.3 Business Rules
 
-**[FEAT-BR-113]** The TUI MUST re-render within 50 milliseconds of receiving any gRPC `RunEvent`
+**[4_USER_FEATURES-FEAT-BR-113]** The TUI MUST re-render within 50 milliseconds of receiving any gRPC `RunEvent`
 push. Rendering is event-driven; no polling timer is used for the normal update path.
 
-**[FEAT-BR-114]** The TUI log buffer holds a maximum of 10,000 lines per stage. Lines beyond this
+**[4_USER_FEATURES-FEAT-BR-114]** The TUI log buffer holds a maximum of 10,000 lines per stage. Lines beyond this
 limit cause the oldest lines to be evicted from the in-memory buffer. The full log is always
 available on disk via `get_stage_output`.
 
-**[FEAT-BR-115]** The TUI MUST operate correctly in any terminal at minimum 80 columns × 24 rows.
+**[4_USER_FEATURES-FEAT-BR-115]** The TUI MUST operate correctly in any terminal at minimum 80 columns × 24 rows.
 All stage boxes and DAG connectors use ASCII characters only (`-`, `|`, `>`, `[`, `]`). No
 Unicode box-drawing characters (`│`, `┌`, `─`) are used in the DAG renderer.
 
-**[FEAT-BR-116]** TUI auto-reconnect uses exponential backoff: 1→2→4→8→16→30 seconds. After the
+**[4_USER_FEATURES-FEAT-BR-116]** TUI auto-reconnect uses exponential backoff: 1→2→4→8→16→30 seconds. After the
 total reconnect time reaches 30 seconds, the TUI waits an additional 5 seconds, then exits with
 code 1 and prints `ERROR: lost connection to server; could not reconnect within 35s`.
 
@@ -1639,15 +1639,15 @@ code 1 and prints `ERROR: lost connection to server; could not reconnect within 
 
 #### 2.5.5 Acceptance Criteria
 
-- **[AC-FEAT-2-016]** GIVEN a running server with an active run, WHEN the TUI is launched and
+- **[4_USER_FEATURES-AC-FEAT-2-016]** GIVEN a running server with an active run, WHEN the TUI is launched and
   `StreamRunEvents` delivers a stage status change, THEN the TUI re-renders within 50ms and the
   stage box shows the updated `STATUS` abbreviation.
 
-- **[AC-FEAT-2-017]** GIVEN the TUI connected to a server, WHEN the server process is killed,
+- **[4_USER_FEATURES-AC-FEAT-2-017]** GIVEN the TUI connected to a server, WHEN the server process is killed,
   THEN the TUI displays a reconnect notice and exits with code 1 after failing to reconnect within
   35 seconds total.
 
-- **[AC-FEAT-2-018]** GIVEN a workflow with 5 stages in a `plan→[impl-api, impl-ui]→review→merge`
+- **[4_USER_FEATURES-AC-FEAT-2-018]** GIVEN a workflow with 5 stages in a `plan→[impl-api, impl-ui]→review→merge`
   DAG, WHEN the TUI Dashboard renders the run, THEN `impl-api` and `impl-ui` appear on the same
   column tier in the ASCII DAG, connected by arrows from `plan` and to `review`.
 
@@ -1655,7 +1655,7 @@ code 1 and prints `ERROR: lost connection to server; could not reconnect within 
 
 ### 2.6 Journey: Streaming Logs via CLI
 
-**[FEAT-010]** A developer follows live log output for a running stage.
+**[4_USER_FEATURES-FEAT-010]** A developer follows live log output for a running stage.
 
 ```mermaid
 sequenceDiagram
@@ -1735,16 +1735,16 @@ Terminal chunk (final message after stage/run ends):
 
 #### 2.6.3 Business Rules
 
-**[FEAT-BR-117]** Sequence numbers in `stream_logs` MUST start at 1 and MUST be monotonically
+**[4_USER_FEATURES-FEAT-BR-117]** Sequence numbers in `stream_logs` MUST start at 1 and MUST be monotonically
 increasing with no gaps. A client receiving a gap (e.g., sequence jumps from 5 to 7) MUST treat
 this as an internal error.
 
-**[FEAT-BR-118]** `stream_logs` with `follow: true` on a stage in `Pending`, `Waiting`, or
+**[4_USER_FEATURES-FEAT-BR-118]** `stream_logs` with `follow: true` on a stage in `Pending`, `Waiting`, or
 `Eligible` state MUST hold the HTTP connection open until the stage starts executing. If the stage
 transitions to `Cancelled` without ever running, the server sends the terminal chunk with
 `total_lines: 0`.
 
-**[FEAT-BR-119]** `devs logs --follow` exits with code 0 when the run reaches `Completed` and
+**[4_USER_FEATURES-FEAT-BR-119]** `devs logs --follow` exits with code 0 when the run reaches `Completed` and
 with code 1 when the run reaches `Failed` or `Cancelled`. The exit code reflects the run's terminal
 state, not the individual stage's state (if a stage name was specified).
 
@@ -1760,13 +1760,13 @@ state, not the individual stage's state (if a stage name was specified).
 
 #### 2.6.5 Acceptance Criteria
 
-- **[AC-FEAT-2-019]** GIVEN `devs logs <run> --follow` and the run reaches `Completed`, WHEN the
+- **[4_USER_FEATURES-AC-FEAT-2-019]** GIVEN `devs logs <run> --follow` and the run reaches `Completed`, WHEN the
   final terminal chunk is delivered, THEN the CLI exits with code 0.
 
-- **[AC-FEAT-2-020]** GIVEN `devs logs <run> --follow` and the run reaches `Failed`, WHEN the
+- **[4_USER_FEATURES-AC-FEAT-2-020]** GIVEN `devs logs <run> --follow` and the run reaches `Failed`, WHEN the
   final terminal chunk is delivered, THEN the CLI exits with code 1.
 
-- **[AC-FEAT-2-021]** GIVEN `stream_logs` with `follow: true` on a stage in `Eligible` state,
+- **[4_USER_FEATURES-AC-FEAT-2-021]** GIVEN `stream_logs` with `follow: true` on a stage in `Eligible` state,
   WHEN the stage is later cancelled without running, THEN the server delivers
   `{"done":true,"truncated":false,"total_lines":0}` and closes the stream.
 
@@ -1774,7 +1774,7 @@ state, not the individual stage's state (if a stage name was specified).
 
 ### 2.7 Journey: Cancelling a Run
 
-**[FEAT-011]** A developer cancels a running workflow.
+**[4_USER_FEATURES-FEAT-011]** A developer cancels a running workflow.
 
 ```mermaid
 sequenceDiagram
@@ -1832,15 +1832,15 @@ defect.
 
 #### 2.7.3 Business Rules
 
-**[FEAT-BR-120]** `cancel_run` on a run already in a terminal state (`Completed`, `Failed`,
+**[4_USER_FEATURES-FEAT-BR-120]** `cancel_run` on a run already in a terminal state (`Completed`, `Failed`,
 `Cancelled`) MUST return `failed_precondition: run '<id>' is already <status>` and MUST NOT
 modify any state or write any checkpoint.
 
-**[FEAT-BR-121]** `cancel_stage` cancels one stage without cancelling the run. The run continues;
+**[4_USER_FEATURES-FEAT-BR-121]** `cancel_stage` cancels one stage without cancelling the run. The run continues;
 downstream stages that `depends_on` the cancelled stage are immediately transitioned to `Cancelled`
 (because the cancelled stage will never complete).
 
-**[FEAT-BR-122]** When a fan-out stage is cancelled via `cancel_stage`, all active sub-agent
+**[4_USER_FEATURES-FEAT-BR-122]** When a fan-out stage is cancelled via `cancel_stage`, all active sub-agent
 processes receive `devs:cancel\n`. All sub-runs transition to `Cancelled`. The parent stage
 transitions to `Cancelled`.
 
@@ -1856,15 +1856,15 @@ transitions to `Cancelled`.
 
 #### 2.7.5 Acceptance Criteria
 
-- **[AC-FEAT-2-022]** GIVEN a run with 3 stages (one `Running`, one `Eligible`, one `Waiting`),
+- **[4_USER_FEATURES-AC-FEAT-2-022]** GIVEN a run with 3 stages (one `Running`, one `Eligible`, one `Waiting`),
   WHEN `cancel_run` is called, THEN a single subsequent `get_run` shows all three stages as
   `cancelled` and the run as `cancelled`.
 
-- **[AC-FEAT-2-023]** GIVEN `cancel_run` on a `Completed` run, WHEN the MCP tool returns, THEN
+- **[4_USER_FEATURES-AC-FEAT-2-023]** GIVEN `cancel_run` on a `Completed` run, WHEN the MCP tool returns, THEN
   the response contains `"error": "failed_precondition: run '<id>' is already completed"` and
   `get_run` still shows status `completed`.
 
-- **[AC-FEAT-2-024]** GIVEN a running agent that ignores `devs:cancel\n`, WHEN the 10-second
+- **[4_USER_FEATURES-AC-FEAT-2-024]** GIVEN a running agent that ignores `devs:cancel\n`, WHEN the 10-second
   grace period expires, THEN the agent process is killed and `get_stage_output` shows a non-zero
   `exit_code`.
 
@@ -1872,7 +1872,7 @@ transitions to `Cancelled`.
 
 ### 2.8 Journey: Pausing and Resuming a Run
 
-**[FEAT-012]** A developer pauses a run to inspect state, then resumes it.
+**[4_USER_FEATURES-FEAT-012]** A developer pauses a run to inspect state, then resumes it.
 
 ```mermaid
 sequenceDiagram
@@ -1930,18 +1930,18 @@ stateDiagram-v2
 
 #### 2.8.2 Business Rules
 
-**[FEAT-BR-123]** `pause_run` on a run not in `Running` state MUST return
+**[4_USER_FEATURES-FEAT-BR-123]** `pause_run` on a run not in `Running` state MUST return
 `failed_precondition: run '<id>' is not running (current state: <state>)`. No state change occurs.
 
-**[FEAT-BR-124]** `resume_run` on a run not in `Paused` state MUST return
+**[4_USER_FEATURES-FEAT-BR-124]** `resume_run` on a run not in `Paused` state MUST return
 `failed_precondition: run '<id>' is not paused (current state: <state>)`. No state change occurs.
 
-**[FEAT-BR-125]** When a run is paused at the run level, the DAG Scheduler MUST NOT dispatch
+**[4_USER_FEATURES-FEAT-BR-125]** When a run is paused at the run level, the DAG Scheduler MUST NOT dispatch
 any new stages until `resume_run` is called. Stages that become `Eligible` during the pause
 (because a dependency completes) transition to `Eligible` but are not dispatched; they are
 dispatched immediately upon `resume_run`.
 
-**[FEAT-BR-126]** `cancel_run` on a `Paused` run MUST succeed. The cancel signal is sent to any
+**[4_USER_FEATURES-FEAT-BR-126]** `cancel_run` on a `Paused` run MUST succeed. The cancel signal is sent to any
 agents that are still running (in `Paused` sub-state). All non-terminal stages transition to
 `Cancelled` atomically.
 
@@ -1957,21 +1957,21 @@ agents that are still running (in `Paused` sub-state). All non-terminal stages t
 
 #### 2.8.4 Acceptance Criteria
 
-- **[AC-FEAT-2-025]** GIVEN a running run with two stages (`Running` and `Eligible`), WHEN
+- **[4_USER_FEATURES-AC-FEAT-2-025]** GIVEN a running run with two stages (`Running` and `Eligible`), WHEN
   `pause_run` is called, THEN `get_run` shows the run as `paused` and the `Eligible` stage
   remains `eligible` (not dispatched).
 
-- **[AC-FEAT-2-026]** GIVEN a paused run with an `Eligible` stage, WHEN `resume_run` is called,
+- **[4_USER_FEATURES-AC-FEAT-2-026]** GIVEN a paused run with an `Eligible` stage, WHEN `resume_run` is called,
   THEN the `Eligible` stage is dispatched within 100ms and `get_run` shows the run as `running`.
 
-- **[AC-FEAT-2-027]** GIVEN `pause_run` on a run in `Completed` state, WHEN the CLI returns,
+- **[4_USER_FEATURES-AC-FEAT-2-027]** GIVEN `pause_run` on a run in `Completed` state, WHEN the CLI returns,
   THEN the exit code is 1 and the error contains `failed_precondition`.
 
 ---
 
 ### 2.9 Journey: Orchestrated Agent Completing a Stage
 
-**[FEAT-013]** An AI agent spawned as a workflow stage signals completion via MCP.
+**[4_USER_FEATURES-FEAT-013]** An AI agent spawned as a workflow stage signals completion via MCP.
 
 ```mermaid
 sequenceDiagram
@@ -2099,19 +2099,19 @@ The following variables are **stripped** from the agent environment (MUST NOT be
 
 #### 2.9.4 Business Rules
 
-**[FEAT-BR-127]** `.devs_context.json` write failure (e.g., disk full) causes the stage to
+**[4_USER_FEATURES-FEAT-BR-127]** `.devs_context.json` write failure (e.g., disk full) causes the stage to
 transition to `Failed` immediately without spawning the agent process. The error is logged at
 `ERROR` level and recorded in the stage's `stderr` field.
 
-**[FEAT-BR-128]** `signal_completion` is idempotent only for the first call. A second call on a
+**[4_USER_FEATURES-FEAT-BR-128]** `signal_completion` is idempotent only for the first call. A second call on a
 stage in a terminal state returns `failed_precondition: stage already in terminal state` and
 MUST NOT modify any state.
 
-**[FEAT-BR-129]** An Orchestrated Agent that exits without calling `signal_completion` when
+**[4_USER_FEATURES-FEAT-BR-129]** An Orchestrated Agent that exits without calling `signal_completion` when
 `completion = "mcp_tool_call"` causes the server to fall back to exit code evaluation: exit
 code 0 → `Completed`, non-zero → `Failed`. This fallback is not an error; it is a defined behavior.
 
-**[FEAT-BR-130]** The working directory is cleaned up after every stage completion regardless of
+**[4_USER_FEATURES-FEAT-BR-130]** The working directory is cleaned up after every stage completion regardless of
 outcome (success, failure, timeout, cancellation). Cleanup failures are logged at `WARN` level
 and do not affect stage outcome.
 
@@ -2127,26 +2127,26 @@ and do not affect stage outcome.
 
 #### 2.9.6 Acceptance Criteria
 
-- **[AC-FEAT-2-028]** GIVEN a stage with `completion="structured_output"` and `.devs_output.json`
+- **[4_USER_FEATURES-AC-FEAT-2-028]** GIVEN a stage with `completion="structured_output"` and `.devs_output.json`
   containing `{"success": true}`, WHEN the agent exits, THEN `get_stage_output` shows
   `structured.success = true` and the stage status is `completed`.
 
-- **[AC-FEAT-2-029]** GIVEN a stage with `completion="structured_output"` and `.devs_output.json`
+- **[4_USER_FEATURES-AC-FEAT-2-029]** GIVEN a stage with `completion="structured_output"` and `.devs_output.json`
   containing `{"success": "true"}` (string), WHEN the agent exits, THEN the stage transitions to
   `failed`.
 
-- **[AC-FEAT-2-030]** GIVEN an agent calling `signal_completion` twice for the same stage, WHEN
+- **[4_USER_FEATURES-AC-FEAT-2-030]** GIVEN an agent calling `signal_completion` twice for the same stage, WHEN
   the second call is made, THEN the response contains `"error": "failed_precondition: stage already
   in terminal state"` and `get_run` shows the stage status unchanged from after the first call.
 
-- **[AC-FEAT-2-031]** GIVEN a stage with `completion="exit_code"`, WHEN the agent exits with code
+- **[4_USER_FEATURES-AC-FEAT-2-031]** GIVEN a stage with `completion="exit_code"`, WHEN the agent exits with code
   0, THEN the stage transitions to `completed` and `StageRun.exit_code = 0`.
 
 ---
 
 ### 2.10 Journey: Development Lifecycle via `./do`
 
-**[FEAT-014]** A developer (or AI agent) runs the development presubmit workflow.
+**[4_USER_FEATURES-FEAT-014]** A developer (or AI agent) runs the development presubmit workflow.
 
 ```mermaid
 flowchart TD
@@ -2222,10 +2222,10 @@ One JSON object per line; each represents one `./do` step:
 | `schema_version` | integer | Always `1` |
 | `overall_passed` | boolean | `true` iff all requirements are covered AND `stale_annotations` is empty |
 | `traceability_pct` | float | Percentage of requirements with at least one covering test |
-| `requirements` | array | One entry per `[FEAT-*]` tag found in spec documents |
+| `requirements` | array | One entry per `[4_USER_FEATURES-FEAT-*]` tag found in spec documents |
 | `stale_annotations` | array | `// Covers: <id>` annotations referencing non-existent requirement IDs |
 
-Requirements are discovered by scanning `docs/plan/specs/` for `\[([0-9A-Z_a-z]+-[A-Z]+-[0-9]+)\]`
+Requirements are discovered by scanning `docs/plan/specs/` for `\[([0-9A-Z_a-z]+-[4_USER_FEATURES-A-Z]+-[4_USER_FEATURES-0-9]+)\]`
 patterns. Covering tests are discovered by scanning `tests/` and `crates/*/tests/` for
 `// Covers: <id>` comments.
 
@@ -2266,18 +2266,18 @@ the logical AND of all five individual `passed` fields.
 
 #### 2.10.5 Business Rules
 
-**[FEAT-BR-131]** The 15-minute timeout in `./do presubmit` is measured from the moment the
+**[4_USER_FEATURES-FEAT-BR-131]** The 15-minute timeout in `./do presubmit` is measured from the moment the
 first step (setup) begins, not from when the script is invoked. The timer runs in the background
 as a separate process or timer construct in POSIX sh.
 
-**[FEAT-BR-132]** `./do setup` is idempotent. Running it N times produces the same result as
+**[4_USER_FEATURES-FEAT-BR-132]** `./do setup` is idempotent. Running it N times produces the same result as
 running it once. Tools already at the required version are NOT reinstalled or downgraded.
 
-**[FEAT-BR-133]** `./do lint` includes a dependency audit step that verifies all crates in the
+**[4_USER_FEATURES-FEAT-BR-133]** `./do lint` includes a dependency audit step that verifies all crates in the
 Cargo workspace match the authoritative version table in `2_TAS.md` §2.2. Any workspace crate
 with a dependency version not matching the table causes `./do lint` to exit non-zero.
 
-**[FEAT-BR-134]** `./do test` exits non-zero if `traceability.json` `overall_passed` is `false`,
+**[4_USER_FEATURES-FEAT-BR-134]** `./do test` exits non-zero if `traceability.json` `overall_passed` is `false`,
 even when all `cargo test` tests pass individually. Traceability failures are test failures.
 
 #### 2.10.6 Edge Cases
@@ -2292,26 +2292,26 @@ even when all `cargo test` tests pass individually. Traceability failures are te
 
 #### 2.10.7 Acceptance Criteria
 
-- **[AC-FEAT-2-032]** GIVEN a test file with `// Covers: AC-FEAT-2-999` where `AC-FEAT-2-999`
+- **[4_USER_FEATURES-AC-FEAT-2-032]** GIVEN a test file with `// Covers: AC-FEAT-2-999` where `AC-FEAT-2-999`
   does not exist in any spec, WHEN `./do test` runs, THEN `target/traceability.json` contains
   `AC-FEAT-2-999` in `stale_annotations` and the process exits non-zero.
 
-- **[AC-FEAT-2-033]** GIVEN `./do presubmit` that runs for 16 minutes, WHEN the timeout fires
+- **[4_USER_FEATURES-AC-FEAT-2-033]** GIVEN `./do presubmit` that runs for 16 minutes, WHEN the timeout fires
   at 15 minutes, THEN all child processes are killed and the process exits non-zero within 5
   seconds of the timeout firing.
 
-- **[AC-FEAT-2-034]** GIVEN `./do coverage` with all 5 quality gates passing, WHEN the command
+- **[4_USER_FEATURES-AC-FEAT-2-034]** GIVEN `./do coverage` with all 5 quality gates passing, WHEN the command
   completes, THEN `target/coverage/report.json` exists with `overall_passed: true` and exactly
   5 entries in `gates` (QG-001 through QG-005).
 
-- **[AC-FEAT-2-035]** GIVEN `./do setup` run twice in sequence, WHEN the second invocation
+- **[4_USER_FEATURES-AC-FEAT-2-035]** GIVEN `./do setup` run twice in sequence, WHEN the second invocation
   completes, THEN it exits with code 0 and does not reinstall already-present tools.
 
 ---
 
 ### 2.11 Journey: AI Agent Agentic Development Loop (TDD)
 
-**[FEAT-015]** An observing/controlling AI agent implements a requirement using TDD.
+**[4_USER_FEATURES-FEAT-015]** An observing/controlling AI agent implements a requirement using TDD.
 
 ```mermaid
 sequenceDiagram
@@ -2452,18 +2452,18 @@ When multiple independent requirements can be implemented concurrently:
 
 #### 2.11.5 Business Rules
 
-**[FEAT-BR-135]** An agent MUST NOT make code changes before verifying that the test fails
+**[4_USER_FEATURES-FEAT-BR-135]** An agent MUST NOT make code changes before verifying that the test fails
 (Red phase). Implementing first and testing second invalidates the TDD discipline and may produce
 false-positive tests.
 
-**[FEAT-BR-136]** An agent MUST check `list_runs` for active `presubmit-check` runs before
+**[4_USER_FEATURES-FEAT-BR-136]** An agent MUST check `list_runs` for active `presubmit-check` runs before
 submitting a new one. If an active `presubmit-check` run exists, the agent MUST monitor it via
 `stream_logs` rather than submitting a duplicate.
 
-**[FEAT-BR-137]** An agent MUST write `task_state.json` before calling `submit_run` and again
+**[4_USER_FEATURES-FEAT-BR-137]** An agent MUST write `task_state.json` before calling `submit_run` and again
 after each run reaches a terminal state. This enables crash recovery without losing progress.
 
-**[FEAT-BR-138]** An agent MUST NOT restart the `devs` server while any run is in `Running` or
+**[4_USER_FEATURES-FEAT-BR-138]** An agent MUST NOT restart the `devs` server while any run is in `Running` or
 `Paused` state. Restart is only permitted after all runs reach terminal state or are cancelled.
 
 #### 2.11.6 Edge Cases
@@ -2478,15 +2478,15 @@ after each run reaches a terminal state. This enables crash recovery without los
 
 #### 2.11.7 Acceptance Criteria
 
-- **[AC-FEAT-2-036]** GIVEN an agent submitting `tdd-red` for a test that does not yet have
+- **[4_USER_FEATURES-AC-FEAT-2-036]** GIVEN an agent submitting `tdd-red` for a test that does not yet have
   implementation, WHEN `assert_stage_output` checks `exit_code ne 0`, THEN the assertion passes
   (confirming the test fails).
 
-- **[AC-FEAT-2-037]** GIVEN an agent with an active `presubmit-check` run already running, WHEN
+- **[4_USER_FEATURES-AC-FEAT-2-037]** GIVEN an agent with an active `presubmit-check` run already running, WHEN
   the agent calls `list_runs {workflow_name:"presubmit-check", status:"running"}`, THEN the
   response contains the active run and the agent MUST NOT submit a duplicate.
 
-- **[AC-FEAT-2-038]** GIVEN `task_state.json` with `last_run_id` set to a run in `Failed` state,
+- **[4_USER_FEATURES-AC-FEAT-2-038]** GIVEN `task_state.json` with `last_run_id` set to a run in `Failed` state,
   WHEN the agent restarts and reads this file, THEN the agent calls `get_run(last_run_id)` and
   processes the failure before attempting any new implementation.
 
@@ -2494,7 +2494,7 @@ after each run reaches a terminal state. This enables crash recovery without los
 
 ### 2.12 Journey: Failure Diagnosis by AI Agent
 
-**[FEAT-016]** An AI agent diagnoses and resolves a failed presubmit stage.
+**[4_USER_FEATURES-FEAT-016]** An AI agent diagnoses and resolves a failed presubmit stage.
 
 ```mermaid
 flowchart TD
@@ -2534,7 +2534,7 @@ Before making any code edit in response to a failure, an agent MUST execute all 
 4. **Apply the targeted fix** based on the classification. Do not make speculative edits to files
    that the failure diagnostic does not identify.
 
-**[FEAT-BR-139]** An agent MUST NOT transition from diagnosing to editing until `get_stage_output`
+**[4_USER_FEATURES-FEAT-BR-139]** An agent MUST NOT transition from diagnosing to editing until `get_stage_output`
 returns `"error": null`. If `get_stage_output` returns an error (e.g., stage output not yet
 persisted), the agent MUST retry once before treating it as an internal error.
 
@@ -2542,7 +2542,7 @@ persisted), the agent MUST retry once before treating it as an internal error.
 
 | Category | Detection Pattern | Required Action |
 |---|---|---|
-| Compilation error | `stderr` matches `error\[E[0-9]+\]` (Rust error code) | Read source file at the line indicated by compiler; make targeted fix at that line only |
+| Compilation error | `stderr` matches `error\[E[4_USER_FEATURES-0-9]+\]` (Rust error code) | Read source file at the line indicated by compiler; make targeted fix at that line only |
 | Test assertion failure | `stdout` contains `FAILED` and a test function name | Read both the failing test and the implementation under test; identify the assertion that failed; fix the logic |
 | Coverage gate failure | `structured.gates[*].passed == false` for any gate | Read `target/coverage/report.json` via Filesystem MCP; identify specific uncovered lines for the failing gate; add targeted tests covering those lines |
 | Clippy denial | `stderr` matches `^error:` from `cargo clippy` | Read the source file at the indicated line; apply the minimal fix that satisfies the lint without changing behavior |
@@ -2569,15 +2569,15 @@ request.
 
 #### 2.12.4 Business Rules
 
-**[FEAT-BR-140]** An agent MUST NOT make speculative code changes without first reading the
+**[4_USER_FEATURES-FEAT-BR-140]** An agent MUST NOT make speculative code changes without first reading the
 specific stderr/stdout output that identifies the failure. Reading only the run status (`failed`)
 and immediately editing files is a protocol violation.
 
-**[FEAT-BR-141]** For coverage gate failures, the agent MUST read `target/coverage/report.json`
+**[4_USER_FEATURES-FEAT-BR-141]** For coverage gate failures, the agent MUST read `target/coverage/report.json`
 to identify the specific gate (QG-001 through QG-005) and the specific lines that lack coverage.
 Adding tests that do not target the uncovered lines does not satisfy the gate.
 
-**[FEAT-BR-142]** For traceability failures, the agent MUST NOT add `// Covers: <id>` annotations
+**[4_USER_FEATURES-FEAT-BR-142]** For traceability failures, the agent MUST NOT add `// Covers: <id>` annotations
 to tests that do not actually test the specified requirement. Annotation must correspond to genuine
 behavioral coverage.
 
@@ -2593,20 +2593,20 @@ behavioral coverage.
 
 #### 2.12.6 Acceptance Criteria
 
-- **[AC-FEAT-2-039]** GIVEN a failed stage with `stderr` containing `error[E0308]`, WHEN the
+- **[4_USER_FEATURES-AC-FEAT-2-039]** GIVEN a failed stage with `stderr` containing `error[E0308]`, WHEN the
   agent calls `get_stage_output`, THEN `stderr` is non-null and the agent MUST call
   `search_content` on the indicated source file before making any edit.
 
-- **[AC-FEAT-2-040]** GIVEN `presubmit-check` where coverage gate QG-003 (CLI E2E) fails at
+- **[4_USER_FEATURES-AC-FEAT-2-040]** GIVEN `presubmit-check` where coverage gate QG-003 (CLI E2E) fails at
   45%, WHEN the agent reads `target/coverage/report.json`, THEN it identifies QG-003 as the
   failing gate and adds tests that exercise CLI commands through the `devs-cli` binary, not
   through internal Rust functions.
 
-- **[AC-FEAT-2-041]** GIVEN a `TimedOut` stage, WHEN `get_stage_output` is called, THEN
+- **[4_USER_FEATURES-AC-FEAT-2-041]** GIVEN a `TimedOut` stage, WHEN `get_stage_output` is called, THEN
   `stage.exit_code` is null (process killed before clean exit) and `stage.status` is
   `"timed_out"`, not `"failed"`.
 
-- **[AC-FEAT-2-042]** GIVEN `assert_stage_output` called with a `matches` operator and an
+- **[4_USER_FEATURES-AC-FEAT-2-042]** GIVEN `assert_stage_output` called with a `matches` operator and an
   invalid Rust regex `"[unclosed"`, WHEN the MCP tool responds, THEN `"error"` is non-null with
   `invalid_argument` prefix and no assertions are evaluated.
 
@@ -2620,9 +2620,9 @@ This section defines the precise behavioral contracts, data schemas, error handl
 
 #### 3.1.1 Global Flags and Discovery
 
-**[FEAT-017]** Every CLI command supports `--format json` to emit machine-readable output. When `--format json` is used, all output (including errors) is written to stdout as JSON. Nothing is written to stderr when `--format json` is active.
+**[4_USER_FEATURES-FEAT-017]** Every CLI command supports `--format json` to emit machine-readable output. When `--format json` is used, all output (including errors) is written to stdout as JSON. Nothing is written to stderr when `--format json` is active.
 
-**[FEAT-018]** Every CLI command supports `--server <host:port>` to override server auto-discovery. Explicit `--server` takes precedence over the discovery file. The format is `<hostname-or-ip>:<port>` (no scheme prefix).
+**[4_USER_FEATURES-FEAT-018]** Every CLI command supports `--server <host:port>` to override server auto-discovery. Explicit `--server` takes precedence over the discovery file. The format is `<hostname-or-ip>:<port>` (no scheme prefix).
 
 Server discovery resolution order (first match wins):
 
@@ -2636,9 +2636,9 @@ Server discovery resolution order (first match wins):
 
 If none of the above resolves, the CLI exits with code 3 and prints `"server unreachable: no address configured"`.
 
-**[FEAT-019]** CLI run identifier resolution: if the identifier string matches UUID4 format (`[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}`), it is treated as a `run_id` and looked up by UUID. Otherwise it is treated as a `slug`. When the same value is both a valid UUID and a valid slug (a theoretical collision), the UUID lookup takes precedence.
+**[4_USER_FEATURES-FEAT-019]** CLI run identifier resolution: if the identifier string matches UUID4 format (`[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}`), it is treated as a `run_id` and looked up by UUID. Otherwise it is treated as a `slug`. When the same value is both a valid UUID and a valid slug (a theoretical collision), the UUID lookup takes precedence.
 
-**[FEAT-020]** `devs submit` requires `--project <name-or-id>` when the current working directory does not resolve to exactly one registered project. If the CWD resolves to zero or two-or-more projects, the CLI exits with code 4 and lists the ambiguous or missing candidates.
+**[4_USER_FEATURES-FEAT-020]** `devs submit` requires `--project <name-or-id>` when the current working directory does not resolve to exactly one registered project. If the CWD resolves to zero or two-or-more projects, the CLI exits with code 4 and lists the ambiguous or missing candidates.
 
 #### 3.1.2 Command Schemas
 
@@ -2682,7 +2682,7 @@ When multiple validation errors exist, they are joined as a newline-delimited li
 
 **`devs list`**
 
-**[FEAT-021]** `devs list` output includes active and historical runs. Runs are sorted by `created_at` descending. The command does not embed per-stage detail. Default limit is 100. `--limit <n>` overrides. `--status <status>` filters by run status.
+**[4_USER_FEATURES-FEAT-021]** `devs list` output includes active and historical runs. Runs are sorted by `created_at` descending. The command does not embed per-stage detail. Default limit is 100. `--limit <n>` overrides. `--status <status>` filters by run status.
 
 JSON success response:
 
@@ -2708,7 +2708,7 @@ JSON success response:
 
 **`devs status <run>`**
 
-**[FEAT-022]** `devs status <run>` shows the current `WorkflowRun` status including all `StageRun` records with their current statuses and elapsed times.
+**[4_USER_FEATURES-FEAT-022]** `devs status <run>` shows the current `WorkflowRun` status including all `StageRun` records with their current statuses and elapsed times.
 
 JSON success response:
 
@@ -2743,7 +2743,7 @@ The `elapsed_ms` field uses monotonic clock measurement. For terminal stages, it
 
 **`devs logs <run> [stage]`**
 
-**[FEAT-023]** `devs logs <run> [stage] --follow` streams log lines to stdout until the run (or selected stage) reaches a terminal state. Exit code 0 on `Completed`, exit code 1 on `Failed` or `Cancelled`.
+**[4_USER_FEATURES-FEAT-023]** `devs logs <run> [stage] --follow` streams log lines to stdout until the run (or selected stage) reaches a terminal state. Exit code 0 on `Completed`, exit code 1 on `Failed` or `Cancelled`.
 
 When `--follow` is not specified, all buffered log lines are printed and the command exits immediately with code 0.
 
@@ -2773,7 +2773,7 @@ JSON error response (run already terminal):
 
 #### 3.1.3 Exit Code Contract
 
-**[FEAT-024]** All CLI commands produce one of the following exit codes:
+**[4_USER_FEATURES-FEAT-024]** All CLI commands produce one of the following exit codes:
 
 | Exit Code | Meaning | Example Condition |
 |---|---|---|
@@ -2801,13 +2801,13 @@ When `--format json` is active, the exit code is always encoded as `"code"` in t
 
 #### 3.1.5 CLI Business Rules
 
-- **[CLI-BR-001]** `--format json` and `--format text` are mutually exclusive flags. Specifying both causes exit code 4.
-- **[CLI-BR-002]** All timestamps in `--format json` output use RFC 3339 with millisecond precision and `Z` suffix.
-- **[CLI-BR-003]** All status enum values in JSON output are lowercase underscore-separated strings (`"timed_out"`, not `"TimedOut"`).
-- **[CLI-BR-004]** All UUID values in JSON output are lowercase hyphenated strings.
-- **[CLI-BR-005]** JSON error output format is always `{"error": "<string>", "code": <int>}` — never an array or nested object at the top level.
-- **[CLI-BR-006]** When a run identifier resolves to both a UUID and a slug (theoretical collision), UUID lookup MUST take precedence without error.
-- **[CLI-BR-007]** `devs logs` without `--follow` MUST exit 0 regardless of run status.
+- **[4_USER_FEATURES-CLI-BR-001]** `--format json` and `--format text` are mutually exclusive flags. Specifying both causes exit code 4.
+- **[4_USER_FEATURES-CLI-BR-002]** All timestamps in `--format json` output use RFC 3339 with millisecond precision and `Z` suffix.
+- **[4_USER_FEATURES-CLI-BR-003]** All status enum values in JSON output are lowercase underscore-separated strings (`"timed_out"`, not `"TimedOut"`).
+- **[4_USER_FEATURES-CLI-BR-004]** All UUID values in JSON output are lowercase hyphenated strings.
+- **[4_USER_FEATURES-CLI-BR-005]** JSON error output format is always `{"error": "<string>", "code": <int>}` — never an array or nested object at the top level.
+- **[4_USER_FEATURES-CLI-BR-006]** When a run identifier resolves to both a UUID and a slug (theoretical collision), UUID lookup MUST take precedence without error.
+- **[4_USER_FEATURES-CLI-BR-007]** `devs logs` without `--follow` MUST exit 0 regardless of run status.
 
 ---
 
@@ -2815,15 +2815,15 @@ When `--format json` is active, the exit code is always encoded as `"code"` in t
 
 #### 3.2.1 Layout and Navigation
 
-**[FEAT-025]** The TUI displays four tabs navigable by keyboard: **Dashboard**, **Logs**, **Debug**, and **Pools**. Tab switching is available via the number keys `1`–`4` or left/right arrow keys. The active tab is visually highlighted in the tab bar.
+**[4_USER_FEATURES-FEAT-025]** The TUI displays four tabs navigable by keyboard: **Dashboard**, **Logs**, **Debug**, and **Pools**. Tab switching is available via the number keys `1`–`4` or left/right arrow keys. The active tab is visually highlighted in the tab bar.
 
-**[FEAT-026]** The Dashboard tab is split into two panes: a project/run list on the left, and the selected run detail on the right. The right pane shows the ASCII DAG with stage boxes, a per-stage status indicator, elapsed time, and a live log tail.
+**[4_USER_FEATURES-FEAT-026]** The Dashboard tab is split into two panes: a project/run list on the left, and the selected run detail on the right. The right pane shows the ASCII DAG with stage boxes, a per-stage status indicator, elapsed time, and a live log tail.
 
 Minimum terminal dimensions: 80 columns × 24 rows. Below this threshold, the TUI displays a single-line message: `"Terminal too small: <W>x<H> (min 80x24)"` and does not render any interactive content.
 
 #### 3.2.2 Stage Box Rendering
 
-**[FEAT-027]** Stage boxes in the ASCII DAG render as: `[ stage-name | STATUS | M:SS ]`
+**[4_USER_FEATURES-FEAT-027]** Stage boxes in the ASCII DAG render as: `[ stage-name | STATUS | M:SS ]`
 
 Stage status abbreviations:
 
@@ -2844,19 +2844,19 @@ DAG edges are rendered using ASCII characters only: `|` for vertical edges, `-` 
 
 #### 3.2.3 Event-Driven Rendering
 
-**[FEAT-028]** The TUI re-renders within 50 ms of receiving a `StreamRunEvents` gRPC push event. The screen is not updated on a fixed timer; updates are event-driven. The TUI MUST NOT poll the server for state; all state updates come via the `StreamRunEvents` streaming RPC.
+**[4_USER_FEATURES-FEAT-028]** The TUI re-renders within 50 ms of receiving a `StreamRunEvents` gRPC push event. The screen is not updated on a fixed timer; updates are event-driven. The TUI MUST NOT poll the server for state; all state updates come via the `StreamRunEvents` streaming RPC.
 
 The internal render pipeline: gRPC event received → update in-memory state → schedule render → apply diff to terminal. All steps complete within 50 ms of event receipt.
 
 #### 3.2.4 Log Buffer
 
-**[FEAT-029]** The Logs tab displays up to 10,000 log lines in memory per stage. When the buffer reaches 10,000 lines, the oldest lines are evicted (FIFO). A status line at the top of the Logs pane reads `"Lines: <n>/10000 [TRUNCATED]"` when the buffer is at capacity.
+**[4_USER_FEATURES-FEAT-029]** The Logs tab displays up to 10,000 log lines in memory per stage. When the buffer reaches 10,000 lines, the oldest lines are evicted (FIFO). A status line at the top of the Logs pane reads `"Lines: <n>/10000 [TRUNCATED]"` when the buffer is at capacity.
 
 Log lines in the Logs tab include a timestamp prefix: `HH:MM:SS.mmm [stdout|stderr] <line>`.
 
 #### 3.2.5 Debug and Pools Tabs
 
-**[FEAT-030]** The Debug tab shows the selected agent's live progress, a diff of its working directory, and keyboard controls to send cancel, pause, or resume signals. The working-directory diff is fetched on demand via a gRPC call when the user selects a running stage; it is not streamed continuously.
+**[4_USER_FEATURES-FEAT-030]** The Debug tab shows the selected agent's live progress, a diff of its working directory, and keyboard controls to send cancel, pause, or resume signals. The working-directory diff is fetched on demand via a gRPC call when the user selects a running stage; it is not streamed continuously.
 
 Keyboard controls available in the Debug tab:
 
@@ -2868,7 +2868,7 @@ Keyboard controls available in the Debug tab:
 | `d` | Refresh working-directory diff |
 | `ESC` | Return to Dashboard tab |
 
-**[FEAT-031]** The Pools tab shows real-time pool utilization: pool name, `max_concurrent`, active count, queued count, per-agent availability, and recent fallback events.
+**[4_USER_FEATURES-FEAT-031]** The Pools tab shows real-time pool utilization: pool name, `max_concurrent`, active count, queued count, per-agent availability, and recent fallback events.
 
 Pool row format: `<pool-name>  active: <n>/<max>  queued: <n>  agents: [<tool>:<state>, ...]`
 
@@ -2876,7 +2876,7 @@ Agent state tokens: `ok` (available), `busy` (running), `rate-limited` (in coold
 
 #### 3.2.6 Reconnection State Machine
 
-**[FEAT-032]** When the TUI loses server connectivity, it displays a reconnection notice and attempts reconnect with exponential backoff.
+**[4_USER_FEATURES-FEAT-032]** When the TUI loses server connectivity, it displays a reconnection notice and attempts reconnect with exponential backoff.
 
 ```mermaid
 stateDiagram-v2
@@ -2916,12 +2916,12 @@ On successful reconnect, the TUI calls `StreamRunEvents` with `since_sequence: <
 
 #### 3.2.8 TUI Business Rules
 
-- **[TUI-BR-001]** TUI tests MUST use `ratatui::backend::TestBackend` with a 200×50 virtual terminal and `insta` text snapshots stored in `crates/devs-tui/tests/snapshots/*.txt`.
-- **[TUI-BR-002]** Pixel-based screenshot comparison is prohibited in tests.
-- **[TUI-BR-003]** TUI MUST NOT use `println!` or `eprintln!` for any output; all rendering goes through Ratatui's render pipeline.
-- **[TUI-BR-004]** The TUI MUST re-render in ≤50 ms after any `StreamRunEvents` message is received, measurable in tests by asserting the terminal buffer state after event injection.
-- **[TUI-BR-005]** Stage status abbreviations MUST exactly match the table in §3.2.2. No alternative spellings or truncations.
-- **[TUI-BR-006]** Keyboard controls in the Debug tab MUST function regardless of which pane has visual focus.
+- **[4_USER_FEATURES-TUI-BR-001]** TUI tests MUST use `ratatui::backend::TestBackend` with a 200×50 virtual terminal and `insta` text snapshots stored in `crates/devs-tui/tests/snapshots/*.txt`.
+- **[4_USER_FEATURES-TUI-BR-002]** Pixel-based screenshot comparison is prohibited in tests.
+- **[4_USER_FEATURES-TUI-BR-003]** TUI MUST NOT use `println!` or `eprintln!` for any output; all rendering goes through Ratatui's render pipeline.
+- **[4_USER_FEATURES-TUI-BR-004]** The TUI MUST re-render in ≤50 ms after any `StreamRunEvents` message is received, measurable in tests by asserting the terminal buffer state after event injection.
+- **[4_USER_FEATURES-TUI-BR-005]** Stage status abbreviations MUST exactly match the table in §3.2.2. No alternative spellings or truncations.
+- **[4_USER_FEATURES-TUI-BR-006]** Keyboard controls in the Debug tab MUST function regardless of which pane has visual focus.
 
 ---
 
@@ -2991,11 +2991,11 @@ On tool-level failure:
 
 #### 3.3.2 Observation Tools
 
-**[FEAT-034]** Observation tools acquire read locks only and execute fully in parallel with each other and with other observation calls.
+**[4_USER_FEATURES-FEAT-034]** Observation tools acquire read locks only and execute fully in parallel with each other and with other observation calls.
 
 **`list_runs` tool**
 
-**[FEAT-036]** Returns runs sorted by `created_at` descending, without embedding `stage_runs`. Default limit 100.
+**[4_USER_FEATURES-FEAT-036]** Returns runs sorted by `created_at` descending, without embedding `stage_runs`. Default limit 100.
 
 Request params:
 
@@ -3030,7 +3030,7 @@ Response `result` schema:
 
 **`get_run` tool**
 
-**[FEAT-037]** Returns the full `WorkflowRun` including all `StageRun` records. Every field is present; unpopulated optional fields are JSON `null`, never absent.
+**[4_USER_FEATURES-FEAT-037]** Returns the full `WorkflowRun` including all `StageRun` records. Every field is present; unpopulated optional fields are JSON `null`, never absent.
 
 Request params:
 
@@ -3042,7 +3042,7 @@ Response `result` schema: full `WorkflowRun` object as defined in §6, including
 
 **`get_stage_output` tool**
 
-**[FEAT-038]** Returns `stdout` and `stderr` as UTF-8 strings. Invalid bytes replaced with U+FFFD (`\uFFFD`). Each capped at 1 MiB, truncated from the beginning.
+**[4_USER_FEATURES-FEAT-038]** Returns `stdout` and `stderr` as UTF-8 strings. Invalid bytes replaced with U+FFFD (`\uFFFD`). Each capped at 1 MiB, truncated from the beginning.
 
 Request params:
 
@@ -3071,7 +3071,7 @@ Response `result` schema:
 
 **`stream_logs` tool**
 
-**[FEAT-039]** With `follow: true`, holds the HTTP connection open using chunked transfer encoding. Newline-delimited JSON chunks. Each chunk has a monotonically increasing `sequence` starting at 1 with no gaps. Each chunk is ≤32 KiB.
+**[4_USER_FEATURES-FEAT-039]** With `follow: true`, holds the HTTP connection open using chunked transfer encoding. Newline-delimited JSON chunks. Each chunk has a monotonically increasing `sequence` starting at 1 with no gaps. Each chunk is ≤32 KiB.
 
 Request params:
 
@@ -3105,9 +3105,9 @@ Terminal chunk (always the last chunk):
 }
 ```
 
-**[FEAT-040]** `stream_logs` with `follow: true` on a stage in `Pending`, `Waiting`, or `Eligible` status holds the connection until the stage runs. If the stage is cancelled before running, the terminal chunk is `{"done": true, "truncated": false, "total_lines": 0}`.
+**[4_USER_FEATURES-FEAT-040]** `stream_logs` with `follow: true` on a stage in `Pending`, `Waiting`, or `Eligible` status holds the connection until the stage runs. If the stage is cancelled before running, the terminal chunk is `{"done": true, "truncated": false, "total_lines": 0}`.
 
-**[FEAT-041]** `stream_logs` with `follow: false` returns all buffered lines and closes immediately. The response is not chunked; it is a standard HTTP response with `Content-Type: application/json` and a single terminal chunk at the end.
+**[4_USER_FEATURES-FEAT-041]** `stream_logs` with `follow: false` returns all buffered lines and closes immediately. The response is not chunked; it is a standard HTTP response with `Content-Type: application/json` and a single terminal chunk at the end.
 
 `stream_logs` MUST NOT hold the `SchedulerState` lock; it reads from a `tokio::sync::broadcast::Receiver` per stage.
 
@@ -3169,11 +3169,11 @@ Response `result` schema:
 
 #### 3.3.3 Control Tools
 
-**[FEAT-035]** Control tools acquire write locks and execute serially with respect to other control tools. Multiple concurrent control calls are serialized by the `SchedulerState` write lock, with a maximum wait of 5 seconds before returning `"error": "resource_exhausted: lock acquisition timed out after 5s"`.
+**[4_USER_FEATURES-FEAT-035]** Control tools acquire write locks and execute serially with respect to other control tools. Multiple concurrent control calls are serialized by the `SchedulerState` write lock, with a maximum wait of 5 seconds before returning `"error": "resource_exhausted: lock acquisition timed out after 5s"`.
 
 **`submit_run` tool**
 
-**[FEAT-042]** Validates all inputs atomically under per-project lock before creating any run. If any validation step fails, the entire call fails with no state change.
+**[4_USER_FEATURES-FEAT-042]** Validates all inputs atomically under per-project lock before creating any run. If any validation step fails, the entire call fails with no state change.
 
 Validation steps (in order, all errors collected before returning):
 
@@ -3217,7 +3217,7 @@ Input type coercion rules:
 
 **`cancel_run` tool**
 
-**[FEAT-048]** Transitions all non-terminal `StageRun` records to `Cancelled` in a single atomic checkpoint write, then transitions the `WorkflowRun` to `Cancelled`.
+**[4_USER_FEATURES-FEAT-048]** Transitions all non-terminal `StageRun` records to `Cancelled` in a single atomic checkpoint write, then transitions the `WorkflowRun` to `Cancelled`.
 
 Request params: `run_id` (string, required).
 
@@ -3233,7 +3233,7 @@ Only valid for stages in `Running`, `Paused`, `Eligible`, or `Waiting` status. S
 
 **`pause_run` / `resume_run` tools**
 
-**[FEAT-049]** `pause_run` sends `devs:pause\n` to all active agent processes and holds all `Eligible` and `Waiting` stages from being dispatched. `resume_run` lifts the hold and sends `devs:resume\n` to paused agent processes.
+**[4_USER_FEATURES-FEAT-049]** `pause_run` sends `devs:pause\n` to all active agent processes and holds all `Eligible` and `Waiting` stages from being dispatched. `resume_run` lifts the hold and sends `devs:resume\n` to paused agent processes.
 
 `pause_run` response `result`: `{"run_id": "...", "status": "paused", "paused_stage_count": <n>}`.
 
@@ -3243,7 +3243,7 @@ Only valid for stages in `Running`, `Paused`, `Eligible`, or `Waiting` status. S
 
 **`write_workflow_definition` tool**
 
-**[FEAT-043]** Does not affect in-flight runs. Active runs continue using their immutable definition snapshot. The new definition is used only for subsequent `submit_run` calls.
+**[4_USER_FEATURES-FEAT-043]** Does not affect in-flight runs. Active runs continue using their immutable definition snapshot. The new definition is used only for subsequent `submit_run` calls.
 
 Request params:
 
@@ -3262,7 +3262,7 @@ Response `result`: `{"workflow_name": "...", "source_path": "...", "validated": 
 
 **`inject_stage_input` tool**
 
-**[FEAT-045]** Only accepted for stages in `Waiting` or `Eligible` status. Injects synthetic output as if a prior stage produced it, making template variables available. The injected checkpoint is committed immediately.
+**[4_USER_FEATURES-FEAT-045]** Only accepted for stages in `Waiting` or `Eligible` status. Injects synthetic output as if a prior stage produced it, making template variables available. The injected checkpoint is committed immediately.
 
 Request params:
 
@@ -3278,7 +3278,7 @@ Injected values are available via `{{stage.<stage_name>.*}}` template variables 
 
 **`assert_stage_output` tool**
 
-**[FEAT-046]** Evaluates all assertions in a single request (no short-circuit). All assertion results are returned together. An invalid regex pattern causes the entire request to fail before any assertion is evaluated.
+**[4_USER_FEATURES-FEAT-046]** Evaluates all assertions in a single request (no short-circuit). All assertion results are returned together. An invalid regex pattern causes the entire request to fail before any assertion is evaluated.
 
 Request params:
 
@@ -3343,7 +3343,7 @@ Response `result`: `{"recorded": true}`.
 
 **`signal_completion` tool**
 
-**[FEAT-044]** Idempotent only on the first call. Subsequent calls on a terminal stage return `"error": "failed_precondition: stage already completed"` with no state change.
+**[4_USER_FEATURES-FEAT-044]** Idempotent only on the first call. Subsequent calls on a terminal stage return `"error": "failed_precondition: stage already completed"` with no state change.
 
 Request params:
 
@@ -3359,7 +3359,7 @@ Response `result`: `{"stage_status": "completed"|"failed", "run_id": "...", "sta
 
 **`report_rate_limit` tool**
 
-**[FEAT-047]** Triggers pool fallback. If a fallback agent is available, the stage is requeued without incrementing `attempt`. If no fallback is available, the stage is marked `Failed` and the `pool.exhausted` webhook fires.
+**[4_USER_FEATURES-FEAT-047]** Triggers pool fallback. If a fallback agent is available, the stage is requeued without incrementing `attempt`. If no fallback is available, the stage is marked `Failed` and the `pool.exhausted` webhook fires.
 
 Request params: `run_id` (string), `stage_name` (string), `reason` (string, optional).
 
@@ -3380,7 +3380,7 @@ The 60-second rate-limit cooldown on the reporting agent starts immediately upon
 
 Lock acquisition order (always in this order to prevent deadlocks): `SchedulerState` → `PoolState` → `CheckpointStore`.
 
-**[FEAT-033]** Every MCP tool response is a JSON object with exactly two top-level fields: `"result"` (non-null on success) and `"error"` (non-null on failure). They are mutually exclusive.
+**[4_USER_FEATURES-FEAT-033]** Every MCP tool response is a JSON object with exactly two top-level fields: `"result"` (non-null on success) and `"error"` (non-null on failure). They are mutually exclusive.
 
 #### 3.3.7 MCP Edge Cases
 
@@ -3404,14 +3404,14 @@ Lock acquisition order (always in this order to prevent deadlocks): `SchedulerSt
 
 #### 3.3.8 MCP Business Rules
 
-- **[MCP-BR-T001]** Every field in every MCP response entity MUST be present. Unpopulated optional fields MUST be JSON `null`, never absent.
-- **[MCP-BR-T002]** `"error"` and `"result"` are mutually exclusive. Both being non-null or both being null is an invariant violation.
-- **[MCP-BR-T003]** All control tool calls MUST pass through `StateMachine::transition()`; illegal transitions return `"error": "failed_precondition: ..."`.
-- **[MCP-BR-T004]** MCP server MUST handle ≥64 concurrent connections without error.
-- **[MCP-BR-T005]** Observation tool responses MUST be received within 2 seconds under normal load. Exceeding 2 seconds is logged at `WARN`.
-- **[MCP-BR-T006]** `stream_logs` sequence numbers start at 1 and have no gaps. If `from_sequence: N` is provided, only chunks with `sequence ≥ N` are returned.
-- **[MCP-BR-T007]** The MCP stdio bridge (`devs-mcp-bridge`) forwards exactly one request per stdin line and writes exactly one response per stdout line. No buffering of multiple requests before responding.
-- **[MCP-BR-T008]** On MCP server connection loss, `devs-mcp-bridge` makes exactly one reconnect attempt after 1 second, then exits with code 1 and writes `{"result":null,"error":"internal: server connection lost","fatal":true}` to stdout.
+- **[4_USER_FEATURES-MCP-BR-T001]** Every field in every MCP response entity MUST be present. Unpopulated optional fields MUST be JSON `null`, never absent.
+- **[4_USER_FEATURES-MCP-BR-T002]** `"error"` and `"result"` are mutually exclusive. Both being non-null or both being null is an invariant violation.
+- **[4_USER_FEATURES-MCP-BR-T003]** All control tool calls MUST pass through `StateMachine::transition()`; illegal transitions return `"error": "failed_precondition: ..."`.
+- **[4_USER_FEATURES-MCP-BR-T004]** MCP server MUST handle ≥64 concurrent connections without error.
+- **[4_USER_FEATURES-MCP-BR-T005]** Observation tool responses MUST be received within 2 seconds under normal load. Exceeding 2 seconds is logged at `WARN`.
+- **[4_USER_FEATURES-MCP-BR-T006]** `stream_logs` sequence numbers start at 1 and have no gaps. If `from_sequence: N` is provided, only chunks with `sequence ≥ N` are returned.
+- **[4_USER_FEATURES-MCP-BR-T007]** The MCP stdio bridge (`devs-mcp-bridge`) forwards exactly one request per stdin line and writes exactly one response per stdout line. No buffering of multiple requests before responding.
+- **[4_USER_FEATURES-MCP-BR-T008]** On MCP server connection loss, `devs-mcp-bridge` makes exactly one reconnect attempt after 1 second, then exits with code 1 and writes `{"result":null,"error":"internal: server connection lost","fatal":true}` to stdout.
 
 ---
 
@@ -3463,13 +3463,13 @@ stateDiagram-v2
     TimedOut --> Waiting: retry configured, attempt < max_attempts
 ```
 
-**[FEAT-050]** When a stage's `depends_on` dependency reaches a terminal `Failed`, `TimedOut`, or `Cancelled` status with no retry configured, all downstream stages transition to `Cancelled` immediately. If the downstream stage is already dispatched (Running), a cancel signal is sent to the agent.
+**[4_USER_FEATURES-FEAT-050]** When a stage's `depends_on` dependency reaches a terminal `Failed`, `TimedOut`, or `Cancelled` status with no retry configured, all downstream stages transition to `Cancelled` immediately. If the downstream stage is already dispatched (Running), a cancel signal is sent to the agent.
 
 #### 3.4.3 Dependency and Template Resolution
 
-**[FEAT-052]** A template variable reference (`{{stage.<name>.*}}`) is only valid if `<name>` is in the transitive `depends_on` closure of the referencing stage. An invalid reference causes the stage to fail before the agent is spawned, with error: `"template error: stage '<name>' is not in the transitive depends_on closure"`.
+**[4_USER_FEATURES-FEAT-052]** A template variable reference (`{{stage.<name>.*}}`) is only valid if `<name>` is in the transitive `depends_on` closure of the referencing stage. An invalid reference causes the stage to fail before the agent is spawned, with error: `"template error: stage '<name>' is not in the transitive depends_on closure"`.
 
-**[FEAT-053]** A missing template variable value causes the stage to fail immediately before agent spawn. Variables are never silently substituted with an empty string. Error format: `"template error: variable '{{<var>}}' could not be resolved"`.
+**[4_USER_FEATURES-FEAT-053]** A missing template variable value causes the stage to fail immediately before agent spawn. Variables are never silently substituted with an empty string. Error format: `"template error: variable '{{<var>}}' could not be resolved"`.
 
 Template variable resolution order (first match wins):
 
@@ -3488,11 +3488,11 @@ Template variable resolution order (first match wins):
 
 No match at any priority → stage fails immediately with `TemplateError::UnknownVariable`.
 
-**[FEAT-054]** A missing `prompt_file` at execution time causes the stage to fail before the agent is spawned. The error is: `"prompt_file not found: <path>"`. The file path is resolved at execution time, not at workflow validation time.
+**[4_USER_FEATURES-FEAT-054]** A missing `prompt_file` at execution time causes the stage to fail before the agent is spawned. The error is: `"prompt_file not found: <path>"`. The file path is resolved at execution time, not at workflow validation time.
 
 #### 3.4.4 Completion Signal Processing
 
-**[FEAT-055]** A `structured_output` stage with `"success": "true"` (string, not boolean) in `.devs_output.json` is treated as `Failed`. The `success` field must be a JSON boolean. String `"true"` and string `"false"` are both parse failures.
+**[4_USER_FEATURES-FEAT-055]** A `structured_output` stage with `"success": "true"` (string, not boolean) in `.devs_output.json` is treated as `Failed`. The `success` field must be a JSON boolean. String `"true"` and string `"false"` are both parse failures.
 
 Completion signal processing rules by mechanism:
 
@@ -3502,7 +3502,7 @@ Completion signal processing rules by mechanism:
 | `structured_output` | `.devs_output.json` (priority) or last JSON object on stdout | `"success": true` → `Completed`; `"success": false` → `Failed`; missing/invalid/non-boolean → `Failed` |
 | `mcp_tool_call` | `signal_completion` MCP call | `success:true` → `Completed`; `success:false` → `Failed`; process exits without calling → fallback to `exit_code` mechanism |
 
-**[FEAT-056]** When `completion="mcp_tool_call"` and the agent process exits without calling `signal_completion`, the stage completion falls back to the `exit_code` mechanism using the process exit code.
+**[4_USER_FEATURES-FEAT-056]** When `completion="mcp_tool_call"` and the agent process exits without calling `signal_completion`, the stage completion falls back to the `exit_code` mechanism using the process exit code.
 
 `exit_code` is always recorded in `StageRun.exit_code` regardless of which completion mechanism is configured.
 
@@ -3519,13 +3519,13 @@ T+10s+: record exit_code (typically -9 for SIGKILL)
 T+10s+: mark stage TimedOut
 ```
 
-**[FEAT-058]** After `max_attempts` is exhausted, the stage is marked `Failed` and branch conditions are evaluated. The workflow graph determines next steps; the run does not halt automatically.
+**[4_USER_FEATURES-FEAT-058]** After `max_attempts` is exhausted, the stage is marked `Failed` and branch conditions are evaluated. The workflow graph determines next steps; the run does not halt automatically.
 
 Workflow-level timeout is enforced independently: if `workflow.timeout_secs` elapses, ALL running stages receive the cancel sequence simultaneously, and the run transitions to `Failed`.
 
 #### 3.4.6 Retry and Rate Limiting
 
-**[FEAT-057]** Rate-limit events do NOT increment the stage `attempt` counter. Only genuine failures (non-rate-limit process failures) increment the counter toward `max_attempts`.
+**[4_USER_FEATURES-FEAT-057]** Rate-limit events do NOT increment the stage `attempt` counter. Only genuine failures (non-rate-limit process failures) increment the counter toward `max_attempts`.
 
 Retry backoff formulas:
 
@@ -3539,7 +3539,7 @@ Retry backoff formulas:
 
 #### 3.4.7 Fan-Out
 
-**[FEAT-051]** When a fan-out stage has any sub-agent fail and no custom merge handler is configured, the entire fan-out stage is marked `Failed`. The failure response includes `{"failed_indices": [0, 2, ...]}`.
+**[4_USER_FEATURES-FEAT-051]** When a fan-out stage has any sub-agent fail and no custom merge handler is configured, the entire fan-out stage is marked `Failed`. The failure response includes `{"failed_indices": [0, 2, ...]}`.
 
 Fan-out orchestration rules:
 
@@ -3567,13 +3567,13 @@ Default merge output schema:
 
 #### 3.4.8 Pool Dispatch Edge Cases
 
-**[FEAT-059]** When `submit_run` is called during server shutdown, the server returns `FAILED_PRECONDITION "server is shutting down"` and does not create a run.
+**[4_USER_FEATURES-FEAT-059]** When `submit_run` is called during server shutdown, the server returns `FAILED_PRECONDITION "server is shutting down"` and does not create a run.
 
-**[FEAT-060]** When a pool has no agents satisfying required capability tags, the stage fails immediately with `PoolError::UnsatisfiedCapability`. The stage is not queued. Error: `"pool '<name>' has no agents satisfying capabilities: [<cap1>, <cap2>]"`.
+**[4_USER_FEATURES-FEAT-060]** When a pool has no agents satisfying required capability tags, the stage fails immediately with `PoolError::UnsatisfiedCapability`. The stage is not queued. Error: `"pool '<name>' has no agents satisfying capabilities: [<cap1>, <cap2>]"`.
 
-**[FEAT-061]** When `max_concurrent` agents are all occupied, new stage dispatches queue in FIFO order on the pool semaphore. The stage status remains `Eligible` while queued. There is no timeout on the semaphore wait; stages wait until a slot is available or the run is cancelled.
+**[4_USER_FEATURES-FEAT-061]** When `max_concurrent` agents are all occupied, new stage dispatches queue in FIFO order on the pool semaphore. The stage status remains `Eligible` while queued. There is no timeout on the semaphore wait; stages wait until a slot is available or the run is cancelled.
 
-**[FEAT-062]** `devs project remove` on a project with active runs allows active runs to complete. The project status transitions to `removing`. No new submissions are accepted. When all active runs reach terminal state, the project is fully removed from the registry.
+**[4_USER_FEATURES-FEAT-062]** `devs project remove` on a project with active runs allows active runs to complete. The project status transitions to `removing`. No new submissions are accepted. When all active runs reach terminal state, the project is fully removed from the registry.
 
 #### 3.4.9 State Persistence Edge Cases
 
@@ -3597,19 +3597,19 @@ Corrupt `checkpoint.json` (invalid JSON, unrecognized `schema_version`): the run
 
 #### 3.5.1 Command Behavior
 
-**[FEAT-063]** `./do presubmit` kills all child processes and exits non-zero if the wall-clock time exceeds 15 minutes. The timeout is enforced by a background timer process that sends SIGTERM to the presubmit process group. The exit code is 1.
+**[4_USER_FEATURES-FEAT-063]** `./do presubmit` kills all child processes and exits non-zero if the wall-clock time exceeds 15 minutes. The timeout is enforced by a background timer process that sends SIGTERM to the presubmit process group. The exit code is 1.
 
-**[FEAT-064]** `./do setup` is idempotent. Running it multiple times produces the same result with no errors. Tools already at the required version are skipped without reinstall. The command exits 0 if all dependencies are satisfied.
+**[4_USER_FEATURES-FEAT-064]** `./do setup` is idempotent. Running it multiple times produces the same result with no errors. Tools already at the required version are skipped without reinstall. The command exits 0 if all dependencies are satisfied.
 
-**[FEAT-065]** An unknown subcommand to `./do` prints the list of valid subcommands to stderr and exits non-zero (exit code 1). Output format: `"Usage: ./do <command>\nCommands: setup build test lint format coverage presubmit ci"`.
+**[4_USER_FEATURES-FEAT-065]** An unknown subcommand to `./do` prints the list of valid subcommands to stderr and exits non-zero (exit code 1). Output format: `"Usage: ./do <command>\nCommands: setup build test lint format coverage presubmit ci"`.
 
-**[FEAT-066]** `./do test` generates `target/traceability.json` and exits non-zero if:
+**[4_USER_FEATURES-FEAT-066]** `./do test` generates `target/traceability.json` and exits non-zero if:
 - Any requirement ID referenced in `docs/plan/specs/*.md` has zero covering tests, OR
 - Any test annotation (`// Covers: <ID>`) references a non-existent requirement ID.
 
 All cargo tests passing does not guarantee exit 0; traceability must also pass.
 
-**[FEAT-067]** `./do coverage` generates `target/coverage/report.json` containing exactly five quality gates (QG-001 through QG-005) and exits non-zero if `overall_passed` is `false`.
+**[4_USER_FEATURES-FEAT-067]** `./do coverage` generates `target/coverage/report.json` containing exactly five quality gates (QG-001 through QG-005) and exits non-zero if `overall_passed` is `false`.
 
 #### 3.5.2 Generated File Schemas
 
@@ -3690,12 +3690,12 @@ The `delta_pct` field is the difference between `actual_pct` and `threshold_pct`
 
 #### 3.5.4 `./do` Business Rules
 
-- **[DO-BR-001]** `./do` MUST be a POSIX `sh` script with no bash-specific syntax. It MUST execute correctly under `/bin/sh` on Linux, macOS, and Windows (Git Bash).
-- **[DO-BR-002]** `./do presubmit` executes steps in this order: `setup → lint → test → coverage`. Each step's exit code is checked; on failure, subsequent steps are skipped and `presubmit` exits non-zero.
-- **[DO-BR-003]** `./do ci` pushes a temporary branch, triggers a GitLab pipeline, polls for up to 30 minutes, then deletes the branch. It exits 0 only if all three CI jobs pass.
-- **[DO-BR-004]** All `./do` commands produce identical exit codes on Linux, macOS, and Windows (Git Bash).
-- **[DO-BR-005]** `./do format` MUST modify files in-place and exit 0 even if no files needed formatting.
-- **[DO-BR-006]** `./do build` MUST build all workspace crates in release mode. Exit non-zero if any crate fails to compile.
+- **[4_USER_FEATURES-DO-BR-001]** `./do` MUST be a POSIX `sh` script with no bash-specific syntax. It MUST execute correctly under `/bin/sh` on Linux, macOS, and Windows (Git Bash).
+- **[4_USER_FEATURES-DO-BR-002]** `./do presubmit` executes steps in this order: `setup → format → lint → test → coverage → ci`. Each step's exit code is checked; on failure, subsequent steps are skipped and `presubmit` exits non-zero.
+- **[4_USER_FEATURES-DO-BR-003]** `./do ci` pushes a temporary branch, triggers a GitLab pipeline, polls for up to 30 minutes, then deletes the branch. It exits 0 only if all three CI jobs pass.
+- **[4_USER_FEATURES-DO-BR-004]** All `./do` commands produce identical exit codes on Linux, macOS, and Windows (Git Bash).
+- **[4_USER_FEATURES-DO-BR-005]** `./do format` MUST modify files in-place and exit 0 even if no files needed formatting.
+- **[4_USER_FEATURES-DO-BR-006]** `./do build` MUST build all workspace crates in release mode. Exit non-zero if any crate fails to compile.
 
 ---
 
@@ -3728,58 +3728,58 @@ The following criteria are testable assertions that an implementing agent MUST v
 
 #### CLI Acceptance Criteria
 
-- **[AC-3-CLI-001]** GIVEN `devs status <valid-run-id> --format json`, WHEN the run exists, THEN the response is valid JSON with `run_id`, `status`, `stage_runs` array, and all timestamp fields present (null or string, never absent).
-- **[AC-3-CLI-002]** GIVEN `devs status <nonexistent-id>`, WHEN the command runs, THEN exit code is 2 and `--format json` output is `{"error": "not_found: ...", "code": 2}`.
-- **[AC-3-CLI-003]** GIVEN the server is not running and no `--server` flag, WHEN any CLI command runs, THEN exit code is 3.
-- **[AC-3-CLI-004]** GIVEN `devs submit <workflow> --input required_field=value` where `required_field` type is `boolean` and value is `"1"`, WHEN the command runs, THEN exit code is 4 and the error message references `required_field`.
-- **[AC-3-CLI-005]** GIVEN `devs logs <run> --follow` where the run completes successfully, WHEN the run reaches `Completed`, THEN the command exits with code 0.
-- **[AC-3-CLI-006]** GIVEN `devs logs <run> --follow` where the run fails, WHEN the run reaches `Failed`, THEN the command exits with code 1.
-- **[AC-3-CLI-007]** GIVEN `devs submit` from a CWD that matches two registered projects with no `--project` flag, WHEN the command runs, THEN exit code is 4 and the error message lists both project names.
-- **[AC-3-CLI-008]** GIVEN `./do unknown-command`, WHEN the script runs, THEN exit code is non-zero and stderr contains the list of valid commands.
-- **[AC-3-CLI-009]** GIVEN `devs list --format json`, WHEN zero runs exist, THEN the response is `{"runs": [], "total": 0, "limit": 100, "offset": 0}` (not an error).
+- **[4_USER_FEATURES-AC-3-CLI-001]** GIVEN `devs status <valid-run-id> --format json`, WHEN the run exists, THEN the response is valid JSON with `run_id`, `status`, `stage_runs` array, and all timestamp fields present (null or string, never absent).
+- **[4_USER_FEATURES-AC-3-CLI-002]** GIVEN `devs status <nonexistent-id>`, WHEN the command runs, THEN exit code is 2 and `--format json` output is `{"error": "not_found: ...", "code": 2}`.
+- **[4_USER_FEATURES-AC-3-CLI-003]** GIVEN the server is not running and no `--server` flag, WHEN any CLI command runs, THEN exit code is 3.
+- **[4_USER_FEATURES-AC-3-CLI-004]** GIVEN `devs submit <workflow> --input required_field=value` where `required_field` type is `boolean` and value is `"1"`, WHEN the command runs, THEN exit code is 4 and the error message references `required_field`.
+- **[4_USER_FEATURES-AC-3-CLI-005]** GIVEN `devs logs <run> --follow` where the run completes successfully, WHEN the run reaches `Completed`, THEN the command exits with code 0.
+- **[4_USER_FEATURES-AC-3-CLI-006]** GIVEN `devs logs <run> --follow` where the run fails, WHEN the run reaches `Failed`, THEN the command exits with code 1.
+- **[4_USER_FEATURES-AC-3-CLI-007]** GIVEN `devs submit` from a CWD that matches two registered projects with no `--project` flag, WHEN the command runs, THEN exit code is 4 and the error message lists both project names.
+- **[4_USER_FEATURES-AC-3-CLI-008]** GIVEN `./do unknown-command`, WHEN the script runs, THEN exit code is non-zero and stderr contains the list of valid commands.
+- **[4_USER_FEATURES-AC-3-CLI-009]** GIVEN `devs list --format json`, WHEN zero runs exist, THEN the response is `{"runs": [], "total": 0, "limit": 100, "offset": 0}` (not an error).
 
 #### TUI Acceptance Criteria
 
-- **[AC-3-TUI-001]** GIVEN a TUI test with `TestBackend(200×50)` and a run with two stages in `RUN` status, WHEN the backend is rendered, THEN the snapshot contains `[ stage-name | RUN |` text for both stages.
-- **[AC-3-TUI-002]** GIVEN a TUI test where a `StreamRunEvents` event is injected with a stage transitioning to `DONE`, WHEN 50 ms elapses, THEN the rendered buffer shows `DONE` for that stage.
-- **[AC-3-TUI-003]** GIVEN a TUI with terminal width 79 columns, WHEN the TUI renders, THEN the buffer contains `"Terminal too small"` and no interactive content.
-- **[AC-3-TUI-004]** GIVEN a TUI that loses its gRPC connection, WHEN 30 seconds elapse and 5 additional seconds pass, THEN the TUI process exits with code 1.
-- **[AC-3-TUI-005]** GIVEN the Logs tab is active and a stage has 10,001 log lines, WHEN the buffer is inspected, THEN it contains exactly 10,000 lines and the status bar shows `[TRUNCATED]`.
-- **[AC-3-TUI-006]** GIVEN no runs exist, WHEN the Dashboard tab is rendered, THEN the left pane shows `"No runs found."` and the TUI does not exit or error.
+- **[4_USER_FEATURES-AC-3-TUI-001]** GIVEN a TUI test with `TestBackend(200×50)` and a run with two stages in `RUN` status, WHEN the backend is rendered, THEN the snapshot contains `[ stage-name | RUN |` text for both stages.
+- **[4_USER_FEATURES-AC-3-TUI-002]** GIVEN a TUI test where a `StreamRunEvents` event is injected with a stage transitioning to `DONE`, WHEN 50 ms elapses, THEN the rendered buffer shows `DONE` for that stage.
+- **[4_USER_FEATURES-AC-3-TUI-003]** GIVEN a TUI with terminal width 79 columns, WHEN the TUI renders, THEN the buffer contains `"Terminal too small"` and no interactive content.
+- **[4_USER_FEATURES-AC-3-TUI-004]** GIVEN a TUI that loses its gRPC connection, WHEN 30 seconds elapse and 5 additional seconds pass, THEN the TUI process exits with code 1.
+- **[4_USER_FEATURES-AC-3-TUI-005]** GIVEN the Logs tab is active and a stage has 10,001 log lines, WHEN the buffer is inspected, THEN it contains exactly 10,000 lines and the status bar shows `[TRUNCATED]`.
+- **[4_USER_FEATURES-AC-3-TUI-006]** GIVEN no runs exist, WHEN the Dashboard tab is rendered, THEN the left pane shows `"No runs found."` and the TUI does not exit or error.
 
 #### MCP Acceptance Criteria
 
-- **[AC-3-MCP-001]** GIVEN a `GET /mcp/v1/call` request (wrong method), WHEN the server responds, THEN HTTP status is 405.
-- **[AC-3-MCP-002]** GIVEN `submit_run` with a duplicate non-cancelled `run_name` for the same project, WHEN two concurrent calls are made, THEN exactly one returns `"error": null` and one returns `"error": "already_exists: ..."`.
-- **[AC-3-MCP-003]** GIVEN `get_run` on any valid run, WHEN the response is received, THEN every field in the `WorkflowRun` schema is present (including optional fields as `null`).
-- **[AC-3-MCP-004]** GIVEN `stream_logs(follow:false)` on a completed stage, WHEN the response arrives, THEN HTTP status is 200, the final line is `{"done":true,...}`, and the connection is closed.
-- **[AC-3-MCP-005]** GIVEN `signal_completion` called twice on the same terminal stage, WHEN the second call is made, THEN `"error"` is non-null with `"failed_precondition"` prefix and no state change occurs.
-- **[AC-3-MCP-006]** GIVEN `assert_stage_output` with a `matches` operator and invalid regex `"[unclosed"`, WHEN the call is made, THEN `"error"` is non-null with `"invalid_argument"` prefix and no assertions are evaluated.
-- **[AC-3-MCP-007]** GIVEN `inject_stage_input` on a `Running` stage, WHEN the call is made, THEN `"error"` is non-null with `"failed_precondition"` prefix.
-- **[AC-3-MCP-008]** GIVEN a request body exceeding 1 MiB, WHEN the server receives it, THEN HTTP status is 413.
-- **[AC-3-MCP-009]** GIVEN `cancel_run` on a run with three running stages, WHEN the call completes, THEN `checkpoint.json` contains all three stages in `Cancelled` status in a single commit.
-- **[AC-3-MCP-010]** GIVEN 64 concurrent observation tool calls, WHEN all are issued simultaneously, THEN all complete without error (no lock contention failures).
+- **[4_USER_FEATURES-AC-3-MCP-001]** GIVEN a `GET /mcp/v1/call` request (wrong method), WHEN the server responds, THEN HTTP status is 405.
+- **[4_USER_FEATURES-AC-3-MCP-002]** GIVEN `submit_run` with a duplicate non-cancelled `run_name` for the same project, WHEN two concurrent calls are made, THEN exactly one returns `"error": null` and one returns `"error": "already_exists: ..."`.
+- **[4_USER_FEATURES-AC-3-MCP-003]** GIVEN `get_run` on any valid run, WHEN the response is received, THEN every field in the `WorkflowRun` schema is present (including optional fields as `null`).
+- **[4_USER_FEATURES-AC-3-MCP-004]** GIVEN `stream_logs(follow:false)` on a completed stage, WHEN the response arrives, THEN HTTP status is 200, the final line is `{"done":true,...}`, and the connection is closed.
+- **[4_USER_FEATURES-AC-3-MCP-005]** GIVEN `signal_completion` called twice on the same terminal stage, WHEN the second call is made, THEN `"error"` is non-null with `"failed_precondition"` prefix and no state change occurs.
+- **[4_USER_FEATURES-AC-3-MCP-006]** GIVEN `assert_stage_output` with a `matches` operator and invalid regex `"[unclosed"`, WHEN the call is made, THEN `"error"` is non-null with `"invalid_argument"` prefix and no assertions are evaluated.
+- **[4_USER_FEATURES-AC-3-MCP-007]** GIVEN `inject_stage_input` on a `Running` stage, WHEN the call is made, THEN `"error"` is non-null with `"failed_precondition"` prefix.
+- **[4_USER_FEATURES-AC-3-MCP-008]** GIVEN a request body exceeding 1 MiB, WHEN the server receives it, THEN HTTP status is 413.
+- **[4_USER_FEATURES-AC-3-MCP-009]** GIVEN `cancel_run` on a run with three running stages, WHEN the call completes, THEN `checkpoint.json` contains all three stages in `Cancelled` status in a single commit.
+- **[4_USER_FEATURES-AC-3-MCP-010]** GIVEN 64 concurrent observation tool calls, WHEN all are issued simultaneously, THEN all complete without error (no lock contention failures).
 
 #### Workflow Execution Acceptance Criteria
 
-- **[AC-3-WF-001]** GIVEN a stage with `{{stage.x.output.field}}` where stage `x` is not in the transitive `depends_on` closure, WHEN the stage attempts to run, THEN the stage fails before agent spawn with a template error message.
-- **[AC-3-WF-002]** GIVEN a `structured_output` stage whose `.devs_output.json` contains `"success": "true"` (string), WHEN the stage completes, THEN stage status is `Failed`.
-- **[AC-3-WF-003]** GIVEN a stage with `max_attempts: 3` that fails due to rate-limit on attempt 1, WHEN the stage is retried, THEN `attempt` counter remains at 1 after the rate-limit event.
-- **[AC-3-WF-004]** GIVEN two stages with no shared dependencies submitted simultaneously, WHEN both become `Eligible`, THEN both are dispatched within 100 ms of each other.
-- **[AC-3-WF-005]** GIVEN a fan-out stage with `count: 3` where sub-agent at index 1 fails and no merge handler is configured, WHEN all sub-agents complete, THEN the fan-out stage status is `Failed` and `"failed_indices": [1]` is in the error output.
-- **[AC-3-WF-006]** GIVEN a stage timeout of 10 seconds elapses, WHEN enforcement runs, THEN the sequence is: stdin `devs:cancel\n` → SIGTERM at T+5s → SIGKILL at T+10s → stage marked `TimedOut`.
-- **[AC-3-WF-007]** GIVEN a server crash with a stage in `Running` state, WHEN the server restarts and loads checkpoints, THEN the stage status is `Eligible` (not `Running`).
-- **[AC-3-WF-008]** GIVEN `cancel_run` called while stage A is Running and stage B is Waiting, WHEN cancellation completes, THEN both stages are `Cancelled` in the same checkpoint write.
-- **[AC-3-WF-009]** GIVEN a pool with `max_concurrent: 4` and 10 stages all becoming `Eligible` simultaneously, WHEN dispatching occurs, THEN exactly 4 stages transition to `Running` and 6 remain `Eligible`.
-- **[AC-3-WF-010]** GIVEN `devs project remove` called while a run is active, WHEN the command completes, THEN the project status is `removing`, the active run continues, and a subsequent `submit_run` for that project returns an error.
+- **[4_USER_FEATURES-AC-3-WF-001]** GIVEN a stage with `{{stage.x.output.field}}` where stage `x` is not in the transitive `depends_on` closure, WHEN the stage attempts to run, THEN the stage fails before agent spawn with a template error message.
+- **[4_USER_FEATURES-AC-3-WF-002]** GIVEN a `structured_output` stage whose `.devs_output.json` contains `"success": "true"` (string), WHEN the stage completes, THEN stage status is `Failed`.
+- **[4_USER_FEATURES-AC-3-WF-003]** GIVEN a stage with `max_attempts: 3` that fails due to rate-limit on attempt 1, WHEN the stage is retried, THEN `attempt` counter remains at 1 after the rate-limit event.
+- **[4_USER_FEATURES-AC-3-WF-004]** GIVEN two stages with no shared dependencies submitted simultaneously, WHEN both become `Eligible`, THEN both are dispatched within 100 ms of each other.
+- **[4_USER_FEATURES-AC-3-WF-005]** GIVEN a fan-out stage with `count: 3` where sub-agent at index 1 fails and no merge handler is configured, WHEN all sub-agents complete, THEN the fan-out stage status is `Failed` and `"failed_indices": [1]` is in the error output.
+- **[4_USER_FEATURES-AC-3-WF-006]** GIVEN a stage timeout of 10 seconds elapses, WHEN enforcement runs, THEN the sequence is: stdin `devs:cancel\n` → SIGTERM at T+5s → SIGKILL at T+10s → stage marked `TimedOut`.
+- **[4_USER_FEATURES-AC-3-WF-007]** GIVEN a server crash with a stage in `Running` state, WHEN the server restarts and loads checkpoints, THEN the stage status is `Eligible` (not `Running`).
+- **[4_USER_FEATURES-AC-3-WF-008]** GIVEN `cancel_run` called while stage A is Running and stage B is Waiting, WHEN cancellation completes, THEN both stages are `Cancelled` in the same checkpoint write.
+- **[4_USER_FEATURES-AC-3-WF-009]** GIVEN a pool with `max_concurrent: 4` and 10 stages all becoming `Eligible` simultaneously, WHEN dispatching occurs, THEN exactly 4 stages transition to `Running` and 6 remain `Eligible`.
+- **[4_USER_FEATURES-AC-3-WF-010]** GIVEN `devs project remove` called while a run is active, WHEN the command completes, THEN the project status is `removing`, the active run continues, and a subsequent `submit_run` for that project returns an error.
 
 #### `./do` Script Acceptance Criteria
 
-- **[AC-3-DO-001]** GIVEN `./do presubmit` running for 16 minutes, WHEN the 15-minute wall-clock deadline passes, THEN all child processes are killed and `./do presubmit` exits non-zero.
-- **[AC-3-DO-002]** GIVEN `./do setup` run twice, WHEN the second run completes, THEN exit code is 0 and no duplicate installations occur.
-- **[AC-3-DO-003]** GIVEN `./do test` where one test has annotation `// Covers: NONEXISTENT-999` referencing a non-existent requirement, WHEN the command runs, THEN exit code is non-zero and `target/traceability.json` contains the stale annotation in `stale_annotations`.
-- **[AC-3-DO-004]** GIVEN `./do coverage` where QG-002 (E2E aggregate) is below 80%, WHEN the command runs, THEN exit code is non-zero and `target/coverage/report.json` contains `"overall_passed": false`.
-- **[AC-3-DO-005]** GIVEN `./do coverage` completes successfully, WHEN `target/coverage/report.json` is inspected, THEN it contains exactly 5 gate objects with `gate_id` values `QG-001` through `QG-005`.
+- **[4_USER_FEATURES-AC-3-DO-001]** GIVEN `./do presubmit` running for 16 minutes, WHEN the 15-minute wall-clock deadline passes, THEN all child processes are killed and `./do presubmit` exits non-zero.
+- **[4_USER_FEATURES-AC-3-DO-002]** GIVEN `./do setup` run twice, WHEN the second run completes, THEN exit code is 0 and no duplicate installations occur.
+- **[4_USER_FEATURES-AC-3-DO-003]** GIVEN `./do test` where one test has annotation `// Covers: NONEXISTENT-999` referencing a non-existent requirement, WHEN the command runs, THEN exit code is non-zero and `target/traceability.json` contains the stale annotation in `stale_annotations`.
+- **[4_USER_FEATURES-AC-3-DO-004]** GIVEN `./do coverage` where QG-002 (E2E aggregate) is below 80%, WHEN the command runs, THEN exit code is non-zero and `target/coverage/report.json` contains `"overall_passed": false`.
+- **[4_USER_FEATURES-AC-3-DO-005]** GIVEN `./do coverage` completes successfully, WHEN `target/coverage/report.json` is inspected, THEN it contains exactly 5 gate objects with `gate_id` values `QG-001` through `QG-005`.
 
 ---
 
@@ -3795,7 +3795,7 @@ This section defines all requirements governing terminal interface accessibility
 
 #### 4.1.1 ASCII Character Palette
 
-**[FEAT-068]** All TUI output uses only standard ASCII characters (codepoints U+0020–U+007E) for structural elements including box borders, DAG edges, status labels, and separator lines. No Unicode box-drawing characters (U+2500–U+257F), block elements, or emoji are used in any interface element. This ensures compatibility with the broadest range of terminal emulators including those on headless Linux servers that may not have full UTF-8 locale support.
+**[4_USER_FEATURES-FEAT-068]** All TUI output uses only standard ASCII characters (codepoints U+0020–U+007E) for structural elements including box borders, DAG edges, status labels, and separator lines. No Unicode box-drawing characters (U+2500–U+257F), block elements, or emoji are used in any interface element. This ensures compatibility with the broadest range of terminal emulators including those on headless Linux servers that may not have full UTF-8 locale support.
 
 The complete set of ASCII structural characters used in the TUI is fixed and enumerated in the following table. Any TUI rendering that uses a character outside this palette is a defect.
 
@@ -3812,13 +3812,13 @@ The complete set of ASCII structural characters used in the TUI is fixed and enu
 | Progress ellipsis | `.` (U+002E) | `Connecting...` |
 | Stage status bracket | `[`, `]` (U+005B, U+005D) | `[ plan \| RUN \| 0:23 ]` |
 
-**[FEAT-068a]** The TUI never emits ANSI escape codes that rely on terminal-specific extensions beyond the following safe subset: SGR color codes (3x/4x/9x/10x foreground/background), SGR bold (1), SGR reset (0), cursor movement (CUP, CUU, CUD, CUF, CUB), and erase in line (EL). No xterm-specific sequences (e.g., title bar changes, alternate screen mode beyond the standard `smcup`/`rmcup`) are required for correct operation.
+**[4_USER_FEATURES-FEAT-068a]** The TUI never emits ANSI escape codes that rely on terminal-specific extensions beyond the following safe subset: SGR color codes (3x/4x/9x/10x foreground/background), SGR bold (1), SGR reset (0), cursor movement (CUP, CUU, CUD, CUF, CUB), and erase in line (EL). No xterm-specific sequences (e.g., title bar changes, alternate screen mode beyond the standard `smcup`/`rmcup`) are required for correct operation.
 
-**[FEAT-068b]** The `ratatui::backend::TestBackend` used in TUI tests renders to a `200×50` in-memory buffer. All TUI tests assert on the text content of this buffer using `insta` snapshot files (`.txt` fixtures in `crates/devs-tui/tests/snapshots/`). Pixel-based comparison is prohibited. Snapshot files are committed to the repository and must be updated explicitly when rendering changes intentionally.
+**[4_USER_FEATURES-FEAT-068b]** The `ratatui::backend::TestBackend` used in TUI tests renders to a `200×50` in-memory buffer. All TUI tests assert on the text content of this buffer using `insta` snapshot files (`.txt` fixtures in `crates/devs-tui/tests/snapshots/`). Pixel-based comparison is prohibited. Snapshot files are committed to the repository and must be updated explicitly when rendering changes intentionally.
 
 #### 4.1.2 Stage Status Labels
 
-**[FEAT-069]** Stage status labels in the TUI are exactly four uppercase ASCII characters. The complete mapping from `StageStatus` enum value to TUI abbreviation is:
+**[4_USER_FEATURES-FEAT-069]** Stage status labels in the TUI are exactly four uppercase ASCII characters. The complete mapping from `StageStatus` enum value to TUI abbreviation is:
 
 | `StageStatus` | TUI Label | Meaning |
 |---|---|---|
@@ -3832,9 +3832,9 @@ The complete set of ASCII structural characters used in the TUI is fixed and enu
 | `TimedOut` | `TIME` | Stage exceeded its configured `timeout_secs` |
 | `Cancelled` | `CANC` | Stage was explicitly cancelled or cascaded |
 
-**[FEAT-069a]** The four-letter label is the sole text indicator of stage status. The TUI also applies a color hint (see §4.1.3) as a secondary signal, but the text abbreviation MUST always be present regardless of color capability. No status is conveyed through color alone.
+**[4_USER_FEATURES-FEAT-069a]** The four-letter label is the sole text indicator of stage status. The TUI also applies a color hint (see §4.1.3) as a secondary signal, but the text abbreviation MUST always be present regardless of color capability. No status is conveyed through color alone.
 
-**[FEAT-069b]** Stage boxes in the TUI DAG view use the format `[ <stage-name> | <STATUS> | <elapsed> ]`. Stage names are truncated with a trailing `~` if they exceed 20 characters within the box to preserve 80-column layout. The elapsed field uses the format `M:SS` for durations under one hour and `H:MM:SS` for one hour or more. A stage that has not started displays `--:--` in place of elapsed time.
+**[4_USER_FEATURES-FEAT-069b]** Stage boxes in the TUI DAG view use the format `[ <stage-name> | <STATUS> | <elapsed> ]`. Stage names are truncated with a trailing `~` if they exceed 20 characters within the box to preserve 80-column layout. The elapsed field uses the format `M:SS` for durations under one hour and `H:MM:SS` for one hour or more. A stage that has not started displays `--:--` in place of elapsed time.
 
 Example stage box rendering:
 ```
@@ -3845,7 +3845,7 @@ Example stage box rendering:
 
 #### 4.1.3 Color as a Secondary Signal
 
-**[FEAT-070]** Color is a secondary (non-exclusive) channel for conveying state. The following color scheme is used when terminal color is detected, but the TUI remains fully usable with color disabled:
+**[4_USER_FEATURES-FEAT-070]** Color is a secondary (non-exclusive) channel for conveying state. The following color scheme is used when terminal color is detected, but the TUI remains fully usable with color disabled:
 
 | Status | Foreground Color (ANSI) | Notes |
 |---|---|---|
@@ -3859,13 +3859,13 @@ Example stage box rendering:
 | `WAIT` | Dark gray (90) | |
 | `PEND` | Dark gray (90) | |
 
-**[FEAT-070a]** Color is never applied to structural elements (box borders, DAG arrows, separators). Color is applied only to status labels and log line prefixes (`stdout:`/`stderr:` in the Debug tab).
+**[4_USER_FEATURES-FEAT-070a]** Color is never applied to structural elements (box borders, DAG arrows, separators). Color is applied only to status labels and log line prefixes (`stdout:`/`stderr:` in the Debug tab).
 
-**[FEAT-070b]** Terminal color capability is detected via `TERM`, `COLORTERM`, and `NO_COLOR` environment variables. If `NO_COLOR` is set (to any value, including empty string), all color output is suppressed and only plain text is emitted. This follows the `no-color.org` convention.
+**[4_USER_FEATURES-FEAT-070b]** Terminal color capability is detected via `TERM`, `COLORTERM`, and `NO_COLOR` environment variables. If `NO_COLOR` is set (to any value, including empty string), all color output is suppressed and only plain text is emitted. This follows the `no-color.org` convention.
 
 #### 4.1.4 Keyboard Navigation
 
-**[FEAT-071]** All TUI controls are operable via keyboard without a mouse. The complete keyboard binding table for the TUI is:
+**[4_USER_FEATURES-FEAT-071]** All TUI controls are operable via keyboard without a mouse. The complete keyboard binding table for the TUI is:
 
 | Key | Action | Context |
 |---|---|---|
@@ -3891,32 +3891,32 @@ Example stage box rendering:
 | `?` | Display keybinding help overlay | Global |
 | `Esc` | Close overlay / deselect | Global |
 
-**[FEAT-071a]** The keybinding help overlay (`?`) lists all active bindings for the current tab and context. It is rendered as a bordered ASCII box overlaid on the current tab content. It is dismissible with `Esc` or `?` again.
+**[4_USER_FEATURES-FEAT-071a]** The keybinding help overlay (`?`) lists all active bindings for the current tab and context. It is rendered as a bordered ASCII box overlaid on the current tab content. It is dismissible with `Esc` or `?` again.
 
-**[FEAT-071b]** When a keyboard action is invalid for the current state (e.g., pressing `c` on a `Completed` run), the TUI displays a transient status bar message at the bottom of the screen for 3 seconds: `"Action unavailable: <reason>"`. The TUI never silently ignores a key press that maps to an action.
+**[4_USER_FEATURES-FEAT-071b]** When a keyboard action is invalid for the current state (e.g., pressing `c` on a `Completed` run), the TUI displays a transient status bar message at the bottom of the screen for 3 seconds: `"Action unavailable: <reason>"`. The TUI never silently ignores a key press that maps to an action.
 
 #### 4.1.5 Minimum Terminal Dimensions
 
-**[FEAT-072]** The TUI requires a minimum terminal size of 80 columns × 24 rows. At or above this size, all interactive elements, stage boxes, status labels, and the log tail are fully visible without truncation of critical information.
+**[4_USER_FEATURES-FEAT-072]** The TUI requires a minimum terminal size of 80 columns × 24 rows. At or above this size, all interactive elements, stage boxes, status labels, and the log tail are fully visible without truncation of critical information.
 
-**[FEAT-072a]** If the terminal is detected to be smaller than 80×24 at startup or after a resize event, the TUI replaces its normal layout with a single-line warning: `"Terminal too small: 80x24 minimum required (current: <W>x<H>)"`. When the terminal is resized back above the minimum, the normal layout resumes immediately on the next render cycle.
+**[4_USER_FEATURES-FEAT-072a]** If the terminal is detected to be smaller than 80×24 at startup or after a resize event, the TUI replaces its normal layout with a single-line warning: `"Terminal too small: 80x24 minimum required (current: <W>x<H>)"`. When the terminal is resized back above the minimum, the normal layout resumes immediately on the next render cycle.
 
-**[FEAT-072b]** The TUI handles `SIGWINCH` (terminal resize) on Linux/macOS and the equivalent resize event from `crossterm` on Windows. Resize events trigger a full re-render within 50 ms. The layout reflows to use the new dimensions.
+**[4_USER_FEATURES-FEAT-072b]** The TUI handles `SIGWINCH` (terminal resize) on Linux/macOS and the equivalent resize event from `crossterm` on Windows. Resize events trigger a full re-render within 50 ms. The layout reflows to use the new dimensions.
 
-**[FEAT-072c]** Stage names longer than the available column width in the run list are truncated with a trailing `~` character. The truncation point preserves the maximum number of leading characters that fit. No stage name is ever elided entirely; at least 4 characters are always shown.
+**[4_USER_FEATURES-FEAT-072c]** Stage names longer than the available column width in the run list are truncated with a trailing `~` character. The truncation point preserves the maximum number of leading characters that fit. No stage name is ever elided entirely; at least 4 characters are always shown.
 
 #### 4.1.6 CLI Log Output Format
 
-**[FEAT-073]** Log output from `devs logs` (in default text mode) is plain UTF-8 text, one log line per output line. Lines from `stdout` and `stderr` are interleaved in chronological order with a stream prefix:
+**[4_USER_FEATURES-FEAT-073]** Log output from `devs logs` (in default text mode) is plain UTF-8 text, one log line per output line. Lines from `stdout` and `stderr` are interleaved in chronological order with a stream prefix:
 
 ```
 stdout: <log line content>
 stderr: <log line content>
 ```
 
-**[FEAT-073a]** When `devs logs --follow` is active, the command streams lines to stdout as they arrive, with no buffering beyond a single line. This output is compatible with standard terminal pagers (`less -R`, `more`) and log aggregation tools (`grep`, `awk`, `jq` when combined with `--format json`).
+**[4_USER_FEATURES-FEAT-073a]** When `devs logs --follow` is active, the command streams lines to stdout as they arrive, with no buffering beyond a single line. This output is compatible with standard terminal pagers (`less -R`, `more`) and log aggregation tools (`grep`, `awk`, `jq` when combined with `--format json`).
 
-**[FEAT-073b]** When stdout of `devs logs` is not a TTY (i.e., output is piped), the `stdout:` / `stderr:` stream prefix is still included. Color codes are suppressed automatically when not writing to a TTY.
+**[4_USER_FEATURES-FEAT-073b]** When stdout of `devs logs` is not a TTY (i.e., output is piped), the `stdout:` / `stderr:` stream prefix is still included. Color codes are suppressed automatically when not writing to a TTY.
 
 #### 4.1.7 Edge Cases — Terminal Interface
 
@@ -3938,7 +3938,7 @@ stderr: <log line content>
 
 #### 4.2.1 CLI JSON Output Mode
 
-**[FEAT-074]** All CLI commands support `--format json` as a machine-readable output mode. When `--format json` is active:
+**[4_USER_FEATURES-FEAT-074]** All CLI commands support `--format json` as a machine-readable output mode. When `--format json` is active:
 
 - All output (success and error) is written to **stdout** as structured JSON.
 - **Nothing** is written to stderr.
@@ -3947,7 +3947,7 @@ stderr: <log line content>
 
 The `--format` flag accepts exactly two values: `text` (default) and `json`. Any other value is a validation error (exit code 4).
 
-**[FEAT-074a]** When `devs logs --format json --follow` is active, each log line is emitted as a separate JSON object (newline-delimited JSON / NDJSON), one object per line:
+**[4_USER_FEATURES-FEAT-074a]** When `devs logs --format json --follow` is active, each log line is emitted as a separate JSON object (newline-delimited JSON / NDJSON), one object per line:
 
 ```json
 {"stream": "stdout", "line": "<content>", "timestamp": "2026-03-10T14:23:05.123Z", "sequence": 1}
@@ -3957,7 +3957,7 @@ The `--format` flag accepts exactly two values: `text` (default) and `json`. Any
 
 The final `{"done": true, ...}` object is emitted when the run reaches a terminal state. The `sequence` field starts at 1 and increments monotonically with no gaps.
 
-**[FEAT-074b]** When `devs logs --format json` is active without `--follow`, all buffered log lines are emitted as NDJSON followed by the `{"done": true}` terminator, then the process exits.
+**[4_USER_FEATURES-FEAT-074b]** When `devs logs --format json` is active without `--follow`, all buffered log lines are emitted as NDJSON followed by the `{"done": true}` terminator, then the process exits.
 
 #### 4.2.2 CLI JSON Success Response Schemas
 
@@ -4028,7 +4028,7 @@ The following tables define the JSON schemas for each CLI command's success outp
 
 #### 4.2.3 CLI JSON Error Response Schema
 
-**[FEAT-075]** JSON error responses from the CLI use the following schema:
+**[4_USER_FEATURES-FEAT-075]** JSON error responses from the CLI use the following schema:
 
 ```json
 {
@@ -4044,7 +4044,7 @@ The following tables define the JSON schemas for each CLI command's success outp
 
 The `error` string and the process exit code MUST agree: if `code` is 2, the process exits with code 2.
 
-**[FEAT-075a]** When multiple validation errors exist (e.g., `devs submit` with several invalid inputs), the `error` field contains a JSON-encoded array of error strings serialized as a JSON string:
+**[4_USER_FEATURES-FEAT-075a]** When multiple validation errors exist (e.g., `devs submit` with several invalid inputs), the `error` field contains a JSON-encoded array of error strings serialized as a JSON string:
 
 ```json
 {
@@ -4055,7 +4055,7 @@ The `error` string and the process exit code MUST agree: if `code` is 2, the pro
 
 #### 4.2.4 MCP Response Schema
 
-**[FEAT-076]** All MCP responses use the following envelope structure. `result` and `error` are mutually exclusive: exactly one is non-null.
+**[4_USER_FEATURES-FEAT-076]** All MCP responses use the following envelope structure. `result` and `error` are mutually exclusive: exactly one is non-null.
 
 ```json
 {
@@ -4069,9 +4069,9 @@ The `error` string and the process exit code MUST agree: if `code` is 2, the pro
 | `result` | object or null | Non-null when `error` is null |
 | `error` | string or null | Non-null when `result` is null; begins with machine-stable prefix |
 
-**[FEAT-076a]** Optional fields that have no current value (e.g., `completed_at` on a running stage, `exit_code` on a waiting stage) MUST be present in the response with a JSON `null` value. Absent fields are a protocol violation. This invariant applies to all MCP tool responses including `get_run`, `get_stage_output`, `get_pool_state`, and `get_workflow_definition`.
+**[4_USER_FEATURES-FEAT-076a]** Optional fields that have no current value (e.g., `completed_at` on a running stage, `exit_code` on a waiting stage) MUST be present in the response with a JSON `null` value. Absent fields are a protocol violation. This invariant applies to all MCP tool responses including `get_run`, `get_stage_output`, `get_pool_state`, and `get_workflow_definition`.
 
-**[FEAT-076b]** The complete set of fields that must be present in each MCP entity response is:
+**[4_USER_FEATURES-FEAT-076b]** The complete set of fields that must be present in each MCP entity response is:
 
 `WorkflowRun` (from `get_run`):
 
@@ -4118,11 +4118,11 @@ The `error` string and the process exit code MUST agree: if `code` is 2, the pro
 
 #### 4.2.5 Serialization Rules
 
-**[FEAT-077]** All timestamps in any JSON output (CLI `--format json`, MCP responses, checkpoint files, webhook payloads) use RFC 3339 format with millisecond precision and a `Z` timezone suffix.
+**[4_USER_FEATURES-FEAT-077]** All timestamps in any JSON output (CLI `--format json`, MCP responses, checkpoint files, webhook payloads) use RFC 3339 format with millisecond precision and a `Z` timezone suffix.
 
-**[FEAT-078]** All status enum values in any JSON output use lowercase strings with underscore word-separators.
+**[4_USER_FEATURES-FEAT-078]** All status enum values in any JSON output use lowercase strings with underscore word-separators.
 
-**[FEAT-079]** All UUIDs in any JSON output use lowercase hyphenated format (8-4-4-4-12 hex groups).
+**[4_USER_FEATURES-FEAT-079]** All UUIDs in any JSON output use lowercase hyphenated format (8-4-4-4-12 hex groups).
 
 The complete serialization rules table:
 
@@ -4140,11 +4140,11 @@ The complete serialization rules table:
 | Integer | JSON number (never quoted string) | |
 | Empty collection | JSON `[]` or `{}` (never `null`) | |
 
-**[FEAT-079a]** `elapsed_ms` is computed using a monotonic clock (not wall clock) from the moment the stage entered `Running` status. It is present in API responses where the field is defined. It is `null` for stages that have never been `Running`.
+**[4_USER_FEATURES-FEAT-079a]** `elapsed_ms` is computed using a monotonic clock (not wall clock) from the moment the stage entered `Running` status. It is present in API responses where the field is defined. It is `null` for stages that have never been `Running`.
 
 #### 4.2.6 Null vs. Absent Fields
 
-**[FEAT-076c]** The distinction between a `null` field and an absent field is semantically significant:
+**[4_USER_FEATURES-FEAT-076c]** The distinction between a `null` field and an absent field is semantically significant:
 
 - **`null`**: the field is defined in the schema but has no current value (e.g., a stage that has not yet completed has `completed_at: null`).
 - **Absent**: the field does not exist in the response at all. An absent field is a protocol violation and MUST be treated as an implementation defect.
@@ -4170,19 +4170,19 @@ Any consumer (CLI, TUI, AI agent) that encounters an absent required field MUST 
 
 #### 4.3.1 Language Scope
 
-**[FEAT-080]** All user-facing text in `devs` — including CLI output, TUI labels, TUI help overlays, error messages, log prefixes, and server startup messages — is English only at MVP. No internationalization (i18n) framework, locale-detection logic, or message catalogue is introduced into any crate at MVP.
+**[4_USER_FEATURES-FEAT-080]** All user-facing text in `devs` — including CLI output, TUI labels, TUI help overlays, error messages, log prefixes, and server startup messages — is English only at MVP. No internationalization (i18n) framework, locale-detection logic, or message catalogue is introduced into any crate at MVP.
 
-**[FEAT-080a]** Post-MVP localization is forward-compatible with this design because:
+**[4_USER_FEATURES-FEAT-080a]** Post-MVP localization is forward-compatible with this design because:
 
 1. All user-visible strings are defined as Rust `const` or `&'static str` literals in dedicated string modules within each crate (`devs-tui/src/strings.rs`, `devs-cli/src/strings.rs`). They are never inlined ad hoc throughout business logic.
 2. Machine-stable error prefix tokens (§4.3.2) are separate from the human-readable detail suffix, making it possible to translate only the suffix in a future release without breaking agent parsers.
 3. No assumption about text direction (LTR only at MVP) is baked into the TUI layout algorithm, but bidirectional text support is explicitly out of scope.
 
-**[FEAT-080b]** The `LANG`, `LC_ALL`, `LC_MESSAGES`, and `LANGUAGE` environment variables have no effect on `devs` output at MVP. `devs` does not read these variables.
+**[4_USER_FEATURES-FEAT-080b]** The `LANG`, `LC_ALL`, `LC_MESSAGES`, and `LANGUAGE` environment variables have no effect on `devs` output at MVP. `devs` does not read these variables.
 
 #### 4.3.2 Machine-Stable Error Prefix Registry
 
-**[FEAT-081]** Error messages in MCP responses, gRPC error details, and CLI JSON error output begin with a machine-stable prefix token followed by a colon and space. The prefix token is invariant across releases; the human-readable detail that follows may change.
+**[4_USER_FEATURES-FEAT-081]** Error messages in MCP responses, gRPC error details, and CLI JSON error output begin with a machine-stable prefix token followed by a colon and space. The prefix token is invariant across releases; the human-readable detail that follows may change.
 
 The complete registry of valid prefix tokens:
 
@@ -4199,11 +4199,11 @@ The complete registry of valid prefix tokens:
 | `timeout` | Operation exceeded time limit | 1 | `DEADLINE_EXCEEDED` |
 | `permission_denied` | Operation refused (reserved for post-MVP auth) | 1 | `PERMISSION_DENIED` |
 
-**[FEAT-081a]** Prefix tokens are lowercase, contain only ASCII letters and underscores, and MUST NOT contain digits or hyphens. Any code path that produces an error string MUST select a prefix from this registry. Introducing a new prefix token is a breaking change that requires a protocol major version bump.
+**[4_USER_FEATURES-FEAT-081a]** Prefix tokens are lowercase, contain only ASCII letters and underscores, and MUST NOT contain digits or hyphens. Any code path that produces an error string MUST select a prefix from this registry. Introducing a new prefix token is a breaking change that requires a protocol major version bump.
 
-**[FEAT-081b]** The gRPC error `message` field follows the format `"<prefix>: <detail>"` with a machine-stable prefix. The `details` repeated field in the gRPC `Status` proto MAY carry a `google.rpc.BadRequest` proto for `invalid_argument` errors listing individual field violations.
+**[4_USER_FEATURES-FEAT-081b]** The gRPC error `message` field follows the format `"<prefix>: <detail>"` with a machine-stable prefix. The `details` repeated field in the gRPC `Status` proto MAY carry a `google.rpc.BadRequest` proto for `invalid_argument` errors listing individual field violations.
 
-**[FEAT-081c]** Validation errors that affect multiple fields return a JSON array embedded in the error detail string:
+**[4_USER_FEATURES-FEAT-081c]** Validation errors that affect multiple fields return a JSON array embedded in the error detail string:
 
 ```
 "invalid_argument: [{"field":"stages[0].pool","message":"pool 'primary' not found"},{"field":"stages[1].depends_on[0]","message":"stage 'nonexistent' not defined"}]"
@@ -4213,7 +4213,7 @@ Consuming agents MUST handle both single-error and multi-error formats.
 
 #### 4.3.3 Time and Date Display Formats
 
-**[FEAT-082]** Time and date values in user-visible output use locale-neutral formats with no dependence on the host locale settings:
+**[4_USER_FEATURES-FEAT-082]** Time and date values in user-visible output use locale-neutral formats with no dependence on the host locale settings:
 
 | Context | Format | Example |
 |---|---|---|
@@ -4225,13 +4225,13 @@ Consuming agents MUST handle both single-error and multi-error formats.
 | `./do presubmit` step timing | Decimal seconds to 2 dp | `build: 12.34s` |
 | `target/presubmit_timings.jsonl` | RFC 3339 start + float seconds | `{"step":"build","started_at":"...","elapsed_s":12.34}` |
 
-**[FEAT-082a]** The TUI elapsed timer increments once per second using a monotonic clock. It does not account for leap seconds. The display is updated on every TUI render cycle (triggered by gRPC `StreamRunEvents` push or a 1-second tick, whichever comes first).
+**[4_USER_FEATURES-FEAT-082a]** The TUI elapsed timer increments once per second using a monotonic clock. It does not account for leap seconds. The display is updated on every TUI render cycle (triggered by gRPC `StreamRunEvents` push or a 1-second tick, whichever comes first).
 
-**[FEAT-082b]** Elapsed time in `devs status --format json` is expressed in milliseconds as an integer in the `elapsed_ms` field. It is never expressed as a human-readable string in JSON mode.
+**[4_USER_FEATURES-FEAT-082b]** Elapsed time in `devs status --format json` is expressed in milliseconds as an integer in the `elapsed_ms` field. It is never expressed as a human-readable string in JSON mode.
 
 #### 4.3.4 Number Formats
 
-**[FEAT-082c]** Numeric values in user-visible text output (`--format text`) use no locale-specific thousands separators. Numbers are rendered in plain decimal notation. This applies to stage counts, line counts, byte counts, and coverage percentages.
+**[4_USER_FEATURES-FEAT-082c]** Numeric values in user-visible text output (`--format text`) use no locale-specific thousands separators. Numbers are rendered in plain decimal notation. This applies to stage counts, line counts, byte counts, and coverage percentages.
 
 Coverage percentages in `target/coverage/report.json` use two decimal places of precision (e.g., `90.00`, `50.00`, `80.12`). The `delta_pct` field uses the same format and is positive when coverage improved relative to the last run.
 
@@ -4252,9 +4252,9 @@ Coverage percentages in `target/coverage/report.json` use two decimal places of 
 
 #### 4.4.1 `./do` Script Portability
 
-**[FEAT-083]** All `./do` script commands produce identical exit codes on Linux, macOS, and Windows (Git Bash). Behavior — including output, exit codes, and file creation — MUST NOT diverge across platforms. The `./do` script is POSIX `sh` with no bash-specific syntax.
+**[4_USER_FEATURES-FEAT-083]** All `./do` script commands produce identical exit codes on Linux, macOS, and Windows (Git Bash). Behavior — including output, exit codes, and file creation — MUST NOT diverge across platforms. The `./do` script is POSIX `sh` with no bash-specific syntax.
 
-**[FEAT-083a]** The following `./do` commands are validated on all three platforms in CI as separate GitLab pipeline jobs (`presubmit-linux`, `presubmit-macos`, `presubmit-windows`):
+**[4_USER_FEATURES-FEAT-083a]** The following `./do` commands are validated on all three platforms in CI as separate GitLab pipeline jobs (`presubmit-linux`, `presubmit-macos`, `presubmit-windows`):
 
 | Command | Linux | macOS | Windows (Git Bash) |
 |---|---|---|---|
@@ -4266,15 +4266,15 @@ Coverage percentages in `target/coverage/report.json` use two decimal places of 
 | `./do coverage` | ✓ | ✓ | ✓ |
 | `./do presubmit` | ✓ | ✓ | ✓ |
 
-**[FEAT-083b]** The `./do` script MUST NOT use the following bash-specific or platform-specific constructs: `[[` (use `[`), `$'\n'`, process substitution (`<(cmd)`), `local` in any context other than a function body, `pushd`/`popd`, or GNU-specific flags to `date`, `sed`, `awk`, or `find`. Where platform differences exist, the script uses the lowest common denominator (POSIX) or conditional blocks with explicit platform detection via `uname`.
+**[4_USER_FEATURES-FEAT-083b]** The `./do` script MUST NOT use the following bash-specific or platform-specific constructs: `[[` (use `[`), `$'\n'`, process substitution (`<(cmd)`), `local` in any context other than a function body, `pushd`/`popd`, or GNU-specific flags to `date`, `sed`, `awk`, or `find`. Where platform differences exist, the script uses the lowest common denominator (POSIX) or conditional blocks with explicit platform detection via `uname`.
 
-**[FEAT-083c]** The 15-minute hard wall-clock timeout in `./do presubmit` is implemented using a background timer that sends SIGTERM to the main presubmit process group. On Windows (Git Bash), the equivalent is `taskkill /F /T /PID <pid>`. The exit code on timeout is non-zero (the script exits 1 after killing its children).
+**[4_USER_FEATURES-FEAT-083c]** The 15-minute hard wall-clock timeout in `./do presubmit` is implemented using a background timer that sends SIGTERM to the main presubmit process group. On Windows (Git Bash), the equivalent is `taskkill /F /T /PID <pid>`. The exit code on timeout is non-zero (the script exits 1 after killing its children).
 
 #### 4.4.2 File Path Normalization
 
-**[FEAT-084]** File paths in `devs.toml`, the project registry (`~/.config/devs/projects.toml`), and all API-level path fields use forward-slash (`/`) as the path separator in stored form. The platform-native separator (`\` on Windows) is accepted on input and normalized to `/` before validation, storage, or comparison.
+**[4_USER_FEATURES-FEAT-084]** File paths in `devs.toml`, the project registry (`~/.config/devs/projects.toml`), and all API-level path fields use forward-slash (`/`) as the path separator in stored form. The platform-native separator (`\` on Windows) is accepted on input and normalized to `/` before validation, storage, or comparison.
 
-**[FEAT-084a]** Path normalization rules:
+**[4_USER_FEATURES-FEAT-084a]** Path normalization rules:
 
 | Rule | Input | Stored Form |
 |---|---|---|
@@ -4284,15 +4284,15 @@ Coverage percentages in `target/coverage/report.json` use two decimal places of 
 | Trailing separator stripped | `/home/user/project/` | `/home/user/project` |
 | Home directory expansion | `~/project` | Expanded at use time, not at storage time |
 
-**[FEAT-084b]** The `~` home directory shorthand in path fields is NOT expanded at storage time. It is expanded to the server process's home directory at the moment the path is first accessed (e.g., when cloning a repo). This ensures paths remain portable across user accounts when the registry file is shared.
+**[4_USER_FEATURES-FEAT-084b]** The `~` home directory shorthand in path fields is NOT expanded at storage time. It is expanded to the server process's home directory at the moment the path is first accessed (e.g., when cloning a repo). This ensures paths remain portable across user accounts when the registry file is shared.
 
-**[FEAT-084c]** Path fields in workflow input parameters (type `path`) are stored with forward-slash normalization applied. They are NOT resolved to absolute paths at submission time. Resolution occurs at execution time within the agent's working directory.
+**[4_USER_FEATURES-FEAT-084c]** Path fields in workflow input parameters (type `path`) are stored with forward-slash normalization applied. They are NOT resolved to absolute paths at submission time. Resolution occurs at execution time within the agent's working directory.
 
-**[FEAT-084d]** All path comparison operations (e.g., determining whether a project path is already registered) are performed case-insensitively on Windows and case-sensitively on Linux and macOS. The platform is detected at runtime via `cfg!(target_os = "windows")`.
+**[4_USER_FEATURES-FEAT-084d]** All path comparison operations (e.g., determining whether a project path is already registered) are performed case-insensitively on Windows and case-sensitively on Linux and macOS. The platform is detected at runtime via `cfg!(target_os = "windows")`.
 
 #### 4.4.3 Terminal Emulator Compatibility
 
-**[FEAT-085]** The TUI renders correctly in standard terminal emulators on all three supported platforms. The following terminals are the reference targets:
+**[4_USER_FEATURES-FEAT-085]** The TUI renders correctly in standard terminal emulators on all three supported platforms. The following terminals are the reference targets:
 
 | Platform | Reference Terminal |
 |---|---|
@@ -4300,20 +4300,20 @@ Coverage percentages in `target/coverage/report.json` use two decimal places of 
 | macOS | Terminal.app, iTerm2 |
 | Windows | Windows Terminal (WT), Git Bash mintty |
 
-**[FEAT-085a]** The TUI does not use any terminal capability that is not supported by all reference terminals listed above. Specifically, the following are prohibited:
+**[4_USER_FEATURES-FEAT-085a]** The TUI does not use any terminal capability that is not supported by all reference terminals listed above. Specifically, the following are prohibited:
 
 - Sixel or iTerm2 inline image protocols (no image rendering)
 - OSC sequences beyond OSC 0 (window title)
 - Mouse event reporting (no mouse input; keyboard-only per §4.1.4)
 - `TIOCGWINSZ` ioctls outside of the `crossterm` abstraction layer
 
-**[FEAT-085b]** The `crossterm` crate is used exclusively for all terminal interaction in `devs-tui`. Direct writes to `stdout` using ANSI escape codes are prohibited outside of `crossterm`. This ensures the abstraction layer handles platform differences.
+**[4_USER_FEATURES-FEAT-085b]** The `crossterm` crate is used exclusively for all terminal interaction in `devs-tui`. Direct writes to `stdout` using ANSI escape codes are prohibited outside of `crossterm`. This ensures the abstraction layer handles platform differences.
 
-**[FEAT-085c]** The `devs-cli` and `devs-mcp-bridge` binaries do not use `crossterm` or any terminal control library. They write plain text or JSON to stdout/stderr as appropriate. Color output in CLI text mode is gated on `stdout.is_terminal()` (using the `std::io::IsTerminal` trait, stable from Rust 1.70). If stdout is not a TTY, color is suppressed automatically.
+**[4_USER_FEATURES-FEAT-085c]** The `devs-cli` and `devs-mcp-bridge` binaries do not use `crossterm` or any terminal control library. They write plain text or JSON to stdout/stderr as appropriate. Color output in CLI text mode is gated on `stdout.is_terminal()` (using the `std::io::IsTerminal` trait, stable from Rust 1.70). If stdout is not a TTY, color is suppressed automatically.
 
 #### 4.4.4 Process and Signal Handling
 
-**[FEAT-085d]** The `devs-server` binary handles the following signals on all platforms:
+**[4_USER_FEATURES-FEAT-085d]** The `devs-server` binary handles the following signals on all platforms:
 
 | Signal | Linux/macOS | Windows Equivalent | Behavior |
 |---|---|---|---|
@@ -4321,9 +4321,9 @@ Coverage percentages in `target/coverage/report.json` use two decimal places of 
 | `SIGINT` / `Ctrl+C` | ✓ | `CTRL_C_EVENT` | Same as SIGTERM |
 | `SIGHUP` | Linux/macOS only | N/A | Ignored (server continues running) |
 
-**[FEAT-085e]** On Windows, the server registers a `SetConsoleCtrlHandler` callback via the `ctrlc` crate. The handler posts a shutdown event to the Tokio runtime. The behavior is equivalent to SIGTERM on Unix.
+**[4_USER_FEATURES-FEAT-085e]** On Windows, the server registers a `SetConsoleCtrlHandler` callback via the `ctrlc` crate. The handler posts a shutdown event to the Tokio runtime. The behavior is equivalent to SIGTERM on Unix.
 
-**[FEAT-085f]** Exit codes are consistent across platforms. The mapping from Rust's `std::process::exit()` codes to platform behavior is:
+**[4_USER_FEATURES-FEAT-085f]** Exit codes are consistent across platforms. The mapping from Rust's `std::process::exit()` codes to platform behavior is:
 
 | Code | Meaning | CLI | TUI | Server |
 |---|---|---|---|---|
@@ -4335,7 +4335,7 @@ Coverage percentages in `target/coverage/report.json` use two decimal places of 
 
 #### 4.4.5 Configuration Directory
 
-**[FEAT-085g]** The server's configuration directory (`~/.config/devs/`) is platform-native. The path is resolved as follows:
+**[4_USER_FEATURES-FEAT-085g]** The server's configuration directory (`~/.config/devs/`) is platform-native. The path is resolved as follows:
 
 | Platform | Path |
 |---|---|
@@ -4344,7 +4344,7 @@ Coverage percentages in `target/coverage/report.json` use two decimal places of 
 
 The directory is created at first use if absent. The server logs the resolved path at `INFO` level on startup.
 
-**[FEAT-085h]** The `DEVS_DISCOVERY_FILE` environment variable overrides the default discovery file path on all platforms. When set, the override path is used verbatim without platform-specific normalization. This is required for test isolation across parallel server instances.
+**[4_USER_FEATURES-FEAT-085h]** The `DEVS_DISCOVERY_FILE` environment variable overrides the default discovery file path on all platforms. When set, the override path is used verbatim without platform-specific normalization. This is required for test isolation across parallel server instances.
 
 #### 4.4.6 Edge Cases — Cross-Platform Compatibility
 
@@ -4369,48 +4369,48 @@ The following are testable acceptance criteria for Section 4. Each is an automat
 
 #### 4.5.1 Terminal Interface Accessibility
 
-- **[AC-4-TUI-001]** GIVEN a TUI rendered to a `TestBackend`, WHEN any stage is in `Completed` status, THEN the text `DONE` appears in the rendered buffer. No test asserts on color codes.
-- **[AC-4-TUI-002]** GIVEN a TUI rendered to a `TestBackend`, WHEN any stage is in `TimedOut` status, THEN the text `TIME` appears in the rendered buffer.
-- **[AC-4-TUI-003]** GIVEN a TUI rendered to a `TestBackend` with dimensions 80×24, WHEN a run with 3 stages is displayed, THEN no stage box is truncated and all stage names are visible.
-- **[AC-4-TUI-004]** GIVEN a TUI rendered to a `TestBackend` with dimensions 79×24, WHEN rendered, THEN the buffer contains the text `"Terminal too small"`.
-- **[AC-4-TUI-005]** GIVEN any TUI snapshot in `crates/devs-tui/tests/snapshots/`, WHEN scanned for bytes outside the range U+0020–U+007E and standard C0 control codes (newline, carriage return), THEN no such bytes are found except within actual log content lines.
-- **[AC-4-TUI-006]** GIVEN `NO_COLOR=1` is set in the environment, WHEN the TUI is rendered, THEN no ANSI SGR escape sequences appear in the output.
-- **[AC-4-TUI-007]** GIVEN a stage with a 25-character name, WHEN rendered in a stage box, THEN the name is truncated to 19 characters followed by `~`.
-- **[AC-4-TUI-008]** GIVEN the TUI help overlay is triggered by pressing `?`, WHEN rendered, THEN the text `"q"` and `"Quit"` appear in the buffer.
+- **[4_USER_FEATURES-AC-4-TUI-001]** GIVEN a TUI rendered to a `TestBackend`, WHEN any stage is in `Completed` status, THEN the text `DONE` appears in the rendered buffer. No test asserts on color codes.
+- **[4_USER_FEATURES-AC-4-TUI-002]** GIVEN a TUI rendered to a `TestBackend`, WHEN any stage is in `TimedOut` status, THEN the text `TIME` appears in the rendered buffer.
+- **[4_USER_FEATURES-AC-4-TUI-003]** GIVEN a TUI rendered to a `TestBackend` with dimensions 80×24, WHEN a run with 3 stages is displayed, THEN no stage box is truncated and all stage names are visible.
+- **[4_USER_FEATURES-AC-4-TUI-004]** GIVEN a TUI rendered to a `TestBackend` with dimensions 79×24, WHEN rendered, THEN the buffer contains the text `"Terminal too small"`.
+- **[4_USER_FEATURES-AC-4-TUI-005]** GIVEN any TUI snapshot in `crates/devs-tui/tests/snapshots/`, WHEN scanned for bytes outside the range U+0020–U+007E and standard C0 control codes (newline, carriage return), THEN no such bytes are found except within actual log content lines.
+- **[4_USER_FEATURES-AC-4-TUI-006]** GIVEN `NO_COLOR=1` is set in the environment, WHEN the TUI is rendered, THEN no ANSI SGR escape sequences appear in the output.
+- **[4_USER_FEATURES-AC-4-TUI-007]** GIVEN a stage with a 25-character name, WHEN rendered in a stage box, THEN the name is truncated to 19 characters followed by `~`.
+- **[4_USER_FEATURES-AC-4-TUI-008]** GIVEN the TUI help overlay is triggered by pressing `?`, WHEN rendered, THEN the text `"q"` and `"Quit"` appear in the buffer.
 
 #### 4.5.2 Machine-Readable Output
 
-- **[AC-4-JSON-001]** GIVEN `devs submit --format json` succeeds, WHEN the output is parsed as JSON, THEN it contains fields `run_id`, `slug`, `workflow_name`, `project_id`, and `status` all with non-null values.
-- **[AC-4-JSON-002]** GIVEN `devs status <run-id> --format json` is called on a run that has not yet started, WHEN parsed, THEN `started_at` is present in the JSON with value `null`.
-- **[AC-4-JSON-003]** GIVEN `devs list --format json` with no runs, WHEN parsed, THEN `runs` is an empty JSON array `[]` and `total` is `0`.
-- **[AC-4-JSON-004]** GIVEN `devs submit --format json` is called with an invalid workflow name, WHEN the output is parsed, THEN `error` begins with `"invalid_argument:"` and `code` is `4`.
-- **[AC-4-JSON-005]** GIVEN `devs status --format json` is called with a run ID that does not exist, WHEN the output is parsed, THEN `error` begins with `"not_found:"` and `code` is `2`.
-- **[AC-4-JSON-006]** GIVEN `devs logs --format json --follow` is active and the run completes, WHEN all output lines are collected, THEN the final line is `{"done": true, "total_lines": <n>, "truncated": false}`.
-- **[AC-4-JSON-007]** GIVEN `devs logs --format json` is active with sequence-numbered chunks, WHEN all chunks are collected, THEN the `sequence` values form a contiguous series starting at 1 with no gaps.
-- **[AC-4-JSON-008]** GIVEN a MCP `get_run` response for a running stage, WHEN parsed, THEN `completed_at` is present as a JSON key with value `null` (not absent from the object).
-- **[AC-4-JSON-009]** GIVEN a MCP `get_run` response, WHEN parsed, THEN `status` is a lowercase string (e.g., `"running"`, not `"Running"`).
-- **[AC-4-JSON-010]** GIVEN a MCP `get_stage_output` response, WHEN parsed, THEN `stdout` is a non-null string (empty string `""` if no output, never `null`).
-- **[AC-4-JSON-011]** GIVEN a MCP tool returns an error, WHEN parsed, THEN `result` is `null` and `error` is a non-null string beginning with a registered prefix token.
-- **[AC-4-JSON-012]** GIVEN a MCP tool returns success, WHEN parsed, THEN `error` is `null` and `result` is a non-null object.
+- **[4_USER_FEATURES-AC-4-JSON-001]** GIVEN `devs submit --format json` succeeds, WHEN the output is parsed as JSON, THEN it contains fields `run_id`, `slug`, `workflow_name`, `project_id`, and `status` all with non-null values.
+- **[4_USER_FEATURES-AC-4-JSON-002]** GIVEN `devs status <run-id> --format json` is called on a run that has not yet started, WHEN parsed, THEN `started_at` is present in the JSON with value `null`.
+- **[4_USER_FEATURES-AC-4-JSON-003]** GIVEN `devs list --format json` with no runs, WHEN parsed, THEN `runs` is an empty JSON array `[]` and `total` is `0`.
+- **[4_USER_FEATURES-AC-4-JSON-004]** GIVEN `devs submit --format json` is called with an invalid workflow name, WHEN the output is parsed, THEN `error` begins with `"invalid_argument:"` and `code` is `4`.
+- **[4_USER_FEATURES-AC-4-JSON-005]** GIVEN `devs status --format json` is called with a run ID that does not exist, WHEN the output is parsed, THEN `error` begins with `"not_found:"` and `code` is `2`.
+- **[4_USER_FEATURES-AC-4-JSON-006]** GIVEN `devs logs --format json --follow` is active and the run completes, WHEN all output lines are collected, THEN the final line is `{"done": true, "total_lines": <n>, "truncated": false}`.
+- **[4_USER_FEATURES-AC-4-JSON-007]** GIVEN `devs logs --format json` is active with sequence-numbered chunks, WHEN all chunks are collected, THEN the `sequence` values form a contiguous series starting at 1 with no gaps.
+- **[4_USER_FEATURES-AC-4-JSON-008]** GIVEN a MCP `get_run` response for a running stage, WHEN parsed, THEN `completed_at` is present as a JSON key with value `null` (not absent from the object).
+- **[4_USER_FEATURES-AC-4-JSON-009]** GIVEN a MCP `get_run` response, WHEN parsed, THEN `status` is a lowercase string (e.g., `"running"`, not `"Running"`).
+- **[4_USER_FEATURES-AC-4-JSON-010]** GIVEN a MCP `get_stage_output` response, WHEN parsed, THEN `stdout` is a non-null string (empty string `""` if no output, never `null`).
+- **[4_USER_FEATURES-AC-4-JSON-011]** GIVEN a MCP tool returns an error, WHEN parsed, THEN `result` is `null` and `error` is a non-null string beginning with a registered prefix token.
+- **[4_USER_FEATURES-AC-4-JSON-012]** GIVEN a MCP tool returns success, WHEN parsed, THEN `error` is `null` and `result` is a non-null object.
 
 #### 4.5.3 Localization
 
-- **[AC-4-L10N-001]** GIVEN any MCP error response, WHEN the `error` field is parsed, THEN it begins with one of the tokens defined in the machine-stable error prefix registry (§4.3.2).
-- **[AC-4-L10N-002]** GIVEN `devs status <run> --format json` on a completed stage, WHEN the `completed_at` field is parsed, THEN it is a valid RFC 3339 timestamp ending with `Z` and containing millisecond precision.
-- **[AC-4-L10N-003]** GIVEN a TUI with a running stage of 65 seconds elapsed, WHEN rendered, THEN the elapsed display shows `1:05`.
-- **[AC-4-L10N-004]** GIVEN a TUI with a running stage of 3723 seconds elapsed, WHEN rendered, THEN the elapsed display shows `1:02:03`.
-- **[AC-4-L10N-005]** GIVEN `target/coverage/report.json` after a coverage run, WHEN parsed, THEN `actual_pct` is a floating-point number with exactly 2 decimal places.
-- **[AC-4-L10N-006]** GIVEN a gRPC `INVALID_ARGUMENT` error for a multi-field validation failure, WHEN the error message is parsed, THEN it begins with `"invalid_argument:"` and contains a JSON array of field violation objects.
+- **[4_USER_FEATURES-AC-4-L10N-001]** GIVEN any MCP error response, WHEN the `error` field is parsed, THEN it begins with one of the tokens defined in the machine-stable error prefix registry (§4.3.2).
+- **[4_USER_FEATURES-AC-4-L10N-002]** GIVEN `devs status <run> --format json` on a completed stage, WHEN the `completed_at` field is parsed, THEN it is a valid RFC 3339 timestamp ending with `Z` and containing millisecond precision.
+- **[4_USER_FEATURES-AC-4-L10N-003]** GIVEN a TUI with a running stage of 65 seconds elapsed, WHEN rendered, THEN the elapsed display shows `1:05`.
+- **[4_USER_FEATURES-AC-4-L10N-004]** GIVEN a TUI with a running stage of 3723 seconds elapsed, WHEN rendered, THEN the elapsed display shows `1:02:03`.
+- **[4_USER_FEATURES-AC-4-L10N-005]** GIVEN `target/coverage/report.json` after a coverage run, WHEN parsed, THEN `actual_pct` is a floating-point number with exactly 2 decimal places.
+- **[4_USER_FEATURES-AC-4-L10N-006]** GIVEN a gRPC `INVALID_ARGUMENT` error for a multi-field validation failure, WHEN the error message is parsed, THEN it begins with `"invalid_argument:"` and contains a JSON array of field violation objects.
 
 #### 4.5.4 Cross-Platform Compatibility
 
-- **[AC-4-XPLAT-001]** GIVEN `./do build` is run on Linux, macOS, and Windows CI runners, THEN all three exit with code 0 and the `devs-server` binary is present in `target/release/`.
-- **[AC-4-XPLAT-002]** GIVEN `./do test` is run on all three platforms, THEN exit codes are identical (0 on success, non-zero on failure).
-- **[AC-4-XPLAT-003]** GIVEN a project registered with a Windows-style path (`C:\Users\user\project`), WHEN retrieved via `devs project list --format json`, THEN the `repo_path` field uses forward slashes (`C:/Users/user/project`).
-- **[AC-4-XPLAT-004]** GIVEN `devs-cli` is invoked with stdout redirected to a file (not a TTY), WHEN it produces text output, THEN no ANSI escape codes appear in the file.
-- **[AC-4-XPLAT-005]** GIVEN `DEVS_DISCOVERY_FILE=/tmp/test-1234.addr` is set, WHEN the server starts, THEN it writes the gRPC address to that exact path (not the default `~/.config/devs/server.addr`).
-- **[AC-4-XPLAT-006]** GIVEN `./do presubmit` is run and exceeds 15 minutes of wall-clock time, THEN the script exits non-zero and all child processes are terminated.
-- **[AC-4-XPLAT-007]** GIVEN two server instances started with distinct `DEVS_DISCOVERY_FILE` values, WHEN both are running, THEN neither overwrites the other's discovery file.
+- **[4_USER_FEATURES-AC-4-XPLAT-001]** GIVEN `./do build` is run on Linux, macOS, and Windows CI runners, THEN all three exit with code 0 and the `devs-server` binary is present in `target/release/`.
+- **[4_USER_FEATURES-AC-4-XPLAT-002]** GIVEN `./do test` is run on all three platforms, THEN exit codes are identical (0 on success, non-zero on failure).
+- **[4_USER_FEATURES-AC-4-XPLAT-003]** GIVEN a project registered with a Windows-style path (`C:\Users\user\project`), WHEN retrieved via `devs project list --format json`, THEN the `repo_path` field uses forward slashes (`C:/Users/user/project`).
+- **[4_USER_FEATURES-AC-4-XPLAT-004]** GIVEN `devs-cli` is invoked with stdout redirected to a file (not a TTY), WHEN it produces text output, THEN no ANSI escape codes appear in the file.
+- **[4_USER_FEATURES-AC-4-XPLAT-005]** GIVEN `DEVS_DISCOVERY_FILE=/tmp/test-1234.addr` is set, WHEN the server starts, THEN it writes the gRPC address to that exact path (not the default `~/.config/devs/server.addr`).
+- **[4_USER_FEATURES-AC-4-XPLAT-006]** GIVEN `./do presubmit` is run and exceeds 15 minutes of wall-clock time, THEN the script exits non-zero and all child processes are terminated.
+- **[4_USER_FEATURES-AC-4-XPLAT-007]** GIVEN two server instances started with distinct `DEVS_DISCOVERY_FILE` values, WHEN both are running, THEN neither overwrites the other's discovery file.
 
 ---
 
@@ -4424,9 +4424,9 @@ This section defines the complete error taxonomy, presentation contracts, state 
 
 ### 5.1 CLI Error Presentation
 
-**[FEAT-086]** When `--format text` (default), CLI errors are printed to **stderr** as human-readable messages. Nothing is written to stdout on error. The process exits with the appropriate exit code from the table below.
+**[4_USER_FEATURES-FEAT-086]** When `--format text` (default), CLI errors are printed to **stderr** as human-readable messages. Nothing is written to stdout on error. The process exits with the appropriate exit code from the table below.
 
-**[FEAT-087]** When `--format json`, CLI errors are printed to **stdout** as a JSON object. Nothing is written to stderr. The process exits with code `<n>` matching the `code` field.
+**[4_USER_FEATURES-FEAT-087]** When `--format json`, CLI errors are printed to **stdout** as a JSON object. Nothing is written to stderr. The process exits with code `<n>` matching the `code` field.
 
 #### 5.1.1 Exit Code Table
 
@@ -4468,13 +4468,13 @@ The `details` array is present and non-empty only when multiple validation error
 
 #### 5.1.3 Validation Error Aggregation
 
-**[FEAT-088]** Validation errors from `devs submit` include **all** validation failures collected in a single pass, not just the first error found. The validation order is fixed (schema → uniqueness → dependency resolution → cycle detection → pool existence → handler existence → type coercion → exclusivity constraints). All errors from all steps are collected before the response is returned.
+**[4_USER_FEATURES-FEAT-088]** Validation errors from `devs submit` include **all** validation failures collected in a single pass, not just the first error found. The validation order is fixed (schema → uniqueness → dependency resolution → cycle detection → pool existence → handler existence → type coercion → exclusivity constraints). All errors from all steps are collected before the response is returned.
 
 A `devs submit` call with five validation errors returns all five in a single `INVALID_ARGUMENT` response. The user or agent corrects all issues before resubmitting.
 
 #### 5.1.4 Server Reachability vs. Server Errors
 
-**[FEAT-089]** The CLI distinguishes between a server that is unreachable (exit code 3) and a server that returned a valid gRPC error response (exit codes 1, 2, or 4).
+**[4_USER_FEATURES-FEAT-089]** The CLI distinguishes between a server that is unreachable (exit code 3) and a server that returned a valid gRPC error response (exit codes 1, 2, or 4).
 
 Conditions that produce exit code 3 (`SERVER_UNREACHABLE`):
 - Discovery file (`~/.config/devs/server.addr` or `DEVS_DISCOVERY_FILE`) does not exist
@@ -4493,7 +4493,7 @@ error: server unreachable at 127.0.0.1:7890 (connection refused)
 
 #### 5.1.5 `devs logs --follow` Termination
 
-**[FEAT-064-EXT]** `devs logs --follow` streams log lines until the run reaches a terminal state, then exits:
+**[4_USER_FEATURES-FEAT-064-EXT]** `devs logs --follow` streams log lines until the run reaches a terminal state, then exits:
 - Exit code `0` when run transitions to `Completed`
 - Exit code `1` when run transitions to `Failed`, `Cancelled`, or `TimedOut`
 
@@ -4520,7 +4520,7 @@ and exits with code 3.
 
 #### 5.2.1 Connection Failure on Startup
 
-**[FEAT-090]** When the TUI cannot connect to the server on startup, it displays a full-screen error panel (not a modal overlay) with:
+**[4_USER_FEATURES-FEAT-090]** When the TUI cannot connect to the server on startup, it displays a full-screen error panel (not a modal overlay) with:
 - The attempted server address
 - The reason for failure (e.g., "connection refused", "address not found in discovery file")
 - A suggestion for the user (e.g., "run `devs server start` to start the server")
@@ -4530,7 +4530,7 @@ The error panel persists until the user quits. It does not scroll off the screen
 
 #### 5.2.2 Reconnection State Machine
 
-**[FEAT-091]** When the TUI loses its gRPC connection after a successful initial connection, it enters automatic reconnection mode. The reconnection backoff schedule is:
+**[4_USER_FEATURES-FEAT-091]** When the TUI loses its gRPC connection after a successful initial connection, it enters automatic reconnection mode. The reconnection backoff schedule is:
 
 | Attempt | Wait Before Next Attempt |
 |---|---|
@@ -4565,7 +4565,7 @@ During reconnection, the TUI MUST display a status bar notification containing:
 
 The main dashboard content remains visible in a dimmed/greyed state while disconnected so the user retains context.
 
-**[FEAT-092]** When the TUI exits due to sustained reconnection failure, it clears the alternate screen buffer, restores the terminal to its prior state, and prints to the restored terminal:
+**[4_USER_FEATURES-FEAT-092]** When the TUI exits due to sustained reconnection failure, it clears the alternate screen buffer, restores the terminal to its prior state, and prints to the restored terminal:
 ```
 devs-tui: disconnected from server at <addr>; could not reconnect after 35s. Exit 1.
 ```
@@ -4573,7 +4573,7 @@ The process then exits with code 1. No raw terminal state is left behind.
 
 #### 5.2.3 Invalid Keyboard Actions
 
-**[FEAT-093]** TUI keyboard actions that are invalid for the current state display a brief inline status message in the status bar for 3 seconds, then auto-clear. The TUI NEVER silently ignores a user action.
+**[4_USER_FEATURES-FEAT-093]** TUI keyboard actions that are invalid for the current state display a brief inline status message in the status bar for 3 seconds, then auto-clear. The TUI NEVER silently ignores a user action.
 
 Status bar message format:
 ```
@@ -4623,7 +4623,7 @@ Every MCP tool response conforms to the following envelope regardless of success
 - `fatal` is `true` only in bridge connection-loss messages (see §5.5.4). For all other errors, `fatal` is `false` and MAY be omitted.
 - The `error` field is always present in the response — never absent, even on success (`null` indicates success).
 
-**[FEAT-094]** MCP error strings are prefixed with a machine-stable category token. The prefix is always a lowercase identifier followed by `: `. The detail after `: ` is a human-readable string that may vary across server versions. Agents MUST match on the prefix only, never on the full string.
+**[4_USER_FEATURES-FEAT-094]** MCP error strings are prefixed with a machine-stable category token. The prefix is always a lowercase identifier followed by `: `. The detail after `: ` is a human-readable string that may vary across server versions. Agents MUST match on the prefix only, never on the full string.
 
 #### 5.3.2 Error Prefix Reference
 
@@ -4646,7 +4646,7 @@ Agents parsing `invalid_argument:` errors from `submit_run` MUST parse the embed
 
 #### 5.3.3 Lock Timeout Behavior
 
-**[FEAT-095]** When the MCP server cannot acquire `SchedulerState` write lock within 5 seconds, it returns:
+**[4_USER_FEATURES-FEAT-095]** When the MCP server cannot acquire `SchedulerState` write lock within 5 seconds, it returns:
 ```json
 {
   "result": null,
@@ -4660,7 +4660,7 @@ Lock contention of > 5 s is an abnormal condition and MUST be logged at `WARN` l
 
 #### 5.3.4 `stream_logs` Truncation
 
-**[FEAT-096]** When `stream_logs` returns a terminal chunk with `"truncated": true`, the total output exceeded the 10,000-line in-memory buffer. Truncation is from the **beginning** of the log — the most recent lines are always retained.
+**[4_USER_FEATURES-FEAT-096]** When `stream_logs` returns a terminal chunk with `"truncated": true`, the total output exceeded the 10,000-line in-memory buffer. Truncation is from the **beginning** of the log — the most recent lines are always retained.
 
 The terminal chunk schema:
 ```json
@@ -4675,7 +4675,7 @@ The terminal chunk schema:
 
 #### 5.3.5 Running Stage Output
 
-**[FEAT-097]** When `get_stage_output` is called on a stage with status `running`, the response returns whatever partial output has been captured so far:
+**[4_USER_FEATURES-FEAT-097]** When `get_stage_output` is called on a stage with status `running`, the response returns whatever partial output has been captured so far:
 
 ```json
 {
@@ -4692,7 +4692,7 @@ The terminal chunk schema:
 }
 ```
 
-`exit_code: null` when the process has not yet exited is a defined valid value, not an error. Agents MUST NOT treat `exit_code: null` as a failure condition when `status` is `"running"`. **[MCP-DBG-BR-017]** is the authoritative reference.
+`exit_code: null` when the process has not yet exited is a defined valid value, not an error. Agents MUST NOT treat `exit_code: null` as a failure condition when `status` is `"running"`. **[4_USER_FEATURES-MCP-DBG-BR-017]** is the authoritative reference.
 
 #### 5.3.6 Edge Cases
 
@@ -4712,7 +4712,7 @@ The terminal chunk schema:
 
 #### 5.4.1 Configuration Error Reporting
 
-**[FEAT-098]** All `devs.toml` configuration errors are collected in a single validation pass and reported to stderr before any port is bound. The format is:
+**[4_USER_FEATURES-FEAT-098]** All `devs.toml` configuration errors are collected in a single validation pass and reported to stderr before any port is bound. The format is:
 
 ```
 devs: configuration error(s) in /path/to/devs.toml:
@@ -4724,15 +4724,15 @@ devs: startup aborted
 
 Each error entry is prefixed with the TOML key path in brackets. The server MUST NOT start, bind any port, or write the discovery file if any configuration error is present.
 
-**[FEAT-5-CFG-BR-001]** When `--config` points to a file that does not exist, the error is:
+**[4_USER_FEATURES-FEAT-5-CFG-BR-001]** When `--config` points to a file that does not exist, the error is:
 ```
 devs: --config file not found: /path/to/missing.toml
 devs: startup aborted
 ```
 
-**[FEAT-5-CFG-BR-002]** When `devs.toml` is absent and no `--config` flag is given, the server starts with built-in defaults and logs `WARN: no devs.toml found; using built-in defaults`. This is not a fatal condition.
+**[4_USER_FEATURES-FEAT-5-CFG-BR-002]** When `devs.toml` is absent and no `--config` flag is given, the server starts with built-in defaults and logs `WARN: no devs.toml found; using built-in defaults`. This is not a fatal condition.
 
-**[FEAT-5-CFG-BR-003]** If `devs.toml` contains a `[triggers]` section (reserved for post-MVP), the server logs:
+**[4_USER_FEATURES-FEAT-5-CFG-BR-003]** If `devs.toml` contains a `[triggers]` section (reserved for post-MVP), the server logs:
 ```
 WARN: [triggers] section found in devs.toml; automated triggers are not supported in this version and will be ignored
 ```
@@ -4740,7 +4740,7 @@ This is a warning, not a fatal error. The server starts normally.
 
 #### 5.4.2 Checkpoint Recovery Error Handling
 
-**[FEAT-099]** During crash recovery at startup, checkpoint loading failures are classified and handled per the following table:
+**[4_USER_FEATURES-FEAT-099]** During crash recovery at startup, checkpoint loading failures are classified and handled per the following table:
 
 | Failure | Severity | Behavior |
 |---|---|---|
@@ -4753,11 +4753,11 @@ This is a warning, not a fatal error. The server starts normally.
 
 An `Unrecoverable` run is visible via `list_runs` with `status: "unrecoverable"`. No further transitions occur. The user can cancel it via `devs cancel <run-id>` to clean it up.
 
-**[FEAT-5-CHKPT-BR-001]** Per-project checkpoint recovery failures are non-fatal. A project with corrupt state does not prevent other projects from recovering normally.
+**[4_USER_FEATURES-FEAT-5-CHKPT-BR-001]** Per-project checkpoint recovery failures are non-fatal. A project with corrupt state does not prevent other projects from recovering normally.
 
 #### 5.4.3 Disk-Full Handling
 
-**[FEAT-100]** When a checkpoint write fails due to disk full or any I/O error:
+**[4_USER_FEATURES-FEAT-100]** When a checkpoint write fails due to disk full or any I/O error:
 
 1. The `.tmp` file is deleted (best-effort; log `WARN` if deletion also fails)
 2. The error is logged at `ERROR` level with the run ID, stage name, and OS error detail
@@ -4770,11 +4770,11 @@ The message logged on write failure:
 ERROR devs_persist: checkpoint write failed run_id=<uuid> stage=<name> error="No space left on device"
 ```
 
-**[FEAT-5-DISK-BR-001]** The server maintains an in-memory retry queue for failed checkpoint writes. When a subsequent state transition occurs for the same run, the server attempts to write the latest state (not the failed state). Intermediate states that were missed due to disk full are not separately replayed.
+**[4_USER_FEATURES-FEAT-5-DISK-BR-001]** The server maintains an in-memory retry queue for failed checkpoint writes. When a subsequent state transition occurs for the same run, the server attempts to write the latest state (not the failed state). Intermediate states that were missed due to disk full are not separately replayed.
 
 #### 5.4.4 Webhook Delivery Failures
 
-**[FEAT-101]** Webhook delivery failures follow this handling policy:
+**[4_USER_FEATURES-FEAT-101]** Webhook delivery failures follow this handling policy:
 
 | Condition | Log Level | Effect on Run/Stage |
 |---|---|---|
@@ -4789,29 +4789,29 @@ The log entry on all-retries-exhausted:
 ERROR devs_webhook: delivery failed after <N> attempts webhook_id=<uuid> event=stage.completed run_id=<uuid>
 ```
 
-Webhook delivery is always fire-and-forget from the workflow engine's perspective. No stage waits for ACK. No run waits for webhook completion. **[3_PRD-BR-047]** is the authoritative reference.
+Webhook delivery is always fire-and-forget from the workflow engine's perspective. No stage waits for ACK. No run waits for webhook completion. **[4_USER_FEATURES-3_PRD-BR-047]** is the authoritative reference.
 
 #### 5.4.5 Agent Binary and Environment Failures
 
-**[FEAT-102]** When the agent binary is not found on `PATH` at stage dispatch:
+**[4_USER_FEATURES-FEAT-102]** When the agent binary is not found on `PATH` at stage dispatch:
 - Stage transitions to `Failed` immediately
 - No retry is triggered (not a rate-limit or transient condition)
 - `StageOutput.stderr` contains: `devs: agent binary not found: <tool-name>. Ensure '<tool-name>' is installed and on PATH.`
 - `StageOutput.exit_code` is recorded as `-1` (synthetic; no process was spawned)
 
-**[FEAT-103]** When PTY allocation fails for an agent with `pty: true`:
+**[4_USER_FEATURES-FEAT-103]** When PTY allocation fails for an agent with `pty: true`:
 - Stage transitions to `Failed` immediately
 - No fallback to non-PTY mode occurs (the `pty` flag is not advisory)
 - `StageOutput.stderr` contains: `devs: PTY allocation failed: <OS error message>`
 - `StageOutput.exit_code` is `-1`
 
-**[FEAT-104]** When `.devs_context.json` cannot be written before agent spawn:
+**[4_USER_FEATURES-FEAT-104]** When `.devs_context.json` cannot be written before agent spawn:
 - Stage transitions to `Failed` immediately without spawning the agent process
 - `StageOutput.stderr` contains: `devs: failed to write context file: <OS error message>`
 - The failure is logged at `ERROR` level
 - No retry is triggered
 
-**[FEAT-105]** When `prompt_file` does not exist at stage execution time:
+**[4_USER_FEATURES-FEAT-105]** When `prompt_file` does not exist at stage execution time:
 - Stage transitions to `Failed` immediately without spawning the agent process
 - `StageOutput.stderr` contains: `devs: prompt_file not found: <absolute-resolved-path>`
 - The missing path in the error message is the path after template variable resolution
@@ -4834,7 +4834,7 @@ Webhook delivery is always fire-and-forget from the workflow engine's perspectiv
 
 #### 5.5.1 Orchestrated Agent `signal_completion` Idempotency
 
-**[FEAT-106]** An orchestrated agent that calls `signal_completion` on a stage already in a terminal state receives:
+**[4_USER_FEATURES-FEAT-106]** An orchestrated agent that calls `signal_completion` on a stage already in a terminal state receives:
 ```json
 {
   "result": null,
@@ -4848,7 +4848,7 @@ The terminal state name (`completed`, `failed`, `cancelled`, `timed_out`) is inc
 
 #### 5.5.2 Agent Cancellation Sequence
 
-**[FEAT-107]** When a running agent is cancelled (via `cancel_run`, `cancel_stage`, workflow timeout, or server shutdown), `devs` executes the following sequence:
+**[4_USER_FEATURES-FEAT-107]** When a running agent is cancelled (via `cancel_run`, `cancel_stage`, workflow timeout, or server shutdown), `devs` executes the following sequence:
 
 ```
 t+0s   Write "devs:cancel\n" to agent stdin
@@ -4875,7 +4875,7 @@ For **workflow-level timeouts**, all running stages are cancelled simultaneously
 
 #### 5.5.4 Server Shutdown Notification to Agents
 
-**[FEAT-108]** When the server begins SIGTERM shutdown, any MCP tool call received after shutdown is initiated returns:
+**[4_USER_FEATURES-FEAT-108]** When the server begins SIGTERM shutdown, any MCP tool call received after shutdown is initiated returns:
 ```json
 {
   "result": null,
@@ -4892,7 +4892,7 @@ Agents that do not terminate within 10 seconds are included in the server's SIGK
 
 #### 5.5.5 MCP stdio Bridge Error Contract
 
-**[FEAT-109]** The `devs-mcp-bridge` stdio proxy follows this error protocol:
+**[4_USER_FEATURES-FEAT-109]** The `devs-mcp-bridge` stdio proxy follows this error protocol:
 
 **Normal operation:** One JSON-RPC request per stdin line → forwarded to `POST /mcp/v1/call` → response written to stdout as one JSON line. The bridge does not buffer or batch requests.
 
@@ -4953,7 +4953,7 @@ When `stage_requeued: false` (no fallback available), the stage transitions to `
 
 #### 5.6.1 Coverage Report
 
-**[FEAT-110]** `./do coverage` writes `target/coverage/report.json` after every run — including runs where some gates fail — so that an AI agent always has a complete, parseable gate report to work from.
+**[4_USER_FEATURES-FEAT-110]** `./do coverage` writes `target/coverage/report.json` after every run — including runs where some gates fail — so that an AI agent always has a complete, parseable gate report to work from.
 
 The file schema is defined in §6.15. The five gates are always present regardless of pass/fail state:
 
@@ -4967,23 +4967,23 @@ The file schema is defined in §6.15. The five gates are always present regardle
 
 `./do coverage` exits non-zero when `overall_passed: false`. The exit code is `1`. Even when `overall_passed: false`, `target/coverage/report.json` is still written before exit. An agent MUST check `overall_passed` and the individual `passed` fields in `gates[]`; a non-zero exit from `./do coverage` alone does not identify which gate failed.
 
-**[FEAT-5-COV-BR-001]** Unit test coverage (QG-001) MUST NOT be counted toward QG-003, QG-004, or QG-005. E2E and unit coverage are measured independently. Coverage from calling internal Rust functions directly in tests does not satisfy QG-003/004/005.
+**[4_USER_FEATURES-FEAT-5-COV-BR-001]** Unit test coverage (QG-001) MUST NOT be counted toward QG-003, QG-004, or QG-005. E2E and unit coverage are measured independently. Coverage from calling internal Rust functions directly in tests does not satisfy QG-003/004/005.
 
-**[FEAT-5-COV-BR-002]** `delta_pct` in each gate record is the difference between `actual_pct` and `threshold_pct`: positive means above threshold, negative means below. This allows an agent to prioritize which gate is furthest from passing.
+**[4_USER_FEATURES-FEAT-5-COV-BR-002]** `delta_pct` in each gate record is the difference between `actual_pct` and `threshold_pct`: positive means above threshold, negative means below. This allows an agent to prioritize which gate is furthest from passing.
 
 #### 5.6.2 Traceability Report
 
-**[FEAT-111]** `./do test` writes `target/traceability.json` after every test run — including partial failures — so that the requirement-coverage state is always available.
+**[4_USER_FEATURES-FEAT-111]** `./do test` writes `target/traceability.json` after every test run — including partial failures — so that the requirement-coverage state is always available.
 
 The scanning algorithm:
-1. Extract all requirement IDs from `docs/plan/specs/*.md` using the regex `\[([0-9A-Z_a-z]+-[A-Z]+-[0-9]+)\]`
+1. Extract all requirement IDs from `docs/plan/specs/*.md` using the regex `\[([0-9A-Z_a-z]+-[4_USER_FEATURES-A-Z]+-[4_USER_FEATURES-0-9]+)\]`
 2. Scan all test source files for `// Covers: <id>` annotations
 3. Each `<id>` in a `// Covers:` annotation is checked against the set of known IDs; unknown IDs are recorded in `stale_annotations[]`
 4. `overall_passed` is `false` if any requirement has `covered: false` OR if `stale_annotations` is non-empty
 
-**[FEAT-5-TRACE-BR-001]** `./do test` exits non-zero when `overall_passed: false` even if all `cargo test` assertions pass. The traceability check is a separate gate, not optional.
+**[4_USER_FEATURES-FEAT-5-TRACE-BR-001]** `./do test` exits non-zero when `overall_passed: false` even if all `cargo test` assertions pass. The traceability check is a separate gate, not optional.
 
-**[FEAT-5-TRACE-BR-002]** A test file with `// Covers: NONEXISTENT-REQ-999` causes `overall_passed: false`. Stale annotations are listed in `stale_annotations[]` with the annotation text and source file location.
+**[4_USER_FEATURES-FEAT-5-TRACE-BR-002]** A test file with `// Covers: NONEXISTENT-REQ-999` causes `overall_passed: false`. Stale annotations are listed in `stale_annotations[]` with the annotation text and source file location.
 
 An agent diagnosing traceability failures MUST:
 1. Read `target/traceability.json` to identify `covered: false` requirements
@@ -4994,7 +4994,7 @@ An agent diagnosing traceability failures MUST:
 
 #### 5.6.3 Lint Error Output
 
-**[FEAT-112]** When `./do lint` fails, each error is printed in the format:
+**[4_USER_FEATURES-FEAT-112]** When `./do lint` fails, each error is printed in the format:
 ```
 <file>:<line>:<col>: error: <message>
 ```
@@ -5008,14 +5008,14 @@ The lint suite comprises:
 
 When `cargo fmt --check` fails, the output is a `diff -u`-style diff showing the required changes. An agent fixing fmt errors should run `./do format` and re-run lint.
 
-**[FEAT-5-LINT-BR-001]** `./do lint` also performs a dependency audit: it reads `Cargo.lock` and compares all transitive dependencies against the authoritative version table in §2.2 of the TAS. Any undocumented crate (not in the table) causes lint to fail with:
+**[4_USER_FEATURES-FEAT-5-LINT-BR-001]** `./do lint` also performs a dependency audit: it reads `Cargo.lock` and compares all transitive dependencies against the authoritative version table in §2.2 of the TAS. Any undocumented crate (not in the table) causes lint to fail with:
 ```
 lint: undocumented dependency: <crate-name> <version>. Add to §2.2 of 2_TAS.md.
 ```
 
 #### 5.6.4 Presubmit Timeout Feedback
 
-**[FEAT-113]** When `./do presubmit` is killed by the 15-minute hard wall-clock timeout:
+**[4_USER_FEATURES-FEAT-113]** When `./do presubmit` is killed by the 15-minute hard wall-clock timeout:
 
 1. A background timer process sends SIGTERM to the `presubmit` shell and all its child processes
 2. The final line written to stderr before exit is:
@@ -5064,7 +5064,7 @@ All server-side errors are mapped to gRPC status codes before transmission to CL
 | Unhandled server error | `INTERNAL` | 1 | Status bar: `[!] Internal server error` |
 | Server unreachable | N/A (transport error) | 3 | Reconnection mode |
 
-**[FEAT-5-GRPC-BR-001]** The `INVALID_ARGUMENT` gRPC response for validation failures includes all errors as a JSON array in the status message:
+**[4_USER_FEATURES-FEAT-5-GRPC-BR-001]** The `INVALID_ARGUMENT` gRPC response for validation failures includes all errors as a JSON array in the status message:
 ```
 invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 ```
@@ -5094,49 +5094,49 @@ This error is returned before any business logic executes. The TUI displays a fu
 The following criteria are testable assertions that an automated test suite MUST verify to consider this section fully implemented. Each criterion references the relevant feature tag(s).
 
 **CLI Error Presentation:**
-- **[AC-5-001]** GIVEN `devs status <valid-uuid>` where the run does not exist, WHEN `--format text`, THEN stderr contains `error: run not found: <uuid>` and exit code is 2. // Covers: FEAT-086, FEAT-089
-- **[AC-5-002]** GIVEN `devs status <valid-uuid>` where the run does not exist, WHEN `--format json`, THEN stdout is `{"error": "run not found: <uuid>", "code": 2}`, stderr is empty, and exit code is 2. // Covers: FEAT-087
-- **[AC-5-003]** GIVEN `devs submit` with three validation errors in the workflow definition, WHEN submitted, THEN the response (text or JSON) contains all three error messages and exit code is 4. // Covers: FEAT-088
-- **[AC-5-004]** GIVEN the discovery file does not exist, WHEN any CLI command is run, THEN exit code is 3 and the error message references the discovery file path. // Covers: FEAT-089
-- **[AC-5-005]** GIVEN `devs logs --follow` is streaming and the run transitions to `Completed`, THEN the CLI exits with code 0. // Covers: FEAT-064-EXT
-- **[AC-5-006]** GIVEN `devs logs --follow` is streaming and the run transitions to `Failed`, THEN the CLI exits with code 1. // Covers: FEAT-064-EXT
-- **[AC-5-007]** GIVEN two simultaneous `devs submit` calls with the same `--name`, THEN exactly one exits 0 and one exits 4 with `already_exists` in the error. // Covers: FEAT-088
+- **[4_USER_FEATURES-AC-5-001]** GIVEN `devs status <valid-uuid>` where the run does not exist, WHEN `--format text`, THEN stderr contains `error: run not found: <uuid>` and exit code is 2. // Covers: FEAT-086, FEAT-089
+- **[4_USER_FEATURES-AC-5-002]** GIVEN `devs status <valid-uuid>` where the run does not exist, WHEN `--format json`, THEN stdout is `{"error": "run not found: <uuid>", "code": 2}`, stderr is empty, and exit code is 2. // Covers: FEAT-087
+- **[4_USER_FEATURES-AC-5-003]** GIVEN `devs submit` with three validation errors in the workflow definition, WHEN submitted, THEN the response (text or JSON) contains all three error messages and exit code is 4. // Covers: FEAT-088
+- **[4_USER_FEATURES-AC-5-004]** GIVEN the discovery file does not exist, WHEN any CLI command is run, THEN exit code is 3 and the error message references the discovery file path. // Covers: FEAT-089
+- **[4_USER_FEATURES-AC-5-005]** GIVEN `devs logs --follow` is streaming and the run transitions to `Completed`, THEN the CLI exits with code 0. // Covers: FEAT-064-EXT
+- **[4_USER_FEATURES-AC-5-006]** GIVEN `devs logs --follow` is streaming and the run transitions to `Failed`, THEN the CLI exits with code 1. // Covers: FEAT-064-EXT
+- **[4_USER_FEATURES-AC-5-007]** GIVEN two simultaneous `devs submit` calls with the same `--name`, THEN exactly one exits 0 and one exits 4 with `already_exists` in the error. // Covers: FEAT-088
 
 **TUI Error Presentation:**
-- **[AC-5-008]** GIVEN the TUI is started with an invalid server address, THEN the TUI renders a full-screen error panel containing the attempted address and does not crash. // Covers: FEAT-090
-- **[AC-5-009]** GIVEN the TUI is connected and the server process is killed, THEN the TUI enters reconnection mode and displays a countdown without clearing the frozen dashboard view. // Covers: FEAT-091
-- **[AC-5-010]** GIVEN the TUI has been in reconnection mode for 35 s without success, THEN the TUI exits with code 1 and prints the disconnection message to the restored terminal. // Covers: FEAT-092
-- **[AC-5-011]** GIVEN the TUI is focused on a `Completed` run and the user presses `c` (cancel), THEN the status bar displays `[!] Cannot cancel: run is already in terminal state` for 3 s. // Covers: FEAT-093
-- **[AC-5-012]** GIVEN the TUI is started against a server with a different major version, THEN a full-screen version mismatch error is displayed and the TUI exits. // Covers: FEAT-5-GRPC-BR-001
+- **[4_USER_FEATURES-AC-5-008]** GIVEN the TUI is started with an invalid server address, THEN the TUI renders a full-screen error panel containing the attempted address and does not crash. // Covers: FEAT-090
+- **[4_USER_FEATURES-AC-5-009]** GIVEN the TUI is connected and the server process is killed, THEN the TUI enters reconnection mode and displays a countdown without clearing the frozen dashboard view. // Covers: FEAT-091
+- **[4_USER_FEATURES-AC-5-010]** GIVEN the TUI has been in reconnection mode for 35 s without success, THEN the TUI exits with code 1 and prints the disconnection message to the restored terminal. // Covers: FEAT-092
+- **[4_USER_FEATURES-AC-5-011]** GIVEN the TUI is focused on a `Completed` run and the user presses `c` (cancel), THEN the status bar displays `[!] Cannot cancel: run is already in terminal state` for 3 s. // Covers: FEAT-093
+- **[4_USER_FEATURES-AC-5-012]** GIVEN the TUI is started against a server with a different major version, THEN a full-screen version mismatch error is displayed and the TUI exits. // Covers: FEAT-5-GRPC-BR-001
 
 **MCP Error Presentation:**
-- **[AC-5-013]** GIVEN `get_run` is called with a UUID that does not exist, THEN the response is `{"result": null, "error": "not_found: run '<uuid>' does not exist"}`. // Covers: FEAT-094
-- **[AC-5-014]** GIVEN `submit_run` is called with two validation errors, THEN the `error` string contains a JSON array with both error objects. // Covers: FEAT-094
-- **[AC-5-015]** GIVEN `get_stage_output` is called on a stage with status `running`, THEN `result.exit_code` is `null` and `error` is `null`. // Covers: FEAT-097
-- **[AC-5-016]** GIVEN `stream_logs` is called with `follow: true` on a stage that is in `waiting` status and the stage is later cancelled without running, THEN the stream eventually delivers `{"done": true, "truncated": false, "total_lines": 0}`. // Covers: FEAT-096
-- **[AC-5-017]** GIVEN `assert_stage_output` is called with an invalid regex pattern, THEN `error` is non-null and begins with `invalid_argument:` and no assertions are evaluated. // Covers: FEAT-094
+- **[4_USER_FEATURES-AC-5-013]** GIVEN `get_run` is called with a UUID that does not exist, THEN the response is `{"result": null, "error": "not_found: run '<uuid>' does not exist"}`. // Covers: FEAT-094
+- **[4_USER_FEATURES-AC-5-014]** GIVEN `submit_run` is called with two validation errors, THEN the `error` string contains a JSON array with both error objects. // Covers: FEAT-094
+- **[4_USER_FEATURES-AC-5-015]** GIVEN `get_stage_output` is called on a stage with status `running`, THEN `result.exit_code` is `null` and `error` is `null`. // Covers: FEAT-097
+- **[4_USER_FEATURES-AC-5-016]** GIVEN `stream_logs` is called with `follow: true` on a stage that is in `waiting` status and the stage is later cancelled without running, THEN the stream eventually delivers `{"done": true, "truncated": false, "total_lines": 0}`. // Covers: FEAT-096
+- **[4_USER_FEATURES-AC-5-017]** GIVEN `assert_stage_output` is called with an invalid regex pattern, THEN `error` is non-null and begins with `invalid_argument:` and no assertions are evaluated. // Covers: FEAT-094
 
 **Server-Side Error Handling:**
-- **[AC-5-018]** GIVEN `devs.toml` has two configuration errors, WHEN the server is started, THEN both errors are printed to stderr, zero ports are bound, and the process exits non-zero. // Covers: FEAT-098
-- **[AC-5-019]** GIVEN a corrupt `checkpoint.json` exists for one project and valid checkpoints for another, WHEN the server starts, THEN the corrupt run is marked `Unrecoverable`, the valid project recovers normally, and the server accepts connections. // Covers: FEAT-099
-- **[AC-5-020]** GIVEN a checkpoint write fails due to a simulated disk-full error, THEN the server logs `ERROR` with the run ID, does not crash, and the next state transition triggers another write attempt. // Covers: FEAT-100
-- **[AC-5-021]** GIVEN a webhook target URL is unreachable and `max_retries = 3`, WHEN a `stage.completed` event fires, THEN the server logs `ERROR` after 4 total attempts and the stage status is unaffected. // Covers: FEAT-101
-- **[AC-5-022]** GIVEN a stage references an agent binary that does not exist on PATH, WHEN the stage is dispatched, THEN it transitions to `Failed` with `exit_code: -1` and `stderr` containing `devs: agent binary not found: <tool-name>`. // Covers: FEAT-102
-- **[AC-5-023]** GIVEN a stage has `pty: true` and PTY allocation fails (simulated), THEN the stage transitions to `Failed` immediately with no fallback. // Covers: FEAT-103
-- **[AC-5-024]** GIVEN `prompt_file` references a path that does not exist at execution time, THEN the stage transitions to `Failed` with `stderr` containing `devs: prompt_file not found: <path>`. // Covers: FEAT-105
+- **[4_USER_FEATURES-AC-5-018]** GIVEN `devs.toml` has two configuration errors, WHEN the server is started, THEN both errors are printed to stderr, zero ports are bound, and the process exits non-zero. // Covers: FEAT-098
+- **[4_USER_FEATURES-AC-5-019]** GIVEN a corrupt `checkpoint.json` exists for one project and valid checkpoints for another, WHEN the server starts, THEN the corrupt run is marked `Unrecoverable`, the valid project recovers normally, and the server accepts connections. // Covers: FEAT-099
+- **[4_USER_FEATURES-AC-5-020]** GIVEN a checkpoint write fails due to a simulated disk-full error, THEN the server logs `ERROR` with the run ID, does not crash, and the next state transition triggers another write attempt. // Covers: FEAT-100
+- **[4_USER_FEATURES-AC-5-021]** GIVEN a webhook target URL is unreachable and `max_retries = 3`, WHEN a `stage.completed` event fires, THEN the server logs `ERROR` after 4 total attempts and the stage status is unaffected. // Covers: FEAT-101
+- **[4_USER_FEATURES-AC-5-022]** GIVEN a stage references an agent binary that does not exist on PATH, WHEN the stage is dispatched, THEN it transitions to `Failed` with `exit_code: -1` and `stderr` containing `devs: agent binary not found: <tool-name>`. // Covers: FEAT-102
+- **[4_USER_FEATURES-AC-5-023]** GIVEN a stage has `pty: true` and PTY allocation fails (simulated), THEN the stage transitions to `Failed` immediately with no fallback. // Covers: FEAT-103
+- **[4_USER_FEATURES-AC-5-024]** GIVEN `prompt_file` references a path that does not exist at execution time, THEN the stage transitions to `Failed` with `stderr` containing `devs: prompt_file not found: <path>`. // Covers: FEAT-105
 
 **Agent-Side Error Feedback:**
-- **[AC-5-025]** GIVEN `signal_completion` is called twice on the same stage, THEN the first call returns `error: null` and the second returns `error: "failed_precondition: stage already in terminal state: ..."`. // Covers: FEAT-106
-- **[AC-5-026]** GIVEN a running agent receives `devs:cancel\n` on stdin and does not exit, THEN SIGTERM is sent after 5 s, SIGKILL after 10 s total, and the stage transitions to `Cancelled`. // Covers: FEAT-107
-- **[AC-5-027]** GIVEN the server begins shutdown and an MCP tool call arrives, THEN the response is `{"result": null, "error": "failed_precondition: server is shutting down"}`. // Covers: FEAT-108
-- **[AC-5-028]** GIVEN `devs-mcp-bridge` is running and the server process is killed, THEN within 2 s the bridge writes `{"result": null, "error": "internal: server connection lost", "fatal": true}` to stdout and exits with code 1. // Covers: FEAT-109
+- **[4_USER_FEATURES-AC-5-025]** GIVEN `signal_completion` is called twice on the same stage, THEN the first call returns `error: null` and the second returns `error: "failed_precondition: stage already in terminal state: ..."`. // Covers: FEAT-106
+- **[4_USER_FEATURES-AC-5-026]** GIVEN a running agent receives `devs:cancel\n` on stdin and does not exit, THEN SIGTERM is sent after 5 s, SIGKILL after 10 s total, and the stage transitions to `Cancelled`. // Covers: FEAT-107
+- **[4_USER_FEATURES-AC-5-027]** GIVEN the server begins shutdown and an MCP tool call arrives, THEN the response is `{"result": null, "error": "failed_precondition: server is shutting down"}`. // Covers: FEAT-108
+- **[4_USER_FEATURES-AC-5-028]** GIVEN `devs-mcp-bridge` is running and the server process is killed, THEN within 2 s the bridge writes `{"result": null, "error": "internal: server connection lost", "fatal": true}` to stdout and exits with code 1. // Covers: FEAT-109
 
 **Quality Gate Feedback:**
-- **[AC-5-029]** GIVEN `./do coverage` is run and QG-002 fails, THEN `target/coverage/report.json` exists, `overall_passed` is `false`, and the QG-002 gate entry has `passed: false`. // Covers: FEAT-110
-- **[AC-5-030]** GIVEN `./do test` is run with one requirement that has no covering test, THEN `target/traceability.json` has `overall_passed: false`, the uncovered requirement has `covered: false`, and `./do test` exits non-zero. // Covers: FEAT-111
-- **[AC-5-031]** GIVEN `./do lint` fails due to a `cargo clippy` denial, THEN the output includes the file path and line number in `file:line:col: error: message` format. // Covers: FEAT-112
-- **[AC-5-032]** GIVEN `./do presubmit` runs for more than 900 s, THEN the script exits non-zero, stderr contains `presubmit: TIMEOUT after 900s; step=<name>`, and `target/presubmit_timings.jsonl` contains an entry with `"status": "killed"`. // Covers: FEAT-113
-- **[AC-5-033]** GIVEN `./do test` is run with a `// Covers: STALE-REQ-999` annotation in a test file that references a non-existent requirement ID, THEN `stale_annotations` in `target/traceability.json` is non-empty and `overall_passed` is `false`. // Covers: FEAT-5-TRACE-BR-002
+- **[4_USER_FEATURES-AC-5-029]** GIVEN `./do coverage` is run and QG-002 fails, THEN `target/coverage/report.json` exists, `overall_passed` is `false`, and the QG-002 gate entry has `passed: false`. // Covers: FEAT-110
+- **[4_USER_FEATURES-AC-5-030]** GIVEN `./do test` is run with one requirement that has no covering test, THEN `target/traceability.json` has `overall_passed: false`, the uncovered requirement has `covered: false`, and `./do test` exits non-zero. // Covers: FEAT-111
+- **[4_USER_FEATURES-AC-5-031]** GIVEN `./do lint` fails due to a `cargo clippy` denial, THEN the output includes the file path and line number in `file:line:col: error: message` format. // Covers: FEAT-112
+- **[4_USER_FEATURES-AC-5-032]** GIVEN `./do presubmit` runs for more than 900 s, THEN the script exits non-zero, stderr contains `presubmit: TIMEOUT after 900s; step=<name>`, and `target/presubmit_timings.jsonl` contains an entry with `"status": "killed"`. // Covers: FEAT-113
+- **[4_USER_FEATURES-AC-5-033]** GIVEN `./do test` is run with a `// Covers: STALE-REQ-999` annotation in a test file that references a non-existent requirement ID, THEN `stale_annotations` in `target/traceability.json` is non-empty and `overall_passed` is `false`. // Covers: FEAT-5-TRACE-BR-002
 
 ---
 
@@ -5159,11 +5159,11 @@ A `WorkflowDefinition` is the authored description of a workflow DAG. It is load
 | `artifact_collection` | `enum` | `AgentDriven \| AutoCollect` | How completed stage artifacts are persisted back to the repo |
 | `source_path` | `string?` | Absolute file path | Path to the definition file on disk; set by the server at load time, not authored |
 
-**[FEAT-BR-001]** A `WorkflowDefinition` with zero stages MUST be rejected with `INVALID_ARGUMENT` during submission. A definition file on disk is not rejected at load time; rejection occurs at `submit_run`.
+**[4_USER_FEATURES-FEAT-BR-001]** A `WorkflowDefinition` with zero stages MUST be rejected with `INVALID_ARGUMENT` during submission. A definition file on disk is not rejected at load time; rejection occurs at `submit_run`.
 
-**[FEAT-BR-002]** Stage names within a single `WorkflowDefinition` MUST be unique. Duplicate stage names cause a validation error listing all duplicates.
+**[4_USER_FEATURES-FEAT-BR-002]** Stage names within a single `WorkflowDefinition` MUST be unique. Duplicate stage names cause a validation error listing all duplicates.
 
-**[FEAT-BR-003]** The DAG formed by `depends_on` references MUST be acyclic. Cycle detection uses Kahn's algorithm. The error response includes the full cycle path as an array of stage names.
+**[4_USER_FEATURES-FEAT-BR-003]** The DAG formed by `depends_on` references MUST be acyclic. Cycle detection uses Kahn's algorithm. The error response includes the full cycle path as an array of stage names.
 
 ### 6.2 WorkflowInput
 
@@ -5183,9 +5183,9 @@ A `WorkflowDefinition` is the authored description of a workflow DAG. It is load
 | `Integer` | ✓ coerced | ✓ accepted | ✗ rejected | ✗ rejected |
 | `Boolean` | ✗ rejected (`"1"`/`"0"` also rejected) | ✗ rejected | ✓ accepted | ✓ accepted (`"true"`/`"false"` only) |
 
-**[FEAT-BR-004]** `Path`-typed inputs are accepted as JSON strings and normalized to forward-slash separators internally. They are NOT resolved to absolute paths at submission time; resolution occurs at stage execution time.
+**[4_USER_FEATURES-FEAT-BR-004]** `Path`-typed inputs are accepted as JSON strings and normalized to forward-slash separators internally. They are NOT resolved to absolute paths at submission time; resolution occurs at stage execution time.
 
-**[FEAT-BR-005]** `Boolean` type accepts only JSON `true`/`false` or string `"true"`/`"false"`. Strings `"1"` and `"0"` MUST be rejected with `INVALID_ARGUMENT`.
+**[4_USER_FEATURES-FEAT-BR-005]** `Boolean` type accepts only JSON `true`/`false` or string `"true"`/`"false"`. Strings `"1"` and `"0"` MUST be rejected with `INVALID_ARGUMENT`.
 
 ### 6.3 StageDefinition
 
@@ -5201,7 +5201,7 @@ A `StageDefinition` describes a single node in the workflow DAG. All fields are 
 | `depends_on` | `string[]` | Each entry must name an existing stage; no cycles | Stages that must complete successfully before this stage is eligible |
 | `required_capabilities` | `string[]` | 0–N entries | Capability tags the selected agent must possess |
 | `completion` | `enum` | `ExitCode \| StructuredOutput \| McpToolCall` | Mechanism by which `devs` determines stage outcome |
-| `env` | `map<EnvKey, string>` | 0–256 entries; keys match `[A-Z_][A-Z0-9_]{0,127}` | Per-stage environment variables; override `default_env` |
+| `env` | `map<EnvKey, string>` | 0–256 entries; keys match `[4_USER_FEATURES-A-Z_][4_USER_FEATURES-A-Z0-9_]{0,127}` | Per-stage environment variables; override `default_env` |
 | `execution_env` | `ExecutionEnv?` | Optional; inherits workflow default if absent | Filesystem and process environment configuration |
 | `retry` | `RetryConfig?` | Optional | Retry policy for genuine failures |
 | `timeout_secs` | `u64?` | Must not exceed `workflow.timeout_secs` if both set | Per-stage wall-clock timeout |
@@ -5229,9 +5229,9 @@ A `StageDefinition` describes a single node in the workflow DAG. All fields are 
 | `Exponential` | `min(initial_delay_secs ^ N, max_delay_secs.unwrap_or(300))` |
 | `Linear` | `min(initial_delay_secs × N, max_delay_secs.unwrap_or(300))` |
 
-**[FEAT-BR-006]** Rate-limit events do NOT increment `attempt`. Only genuine stage failures (non-rate-limit exit) advance the attempt counter toward `max_attempts`.
+**[4_USER_FEATURES-FEAT-BR-006]** Rate-limit events do NOT increment `attempt`. Only genuine stage failures (non-rate-limit exit) advance the attempt counter toward `max_attempts`.
 
-**[FEAT-BR-007]** When `max_attempts` is exhausted, the stage transitions to `Failed` and branch conditions are evaluated. The workflow does not halt unless the branch routes to a terminal state.
+**[4_USER_FEATURES-FEAT-BR-007]** When `max_attempts` is exhausted, the stage transitions to `Failed` and branch conditions are evaluated. The workflow does not halt unless the branch routes to a terminal state.
 
 ### 6.5 FanOutConfig
 
@@ -5260,9 +5260,9 @@ A `StageDefinition` describes a single node in the workflow DAG. All fields are 
 }
 ```
 
-**[FEAT-BR-008]** If any sub-agent fails and no `merge_handler` is configured, the entire fan-out stage is marked `Failed`. The error output includes `{ "failed_indices": [0, 2] }` listing zero-based indices of failed sub-agents.
+**[4_USER_FEATURES-FEAT-BR-008]** If any sub-agent fails and no `merge_handler` is configured, the entire fan-out stage is marked `Failed`. The error output includes `{ "failed_indices": [0, 2] }` listing zero-based indices of failed sub-agents.
 
-**[FEAT-BR-009]** All sub-agents must complete before the merge handler runs or the next stage is dispatched. Partial completion is never forwarded downstream.
+**[4_USER_FEATURES-FEAT-BR-009]** All sub-agents must complete before the merge handler runs or the next stage is dispatched. Partial completion is never forwarded downstream.
 
 ### 6.6 BranchConfig
 
@@ -5333,9 +5333,9 @@ A `WorkflowRun` is created by `submit_run` and transitions through a defined sta
 | `completed_at` | `DateTime<Utc>?` | `null` until run reaches terminal state | Timestamp of terminal state transition |
 | `stage_runs` | `StageRun[]` | One entry per stage attempt | All stage run records for this run |
 
-**[FEAT-BR-010]** Two `WorkflowRun` records within the same project MUST NOT share the same `slug` unless one of them is in `Cancelled` status. This uniqueness check is enforced atomically under a per-project mutex.
+**[4_USER_FEATURES-FEAT-BR-010]** Two `WorkflowRun` records within the same project MUST NOT share the same `slug` unless one of them is in `Cancelled` status. This uniqueness check is enforced atomically under a per-project mutex.
 
-**[FEAT-BR-011]** The `definition_snapshot` is written and committed to git before the first `StageRun` transitions from `Waiting` to `Eligible`. It is immutable thereafter; `write_workflow_definition` does not modify in-flight snapshots.
+**[4_USER_FEATURES-FEAT-BR-011]** The `definition_snapshot` is written and committed to git before the first `StageRun` transitions from `Waiting` to `Eligible`. It is immutable thereafter; `write_workflow_definition` does not modify in-flight snapshots.
 
 ### 6.9 StageRun
 
@@ -5355,9 +5355,9 @@ A `StageRun` represents one attempt to execute one stage. Multiple `StageRun` re
 | `exit_code` | `i32?` | `null` until process exits; `-9` for SIGKILL | Process exit code; always recorded regardless of completion mechanism |
 | `output` | `StageOutput?` | `null` until stage completes | Captured output from the agent process |
 
-**[FEAT-BR-012]** `exit_code` is always recorded in `StageRun.exit_code` regardless of which `completion` mechanism is configured. If the process was killed by SIGKILL, `exit_code` is `-9`. If the process has not yet exited, `exit_code` is `null`.
+**[4_USER_FEATURES-FEAT-BR-012]** `exit_code` is always recorded in `StageRun.exit_code` regardless of which `completion` mechanism is configured. If the process was killed by SIGKILL, `exit_code` is `-9`. If the process has not yet exited, `exit_code` is `null`.
 
-**[FEAT-BR-013]** When a `WorkflowRun` transitions to `Cancelled`, all non-terminal `StageRun` records MUST transition to `Cancelled` in a single atomic checkpoint write. No `StageRun` may remain in a non-terminal status after the parent run is `Cancelled`.
+**[4_USER_FEATURES-FEAT-BR-013]** When a `WorkflowRun` transitions to `Cancelled`, all non-terminal `StageRun` records MUST transition to `Cancelled` in a single atomic checkpoint write. No `StageRun` may remain in a non-terminal status after the parent run is `Cancelled`.
 
 ### 6.10 StageOutput
 
@@ -5372,9 +5372,9 @@ A `StageRun` represents one attempt to execute one stage. Multiple `StageRun` re
 | `log_path` | `string` | Relative path within `.devs/logs/<run-id>/<stage>/attempt_<N>/` | Path to persistent log files in the checkpoint branch |
 | `truncated` | `bool` | `true` if stdout or stderr was truncated | Indicates truncation occurred; the most recent output is preserved |
 
-**[FEAT-BR-014]** A `StructuredOutput` stage where `.devs_output.json` contains `"success": "true"` (a string, not a boolean) MUST be treated as `Failed`. The `success` field must be a JSON boolean literal.
+**[4_USER_FEATURES-FEAT-BR-014]** A `StructuredOutput` stage where `.devs_output.json` contains `"success": "true"` (a string, not a boolean) MUST be treated as `Failed`. The `success` field must be a JSON boolean literal.
 
-**[FEAT-BR-015]** For `StructuredOutput` completion, `.devs_output.json` in the working directory takes precedence over the last JSON object found on stdout. If `.devs_output.json` exists but contains invalid JSON, the stage fails regardless of stdout content.
+**[4_USER_FEATURES-FEAT-BR-015]** For `StructuredOutput` completion, `.devs_output.json` in the working directory takes precedence over the last JSON object found on stdout. If `.devs_output.json` exists but contains invalid JSON, the stage fails regardless of stdout content.
 
 ### 6.11 AgentPool
 
@@ -5384,9 +5384,9 @@ A `StageRun` represents one attempt to execute one stage. Multiple `StageRun` re
 | `max_concurrent` | `u32` | 1–1024 | Maximum simultaneously running agents across all projects |
 | `agents` | `AgentConfig[]` | ≥1 entry | Ordered list of agent configurations; priority determined by list order |
 
-**[FEAT-BR-016]** `max_concurrent` is a hard limit enforced across all projects sharing the pool. No single project can monopolize all slots regardless of priority.
+**[4_USER_FEATURES-FEAT-BR-016]** `max_concurrent` is a hard limit enforced across all projects sharing the pool. No single project can monopolize all slots regardless of priority.
 
-**[FEAT-BR-017]** A stage that requires capability tags not satisfied by any agent in the pool fails immediately with `PoolError::UnsatisfiedCapability`. The stage is never queued; it transitions directly to `Failed`.
+**[4_USER_FEATURES-FEAT-BR-017]** A stage that requires capability tags not satisfied by any agent in the pool fails immediately with `PoolError::UnsatisfiedCapability`. The stage is never queued; it transitions directly to `Failed`.
 
 ### 6.12 AgentConfig
 
@@ -5473,11 +5473,11 @@ A `StageRun` represents one attempt to execute one stage. Multiple `StageRun` re
 }
 ```
 
-**[FEAT-BR-018]** The `pool.exhausted` event fires exactly once per exhaustion episode. An episode begins when all agents in the pool become unavailable and ends when at least one agent becomes available again. Multiple stages failing concurrently do not trigger multiple `pool.exhausted` events within a single episode.
+**[4_USER_FEATURES-FEAT-BR-018]** The `pool.exhausted` event fires exactly once per exhaustion episode. An episode begins when all agents in the pool become unavailable and ends when at least one agent becomes available again. Multiple stages failing concurrently do not trigger multiple `pool.exhausted` events within a single episode.
 
-**[FEAT-BR-019]** Webhook delivery failures are logged at `WARN` level. The workflow run and all stage runs proceed regardless of webhook delivery outcome. A failing webhook never blocks or delays the workflow engine.
+**[4_USER_FEATURES-FEAT-BR-019]** Webhook delivery failures are logged at `WARN` level. The workflow run and all stage runs proceed regardless of webhook delivery outcome. A failing webhook never blocks or delays the workflow engine.
 
-**[FEAT-BR-020]** When `state.changed` is subscribed and a specific event (e.g., `stage.completed`) also fires, exactly one HTTP POST is delivered per state transition (not two). The `state.changed` event and the specific event are not delivered separately.
+**[4_USER_FEATURES-FEAT-BR-020]** When `state.changed` is subscribed and a specific event (e.g., `stage.completed`) also fires, exactly one HTTP POST is delivered per state transition (not two). The `state.changed` event and the specific event are not delivered separately.
 
 ### 6.15 Checkpoint File Schemas
 
@@ -5754,7 +5754,7 @@ devs resume <run-id|slug> [--stage <stage-name>]
 
 ### 7.2 MCP Tool Reference
 
-All MCP tools are invoked via HTTP POST to `/mcp/v1/call`. The request body is a JSON-RPC 2.0 object. All responses follow the envelope defined in §3.3 ([FEAT-033]).
+All MCP tools are invoked via HTTP POST to `/mcp/v1/call`. The request body is a JSON-RPC 2.0 object. All responses follow the envelope defined in §3.3 ([4_USER_FEATURES-FEAT-033]).
 
 **Request format:**
 ```json
@@ -5847,7 +5847,7 @@ All parameters are optional. `project_id` filters to a single project. `limit` d
 }
 ```
 
-**[FEAT-BR-021]** `stdout` and `stderr` are always non-null strings. An empty string, not `null`, is returned when a stage produced no output.
+**[4_USER_FEATURES-FEAT-BR-021]** `stdout` and `stderr` are always non-null strings. An empty string, not `null`, is returned when a stage produced no output.
 
 #### 7.2.4 `stream_logs`
 
@@ -6042,7 +6042,7 @@ Validates the workflow definition before writing. If validation fails, the file 
 
 Only accepted for stages in `Waiting` or `Eligible` status. The injected data is treated as if the stage ran and completed. A checkpoint is committed immediately.
 
-**[FEAT-BR-022]** `exit_code: 0` causes the stage to transition to `Completed`. A non-zero `exit_code` causes it to transition to `Failed`. Branch conditions are evaluated as normal.
+**[4_USER_FEATURES-FEAT-BR-022]** `exit_code: 0` causes the stage to transition to `Completed`. A non-zero `exit_code` causes it to transition to `Failed`. Branch conditions are evaluated as normal.
 
 #### 7.2.15 `assert_stage_output`
 
@@ -6354,108 +6354,108 @@ Acceptance criteria are organized by feature category. Each criterion is a concr
 
 ### 10.1 Server Startup and Discovery
 
-- **[AC-FEAT-001]** GIVEN a `devs.toml` with any invalid field WHEN the server starts THEN all configuration errors are printed to stderr, no ports are bound, and the process exits non-zero.
-- **[AC-FEAT-002]** GIVEN a valid `devs.toml` WHEN the server starts THEN the gRPC port is bound before the MCP port; if the MCP port fails, the gRPC port is released and the process exits non-zero.
-- **[AC-FEAT-003]** GIVEN a running server WHEN startup completes THEN the discovery file at `$DEVS_DISCOVERY_FILE` (or `~/.config/devs/server.addr`) contains exactly `<host>:<grpc-port>` as plain UTF-8.
-- **[AC-FEAT-004]** GIVEN a running server receiving SIGTERM WHEN shutdown completes THEN the discovery file is deleted and the process exits 0.
-- **[AC-FEAT-005]** GIVEN a stale discovery file pointing to a stopped server WHEN a CLI client runs any command THEN the command exits with code 3.
-- **[AC-FEAT-006]** GIVEN `DEVS_DISCOVERY_FILE` set in the environment WHEN a client starts THEN it reads only that path for server discovery and ignores `~/.config/devs/server.addr`.
-- **[AC-FEAT-007]** GIVEN `--server <addr>` passed to any CLI command WHEN the command runs THEN the explicit address is used without reading the discovery file.
+- **[4_USER_FEATURES-AC-FEAT-001]** GIVEN a `devs.toml` with any invalid field WHEN the server starts THEN all configuration errors are printed to stderr, no ports are bound, and the process exits non-zero.
+- **[4_USER_FEATURES-AC-FEAT-002]** GIVEN a valid `devs.toml` WHEN the server starts THEN the gRPC port is bound before the MCP port; if the MCP port fails, the gRPC port is released and the process exits non-zero.
+- **[4_USER_FEATURES-AC-FEAT-003]** GIVEN a running server WHEN startup completes THEN the discovery file at `$DEVS_DISCOVERY_FILE` (or `~/.config/devs/server.addr`) contains exactly `<host>:<grpc-port>` as plain UTF-8.
+- **[4_USER_FEATURES-AC-FEAT-004]** GIVEN a running server receiving SIGTERM WHEN shutdown completes THEN the discovery file is deleted and the process exits 0.
+- **[4_USER_FEATURES-AC-FEAT-005]** GIVEN a stale discovery file pointing to a stopped server WHEN a CLI client runs any command THEN the command exits with code 3.
+- **[4_USER_FEATURES-AC-FEAT-006]** GIVEN `DEVS_DISCOVERY_FILE` set in the environment WHEN a client starts THEN it reads only that path for server discovery and ignores `~/.config/devs/server.addr`.
+- **[4_USER_FEATURES-AC-FEAT-007]** GIVEN `--server <addr>` passed to any CLI command WHEN the command runs THEN the explicit address is used without reading the discovery file.
 
 ### 10.2 Workflow Authoring and Submission
 
-- **[AC-FEAT-010]** GIVEN a workflow with a dependency cycle `A → B → A` WHEN `submit_run` is called THEN the response is `INVALID_ARGUMENT` containing `"cycle detected"` and the array `["A", "B", "A"]`.
-- **[AC-FEAT-011]** GIVEN a workflow with zero stages WHEN `submit_run` is called THEN the response is `INVALID_ARGUMENT`.
-- **[AC-FEAT-012]** GIVEN a workflow stage referencing a non-existent pool WHEN `submit_run` is called THEN the response is `INVALID_ARGUMENT` identifying the unknown pool name.
-- **[AC-FEAT-013]** GIVEN a workflow with duplicate stage names WHEN `submit_run` is called THEN all duplicate names are listed in a single `INVALID_ARGUMENT` response.
-- **[AC-FEAT-014]** GIVEN a workflow with multiple validation errors WHEN `submit_run` is called THEN all errors are returned in a single response (not just the first error).
-- **[AC-FEAT-015]** GIVEN `submit_run` succeeds WHEN the run transitions `Pending → Running` THEN the `definition_snapshot` is written and committed to git before the first stage transitions `Waiting → Eligible`.
-- **[AC-FEAT-016]** GIVEN two concurrent `submit_run` calls with the same `run_name` for the same project WHEN both complete THEN exactly one succeeds and exactly one returns `ALREADY_EXISTS`.
-- **[AC-FEAT-017]** GIVEN a `Boolean`-typed workflow input WHEN submitted with value `"1"` THEN the submission is rejected with `INVALID_ARGUMENT`.
-- **[AC-FEAT-018]** GIVEN a workflow input with `required: true` omitted from submission WHEN `submit_run` is called THEN the response is `INVALID_ARGUMENT` identifying the missing input.
-- **[AC-FEAT-019]** GIVEN `write_workflow_definition` is called while a run of that workflow is active WHEN the run's stages complete THEN the run uses the snapshot captured at start time, not the newly written definition.
+- **[4_USER_FEATURES-AC-FEAT-010]** GIVEN a workflow with a dependency cycle `A → B → A` WHEN `submit_run` is called THEN the response is `INVALID_ARGUMENT` containing `"cycle detected"` and the array `["A", "B", "A"]`.
+- **[4_USER_FEATURES-AC-FEAT-011]** GIVEN a workflow with zero stages WHEN `submit_run` is called THEN the response is `INVALID_ARGUMENT`.
+- **[4_USER_FEATURES-AC-FEAT-012]** GIVEN a workflow stage referencing a non-existent pool WHEN `submit_run` is called THEN the response is `INVALID_ARGUMENT` identifying the unknown pool name.
+- **[4_USER_FEATURES-AC-FEAT-013]** GIVEN a workflow with duplicate stage names WHEN `submit_run` is called THEN all duplicate names are listed in a single `INVALID_ARGUMENT` response.
+- **[4_USER_FEATURES-AC-FEAT-014]** GIVEN a workflow with multiple validation errors WHEN `submit_run` is called THEN all errors are returned in a single response (not just the first error).
+- **[4_USER_FEATURES-AC-FEAT-015]** GIVEN `submit_run` succeeds WHEN the run transitions `Pending → Running` THEN the `definition_snapshot` is written and committed to git before the first stage transitions `Waiting → Eligible`.
+- **[4_USER_FEATURES-AC-FEAT-016]** GIVEN two concurrent `submit_run` calls with the same `run_name` for the same project WHEN both complete THEN exactly one succeeds and exactly one returns `ALREADY_EXISTS`.
+- **[4_USER_FEATURES-AC-FEAT-017]** GIVEN a `Boolean`-typed workflow input WHEN submitted with value `"1"` THEN the submission is rejected with `INVALID_ARGUMENT`.
+- **[4_USER_FEATURES-AC-FEAT-018]** GIVEN a workflow input with `required: true` omitted from submission WHEN `submit_run` is called THEN the response is `INVALID_ARGUMENT` identifying the missing input.
+- **[4_USER_FEATURES-AC-FEAT-019]** GIVEN `write_workflow_definition` is called while a run of that workflow is active WHEN the run's stages complete THEN the run uses the snapshot captured at start time, not the newly written definition.
 
 ### 10.3 Stage Execution and Completion
 
-- **[AC-FEAT-020]** GIVEN two stages with no shared dependencies WHEN the shared dependency completes THEN both stages are dispatched within 100ms of each other.
-- **[AC-FEAT-021]** GIVEN a stage with `completion: StructuredOutput` WHEN `.devs_output.json` contains `"success": "true"` (string) THEN the stage transitions to `Failed`.
-- **[AC-FEAT-022]** GIVEN a stage with `completion: McpToolCall` WHEN the agent exits without calling `signal_completion` THEN the stage is evaluated using the process exit code as if `completion: ExitCode`.
-- **[AC-FEAT-023]** GIVEN a stage where `prompt_file` points to a non-existent file at execution time WHEN the stage is dispatched THEN the stage fails before the agent is spawned, with the missing path in the failure reason.
-- **[AC-FEAT-024]** GIVEN a template variable `{{stage.X.output.field}}` where stage X uses `completion: ExitCode` WHEN the stage referencing it is dispatched THEN it fails before agent spawn with `TemplateError::NoStructuredOutput`.
-- **[AC-FEAT-025]** GIVEN a template variable referencing a stage not in the transitive `depends_on` closure WHEN the stage is dispatched THEN it fails before agent spawn.
-- **[AC-FEAT-026]** GIVEN a missing template variable that has no value WHEN the stage is dispatched THEN it fails before agent spawn with the variable name identified; no empty-string substitution occurs.
-- **[AC-FEAT-027]** GIVEN `.devs_context.json` cannot be written (simulated disk full) WHEN a stage is dispatched THEN the stage fails without spawning the agent.
-- **[AC-FEAT-028]** GIVEN a stage timeout of N seconds WHEN the agent has not exited after N seconds THEN the server writes `devs:cancel\n`, waits 5s, sends SIGTERM, waits 5s, sends SIGKILL, then records `TimedOut`.
-- **[AC-FEAT-029]** GIVEN a running agent WHEN the agent binary is not found on PATH THEN the stage fails immediately with an error identifying the missing binary; no retry is attempted.
-- **[AC-FEAT-030]** GIVEN a PTY-mode agent WHEN PTY allocation fails THEN the stage fails immediately; no fallback to non-PTY mode occurs.
+- **[4_USER_FEATURES-AC-FEAT-020]** GIVEN two stages with no shared dependencies WHEN the shared dependency completes THEN both stages are dispatched within 100ms of each other.
+- **[4_USER_FEATURES-AC-FEAT-021]** GIVEN a stage with `completion: StructuredOutput` WHEN `.devs_output.json` contains `"success": "true"` (string) THEN the stage transitions to `Failed`.
+- **[4_USER_FEATURES-AC-FEAT-022]** GIVEN a stage with `completion: McpToolCall` WHEN the agent exits without calling `signal_completion` THEN the stage is evaluated using the process exit code as if `completion: ExitCode`.
+- **[4_USER_FEATURES-AC-FEAT-023]** GIVEN a stage where `prompt_file` points to a non-existent file at execution time WHEN the stage is dispatched THEN the stage fails before the agent is spawned, with the missing path in the failure reason.
+- **[4_USER_FEATURES-AC-FEAT-024]** GIVEN a template variable `{{stage.X.output.field}}` where stage X uses `completion: ExitCode` WHEN the stage referencing it is dispatched THEN it fails before agent spawn with `TemplateError::NoStructuredOutput`.
+- **[4_USER_FEATURES-AC-FEAT-025]** GIVEN a template variable referencing a stage not in the transitive `depends_on` closure WHEN the stage is dispatched THEN it fails before agent spawn.
+- **[4_USER_FEATURES-AC-FEAT-026]** GIVEN a missing template variable that has no value WHEN the stage is dispatched THEN it fails before agent spawn with the variable name identified; no empty-string substitution occurs.
+- **[4_USER_FEATURES-AC-FEAT-027]** GIVEN `.devs_context.json` cannot be written (simulated disk full) WHEN a stage is dispatched THEN the stage fails without spawning the agent.
+- **[4_USER_FEATURES-AC-FEAT-028]** GIVEN a stage timeout of N seconds WHEN the agent has not exited after N seconds THEN the server writes `devs:cancel\n`, waits 5s, sends SIGTERM, waits 5s, sends SIGKILL, then records `TimedOut`.
+- **[4_USER_FEATURES-AC-FEAT-029]** GIVEN a running agent WHEN the agent binary is not found on PATH THEN the stage fails immediately with an error identifying the missing binary; no retry is attempted.
+- **[4_USER_FEATURES-AC-FEAT-030]** GIVEN a PTY-mode agent WHEN PTY allocation fails THEN the stage fails immediately; no fallback to non-PTY mode occurs.
 
 ### 10.4 Agent Pools and Routing
 
-- **[AC-FEAT-031]** GIVEN a stage requires capability `["review"]` WHEN no agent in the pool has `review` capability THEN the stage immediately fails with `UnsatisfiedCapability`; it is never queued.
-- **[AC-FEAT-032]** GIVEN `max_concurrent = 4` and 10 stages dispatched simultaneously WHEN the pool processes them THEN exactly 4 run concurrently and the remaining 6 queue in FIFO order on the semaphore.
-- **[AC-FEAT-033]** GIVEN an agent reports a rate-limit event WHEN a fallback agent is available THEN the stage is requeued without incrementing `StageRun.attempt`.
-- **[AC-FEAT-034]** GIVEN an agent reports a rate-limit event WHEN no fallback agent is available THEN the stage transitions to `Failed` and the `pool.exhausted` webhook fires exactly once for this exhaustion episode.
-- **[AC-FEAT-035]** GIVEN all agents in a pool are rate-limited simultaneously WHEN any agent becomes available again THEN the `pool.exhausted` episode ends and the next `pool.exhausted` fires only on the next new episode.
+- **[4_USER_FEATURES-AC-FEAT-031]** GIVEN a stage requires capability `["review"]` WHEN no agent in the pool has `review` capability THEN the stage immediately fails with `UnsatisfiedCapability`; it is never queued.
+- **[4_USER_FEATURES-AC-FEAT-032]** GIVEN `max_concurrent = 4` and 10 stages dispatched simultaneously WHEN the pool processes them THEN exactly 4 run concurrently and the remaining 6 queue in FIFO order on the semaphore.
+- **[4_USER_FEATURES-AC-FEAT-033]** GIVEN an agent reports a rate-limit event WHEN a fallback agent is available THEN the stage is requeued without incrementing `StageRun.attempt`.
+- **[4_USER_FEATURES-AC-FEAT-034]** GIVEN an agent reports a rate-limit event WHEN no fallback agent is available THEN the stage transitions to `Failed` and the `pool.exhausted` webhook fires exactly once for this exhaustion episode.
+- **[4_USER_FEATURES-AC-FEAT-035]** GIVEN all agents in a pool are rate-limited simultaneously WHEN any agent becomes available again THEN the `pool.exhausted` episode ends and the next `pool.exhausted` fires only on the next new episode.
 
 ### 10.5 State Persistence and Recovery
 
-- **[AC-FEAT-036]** GIVEN a server crash with stages in `Running` status WHEN the server restarts and loads checkpoints THEN those stages are reset to `Eligible` and re-dispatched.
-- **[AC-FEAT-037]** GIVEN a corrupt `checkpoint.json` file WHEN the server restarts THEN the affected run is marked `Unrecoverable` and skipped; the server continues loading other runs without crashing.
-- **[AC-FEAT-038]** GIVEN a disk-full condition during checkpoint write WHEN the write fails THEN the server logs `ERROR`, deletes the `.tmp` file, and continues running; the write is retried on the next state transition.
-- **[AC-FEAT-039]** GIVEN a checkpoint branch does not exist WHEN the first checkpoint is written THEN the branch is created as an orphan branch.
-- **[AC-FEAT-040]** GIVEN `auto_collect` artifact collection WHEN a stage completes THEN `devs` diffs the working dir, commits any changes with message `devs: auto-collect stage <name> run <id>`, and pushes to the checkpoint branch only (not the main branch).
+- **[4_USER_FEATURES-AC-FEAT-036]** GIVEN a server crash with stages in `Running` status WHEN the server restarts and loads checkpoints THEN those stages are reset to `Eligible` and re-dispatched.
+- **[4_USER_FEATURES-AC-FEAT-037]** GIVEN a corrupt `checkpoint.json` file WHEN the server restarts THEN the affected run is marked `Unrecoverable` and skipped; the server continues loading other runs without crashing.
+- **[4_USER_FEATURES-AC-FEAT-038]** GIVEN a disk-full condition during checkpoint write WHEN the write fails THEN the server logs `ERROR`, deletes the `.tmp` file, and continues running; the write is retried on the next state transition.
+- **[4_USER_FEATURES-AC-FEAT-039]** GIVEN a checkpoint branch does not exist WHEN the first checkpoint is written THEN the branch is created as an orphan branch.
+- **[4_USER_FEATURES-AC-FEAT-040]** GIVEN `auto_collect` artifact collection WHEN a stage completes THEN `devs` diffs the working dir, commits any changes with message `devs: auto-collect stage <name> run <id>`, and pushes to the checkpoint branch only (not the main branch).
 
 ### 10.6 CLI Interface
 
-- **[AC-FEAT-041]** GIVEN any CLI command with `--format json` WHEN an error occurs THEN the error is written to stdout as `{"error": "...", "code": <n>}` and nothing is written to stderr.
-- **[AC-FEAT-042]** GIVEN `devs logs <run> --follow` WHEN the run reaches `Completed` THEN the command exits with code 0.
-- **[AC-FEAT-043]** GIVEN `devs logs <run> --follow` WHEN the run reaches `Failed` or `Cancelled` THEN the command exits with code 1.
-- **[AC-FEAT-044]** GIVEN a run identifier in UUID4 format AND the same value matching a slug WHEN any CLI command uses it THEN it is resolved as a `run_id` (UUID takes precedence).
-- **[AC-FEAT-045]** GIVEN `devs submit` is called from a directory matching multiple registered projects WHEN `--project` is not specified THEN the command exits with code 4 indicating the ambiguity.
-- **[AC-FEAT-046]** GIVEN a server returning `NOT_FOUND` for a run WHEN a CLI command targets it THEN the exit code is 2.
+- **[4_USER_FEATURES-AC-FEAT-041]** GIVEN any CLI command with `--format json` WHEN an error occurs THEN the error is written to stdout as `{"error": "...", "code": <n>}` and nothing is written to stderr.
+- **[4_USER_FEATURES-AC-FEAT-042]** GIVEN `devs logs <run> --follow` WHEN the run reaches `Completed` THEN the command exits with code 0.
+- **[4_USER_FEATURES-AC-FEAT-043]** GIVEN `devs logs <run> --follow` WHEN the run reaches `Failed` or `Cancelled` THEN the command exits with code 1.
+- **[4_USER_FEATURES-AC-FEAT-044]** GIVEN a run identifier in UUID4 format AND the same value matching a slug WHEN any CLI command uses it THEN it is resolved as a `run_id` (UUID takes precedence).
+- **[4_USER_FEATURES-AC-FEAT-045]** GIVEN `devs submit` is called from a directory matching multiple registered projects WHEN `--project` is not specified THEN the command exits with code 4 indicating the ambiguity.
+- **[4_USER_FEATURES-AC-FEAT-046]** GIVEN a server returning `NOT_FOUND` for a run WHEN a CLI command targets it THEN the exit code is 2.
 
 ### 10.7 TUI Interface
 
-- **[AC-FEAT-047]** GIVEN the TUI is connected to a running server WHEN a `StreamRunEvents` event arrives THEN the screen is re-rendered within 50ms.
-- **[AC-FEAT-048]** GIVEN the TUI is connected WHEN the server connection drops THEN the TUI displays a reconnection notice and begins exponential backoff (1s→2s→4s→8s→16s→30s).
-- **[AC-FEAT-049]** GIVEN the TUI has been disconnected for more than 30s total (plus 5s additional) WHEN no reconnection succeeds THEN the TUI prints a final disconnection message and exits with code 1.
-- **[AC-FEAT-050]** GIVEN stage statuses displayed in the TUI WHEN any status changes THEN the four-letter abbreviation and elapsed time in the stage box are updated without requiring color to distinguish states.
-- **[AC-FEAT-051]** GIVEN the TUI renders on an 80-column terminal WHEN stage names and statuses are displayed THEN no critical information is clipped or absent.
-- **[AC-FEAT-052]** GIVEN TUI tests run in CI WHEN snapshots are compared THEN comparison uses text file fixtures (not pixel screenshots); mismatches generate `.txt.new` files that must be reviewed before approval.
+- **[4_USER_FEATURES-AC-FEAT-047]** GIVEN the TUI is connected to a running server WHEN a `StreamRunEvents` event arrives THEN the screen is re-rendered within 50ms.
+- **[4_USER_FEATURES-AC-FEAT-048]** GIVEN the TUI is connected WHEN the server connection drops THEN the TUI displays a reconnection notice and begins exponential backoff (1s→2s→4s→8s→16s→30s).
+- **[4_USER_FEATURES-AC-FEAT-049]** GIVEN the TUI has been disconnected for more than 30s total (plus 5s additional) WHEN no reconnection succeeds THEN the TUI prints a final disconnection message and exits with code 1.
+- **[4_USER_FEATURES-AC-FEAT-050]** GIVEN stage statuses displayed in the TUI WHEN any status changes THEN the four-letter abbreviation and elapsed time in the stage box are updated without requiring color to distinguish states.
+- **[4_USER_FEATURES-AC-FEAT-051]** GIVEN the TUI renders on an 80-column terminal WHEN stage names and statuses are displayed THEN no critical information is clipped or absent.
+- **[4_USER_FEATURES-AC-FEAT-052]** GIVEN TUI tests run in CI WHEN snapshots are compared THEN comparison uses text file fixtures (not pixel screenshots); mismatches generate `.txt.new` files that must be reviewed before approval.
 
 ### 10.8 MCP Interface
 
-- **[AC-FEAT-053]** GIVEN any MCP tool call WHEN the tool succeeds THEN the response contains `"result": <non-null>` and `"error": null`; these fields are mutually exclusive.
-- **[AC-FEAT-054]** GIVEN any MCP tool call WHEN the tool fails THEN the response contains `"result": null` and `"error": "<prefix>: <detail>"` where `<prefix>` is one of the stable category tokens.
-- **[AC-FEAT-055]** GIVEN `get_run` on any run WHEN the response is returned THEN every field defined in §6.8 is present; no optional field is absent (absent vs null is a protocol violation).
-- **[AC-FEAT-056]** GIVEN `signal_completion` is called on a stage already in a terminal state WHEN the call is made THEN the response is `"error": "failed_precondition: ..."` and no state change occurs.
-- **[AC-FEAT-057]** GIVEN `inject_stage_input` is called on a `Running` stage WHEN the call is made THEN the response is `"error": "failed_precondition: ..."`.
-- **[AC-FEAT-058]** GIVEN `assert_stage_output` is called with an invalid regex pattern WHEN the call is made THEN the entire request fails with an error before any assertion is evaluated.
-- **[AC-FEAT-059]** GIVEN a request body exceeding 1 MiB WHEN it is POSTed to `/mcp/v1/call` THEN the server responds with HTTP 413.
-- **[AC-FEAT-060]** GIVEN 64 concurrent MCP connections WHEN all issue simultaneous observation tool calls THEN all receive responses; the server does not deadlock or reject connections.
-- **[AC-FEAT-061]** GIVEN `stream_logs(follow:true)` on a stage that is `Pending` WHEN the stage is subsequently cancelled without running THEN the final chunk is `{"done":true,"truncated":false,"total_lines":0}`.
-- **[AC-FEAT-062]** GIVEN MCP and gRPC both serve a `cancel_run` call targeting the same run WHEN the cancel is processed THEN both interfaces observe consistent state (shared `Arc<RwLock<ServerState>>`); no sleep or polling is required to observe the change.
+- **[4_USER_FEATURES-AC-FEAT-053]** GIVEN any MCP tool call WHEN the tool succeeds THEN the response contains `"result": <non-null>` and `"error": null`; these fields are mutually exclusive.
+- **[4_USER_FEATURES-AC-FEAT-054]** GIVEN any MCP tool call WHEN the tool fails THEN the response contains `"result": null` and `"error": "<prefix>: <detail>"` where `<prefix>` is one of the stable category tokens.
+- **[4_USER_FEATURES-AC-FEAT-055]** GIVEN `get_run` on any run WHEN the response is returned THEN every field defined in §6.8 is present; no optional field is absent (absent vs null is a protocol violation).
+- **[4_USER_FEATURES-AC-FEAT-056]** GIVEN `signal_completion` is called on a stage already in a terminal state WHEN the call is made THEN the response is `"error": "failed_precondition: ..."` and no state change occurs.
+- **[4_USER_FEATURES-AC-FEAT-057]** GIVEN `inject_stage_input` is called on a `Running` stage WHEN the call is made THEN the response is `"error": "failed_precondition: ..."`.
+- **[4_USER_FEATURES-AC-FEAT-058]** GIVEN `assert_stage_output` is called with an invalid regex pattern WHEN the call is made THEN the entire request fails with an error before any assertion is evaluated.
+- **[4_USER_FEATURES-AC-FEAT-059]** GIVEN a request body exceeding 1 MiB WHEN it is POSTed to `/mcp/v1/call` THEN the server responds with HTTP 413.
+- **[4_USER_FEATURES-AC-FEAT-060]** GIVEN 64 concurrent MCP connections WHEN all issue simultaneous observation tool calls THEN all receive responses; the server does not deadlock or reject connections.
+- **[4_USER_FEATURES-AC-FEAT-061]** GIVEN `stream_logs(follow:true)` on a stage that is `Pending` WHEN the stage is subsequently cancelled without running THEN the final chunk is `{"done":true,"truncated":false,"total_lines":0}`.
+- **[4_USER_FEATURES-AC-FEAT-062]** GIVEN MCP and gRPC both serve a `cancel_run` call targeting the same run WHEN the cancel is processed THEN both interfaces observe consistent state (shared `Arc<RwLock<ServerState>>`); no sleep or polling is required to observe the change.
 
 ### 10.9 Development Lifecycle (`./do`)
 
-- **[AC-FEAT-063]** GIVEN `./do presubmit` runs for more than 15 minutes WHEN the timeout fires THEN all child processes are killed and the script exits non-zero with `presubmit: TIMEOUT after 900s` on stderr.
-- **[AC-FEAT-064]** GIVEN `./do setup` is run twice in sequence WHEN the second run completes THEN it exits 0 and produces no errors (idempotency).
-- **[AC-FEAT-065]** GIVEN `./do <unknown>` is called WHEN the script runs THEN the valid subcommands are printed to stderr and the script exits non-zero.
-- **[AC-FEAT-066]** GIVEN `./do test` runs WHEN `target/traceability.json` is generated THEN `overall_passed` is `false` if any requirement ID in `docs/plan/specs/*.md` has zero covering tests; the process exits non-zero.
-- **[AC-FEAT-067]** GIVEN `./do test` runs WHEN a test annotation references a non-existent requirement ID THEN `stale_annotations` in `target/traceability.json` is non-empty and the process exits non-zero.
-- **[AC-FEAT-068]** GIVEN `./do coverage` runs WHEN `target/coverage/report.json` is generated THEN it contains exactly five gates with IDs `QG-001` through `QG-005`; `overall_passed` is `false` if any gate's `actual_pct` is below `threshold_pct`.
-- **[AC-FEAT-069]** GIVEN any `./do` command WHEN run on Linux, macOS, and Windows Git Bash THEN the exit code is identical across all three platforms for the same logical outcome.
-- **[AC-FEAT-070]** GIVEN `./do lint` runs WHEN a lint error occurs THEN the error message includes a file path and line number in `file:line: error: message` format that an AI agent can navigate to directly.
+- **[4_USER_FEATURES-AC-FEAT-063]** GIVEN `./do presubmit` runs for more than 15 minutes WHEN the timeout fires THEN all child processes are killed and the script exits non-zero with `presubmit: TIMEOUT after 900s` on stderr.
+- **[4_USER_FEATURES-AC-FEAT-064]** GIVEN `./do setup` is run twice in sequence WHEN the second run completes THEN it exits 0 and produces no errors (idempotency).
+- **[4_USER_FEATURES-AC-FEAT-065]** GIVEN `./do <unknown>` is called WHEN the script runs THEN the valid subcommands are printed to stderr and the script exits non-zero.
+- **[4_USER_FEATURES-AC-FEAT-066]** GIVEN `./do test` runs WHEN `target/traceability.json` is generated THEN `overall_passed` is `false` if any requirement ID in `docs/plan/specs/*.md` has zero covering tests; the process exits non-zero.
+- **[4_USER_FEATURES-AC-FEAT-067]** GIVEN `./do test` runs WHEN a test annotation references a non-existent requirement ID THEN `stale_annotations` in `target/traceability.json` is non-empty and the process exits non-zero.
+- **[4_USER_FEATURES-AC-FEAT-068]** GIVEN `./do coverage` runs WHEN `target/coverage/report.json` is generated THEN it contains exactly five gates with IDs `QG-001` through `QG-005`; `overall_passed` is `false` if any gate's `actual_pct` is below `threshold_pct`.
+- **[4_USER_FEATURES-AC-FEAT-069]** GIVEN any `./do` command WHEN run on Linux, macOS, and Windows Git Bash THEN the exit code is identical across all three platforms for the same logical outcome.
+- **[4_USER_FEATURES-AC-FEAT-070]** GIVEN `./do lint` runs WHEN a lint error occurs THEN the error message includes a file path and line number in `file:line: error: message` format that an AI agent can navigate to directly.
 
 ### 10.10 Agentic Development Behaviors
 
-- **[AC-FEAT-071]** GIVEN an observing/controlling agent submitting a second run for the same workflow WHEN a non-terminal run already exists THEN the agent cancels the existing run before submitting.
-- **[AC-FEAT-072]** GIVEN an orchestrated agent receiving `devs:cancel\n` on stdin WHEN the agent exits within 10s THEN no SIGTERM is sent.
-- **[AC-FEAT-073]** GIVEN an orchestrated agent receiving `devs:cancel\n` on stdin WHEN the agent does NOT exit within 10s + 5s THEN SIGTERM is sent; if still running after 5 more seconds, SIGKILL is sent.
-- **[AC-FEAT-074]** GIVEN an observing agent receiving `"failed_precondition: server is shutting down"` from any MCP tool WHEN the agent handles this response THEN `task_state.json` is written atomically to `.devs/agent-state/<session-id>/task_state.json` before the agent terminates.
-- **[AC-FEAT-075]** GIVEN the `devs-mcp-bridge` process WHEN the MCP server connection is lost THEN it writes `{"result":null,"error":"internal: server connection lost","fatal":true}` to stdout and exits with code 1 after one reconnection attempt after 1s.
-- **[AC-FEAT-076]** GIVEN an E2E test for any MCP tool WHEN the test exercises the tool THEN it calls the tool via `POST /mcp/v1/call` using `DEVS_MCP_ADDR`; calling the Rust function directly does not satisfy E2E coverage requirements.
-- **[AC-FEAT-077]** GIVEN nested E2E test runs (a workflow stage that itself runs `devs`) WHEN the inner server starts THEN it uses a distinct `DEVS_DISCOVERY_FILE` path; it does NOT use the outer development server instance.
+- **[4_USER_FEATURES-AC-FEAT-071]** GIVEN an observing/controlling agent submitting a second run for the same workflow WHEN a non-terminal run already exists THEN the agent cancels the existing run before submitting.
+- **[4_USER_FEATURES-AC-FEAT-072]** GIVEN an orchestrated agent receiving `devs:cancel\n` on stdin WHEN the agent exits within 10s THEN no SIGTERM is sent.
+- **[4_USER_FEATURES-AC-FEAT-073]** GIVEN an orchestrated agent receiving `devs:cancel\n` on stdin WHEN the agent does NOT exit within 10s + 5s THEN SIGTERM is sent; if still running after 5 more seconds, SIGKILL is sent.
+- **[4_USER_FEATURES-AC-FEAT-074]** GIVEN an observing agent receiving `"failed_precondition: server is shutting down"` from any MCP tool WHEN the agent handles this response THEN `task_state.json` is written atomically to `.devs/agent-state/<session-id>/task_state.json` before the agent terminates.
+- **[4_USER_FEATURES-AC-FEAT-075]** GIVEN the `devs-mcp-bridge` process WHEN the MCP server connection is lost THEN it writes `{"result":null,"error":"internal: server connection lost","fatal":true}` to stdout and exits with code 1 after one reconnection attempt after 1s.
+- **[4_USER_FEATURES-AC-FEAT-076]** GIVEN an E2E test for any MCP tool WHEN the test exercises the tool THEN it calls the tool via `POST /mcp/v1/call` using `DEVS_MCP_ADDR`; calling the Rust function directly does not satisfy E2E coverage requirements.
+- **[4_USER_FEATURES-AC-FEAT-077]** GIVEN nested E2E test runs (a workflow stage that itself runs `devs`) WHEN the inner server starts THEN it uses a distinct `DEVS_DISCOVERY_FILE` path; it does NOT use the outer development server instance.
 
 ---
 

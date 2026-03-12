@@ -106,17 +106,17 @@ graph TD
     POOL --> ADAPT
 ```
 
-**[2_TAS-REQ-001a]** The Interface Layer MUST NOT contain business logic. All validation, routing, and state mutation MUST be delegated to Engine Layer components. Interface Layer handlers are limited to: deserializing the wire request, calling one Engine Layer method, serializing the response.
+**[2_TAS-REQ-001A]** The Interface Layer MUST NOT contain business logic. All validation, routing, and state mutation MUST be delegated to Engine Layer components. Interface Layer handlers are limited to: deserializing the wire request, calling one Engine Layer method, serializing the response.
 
-**[2_TAS-REQ-001b]** Infrastructure Layer components MUST NOT hold mutable shared state beyond their own internal caches. They are invoked from Engine Layer components and return results without retaining references to caller state.
+**[2_TAS-REQ-001B]** Infrastructure Layer components MUST NOT hold mutable shared state beyond their own internal caches. They are invoked from Engine Layer components and return results without retaining references to caller state.
 
-**[2_TAS-REQ-001c]** The MCP server and gRPC server MUST share the same in-process state. A change made through the MCP interface MUST be immediately visible through the gRPC interface and vice versa, within the same Tokio scheduler cycle, without any inter-process communication.
+**[2_TAS-REQ-001C]** The MCP server and gRPC server MUST share the same in-process state. A change made through the MCP interface MUST be immediately visible through the gRPC interface and vice versa, within the same Tokio scheduler cycle, without any inter-process communication.
 
 ---
 
 ### 1.2 Cargo Workspace Structure
 
-**[2_TAS-REQ-001d]** The repository root contains a single `Cargo.toml` workspace manifest. All crates are members of this workspace. No library crate depends on a crate outside the workspace in its non-dev dependencies, except for third-party crates specified in §2.2.
+**[2_TAS-REQ-001D]** The repository root contains a single `Cargo.toml` workspace manifest. All crates are members of this workspace. No library crate depends on a crate outside the workspace in its non-dev dependencies, except for third-party crates specified in §2.2.
 
 The workspace is organized into the following crates:
 
@@ -138,11 +138,11 @@ The workspace is organized into the following crates:
 | `devs-cli` | bin | `devs` (subcommands) | CLI client. Clap-based argument parsing, gRPC calls, JSON/human-readable output. Depends on `devs-proto`, `devs-core`. |
 | `devs-mcp-bridge` | bin | `devs-mcp-bridge` | MCP stdio bridge. Reads JSON-RPC from stdin, forwards over HTTP to MCP port, writes responses to stdout. Depends on `devs-core` only. |
 
-**[2_TAS-REQ-001e]** `devs-core` MUST NOT have `tokio`, `git2`, `reqwest`, or `tonic` in its non-dev `[dependencies]`. This is verified as part of `./do lint` by a dependency audit step.
+**[2_TAS-REQ-001E]** `devs-core` MUST NOT have `tokio`, `git2`, `reqwest`, or `tonic` in its non-dev `[dependencies]`. This is verified as part of `./do lint` by a dependency audit step.
 
-**[2_TAS-REQ-001f]** `devs-proto` generated files (`src/gen/*.rs`) MUST be committed to the repository. The `build.rs` regenerates them when `.proto` source files change, detected via `cargo:rerun-if-changed` directives.
+**[2_TAS-REQ-001F]** `devs-proto` generated files (`src/gen/*.rs`) MUST be committed to the repository. The `build.rs` regenerates them when `.proto` source files change, detected via `cargo:rerun-if-changed` directives.
 
-**[2_TAS-REQ-001g]** Wire types from `devs-proto` MUST NOT appear in the public API of `devs-scheduler`, `devs-executor`, or `devs-pool`. All cross-crate communication within the engine uses types from `devs-core`.
+**[2_TAS-REQ-001G]** Wire types from `devs-proto` MUST NOT appear in the public API of `devs-scheduler`, `devs-executor`, or `devs-pool`. All cross-crate communication within the engine uses types from `devs-core`.
 
 #### Crate Dependency Graph
 
@@ -210,7 +210,7 @@ graph TD
 5. Initialize the Agent Pool Manager from the validated pool configurations.
 6. Load and validate the project registry (`~/.config/devs/projects.toml`). Create the file if absent (an empty registry is valid).
 7. For each registered project, scan for workflow definition files in the configured `workflow_paths`.
-8. Restore checkpointed runs from git: for each project's checkpoint branch, read all `checkpoint.json` files. Reset stages in `Running` state to `Eligible`; re-queue stages in `Waiting`/`Eligible` state; re-queue `Pending` runs. A failure to restore one project's checkpoints MUST NOT abort startup — log at `ERROR` level and continue with remaining projects.
+8. **[2_TAS-REQ-206]** Restore checkpointed runs from git: for each project's checkpoint branch, read all `checkpoint.json` files. Reset stages in `Running` state to `Eligible`; re-queue stages in `Waiting`/`Eligible` state; re-queue `Pending` runs. A failure to restore one project's checkpoints MUST NOT abort startup — log at `ERROR` level and continue with remaining projects.
 9. Write the discovery file atomically to `~/.config/devs/server.addr` (or the path in `DEVS_DISCOVERY_FILE` if set).
 10. Begin accepting connections on both ports.
 11. Resume recovered runs by triggering the DAG Scheduler for each restored `WorkflowRun`.
@@ -237,30 +237,30 @@ flowchart TD
     R --> S([Server Running])
 ```
 
-**[2_TAS-REQ-001h]** Config validation (step 2) MUST collect ALL errors in a single pass and report them together. The error output format is one error per line on stderr, each prefixed with `ERROR:`. The process MUST NOT bind any port if any config error exists.
+**[2_TAS-REQ-001H]** Config validation (step 2) MUST collect ALL errors in a single pass and report them together. The error output format is one error per line on stderr, each prefixed with `ERROR:`. The process MUST NOT bind any port if any config error exists.
 
-**[2_TAS-REQ-001i]** If the MCP port is unavailable (step 4), the server MUST release the already-bound gRPC port before exiting, leaving no lingering port bindings in any exit path.
+**[2_TAS-REQ-001I]** If the MCP port is unavailable (step 4), the server MUST release the already-bound gRPC port before exiting, leaving no lingering port bindings in any exit path.
 
-**[2_TAS-REQ-001j]** Discovery file write (step 9) MUST be atomic: write to a `.tmp` suffixed file in the same directory, then rename to the final path. On Linux/macOS this is guaranteed atomic by `rename(2)`. On Windows, the implementation MUST use a rename approach equivalent to `MoveFileExW` with `MOVEFILE_REPLACE_EXISTING`.
+**[2_TAS-REQ-001J]** Discovery file write (step 9) MUST be atomic: write to a `.tmp` suffixed file in the same directory, then rename to the final path. On Linux/macOS this is guaranteed atomic by `rename(2)`. On Windows, the implementation MUST use a rename approach equivalent to `MoveFileExW` with `MOVEFILE_REPLACE_EXISTING`.
 
-**[2_TAS-REQ-001k]** Checkpoint restoration (step 8) MUST NOT fail startup if a single project's checkpoint branch is inaccessible (e.g., corrupt git repo, missing branch). The server MUST log an `ERROR`-level message for that project and continue restoring the remaining projects.
+**[2_TAS-REQ-001K]** Checkpoint restoration (step 8) MUST NOT fail startup if a single project's checkpoint branch is inaccessible (e.g., corrupt git repo, missing branch). The server MUST log an `ERROR`-level message for that project and continue restoring the remaining projects.
 
-**[2_TAS-REQ-001l]** If the `devs.toml` does not exist at the default search path and `--config` is not supplied, the server MUST start with all built-in defaults and emit a `WARN`-level log: `"No devs.toml found at <path>; using built-in defaults."` This is not an error.
+**[2_TAS-REQ-001L]** If the `devs.toml` does not exist at the default search path and `--config` is not supplied, the server MUST start with all built-in defaults and emit a `WARN`-level log: `"No devs.toml found at <path>; using built-in defaults."` This is not an error.
 
-**[2_TAS-REQ-001m]** If `--config` is supplied and the file does not exist, the server MUST exit immediately with a descriptive error before any port binding: `"Error: config file not found: <path>"`.
+**[2_TAS-REQ-001M]** If `--config` is supplied and the file does not exist, the server MUST exit immediately with a descriptive error before any port binding: `"Error: config file not found: <path>"`.
 
-**[2_TAS-REQ-001n]** If the discovery file directory does not exist, the server MUST create it (including all missing parent directories) before writing the discovery file. Failure to create the directory is a fatal error at step 9.
+**[2_TAS-REQ-001N]** If the discovery file directory does not exist, the server MUST create it (including all missing parent directories) before writing the discovery file. Failure to create the directory is a fatal error at step 9.
 
 #### Startup Business Rules
 
 | Rule ID | Rule |
 |---|---|
-| ARCH-SR-001 | No port is bound before all config errors are collected and reported |
-| ARCH-SR-002 | The discovery file path resolves as: `DEVS_DISCOVERY_FILE` env var → `server.discovery_file` in `devs.toml` → `~/.config/devs/server.addr` |
-| ARCH-SR-003 | The discovery file contains exactly `<host>:<port>` as plain UTF-8; no trailing newline is required but clients MUST strip whitespace |
-| ARCH-SR-004 | Checkpoint restoration failure for one project does not prevent other projects from recovering |
-| ARCH-SR-005 | Clients MUST NOT be accepted on either port before the discovery file is written |
-| ARCH-SR-006 | The discovery file encodes the gRPC port only; MCP port is obtained via `ServerService.GetInfo` gRPC call |
+| [2_TAS-REQ-400] | No port is bound before all config errors are collected and reported |
+| [2_TAS-REQ-401] | The discovery file path resolves as: `DEVS_DISCOVERY_FILE` env var → `server.discovery_file` in `devs.toml` → `~/.config/devs/server.addr` |
+| [2_TAS-REQ-402] | The discovery file contains exactly `<host>:<port>` as plain UTF-8; no trailing newline is required but clients MUST strip whitespace |
+| [2_TAS-REQ-403] | Checkpoint restoration failure for one project does not prevent other projects from recovering |
+| [2_TAS-REQ-404] | Clients MUST NOT be accepted on either port before the discovery file is written |
+| [2_TAS-REQ-405] | The discovery file encodes the gRPC port only; MCP port is obtained via `ServerService.GetInfo` gRPC call |
 
 ---
 
@@ -295,13 +295,13 @@ flowchart TD
     K --> G
 ```
 
-**[2_TAS-REQ-002a]** The discovery file MUST be deleted before the process exits. If deletion fails (e.g., permissions error), the failure MUST be logged at `ERROR` level. The process MUST still exit with code 0.
+**[2_TAS-REQ-002A]** The discovery file MUST be deleted before the process exits. If deletion fails (e.g., permissions error), the failure MUST be logged at `ERROR` level. The process MUST still exit with code 0.
 
-**[2_TAS-REQ-002b]** In-flight gRPC streaming calls (e.g., `StreamRunEvents`, `StreamLogs`) that are active at shutdown MUST receive a `CANCELLED` status code before their connections are closed.
+**[2_TAS-REQ-002B]** In-flight gRPC streaming calls (e.g., `StreamRunEvents`, `StreamLogs`) that are active at shutdown MUST receive a `CANCELLED` status code before their connections are closed.
 
-**[2_TAS-REQ-002c]** All `WorkflowRun` and `StageRun` state that was `Running` at shutdown MUST be persisted to git before exit, with those stages' status set in the checkpoint such that recovery on restart (§1.3 step 8) correctly resets them to `Eligible`.
+**[2_TAS-REQ-002C]** All `WorkflowRun` and `StageRun` state that was `Running` at shutdown MUST be persisted to git before exit, with those stages' status set in the checkpoint such that recovery on restart (§1.3 step 8) correctly resets them to `Eligible`.
 
-**[2_TAS-REQ-002d]** If a second `SIGTERM` is received during an in-progress shutdown, the server MUST immediately send `SIGKILL` to all remaining agent subprocesses without waiting for the grace period, then proceed to checkpoint flush and exit.
+**[2_TAS-REQ-002D]** If a second `SIGTERM` is received during an in-progress shutdown, the server MUST immediately send `SIGKILL` to all remaining agent subprocesses without waiting for the grace period, then proceed to checkpoint flush and exit.
 
 ---
 
@@ -309,20 +309,20 @@ flowchart TD
 
 Clients locate the running server without requiring the user to specify an address. The discovery mechanism uses a well-known file on the local filesystem written atomically by the server at startup.
 
-**[2_TAS-REQ-002e]** The discovery file path is resolved in this priority order:
+**[2_TAS-REQ-002E]** The discovery file path is resolved in this priority order:
 1. The `DEVS_DISCOVERY_FILE` environment variable, if set and non-empty.
 2. The `server.discovery_file` key in `devs.toml`, if present.
 3. The default path: `~/.config/devs/server.addr` (where `~` resolves via `HOME` on Linux/macOS and `USERPROFILE` on Windows).
 
-**[2_TAS-REQ-002f]** The discovery file MUST contain exactly one line of plain UTF-8 text in the format `<host>:<port>`, where `<host>` is an IPv4 address, an IPv6 address in brackets (e.g., `[::1]`), or a DNS hostname, and `<port>` is a decimal integer in the range `1`–`65535`. Clients MUST strip all surrounding whitespace before parsing.
+**[2_TAS-REQ-002F]** The discovery file MUST contain exactly one line of plain UTF-8 text in the format `<host>:<port>`, where `<host>` is an IPv4 address, an IPv6 address in brackets (e.g., `[::1]`), or a DNS hostname, and `<port>` is a decimal integer in the range `1`–`65535`. Clients MUST strip all surrounding whitespace before parsing.
 
-**[2_TAS-REQ-002g]** The discovery file encodes the gRPC listen port. The MCP port is retrieved via the `ServerService.GetInfo` gRPC RPC after connecting. Client binaries that need the MCP port (e.g., `devs-mcp-bridge`) MUST call `GetInfo` first rather than hardcoding or computing the MCP port.
+**[2_TAS-REQ-002G]** The discovery file encodes the gRPC listen port. The MCP port is retrieved via the `ServerService.GetInfo` gRPC RPC after connecting. Client binaries that need the MCP port (e.g., `devs-mcp-bridge`) MUST call `GetInfo` first rather than hardcoding or computing the MCP port.
 
-**[2_TAS-REQ-002h]** If a client reads the discovery file and the address is stale (server not listening), the gRPC connection attempt fails. The client MUST report this condition as exit code `3` and print a human-readable error to stderr: `"Server at <addr> is not reachable. Is it running?"`.
+**[2_TAS-REQ-002H]** If a client reads the discovery file and the address is stale (server not listening), the gRPC connection attempt fails. The client MUST report this condition as exit code `3` and print a human-readable error to stderr: `"Server at <addr> is not reachable. Is it running?"`.
 
-**[2_TAS-REQ-002i]** For E2E test isolation, every test that starts a server instance MUST set `DEVS_DISCOVERY_FILE` to a unique temporary path (e.g., a path under the test's temp directory). This prevents discovery file conflicts between parallel server instances in the same test run.
+**[2_TAS-REQ-002I]** For E2E test isolation, every test that starts a server instance MUST set `DEVS_DISCOVERY_FILE` to a unique temporary path (e.g., a path under the test's temp directory). This prevents discovery file conflicts between parallel server instances in the same test run.
 
-**[2_TAS-REQ-002j]** When `--server <host:port>` is passed to any client binary, the client MUST use the explicit address unconditionally and MUST NOT read the discovery file.
+**[2_TAS-REQ-002J]** When `--server <host:port>` is passed to any client binary, the client MUST use the explicit address unconditionally and MUST NOT read the discovery file.
 
 #### Discovery File Format
 
@@ -353,15 +353,15 @@ Clients locate the running server without requiring the user to specify an addre
 
 `devs` is an async-first application built on Tokio. The concurrency model is defined here to ensure all engine components interact correctly without races or deadlocks.
 
-**[2_TAS-REQ-002k]** The server binary initializes a single multi-threaded Tokio runtime using `#[tokio::main]` with the default thread pool (worker thread count = number of logical CPUs). All async tasks run on this shared runtime. Creating additional Tokio runtimes inside the server process is prohibited.
+**[2_TAS-REQ-002K]** The server binary initializes a single multi-threaded Tokio runtime using `#[tokio::main]` with the default thread pool (worker thread count = number of logical CPUs). All async tasks run on this shared runtime. Creating additional Tokio runtimes inside the server process is prohibited.
 
-**[2_TAS-REQ-002l]** Blocking operations that cannot be made async — specifically all `git2` filesystem operations, subprocess `wait()` calls, and synchronous SSH operations — MUST be dispatched with `tokio::task::spawn_blocking`. These operations MUST NOT be called directly on a Tokio worker thread.
+**[2_TAS-REQ-002L]** Blocking operations that cannot be made async — specifically all `git2` filesystem operations, subprocess `wait()` calls, and synchronous SSH operations — MUST be dispatched with `tokio::task::spawn_blocking`. These operations MUST NOT be called directly on a Tokio worker thread.
 
-**[2_TAS-REQ-002m]** Shared mutable state between async tasks MUST use `Arc<tokio::sync::RwLock<T>>` for read-heavy state (e.g., `SchedulerState` reads during event broadcasts) or `Arc<tokio::sync::Mutex<T>>` for write-heavy or fine-grained state. `std::sync::RwLock` and `std::sync::Mutex` MUST NOT be held across `.await` points.
+**[2_TAS-REQ-002M]** Shared mutable state between async tasks MUST use `Arc<tokio::sync::RwLock<T>>` for read-heavy state (e.g., `SchedulerState` reads during event broadcasts) or `Arc<tokio::sync::Mutex<T>>` for write-heavy or fine-grained state. `std::sync::RwLock` and `std::sync::Mutex` MUST NOT be held across `.await` points.
 
-**[2_TAS-REQ-002n]** The concurrency semaphore for each agent pool is `Arc<tokio::sync::Semaphore>` with `max_concurrent` permits. Permits are acquired via `.acquire_owned()` so they can be sent across task boundaries. Permit release MUST occur when the `OwnedSemaphorePermit` is dropped by the stage executor, regardless of stage success or failure.
+**[2_TAS-REQ-002N]** The concurrency semaphore for each agent pool is `Arc<tokio::sync::Semaphore>` with `max_concurrent` permits. Permits are acquired via `.acquire_owned()` so they can be sent across task boundaries. Permit release MUST occur when the `OwnedSemaphorePermit` is dropped by the stage executor, regardless of stage success or failure.
 
-**[2_TAS-REQ-002o]** The DAG Scheduler maintains all `WorkflowRun` and `StageRun` instances in a single `Arc<RwLock<SchedulerState>>`. This is the canonical source of truth for runtime state. The git checkpoint is the source of truth for persisted state. On startup, git checkpoint data is loaded into `SchedulerState` before any connections are accepted.
+**[2_TAS-REQ-002O]** The DAG Scheduler maintains all `WorkflowRun` and `StageRun` instances in a single `Arc<RwLock<SchedulerState>>`. This is the canonical source of truth for runtime state. The git checkpoint is the source of truth for persisted state. On startup, git checkpoint data is loaded into `SchedulerState` before any connections are accepted.
 
 #### Canonical Shared State Structures
 
@@ -389,7 +389,7 @@ pub struct PoolState {
 }
 ```
 
-**[2_TAS-REQ-002p]** Lock acquisition order MUST be consistent across all code paths to prevent deadlock. The defined global order is: `SchedulerState` → `PoolState` → `CheckpointStore` internal lock (if any). Any code path that must acquire multiple locks MUST acquire them in this order.
+**[2_TAS-REQ-002P]** Lock acquisition order MUST be consistent across all code paths to prevent deadlock. The defined global order is: `SchedulerState` → `PoolState` → `CheckpointStore` internal lock (if any). Any code path that must acquire multiple locks MUST acquire them in this order.
 
 #### Internal Async Channel Topology
 
@@ -400,7 +400,7 @@ pub struct PoolState {
 | `cancel_tx` | Scheduler / Interface Layer | All active Stage Executors | `broadcast` | Propagate cancel/pause signals to in-flight stages |
 | `pool_event_tx` | Agent Pool Manager | DAG Scheduler | `mpsc` | Notify scheduler of rate-limit events and pool exhaustion episodes |
 
-**[2_TAS-REQ-002q]** The Webhook Dispatcher operates on a dedicated `tokio::sync::mpsc` channel with a buffer of at least 1024 events. Engine components send `WebhookEvent` messages and immediately return without awaiting delivery. The dispatcher task consumes events independently and retries HTTP delivery without blocking any Scheduler operation.
+**[2_TAS-REQ-002Q]** The Webhook Dispatcher operates on a dedicated `tokio::sync::mpsc` channel with a buffer of at least 1024 events. Engine components send `WebhookEvent` messages and immediately return without awaiting delivery. The dispatcher task consumes events independently and retries HTTP delivery without blocking any Scheduler operation.
 
 ---
 
@@ -417,7 +417,7 @@ The `devs.v1` gRPC interface is split into six focused services, each defined in
 | `PoolService` | `pool.proto` | `GetPoolStatus`, `ListPools`, `WatchPoolUtilization` |
 | `ProjectService` | `project.proto` | `AddProject`, `RemoveProject`, `GetProject`, `ListProjects`, `UpdateProject` |
 
-**[2_TAS-REQ-002r]** All gRPC service methods MUST return `tonic::Status` errors with the appropriate `tonic::Code`. The mapping between domain errors and gRPC status codes is:
+**[2_TAS-REQ-002R]** All gRPC service methods MUST return `tonic::Status` errors with the appropriate `tonic::Code`. The mapping between domain errors and gRPC status codes is:
 
 | Domain Error Condition | gRPC Code |
 |---|---|
@@ -430,11 +430,11 @@ The `devs.v1` gRPC interface is split into six focused services, each defined in
 | Internal server error (unhandled) | `INTERNAL` |
 | Client cancelled an in-flight streaming RPC | `CANCELLED` |
 
-**[2_TAS-REQ-002s]** Every gRPC unary response message MUST include a `string request_id` field containing a server-generated UUID4 for correlation with server-side logs.
+**[2_TAS-REQ-002S]** Every gRPC unary response message MUST include a `string request_id` field containing a server-generated UUID4 for correlation with server-side logs.
 
-**[2_TAS-REQ-002t]** All gRPC streaming RPCs MUST respect Tokio context cancellation. When a client cancels a stream, the server MUST stop sending messages and release all associated resources within 500 ms.
+**[2_TAS-REQ-002T]** All gRPC streaming RPCs MUST respect Tokio context cancellation. When a client cancels a stream, the server MUST stop sending messages and release all associated resources within 500 ms.
 
-**[2_TAS-REQ-002u]** The server MUST implement gRPC reflection via `tonic-reflection` so that tools such as `grpcurl` can discover the full service schema at runtime without a local `.proto` file.
+**[2_TAS-REQ-002U]** The server MUST implement gRPC reflection via `tonic-reflection` so that tools such as `grpcurl` can discover the full service schema at runtime without a local `.proto` file.
 
 ---
 
@@ -444,18 +444,18 @@ The following rules govern the overall architecture and apply across all compone
 
 | Rule ID | Rule |
 |---|---|
-| ARCH-BR-001 | The server process exposes exactly two TCP ports: one gRPC port and one MCP port. No HTTP REST endpoint or Unix domain socket listener is exposed. |
-| ARCH-BR-002 | All client-to-server communication goes through either the gRPC port or the MCP port. No shared memory, Unix domain sockets, or named pipes are used for client-server IPC. |
-| ARCH-BR-003 | Agent subprocesses communicate with `devs` exclusively via the MCP port, using the address injected in `DEVS_MCP_ADDR`. Agents do not communicate with client binaries directly. |
-| ARCH-BR-004 | The server handles concurrent requests from TUI, CLI, and MCP bridge clients simultaneously without data races. All shared mutable state is protected by Tokio synchronization primitives. |
-| ARCH-BR-005 | No Tokio worker thread is blocked by synchronous I/O. All blocking I/O (`git2`, subprocess `wait()`, SSH) runs inside `tokio::task::spawn_blocking`. |
-| ARCH-BR-006 | Exactly one Tokio runtime is created in the server process. Creating additional runtimes is prohibited. |
-| ARCH-BR-007 | Server configuration is immutable after startup. `devs.toml` is not reloaded while the server is running. Project registry changes (`devs project add/remove`) are the only live-update exception and take effect immediately. |
-| ARCH-BR-008 | All log output from server and library crates uses the `tracing` crate with structured fields. `println!`, `eprintln!`, and `log::` macros are prohibited in library crates. |
-| ARCH-BR-009 | `devs-core` compiles with zero I/O crates (`tokio`, `git2`, `reqwest`, `tonic`) in its non-dev `[dependencies]`. Verified by `./do lint`. |
-| ARCH-BR-010 | Every public API boundary between crates uses types from `devs-core`. Wire types from `devs-proto` do not appear in the public APIs of `devs-scheduler`, `devs-executor`, or `devs-pool`. |
-| ARCH-BR-011 | All `Arc<RwLock<...>>` and `Arc<Mutex<...>>` guards are released before any `.await` point. Holding a synchronous lock guard across an await is a compile-error or a deadlock; both are prohibited. |
-| ARCH-BR-012 | The MCP server and gRPC server share the same `Arc<RwLock<SchedulerState>>`. There is no separate copy of run/stage state for MCP. |
+| [2_TAS-REQ-406] | The server process exposes exactly two TCP ports: one gRPC port and one MCP port. No HTTP REST endpoint or Unix domain socket listener is exposed. |
+| [2_TAS-REQ-407] | All client-to-server communication goes through either the gRPC port or the MCP port. No shared memory, Unix domain sockets, or named pipes are used for client-server IPC. |
+| [2_TAS-REQ-408] | Agent subprocesses communicate with `devs` exclusively via the MCP port, using the address injected in `DEVS_MCP_ADDR`. Agents do not communicate with client binaries directly. |
+| [2_TAS-REQ-409] | The server handles concurrent requests from TUI, CLI, and MCP bridge clients simultaneously without data races. All shared mutable state is protected by Tokio synchronization primitives. |
+| [2_TAS-REQ-410] | No Tokio worker thread is blocked by synchronous I/O. All blocking I/O (`git2`, subprocess `wait()`, SSH) runs inside `tokio::task::spawn_blocking`. |
+| [2_TAS-REQ-411] | Exactly one Tokio runtime is created in the server process. Creating additional runtimes is prohibited. |
+| [2_TAS-REQ-412] | Server configuration is immutable after startup. `devs.toml` is not reloaded while the server is running. Project registry changes (`devs project add/remove`) are the only live-update exception and take effect immediately. |
+| [2_TAS-REQ-413] | All log output from server and library crates uses the `tracing` crate with structured fields. `println!`, `eprintln!`, and `log::` macros are prohibited in library crates. |
+| [2_TAS-REQ-414] | `devs-core` compiles with zero I/O crates (`tokio`, `git2`, `reqwest`, `tonic`) in its non-dev `[dependencies]`. Verified by `./do lint`. |
+| [2_TAS-REQ-415] | Every public API boundary between crates uses types from `devs-core`. Wire types from `devs-proto` do not appear in the public APIs of `devs-scheduler`, `devs-executor`, or `devs-pool`. |
+| [2_TAS-REQ-416] | All `Arc<RwLock<...>>` and `Arc<Mutex<...>>` guards are released before any `.await` point. Holding a synchronous lock guard across an await is a compile-error or a deadlock; both are prohibited. |
+| [2_TAS-REQ-417] | The MCP server and gRPC server share the same `Arc<RwLock<SchedulerState>>`. There is no separate copy of run/stage state for MCP. |
 
 ---
 
@@ -472,7 +472,7 @@ The following rules govern the overall architecture and apply across all compone
 | A project's checkpoint branch absent in its git repo | Server logs `WARN` for that project, skips checkpoint restoration, continues startup; project remains registered and accepts new submissions |
 | A project's `repo_path` does not exist at startup | Server logs `ERROR` for that project, marks it `Unavailable` in the registry; submissions for that project are rejected until the path is restored |
 | Discovery file directory (`~/.config/devs/`) does not exist | Server creates the directory (including parents) before writing the discovery file; failure to create is a fatal error |
-| Two server instances start concurrently on the same machine with the same discovery file path | Last writer wins (atomic rename); clients connecting to the stale address receive exit code 3; users must configure distinct ports or discovery file paths |
+| Two server instances start concurrently on the same machine with the same discovery file path | Last writer wins (atomic rename); clients connecting to the stale address receive exit code 3; **[2_TAS-REQ-602]** users must configure distinct ports or discovery file paths |
 | `devs.toml` has multiple errors (e.g., invalid pool name + unknown field) | All errors are collected and printed together; server does not exit after the first error encountered |
 
 #### 1.9.2 Runtime Edge Cases
@@ -500,29 +500,29 @@ The following rules govern the overall architecture and apply across all compone
 
 ### 1.10 Architecture Acceptance Criteria
 
-All of the following assertions MUST be verified by automated tests to consider the Architecture section implemented:
+**[2_TAS-REQ-600]** All of the following assertions MUST be verified by automated tests to consider the Architecture section implemented:
 
-- **[ARCH-AC-001]** Starting the server with an invalid `devs.toml` (unknown field, wrong type) causes all validation errors to appear on stderr and the process to exit non-zero with no ports bound. Verified by checking `ss -tlnp` or equivalent shows no bound ports on the configured addresses after the failed start.
-- **[ARCH-AC-002]** Starting a second server instance on the same gRPC port while a first instance is running causes the second to exit non-zero with an `EADDRINUSE` error message in stderr.
-- **[ARCH-AC-003]** A CLI client started without `--server`, when a server is running and has written its discovery file, successfully connects and completes a `devs list` command (exit 0).
-- **[ARCH-AC-004]** Sending `SIGTERM` to a running server causes the discovery file to be deleted and the server to exit with code 0, verified by checking the file is absent after exit.
-- **[ARCH-AC-005]** A CLI client invoked after the server has shut down exits with code 3 and prints a message containing "not reachable" or "not found" (because the discovery file is gone or the address is stale).
-- **[ARCH-AC-006]** Two simultaneous `SubmitRun` gRPC calls with identical run names for the same project: exactly one returns success and the other returns `ALREADY_EXISTS`, with no duplicate runs in `ListRuns`.
-- **[ARCH-AC-007]** Two parallel E2E test server instances started with distinct `DEVS_DISCOVERY_FILE` paths operate independently; neither test's discovery file contains the other test's server address.
-- **[ARCH-AC-008]** `cargo check --workspace` produces zero warnings with `#![deny(missing_docs)]` active in all library crates.
-- **[ARCH-AC-009]** A `cargo tree -p devs-core --edges normal` output contains no entries for `tokio`, `git2`, `reqwest`, or `tonic`.
-- **[ARCH-AC-010]** A server started with one registered project whose `repo_path` does not exist logs an `ERROR` for that project and completes startup normally; a `devs list` for an unaffected project succeeds.
-- **[ARCH-AC-011]** A server restart after a crash (simulated by `SIGKILL`) with a stage previously in `Running` state: after restart the stage transitions to `Eligible` and eventually to `Running` again.
-- **[ARCH-AC-012]** `grpcurl list <server>` (using gRPC reflection) returns all six service names: `devs.v1.WorkflowDefinitionService`, `devs.v1.RunService`, `devs.v1.StageService`, `devs.v1.LogService`, `devs.v1.PoolService`, `devs.v1.ProjectService`.
-- **[ARCH-AC-013]** A state change applied through the MCP API (e.g., `cancel_run`) is reflected in the subsequent gRPC `GetRun` response with no intermediate sleep or polling required — the same in-process `SchedulerState` serves both interfaces.
-- **[ARCH-AC-014]** `devs-mcp-bridge`, when the server is not running, prints `{"error": "connection refused", "code": 3}` to stdout and exits with code 3.
-- **[ARCH-AC-015]** Starting the server with `--config` pointing to a non-existent file causes it to exit non-zero with `"config file not found"` in stderr and zero port bindings.
+- **[2_TAS-REQ-418]** Starting the server with an invalid `devs.toml` (unknown field, wrong type) causes all validation errors to appear on stderr and the process to exit non-zero with no ports bound. Verified by checking `ss -tlnp` or equivalent shows no bound ports on the configured addresses after the failed start.
+- **[2_TAS-REQ-419]** Starting a second server instance on the same gRPC port while a first instance is running causes the second to exit non-zero with an `EADDRINUSE` error message in stderr.
+- **[2_TAS-REQ-420]** A CLI client started without `--server`, when a server is running and has written its discovery file, successfully connects and completes a `devs list` command (exit 0).
+- **[2_TAS-REQ-421]** Sending `SIGTERM` to a running server causes the discovery file to be deleted and the server to exit with code 0, verified by checking the file is absent after exit.
+- **[2_TAS-REQ-422]** A CLI client invoked after the server has shut down exits with code 3 and prints a message containing "not reachable" or "not found" (because the discovery file is gone or the address is stale).
+- **[2_TAS-REQ-423]** Two simultaneous `SubmitRun` gRPC calls with identical run names for the same project: exactly one returns success and the other returns `ALREADY_EXISTS`, with no duplicate runs in `ListRuns`.
+- **[2_TAS-REQ-424]** Two parallel E2E test server instances started with distinct `DEVS_DISCOVERY_FILE` paths operate independently; neither test's discovery file contains the other test's server address.
+- **[2_TAS-REQ-425]** `cargo check --workspace` produces zero warnings with `#![deny(missing_docs)]` active in all library crates.
+- **[2_TAS-REQ-426]** A `cargo tree -p devs-core --edges normal` output contains no entries for `tokio`, `git2`, `reqwest`, or `tonic`.
+- **[2_TAS-REQ-427]** A server started with one registered project whose `repo_path` does not exist logs an `ERROR` for that project and completes startup normally; a `devs list` for an unaffected project succeeds.
+- **[2_TAS-REQ-428]** A server restart after a crash (simulated by `SIGKILL`) with a stage previously in `Running` state: after restart the stage transitions to `Eligible` and eventually to `Running` again.
+- **[2_TAS-REQ-429]** `grpcurl list <server>` (using gRPC reflection) returns all six service names: `devs.v1.WorkflowDefinitionService`, `devs.v1.RunService`, `devs.v1.StageService`, `devs.v1.LogService`, `devs.v1.PoolService`, `devs.v1.ProjectService`.
+- **[2_TAS-REQ-430]** A state change applied through the MCP API (e.g., `cancel_run`) is reflected in the subsequent gRPC `GetRun` response with no intermediate sleep or polling required — the same in-process `SchedulerState` serves both interfaces.
+- **[2_TAS-REQ-431]** `devs-mcp-bridge`, when the server is not running, prints `{"error": "connection refused", "code": 3}` to stdout and exits with code 3.
+- **[2_TAS-REQ-432]** Starting the server with `--config` pointing to a non-existent file causes it to exit non-zero with `"config file not found"` in stderr and zero port bindings.
 
 ---
 
 ## 2. Technology Stack & Toolchain
 
-This section specifies the complete technology stack, dependency versions, build system configuration, CI/CD pipeline, and developer toolchain for `devs`. Every agent implementing `devs` MUST treat this section as a binding constraint: deviations require an explicit requirement change, not ad-hoc choices.
+**[2_TAS-REQ-230]** This section specifies the complete technology stack, dependency versions, build system configuration, CI/CD pipeline, and developer toolchain for `devs`. Every agent implementing `devs` MUST treat this section as a binding constraint: deviations require an explicit requirement change, not ad-hoc choices.
 
 ---
 
@@ -547,7 +547,7 @@ The `llvm-tools-preview` component is required by `cargo-llvm-cov` for coverage 
 
 The root `Cargo.toml` workspace manifest controls edition, lint policy, and build profiles for all crates uniformly. Library crates use `edition = "2021"`. No crate may declare a different edition.
 
-**[2_TAS-REQ-004a]** The workspace `[workspace.lints]` table MUST contain the following configuration, enforced on all member crates via `[lints] workspace = true` in each crate's `Cargo.toml`:
+**[2_TAS-REQ-004A]** The workspace `[workspace.lints]` table MUST contain the following configuration, enforced on all member crates via `[lints] workspace = true` in each crate's `Cargo.toml`:
 
 ```toml
 # Cargo.toml (workspace root) — authoritative lint table
@@ -565,9 +565,9 @@ module_name_repetitions = "allow"
 must_use_candidate      = "allow"
 ```
 
-**[2_TAS-REQ-004b]** `unsafe_code = "deny"` applies workspace-wide. No `unsafe` block is permitted in any crate. If a dependency transitively requires unsafe code inside its own implementation (e.g., `git2`, `portable-pty`), that is acceptable — the prohibition applies only to code authored within this workspace.
+**[2_TAS-REQ-004B]** `unsafe_code = "deny"` applies workspace-wide. No `unsafe` block is permitted in any crate. If a dependency transitively requires unsafe code inside its own implementation (e.g., `git2`, `portable-pty`), that is acceptable — the prohibition applies only to code authored within this workspace.
 
-**[2_TAS-REQ-004c]** The workspace MUST define the following Cargo profiles:
+**[2_TAS-REQ-004C]** The workspace MUST define the following Cargo profiles:
 
 ```toml
 # Cargo.toml (workspace root) — authoritative profile table
@@ -592,28 +592,28 @@ debug    = true
 
 The `panic = "abort"` in the release profile eliminates stack-unwinding overhead. All `Result` types are propagated explicitly; panics in production code are defects.
 
-**[2_TAS-REQ-004d]** The root `Cargo.toml` MUST declare `resolver = "2"` to use the v2 feature resolver, which correctly handles feature unification across workspace crates with optional features.
+**[2_TAS-REQ-004D]** The root `Cargo.toml` MUST declare `resolver = "2"` to use the v2 feature resolver, which correctly handles feature unification across workspace crates with optional features.
 
 #### 2.1.2 Feature Flag Policy
 
-**[2_TAS-REQ-004e]** No workspace crate may declare optional `[features]` that enable or disable core business logic. Feature flags are permitted only for TLS backend selection in `reqwest` (always `rustls-tls`, never `native-tls`) and for test-only utilities gated with `#[cfg(test)]`. This constraint prevents partial-feature builds from silently omitting required functionality.
+**[2_TAS-REQ-004E]** No workspace crate may declare optional `[features]` that enable or disable core business logic. Feature flags are permitted only for TLS backend selection in `reqwest` (always `rustls-tls`, never `native-tls`) and for test-only utilities gated with `#[cfg(test)]`. This constraint prevents partial-feature builds from silently omitting required functionality.
 
-**[2_TAS-REQ-004f]** All CI jobs MUST build and test with `--all-features` to ensure no feature combination is silently broken. The explicit invocation is `cargo build --workspace --all-features` and `cargo test --workspace --all-features`.
+**[2_TAS-REQ-004F]** All CI jobs MUST build and test with `--all-features` to ensure no feature combination is silently broken. The explicit invocation is `cargo build --workspace --all-features` and `cargo test --workspace --all-features`.
 
 #### 2.1.3 Unsafe Code Prohibition
 
-**[2_TAS-REQ-004g]** The `unsafe_code = "deny"` lint MUST be active. Any `#[allow(unsafe_code)]` or `unsafe` block in workspace source files MUST cause `./do lint` to fail with a `clippy` error. If a third-party crate's API requires calling an `unsafe fn`, the workspace crate MUST wrap it in a safe abstraction within a dedicated module with a `SAFETY:` comment, but the `unsafe` keyword itself in workspace source remains prohibited — such patterns indicate the wrong abstraction and MUST be resolved by using a safe alternative API.
+**[2_TAS-REQ-004G]** The `unsafe_code = "deny"` lint MUST be active. Any `#[allow(unsafe_code)]` or `unsafe` block in workspace source files MUST cause `./do lint` to fail with a `clippy` error. If a third-party crate's API requires calling an `unsafe fn`, the workspace crate MUST wrap it in a safe abstraction within a dedicated module with a `SAFETY:` comment, but the `unsafe` keyword itself in workspace source remains prohibited — such patterns indicate the wrong abstraction and MUST be resolved by using a safe alternative API.
 
 #### 2.1.4 Technology Stack Business Rules (Rust Toolchain)
 
 | Rule ID | Rule |
 |---|---|
-| TECH-BR-001 | `rust-toolchain.toml` is present at the repository root from the first commit. |
-| TECH-BR-002 | No crate in the workspace uses `edition` other than `"2021"`. |
-| TECH-BR-003 | Adding a new crate dependency to any workspace member requires updating the authoritative version table in §2.2. Undocumented dependencies are a lint failure. |
-| TECH-BR-004 | The `clippy::pedantic` group is set to `warn`, not `deny`, to allow iterative refinement. The `clippy::all` group is `deny`. |
-| TECH-BR-005 | `#![deny(missing_docs)]` is enforced in every `lib.rs` and `main.rs` via the workspace lint table, not per-crate annotations. |
-| TECH-BR-006 | No nightly compiler feature gate (e.g., `#![feature(...)]`) appears in any source file in the workspace. |
+| [2_TAS-REQ-433] | `rust-toolchain.toml` is present at the repository root from the first commit. |
+| [2_TAS-REQ-434] | No crate in the workspace uses `edition` other than `"2021"`. |
+| [2_TAS-REQ-435] | Adding a new crate dependency to any workspace member requires updating the authoritative version table in §2.2. Undocumented dependencies are a lint failure. |
+| [2_TAS-REQ-436] | The `clippy::pedantic` group is set to `warn`, not `deny`, to allow iterative refinement. The `clippy::all` group is `deny`. |
+| [2_TAS-REQ-437] | `#![deny(missing_docs)]` is enforced in every `lib.rs` and `main.rs` via the workspace lint table, not per-crate annotations. |
+| [2_TAS-REQ-438] | No nightly compiler feature gate (e.g., `#![feature(...)]`) appears in any source file in the workspace. |
 
 ---
 
@@ -627,7 +627,7 @@ This section is the authoritative version table for all non-dev dependencies. Wh
 |---|---|---|---|
 | `tokio` | 1.38 | `full` | Async runtime: task spawning, channels, timers, I/O, `spawn_blocking`. `full` enables all tokio sub-features including `rt-multi-thread`, `macros`, `time`, `sync`, `net`. |
 | `tonic` | 0.12 | `transport`, `codegen` | gRPC server and client. `transport` provides the `Server` and `Channel` types. `codegen` provides `async_trait` re-exports used by generated service traits. |
-| `prost` | 0.13 | `derive` | Protobuf message encoding/decoding. `derive` enables `#[derive(Message)]`. Must match the version used by `tonic-build`. |
+| `prost` | 0.13 | `derive` | Protobuf message encoding/decoding. `derive` enables `#[derive(Message)]`. **[2_TAS-REQ-603]** Must match the version used by `tonic-build`. |
 | `tonic-build` | 0.12 | _(build dependency)_ | `build.rs` code generator for `.proto` files. Invoked via `tonic_build::compile_protos`. |
 | `tonic-reflection` | 0.12 | `server` | gRPC server reflection for `grpcurl` compatibility. Registered alongside service routes at server startup. |
 | `ratatui` | 0.28 | `crossterm` | TUI widget library. The `crossterm` feature activates the `CrosstermBackend` used on all three platforms. |
@@ -649,9 +649,9 @@ This section is the authoritative version table for all non-dev dependencies. Wh
 | `tempfile` | 3.12 | _(default)_ | Temporary directory creation for `tempdir` execution environments and prompt file writing. Directories are automatically cleaned up when the `TempDir` handle is dropped. |
 | `bytes` | 1.7 | _(default)_ | Byte buffer management for gRPC streaming (prost message encoding) and log streaming. |
 | `thiserror` | 1.0 | _(default)_ | Ergonomic `#[derive(Error)]` for library crate error types. Used in every `devs-*` library crate's `error.rs`. |
-| `anyhow` | 1.0 | _(default)_ | Opaque error propagation in binary crates (`devs-server`, `devs-tui`, `devs-cli`, `devs-mcp-bridge`). MUST NOT appear in library crates' `[dependencies]`. |
+**[2_TAS-REQ-234]** | `anyhow` | 1.0 | _(default)_ | Opaque error propagation in binary crates (`devs-server`, `devs-tui`, `devs-cli`, `devs-mcp-bridge`). MUST NOT appear in library crates' `[dependencies]`. |
 
-**[2_TAS-REQ-005a]** The dependency on `anyhow` is restricted to binary crates only. Library crates (`devs-core`, `devs-config`, `devs-checkpoint`, `devs-adapters`, `devs-pool`, `devs-executor`, `devs-scheduler`, `devs-webhook`, `devs-grpc`, `devs-mcp`, `devs-proto`) MUST use `thiserror` for their error types and return `Result<T, MyError>` where `MyError` is a domain-specific type. This allows downstream callers to pattern-match on specific error variants.
+**[2_TAS-REQ-005A]** The dependency on `anyhow` is restricted to binary crates only. Library crates (`devs-core`, `devs-config`, `devs-checkpoint`, `devs-adapters`, `devs-pool`, `devs-executor`, `devs-scheduler`, `devs-webhook`, `devs-grpc`, `devs-mcp`, `devs-proto`) MUST use `thiserror` for their error types and return `Result<T, MyError>` where `MyError` is a domain-specific type. This allows downstream callers to pattern-match on specific error variants.
 
 **[2_TAS-REQ-006]** `reqwest` MUST use the `rustls-tls` feature exclusively. The `native-tls` and `native-tls-alpn` features MUST NOT be enabled on any workspace crate. This guarantees that webhook TLS behavior is identical on Linux, macOS, and Windows without requiring OpenSSL to be installed on the host system.
 
@@ -671,9 +671,9 @@ This section is the authoritative version table for all non-dev dependencies. Wh
 
 #### 2.2.1 Dependency Audit Rule
 
-**[2_TAS-REQ-007a]** `./do lint` MUST include a step that verifies no workspace crate's `Cargo.lock`-resolved dependency list contains a crate not present in the authoritative tables above (§2.2 for non-dev, §2.2 dev table for dev). The check is implemented as a script that compares `cargo metadata --format-version 1` output against the documented set and exits non-zero on any undocumented crate. This prevents accidental transitive dependency promotion.
+**[2_TAS-REQ-007A]** `./do lint` MUST include a step that verifies no workspace crate's `Cargo.lock`-resolved dependency list contains a crate not present in the authoritative tables above (§2.2 for non-dev, §2.2 dev table for dev). The check is implemented as a script that compares `cargo metadata --format-version 1` output against the documented set and exits non-zero on any undocumented crate. This prevents accidental transitive dependency promotion.
 
-**[2_TAS-REQ-007b]** When a new dependency is required, the implementing agent MUST:
+**[2_TAS-REQ-007B]** When a new dependency is required, the implementing agent MUST:
 1. Add it to the authoritative table in this document with version, features, and purpose.
 2. Add it to the relevant crate's `Cargo.toml`.
 3. Verify `./do lint` passes, including the dependency audit step.
@@ -682,7 +682,7 @@ Submitting code that uses an undocumented crate without updating this table is a
 
 #### 2.2.2 Platform-Specific Dependency Notes
 
-On Windows, `git2` with the `https` feature links against the system Schannel TLS provider rather than OpenSSL. The CI `presubmit-windows` job validates this at compile time. On Linux and macOS CI runners, OpenSSL development headers must be available; the `./do setup` command installs them (§2.6.1). `portable-pty` uses `ConPTY` on Windows (available since Windows 10 Build 1809) and `openpty(3)` on POSIX systems; no additional system packages are required.
+On Windows, `git2` with the `https` feature links against the system Schannel TLS provider rather than OpenSSL. The CI `presubmit-windows` job validates this at compile time. On Linux and macOS CI runners, **[2_TAS-REQ-604]** OpenSSL development headers must be available; the `./do setup` command installs them (§2.6.1). `portable-pty` uses `ConPTY` on Windows (available since Windows 10 Build 1809) and `openpty(3)` on POSIX systems; no additional system packages are required.
 
 ---
 
@@ -708,9 +708,9 @@ proto/
       server.proto               # ServerService + ServerInfo (version, MCP port)
 ```
 
-All `.proto` files MUST declare `syntax = "proto3";` and `option go_package` is OMITTED (Go is not a target language). The `java_package` option is also omitted. Only the Rust targets are relevant.
+**[2_TAS-REQ-237]** All `.proto` files MUST declare `syntax = "proto3";` and `option go_package` is OMITTED (Go is not a target language). The `java_package` option is also omitted. Only the Rust targets are relevant.
 
-**[2_TAS-REQ-008a]** Every `.proto` file MUST begin with the following header block:
+**[2_TAS-REQ-008A]** Every `.proto` file MUST begin with the following header block:
 
 ```proto
 syntax = "proto3";
@@ -720,13 +720,13 @@ import "google/protobuf/timestamp.proto";
 // Additional imports as required
 ```
 
-All timestamp fields MUST use `google.protobuf.Timestamp` (imported from `google/protobuf/timestamp.proto`), never a raw `string` or `int64`. `tonic-build` maps these to `prost_types::Timestamp` in generated Rust code.
+**[2_TAS-REQ-238]** All timestamp fields MUST use `google.protobuf.Timestamp` (imported from `google/protobuf/timestamp.proto`), never a raw `string` or `int64`. `tonic-build` maps these to `prost_types::Timestamp` in generated Rust code.
 
 #### 2.3.2 Generated File Management
 
-**[2_TAS-REQ-008b]** The `devs-proto` crate contains a `build.rs` that compiles `.proto` files into Rust source. Generated files are written into `devs-proto/src/gen/`. This directory and all its contents MUST be committed to the repository so that `cargo build` succeeds without `protoc` installed.
+**[2_TAS-REQ-008B]** The `devs-proto` crate contains a `build.rs` that compiles `.proto` files into Rust source. Generated files are written into `devs-proto/src/gen/`. This directory and all its contents MUST be committed to the repository so that `cargo build` succeeds without `protoc` installed.
 
-The `build.rs` MUST emit `cargo:rerun-if-changed` directives for every `.proto` file, ensuring the generator re-runs on any proto change but not on unrelated source changes.
+**[2_TAS-REQ-240]** The `build.rs` MUST emit `cargo:rerun-if-changed` directives for every `.proto` file, ensuring the generator re-runs on any proto change but not on unrelated source changes.
 
 ```rust
 // devs-proto/build.rs (authoritative sketch)
@@ -761,15 +761,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-**[2_TAS-REQ-008c]** The `devs-proto/src/gen/` directory MUST contain an `mod.rs` (or equivalent `lib.rs` re-exports) that re-exports all generated modules under a clean public API. Downstream crates import types as `devs_proto::devs::v1::WorkflowRun`, not by reaching into `gen::` submodules directly.
+**[2_TAS-REQ-008C]** The `devs-proto/src/gen/` directory MUST contain an `mod.rs` (or equivalent `lib.rs` re-exports) that re-exports all generated modules under a clean public API. Downstream crates import types as `devs_proto::devs::v1::WorkflowRun`, not by reaching into `gen::` submodules directly.
 
-**[2_TAS-REQ-008d]** If `protoc` is not installed on the build machine, `build.rs` MUST detect this and skip re-generation, using the committed generated files. It MUST NOT fail the build. The detection is: attempt to invoke `protoc --version`; if it fails, print `cargo:warning=protoc not found; using committed generated files.` and return `Ok(())` immediately.
+**[2_TAS-REQ-008D]** If `protoc` is not installed on the build machine, `build.rs` MUST detect this and skip re-generation, using the committed generated files. It MUST NOT fail the build. The detection is: attempt to invoke `protoc --version`; if it fails, print `cargo:warning=protoc not found; using committed generated files.` and return `Ok(())` immediately.
 
 #### 2.3.3 Proto Naming and Versioning Conventions
 
 **[2_TAS-REQ-009]** The proto package name is `devs.v1`. Message and service names use `PascalCase`. Field names use `snake_case`. Enum value names use `SCREAMING_SNAKE_CASE` prefixed with the enum name (e.g., `RUN_STATUS_PENDING`, `RUN_STATUS_RUNNING`).
 
-**[2_TAS-REQ-009a]** Field numbers in all messages MUST be assigned sequentially starting from 1 and MUST NOT be reused after removal. If a field is removed from a message, its number is reserved with a `reserved` statement. This preserves backward compatibility with clients running older binaries.
+**[2_TAS-REQ-009A]** Field numbers in all messages MUST be assigned sequentially starting from 1 and MUST NOT be reused after removal. If a field is removed from a message, its number is reserved with a `reserved` statement. This preserves backward compatibility with clients running older binaries.
 
 ```proto
 // Example of correct field reservation (authoritative pattern)
@@ -784,7 +784,7 @@ message WorkflowRun {
 }
 ```
 
-**[2_TAS-REQ-009b]** The `ServerService` MUST include a `GetInfo` RPC that returns the server version and MCP port:
+**[2_TAS-REQ-009B]** The `ServerService` MUST include a `GetInfo` RPC that returns the server version and MCP port:
 
 ```proto
 service ServerService {
@@ -807,10 +807,10 @@ This is the mechanism clients use to discover the MCP port after connecting to t
 | Scenario | Expected Behavior |
 |---|---|
 | `protoc` not installed on developer machine | `build.rs` skips regeneration and uses committed `src/gen/` files; build succeeds. |
-| A `.proto` file is modified but `protoc` is not installed | `build.rs` detects `protoc` absence, skips regeneration, emits a `cargo:warning`. The committed generated files are now stale. `./do lint` MUST detect this by checking whether `src/gen/` files are newer than all `.proto` files and fail if they are stale without matching the proto source. |
-| A proto message field is removed | The field number MUST be added to a `reserved` statement in the `.proto` file. Removing a field without reserving its number causes `./do lint` to fail via a proto lint step (`buf lint` or equivalent). |
+**[2_TAS-REQ-244]** | A `.proto` file is modified but `protoc` is not installed | `build.rs` detects `protoc` absence, skips regeneration, emits a `cargo:warning`. The committed generated files are now stale. `./do lint` MUST detect this by checking whether `src/gen/` files are newer than all `.proto` files and fail if they are stale without matching the proto source. |
+**[2_TAS-REQ-245]** | A proto message field is removed | The field number MUST be added to a `reserved` statement in the `.proto` file. Removing a field without reserving its number causes `./do lint` to fail via a proto lint step (`buf lint` or equivalent). |
 | Two workspace crates import `devs-proto` with different feature sets | Not possible: `devs-proto` has no optional features. The v2 feature resolver prevents any ambiguity. |
-| Generated Rust file from `tonic-build` contains a `#[allow(clippy::...)]` suppression | This is expected for machine-generated code. The workspace lint table applies `#[expect(...)]` style; however, `build.rs` output is exempt because it is generated. The `clippy` invocation in `./do lint` MUST exclude `src/gen/` from linting via `--skip src/gen`. |
+**[2_TAS-REQ-246]** | Generated Rust file from `tonic-build` contains a `#[allow(clippy::...)]` suppression | This is expected for machine-generated code. The workspace lint table applies `#[expect(...)]` style; however, `build.rs` output is exempt because it is generated. The `clippy` invocation in `./do lint` MUST exclude `src/gen/` from linting via `--skip src/gen`. |
 
 ---
 
@@ -865,11 +865,11 @@ presubmit-windows:
   tags: [windows, shell]
 ```
 
-**[2_TAS-REQ-010a]** The GitLab CI job timeout is set to **25 minutes** to provide a 10-minute buffer beyond the 15-minute `./do presubmit` hard timeout. If `./do presubmit` exceeds 15 minutes, it kills all child processes and exits non-zero, causing the CI job to fail cleanly within the 25-minute CI timeout. This two-tier timeout prevents hung CI jobs from consuming runner resources indefinitely.
+**[2_TAS-REQ-010A]** The GitLab CI job timeout is set to **25 minutes** to provide a 10-minute buffer beyond the 15-minute `./do presubmit` hard timeout. If `./do presubmit` exceeds 15 minutes, it kills all child processes and exits non-zero, causing the CI job to fail cleanly within the 25-minute CI timeout. This two-tier timeout prevents hung CI jobs from consuming runner resources indefinitely.
 
-**[2_TAS-REQ-010b]** CI artifacts MUST include `target/coverage/report.json`, `target/presubmit_timings.jsonl`, and `target/traceability.json` with `expire_in: 7 days`. These files are uploaded even on job failure (`when: always`) to aid post-failure debugging.
+**[2_TAS-REQ-010B]** CI artifacts MUST include `target/coverage/report.json`, `target/presubmit_timings.jsonl`, and `target/traceability.json` with `expire_in: 7 days`. These files are uploaded even on job failure (`when: always`) to aid post-failure debugging.
 
-**[2_TAS-REQ-010c]** The Cargo registry cache (`$CARGO_HOME/registry`) and the `target/` directory MUST be cached per job name per branch (`CI_JOB_NAME-$CI_COMMIT_REF_SLUG`). This avoids redownloading all crates on every run. Cache restoration failures MUST NOT cause the job to fail — `./do setup` will re-fetch any missing artifacts.
+**[2_TAS-REQ-010C]** The Cargo registry cache (`$CARGO_HOME/registry`) and the `target/` directory MUST be cached per job name per branch (`CI_JOB_NAME-$CI_COMMIT_REF_SLUG`). This avoids redownloading all crates on every run. Cache restoration failures MUST NOT cause the job to fail — `./do setup` will re-fetch any missing artifacts.
 
 #### 2.4.2 Platform-Specific CI Considerations
 
@@ -879,13 +879,13 @@ presubmit-windows:
 | macOS | Shell runner | `sh` (bash-compatible) | `./do setup` uses `brew` to install dependencies. `protoc` installed via `brew install protobuf`. |
 | Windows | Shell runner | Git Bash (`sh`-compatible) | `./do setup` uses `winget` or `choco` to install `git`, `protobuf`. `portable-pty` uses ConPTY. PTY E2E tests run on Windows only in this job. |
 
-**[2_TAS-REQ-010d]** The `./do` script MUST be POSIX `sh`-compatible. Bash-specific syntax (arrays, `[[ ]]`, `$'...'`, process substitution `<(...)`) MUST NOT appear. On Windows the script runs under Git Bash, which provides a POSIX `sh`. The shebang line MUST be `#!/bin/sh`.
+**[2_TAS-REQ-010D]** The `./do` script MUST be POSIX `sh`-compatible. Bash-specific syntax (arrays, `[[ ]]`, `$'...'`, process substitution `<(...)`) MUST NOT appear. On Windows the script runs under Git Bash, which provides a POSIX `sh`. The shebang line MUST be `#!/bin/sh`.
 
-**[2_TAS-REQ-010e]** The `DEVS_DISCOVERY_FILE` environment variable MUST be set to a unique temporary path for every E2E test invocation within CI to prevent discovery file conflicts between parallel test processes running within the same job.
+**[2_TAS-REQ-010E]** The `DEVS_DISCOVERY_FILE` environment variable MUST be set to a unique temporary path for every E2E test invocation within CI to prevent discovery file conflicts between parallel test processes running within the same job.
 
 #### 2.4.3 `./do ci` Command
 
-**[2_TAS-REQ-010f]** `./do ci` copies the working directory to a temporary git commit (without modifying the actual branch) and submits it to the GitLab CI API to trigger a pipeline run. The command:
+**[2_TAS-REQ-010F]** `./do ci` copies the working directory to a temporary git commit (without modifying the actual branch) and submits it to the GitLab CI API to trigger a pipeline run. The command:
 1. Creates a temporary branch named `ci/local-<timestamp>-<6-hex-chars>`.
 2. Commits all staged and unstaged changes to that branch (no-edit, no-hooks).
 3. Pushes the temporary branch to the `origin` remote.
@@ -904,7 +904,7 @@ All formatting and linting is enforced by `./do lint`. A CI presubmit run that d
 
 #### 2.5.1 `rustfmt` Configuration
 
-**[2_TAS-REQ-012a]** A `rustfmt.toml` file at the repository root controls formatting. Its authoritative content is:
+**[2_TAS-REQ-012A]** A `rustfmt.toml` file at the repository root controls formatting. Its authoritative content is:
 
 ```toml
 # rustfmt.toml (authoritative)
@@ -918,11 +918,11 @@ group_imports    = "StdExternalCrate"
 
 `max_width = 100` provides slightly more horizontal space than the default 80 to accommodate long Rust identifiers (trait bounds, type parameters) common in async Rust without forcing awkward line breaks. `imports_granularity = "Crate"` groups all imports from the same crate into a single `use` statement tree.
 
-**[2_TAS-REQ-012b]** `./do format` runs `cargo fmt --all` to apply formatting in place. `./do lint` runs `cargo fmt --check --all`; any formatting divergence is a lint failure. These are separate commands: `format` mutates, `lint` only checks.
+**[2_TAS-REQ-012B]** `./do format` runs `cargo fmt --all` to apply formatting in place. `./do lint` runs `cargo fmt --check --all`; any formatting divergence is a lint failure. These are separate commands: `format` mutates, `lint` only checks.
 
 #### 2.5.2 Clippy Configuration
 
-**[2_TAS-REQ-012c]** `./do lint` runs clippy as:
+**[2_TAS-REQ-012C]** `./do lint` runs clippy as:
 
 ```sh
 cargo clippy --workspace --all-targets --all-features -- -D warnings
@@ -930,7 +930,7 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 
 `--all-targets` includes `tests`, `benches`, and `examples` in addition to `lib` and `bin` targets. `--all-features` ensures all optional feature combinations are checked. `-D warnings` promotes all clippy warnings to errors.
 
-**[2_TAS-REQ-012d]** The workspace `[workspace.lints.clippy]` table (§2.1.1) configures lint levels. Individual `#[allow(clippy::...)]` suppressions are permitted in source code only when the suppression includes a `// REASON:` comment explaining why the lint is inapplicable. Suppressions without `REASON:` comments are rejected by a custom `./do lint` check that `grep`s for `#[allow(clippy::` without a trailing comment.
+**[2_TAS-REQ-012D]** The workspace `[workspace.lints.clippy]` table (§2.1.1) configures lint levels. Individual `#[allow(clippy::...)]` suppressions are permitted in source code only when the suppression includes a `// REASON:` comment explaining why the lint is inapplicable. Suppressions without `REASON:` comments are rejected by a custom `./do lint` check that `grep`s for `#[allow(clippy::` without a trailing comment.
 
 #### 2.5.3 Documentation Lint
 
@@ -946,7 +946,7 @@ Step 3 catches `missing_docs` violations and broken intra-doc links that `clippy
 
 #### 2.5.4 Dependency Audit Lint
 
-**[2_TAS-REQ-013a]** `./do lint` includes a dependency audit step implemented as a shell script that:
+**[2_TAS-REQ-013A]** `./do lint` includes a dependency audit step implemented as a shell script that:
 1. Runs `cargo metadata --format-version 1 --no-deps` to list all direct dependencies of all workspace crates.
 2. Compares the output against the authoritative dependency tables in §2.2.
 3. Exits non-zero if any dependency is present in `Cargo.toml` but absent from the §2.2 tables, or if any dependency in §2.2 specifies a version range that does not match what is in `Cargo.toml`.
@@ -957,18 +957,18 @@ This prevents undocumented dependencies from silently entering the codebase.
 
 | Rule ID | Rule |
 |---|---|
-| TECH-BR-007 | `cargo fmt --check` failure is a blocking lint error, not a warning. |
-| TECH-BR-008 | `clippy -D warnings` failure is a blocking lint error. |
-| TECH-BR-009 | `cargo doc` output containing the string `warning` or `error` is a blocking lint error. |
-| TECH-BR-010 | A `#[allow(clippy::...)]` without an adjacent `// REASON:` comment is a blocking lint error detected by `./do lint`. |
-| TECH-BR-011 | `unsafe` code in workspace sources is a blocking lint error (`unsafe_code = "deny"`). |
-| TECH-BR-012 | All lint steps run in sequence. `./do lint` does not stop at the first failure — it collects all failures and reports them together. Exit code is the logical OR of all step exit codes. |
+| [2_TAS-REQ-439] | `cargo fmt --check` failure is a blocking lint error, not a warning. |
+| [2_TAS-REQ-440] | `clippy -D warnings` failure is a blocking lint error. |
+| [2_TAS-REQ-441] | `cargo doc` output containing the string `warning` or `error` is a blocking lint error. |
+| [2_TAS-REQ-442] | A `#[allow(clippy::...)]` without an adjacent `// REASON:` comment is a blocking lint error detected by `./do lint`. |
+| [2_TAS-REQ-443] | `unsafe` code in workspace sources is a blocking lint error (`unsafe_code = "deny"`). |
+| [2_TAS-REQ-444] | All lint steps run in sequence. `./do lint` does not stop at the first failure — it collects all failures and reports them together. Exit code is the logical OR of all step exit codes. |
 
 ---
 
 ### 2.6 `./do` Script Contract
 
-The `./do` script is the single entrypoint for all developer and CI operations. It MUST exist at the repository root from the first commit and MUST be executable (`chmod +x`). Every command below is callable as `./do <command>`.
+**[2_TAS-REQ-251]** The `./do` script is the single entrypoint for all developer and CI operations. It MUST exist at the repository root from the first commit and MUST be executable (`chmod +x`). Every command below is callable as `./do <command>`.
 
 #### 2.6.1 Command Definitions
 
@@ -985,9 +985,9 @@ The `./do` script is the single entrypoint for all developer and CI operations. 
 | `./do presubmit` | Run setup → format (check only) → lint → test → coverage. Enforces a hard 15-minute wall-clock timeout. | All steps pass within 15 minutes. | Any step fails, or 15-minute timeout is exceeded. |
 | `./do ci` | Push current work to a temporary CI branch, trigger pipeline, poll for result, clean up branch. | All CI jobs pass. | Any CI job fails, 30-minute poll timeout exceeded, or `GITLAB_TOKEN` not set. |
 
-**[2_TAS-REQ-014a]** `./do setup` MUST be idempotent. Running it on a machine that already has all dependencies installed MUST produce the same outcome (zero exit) as running it on a fresh machine. It MUST NOT modify already-correct installations.
+**[2_TAS-REQ-014A]** `./do setup` MUST be idempotent. Running it on a machine that already has all dependencies installed MUST produce the same outcome (zero exit) as running it on a fresh machine. It MUST NOT modify already-correct installations.
 
-**[2_TAS-REQ-014b]** `./do setup` MUST install the following tools, each verified by running `<tool> --version` after installation:
+**[2_TAS-REQ-014B]** `./do setup` MUST install the following tools, each verified by running `<tool> --version` after installation:
 
 | Tool | Installation Method |
 |---|---|
@@ -997,7 +997,7 @@ The `./do` script is the single entrypoint for all developer and CI operations. 
 | `protoc` | Linux: `apt-get install -y protobuf-compiler`; macOS: `brew install protobuf`; Windows: `choco install protobuf` or `winget install protobuf` |
 | `git` | System package manager |
 
-**[2_TAS-REQ-014c]** `./do presubmit` enforces a hard 15-minute wall-clock timeout using the following algorithm:
+**[2_TAS-REQ-014C]** `./do presubmit` enforces a hard 15-minute wall-clock timeout using the following algorithm:
 
 ```sh
 #!/bin/sh
@@ -1021,13 +1021,13 @@ exit 0
 
 On timeout, the script sends `SIGTERM` to its own process group, which terminates any running `cargo` subprocesses. The exit code is non-zero.
 
-**[2_TAS-REQ-014d]** `./do presubmit` logs each step's start time, end time, and exit code to `target/presubmit_timings.jsonl`. Each line is a JSON object:
+**[2_TAS-REQ-014D]** `./do presubmit` logs each step's start time, end time, and exit code to `target/presubmit_timings.jsonl`. Each line is a JSON object:
 
 ```json
 {"step": "lint", "started_at": "2026-03-10T10:00:00Z", "ended_at": "2026-03-10T10:01:23Z", "duration_secs": 83, "exit_code": 0}
 ```
 
-**[2_TAS-REQ-014e]** `./do <unknown-command>` MUST print the following to stderr and exit non-zero:
+**[2_TAS-REQ-014E]** `./do <unknown-command>` MUST print the following to stderr and exit non-zero:
 
 ```
 Unknown command: '<unknown-command>'
@@ -1036,7 +1036,7 @@ Valid commands: setup build test lint format coverage presubmit ci
 
 #### 2.6.2 `./do test` Traceability Check
 
-**[2_TAS-REQ-014f]** `./do test` generates `target/traceability.json` after all tests complete. The generation algorithm:
+**[2_TAS-REQ-014F]** `./do test` generates `target/traceability.json` after all tests complete. The generation algorithm:
 1. Scans all Rust source files under `src/` and `tests/` in all workspace crates for comments or attributes matching the pattern `Covers: 1_PRD-REQ-NNN` or `Covers: 2_TAS-REQ-NNN`.
 2. Scans `docs/plan/specs/1_prd.md` and `docs/plan/specs/2_tas.md` for all requirement IDs matching `\[1_PRD-REQ-\d+\]` and `\[2_TAS-REQ-\d+\]`.
 3. Computes `covered_ids` (IDs with ≥1 test) and `uncovered_ids` (IDs with 0 tests).
@@ -1089,13 +1089,13 @@ cargo llvm-cov \
 # Repeat step 2 with filtered test names matching cli_e2e::, tui_e2e::, mcp_e2e:: prefixes
 ```
 
-**[2_TAS-REQ-015a]** Unit tests are defined as tests using `#[test]` or `#[tokio::test]` attributes located inside `src/` files (i.e., within the crate source, not in `tests/`). E2E tests are defined as tests in `tests/` directories that exercise the system through external interfaces (CLI binary invocation, TUI terminal emulation, MCP JSON-RPC calls). The test binary path convention identifies E2E tests by the prefix `e2e::` in their test name.
+**[2_TAS-REQ-015A]** Unit tests are defined as tests using `#[test]` or `#[tokio::test]` attributes located inside `src/` files (i.e., within the crate source, not in `tests/`). E2E tests are defined as tests in `tests/` directories that exercise the system through external interfaces (CLI binary invocation, TUI terminal emulation, MCP JSON-RPC calls). The test binary path convention identifies E2E tests by the prefix `e2e::` in their test name.
 
-**[2_TAS-REQ-015b]** E2E tests MUST run with `--test-threads 1` to prevent multiple `devs` server instances from conflicting on port numbers or the discovery file. Each E2E test that starts a server instance MUST set `DEVS_DISCOVERY_FILE` to a unique temporary path (see §1.5 ARCH-SR-002).
+**[2_TAS-REQ-015B]** E2E tests MUST run with `--test-threads 1` to prevent multiple `devs` server instances from conflicting on port numbers or the discovery file. Each E2E test that starts a server instance MUST set `DEVS_DISCOVERY_FILE` to a unique temporary path (see §1.5 [2_TAS-REQ-401]).
 
 #### 2.7.2 Coverage Report Format
 
-**[2_TAS-REQ-015c]** `./do coverage` MUST write `target/coverage/report.json` with the following schema after computing all coverage numbers. All fields are required; none may be absent.
+**[2_TAS-REQ-015C]** `./do coverage` MUST write `target/coverage/report.json` with the following schema after computing all coverage numbers. All fields are required; none may be absent.
 
 ```json
 {
@@ -1166,7 +1166,7 @@ Field definitions:
 | `delta_pct` | float | `actual_pct - threshold_pct`. Negative means the gate is failing. |
 | `passed` | bool | `true` if `actual_pct >= threshold_pct`. |
 
-**[2_TAS-REQ-015d]** `./do coverage` exits with code 0 only if `overall_passed` is `true` in the generated report. If any gate fails, `./do coverage` prints a summary table to stderr listing each failing gate with its `actual_pct` and `threshold_pct`, then exits non-zero.
+**[2_TAS-REQ-015D]** `./do coverage` exits with code 0 only if `overall_passed` is `true` in the generated report. If any gate fails, `./do coverage` prints a summary table to stderr listing each failing gate with its `actual_pct` and `threshold_pct`, then exits non-zero.
 
 #### 2.7.3 Coverage Quality Gates
 
@@ -1178,11 +1178,11 @@ Field definitions:
 | QG-004 | E2E tests, TUI interface only | ≥ 50.0% line coverage |
 | QG-005 | E2E tests, MCP interface only | ≥ 50.0% line coverage |
 
-**[2_TAS-REQ-015e]** The per-interface E2E coverage (QG-003, QG-004, QG-005) is computed as the line coverage of the lines executed by the CLI, TUI, and MCP test suites respectively, measured against the **total lines in all workspace crates**. It is not a ratio against interface-only files. This ensures that each interface exercises the full system code path, not just its own surface.
+**[2_TAS-REQ-015E]** The per-interface E2E coverage (QG-003, QG-004, QG-005) is computed as the line coverage of the lines executed by the CLI, TUI, and MCP test suites respectively, measured against the **total lines in all workspace crates**. It is not a ratio against interface-only files. This ensures that each interface exercises the full system code path, not just its own surface.
 
 #### 2.7.4 TUI Test Strategy
 
-**[2_TAS-REQ-015f]** TUI tests MUST use a headless terminal emulator approach:
+**[2_TAS-REQ-015F]** TUI tests MUST use a headless terminal emulator approach:
 1. Render the TUI widget tree to an in-memory `ratatui::backend::TestBackend` (built into Ratatui).
 2. Assert on the text content of specific cells using `backend.buffer().get(x, y).symbol()`.
 3. Save and compare full terminal snapshots as `.txt` files using `insta::assert_snapshot!`.
@@ -1205,8 +1205,8 @@ Pixel-level or screenshot-based comparison is prohibited. Snapshot files are com
 | Two `./do presubmit` invocations run in parallel on the same machine | The second invocation competes for `target/` lock files (`cargo` uses a file lock on the `target/` directory). The second invocation waits or fails with a Cargo lock error. This is expected; parallel presubmit runs on one machine are unsupported. |
 | `./do ci` is invoked without `GITLAB_TOKEN` set | Command exits immediately with `"Error: GITLAB_TOKEN environment variable not set"` and exit code 1. No branch is created or pushed. |
 | CI cache is completely empty (first run or cache invalidated) | `./do setup` downloads all dependencies; `cargo build` downloads and compiles all crates. The job takes longer but succeeds. |
-| Windows CI runner: line endings in `./do` script are CRLF | Git must be configured with `core.autocrlf = false` for the repository. The `.gitattributes` file MUST include `./do text eol=lf` to force LF line endings. |
-| `cargo test` hangs because an E2E test starts a server but fails to clean it up | `./do presubmit`'s 15-minute timeout terminates the hanging test. Post-mortem: E2E test frameworks MUST use `std::process::Command`'s `kill_on_drop`-equivalent (via `assert_cmd`) or explicit cleanup in `Drop` impls for any spawned server processes. |
+**[2_TAS-REQ-254]** | Windows CI runner: line endings in `./do` script are CRLF | Git must be configured with `core.autocrlf = false` for the repository. The `.gitattributes` file MUST include `./do text eol=lf` to force LF line endings. |
+**[2_TAS-REQ-255]** | `cargo test` hangs because an E2E test starts a server but fails to clean it up | `./do presubmit`'s 15-minute timeout terminates the hanging test. Post-mortem: E2E test frameworks MUST use `std::process::Command`'s `kill_on_drop`-equivalent (via `assert_cmd`) or explicit cleanup in `Drop` impls for any spawned server processes. |
 
 #### 2.8.2 Coverage Edge Cases
 
@@ -1214,8 +1214,8 @@ Pixel-level or screenshot-based comparison is prohibited. Snapshot files are com
 |---|---|
 | A gate drops below threshold after a code change that deletes covered lines | `./do coverage` exits non-zero; the failing gate and actual/threshold values are printed to stderr. The commit is blocked by the CI pipeline. |
 | `cargo llvm-cov` produces a `NaN` or `null` for a coverage percentage | `./do coverage` treats this as `0.0%` for gate comparison, fails all applicable gates, and logs `"Warning: coverage instrumentation produced invalid data for <crate>"` to stderr. |
-| An E2E test starts a server on a port that is already in use | The server exits non-zero; the test framework detects this as a startup failure and fails the test with a clear error. The test MUST use a random available port (OS-assigned by binding to port 0) to avoid collisions. |
-| Unit test coverage is above 90% but E2E aggregate is below 80% due to new server-side code added without E2E tests | QG-002 fails; QG-001 passes. `./do coverage` exits non-zero. The developer must add E2E tests covering the new code paths. |
+**[2_TAS-REQ-256]** | An E2E test starts a server on a port that is already in use | The server exits non-zero; the test framework detects this as a startup failure and fails the test with a clear error. The test MUST use a random available port (OS-assigned by binding to port 0) to avoid collisions. |
+| Unit test coverage is above 90% but E2E aggregate is below 80% due to new server-side code added without E2E tests | QG-002 fails; QG-001 passes. `./do coverage` exits non-zero. **[2_TAS-REQ-605]** The developer must add E2E tests covering the new code paths. |
 
 ---
 
@@ -1236,28 +1236,28 @@ This section maps the dependencies between the Technology Stack section (§2) an
 
 ### 2.10 Technology Stack Acceptance Criteria
 
-All of the following assertions MUST be verified by automated tests or `./do` script invocations to consider the Technology Stack section implemented:
+**[2_TAS-REQ-601]** All of the following assertions MUST be verified by automated tests or `./do` script invocations to consider the Technology Stack section implemented:
 
-- **[TECH-AC-001]** `rust-toolchain.toml` is present at the repository root, pins `channel = "stable"` with components `rustfmt`, `clippy`, `llvm-tools-preview`. Verified by `cat rust-toolchain.toml | grep 'channel = "stable"'`.
-- **[TECH-AC-002]** `cargo build --workspace --all-features` exits 0 on Linux, macOS, and Windows after `./do setup`. Verified by CI `presubmit-linux`, `presubmit-macos`, `presubmit-windows` jobs.
-- **[TECH-AC-003]** `cargo fmt --check --all` exits 0 on the committed codebase without any manual formatting interventions. Verified by `./do lint` step 1.
-- **[TECH-AC-004]** `cargo clippy --workspace --all-targets --all-features -- -D warnings` exits 0. Verified by `./do lint` step 2.
-- **[TECH-AC-005]** `cargo doc --no-deps --workspace` produces zero `warning` or `error` lines. Verified by `./do lint` step 3.
-- **[TECH-AC-006]** `cargo tree -p devs-core --edges normal` contains no entries for `tokio`, `git2`, `reqwest`, or `tonic`. Verified by the dependency audit in `./do lint`.
-- **[TECH-AC-007]** `anyhow` does not appear in the `[dependencies]` of any library crate (`devs-core`, `devs-config`, `devs-checkpoint`, `devs-adapters`, `devs-pool`, `devs-executor`, `devs-scheduler`, `devs-webhook`, `devs-grpc`, `devs-mcp`, `devs-proto`). Verified by the dependency audit.
-- **[TECH-AC-008]** `unsafe` does not appear in any Rust source file in the workspace. Verified by `grep -r 'unsafe' src/` returning zero matches in all workspace crates, and by `cargo clippy` with `unsafe_code = "deny"`.
-- **[TECH-AC-009]** `./do setup` exits 0 on a fresh environment (Docker container with only `git` pre-installed) and leaves all required tools (`rustc`, `cargo`, `cargo-llvm-cov`, `protoc`) on `$PATH`. Verified by a CI job that starts from a minimal container image.
-- **[TECH-AC-010]** `./do setup` exits 0 when run a second time on an already-configured machine (idempotence). Verified by running `./do setup && ./do setup` and asserting the second invocation also exits 0.
-- **[TECH-AC-011]** `./do test` generates `target/traceability.json` and the file's `overall_passed` field is `true` when all requirements have covering tests. Verified by checking the file exists and is valid JSON after `./do test`.
-- **[TECH-AC-012]** `./do test` exits non-zero and `target/traceability.json` contains the missing requirement ID in `uncovered_ids` when a test annotation references a non-existent requirement ID. Verified by injecting a stale ID in a test comment and confirming the failure.
-- **[TECH-AC-013]** `./do coverage` generates `target/coverage/report.json` containing exactly five gate entries (QG-001 through QG-005) with all required fields. Verified by reading and schema-validating the file after `./do coverage`.
-- **[TECH-AC-014]** `./do coverage` exits non-zero when a gate threshold is not met. Verified by temporarily modifying the threshold for QG-001 to `99.9%` (artificially high) and confirming `./do coverage` fails.
-- **[TECH-AC-015]** `./do presubmit` exits non-zero and kills child processes when the 15-minute wall-clock timeout is exceeded. Verified by a test that replaces `./do test` with an infinite-sleep command and asserts `./do presubmit` exits within 16 minutes.
-- **[TECH-AC-016]** `./do <unknown>` exits non-zero and prints a list of valid commands to stderr. Verified by `./do foobar 2>&1 | grep "Valid commands"` and checking exit code is non-zero.
-- **[TECH-AC-017]** `devs-proto/src/gen/` contains committed `.rs` files that match what `tonic-build` would generate from the current `.proto` files. Verified by running `./do build` with `protoc` installed and checking `git diff` shows no changes to `src/gen/`.
-- **[TECH-AC-018]** All six gRPC services are present in the `devs-proto` generated code. Verified by checking that the generated `src/gen/` directory contains types for `WorkflowDefinitionService`, `RunService`, `StageService`, `LogService`, `PoolService`, `ProjectService`.
-- **[TECH-AC-019]** TUI tests run headlessly using `ratatui::backend::TestBackend` and produce `insta` snapshot fixtures. Verified by `cargo test -p devs-tui` succeeding in a CI environment with no attached TTY.
-- **[TECH-AC-020]** E2E tests run with `--test-threads 1`. Verified by checking that the `./do coverage` invocation for E2E includes `--test-threads 1` in the cargo invocation, and that no port-conflict failures occur in CI when E2E tests are run.
+- **[2_TAS-REQ-445]** `rust-toolchain.toml` is present at the repository root, pins `channel = "stable"` with components `rustfmt`, `clippy`, `llvm-tools-preview`. Verified by `cat rust-toolchain.toml | grep 'channel = "stable"'`.
+- **[2_TAS-REQ-446]** `cargo build --workspace --all-features` exits 0 on Linux, macOS, and Windows after `./do setup`. Verified by CI `presubmit-linux`, `presubmit-macos`, `presubmit-windows` jobs.
+- **[2_TAS-REQ-447]** `cargo fmt --check --all` exits 0 on the committed codebase without any manual formatting interventions. Verified by `./do lint` step 1.
+- **[2_TAS-REQ-448]** `cargo clippy --workspace --all-targets --all-features -- -D warnings` exits 0. Verified by `./do lint` step 2.
+- **[2_TAS-REQ-449]** `cargo doc --no-deps --workspace` produces zero `warning` or `error` lines. Verified by `./do lint` step 3.
+- **[2_TAS-REQ-450]** `cargo tree -p devs-core --edges normal` contains no entries for `tokio`, `git2`, `reqwest`, or `tonic`. Verified by the dependency audit in `./do lint`.
+- **[2_TAS-REQ-451]** `anyhow` does not appear in the `[dependencies]` of any library crate (`devs-core`, `devs-config`, `devs-checkpoint`, `devs-adapters`, `devs-pool`, `devs-executor`, `devs-scheduler`, `devs-webhook`, `devs-grpc`, `devs-mcp`, `devs-proto`). Verified by the dependency audit.
+- **[2_TAS-REQ-452]** `unsafe` does not appear in any Rust source file in the workspace. Verified by `grep -r 'unsafe' src/` returning zero matches in all workspace crates, and by `cargo clippy` with `unsafe_code = "deny"`.
+- **[2_TAS-REQ-453]** `./do setup` exits 0 on a fresh environment (Docker container with only `git` pre-installed) and leaves all required tools (`rustc`, `cargo`, `cargo-llvm-cov`, `protoc`) on `$PATH`. Verified by a CI job that starts from a minimal container image.
+- **[2_TAS-REQ-454]** `./do setup` exits 0 when run a second time on an already-configured machine (idempotence). Verified by running `./do setup && ./do setup` and asserting the second invocation also exits 0.
+- **[2_TAS-REQ-455]** `./do test` generates `target/traceability.json` and the file's `overall_passed` field is `true` when all requirements have covering tests. Verified by checking the file exists and is valid JSON after `./do test`.
+- **[2_TAS-REQ-456]** `./do test` exits non-zero and `target/traceability.json` contains the missing requirement ID in `uncovered_ids` when a test annotation references a non-existent requirement ID. Verified by injecting a stale ID in a test comment and confirming the failure.
+- **[2_TAS-REQ-457]** `./do coverage` generates `target/coverage/report.json` containing exactly five gate entries (QG-001 through QG-005) with all required fields. Verified by reading and schema-validating the file after `./do coverage`.
+- **[2_TAS-REQ-458]** `./do coverage` exits non-zero when a gate threshold is not met. Verified by temporarily modifying the threshold for QG-001 to `99.9%` (artificially high) and confirming `./do coverage` fails.
+- **[2_TAS-REQ-459]** `./do presubmit` exits non-zero and kills child processes when the 15-minute wall-clock timeout is exceeded. Verified by a test that replaces `./do test` with an infinite-sleep command and asserts `./do presubmit` exits within 16 minutes.
+- **[2_TAS-REQ-460]** `./do <unknown>` exits non-zero and prints a list of valid commands to stderr. Verified by `./do foobar 2>&1 | grep "Valid commands"` and checking exit code is non-zero.
+- **[2_TAS-REQ-461]** `devs-proto/src/gen/` contains committed `.rs` files that match what `tonic-build` would generate from the current `.proto` files. Verified by running `./do build` with `protoc` installed and checking `git diff` shows no changes to `src/gen/`.
+- **[2_TAS-REQ-462]** All six gRPC services are present in the `devs-proto` generated code. Verified by checking that the generated `src/gen/` directory contains types for `WorkflowDefinitionService`, `RunService`, `StageService`, `LogService`, `PoolService`, `ProjectService`.
+- **[2_TAS-REQ-463]** TUI tests run headlessly using `ratatui::backend::TestBackend` and produce `insta` snapshot fixtures. Verified by `cargo test -p devs-tui` succeeding in a CI environment with no attached TTY.
+- **[2_TAS-REQ-464]** E2E tests run with `--test-threads 1`. Verified by checking that the `./do coverage` invocation for E2E includes `--test-threads 1` in the cargo invocation, and that no port-conflict failures occur in CI when E2E tests are run.
 
 ---
 
@@ -1265,13 +1265,13 @@ All of the following assertions MUST be verified by automated tests or `./do` sc
 
 ### 3.1 Persistence Strategy
 
-**[2_TAS-REQ-014]** There is no relational database. All persistent state is stored as JSON files committed to the project's git repository under `.devs/`. In-process state is held in Tokio-synchronized data structures (`Arc<RwLock<...>>`). On server restart, state is reconstructed by reading the git-backed checkpoint files.
+**[2_TAS-REQ-152]** There is no relational database. All persistent state is stored as JSON files committed to the project's git repository under `.devs/`. In-process state is held in Tokio-synchronized data structures (`Arc<RwLock<...>>`). On server restart, state is reconstructed by reading the git-backed checkpoint files.
 
 ### 3.2 Core Type Definitions
 
 All types below are defined in `devs-core/src/types.rs` and derived with `serde::Serialize` + `serde::Deserialize`.
 
-**[2_TAS-REQ-015]** String field length limits are enforced at construction time via newtype wrappers; invalid values return `ValidationError`.
+**[2_TAS-REQ-153]** String field length limits are enforced at construction time via newtype wrappers; invalid values return `ValidationError`.
 
 ```
 WorkflowDefinition {
@@ -1582,17 +1582,17 @@ stateDiagram-v2
     Cancelled --> [*]
 ```
 
-**[2_TAS-REQ-020a]** The `StateMachine` trait MUST reject any transition not listed above with `TransitionError::IllegalTransition { from, to }`. The transition is not applied and the current state is preserved. All state transitions MUST be persisted to `checkpoint.json` before any event is emitted to gRPC streaming subscribers.
+**[2_TAS-REQ-020A]** The `StateMachine` trait MUST reject any transition not listed above with `TransitionError::IllegalTransition { from, to }`. The transition is not applied and the current state is preserved. All state transitions MUST be persisted to `checkpoint.json` before any event is emitted to gRPC streaming subscribers.
 
-**[2_TAS-REQ-020b]** When a `WorkflowRun` transitions to `Failed` or `Cancelled`, all non-terminal `StageRun` records MUST be transitioned to `Cancelled` in the same atomic checkpoint write. A stage is terminal if its status is one of: `Completed`, `Failed`, `TimedOut`, `Cancelled`.
+**[2_TAS-REQ-020B]** When a `WorkflowRun` transitions to `Failed` or `Cancelled`, all non-terminal `StageRun` records MUST be transitioned to `Cancelled` in the same atomic checkpoint write. A stage is terminal if its status is one of: `Completed`, `Failed`, `TimedOut`, `Cancelled`.
 
 ### 3.6 JSON Serialization Schemas
 
-All persistent files use UTF-8 encoded JSON. The exact on-disk format is normative; any deviation is a bug. Field ordering within objects is not guaranteed by serialization but MUST be accepted by deserialization regardless of order.
+**[2_TAS-REQ-259]** All persistent files use UTF-8 encoded JSON. The exact on-disk format is normative; any deviation is a bug. Field ordering within objects is not guaranteed by serialization but MUST be accepted by deserialization regardless of order.
 
 #### 3.6.1 `checkpoint.json`
 
-**[2_TAS-REQ-021a]** `checkpoint.json` MUST conform exactly to the following schema. The file is written atomically by writing to a sibling `.checkpoint.json.tmp` and then calling `rename()`. Any reader that encounters a file ending in `.tmp` MUST treat it as a partial write and ignore it.
+**[2_TAS-REQ-021A]** `checkpoint.json` MUST conform exactly to the following schema. The file is written atomically by writing to a sibling `.checkpoint.json.tmp` and then calling `rename()`. Any reader that encounters a file ending in `.tmp` MUST treat it as a partial write and ignore it.
 
 ```json
 {
@@ -1640,7 +1640,7 @@ All persistent files use UTF-8 encoded JSON. The exact on-disk format is normati
 
 | Field | Type | Constraint |
 |---|---|---|
-| `schema_version` | integer | Always `1`; reader MUST reject any other value with a schema migration error |
+**[2_TAS-REQ-261]** | `schema_version` | integer | Always `1`; reader MUST reject any other value with a schema migration error |
 | `written_at` | string | ISO 8601 UTC; set to wall-clock time at the moment of the atomic rename |
 | `run.run_id` | string | UUID v4; immutable after creation |
 | `run.slug` | string | `[a-z0-9-]+`, max 128 chars; immutable after creation |
@@ -1650,13 +1650,13 @@ All persistent files use UTF-8 encoded JSON. The exact on-disk format is normati
 | `stage_run.output.stdout` | string | Base64-encoded; max 1,048,576 bytes decoded; if truncated, `truncated: true` |
 | `stage_run.output.stderr` | string | Base64-encoded; max 1,048,576 bytes decoded; if truncated, `truncated: true` |
 
-**[2_TAS-REQ-021b]** A `null` value for any optional timestamp field (e.g. `started_at`, `completed_at`) MUST be serialized as JSON `null`, never as an absent key. Deserializing a checkpoint where an optional field is absent (rather than `null`) MUST be treated as `null` for forward compatibility.
+**[2_TAS-REQ-021B]** A `null` value for any optional timestamp field (e.g. `started_at`, `completed_at`) MUST be serialized as JSON `null`, never as an absent key. Deserializing a checkpoint where an optional field is absent (rather than `null`) MUST be treated as `null` for forward compatibility.
 
-**[2_TAS-REQ-021c]** If a disk-full error occurs during the atomic write, `devs` MUST log the error at `ERROR` level, leave the previous checkpoint file unchanged, and continue running. The server MUST NOT crash on checkpoint write failure.
+**[2_TAS-REQ-021C]** If a disk-full error occurs during the atomic write, `devs` MUST log the error at `ERROR` level, leave the previous checkpoint file unchanged, and continue running. The server MUST NOT crash on checkpoint write failure.
 
 #### 3.6.2 `workflow_snapshot.json`
 
-**[2_TAS-REQ-022a]** `workflow_snapshot.json` is a verbatim serialization of the `WorkflowDefinition` struct at the moment the run transitions from `Pending` to `Running`. It is written atomically to `.devs/runs/<run-id>/workflow_snapshot.json` and committed to the checkpoint branch before the first stage becomes `Eligible`.
+**[2_TAS-REQ-022A]** `workflow_snapshot.json` is a verbatim serialization of the `WorkflowDefinition` struct at the moment the run transitions from `Pending` to `Running`. It is written atomically to `.devs/runs/<run-id>/workflow_snapshot.json` and committed to the checkpoint branch before the first stage becomes `Eligible`.
 
 ```json
 {
@@ -1694,13 +1694,13 @@ All persistent files use UTF-8 encoded JSON. The exact on-disk format is normati
 }
 ```
 
-**[2_TAS-REQ-022b]** Once written, `workflow_snapshot.json` is never modified. Any code path that would overwrite an existing snapshot MUST panic in debug builds and return an `ImmutableSnapshotError` in release builds, leaving the file unchanged.
+**[2_TAS-REQ-022B]** Once written, `workflow_snapshot.json` is never modified. Any code path that would overwrite an existing snapshot MUST panic in debug builds and return an `ImmutableSnapshotError` in release builds, leaving the file unchanged.
 
-**[2_TAS-REQ-022c]** The git commit message for the snapshot commit is: `devs: snapshot <run-id>`. The git author for all generated commits is `devs <devs@localhost>`.
+**[2_TAS-REQ-022C]** The git commit message for the snapshot commit is: `devs: snapshot <run-id>`. The git author for all generated commits is `devs <devs@localhost>`.
 
 #### 3.6.3 `.devs_context.json` (Agent Context File)
 
-**[2_TAS-REQ-023a]** Before spawning each agent, `devs` writes `.devs_context.json` into the agent's working directory. This file contains the outputs of all stages in the transitive `depends_on` closure of the current stage (terminal-state stages only).
+**[2_TAS-REQ-023A]** Before spawning each agent, `devs` writes `.devs_context.json` into the agent's working directory. This file contains the outputs of all stages in the transitive `depends_on` closure of the current stage (terminal-state stages only).
 
 ```json
 {
@@ -1723,15 +1723,15 @@ All persistent files use UTF-8 encoded JSON. The exact on-disk format is normati
 }
 ```
 
-**[2_TAS-REQ-023b]** The total serialized size of `.devs_context.json` MUST NOT exceed 10 MiB. If the full content would exceed this limit, `stdout` and `stderr` fields for each stage are truncated proportionally (equal bytes removed from each), and the `truncated` flag for affected stages is set to `true`. A `WARN`-level log entry MUST be emitted listing which stages were truncated and by how many bytes.
+**[2_TAS-REQ-023B]** The total serialized size of `.devs_context.json` MUST NOT exceed 10 MiB. If the full content would exceed this limit, `stdout` and `stderr` fields for each stage are truncated proportionally (equal bytes removed from each), and the `truncated` flag for affected stages is set to `true`. A `WARN`-level log entry MUST be emitted listing which stages were truncated and by how many bytes.
 
-**[2_TAS-REQ-023c]** `.devs_context.json` is written atomically (write-to-temp-rename). A failure to write this file MUST cause the stage to transition to `Failed` immediately, before the agent process is spawned.
+**[2_TAS-REQ-023C]** `.devs_context.json` is written atomically (write-to-temp-rename). A failure to write this file MUST cause the stage to transition to `Failed` immediately, before the agent process is spawned.
 
-**[2_TAS-REQ-023d]** Only stages in the **transitive** `depends_on` closure of the current stage are included. Stages not reachable through the dependency graph are excluded, even if they have completed.
+**[2_TAS-REQ-023D]** Only stages in the **transitive** `depends_on` closure of the current stage are included. Stages not reachable through the dependency graph are excluded, even if they have completed.
 
 #### 3.6.4 `.devs_output.json` (Agent Structured Output)
 
-**[2_TAS-REQ-024a]** When `completion = StructuredOutput`, the agent is expected to write `.devs_output.json` to its working directory. `devs` reads this file after the process exits (or after `signal_completion` is called). If the file exists, it takes absolute precedence over stdout JSON parsing.
+**[2_TAS-REQ-024A]** When `completion = StructuredOutput`, the agent is expected to write `.devs_output.json` to its working directory. `devs` reads this file after the process exits (or after `signal_completion` is called). If the file exists, it takes absolute precedence over stdout JSON parsing.
 
 ```json
 {
@@ -1743,7 +1743,7 @@ All persistent files use UTF-8 encoded JSON. The exact on-disk format is normati
 }
 ```
 
-**[2_TAS-REQ-024b]** Parsing rules for `structured_output` completion:
+**[2_TAS-REQ-024B]** Parsing rules for `structured_output` completion:
 
 | Condition | Result |
 |---|---|
@@ -1754,7 +1754,7 @@ All persistent files use UTF-8 encoded JSON. The exact on-disk format is normati
 | `.devs_output.json` absent; stdout ends with a valid JSON object containing `"success": false` | Stage → `Failed`; `output.structured` = parsed JSON |
 | `.devs_output.json` absent; stdout contains no valid trailing JSON object | Stage → `Failed`; `output.structured` = `null` |
 
-**[2_TAS-REQ-024c]** The `"success"` key MUST be a JSON boolean. A string value such as `"true"` is invalid and causes `Stage → Failed`.
+**[2_TAS-REQ-024C]** The `"success"` key MUST be a JSON boolean. A string value such as `"true"` is invalid and causes `Stage → Failed`.
 
 ### 3.7 In-Memory Runtime State
 
@@ -1810,7 +1810,7 @@ pub enum LogStream { Stdout, Stderr }
 4. Persist `checkpoint.json` to disk (outside the lock, using a snapshot of the mutated value).
 5. Broadcast a `RunEvent` to all streaming subscribers for the affected run.
 
-Steps 4 and 5 MUST happen in that order. A subscriber MUST NOT receive an event for a state that has not yet been persisted to disk.
+**[2_TAS-REQ-268]** Steps 4 and 5 MUST happen in that order. A subscriber MUST NOT receive an event for a state that has not yet been persisted to disk.
 
 ### 3.8 Type Constraints & Validation Rules
 
@@ -1829,7 +1829,7 @@ Every type with a bounded or constrained value domain is implemented as a Rust n
 **[2_TAS-REQ-029]** `EnvKey` wraps a `String` and enforces:
 - Regex pattern: `[A-Z_][A-Z0-9_]{0,127}` (total max 128 chars including first char).
 - Any key not matching this pattern is rejected with `ValidationError::InvalidEnvKey`.
-- The following keys are prohibited and MUST be rejected at stage definition parse time: `DEVS_LISTEN`, `DEVS_MCP_PORT`, `DEVS_DISCOVERY_FILE`. These are stripped from agent environments even if present in the server environment.
+- **[2_TAS-REQ-269]** The following keys are prohibited and MUST be rejected at stage definition parse time: `DEVS_LISTEN`, `DEVS_MCP_PORT`, `DEVS_DISCOVERY_FILE`. These are stripped from agent environments even if present in the server environment.
 
 #### 3.8.3 `RunSlug`
 
@@ -1881,73 +1881,73 @@ The full error list is returned as `Vec<ValidationError>`. gRPC callers receive 
 
 This section states every invariant as a concrete, testable assertion.
 
-**[2_TAS-BR-001]** A `WorkflowDefinition.name` that does not match `[a-z0-9_-]+` or exceeds 128 bytes MUST be rejected with `ValidationError::InvalidName` before any other validation runs.
+**[2_TAS-REQ-465]** A `WorkflowDefinition.name` that does not match `[a-z0-9_-]+` or exceeds 128 bytes MUST be rejected with `ValidationError::InvalidName` before any other validation runs.
 
-**[2_TAS-BR-002]** A `WorkflowDefinition` with zero stages MUST be rejected with `ValidationError::EmptyWorkflow`. A workflow MAY have up to 256 stages; exceeding 256 stages MUST be rejected with `ValidationError::TooManyStages`.
+**[2_TAS-REQ-466]** A `WorkflowDefinition` with zero stages MUST be rejected with `ValidationError::EmptyWorkflow`. A workflow MAY have up to 256 stages; exceeding 256 stages MUST be rejected with `ValidationError::TooManyStages`.
 
-**[2_TAS-BR-003]** A `WorkflowDefinition` with more than 64 inputs MUST be rejected with `ValidationError::TooManyInputs`.
+**[2_TAS-REQ-467]** A `WorkflowDefinition` with more than 64 inputs MUST be rejected with `ValidationError::TooManyInputs`.
 
-**[2_TAS-BR-004]** A `WorkflowInput` with `required: false` and no `default` value is valid. The resolved value at runtime is `null` for optional inputs not provided at submission time.
+**[2_TAS-REQ-468]** A `WorkflowInput` with `required: false` and no `default` value is valid. The resolved value at runtime is `null` for optional inputs not provided at submission time.
 
-**[2_TAS-BR-005]** A `StageDefinition` MUST have exactly one of `prompt` or `prompt_file` set. Both set or neither set MUST be rejected at validation time.
+**[2_TAS-REQ-469]** A `StageDefinition` MUST have exactly one of `prompt` or `prompt_file` set. Both set or neither set MUST be rejected at validation time.
 
-**[2_TAS-BR-006]** A `StageDefinition` MUST NOT have both `fan_out` and `branch` set simultaneously.
+**[2_TAS-REQ-470]** A `StageDefinition` MUST NOT have both `fan_out` and `branch` set simultaneously.
 
-**[2_TAS-BR-007]** A `FanOutConfig` MUST have exactly one of `count` or `input_list` set. `count` MUST be in the range 1–64 inclusive. An `input_list` MUST have 1–64 elements inclusive. Zero-length `input_list` MUST be rejected.
+**[2_TAS-REQ-471]** A `FanOutConfig` MUST have exactly one of `count` or `input_list` set. `count` MUST be in the range 1–64 inclusive. An `input_list` MUST have 1–64 elements inclusive. Zero-length `input_list` MUST be rejected.
 
-**[2_TAS-BR-008]** A `RetryConfig.max_attempts` MUST be in the range 1–20 inclusive. A value of 0 is rejected. A value > 20 is rejected.
+**[2_TAS-REQ-472]** A `RetryConfig.max_attempts` MUST be in the range 1–20 inclusive. A value of 0 is rejected. A value > 20 is rejected.
 
-**[2_TAS-BR-009]** A `RetryConfig` with `backoff = Exponential` and no `max_delay` uses a computed cap of 300 seconds. `initial_delay` MUST be ≥ 1 second.
+**[2_TAS-REQ-473]** A `RetryConfig` with `backoff = Exponential` and no `max_delay` uses a computed cap of 300 seconds. `initial_delay` MUST be ≥ 1 second.
 
-**[2_TAS-BR-010]** An `AgentPool.max_concurrent` MUST be in the range 1–1024 inclusive. An `AgentPool` MUST have at least one `AgentConfig`.
+**[2_TAS-REQ-474]** An `AgentPool.max_concurrent` MUST be in the range 1–1024 inclusive. An `AgentPool` MUST have at least one `AgentConfig`.
 
-**[2_TAS-BR-011]** A `Project.weight` MUST be ≥ 1. A weight of 0 MUST be rejected at project registration time with `ValidationError::InvalidWeight`.
+**[2_TAS-REQ-475]** A `Project.weight` MUST be ≥ 1. A weight of 0 MUST be rejected at project registration time with `ValidationError::InvalidWeight`.
 
-**[2_TAS-BR-012]** A `WebhookTarget.url` MUST use the `https` or `http` scheme. Any other scheme (e.g. `ftp`, `file`) MUST be rejected with `ValidationError::InvalidWebhookUrl`.
+**[2_TAS-REQ-476]** A `WebhookTarget.url` MUST use the `https` or `http` scheme. Any other scheme (e.g. `ftp`, `file`) MUST be rejected with `ValidationError::InvalidWebhookUrl`.
 
-**[2_TAS-BR-013]** The `WorkflowRun.definition_snapshot` field is set exactly once, when the run transitions from `Pending` to `Running`. Any code path that would overwrite a non-null snapshot MUST return `ImmutableSnapshotError`.
+**[2_TAS-REQ-477]** The `WorkflowRun.definition_snapshot` field is set exactly once, when the run transitions from `Pending` to `Running`. Any code path that would overwrite a non-null snapshot MUST return `ImmutableSnapshotError`.
 
-**[2_TAS-BR-014]** `StageRun.attempt` starts at 1 for the first execution. Each retry increments `attempt` by 1. A rate-limit event that causes pool fallback MUST NOT increment `attempt`; only genuine failures (non-zero exit with no rate-limit pattern match) increment the counter.
+**[2_TAS-REQ-478]** `StageRun.attempt` starts at 1 for the first execution. Each retry increments `attempt` by 1. A rate-limit event that causes pool fallback MUST NOT increment `attempt`; only genuine failures (non-zero exit with no rate-limit pattern match) increment the counter.
 
-**[2_TAS-BR-015]** `StageRun.exit_code` MUST be recorded for every stage execution regardless of the `completion` signal type. A stage that is killed by `SIGKILL` records exit code `-9` (or the platform equivalent). A stage that times out records `null` for `exit_code` if the process does not exit before the checkpoint is written, and then records the actual exit code when the process exits.
+**[2_TAS-REQ-479]** `StageRun.exit_code` MUST be recorded for every stage execution regardless of the `completion` signal type. A stage that is killed by `SIGKILL` records exit code `-9` (or the platform equivalent). A stage that times out records `null` for `exit_code` if the process does not exit before the checkpoint is written, and then records the actual exit code when the process exits.
 
-**[2_TAS-BR-016]** Two `WorkflowRun` records in the same project MUST NOT have the same `slug` unless one of them has `status = Cancelled`. The uniqueness check is performed atomically under a per-project mutex at submission time.
+**[2_TAS-REQ-480]** Two `WorkflowRun` records in the same project MUST NOT have the same `slug` unless one of them has `status = Cancelled`. The uniqueness check is performed atomically under a per-project mutex at submission time.
 
-**[2_TAS-BR-017]** A template variable reference `{{stage.<name>.<field>}}` is only valid if `<name>` is in the transitive `depends_on` closure of the referencing stage. A reference to a stage outside this closure MUST cause the stage to transition to `Failed` at execution start, not at validation time (because the dependency graph is checked at validation time but template references within prompts are resolved at execution time).
+**[2_TAS-REQ-481]** A template variable reference `{{stage.<name>.<field>}}` is only valid if `<name>` is in the transitive `depends_on` closure of the referencing stage. A reference to a stage outside this closure MUST cause the stage to transition to `Failed` at execution start, not at validation time (because the dependency graph is checked at validation time but template references within prompts are resolved at execution time).
 
-**[2_TAS-BR-018]** The `EnvKey` values `DEVS_LISTEN`, `DEVS_MCP_PORT`, and `DEVS_DISCOVERY_FILE` MUST be stripped from the agent's environment even if they appear in the server's own environment. `DEVS_MCP_ADDR` MUST be injected into every agent process, set to the MCP server's listen address.
+**[2_TAS-REQ-482]** The `EnvKey` values `DEVS_LISTEN`, `DEVS_MCP_PORT`, and `DEVS_DISCOVERY_FILE` MUST be stripped from the agent's environment even if they appear in the server's own environment. `DEVS_MCP_ADDR` MUST be injected into every agent process, set to the MCP server's listen address.
 
 ### 3.10 Edge Cases & Error Handling
 
 #### 3.10.1 Checkpoint Read Failures on Startup
 
-**[2_TAS-BR-019]** If a `checkpoint.json` file exists but fails to parse (malformed JSON, unknown `schema_version`, missing required fields), `devs` MUST:
+**[2_TAS-REQ-483]** If a `checkpoint.json` file exists but fails to parse (malformed JSON, unknown `schema_version`, missing required fields), `devs` MUST:
 1. Log the error at `ERROR` level with the full file path and parse error message.
 2. Skip that run (do not attempt recovery).
 3. Continue loading all other runs.
 4. After startup completes, expose the unrecoverable run IDs via the `list_runs` MCP tool with `status = "Unrecoverable"` and an `error` field describing the parse failure.
 
-A single corrupt checkpoint file MUST NOT prevent the server from starting.
+**[2_TAS-REQ-270]** A single corrupt checkpoint file MUST NOT prevent the server from starting.
 
-**[2_TAS-BR-020]** If the `workflow_snapshot.json` for a run is missing or corrupt, but the `checkpoint.json` is valid, the run is still recovered but any stage that would require reading the snapshot (e.g. re-resolving templates) transitions immediately to `Failed` with error `MissingSnapshot`.
+**[2_TAS-REQ-484]** If the `workflow_snapshot.json` for a run is missing or corrupt, but the `checkpoint.json` is valid, the run is still recovered but any stage that would require reading the snapshot (e.g. re-resolving templates) transitions immediately to `Failed` with error `MissingSnapshot`.
 
 #### 3.10.2 Concurrent Checkpoint Writes
 
-**[2_TAS-BR-021]** Multiple stage completions may occur concurrently for fan-out stages. Each concurrent completion acquires the `runs` `RwLock` write guard, applies its transition, releases the lock, and then writes `checkpoint.json`. Because lock acquisition is sequential, checkpoint writes are also sequential. A write that loses the lock race MUST re-read the current state from the in-memory map (not from disk) before writing, so the final file reflects all concurrent transitions.
+**[2_TAS-REQ-485]** Multiple stage completions may occur concurrently for fan-out stages. Each concurrent completion acquires the `runs` `RwLock` write guard, applies its transition, releases the lock, and then writes `checkpoint.json`. Because lock acquisition is sequential, checkpoint writes are also sequential. A write that loses the lock race MUST re-read the current state from the in-memory map (not from disk) before writing, so the final file reflects all concurrent transitions.
 
 #### 3.10.3 Disk Full During Checkpoint Write
 
-**[2_TAS-BR-022]** If the `rename()` syscall fails (e.g. because the target filesystem is full or the temp file and target are on different filesystems), `devs` MUST:
+**[2_TAS-REQ-486]** If the `rename()` syscall fails (e.g. because the target filesystem is full or the temp file and target are on different filesystems), `devs` MUST:
 1. Log at `ERROR` level: `"checkpoint write failed: <OS error>"`.
 2. Attempt to delete the `.tmp` file.
 3. Continue running with in-memory state authoritative.
 4. Retry the checkpoint write on the next state transition.
 
-The server MUST NOT crash, terminate the run, or revert the in-memory state change.
+**[2_TAS-REQ-271]** The server MUST NOT crash, terminate the run, or revert the in-memory state change.
 
 #### 3.10.4 Stage Output Exceeds Size Limit
 
-**[2_TAS-BR-023]** If a stage's combined `stdout` + `stderr` exceeds 2 MiB total (1 MiB each), the excess is truncated before storing in `StageOutput`. The truncation algorithm:
+**[2_TAS-REQ-487]** If a stage's combined `stdout` + `stderr` exceeds 2 MiB total (1 MiB each), the excess is truncated before storing in `StageOutput`. The truncation algorithm:
 1. Measure `stdout_len` and `stderr_len`.
 2. If `stdout_len > 1_048_576`: truncate `stdout` to last 1,048,576 bytes (keeping the most recent output, which is most relevant for completion detection).
 3. If `stderr_len > 1_048_576`: truncate `stderr` to last 1,048,576 bytes.
@@ -1956,7 +1956,7 @@ The server MUST NOT crash, terminate the run, or revert the in-memory state chan
 
 #### 3.10.5 Template Variable Resolution Failures
 
-**[2_TAS-BR-024]** Template variable resolution failures are categorized as follows:
+**[2_TAS-REQ-488]** Template variable resolution failures are categorized as follows:
 
 | Failure Mode | Behavior |
 |---|---|
@@ -1966,19 +1966,19 @@ The server MUST NOT crash, terminate the run, or revert the in-memory state chan
 | `{{workflow.input.Y}}` where `Y` is declared but not provided and has no default | Stage → `Failed`; error: `TemplateError::MissingRequiredInput { name: "Y" }` |
 | `{{stage.X.output.field}}` where `field` does not exist in structured output | Stage → `Failed`; error: `TemplateError::UnknownOutputField { stage: "X", field: "field" }` |
 
-All template resolution errors MUST be captured before agent spawn and MUST cause the stage to fail immediately (i.e., no agent process is ever spawned for a stage with unresolvable templates).
+**[2_TAS-REQ-272]** All template resolution errors MUST be captured before agent spawn and MUST cause the stage to fail immediately (i.e., no agent process is ever spawned for a stage with unresolvable templates).
 
 #### 3.10.6 Slug Collision on Run Submission
 
-**[2_TAS-BR-025]** If a user-supplied run name produces a slug that collides with an active (non-cancelled) run in the same project, the submission MUST be rejected atomically with:
+**[2_TAS-REQ-489]** If a user-supplied run name produces a slug that collides with an active (non-cancelled) run in the same project, the submission MUST be rejected atomically with:
 ```json
 { "error": "duplicate_run_name", "slug": "<colliding_slug>", "existing_run_id": "<uuid>" }
 ```
-The check and the run creation MUST be performed under the same per-project mutex to prevent TOCTOU races.
+**[2_TAS-REQ-273]** The check and the run creation MUST be performed under the same per-project mutex to prevent TOCTOU races.
 
 #### 3.10.7 Schema Version Mismatch on Checkpoint Read
 
-**[2_TAS-BR-026]** If `checkpoint.json` contains `"schema_version": N` where N ≠ 1 (the only currently supported version), the server MUST:
+**[2_TAS-REQ-490]** If `checkpoint.json` contains `"schema_version": N` where N ≠ 1 (the only currently supported version), the server MUST:
 1. Log at `ERROR` level: `"unsupported checkpoint schema version <N> in <path>"`.
 2. Mark that run as `Unrecoverable` (same behavior as §3.10.1).
 3. NOT attempt to interpret the file's other fields.
@@ -1987,7 +1987,7 @@ This behavior is forward-compatible: when a future schema version is introduced,
 
 #### 3.10.8 `prompt_file` Absent at Execution Time
 
-**[2_TAS-BR-027]** `prompt_file` paths are resolved at stage execution time, not at workflow definition validation time. If the file does not exist when the stage is about to run, the stage MUST transition to `Failed` with error `PromptFileNotFound { path: "<path>" }`. No agent process is spawned. This allows `prompt_file` to reference files created by earlier stages (e.g. written to a shared directory) without requiring them to exist at submit time.
+**[2_TAS-REQ-491]** `prompt_file` paths are resolved at stage execution time, not at workflow definition validation time. If the file does not exist when the stage is about to run, the stage MUST transition to `Failed` with error `PromptFileNotFound { path: "<path>" }`. No agent process is spawned. This allows `prompt_file` to reference files created by earlier stages (e.g. written to a shared directory) without requiring them to exist at submit time.
 
 ### 3.11 Section Dependencies
 
@@ -2017,45 +2017,45 @@ External dependencies of this section:
 
 The following criteria are independently verifiable by an automated test. Each criterion references a requirement from this section.
 
-- **[AC-3.01]** Given a `checkpoint.json` with `"schema_version": 2`, the server startup MUST log an `ERROR` containing `"unsupported checkpoint schema version"` and skip that run. The server MUST still start and load all other runs. *(covers 2_TAS-BR-026)*
+- **[2_TAS-REQ-492]** Given a `checkpoint.json` with `"schema_version": 2`, the server startup MUST log an `ERROR` containing `"unsupported checkpoint schema version"` and skip that run. The server MUST still start and load all other runs. *(covers [2_TAS-REQ-490])*
 
-- **[AC-3.02]** Given a workflow definition with a stage cycle `A → B → A`, `submit_run` MUST return a `INVALID_ARGUMENT` gRPC status whose error detail contains `"cycle detected"` and the array `["A", "B", "A"]`. *(covers 2_TAS-REQ-032, step 4)*
+- **[2_TAS-REQ-493]** Given a workflow definition with a stage cycle `A → B → A`, `submit_run` MUST return a `INVALID_ARGUMENT` gRPC status whose error detail contains `"cycle detected"` and the array `["A", "B", "A"]`. *(covers 2_TAS-REQ-032, step 4)*
 
-- **[AC-3.03]** Given a `StageRun` in `Running` status, calling `transition(Running → Completed)` MUST succeed and subsequently calling `transition(Completed → Running)` MUST return `TransitionError::IllegalTransition { from: Completed, to: Running }` and leave the status as `Completed`. *(covers 2_TAS-REQ-020a)*
+- **[2_TAS-REQ-494]** Given a `StageRun` in `Running` status, calling `transition(Running → Completed)` MUST succeed and subsequently calling `transition(Completed → Running)` MUST return `TransitionError::IllegalTransition { from: Completed, to: Running }` and leave the status as `Completed`. *(covers 2_TAS-REQ-020a)*
 
-- **[AC-3.04]** Given a `WorkflowRun` that transitions to `Cancelled`, all `StageRun` records with status `Waiting`, `Eligible`, or `Running` MUST have status `Cancelled` in the same `checkpoint.json` write. No intermediate checkpoint with partial cancellation is written. *(covers 2_TAS-REQ-020b)*
+- **[2_TAS-REQ-495]** Given a `WorkflowRun` that transitions to `Cancelled`, all `StageRun` records with status `Waiting`, `Eligible`, or `Running` MUST have status `Cancelled` in the same `checkpoint.json` write. No intermediate checkpoint with partial cancellation is written. *(covers 2_TAS-REQ-020b)*
 
-- **[AC-3.05]** Given a stage producing 2 MiB of stdout, `StageOutput.stdout` MUST be truncated to the last 1,048,576 bytes and `StageOutput.truncated` MUST be `true`. The `WARN` log entry MUST mention the original stdout length. *(covers 2_TAS-BR-023)*
+- **[2_TAS-REQ-496]** Given a stage producing 2 MiB of stdout, `StageOutput.stdout` MUST be truncated to the last 1,048,576 bytes and `StageOutput.truncated` MUST be `true`. The `WARN` log entry MUST mention the original stdout length. *(covers [2_TAS-REQ-487])*
 
-- **[AC-3.06]** Given a `checkpoint.json` write that fails with `ENOSPC` (disk full), the server MUST continue running with in-memory state intact. The next state transition MUST attempt another checkpoint write. The server MUST NOT exit or crash. *(covers 2_TAS-BR-022, 2_TAS-REQ-021c)*
+- **[2_TAS-REQ-497]** Given a `checkpoint.json` write that fails with `ENOSPC` (disk full), the server MUST continue running with in-memory state intact. The next state transition MUST attempt another checkpoint write. The server MUST NOT exit or crash. *(covers [2_TAS-REQ-486], 2_TAS-REQ-021c)*
 
-- **[AC-3.07]** Given a `WorkflowRun` submitted with a run name that collides with an active run in the same project, `submit_run` MUST return an error containing `"duplicate_run_name"` and the `existing_run_id`. The new run MUST NOT be created. *(covers 2_TAS-BR-016, 2_TAS-BR-025)*
+- **[2_TAS-REQ-498]** Given a `WorkflowRun` submitted with a run name that collides with an active run in the same project, `submit_run` MUST return an error containing `"duplicate_run_name"` and the `existing_run_id`. The new run MUST NOT be created. *(covers [2_TAS-REQ-480], [2_TAS-REQ-489])*
 
-- **[AC-3.08]** Given a stage with `prompt_file = "outputs/plan.md"` and no such file exists at execution time, the stage MUST transition to `Failed` with error `PromptFileNotFound`. No agent process MUST have been spawned. *(covers 2_TAS-BR-027)*
+- **[2_TAS-REQ-499]** Given a stage with `prompt_file = "outputs/plan.md"` and no such file exists at execution time, the stage MUST transition to `Failed` with error `PromptFileNotFound`. No agent process MUST have been spawned. *(covers [2_TAS-REQ-491])*
 
-- **[AC-3.09]** Given a `workflow_snapshot.json` is missing for a recovered run, stages requiring template resolution MUST transition to `Failed` with `MissingSnapshot`. Other stages without template references MUST still execute. *(covers 2_TAS-BR-020)*
+- **[2_TAS-REQ-500]** Given a `workflow_snapshot.json` is missing for a recovered run, stages requiring template resolution MUST transition to `Failed` with `MissingSnapshot`. Other stages without template references MUST still execute. *(covers [2_TAS-REQ-484])*
 
-- **[AC-3.10]** Given a `StageDefinition` with both `prompt` and `prompt_file` set, validation MUST return a `ValidationError::MutuallyExclusive` for that stage. The error MUST be included in the full error list alongside any other validation errors from other stages. *(covers 2_TAS-REQ-032, step 8)*
+- **[2_TAS-REQ-501]** Given a `StageDefinition` with both `prompt` and `prompt_file` set, validation MUST return a `ValidationError::MutuallyExclusive` for that stage. The error MUST be included in the full error list alongside any other validation errors from other stages. *(covers 2_TAS-REQ-032, step 8)*
 
-- **[AC-3.11]** Given a context file that would exceed 10 MiB, the server MUST truncate `stdout`/`stderr` fields proportionally across all stages, set `truncated: true` for affected stages, and emit a `WARN` log. The file as written MUST be ≤ 10 MiB. *(covers 2_TAS-REQ-023b)*
+- **[2_TAS-REQ-502]** Given a context file that would exceed 10 MiB, the server MUST truncate `stdout`/`stderr` fields proportionally across all stages, set `truncated: true` for affected stages, and emit a `WARN` log. The file as written MUST be ≤ 10 MiB. *(covers 2_TAS-REQ-023b)*
 
-- **[AC-3.12]** Given an `EnvKey` value of `"DEVS_LISTEN"` in a stage's `env` map, validation MUST reject it with `ValidationError::ProhibitedEnvKey`. *(covers 2_TAS-REQ-029)*
+- **[2_TAS-REQ-503]** Given an `EnvKey` value of `"DEVS_LISTEN"` in a stage's `env` map, validation MUST reject it with `ValidationError::ProhibitedEnvKey`. *(covers 2_TAS-REQ-029)*
 
-- **[AC-3.13]** Given a `WorkflowRun` whose `definition_snapshot` is already set, attempting to overwrite it MUST return `ImmutableSnapshotError` and leave the existing snapshot unchanged. *(covers 2_TAS-BR-013, 2_TAS-REQ-022b)*
+- **[2_TAS-REQ-504]** Given a `WorkflowRun` whose `definition_snapshot` is already set, attempting to overwrite it MUST return `ImmutableSnapshotError` and leave the existing snapshot unchanged. *(covers [2_TAS-REQ-477], 2_TAS-REQ-022b)*
 
-- **[AC-3.14]** Given a template reference `{{stage.X.output.field}}` where stage X used `exit_code` completion, the stage MUST fail immediately before agent spawn with `TemplateError::NoStructuredOutput`. *(covers 2_TAS-BR-024)*
+- **[2_TAS-REQ-505]** Given a template reference `{{stage.X.output.field}}` where stage X used `exit_code` completion, the stage MUST fail immediately before agent spawn with `TemplateError::NoStructuredOutput`. *(covers [2_TAS-REQ-488])*
 
-- **[AC-3.15]** Given a `.devs_output.json` containing `"success": "true"` (string, not boolean), the stage MUST transition to `Failed`. *(covers 2_TAS-REQ-024c)*
+- **[2_TAS-REQ-506]** Given a `.devs_output.json` containing `"success": "true"` (string, not boolean), the stage MUST transition to `Failed`. *(covers 2_TAS-REQ-024c)*
 
-- **[AC-3.16]** Given a `FanOutConfig` with `count = 0`, workflow validation MUST return `ValidationError::FanOutLimitError`. *(covers 2_TAS-BR-007)*
+- **[2_TAS-REQ-507]** Given a `FanOutConfig` with `count = 0`, workflow validation MUST return `ValidationError::FanOutLimitError`. *(covers [2_TAS-REQ-471])*
 
-- **[AC-3.17]** Given a `RetryConfig` with `max_attempts = 21`, workflow validation MUST return `ValidationError::InvalidRetryCount`. *(covers 2_TAS-BR-008)*
+- **[2_TAS-REQ-508]** Given a `RetryConfig` with `max_attempts = 21`, workflow validation MUST return `ValidationError::InvalidRetryCount`. *(covers [2_TAS-REQ-472])*
 
-- **[AC-3.18]** Given a `Project` registered with `weight = 0`, the registration MUST be rejected with `ValidationError::InvalidWeight`. *(covers 2_TAS-BR-011)*
+- **[2_TAS-REQ-509]** Given a `Project` registered with `weight = 0`, the registration MUST be rejected with `ValidationError::InvalidWeight`. *(covers [2_TAS-REQ-475])*
 
-- **[AC-3.19]** Given a `RunSlug` generated from a workflow named `"my-workflow"` on date `2024-01-15`, the slug MUST match `my-workflow-20240115-[a-z0-9]{4}` and be ≤ 128 characters. *(covers 2_TAS-REQ-030)*
+- **[2_TAS-REQ-510]** Given a `RunSlug` generated from a workflow named `"my-workflow"` on date `2024-01-15`, the slug MUST match `my-workflow-20240115-[a-z0-9]{4}` and be ≤ 128 characters. *(covers 2_TAS-REQ-030)*
 
-- **[AC-3.20]** Given a corrupt `checkpoint.json` for run A and a valid `checkpoint.json` for run B in the same project, the server MUST start successfully, recover run B, mark run A as `Unrecoverable`, and expose both via `list_runs`. *(covers 2_TAS-BR-019)*
+- **[2_TAS-REQ-511]** Given a corrupt `checkpoint.json` for run A and a valid `checkpoint.json` for run B in the same project, the server MUST start successfully, recover run B, mark run A as `Unrecoverable`, and expose both via `list_runs`. *(covers [2_TAS-REQ-483])*
 
 ---
 
@@ -2225,7 +2225,7 @@ pub struct TransitionError {
 7. `{{fan_out.index}}` — only valid within a fan-out sub-execution (integer 0-based index)
 8. `{{fan_out.item}}` — only valid within a fan-out sub-execution using `input_list` mode
 
-If a `{{variable}}` expression does not match any of the above patterns, `TemplateResolver` returns `Err(TemplateError::UnknownVariable { expr: String })`. The stage is immediately transitioned to `Failed` with the error message embedded in `StageRun.output.stderr`. The resolver MUST NOT silently substitute an empty string for any unresolved variable.
+**[2_TAS-REQ-274]** If a `{{variable}}` expression does not match any of the above patterns, `TemplateResolver` returns `Err(TemplateError::UnknownVariable { expr: String })`. The stage is immediately transitioned to `Failed` with the error message embedded in `StageRun.output.stderr`. The resolver MUST NOT silently substitute an empty string for any unresolved variable.
 
 **[2_TAS-REQ-104]** `ValidationError` accumulates all validation errors in a single pass and returns them as a `Vec<ValidationError>`. Each entry carries:
 
@@ -2266,7 +2266,7 @@ pub enum ValidationErrorCode {
 
 **[2_TAS-REQ-024]** Parses `devs.toml` into a `ServerConfig` struct. Parses `~/.config/devs/projects.toml` into `ProjectRegistry`. Validation errors are collected and returned as `Vec<ConfigError>` before any side effects. All config fields have documented defaults. The env var override mechanism applies `DEVS_`-prefixed uppercase keys against a flat dotted-path representation of the config.
 
-**[2_TAS-REQ-025]** `devs.toml` top-level sections:
+**[2_TAS-REQ-154]** `devs.toml` top-level sections:
 
 ```toml
 [server]
@@ -2342,7 +2342,7 @@ status            = "active"          # "active" | "removing"; managed by devs, 
   max_retries     = 3                  # default 3; range 0–10
 ```
 
-The registry file is written atomically (write temp + rename). `devs project add` appends a new entry; `devs project remove` removes the entry for the given project ID. Removing a project while it has active runs MUST leave the project record with `status = "removing"` until all active runs complete, after which the record is deleted.
+**[2_TAS-REQ-275]** The registry file is written atomically (write temp + rename). `devs project add` appends a new entry; `devs project remove` removes the entry for the given project ID. Removing a project while it has active runs MUST leave the project record with `status = "removing"` until all active runs complete, after which the record is deleted.
 
 ### 4.4.2 Per-Project Webhook Configuration
 
@@ -2463,17 +2463,17 @@ Webhook delivery state is in-memory only. A server crash discards all pending de
 
 #### Business Rules
 
-**[2_TAS-BR-WH-001]** A project MUST NOT have more than 16 webhook targets. `devs project webhook add` MUST reject the request with exit code 4 and the message: `"project '<name>' already has 16 webhook targets (maximum)"`.
+**[2_TAS-REQ-512]** A project MUST NOT have more than 16 webhook targets. `devs project webhook add` MUST reject the request with exit code 4 and the message: `"project '<name>' already has 16 webhook targets (maximum)"`.
 
-**[2_TAS-BR-WH-002]** The `events` array MUST NOT be empty. A webhook target with `events = []` MUST be rejected at `devs project webhook add` time (exit code 4) and at server startup (startup aborts with a diagnostic to stderr).
+**[2_TAS-REQ-513]** The `events` array MUST NOT be empty. A webhook target with `events = []` MUST be rejected at `devs project webhook add` time (exit code 4) and at server startup (startup aborts with a diagnostic to stderr).
 
-**[2_TAS-BR-WH-003]** The `pool.exhausted` event fires at most once per exhaustion episode. An exhaustion episode begins when all agents in a pool transition to unavailable and ends when at least one agent becomes available. The `WebhookDispatcher` tracks per-pool episode state in memory; episode state is not persisted across restarts.
+**[2_TAS-REQ-514]** The `pool.exhausted` event fires at most once per exhaustion episode. An exhaustion episode begins when all agents in a pool transition to unavailable and ends when at least one agent becomes available. The `WebhookDispatcher` tracks per-pool episode state in memory; episode state is not persisted across restarts.
 
-**[2_TAS-BR-WH-004]** Delivery of a webhook event MUST NOT block the scheduler. The scheduler posts the event to the dispatcher's channel and returns immediately. If the in-flight queue exceeds 1024 items, the notification is dropped and `WARN` is logged; run/stage execution is unaffected.
+**[2_TAS-REQ-515]** Delivery of a webhook event MUST NOT block the scheduler. The scheduler posts the event to the dispatcher's channel and returns immediately. If the in-flight queue exceeds 1024 items, the notification is dropped and `WARN` is logged; run/stage execution is unaffected.
 
-**[2_TAS-BR-WH-005]** When `state.changed` is in the `events` list alongside specific event strings (e.g. `["state.changed", "run.failed"]`), the dispatcher MUST deliver exactly one POST per state transition to that target. Duplicate delivery for the same transition is prohibited.
+**[2_TAS-REQ-516]** When `state.changed` is in the `events` list alongside specific event strings (e.g. `["state.changed", "run.failed"]`), the dispatcher MUST deliver exactly one POST per state transition to that target. Duplicate delivery for the same transition is prohibited.
 
-**[2_TAS-BR-WH-006]** The server MUST validate all `[[project.webhook]]` entries in `projects.toml` at startup. Invalid entries (bad URL scheme, unknown event string, empty `events`, out-of-range `timeout_secs` or `max_retries`) MUST cause startup to abort with all errors reported to stderr, before any port binding.
+**[2_TAS-REQ-517]** The server MUST validate all `[[project.webhook]]` entries in `projects.toml` at startup. Invalid entries (bad URL scheme, unknown event string, empty `events`, out-of-range `timeout_secs` or `max_retries`) MUST cause startup to abort with all errors reported to stderr, before any port binding.
 
 #### Event Delivery State Machine
 
@@ -2542,7 +2542,7 @@ stateDiagram-v2
 
 ### 4.5 `devs-checkpoint`
 
-**[2_TAS-REQ-026]** Exposes a `CheckpointStore` trait with the following methods:
+**[2_TAS-REQ-155]** Exposes a `CheckpointStore` trait with the following methods:
 
 ```rust
 pub trait CheckpointStore: Send + Sync {
@@ -2557,7 +2557,7 @@ pub trait CheckpointStore: Send + Sync {
 
 `GitCheckpointStore` implements `CheckpointStore` using `git2`. All git commits use author `devs <devs@localhost>`. Commit message format: `devs: checkpoint <run-id> stage=<name> status=<status>`.
 
-**[2_TAS-REQ-027]** The checkpoint branch is created as a git orphan branch if it does not yet exist. All checkpoint commits are pushed to this branch only; the project's main branch is never written by `devs-checkpoint` unless artifact collection is configured as `AutoCollect`.
+**[2_TAS-REQ-156]** The checkpoint branch is created as a git orphan branch if it does not yet exist. All checkpoint commits are pushed to this branch only; the project's main branch is never written by `devs-checkpoint` unless artifact collection is configured as `AutoCollect`.
 
 ### 4.5.1 `devs-checkpoint` Detailed Specifications
 
@@ -2603,18 +2603,18 @@ If any step fails after step 2, the `.tmp` file is cleaned up. If push fails (ne
 
 ### 4.6 `devs-scheduler`
 
-**[2_TAS-REQ-028]** The DAG scheduler is the central orchestration engine. It is a Tokio task that owns the in-memory run state and drives all stage transitions. Its internal loop:
+**[2_TAS-REQ-157]** The DAG scheduler is the central orchestration engine. It is a Tokio task that owns the in-memory run state and drives all stage transitions. Its internal loop:
 
 1. On run submission: validate → create `WorkflowRun` with all stages in `Waiting` status → snapshot → commit → set stages with no `depends_on` to `Eligible`.
 2. On pool slot available: select highest-priority project (per scheduling policy) → select an `Eligible` stage → transition to `Running` → spawn `StageExecutor` as a Tokio task.
 3. On stage result received (via channel): apply transition → checkpoint → evaluate branch/fan-out merge → set newly eligible stages → emit events.
 4. On pause/cancel/resume (from gRPC): apply to run + all non-terminal stages → checkpoint → emit events.
 
-**[2_TAS-REQ-029]** The scheduler dispatches eligible stages with independent dependencies within 100 ms of their dependency completing (measured from the dependency's `completed_at` timestamp to the dependent's `started_at` timestamp). This is enforced by the event-driven loop with no polling delay.
+**[2_TAS-REQ-158]** The scheduler dispatches eligible stages with independent dependencies within 100 ms of their dependency completing (measured from the dependency's `completed_at` timestamp to the dependent's `started_at` timestamp). This is enforced by the event-driven loop with no polling delay.
 
-**[2_TAS-REQ-030]** Cycle detection uses Kahn's algorithm on the `depends_on` graph. On detection, the error includes the full cycle path: `["a", "b", "c", "a"]`. Zero-stage workflows are rejected. Unknown pool names are rejected. All validation errors are collected before rejection.
+**[2_TAS-REQ-159]** Cycle detection uses Kahn's algorithm on the `depends_on` graph. On detection, the error includes the full cycle path: `["a", "b", "c", "a"]`. Zero-stage workflows are rejected. Unknown pool names are rejected. All validation errors are collected before rejection.
 
-**[2_TAS-REQ-030a]** Workflow validation runs these checks in order, collecting all errors before returning:
+**[2_TAS-REQ-030A]** Workflow validation runs these checks in order, collecting all errors before returning:
 
 1. Schema validation (required fields present, field lengths within bounds).
 2. Stage name uniqueness: `O(n)` pass over `stages`; collision → `"duplicate stage name: <name>"`.
@@ -2629,10 +2629,10 @@ If any step fails after step 2, the `.tmp` file is cleaned up. If push fails (ne
 7. Input default type coercion: default values are coercible to declared `InputKind`.
 8. Prompt mutual exclusivity: `prompt` and `prompt_file` are mutually exclusive; exactly one must be set.
 9. Fan-out and branch exclusivity: `fan_out` and `branch` are mutually exclusive on a stage.
-10. Fan-out completion compatibility: fan-out stages MUST use `completion = exit_code` or `completion = structured_output`; `mcp_tool_call` is not supported with fan-out.
+10. **[2_TAS-REQ-276]** Fan-out completion compatibility: fan-out stages MUST use `completion = exit_code` or `completion = structured_output`; `mcp_tool_call` is not supported with fan-out.
 11. Stage timeout ≤ workflow timeout (if both set): `"stage.timeout_secs (<N>) exceeds workflow.timeout_secs (<M>)"`.
 
-**[2_TAS-REQ-030b]** The DAG scheduler MUST dispatch newly eligible stages within 100 ms of receiving a dependency-completion event. This is implemented by an event-driven loop with no polling: a `tokio::sync::mpsc` channel carries `SchedulerEvent` values; the scheduling loop processes events and spawns stage executors immediately when a stage becomes eligible and a pool slot is available.
+**[2_TAS-REQ-030B]** The DAG scheduler MUST dispatch newly eligible stages within 100 ms of receiving a dependency-completion event. This is implemented by an event-driven loop with no polling: a `tokio::sync::mpsc` channel carries `SchedulerEvent` values; the scheduling loop processes events and spawns stage executors immediately when a stage becomes eligible and a pool slot is available.
 
 ```rust
 // Non-normative scheduler event types
@@ -2650,7 +2650,7 @@ enum SchedulerEvent {
 }
 ```
 
-**[2_TAS-REQ-030c]** Fan-out orchestration within the scheduler:
+**[2_TAS-REQ-030C]** Fan-out orchestration within the scheduler:
 
 1. When a fan-out stage is dispatched, the scheduler expands it into N sub-executions.
 2. Each sub-execution is a distinct `StageRun` with the same `stage_name` but a `fan_out_index` field (`0..N`).
@@ -2706,10 +2706,10 @@ stateDiagram-v2
 ```
 
 **[2_TAS-REQ-112]** Scheduler event loop invariants:
-1. A `StageRun` in `Waiting` state MUST transition to `Eligible` within one scheduler tick after its last dependency enters a terminal state. No stage remains `Waiting` when all its dependencies are `Completed`.
-2. A `StageRun` MUST NOT be dispatched (transition to `Running`) unless all entries in its `depends_on` list are in `Completed` state. `Failed`, `Cancelled`, or `TimedOut` dependency stages do NOT make a dependent stage `Eligible`.
+1. **[2_TAS-REQ-278]** A `StageRun` in `Waiting` state MUST transition to `Eligible` within one scheduler tick after its last dependency enters a terminal state. No stage remains `Waiting` when all its dependencies are `Completed`.
+2. **[2_TAS-REQ-279]** A `StageRun` MUST NOT be dispatched (transition to `Running`) unless all entries in its `depends_on` list are in `Completed` state. `Failed`, `Cancelled`, or `TimedOut` dependency stages do NOT make a dependent stage `Eligible`.
 3. When a dependency stage reaches `Failed`/`TimedOut`/`Cancelled` and no retry is possible, all downstream dependent stages transition to `Cancelled` immediately.
-4. The scheduler MUST process at most one terminal-state event per stage per tick; duplicate events from the same stage (e.g. two `StageCompleted` signals) are idempotent — the second is discarded without state change.
+4. **[2_TAS-REQ-280]** The scheduler MUST process at most one terminal-state event per stage per tick; duplicate events from the same stage (e.g. two `StageCompleted` signals) are idempotent — the second is discarded without state change.
 
 **Edge Cases — `devs-scheduler`:**
 
@@ -2724,12 +2724,12 @@ stateDiagram-v2
 
 ### 4.7 `devs-pool`
 
-**[2_TAS-REQ-031]** `AgentPoolManager` holds one `AgentPool` state per named pool. Each pool maintains:
+**[2_TAS-REQ-160]** `AgentPoolManager` holds one `AgentPool` state per named pool. Each pool maintains:
 - A `tokio::sync::Semaphore` with `max_concurrent` permits.
 - A per-agent rate-limit cooldown tracker (60-second cooldown after rate-limit event).
 - An ordered agent list (non-fallback agents first within priority, then fallback agents).
 
-**[2_TAS-REQ-032]** Agent selection algorithm for a stage with `required_capabilities = [C1, C2, ...]`:
+**[2_TAS-REQ-161]** Agent selection algorithm for a stage with `required_capabilities = [C1, C2, ...]`:
 1. Filter agents to those whose capability set is a superset of required capabilities. An agent with empty capabilities satisfies any requirement.
 2. If no agents satisfy capabilities → immediately return `Err(PoolError::UnsatisfiedCapability)` (stage → `Failed`, not queued).
 3. From satisfying agents, exclude those in rate-limit cooldown.
@@ -2739,7 +2739,7 @@ stateDiagram-v2
 
 **[2_TAS-REQ-033]** When all agents in a pool are simultaneously unavailable (rate-limited or cooldown), emit `PoolExhausted` webhook event exactly once per exhaustion episode. An episode ends when any agent becomes available again.
 
-**[2_TAS-REQ-033a]** Multi-project scheduling algorithm:
+**[2_TAS-REQ-033A]** Multi-project scheduling algorithm:
 
 The scheduler selects which project's eligible stage to dispatch next from the global queue of `(project_id, stage_name)` pairs.
 
@@ -2780,7 +2780,7 @@ fn select_next_stage_weighted(queue, projects) -> Option<(ProjectId, StageName)>
 }
 ```
 
-**[2_TAS-REQ-033b]** Retry scheduling: when a stage fails and `retry.max_attempts` has not been exhausted, the scheduler inserts a `RetryScheduled` event with a delay computed as:
+**[2_TAS-REQ-033B]** Retry scheduling: when a stage fails and `retry.max_attempts` has not been exhausted, the scheduler inserts a `RetryScheduled` event with a delay computed as:
 
 - `Fixed` backoff: delay = `initial_delay` every attempt.
 - `Exponential` backoff: delay = `min(initial_delay_secs^attempt_number, max_delay_secs.unwrap_or(300))` seconds.
@@ -2933,18 +2933,18 @@ Three implementations: `LocalTempDirExecutor`, `DockerExecutor`, `RemoteSshExecu
 
 **[2_TAS-REQ-044]** Auto-collect artifact collection: after stage completion, `devs-executor` runs `git diff`, `git add -A`, `git commit -m "devs: auto-collect stage <name> run <id>"`, and `git push` targeting the checkpoint branch only. It MUST NOT push to the project's main branch.
 
-**[2_TAS-REQ-044a]** `DockerExecutor` implementation requirements:
+**[2_TAS-REQ-044A]** `DockerExecutor` implementation requirements:
 
 - Uses `DOCKER_HOST` environment variable for daemon connection (falls back to platform default socket: `/var/run/docker.sock` on Linux/macOS, `npipe:////./pipe/docker_engine` on Windows).
-- Container image MUST be specified in the stage's `execution_env.docker.image` field.
+- **[2_TAS-REQ-281]** Container image MUST be specified in the stage's `execution_env.docker.image` field.
 - The executor pulls the image if not present locally before starting the container.
 - The project repository is cloned into the container at `/workspace/repo/` using `docker exec` to run `git clone`.
-- Agent CLI binaries MUST be present in the container image; `devs` does not install them at runtime.
+- **[2_TAS-REQ-282]** Agent CLI binaries MUST be present in the container image; `devs` does not install them at runtime.
 - The container is run with `--rm` flag; it is removed immediately after stage completion or failure.
 - `DEVS_MCP_ADDR` is passed as a container environment variable pointing to the host's MCP port; on Linux this uses the host-gateway IP; on macOS/Windows this uses `host.docker.internal`.
 - Stage environment variables are passed via `--env` flags to `docker run`.
 
-**[2_TAS-REQ-044b]** `RemoteSshExecutor` implementation requirements:
+**[2_TAS-REQ-044B]** `RemoteSshExecutor` implementation requirements:
 
 - Uses `ssh2` crate for SSH connections (not shell subprocess).
 - Connection is configured via the stage's `execution_env.remote.ssh_config` field, which accepts the same key-value pairs as an OpenSSH `~/.ssh/config` block: `HostName`, `User`, `Port`, `IdentityFile`, `ProxyJump`, etc.
@@ -2954,7 +2954,7 @@ Three implementations: `LocalTempDirExecutor`, `DockerExecutor`, `RemoteSshExecu
 - stdout/stderr are streamed back over the SSH channel and written to log files in real time.
 - If the SSH connection drops mid-stage, the stage transitions to `Failed` with error: `"SSH connection lost"`.
 
-**[2_TAS-REQ-044c]** Execution environment configuration schema in `StageDefinition`:
+**[2_TAS-REQ-044C]** Execution environment configuration schema in `StageDefinition`:
 
 ```rust
 enum ExecutionEnv {
@@ -3022,7 +3022,7 @@ pub enum ExecutionEnvKind { Tempdir, Docker, Remote }
 1. Run `git -C <working_dir> add -A`.
 2. Run `git -C <working_dir> diff --cached --quiet`; if exit code 0 (no changes), skip commit.
 3. If changes present: `git commit -m "devs: auto-collect stage <name> run <run-id>"` with author `devs <devs@localhost>`.
-4. Push to the checkpoint branch only. MUST NOT push to any other branch.
+4. **[2_TAS-REQ-283]** Push to the checkpoint branch only. MUST NOT push to any other branch.
 
 **Edge Cases — `devs-executor`:**
 
@@ -3161,7 +3161,7 @@ No plain-text-only responses are permitted.
 
 **[2_TAS-REQ-051]** Every entity in the data model MUST be reachable via at least one MCP observation tool with no field omitted. Optional fields that are not yet populated return typed null (JSON `null`), never absent from the response object.
 
-**[2_TAS-REQ-051a]** Complete MCP tool request/response schemas:
+**[2_TAS-REQ-051A]** Complete MCP tool request/response schemas:
 
 **`list_runs`**
 ```json
@@ -3991,7 +3991,7 @@ Coverage is measured with `cargo-llvm-cov`. Unit tests and E2E tests are instrum
 
 ### 5.10 Complete gRPC Proto Definitions
 
-**[2_TAS-REQ-086a]** The following proto definitions are normative. All six service files import `common.proto` and `google/protobuf/timestamp.proto`. Each file belongs to package `devs.v1`.
+**[2_TAS-REQ-086A]** The following proto definitions are normative. All six service files import `common.proto` and `google/protobuf/timestamp.proto`. Each file belongs to package `devs.v1`.
 
 #### 5.10.1 `workflow.proto`
 
@@ -4386,7 +4386,7 @@ message StageRunProto {
 
 ### 5.11 gRPC Error Code Mapping
 
-**[2_TAS-REQ-086b]** The server returns precisely one gRPC status code for each error category. No method returns a generic `INTERNAL` for a condition listed below; `INTERNAL` is reserved for unexpected panics and infrastructure failures.
+**[2_TAS-REQ-086B]** The server returns precisely one gRPC status code for each error category. No method returns a generic `INTERNAL` for a condition listed below; `INTERNAL` is reserved for unexpected panics and infrastructure failures.
 
 | gRPC Status Code | Integer | Trigger Conditions |
 |---|---|---|
@@ -4401,15 +4401,15 @@ message StageRunProto {
 | `UNIMPLEMENTED` | 12 | Method not implemented (reserved for future methods called by older server) |
 | `INTERNAL` | 13 | Unexpected panic; git operation failure; disk full (after logging at ERROR) |
 
-**[2_TAS-REQ-086c]** Every non-`OK` response MUST include a human-readable string in the gRPC status `message` field. The message format is: `"<error-kind>: <detail>"` where `<error-kind>` is a machine-stable prefix such as `"run not found"`, `"illegal transition"`, `"input validation"`, `"client version mismatch"`, etc. Clients MUST be able to match on the prefix without parsing free-form text in the detail section.
+**[2_TAS-REQ-086C]** Every non-`OK` response MUST include a human-readable string in the gRPC status `message` field. The message format is: `"<error-kind>: <detail>"` where `<error-kind>` is a machine-stable prefix such as `"run not found"`, `"illegal transition"`, `"input validation"`, `"client version mismatch"`, etc. Clients MUST be able to match on the prefix without parsing free-form text in the detail section.
 
-**[2_TAS-REQ-086d]** For `INVALID_ARGUMENT` errors arising from workflow validation, all validation errors are collected in a single pass and returned together. The detail section is a JSON array serialized as a string: `"input validation: [\"stage 'foo': prompt and prompt_file are mutually exclusive\", \"stage 'bar': pool 'missing-pool' not found\"]"`.
+**[2_TAS-REQ-086D]** For `INVALID_ARGUMENT` errors arising from workflow validation, all validation errors are collected in a single pass and returned together. The detail section is a JSON array serialized as a string: `"input validation: [\"stage 'foo': prompt and prompt_file are mutually exclusive\", \"stage 'bar': pool 'missing-pool' not found\"]"`.
 
 ---
 
 ### 5.12 Protocol State Machines
 
-**[2_TAS-REQ-086e]** The following state machines are normative. Any state transition not shown in these diagrams is illegal and MUST return `FAILED_PRECONDITION`.
+**[2_TAS-REQ-086E]** The following state machines are normative. Any state transition not shown in these diagrams is illegal and MUST return `FAILED_PRECONDITION`.
 
 #### 5.12.1 Run Status State Machine
 
@@ -4478,7 +4478,7 @@ stateDiagram-v2
 
 ### 5.13 Webhook HTTP Protocol
 
-**[2_TAS-REQ-086f]** Webhook deliveries are HTTP POST requests. The server is the sender; webhook `url` fields are configurable per-project.
+**[2_TAS-REQ-086F]** Webhook deliveries are HTTP POST requests. The server is the sender; webhook `url` fields are configurable per-project.
 
 #### 5.13.1 Request Headers
 
@@ -4536,7 +4536,7 @@ All webhook payloads conform to this envelope:
 
 ### 5.14 CLI `--format json` Output Schemas
 
-**[2_TAS-REQ-086g]** When `--format json` is passed to any CLI command, output is written to stdout as a single JSON object followed by a newline. Errors use the error envelope described in §4.14. The schemas below are normative.
+**[2_TAS-REQ-086G]** When `--format json` is passed to any CLI command, output is written to stdout as a single JSON object followed by a newline. Errors use the error envelope described in §4.14. The schemas below are normative.
 
 #### `devs submit --format json`
 
@@ -4662,7 +4662,7 @@ When a `<stage>` argument is provided (for `pause`/`resume`):
 
 ### 5.15 Protocol Versioning and Compatibility
 
-**[2_TAS-REQ-086h]** The project uses Semantic Versioning (`MAJOR.MINOR.PATCH`). Protocol compatibility follows these rules:
+**[2_TAS-REQ-086H]** The project uses Semantic Versioning (`MAJOR.MINOR.PATCH`). Protocol compatibility follows these rules:
 
 | Change type | Version bump | Compatibility guarantee |
 |---|---|---|
@@ -4673,9 +4673,9 @@ When a `<stage>` argument is provided (for `pause`/`resume`):
 | Removed field or RPC | MAJOR | Breaking |
 | New required field (validated server-side) | MAJOR | Breaking |
 
-**[2_TAS-REQ-086i]** Compatibility enforcement:
+**[2_TAS-REQ-086I]** Compatibility enforcement:
 
-1. Every gRPC request MUST carry the `x-devs-client-version` metadata key. Its value is the client binary's `MAJOR.MINOR.PATCH` version string.
+1. **[2_TAS-REQ-286]** Every gRPC request MUST carry the `x-devs-client-version` metadata key. Its value is the client binary's `MAJOR.MINOR.PATCH` version string.
 2. The server extracts the `MAJOR` component. If `client_major != server_major`, the server returns `FAILED_PRECONDITION` with message `"client version mismatch: client=<ver> server=<ver>"` for ALL RPC methods. No partial processing occurs.
 3. If the `x-devs-client-version` metadata key is absent, the server returns `FAILED_PRECONDITION` with message `"missing required metadata: x-devs-client-version"`.
 4. MCP tool calls do not carry a version header. The MCP server never rejects a call on version grounds; new fields added to MCP responses are ignored by older clients.
@@ -4685,13 +4685,13 @@ When a `<stage>` argument is provided (for `pause`/`resume`):
 
 ### 5.16 Data Serialization Rules
 
-**[2_TAS-REQ-086j]** These rules apply to all JSON serialization in MCP responses, webhook payloads, CLI JSON output, and the JSON fields embedded in proto messages (e.g. `inputs_json`, `definition_json`).
+**[2_TAS-REQ-086J]** These rules apply to all JSON serialization in MCP responses, webhook payloads, CLI JSON output, and the JSON fields embedded in proto messages (e.g. `inputs_json`, `definition_json`).
 
 | Type | JSON encoding | Example |
 |---|---|---|
 | `Uuid` | Lowercase hyphenated string | `"550e8400-e29b-41d4-a716-446655440000"` |
 | `DateTime<Utc>` | RFC 3339 / ISO 8601 with millisecond precision and `Z` suffix | `"2026-03-10T14:23:05.123Z"` |
-| Optional field not yet populated | JSON `null` — key MUST be present in the object | `"started_at": null` |
+**[2_TAS-REQ-287]** | Optional field not yet populated | JSON `null` — key MUST be present in the object | `"started_at": null` |
 | `RunStatus` enum | Lowercase string | `"running"`, `"completed"`, `"failed"` |
 | `StageStatus` enum | Lowercase string | `"eligible"`, `"timed_out"` |
 | `AgentTool` enum | Lowercase string matching CLI name | `"claude"`, `"gemini"`, `"opencode"`, `"qwen"`, `"copilot"` |
@@ -4701,22 +4701,22 @@ When a `<stage>` argument is provided (for `pause`/`resume`):
 | Binary data (stdout/stderr in `StageOutput` MCP responses) | UTF-8 string with replacement character U+FFFD for invalid bytes | `"hello\uFFFDworld"` |
 | HashMap / env map | JSON object with string keys and string values | `{"KEY": "value"}` |
 
-**[2_TAS-REQ-086k]** Proto3 well-known wrapper types (`google.protobuf.Int32Value`, `google.protobuf.UInt64Value`, etc.) map to `null` in any JSON representation when the wrapper is absent. This is consistent with proto3 JSON mapping rules (RFC). The absence of a wrapper field is equivalent to `null`, not to `0`.
+**[2_TAS-REQ-086K]** Proto3 well-known wrapper types (`google.protobuf.Int32Value`, `google.protobuf.UInt64Value`, etc.) map to `null` in any JSON representation when the wrapper is absent. This is consistent with proto3 JSON mapping rules (RFC). The absence of a wrapper field is equivalent to `null`, not to `0`.
 
-**[2_TAS-REQ-086l]** All timestamps generated by the server use `chrono::Utc::now()`. Monotonic clocks are used only for elapsed-time measurements (reported in `elapsed_ms` fields). Stored timestamps (in `checkpoint.json`, webhook payloads) use wall-clock UTC.
+**[2_TAS-REQ-086L]** All timestamps generated by the server use `chrono::Utc::now()`. Monotonic clocks are used only for elapsed-time measurements (reported in `elapsed_ms` fields). Stored timestamps (in `checkpoint.json`, webhook payloads) use wall-clock UTC.
 
 ---
 
 ### 5.17 Streaming Protocol Specifications
 
-**[2_TAS-REQ-086m]** Three gRPC RPCs produce server-streaming responses. Their behaviour is specified below.
+**[2_TAS-REQ-086M]** Three gRPC RPCs produce server-streaming responses. Their behaviour is specified below.
 
 #### 5.17.1 `RunService.StreamRunEvents`
 
 - **Initial message**: the server sends the full current `WorkflowRun` state (all stage_runs included) as the first `RunEvent` immediately upon stream establishment. `event_type` = `"run.snapshot"` on this initial message.
 - **Subsequent messages**: one `RunEvent` per state transition. Event types: `"run.status_changed"`, `"stage.status_changed"`, `"log.chunk"` (for progress report notifications only; not full log data).
 - **Backpressure**: the server maintains a per-client event buffer of 256 messages. If the client is slow and the buffer fills, the server drops the oldest event from the buffer (not the most recent). Dropped events are logged at `DEBUG`. The client always receives the most recent state on the next event.
-- **Reconnect semantics**: the client may reconnect after a disconnect by opening a new `StreamRunEvents` call. The initial snapshot message makes the stream self-healing. Clients MUST NOT assume they received all intermediate events.
+- **[2_TAS-REQ-288]** **Reconnect semantics**: the client may reconnect after a disconnect by opening a new `StreamRunEvents` call. The initial snapshot message makes the stream self-healing. Clients MUST NOT assume they received all intermediate events.
 - **Stream termination**: when the run reaches a terminal state (`Completed`, `Failed`, `Cancelled`), the server sends one final `RunEvent` with the terminal `RunStatus`, then closes the stream with gRPC status `OK`.
 - **Non-existent run**: if `run_id` is not found, the server returns `NOT_FOUND` immediately (no stream is opened).
 
@@ -4724,7 +4724,7 @@ When a `<stage>` argument is provided (for `pause`/`resume`):
 
 - **`follow: false`**: all buffered log data is returned as a sequence of `LogChunkProto` messages, then the stream closes with `OK`. If no data has been written yet (stage is `Waiting` or `Eligible`), the stream returns zero chunks and closes immediately.
 - **`follow: true`**: the server streams all existing chunks first (in `sequence` order), then holds the stream open and pushes new chunks as the agent writes to stdout/stderr. When the stage reaches a terminal state, the server sends a final chunk with `done: true` and an empty `data` field, then closes with `OK`.
-- **Sequence numbers**: per-stage, monotonically increasing from 1. Gaps in sequence numbers indicate dropped chunks (due to buffer limits). Clients SHOULD detect gaps and surface a warning.
+- **[2_TAS-REQ-289]** **Sequence numbers**: per-stage, monotonically increasing from 1. Gaps in sequence numbers indicate dropped chunks (due to buffer limits). Clients SHOULD detect gaps and surface a warning.
 - **Log chunk size**: each `LogChunkProto.data` field contains at most 32 KiB of raw bytes. Larger writes from the agent are split into multiple chunks.
 - **Reconnect**: a reconnecting client passes the last received `sequence` as context by opening a new `StreamLogs` call. The server does not support resumption (the `sequence` field in the request is absent); clients must buffer and deduplicate based on sequence numbers if they reconnect.
 
@@ -4739,7 +4739,7 @@ When a `<stage>` argument is provided (for `pause`/`resume`):
 
 ### 5.18 Protocol-Level Edge Cases
 
-**[2_TAS-REQ-086n]** The following edge cases apply at the protocol layer and must be handled before any business logic is executed.
+**[2_TAS-REQ-086N]** The following edge cases apply at the protocol layer and must be handled before any business logic is executed.
 
 | # | Scenario | Expected Behavior |
 |---|---|---|
@@ -4799,7 +4799,7 @@ The following are directly testable assertions that verify the API Design & Prot
 - [ ] `devs cancel --format json` on a non-existent run exits 2 and outputs `{"error": "...", "code": 2}`
 
 **Protocol Versioning:**
-- [ ] Server version string matches `[0-9]+\.[0-9]+\.[0-9]+` pattern from `version.rs`
+- [ ] Server version string matches `[\d]+\.[\d]+\.[\d]+` pattern from `version.rs`
 - [ ] `x-devs-client-version` with the same major version but different minor/patch version is accepted
 - [ ] `x-devs-client-version` with a higher major version than the server is rejected with `FAILED_PRECONDITION`
 

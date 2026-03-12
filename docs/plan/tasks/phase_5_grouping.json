@@ -1,0 +1,393 @@
+{
+  "01_Core Quality Gates": [
+    "2_TAS-REQ-082",
+    "3_MCP_DESIGN-REQ-042",
+    "3_MCP_DESIGN-REQ-043",
+    "3_MCP_DESIGN-REQ-044",
+    "3_MCP_DESIGN-REQ-055"
+  ],
+  "02_Core Quality Gates": [
+    "3_MCP_DESIGN-REQ-056",
+    "3_MCP_DESIGN-REQ-082",
+    "3_MCP_DESIGN-REQ-AC-3.20",
+    "3_MCP_DESIGN-REQ-AC-5.15",
+    "3_MCP_DESIGN-REQ-BR-036"
+  ],
+  "03_Core Quality Gates": [
+    "3_MCP_DESIGN-REQ-DBG-BR-000",
+    "AC-ROAD-P5-001",
+    "AC-ROAD-P5-002",
+    "AC-ROAD-P5-003",
+    "AC-ROAD-P5-005"
+  ],
+  "04_MVP Roadmap": [
+    "AC-ROAD-P5-006",
+    "AC-ROAD-P5-007",
+    "ROAD-P5-DEP-001",
+    "ROAD-P5-DEP-002",
+    "ROAD-P5-DEP-003"
+  ],
+  "05_Risk 001 Verification": [
+    "AC-RISK-MATRIX-001",
+    "AC-RISK-MATRIX-002",
+    "AC-RISK-MATRIX-003",
+    "AC-RISK-MATRIX-004",
+    "AC-RISK-MATRIX-005"
+  ],
+  "06_Risk 006 Verification": [
+    "AC-RISK-MATRIX-006",
+    "AC-RISK-MATRIX-007",
+    "AC-RISK-MATRIX-008",
+    "AC-RISK-MATRIX-009",
+    "AC-RISK-MATRIX-010"
+  ],
+  "07_Risk 001 Verification": [
+    "RISK-BR-001",
+    "RISK-BR-002",
+    "RISK-BR-003",
+    "RISK-BR-004",
+    "RISK-BR-005"
+  ],
+  "08_Risk 006 Verification": [
+    "RISK-BR-006",
+    "RISK-BR-007",
+    "RISK-BR-008",
+    "RISK-BR-009",
+    "RISK-BR-010"
+  ],
+  "09_Risk 011 Verification": [
+    "RISK-BR-011",
+    "RISK-BR-012",
+    "RISK-BR-013",
+    "RISK-BR-014",
+    "RISK-BR-015"
+  ],
+  "10_Risk 016 Verification": [
+    "RISK-BR-016",
+    "RISK-BR-017",
+    "RISK-BR-018",
+    "RISK-BR-019",
+    "RISK-BR-020"
+  ],
+  "11_Risk 001 Verification": [
+    "RISK-001",
+    "RISK-001-BR-001",
+    "RISK-001-BR-002",
+    "RISK-001-BR-003",
+    "RISK-001-BR-004"
+  ],
+  "12_MIT-001": [
+    "MIT-001",
+    "AC-RISK-001-01",
+    "AC-RISK-001-02",
+    "AC-RISK-001-03",
+    "AC-RISK-001-04"
+  ],
+  "13_Risk 001 Verification": [
+    "AC-RISK-001-05",
+    "AC-RISK-001-06",
+    "RISK-002",
+    "RISK-002-BR-001",
+    "RISK-002-BR-002"
+  ],
+  "14_Risk 002 Verification": [
+    "RISK-002-BR-003",
+    "RISK-002-BR-004",
+    "MIT-002",
+    "AC-RISK-002-01",
+    "AC-RISK-002-02"
+  ],
+  "15_Risk 002 Verification": [
+    "AC-RISK-002-03",
+    "AC-RISK-002-04",
+    "RISK-003",
+    "RISK-003-BR-001",
+    "RISK-003-BR-002"
+  ],
+  "16_Risk 003 Verification": [
+    "RISK-003-BR-003",
+    "RISK-003-BR-004",
+    "MIT-003",
+    "AC-RISK-003-01",
+    "AC-RISK-003-02"
+  ],
+  "17_Risk 003 Verification": [
+    "AC-RISK-003-03",
+    "AC-RISK-003-04",
+    "RISK-004",
+    "RISK-004-BR-001",
+    "RISK-004-BR-002"
+  ],
+  "18_Risk 004 Verification": [
+    "RISK-004-BR-003",
+    "RISK-004-BR-004",
+    "MIT-004",
+    "AC-RISK-004-01",
+    "AC-RISK-004-02"
+  ],
+  "19_Risk 004 Verification": [
+    "AC-RISK-004-03",
+    "AC-RISK-004-04",
+    "RISK-005",
+    "RISK-005-BR-001",
+    "RISK-005-BR-002"
+  ],
+  "20_Risk 005 Verification": [
+    "RISK-005-BR-003",
+    "RISK-005-BR-004",
+    "MIT-005",
+    "AC-RISK-005-01",
+    "AC-RISK-005-02"
+  ],
+  "21_Risk 005 Verification": [
+    "AC-RISK-005-03",
+    "AC-RISK-005-04",
+    "RISK-006",
+    "RISK-006-BR-001",
+    "RISK-006-BR-002"
+  ],
+  "22_Risk 006 Verification": [
+    "RISK-006-BR-003",
+    "RISK-006-BR-004",
+    "MIT-006",
+    "AC-RISK-006-01",
+    "AC-RISK-006-02"
+  ],
+  "23_Risk 006 Verification": [
+    "AC-RISK-006-03",
+    "AC-RISK-006-04",
+    "RISK-007",
+    "RISK-007-BR-001",
+    "RISK-007-BR-002"
+  ],
+  "24_Risk 007 Verification": [
+    "RISK-007-BR-003",
+    "RISK-007-BR-004",
+    "MIT-007",
+    "AC-RISK-007-01",
+    "AC-RISK-007-02"
+  ],
+  "25_Risk 007 Verification": [
+    "AC-RISK-007-03",
+    "AC-RISK-007-04",
+    "AC-RISK-007-05",
+    "RISK-008",
+    "RISK-008-BR-001"
+  ],
+  "26_Risk 008 Verification": [
+    "RISK-008-BR-002",
+    "RISK-008-BR-003",
+    "RISK-008-BR-004",
+    "MIT-008",
+    "AC-RISK-008-01"
+  ],
+  "27_Risk 008 Verification": [
+    "AC-RISK-008-02",
+    "AC-RISK-008-03",
+    "AC-RISK-008-04",
+    "RISK-009",
+    "RISK-009-BR-001"
+  ],
+  "28_Risk 009 Verification": [
+    "RISK-009-BR-002",
+    "RISK-009-BR-003",
+    "RISK-009-BR-004",
+    "RISK-009-BR-005",
+    "RISK-009-BR-006"
+  ],
+  "29_MIT-009": [
+    "MIT-009",
+    "AC-RISK-009-01",
+    "AC-RISK-009-02",
+    "AC-RISK-009-03",
+    "AC-RISK-009-04"
+  ],
+  "30_Risk 009 Verification": [
+    "AC-RISK-009-05",
+    "RISK-010",
+    "RISK-010-BR-001",
+    "RISK-010-BR-002",
+    "RISK-010-BR-003"
+  ],
+  "31_Risk 010 Verification": [
+    "RISK-010-BR-004",
+    "RISK-010-BR-005",
+    "MIT-010",
+    "AC-RISK-010-01",
+    "AC-RISK-010-02"
+  ],
+  "32_Risk 010 Verification": [
+    "AC-RISK-010-03",
+    "AC-RISK-010-04",
+    "AC-RISK-010-05",
+    "RISK-011",
+    "RISK-011-BR-001"
+  ],
+  "33_Risk 011 Verification": [
+    "RISK-011-BR-002",
+    "RISK-011-BR-003",
+    "RISK-011-BR-004",
+    "MIT-011",
+    "AC-RISK-011-01"
+  ],
+  "34_Risk 011 Verification": [
+    "AC-RISK-011-02",
+    "AC-RISK-011-03",
+    "AC-RISK-011-04",
+    "RISK-012",
+    "RISK-012-BR-001"
+  ],
+  "35_Risk 012 Verification": [
+    "RISK-012-BR-002",
+    "RISK-012-BR-003",
+    "RISK-012-BR-004",
+    "RISK-012-BR-005",
+    "MIT-012"
+  ],
+  "36_Risk 012 Verification": [
+    "AC-RISK-012-01",
+    "AC-RISK-012-02",
+    "AC-RISK-012-03",
+    "AC-RISK-012-04",
+    "AC-RISK-012-05"
+  ],
+  "37_Risk 013 Verification": [
+    "RISK-013",
+    "RISK-013-BR-001",
+    "RISK-013-BR-002",
+    "RISK-013-BR-003",
+    "RISK-013-BR-004"
+  ],
+  "38_Risk 013 Verification": [
+    "RISK-013-BR-005",
+    "MIT-013",
+    "AC-RISK-013-01",
+    "AC-RISK-013-02",
+    "AC-RISK-013-03"
+  ],
+  "39_Risk 013 Verification": [
+    "AC-RISK-013-04",
+    "RISK-014",
+    "RISK-014-BR-001",
+    "RISK-014-BR-002",
+    "RISK-014-BR-003"
+  ],
+  "40_Risk 014 Verification": [
+    "RISK-014-BR-004",
+    "MIT-014",
+    "AC-RISK-014-01",
+    "AC-RISK-014-02",
+    "AC-RISK-014-03"
+  ],
+  "41_Risk 014 Verification": [
+    "AC-RISK-014-04",
+    "RISK-015",
+    "RISK-015-BR-001",
+    "RISK-015-BR-002",
+    "RISK-015-BR-003"
+  ],
+  "42_Risk 015 Verification": [
+    "RISK-015-BR-004",
+    "MIT-015",
+    "AC-RISK-015-01",
+    "AC-RISK-015-02",
+    "AC-RISK-015-03"
+  ],
+  "43_Risk 015 Verification": [
+    "AC-RISK-015-04",
+    "RISK-016",
+    "RISK-016-BR-001",
+    "RISK-016-BR-002",
+    "RISK-016-BR-003"
+  ],
+  "44_Risk 016 Verification": [
+    "RISK-016-BR-004",
+    "RISK-016-BR-005",
+    "MIT-016",
+    "AC-RISK-016-01",
+    "AC-RISK-016-02"
+  ],
+  "45_Risk 016 Verification": [
+    "AC-RISK-016-03",
+    "AC-RISK-016-04",
+    "AC-RISK-016-05",
+    "RISK-021",
+    "RISK-021-BR-001"
+  ],
+  "46_Risk 021 Verification": [
+    "RISK-021-BR-002",
+    "RISK-021-BR-003",
+    "RISK-021-BR-004",
+    "MIT-021",
+    "AC-RISK-021-01"
+  ],
+  "47_Risk 021 Verification": [
+    "AC-RISK-021-02",
+    "AC-RISK-021-03",
+    "AC-RISK-021-04",
+    "AC-RISK-021-05",
+    "AC-RISK-021-06"
+  ],
+  "48_Risk 022 Verification": [
+    "RISK-022",
+    "RISK-022-BR-001",
+    "RISK-022-BR-002",
+    "RISK-022-BR-003",
+    "RISK-022-BR-004"
+  ],
+  "49_MIT-022": [
+    "MIT-022",
+    "AC-RISK-022-01",
+    "AC-RISK-022-02",
+    "AC-RISK-022-03",
+    "AC-RISK-022-04"
+  ],
+  "50_Risk 023 Verification": [
+    "RISK-023",
+    "RISK-023-BR-001",
+    "RISK-023-BR-002",
+    "RISK-023-BR-003",
+    "RISK-023-BR-004"
+  ],
+  "51_MIT-023": [
+    "MIT-023",
+    "AC-RISK-023-01",
+    "AC-RISK-023-02",
+    "AC-RISK-023-03",
+    "AC-RISK-023-04"
+  ],
+  "52_Risk 024 Verification": [
+    "RISK-024",
+    "RISK-024-BR-001",
+    "RISK-024-BR-002",
+    "RISK-024-BR-003",
+    "RISK-024-BR-004"
+  ],
+  "53_MIT-024": [
+    "MIT-024",
+    "AC-RISK-024-01",
+    "AC-RISK-024-02",
+    "AC-RISK-024-03",
+    "AC-RISK-024-04"
+  ],
+  "54_Risk 024 Verification": [
+    "AC-RISK-024-05",
+    "RISK-025",
+    "RISK-025-BR-001",
+    "RISK-025-BR-002",
+    "RISK-025-BR-003"
+  ],
+  "55_Risk 025 Verification": [
+    "RISK-025-BR-004",
+    "MIT-025",
+    "AC-RISK-025-01",
+    "AC-RISK-025-02",
+    "AC-RISK-025-03"
+  ],
+  "56_Risk 025 Verification": [
+    "AC-RISK-025-04",
+    "AC-RISK-025-05",
+    "MIT-NNN",
+    "RISK-NNN"
+  ]
+}

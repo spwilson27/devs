@@ -197,7 +197,7 @@ POSIX `sh` (no bash-specific syntax). Commands:
 | `lint` | `cargo fmt --check`, `cargo clippy -D warnings`, `cargo doc` (zero warnings), dep audit |
 | `format` | `cargo fmt --all` |
 | `coverage` | `cargo llvm-cov` unit + E2E; generate `target/coverage/report.json` |
-| `presubmit` | setup→lint→test→coverage; 15 min hard timeout with background timer kill |
+| `presubmit` | setup → format → lint → test → coverage → ci; 15 min hard timeout with background timer kill |
 | `ci` | Push temp branch, trigger GitLab pipeline, poll 30 min, clean up |
 
 Timings logged to `target/presubmit_timings.jsonl` per step **[2_TAS-REQ-014d]**.

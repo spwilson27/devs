@@ -202,67 +202,67 @@ graph TD
 
 1. [Threat Model & Attack Surface](#1-threat-model--attack-surface)
    - [1.1 System Trust Boundaries](#11-system-trust-boundaries) — trust zone diagram: Trusted / Semi-Trusted (agent subprocesses) / Untrusted (Docker, SSH, webhooks, AI providers)
-   - [1.2 MVP Trust Model Boundary](#12-mvp-trust-model-boundary) — loopback-only default; `[SEC-001]`–`[SEC-002]`
+   - [1.2 MVP Trust Model Boundary](#12-mvp-trust-model-boundary) — loopback-only default; `[SEC-001][5_SECURITY_DESIGN-REQ-001]`–`[SEC-002][5_SECURITY_DESIGN-REQ-002]`
    - [1.3 Primary Attack Vectors](#13-primary-attack-vectors) — 11 attack vectors with edge-case tables:
-     - [1.3.1 Prompt Injection](#131-prompt-injection) — `[SEC-003]`; EC-SEC-001–005
-     - [1.3.2 Credential Exposure](#132-credential-exposure) — `[SEC-004]`; EC-SEC-006–009
-     - [1.3.3 Agent Subprocess Isolation Failure](#133-agent-subprocess-isolation-failure) — `[SEC-005]`; EC-SEC-010–012
-     - [1.3.4 Template Variable Injection via Structured Output](#134-template-variable-injection-via-structured-output) — `[SEC-006]`; EC-SEC-013–015
-     - [1.3.5 Path Traversal via `prompt_file`](#135-path-traversal-via-prompt_file) — `[SEC-007]`; EC-SEC-016–018
-     - [1.3.6 Git Repository Poisoning](#136-git-repository-poisoning) — `[SEC-008]`; EC-SEC-019–021
-     - [1.3.7 Server-Side Request Forgery (SSRF) via Webhooks](#137-server-side-request-forgery-ssrf-via-webhooks) — `[SEC-009]`; EC-SEC-022–024
-     - [1.3.8 Secrets in TOML Configuration](#138-secrets-in-toml-configuration) — `[SEC-010]`; EC-SEC-025–027
-     - [1.3.9 Log Injection](#139-log-injection) — `[SEC-011]`; EC-SEC-028–030
-     - [1.3.10 Docker/SSH Remote Execution Surface](#1310-dockerssh-remote-execution-surface) — `[SEC-012]`; EC-SEC-031–033
-     - [1.3.11 MCP Glass-Box State Exposure](#1311-mcp-glass-box-state-exposure) — `[SEC-013]`; EC-SEC-034–036
+     - [1.3.1 Prompt Injection](#131-prompt-injection) — `[SEC-003][5_SECURITY_DESIGN-REQ-003]`; EC-SEC-001–005
+     - [1.3.2 Credential Exposure](#132-credential-exposure) — `[SEC-004][5_SECURITY_DESIGN-REQ-004]`; EC-SEC-006–009
+     - [1.3.3 Agent Subprocess Isolation Failure](#133-agent-subprocess-isolation-failure) — `[SEC-005][5_SECURITY_DESIGN-REQ-005]`; EC-SEC-010–012
+     - [1.3.4 Template Variable Injection via Structured Output](#134-template-variable-injection-via-structured-output) — `[SEC-006][5_SECURITY_DESIGN-REQ-006]`; EC-SEC-013–015
+     - [1.3.5 Path Traversal via `prompt_file`](#135-path-traversal-via-prompt_file) — `[SEC-007][5_SECURITY_DESIGN-REQ-007]`; EC-SEC-016–018
+     - [1.3.6 Git Repository Poisoning](#136-git-repository-poisoning) — `[SEC-008][5_SECURITY_DESIGN-REQ-008]`; EC-SEC-019–021
+     - [1.3.7 Server-Side Request Forgery (SSRF) via Webhooks](#137-server-side-request-forgery-ssrf-via-webhooks) — `[SEC-009][5_SECURITY_DESIGN-REQ-009]`; EC-SEC-022–024
+     - [1.3.8 Secrets in TOML Configuration](#138-secrets-in-toml-configuration) — `[SEC-010][5_SECURITY_DESIGN-REQ-010]`; EC-SEC-025–027
+     - [1.3.9 Log Injection](#139-log-injection) — `[SEC-011][5_SECURITY_DESIGN-REQ-011]`; EC-SEC-028–030
+     - [1.3.10 Docker/SSH Remote Execution Surface](#1310-dockerssh-remote-execution-surface) — `[SEC-012][5_SECURITY_DESIGN-REQ-012]`; EC-SEC-031–033
+     - [1.3.11 MCP Glass-Box State Exposure](#1311-mcp-glass-box-state-exposure) — `[SEC-013][5_SECURITY_DESIGN-REQ-013]`; EC-SEC-034–036
    - [1.4 STRIDE Threat Analysis](#14-stride-threat-analysis) — STRIDE table: 14 threats mapped to mitigations and residual risk ratings
    - [1.5 Asset Inventory & Sensitivity Classification](#15-asset-inventory--sensitivity-classification) — 11 assets: Critical / High / Medium / Low sensitivity
-   - [1.6 Regulatory & Compliance Scope](#16-regulatory--compliance-scope) — `[SEC-014]`; secret management, audit trails, supply chain
+   - [1.6 Regulatory & Compliance Scope](#16-regulatory--compliance-scope) — `[SEC-014][5_SECURITY_DESIGN-REQ-014]`; secret management, audit trails, supply chain
    - [1.7 Section 1 Acceptance Criteria](#17-section-1-acceptance-criteria) — AC-SEC-1-001–006
 
 2. [Authentication & Authorization Policies](#2-authentication--authorization-policies)
-   - [2.1 MVP Trust Model (No Client Authentication)](#21-mvp-trust-model-no-client-authentication) — `[SEC-015]`–`[SEC-016]`; loopback bind, firewall enforcement, remote TLS requirement
-   - [2.2 Agent Role Separation (Software-Enforced)](#22-agent-role-separation-software-enforced-not-cryptographic) — `[SEC-017]`–`[SEC-018]`; Orchestrated vs Observing/Controlling; env-var detection
-   - [2.3 Filesystem MCP Access Control](#23-filesystem-mcp-access-control) — `[SEC-019]`–`[SEC-020]`; per-path read/write policy table; path canonicalization; EC-SEC-037–041
-   - [2.4 Webhook Signing](#24-webhook-signing) — `[SEC-021]`; HMAC-SHA256; `X-Devs-Signature-256`; signing algorithm in Rust pseudocode; EC-SEC-042–045; minimum 32-byte secret
-   - [2.5 Post-MVP Authentication Pathway](#25-post-mvp-authentication-pathway) — `[SEC-022]`; gRPC mTLS, bearer tokens, MCP header auth — reserved stubs
+   - [2.1 MVP Trust Model (No Client Authentication)](#21-mvp-trust-model-no-client-authentication) — `[SEC-015][5_SECURITY_DESIGN-REQ-015]`–`[SEC-016][5_SECURITY_DESIGN-REQ-016]`; loopback bind, firewall enforcement, remote TLS requirement
+   - [2.2 Agent Role Separation (Software-Enforced)](#22-agent-role-separation-software-enforced-not-cryptographic) — `[SEC-017][5_SECURITY_DESIGN-REQ-017]`–`[SEC-018][5_SECURITY_DESIGN-REQ-018]`; Orchestrated vs Observing/Controlling; env-var detection
+   - [2.3 Filesystem MCP Access Control](#23-filesystem-mcp-access-control) — `[SEC-019][5_SECURITY_DESIGN-REQ-019]`–`[SEC-020][5_SECURITY_DESIGN-REQ-020]`; per-path read/write policy table; path canonicalization; EC-SEC-037–041
+   - [2.4 Webhook Signing](#24-webhook-signing) — `[SEC-021][5_SECURITY_DESIGN-REQ-021]`; HMAC-SHA256; `X-Devs-Signature-256`; signing algorithm in Rust pseudocode; EC-SEC-042–045; minimum 32-byte secret
+   - [2.5 Post-MVP Authentication Pathway](#25-post-mvp-authentication-pathway) — `[SEC-022][5_SECURITY_DESIGN-REQ-022]`; gRPC mTLS, bearer tokens, MCP header auth — reserved stubs
    - [2.6 Security Startup Sequence](#26-security-startup-sequence) — Mermaid state diagram: security check chain integrated with port binding
    - [2.8 Section 2 Acceptance Criteria](#28-section-2-acceptance-criteria)
 
 3. [Data at Rest & Data in Transit Encryption](#3-data-at-rest--data-in-transit-encryption)
    - [3.1 Data Classification](#31-data-classification) — 8 data classes: Critical / High / Medium / Low; encryption posture per class
    - [3.2 Data at Rest](#32-data-at-rest)
-     - [3.2.1 Credential Storage](#321-credential-storage) — `[SEC-023]`–`[SEC-026]`; env var preferred; TOML fallback controls; inheritance chain; EC-SEC-046–049
-     - [3.2.2 Git Checkpoint Store](#322-git-checkpoint-store) — `[SEC-027]`–`[SEC-029]`; no encryption; OS FDE recommended; prompt file lifecycle; EC-SEC-050–053
-     - [3.2.3 Discovery File](#323-discovery-file) — `[SEC-030]`; mode `0600`; atomic overwrite on restart; EC-SEC-054–056
+     - [3.2.1 Credential Storage](#321-credential-storage) — `[SEC-023][5_SECURITY_DESIGN-REQ-023]`–`[SEC-026][5_SECURITY_DESIGN-REQ-026]`; env var preferred; TOML fallback controls; inheritance chain; EC-SEC-046–049
+     - [3.2.2 Git Checkpoint Store](#322-git-checkpoint-store) — `[SEC-027][5_SECURITY_DESIGN-REQ-027]`–`[SEC-029][5_SECURITY_DESIGN-REQ-029]`; no encryption; OS FDE recommended; prompt file lifecycle; EC-SEC-050–053
+     - [3.2.3 Discovery File](#323-discovery-file) — `[SEC-030][5_SECURITY_DESIGN-REQ-030]`; mode `0600`; atomic overwrite on restart; EC-SEC-054–056
    - [3.3 Data in Transit](#33-data-in-transit)
-     - [3.3.1 gRPC Transport (TLS)](#331-grpc-transport-tls) — `[SEC-031]`–`[SEC-033]`; `rustls` only; TLS 1.2 minimum; cipher suite table; TLS config TOML schema; non-loopback enforcement
+     - [3.3.1 gRPC Transport (TLS)](#331-grpc-transport-tls) — `[SEC-031][5_SECURITY_DESIGN-REQ-031]`–`[SEC-033][5_SECURITY_DESIGN-REQ-033]`; `rustls` only; TLS 1.2 minimum; cipher suite table; TLS config TOML schema; non-loopback enforcement
    - Section 3 Acceptance Criteria — AC-SEC-3-001–006
 
 4. [Application Security Controls](#4-application-security-controls)
    - [4.1 Injection Prevention](#41-injection-prevention)
-     - [4.1.1 Template Injection (Prompt Injection)](#411-template-injection-prompt-injection) — `[SEC-040]`–`[SEC-043]`; single-pass; 10,240-byte truncation; scalar-only extraction; EC-SEC-069–073
-     - [4.1.2 Command Injection (Agent Adapter Layer)](#412-command-injection-agent-adapter-layer) — `[SEC-044]`–`[SEC-046]`; `Command::arg()` array; UUID prompt filenames; `EnvKey` validation; EC-SEC-074–076
-     - [4.1.3 Path Traversal](#413-path-traversal) — `[SEC-047]`–`[SEC-048]`; `canonicalize()` before use; validation-time `..` rejection; EC-SEC-077–079
-     - [4.1.4 JSON Injection in Structured Output](#414-json-injection-in-structured-output) — `[SEC-049]`–`[SEC-050]`; depth limit 128; boolean-only `"success"`; 10 MiB file size cap; EC-SEC-080–083
-   - [4.2 OWASP Top 10 Mitigations](#42-owasp-top-10-mitigations) — A01–A10 addressed; `[SEC-051]`–`[SEC-069]`; prohibited cryptographic primitives; UUID v4 only; `cargo audit` CI integration
-   - [4.3 Denial of Service Protections](#43-denial-of-service-protections) — `[SEC-070]`–`[SEC-076]`; gRPC/MCP size limits; `BoundedBytes<1_048_576>`; fan-out cap 64; webhook fire-and-forget; EC-SEC-084–088
-   - [4.4 Input Validation](#44-input-validation) — `[SEC-077]`–`[SEC-080]`; 13-step validation; TOCTOU-safe run name uniqueness; `Path` inputs deferred; `BoundedString<N>` serde enforcement with Rust code sample; EC-SEC-089–092
-   - [4.5 Supply Chain Security](#45-supply-chain-security) — `[SEC-081]`–`[SEC-083]`; dep version table enforcement; `unsafe_code = "deny"`; `rustls-tls` only
-   - [4.6 `Redacted<T>` Type Definition](#46-redactedt-type-definition) — `[SEC-100]`; Rust `impl Debug + Display + tracing::Value`; usage requirements; EC-SEC-093–095
+     - [4.1.1 Template Injection (Prompt Injection)](#411-template-injection-prompt-injection) — `[SEC-040][5_SECURITY_DESIGN-REQ-040]`–`[SEC-043][5_SECURITY_DESIGN-REQ-043]`; single-pass; 10,240-byte truncation; scalar-only extraction; EC-SEC-069–073
+     - [4.1.2 Command Injection (Agent Adapter Layer)](#412-command-injection-agent-adapter-layer) — `[SEC-044][5_SECURITY_DESIGN-REQ-044]`–`[SEC-046][5_SECURITY_DESIGN-REQ-046]`; `Command::arg()` array; UUID prompt filenames; `EnvKey` validation; EC-SEC-074–076
+     - [4.1.3 Path Traversal](#413-path-traversal) — `[SEC-047][5_SECURITY_DESIGN-REQ-047]`–`[SEC-048][5_SECURITY_DESIGN-REQ-048]`; `canonicalize()` before use; validation-time `..` rejection; EC-SEC-077–079
+     - [4.1.4 JSON Injection in Structured Output](#414-json-injection-in-structured-output) — `[SEC-049][5_SECURITY_DESIGN-REQ-049]`–`[SEC-050][5_SECURITY_DESIGN-REQ-050]`; depth limit 128; boolean-only `"success"`; 10 MiB file size cap; EC-SEC-080–083
+   - [4.2 OWASP Top 10 Mitigations](#42-owasp-top-10-mitigations) — A01–A10 addressed; `[SEC-051][5_SECURITY_DESIGN-REQ-051]`–`[SEC-069][5_SECURITY_DESIGN-REQ-069]`; prohibited cryptographic primitives; UUID v4 only; `cargo audit` CI integration
+   - [4.3 Denial of Service Protections](#43-denial-of-service-protections) — `[SEC-070][5_SECURITY_DESIGN-REQ-070]`–`[SEC-076][5_SECURITY_DESIGN-REQ-076]`; gRPC/MCP size limits; `BoundedBytes<1_048_576>`; fan-out cap 64; webhook fire-and-forget; EC-SEC-084–088
+   - [4.4 Input Validation](#44-input-validation) — `[SEC-077][5_SECURITY_DESIGN-REQ-077]`–`[SEC-080][5_SECURITY_DESIGN-REQ-080]`; 13-step validation; TOCTOU-safe run name uniqueness; `Path` inputs deferred; `BoundedString<N>` serde enforcement with Rust code sample; EC-SEC-089–092
+   - [4.5 Supply Chain Security](#45-supply-chain-security) — `[SEC-081][5_SECURITY_DESIGN-REQ-081]`–`[SEC-083][5_SECURITY_DESIGN-REQ-083]`; dep version table enforcement; `unsafe_code = "deny"`; `rustls-tls` only
+   - [4.6 `Redacted<T>` Type Definition](#46-redactedt-type-definition) — `[SEC-100][5_SECURITY_DESIGN-REQ-100]`; Rust `impl Debug + Display + tracing::Value`; usage requirements; EC-SEC-093–095
    - [4.7 SSRF Mitigation Algorithm](#47-ssrf-mitigation-algorithm) — `check_ssrf()` Rust pseudocode; `is_blocked()` per IP family; DNS-at-delivery-time invariants
    - [4.8 Webhook Delivery State Machine](#48-webhook-delivery-state-machine) — Mermaid state diagram: Enqueued → ResolvingDNS → SSRFCheck → Delivering → Success/Failed/Dropped; backoff schedule table
    - [4.9 Section 4 Acceptance Criteria](#49-section-4-acceptance-criteria) — AC-SEC-4-001–008
 
 5. [Logging, Monitoring & Audit Trails](#5-logging-monitoring--audit-trails)
-   - [5.1 Structured Logging Architecture](#51-structured-logging-architecture) — `[SEC-084]`–`[SEC-085]`; `tracing` + JSON format; `DEVS_LOG_FORMAT`; `RUST_LOG` verbosity; DEBUG/TRACE off in release
-   - [5.2 Mandatory Audit Events](#52-mandatory-audit-events) — `[SEC-086]`–`[SEC-087]`; 20-event table with required fields and levels; query-param redaction in webhook URLs
+   - [5.1 Structured Logging Architecture](#51-structured-logging-architecture) — `[SEC-084][5_SECURITY_DESIGN-REQ-084]`–`[SEC-085][5_SECURITY_DESIGN-REQ-085]`; `tracing` + JSON format; `DEVS_LOG_FORMAT`; `RUST_LOG` verbosity; DEBUG/TRACE off in release
+   - [5.2 Mandatory Audit Events](#52-mandatory-audit-events) — `[SEC-086][5_SECURITY_DESIGN-REQ-086]`–`[SEC-087][5_SECURITY_DESIGN-REQ-087]`; 20-event table with required fields and levels; query-param redaction in webhook URLs
    - [5.3 Audit Log Entry Schema](#53-audit-log-entry-schema) — JSON schema with annotated example; required top-level fields table; conditional fields by event type; exhaustive `event_type` registry (21 event types)
-   - [5.4 Credential Redaction in Logs](#54-credential-redaction-in-logs) — `[SEC-088]`–`[SEC-089]`; `Redacted<T>` mandatory; stage stdout/stderr to log files only, never `tracing`
-   - [5.5 Log Injection Mitigation](#55-log-injection-mitigation) — `[SEC-090]`–`[SEC-091]`; verbatim binary-safe writes; JSON formatter escaping; EC-SEC-096–099
-   - [5.6 Log Retention and Access](#56-log-retention-and-access) — `[SEC-092]`–`[SEC-094]`; same retention policy as checkpoints; mode `0600`/`0700`; operator log rotation; EC-SEC-100–102
-   - [5.7 Monitoring and Alerting](#57-monitoring-and-alerting) — `[SEC-095]`–`[SEC-096]`; 9 monitorable conditions with severity ratings; `state.changed` webhook as native monitoring
-   - [5.8 Test Coverage Requirements for Security Controls](#58-test-coverage-requirements-for-security-controls) — `[SEC-097]`; 8 mandatory E2E tests for named security controls; `// Covers: SEC-NNN` annotation requirement
+   - [5.4 Credential Redaction in Logs](#54-credential-redaction-in-logs) — `[SEC-088][5_SECURITY_DESIGN-REQ-088]`–`[SEC-089][5_SECURITY_DESIGN-REQ-089]`; `Redacted<T>` mandatory; stage stdout/stderr to log files only, never `tracing`
+   - [5.5 Log Injection Mitigation](#55-log-injection-mitigation) — `[SEC-090][5_SECURITY_DESIGN-REQ-090]`–`[SEC-091][5_SECURITY_DESIGN-REQ-091]`; verbatim binary-safe writes; JSON formatter escaping; EC-SEC-096–099
+   - [5.6 Log Retention and Access](#56-log-retention-and-access) — `[SEC-092][5_SECURITY_DESIGN-REQ-092]`–`[SEC-094][5_SECURITY_DESIGN-REQ-094]`; same retention policy as checkpoints; mode `0600`/`0700`; operator log rotation; EC-SEC-100–102
+   - [5.7 Monitoring and Alerting](#57-monitoring-and-alerting) — `[SEC-095][5_SECURITY_DESIGN-REQ-095]`–`[SEC-096][5_SECURITY_DESIGN-REQ-096]`; 9 monitorable conditions with severity ratings; `state.changed` webhook as native monitoring
+   - [5.8 Test Coverage Requirements for Security Controls](#58-test-coverage-requirements-for-security-controls) — `[SEC-097][5_SECURITY_DESIGN-REQ-097]`; 8 mandatory E2E tests for named security controls; `// Covers: SEC-NNN` annotation requirement
    - [5.9 Component Dependencies](#59-component-dependencies) — bidirectional dependency table: 8 upstream components + 4 downstream consumers
    - [5.10 Section 5 Acceptance Criteria](#510-section-5-acceptance-criteria) — AC-SEC-5-001–008
 
@@ -346,10 +346,10 @@ All externally reachable network interfaces and significant filesystem surfaces 
 
 **Attack surface reduction rules:**
 
-- **[SEC-ATK-001]** The gRPC and MCP ports MUST be the only two TCP listening sockets created by the `devs-server` process. No additional listening sockets are permitted. This is structurally enforced by `[ARCH-BR-001]`.
-- **[SEC-ATK-002]** The `devs-mcp-bridge` binary MUST NOT create any TCP listening socket. It operates exclusively via stdin/stdout OS pipes and outbound HTTP to the configured MCP port.
-- **[SEC-ATK-003]** On Unix systems, the following file permission modes MUST be applied at creation time: discovery file `0600`; `projects.toml` `0600`; `~/.config/devs/` directory `0700`; `.devs/logs/` directory `0700`; individual log files `0600`. On Windows, equivalent ACLs restricted to the server process owner apply per `[FEAT-BR-001]`.
-- **[SEC-ATK-004]** Any addition to the above entry-point table requires updating this document section before the change is merged to main.
+- **[SEC-ATK-001][5_SECURITY_DESIGN-REQ-377]** The gRPC and MCP ports MUST be the only two TCP listening sockets created by the `devs-server` process. No additional listening sockets are permitted. This is structurally enforced by `[ARCH-BR-001]`.
+- **[SEC-ATK-002][5_SECURITY_DESIGN-REQ-378]** The `devs-mcp-bridge` binary MUST NOT create any TCP listening socket. It operates exclusively via stdin/stdout OS pipes and outbound HTTP to the configured MCP port.
+- **[SEC-ATK-003][5_SECURITY_DESIGN-REQ-379]** On Unix systems, the following file permission modes MUST be applied at creation time: discovery file `0600`; `projects.toml` `0600`; `~/.config/devs/` directory `0700`; `.devs/logs/` directory `0700`; individual log files `0600`. On Windows, equivalent ACLs restricted to the server process owner apply per `[FEAT-BR-001]`.
+- **[SEC-ATK-004][5_SECURITY_DESIGN-REQ-380]** Any addition to the above entry-point table requires updating this document section before the change is merged to main.
 
 **Cross-references to other sections:**
 
@@ -360,20 +360,20 @@ All externally reachable network interfaces and significant filesystem surfaces 
 
 ### 1.2 MVP Trust Model Boundary
 
-**[SEC-001]** The `devs` server is explicitly designed for **local or trusted-network deployment only** at MVP. No client authentication is enforced on the gRPC or MCP interfaces. Any process that can reach the gRPC port (`:7890`) or MCP port (`:7891`) can read and control all workflow runs and internal state. Operators MUST restrict network access to these ports via OS firewall rules or network segmentation. Binding to `127.0.0.1` (loopback) is the default and MUST NOT be changed to `0.0.0.0` in untrusted network environments.
+**[SEC-001][5_SECURITY_DESIGN-REQ-001]** The `devs` server is explicitly designed for **local or trusted-network deployment only** at MVP. No client authentication is enforced on the gRPC or MCP interfaces. Any process that can reach the gRPC port (`:7890`) or MCP port (`:7891`) can read and control all workflow runs and internal state. Operators MUST restrict network access to these ports via OS firewall rules or network segmentation. Binding to `127.0.0.1` (loopback) is the default and MUST NOT be changed to `0.0.0.0` in untrusted network environments.
 
-**[SEC-002]** Post-MVP client authentication will be implemented as a gRPC interceptor using mutual TLS (mTLS) or bearer tokens without requiring changes to service logic. The current design is forward-compatible with this addition.
+**[SEC-002][5_SECURITY_DESIGN-REQ-002]** Post-MVP client authentication will be implemented as a gRPC interceptor using mutual TLS (mTLS) or bearer tokens without requiring changes to service logic. The current design is forward-compatible with this addition.
 
 #### 1.2.1 MVP Trust Model — Formal Business Rules
 
 The following rules are testable assertions that MUST be verified by automated tests. Each rule ID corresponds to a `// Covers:` annotation in the test suite.
 
-- **[SEC-001-BR-001]** When `server.listen` binds to any address other than `127.0.0.1` or `::1`, the server MUST emit a `WARN`-level structured log event with `event_type: "security.misconfiguration"` and `check_id: "SEC-BIND-ADDR"` before accepting any connection. The server continues starting — this is a warning, not a fatal error.
-- **[SEC-001-BR-002]** The built-in default for `server.listen` MUST resolve to `"127.0.0.1:7890"` when no configuration file and no `DEVS_LISTEN` environment variable are present. An unconfigured server MUST bind only to loopback.
-- **[SEC-001-BR-003]** The MCP HTTP server MUST bind to the same IP address as `server.listen`. If `server.listen = "0.0.0.0:7890"`, the MCP server MUST also bind `0.0.0.0:7891`. The MCP port MUST NOT bind to a more permissive network scope than the gRPC port.
-- **[SEC-001-BR-004]** The discovery file MUST contain only the gRPC listen address in `<host>:<port>` plain UTF-8 format. The MCP port MUST NOT appear in the discovery file. Clients obtain the MCP port exclusively via the `ServerService.GetInfo` RPC. This ensures that locating the gRPC service does not automatically expose the MCP attack surface.
-- **[SEC-001-BR-005]** Both gRPC and MCP ports MUST be fully bound before the discovery file is written. Clients that read the discovery file and successfully connect to the gRPC port MUST be guaranteed that the MCP port is also accepting connections.
-- **[SEC-002-BR-001]** No authentication call sites MUST exist inside any gRPC service handler module (`WorkflowServiceImpl`, `RunServiceImpl`, `StageServiceImpl`, `LogServiceImpl`, `PoolServiceImpl`, `ProjectServiceImpl`) at MVP. Post-MVP authentication MUST be implementable as a standalone `tonic` `Layer` (interceptor) applied at the router level, without modifying any service handler code.
+- **[SEC-001-BR-001][5_SECURITY_DESIGN-REQ-339]** When `server.listen` binds to any address other than `127.0.0.1` or `::1`, the server MUST emit a `WARN`-level structured log event with `event_type: "security.misconfiguration"` and `check_id: "SEC-BIND-ADDR"` before accepting any connection. The server continues starting — this is a warning, not a fatal error.
+- **[SEC-001-BR-002][5_SECURITY_DESIGN-REQ-340]** The built-in default for `server.listen` MUST resolve to `"127.0.0.1:7890"` when no configuration file and no `DEVS_LISTEN` environment variable are present. An unconfigured server MUST bind only to loopback.
+- **[SEC-001-BR-003][5_SECURITY_DESIGN-REQ-341]** The MCP HTTP server MUST bind to the same IP address as `server.listen`. If `server.listen = "0.0.0.0:7890"`, the MCP server MUST also bind `0.0.0.0:7891`. The MCP port MUST NOT bind to a more permissive network scope than the gRPC port.
+- **[SEC-001-BR-004][5_SECURITY_DESIGN-REQ-342]** The discovery file MUST contain only the gRPC listen address in `<host>:<port>` plain UTF-8 format. The MCP port MUST NOT appear in the discovery file. Clients obtain the MCP port exclusively via the `ServerService.GetInfo` RPC. This ensures that locating the gRPC service does not automatically expose the MCP attack surface.
+- **[SEC-001-BR-005][5_SECURITY_DESIGN-REQ-343]** Both gRPC and MCP ports MUST be fully bound before the discovery file is written. Clients that read the discovery file and successfully connect to the gRPC port MUST be guaranteed that the MCP port is also accepting connections.
+- **[SEC-002-BR-001][5_SECURITY_DESIGN-REQ-344]** No authentication call sites MUST exist inside any gRPC service handler module (`WorkflowServiceImpl`, `RunServiceImpl`, `StageServiceImpl`, `LogServiceImpl`, `PoolServiceImpl`, `ProjectServiceImpl`) at MVP. Post-MVP authentication MUST be implementable as a standalone `tonic` `Layer` (interceptor) applied at the router level, without modifying any service handler code.
 
 **Deployment Preconditions:**
 
@@ -392,9 +392,9 @@ The following conditions are operator responsibilities not enforced by `devs` so
 
 #### 1.3.1 Prompt Injection
 
-**[SEC-003]** The highest-severity attack vector. Stage prompts accept `{{template}}` variables resolved from prior stage outputs (stdout, stderr, structured JSON fields). A malicious or compromised upstream stage can inject instructions into a downstream agent's prompt, causing it to exfiltrate secrets, modify source code, or call unintended MCP tools. This is an inherent risk of chaining AI agent outputs.
+**[SEC-003][5_SECURITY_DESIGN-REQ-003]** The highest-severity attack vector. Stage prompts accept `{{template}}` variables resolved from prior stage outputs (stdout, stderr, structured JSON fields). A malicious or compromised upstream stage can inject instructions into a downstream agent's prompt, causing it to exfiltrate secrets, modify source code, or call unintended MCP tools. This is an inherent risk of chaining AI agent outputs.
 
-Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]** (output size limits).
+Mitigation strategy: see **[SEC-040][5_SECURITY_DESIGN-REQ-040]** (template sanitization) and **[SEC-042][5_SECURITY_DESIGN-REQ-042]** (output size limits).
 
 **Edge Cases:**
 
@@ -408,7 +408,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.2 Credential Exposure
 
-**[SEC-004]** Agent CLI API keys (`CLAUDE_API_KEY`, `GEMINI_API_KEY`, etc.) are high-value secrets stored in the server process environment or in `devs.toml`. Attack paths include: log scraping (keys inadvertently logged), checkpoint file inclusion (keys written to `.devs/`), environment inheritance to agent subprocesses (intentional but must be controlled), and TOML file exfiltration.
+**[SEC-004][5_SECURITY_DESIGN-REQ-004]** Agent CLI API keys (`CLAUDE_API_KEY`, `GEMINI_API_KEY`, etc.) are high-value secrets stored in the server process environment or in `devs.toml`. Attack paths include: log scraping (keys inadvertently logged), checkpoint file inclusion (keys written to `.devs/`), environment inheritance to agent subprocesses (intentional but must be controlled), and TOML file exfiltration.
 
 **Edge Cases:**
 
@@ -421,7 +421,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.3 Agent Subprocess Isolation Failure
 
-**[SEC-005]** Spawned agent subprocesses execute with the same OS user privileges as the `devs` server. A compromised agent process (e.g., via a malicious model response directing the CLI tool to execute shell commands) can access the full filesystem and network available to the server process. The execution environment (`tempdir`, `docker`, `remote`) provides the primary isolation layer.
+**[SEC-005][5_SECURITY_DESIGN-REQ-005]** Spawned agent subprocesses execute with the same OS user privileges as the `devs` server. A compromised agent process (e.g., via a malicious model response directing the CLI tool to execute shell commands) can access the full filesystem and network available to the server process. The execution environment (`tempdir`, `docker`, `remote`) provides the primary isolation layer.
 
 **Edge Cases:**
 
@@ -433,7 +433,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.4 Template Variable Injection via Structured Output
 
-**[SEC-006]** The `{{stage.<name>.output.<field>}}` template resolution reads JSON fields from agent-produced `.devs_output.json`. A malicious agent could craft structured output containing `{{...}}` sequences that are then re-expanded in a subsequent stage's prompt resolution, creating a second-order injection. Template expansion MUST be single-pass with no recursive re-expansion.
+**[SEC-006][5_SECURITY_DESIGN-REQ-006]** The `{{stage.<name>.output.<field>}}` template resolution reads JSON fields from agent-produced `.devs_output.json`. A malicious agent could craft structured output containing `{{...}}` sequences that are then re-expanded in a subsequent stage's prompt resolution, creating a second-order injection. Template expansion MUST be single-pass with no recursive re-expansion.
 
 **Edge Cases:**
 
@@ -445,7 +445,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.5 Path Traversal via `prompt_file`
 
-**[SEC-007]** The `prompt_file` stage field accepts a filesystem path resolved at execution time. If user-provided paths (via workflow inputs) are interpolated into `prompt_file` values without validation, an attacker-controlled input could read arbitrary files on the server (e.g., `../../.ssh/id_rsa`, `devs.toml`).
+**[SEC-007][5_SECURITY_DESIGN-REQ-007]** The `prompt_file` stage field accepts a filesystem path resolved at execution time. If user-provided paths (via workflow inputs) are interpolated into `prompt_file` values without validation, an attacker-controlled input could read arbitrary files on the server (e.g., `../../.ssh/id_rsa`, `devs.toml`).
 
 **Edge Cases:**
 
@@ -457,7 +457,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.6 Git Repository Poisoning
 
-**[SEC-008]** Checkpoint data written to the project's git repository (`.devs/` directory, checkpoint branch) is under partial control of agent subprocesses (via auto-collect commits). A malicious agent could write crafted checkpoint files that corrupt state on recovery, trigger arbitrary state transitions, or smuggle data into the repository.
+**[SEC-008][5_SECURITY_DESIGN-REQ-008]** Checkpoint data written to the project's git repository (`.devs/` directory, checkpoint branch) is under partial control of agent subprocesses (via auto-collect commits). A malicious agent could write crafted checkpoint files that corrupt state on recovery, trigger arbitrary state transitions, or smuggle data into the repository.
 
 **Edge Cases:**
 
@@ -469,7 +469,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.7 Server-Side Request Forgery (SSRF) via Webhooks
 
-**[SEC-009]** Outbound webhook URLs are configured per-project. An attacker who can register or modify project configuration can direct `devs` to send POST requests to internal network addresses (`http://169.254.169.254/`, `http://localhost/`, RFC-1918 ranges), potentially accessing internal services or cloud metadata endpoints.
+**[SEC-009][5_SECURITY_DESIGN-REQ-009]** Outbound webhook URLs are configured per-project. An attacker who can register or modify project configuration can direct `devs` to send POST requests to internal network addresses (`http://169.254.169.254/`, `http://localhost/`, RFC-1918 ranges), potentially accessing internal services or cloud metadata endpoints.
 
 **Edge Cases:**
 
@@ -481,7 +481,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.8 Secrets in TOML Configuration
 
-**[SEC-010]** Storing API keys directly in `devs.toml` under `[credentials]` is a documented anti-pattern. The file may be committed to source control, accessible to all local users, or readable by agent processes with filesystem MCP access. The Filesystem MCP explicitly permits read access to configuration files in the workspace unless restricted.
+**[SEC-010][5_SECURITY_DESIGN-REQ-010]** Storing API keys directly in `devs.toml` under `[credentials]` is a documented anti-pattern. The file may be committed to source control, accessible to all local users, or readable by agent processes with filesystem MCP access. The Filesystem MCP explicitly permits read access to configuration files in the workspace unless restricted.
 
 **Edge Cases:**
 
@@ -493,7 +493,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.9 Log Injection
 
-**[SEC-011]** Agent stdout and stderr are stored verbatim in `.devs/logs/`. Malformed ANSI escape sequences or newline injection in log content can corrupt log display in the TUI or downstream log consumers. Structured log injection (crafted JSON log lines) can confuse log aggregation tools.
+**[SEC-011][5_SECURITY_DESIGN-REQ-011]** Agent stdout and stderr are stored verbatim in `.devs/logs/`. Malformed ANSI escape sequences or newline injection in log content can corrupt log display in the TUI or downstream log consumers. Structured log injection (crafted JSON log lines) can confuse log aggregation tools.
 
 **Edge Cases:**
 
@@ -505,7 +505,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.10 Docker/SSH Remote Execution Surface
 
-**[SEC-012]** The `docker` execution environment respects the `DOCKER_HOST` environment variable, and the `remote` environment uses `ssh2` for connections. A misconfigured `DOCKER_HOST` pointing to a remote daemon, or SSH credentials to a shared host, expands the blast radius of a compromised stage to that external system.
+**[SEC-012][5_SECURITY_DESIGN-REQ-012]** The `docker` execution environment respects the `DOCKER_HOST` environment variable, and the `remote` environment uses `ssh2` for connections. A misconfigured `DOCKER_HOST` pointing to a remote daemon, or SSH credentials to a shared host, expands the blast radius of a compromised stage to that external system.
 
 **Edge Cases:**
 
@@ -517,7 +517,7 @@ Mitigation strategy: see **[SEC-040]** (template sanitization) and **[SEC-042]**
 
 #### 1.3.11 MCP Glass-Box State Exposure
 
-**[SEC-013]** The MCP server exposes full internal state including stage outputs, structured data, workflow definitions, pool configurations, and checkpoint records. Any process reaching `:7891` can read all secrets that flow through stage outputs (e.g., an agent printing an API key to stdout for debugging). This is an accepted MVP risk; operators must ensure network isolation.
+**[SEC-013][5_SECURITY_DESIGN-REQ-013]** The MCP server exposes full internal state including stage outputs, structured data, workflow definitions, pool configurations, and checkpoint records. Any process reaching `:7891` can read all secrets that flow through stage outputs (e.g., an agent printing an API key to stdout for debugging). This is an accepted MVP risk; operators must ensure network isolation.
 
 **Edge Cases:**
 
@@ -535,19 +535,19 @@ The following table maps STRIDE threat categories to specific attack vectors and
 |---|---|---|---|---|
 | **Spoofing** | Client impersonation on gRPC/MCP | gRPC `:7890`, MCP `:7891` | Network perimeter (loopback bind); post-MVP: mTLS | HIGH — accepted MVP risk; no auth |
 | **Spoofing** | Agent spoofs `signal_completion` for another run | MCP `signal_completion` | `run_id` + `stage_name` required; per-run mutex | LOW — caller must know valid `run_id`; loopback-only |
-| **Tampering** | Workflow snapshot modified after run starts | `.devs/runs/<id>/workflow_snapshot.json` | Write-once check at persist layer (**[SEC-066]**) | LOW — file mode `0600`; git history provides evidence |
+| **Tampering** | Workflow snapshot modified after run starts | `.devs/runs/<id>/workflow_snapshot.json` | Write-once check at persist layer (**[SEC-066][5_SECURITY_DESIGN-REQ-066]**) | LOW — file mode `0600`; git history provides evidence |
 | **Tampering** | Checkpoint state corrupted by malicious file write | `checkpoint.json` | Atomic write (tmp→rename); schema version check; corrupt → `Unrecoverable` | MEDIUM — OS-level attacker with same-user privileges can corrupt |
-| **Tampering** | Prompt injection via stage output template vars | `TemplateResolver` | Single-pass expansion (**[SEC-040]**); scalar-only extraction (**[SEC-043]**); 10KiB truncation (**[SEC-042]**) | MEDIUM — inherent to AI chaining; human review recommended |
-| **Repudiation** | Deny submitting a workflow run | gRPC `SubmitRun` | Audit log with `run_id`, `slug`, `workflow_name`, `actor` (**[SEC-086]**) | LOW — structured audit trail persisted |
-| **Information Disclosure** | Credential leaked via stage stdout | Stage output log files | Log files at `0600` (**[SEC-093]**); MUST NOT appear in `tracing` logs (**[SEC-089]**) | HIGH — operator must rotate exposed keys |
-| **Information Disclosure** | `devs.toml` read via Filesystem MCP | Filesystem MCP | Workspace boundary enforcement (**[SEC-019]**); `devs.toml` outside workspace root | LOW — workspace boundary blocks access |
+| **Tampering** | Prompt injection via stage output template vars | `TemplateResolver` | Single-pass expansion (**[SEC-040][5_SECURITY_DESIGN-REQ-040]**); scalar-only extraction (**[SEC-043][5_SECURITY_DESIGN-REQ-043]**); 10KiB truncation (**[SEC-042][5_SECURITY_DESIGN-REQ-042]**) | MEDIUM — inherent to AI chaining; human review recommended |
+| **Repudiation** | Deny submitting a workflow run | gRPC `SubmitRun` | Audit log with `run_id`, `slug`, `workflow_name`, `actor` (**[SEC-086][5_SECURITY_DESIGN-REQ-086]**) | LOW — structured audit trail persisted |
+| **Information Disclosure** | Credential leaked via stage stdout | Stage output log files | Log files at `0600` (**[SEC-093][5_SECURITY_DESIGN-REQ-093]**); MUST NOT appear in `tracing` logs (**[SEC-089][5_SECURITY_DESIGN-REQ-089]**) | HIGH — operator must rotate exposed keys |
+| **Information Disclosure** | `devs.toml` read via Filesystem MCP | Filesystem MCP | Workspace boundary enforcement (**[SEC-019][5_SECURITY_DESIGN-REQ-019]**); `devs.toml` outside workspace root | LOW — workspace boundary blocks access |
 | **Information Disclosure** | MCP exposes full internal state | MCP `:7891` | Loopback-only bind (default); TLS optional for non-loopback (WARN logged if absent) | HIGH — accepted MVP Glass-Box design |
-| **Denial of Service** | Unbounded stage output exhausts memory | Stage executor | `BoundedBytes<1_048_576>` cap; truncation (**[SEC-072]**) | LOW — hard limit enforced at type level |
-| **Denial of Service** | Fan-out combinatorial explosion | DAG Scheduler | Max 64 sub-agents per stage (**[SEC-074]**); max 256 stages per workflow | LOW — validation-time rejection |
-| **Denial of Service** | Slow webhook receiver blocks scheduler | Webhook dispatcher | Fire-and-forget via `tokio::spawn`; 10s timeout per attempt (**[SEC-076]**) | LOW — isolated async task |
+| **Denial of Service** | Unbounded stage output exhausts memory | Stage executor | `BoundedBytes<1_048_576>` cap; truncation (**[SEC-072][5_SECURITY_DESIGN-REQ-072]**) | LOW — hard limit enforced at type level |
+| **Denial of Service** | Fan-out combinatorial explosion | DAG Scheduler | Max 64 sub-agents per stage (**[SEC-074][5_SECURITY_DESIGN-REQ-074]**); max 256 stages per workflow | LOW — validation-time rejection |
+| **Denial of Service** | Slow webhook receiver blocks scheduler | Webhook dispatcher | Fire-and-forget via `tokio::spawn`; 10s timeout per attempt (**[SEC-076][5_SECURITY_DESIGN-REQ-076]**) | LOW — isolated async task |
 | **Elevation of Privilege** | Agent subprocess gains server-level control | Agent adapter | No privilege separation at MVP; same OS user | HIGH — accepted risk; `docker`/`remote` envs provide partial isolation |
-| **Elevation of Privilege** | MCP control tool called by orchestrated agent | MCP server | Software role separation; orchestrated agents should only call allowed tools (**[SEC-017]**) | MEDIUM — not enforced cryptographically at MVP |
-| **Elevation of Privilege** | Path traversal reads server config/keys | `prompt_file`, Filesystem MCP | Canonicalize + boundary check (**[SEC-047]**, **[SEC-020]**) | LOW — enforced at multiple layers |
+| **Elevation of Privilege** | MCP control tool called by orchestrated agent | MCP server | Software role separation; orchestrated agents should only call allowed tools (**[SEC-017][5_SECURITY_DESIGN-REQ-017]**) | MEDIUM — not enforced cryptographically at MVP |
+| **Elevation of Privilege** | Path traversal reads server config/keys | `prompt_file`, Filesystem MCP | Canonicalize + boundary check (**[SEC-047][5_SECURITY_DESIGN-REQ-047]**, **[SEC-020][5_SECURITY_DESIGN-REQ-020]**) | LOW — enforced at multiple layers |
 
 #### 1.4.1 Threat Severity Classification Schema
 
@@ -560,16 +560,16 @@ Residual risk ratings in the STRIDE table above use the following four-level sca
 | **MEDIUM** | Requires a compromised component or a specific workflow misconfiguration; limited blast radius; partially mitigated by defense-in-depth controls | Second-order prompt injection via crafted structured output from a compromised upstream stage | Implement mitigations in §4; emit audit event on detection; recommend human review in documentation |
 | **LOW** | Requires substantial attacker capability and yields limited-impact access; multiple independent mitigations are already effective | ANSI escape injection in log files causing display corruption | No additional action required; existing mitigation sufficient |
 
-**[SEC-RISK-001]** No threat in the MVP STRIDE analysis is rated **CRITICAL**. The implementation MUST NOT introduce any new residual risk rated **HIGH** or **CRITICAL** without updating §1.4 in this document and obtaining explicit design approval. Approval MUST be recorded as a commit to this specification file, not as a code comment.
+**[SEC-RISK-001][5_SECURITY_DESIGN-REQ-428]** No threat in the MVP STRIDE analysis is rated **CRITICAL**. The implementation MUST NOT introduce any new residual risk rated **HIGH** or **CRITICAL** without updating §1.4 in this document and obtaining explicit design approval. Approval MUST be recorded as a commit to this specification file, not as a code comment.
 
-**[SEC-RISK-002]** The STRIDE analysis in §1.4 MUST be reviewed and updated whenever any of the following changes are made to the implementation:
+**[SEC-RISK-002][5_SECURITY_DESIGN-REQ-429]** The STRIDE analysis in §1.4 MUST be reviewed and updated whenever any of the following changes are made to the implementation:
 - A new network-accessible interface is added (see §1.1.1 entry-point table)
 - A new agent adapter is added beyond the 5 MVP adapters (`claude`, `gemini`, `opencode`, `qwen`, `copilot`)
 - The execution environment set is expanded beyond `{tempdir, docker, remote}`
 - The MCP tool set is expanded beyond the 17 MVP tools
 - Any crate that handles credential data (API keys, HMAC secrets, SSH keys) is added or changed
 
-**[SEC-RISK-003]** Each threat rated **HIGH** with "accepted MVP risk" MUST have a corresponding audit log event emitted when the threat condition is triggered or detected. The `event_type` values for these events are defined in §5.2 and include `security.misconfiguration`, `security.ssrf_blocked`, and `security.credential_in_config`.
+**[SEC-RISK-003][5_SECURITY_DESIGN-REQ-430]** Each threat rated **HIGH** with "accepted MVP risk" MUST have a corresponding audit log event emitted when the threat condition is triggered or detected. The `event_type` values for these events are defined in §5.2 and include `security.misconfiguration`, `security.ssrf_blocked`, and `security.credential_in_config`.
 
 #### 1.4.2 Attack Vector to Control Mapping
 
@@ -625,7 +625,7 @@ The following table maps each sensitive asset to its primary threat vectors and 
 
 ### 1.6 Regulatory & Compliance Scope
 
-**[SEC-014]** `devs` is developer tooling, not a consumer-facing service. At MVP, no PII is processed by `devs` itself (PII may flow through agent outputs depending on user workloads — outside scope). The primary compliance obligations are:
+**[SEC-014][5_SECURITY_DESIGN-REQ-014]** `devs` is developer tooling, not a consumer-facing service. At MVP, no PII is processed by `devs` itself (PII may flow through agent outputs depending on user workloads — outside scope). The primary compliance obligations are:
 
 - **Secret management**: API keys handled per industry standards (env vars preferred, no plaintext logging)
 - **Audit trails**: all workflow submissions, state transitions, and control operations logged
@@ -644,11 +644,11 @@ The following table maps each sensitive asset to its primary threat vectors and 
 | Dependency version pinning | Supply chain | Authoritative version table in TAS §2.2; `./do lint` dep audit enforces it (SEC-081) | AC-SEC-4-005; unregistered dep causes lint failure |
 | No third-party telemetry | Privacy | No dependency that initiates network calls to external analytics/crash-reporting endpoints | Verified by `cargo tree` review as part of dep audit; any such dep fails lint |
 
-**[SEC-014-BR-001]** The audit trail MUST be complete: every `SubmitRun`, `CancelRun`, `PauseRun`, `ResumeRun`, `write_workflow_definition`, and stage terminal transition MUST produce a structured log event at `INFO` level or higher with the mandatory fields defined in §5.3 (`timestamp`, `level`, `target`, `fields.event_type`).
+**[SEC-014-BR-001][5_SECURITY_DESIGN-REQ-345]** The audit trail MUST be complete: every `SubmitRun`, `CancelRun`, `PauseRun`, `ResumeRun`, `write_workflow_definition`, and stage terminal transition MUST produce a structured log event at `INFO` level or higher with the mandatory fields defined in §5.3 (`timestamp`, `level`, `target`, `fields.event_type`).
 
-**[SEC-014-BR-002]** `cargo audit --deny warnings` MUST exit with code 0 on the unmodified repository at any point in the development lifecycle. Any advisory that cannot be immediately resolved MUST have a corresponding `audit.toml` suppression entry with a human-readable justification comment and an ISO 8601 expiry date (see SEC-062).
+**[SEC-014-BR-002][5_SECURITY_DESIGN-REQ-346]** `cargo audit --deny warnings` MUST exit with code 0 on the unmodified repository at any point in the development lifecycle. Any advisory that cannot be immediately resolved MUST have a corresponding `audit.toml` suppression entry with a human-readable justification comment and an ISO 8601 expiry date (see SEC-062).
 
-**[SEC-014-BR-003]** `devs` MUST NOT introduce any dependency that initiates outbound network connections to third-party telemetry, analytics, license validation, or crash-reporting endpoints. All outbound network I/O from the `devs-server` process MUST be one of: agent subprocess invocation (to AI provider APIs), webhook delivery (to operator-configured URLs), or git push/fetch (to the project repository). This MUST be verifiable by a `cargo tree` audit of all non-dev dependencies.
+**[SEC-014-BR-003][5_SECURITY_DESIGN-REQ-347]** `devs` MUST NOT introduce any dependency that initiates outbound network connections to third-party telemetry, analytics, license validation, or crash-reporting endpoints. All outbound network I/O from the `devs-server` process MUST be one of: agent subprocess invocation (to AI provider APIs), webhook delivery (to operator-configured URLs), or git push/fetch (to the project repository). This MUST be verifiable by a `cargo tree` audit of all non-dev dependencies.
 
 ### 1.7 Section 1 Acceptance Criteria
 
@@ -656,56 +656,56 @@ All acceptance criteria in this section MUST be covered by at least one automate
 
 **Trust Model and Attack Surface (§1.1–1.2):**
 
-- **[AC-SEC-1-001]** Server logs `WARN` with `event_type: "security.misconfiguration"`, `check_id: "SEC-BIND-ADDR"`, and `check_id: "SEC-TLS-MISSING"` on startup when `server.listen` binds to a non-loopback address without TLS configured. The server MUST still start (not abort).
-- **[AC-SEC-1-002]** A process connecting to `:7890` on the loopback interface can call `SubmitRun` without providing any credentials; the call succeeds (not rejected with an auth error).
-- **[AC-SEC-1-003]** A process connecting to `:7891` on the loopback interface can call `get_run` without authentication; the call succeeds with the expected JSON response.
-- **[AC-SEC-1-007]** An unconfigured server (no `devs.toml`, no `DEVS_LISTEN` env var) binds only to `127.0.0.1:7890` for gRPC and `127.0.0.1:7891` for MCP. Verified by `netstat`/`ss` or equivalent in the test environment.
-- **[AC-SEC-1-008]** The discovery file written by the server contains exactly one line in `<host>:<port>` format. The file MUST NOT contain the MCP port number or any other content.
-- **[AC-SEC-1-009]** The discovery file is written atomically (write-to-tmp → `rename(2)`). A test that reads the discovery file concurrently with server startup MUST never observe a partial write (empty file or partial address).
-- **[AC-SEC-1-010]** The discovery file has Unix mode `0600` immediately after creation. Verified by `fs::metadata().permissions()` in the test.
+- **[AC-SEC-1-001][5_SECURITY_DESIGN-REQ-201]** Server logs `WARN` with `event_type: "security.misconfiguration"`, `check_id: "SEC-BIND-ADDR"`, and `check_id: "SEC-TLS-MISSING"` on startup when `server.listen` binds to a non-loopback address without TLS configured. The server MUST still start (not abort).
+- **[AC-SEC-1-002][5_SECURITY_DESIGN-REQ-202]** A process connecting to `:7890` on the loopback interface can call `SubmitRun` without providing any credentials; the call succeeds (not rejected with an auth error).
+- **[AC-SEC-1-003][5_SECURITY_DESIGN-REQ-203]** A process connecting to `:7891` on the loopback interface can call `get_run` without authentication; the call succeeds with the expected JSON response.
+- **[AC-SEC-1-007][5_SECURITY_DESIGN-REQ-207]** An unconfigured server (no `devs.toml`, no `DEVS_LISTEN` env var) binds only to `127.0.0.1:7890` for gRPC and `127.0.0.1:7891` for MCP. Verified by `netstat`/`ss` or equivalent in the test environment.
+- **[AC-SEC-1-008][5_SECURITY_DESIGN-REQ-208]** The discovery file written by the server contains exactly one line in `<host>:<port>` format. The file MUST NOT contain the MCP port number or any other content.
+- **[AC-SEC-1-009][5_SECURITY_DESIGN-REQ-209]** The discovery file is written atomically (write-to-tmp → `rename(2)`). A test that reads the discovery file concurrently with server startup MUST never observe a partial write (empty file or partial address).
+- **[AC-SEC-1-010][5_SECURITY_DESIGN-REQ-210]** The discovery file has Unix mode `0600` immediately after creation. Verified by `fs::metadata().permissions()` in the test.
 
 **Prompt Injection (§1.3.1):**
 
-- **[AC-SEC-1-004]** Stage output containing the literal string `{{stage.other.stdout}}` passed as a template variable to a downstream stage does NOT trigger recursive template expansion; the literal string is emitted verbatim in the generated prompt without modification.
-- **[AC-SEC-1-011]** A structured output field containing `{{workflow.input.secret}}` is extracted as a plain string and placed verbatim in the downstream prompt. The downstream prompt MUST NOT contain the expanded value of `workflow.input.secret`.
-- **[AC-SEC-1-012]** A fan-out item value containing `}}{{` boundary sequences is placed verbatim into the generated prompt. No partial template token from the boundary sequence is evaluated.
+- **[AC-SEC-1-004][5_SECURITY_DESIGN-REQ-204]** Stage output containing the literal string `{{stage.other.stdout}}` passed as a template variable to a downstream stage does NOT trigger recursive template expansion; the literal string is emitted verbatim in the generated prompt without modification.
+- **[AC-SEC-1-011][5_SECURITY_DESIGN-REQ-211]** A structured output field containing `{{workflow.input.secret}}` is extracted as a plain string and placed verbatim in the downstream prompt. The downstream prompt MUST NOT contain the expanded value of `workflow.input.secret`.
+- **[AC-SEC-1-012][5_SECURITY_DESIGN-REQ-212]** A fan-out item value containing `}}{{` boundary sequences is placed verbatim into the generated prompt. No partial template token from the boundary sequence is evaluated.
 
 **Credential Exposure (§1.3.2):**
 
-- **[AC-SEC-1-005]** `CLAUDE_API_KEY` value does NOT appear in any `tracing`-generated log line (stdout or stderr of the server process) at any log level during a complete workflow run that includes agent subprocess invocation.
-- **[AC-SEC-1-013]** A workflow `default_env` key that matches the pattern `*_API_KEY` triggers a `WARN` log event with `event_type: "security.credential_in_config"` at workflow load time. The key NAME is logged; the key VALUE is NOT logged.
-- **[AC-SEC-1-014]** `devs.toml` with a credential key under `[credentials]` causes a `WARN` log event with `event_type: "security.credential_in_config"` and `key_name: "<KEYNAME>"` at startup. The credential value MUST NOT appear in the log event.
+- **[AC-SEC-1-005][5_SECURITY_DESIGN-REQ-205]** `CLAUDE_API_KEY` value does NOT appear in any `tracing`-generated log line (stdout or stderr of the server process) at any log level during a complete workflow run that includes agent subprocess invocation.
+- **[AC-SEC-1-013][5_SECURITY_DESIGN-REQ-213]** A workflow `default_env` key that matches the pattern `*_API_KEY` triggers a `WARN` log event with `event_type: "security.credential_in_config"` at workflow load time. The key NAME is logged; the key VALUE is NOT logged.
+- **[AC-SEC-1-014][5_SECURITY_DESIGN-REQ-214]** `devs.toml` with a credential key under `[credentials]` causes a `WARN` log event with `event_type: "security.credential_in_config"` and `key_name: "<KEYNAME>"` at startup. The credential value MUST NOT appear in the log event.
 
 **Agent Subprocess Isolation (§1.3.3):**
 
-- **[AC-SEC-1-015]** Two parallel fan-out sub-agents (fan_out.count = 2) write to paths within their respective working directories. The path `<os-tempdir>/devs-<run-id>-<stage>-0/repo/` and `<os-tempdir>/devs-<run-id>-<stage>-1/repo/` are distinct directories. Neither sub-agent's writes appear in the other's working directory.
-- **[AC-SEC-1-016]** After a stage completes (success or failure), the working directory `<os-tempdir>/devs-<run-id>-<stage>/` is deleted. Verified by asserting the path does not exist on disk after the stage transitions to a terminal state.
+- **[AC-SEC-1-015][5_SECURITY_DESIGN-REQ-215]** Two parallel fan-out sub-agents (fan_out.count = 2) write to paths within their respective working directories. The path `<os-tempdir>/devs-<run-id>-<stage>-0/repo/` and `<os-tempdir>/devs-<run-id>-<stage>-1/repo/` are distinct directories. Neither sub-agent's writes appear in the other's working directory.
+- **[AC-SEC-1-016][5_SECURITY_DESIGN-REQ-216]** After a stage completes (success or failure), the working directory `<os-tempdir>/devs-<run-id>-<stage>/` is deleted. Verified by asserting the path does not exist on disk after the stage transitions to a terminal state.
 
 **Path Traversal (§1.3.5):**
 
-- **[AC-SEC-1-017]** A workflow definition with `prompt_file = "../../etc/passwd"` is rejected at validation time with `INVALID_ARGUMENT` containing `"invalid_argument: path traversal"`. No file read is attempted.
-- **[AC-SEC-1-018]** A `prompt_file` that is a symlink resolving to a path outside the workflow directory is rejected at execution time with `"invalid_argument: path traversal detected"`. The stage transitions to `Failed` without spawning the agent subprocess.
+- **[AC-SEC-1-017][5_SECURITY_DESIGN-REQ-217]** A workflow definition with `prompt_file = "../../etc/passwd"` is rejected at validation time with `INVALID_ARGUMENT` containing `"invalid_argument: path traversal"`. No file read is attempted.
+- **[AC-SEC-1-018][5_SECURITY_DESIGN-REQ-218]** A `prompt_file` that is a symlink resolving to a path outside the workflow directory is rejected at execution time with `"invalid_argument: path traversal detected"`. The stage transitions to `Failed` without spawning the agent subprocess.
 
 **Git Repository Poisoning (§1.3.6):**
 
-- **[AC-SEC-1-019]** A `checkpoint.json` with schema version other than `1` found on recovery is skipped; the corresponding run is marked `Unrecoverable` in the in-memory state; the server continues processing other projects normally.
-- **[AC-SEC-1-020]** A `workflow_snapshot.json` file that already exists for a run MUST NOT be overwritten by a second write attempt. The persist layer returns an error that is logged at `ERROR` level; the server does not crash.
+- **[AC-SEC-1-019][5_SECURITY_DESIGN-REQ-219]** A `checkpoint.json` with schema version other than `1` found on recovery is skipped; the corresponding run is marked `Unrecoverable` in the in-memory state; the server continues processing other projects normally.
+- **[AC-SEC-1-020][5_SECURITY_DESIGN-REQ-220]** A `workflow_snapshot.json` file that already exists for a run MUST NOT be overwritten by a second write attempt. The persist layer returns an error that is logged at `ERROR` level; the server does not crash.
 
 **SSRF via Webhooks (§1.3.7):**
 
-- **[AC-SEC-1-006]** A webhook URL that resolves to `169.254.169.254` at delivery time (simulated via a test DNS stub) is blocked. A `WARN` log entry with `event_type: "security.ssrf_blocked"` is emitted. Zero HTTP requests are made to that address.
-- **[AC-SEC-1-021]** A webhook URL using the literal IPv6 loopback address `http://[::1]:9999/hook` is blocked with `event_type: "security.ssrf_blocked"` without making any network connection.
-- **[AC-SEC-1-022]** A webhook URL using a private RFC-1918 address (e.g., `http://10.0.0.1/hook`) is blocked with `event_type: "security.ssrf_blocked"`. The check is performed after DNS resolution so that DNS rebinding attacks (where a hostname resolves to a private IP) are also blocked.
+- **[AC-SEC-1-006][5_SECURITY_DESIGN-REQ-206]** A webhook URL that resolves to `169.254.169.254` at delivery time (simulated via a test DNS stub) is blocked. A `WARN` log entry with `event_type: "security.ssrf_blocked"` is emitted. Zero HTTP requests are made to that address.
+- **[AC-SEC-1-021][5_SECURITY_DESIGN-REQ-221]** A webhook URL using the literal IPv6 loopback address `http://[::1]:9999/hook` is blocked with `event_type: "security.ssrf_blocked"` without making any network connection.
+- **[AC-SEC-1-022][5_SECURITY_DESIGN-REQ-222]** A webhook URL using a private RFC-1918 address (e.g., `http://10.0.0.1/hook`) is blocked with `event_type: "security.ssrf_blocked"`. The check is performed after DNS resolution so that DNS rebinding attacks (where a hostname resolves to a private IP) are also blocked.
 
 **MCP Glass-Box Exposure (§1.3.11):**
 
-- **[AC-SEC-1-023]** `get_stage_output` called on a stage with `status: "running"` returns a response with `"error": null`, `"exit_code": null`, and partial stdout/stderr content collected up to that point. The call MUST NOT return an error.
-- **[AC-SEC-1-024]** `stream_logs(follow: true)` called after a stage has already completed returns all buffered log lines followed by a terminal chunk `{"done": true}`. The connection closes with HTTP 200; no error is returned.
+- **[AC-SEC-1-023][5_SECURITY_DESIGN-REQ-223]** `get_stage_output` called on a stage with `status: "running"` returns a response with `"error": null`, `"exit_code": null`, and partial stdout/stderr content collected up to that point. The call MUST NOT return an error.
+- **[AC-SEC-1-024][5_SECURITY_DESIGN-REQ-224]** `stream_logs(follow: true)` called after a stage has already completed returns all buffered log lines followed by a terminal chunk `{"done": true}`. The connection closes with HTTP 200; no error is returned.
 
 **Compliance and Supply Chain (§1.6):**
 
-- **[AC-SEC-1-025]** `cargo audit --deny warnings` exits with code 0 when run against the unmodified repository. This criterion MUST remain passing on every commit to main.
-- **[AC-SEC-1-026]** Every `SubmitRun` call (via CLI `devs submit` or MCP `submit_run`) produces a structured log event at `INFO` level containing `event_type: "run.submitted"`, `run_id`, `workflow_name`, and `project_id`. Verified by scanning the server's structured log output in an E2E test.
+- **[AC-SEC-1-025][5_SECURITY_DESIGN-REQ-225]** `cargo audit --deny warnings` exits with code 0 when run against the unmodified repository. This criterion MUST remain passing on every commit to main.
+- **[AC-SEC-1-026][5_SECURITY_DESIGN-REQ-226]** Every `SubmitRun` call (via CLI `devs submit` or MCP `submit_run`) produces a structured log event at `INFO` level containing `event_type: "run.submitted"`, `run_id`, `workflow_name`, and `project_id`. Verified by scanning the server's structured log output in an E2E test.
 
 ### 1.8 Section 1 Component Dependencies
 
@@ -771,13 +771,13 @@ graph TD
 
 ### 2.1 MVP Trust Model (No Client Authentication)
 
-**[SEC-015]** At MVP, neither the gRPC service nor the MCP HTTP server performs client authentication. The access control model is network-perimeter-based:
+**[SEC-015][5_SECURITY_DESIGN-REQ-015]** At MVP, neither the gRPC service nor the MCP HTTP server performs client authentication. The access control model is network-perimeter-based:
 
 - **Bind address**: Default listen address for both gRPC (`:7890`) and MCP (`:7891`) MUST be `127.0.0.1` (loopback). Changing to `0.0.0.0` is a documented operator action with an explicit security warning logged at `WARN` level on startup.
 - **Firewall enforcement**: Operators deploying on multi-user machines MUST use OS-level firewall rules to restrict access to these ports to authorized users or processes.
-- **Remote clients**: When TUI or CLI clients connect to a remote server, the transport connection MUST use TLS (see **[SEC-031]**).
+- **Remote clients**: When TUI or CLI clients connect to a remote server, the transport connection MUST use TLS (see **[SEC-031][5_SECURITY_DESIGN-REQ-031]**).
 
-**[SEC-016]** The `devs-mcp-bridge` (stdio→MCP proxy) inherits the trust level of the process that spawns it. When spawned by an orchestrated agent via `DEVS_MCP_ADDR`, the bridge MUST NOT require additional authentication beyond network reachability. This is an accepted design constraint of the Glass-Box architecture.
+**[SEC-016][5_SECURITY_DESIGN-REQ-016]** The `devs-mcp-bridge` (stdio→MCP proxy) inherits the trust level of the process that spawns it. When spawned by an orchestrated agent via `DEVS_MCP_ADDR`, the bridge MUST NOT require additional authentication beyond network reachability. This is an accepted design constraint of the Glass-Box architecture.
 
 #### 2.1.1 Connection Context Data Model
 
@@ -814,17 +814,17 @@ pub enum ConnectionEndpoint {
 
 The following rules define the binding and isolation behavior at MVP. Each rule is independently testable.
 
-**[SEC-015-BR-001]** The default gRPC bind address is `127.0.0.1:7890`. The default MCP bind address is `127.0.0.1:7891`. Both defaults appear in the built-in default configuration and MUST NOT require any `devs.toml` entry to take effect.
+**[SEC-015-BR-001][5_SECURITY_DESIGN-REQ-348]** The default gRPC bind address is `127.0.0.1:7890`. The default MCP bind address is `127.0.0.1:7891`. Both defaults appear in the built-in default configuration and MUST NOT require any `devs.toml` entry to take effect.
 
-**[SEC-015-BR-002]** When `server.listen` is changed to any non-loopback address (any address where the leading octet is not `127`), the startup security check `SEC-BIND-ADDR` MUST emit a `WARN`-level log. This warning is non-fatal; the server proceeds to bind.
+**[SEC-015-BR-002][5_SECURITY_DESIGN-REQ-349]** When `server.listen` is changed to any non-loopback address (any address where the leading octet is not `127`), the startup security check `SEC-BIND-ADDR` MUST emit a `WARN`-level log. This warning is non-fatal; the server proceeds to bind.
 
-**[SEC-015-BR-003]** When `server.listen` is changed to `0.0.0.0` (all interfaces), the `WARN` log MUST include the machine's resolved non-loopback IP addresses so the operator is fully aware of the network exposure surface.
+**[SEC-015-BR-003][5_SECURITY_DESIGN-REQ-350]** When `server.listen` is changed to `0.0.0.0` (all interfaces), the `WARN` log MUST include the machine's resolved non-loopback IP addresses so the operator is fully aware of the network exposure surface.
 
-**[SEC-015-BR-004]** Both gRPC and MCP ports MUST always be bound simultaneously. There is no configuration option to disable either port individually at MVP.
+**[SEC-015-BR-004][5_SECURITY_DESIGN-REQ-351]** Both gRPC and MCP ports MUST always be bound simultaneously. There is no configuration option to disable either port individually at MVP.
 
-**[SEC-015-BR-005]** If gRPC and MCP are configured to the same port number, startup MUST fail during config validation — before any port binding — with error: `"invalid_argument: server.listen and server.mcp_port must be different"`.
+**[SEC-015-BR-005][5_SECURITY_DESIGN-REQ-352]** If gRPC and MCP are configured to the same port number, startup MUST fail during config validation — before any port binding — with error: `"invalid_argument: server.listen and server.mcp_port must be different"`.
 
-**[SEC-015-BR-006]** The server MUST NOT bind to port 0 (OS-assigned ephemeral port) except in test contexts identified by the presence of the `DEVS_TEST_MODE=1` environment variable paired with an isolated `DEVS_DISCOVERY_FILE` path. Ephemeral-port binding outside test contexts is rejected at config validation.
+**[SEC-015-BR-006][5_SECURITY_DESIGN-REQ-353]** The server MUST NOT bind to port 0 (OS-assigned ephemeral port) except in test contexts identified by the presence of the `DEVS_TEST_MODE=1` environment variable paired with an isolated `DEVS_DISCOVERY_FILE` path. Ephemeral-port binding outside test contexts is rejected at config validation.
 
 #### 2.1.3 `devs-mcp-bridge` Trust Inheritance
 
@@ -847,9 +847,9 @@ The bridge performs no authentication of its own. It forwards all requests verba
 3. All JSON-RPC requests received on stdin are forwarded as-is. The bridge does NOT inspect or modify request bodies.
 4. If the HTTP connection to the MCP server is lost, the bridge writes `{"result":null,"error":"internal: server connection lost","fatal":true}` to stdout and exits with code 1 (**[MCP-057]**); it does NOT silently buffer or retry beyond one reconnect attempt.
 
-**[SEC-016-BR-001]** `devs-mcp-bridge` MUST forward the remote socket identity of its spawning process via the `X-Forwarded-For` HTTP header on every proxied request, enabling the MCP server's audit log to record the originating client.
+**[SEC-016-BR-001][5_SECURITY_DESIGN-REQ-354]** `devs-mcp-bridge` MUST forward the remote socket identity of its spawning process via the `X-Forwarded-For` HTTP header on every proxied request, enabling the MCP server's audit log to record the originating client.
 
-**[SEC-016-BR-002]** If `devs-mcp-bridge` starts and the MCP address from the discovery file is not reachable (connection refused), it MUST exit with code 1 immediately and write `{"result":null,"error":"server_unreachable: MCP server not reachable at <addr>","fatal":true}` to stdout before attempting to forward any requests.
+**[SEC-016-BR-002][5_SECURITY_DESIGN-REQ-355]** If `devs-mcp-bridge` starts and the MCP address from the discovery file is not reachable (connection refused), it MUST exit with code 1 immediately and write `{"result":null,"error":"server_unreachable: MCP server not reachable at <addr>","fatal":true}` to stdout before attempting to forward any requests.
 
 #### 2.1.4 Client Connection Lifecycle State Diagram
 
@@ -876,7 +876,7 @@ stateDiagram-v2
 
 | Case | Trigger | Expected Behavior |
 |---|---|---|
-| EC-SEC-001 | Remote TUI client connects to non-loopback gRPC without TLS configured | Server with `server.listen = "0.0.0.0:7890"` and no TLS cert starts successfully but logs `WARN` with `event_type: "security.misconfiguration"`, `check_id: "SEC-TLS-MISSING"`, `detail: "plaintext gRPC on non-loopback address; configure [server.tls] to suppress"` (**[SEC-033]**) |
+| EC-SEC-001 | Remote TUI client connects to non-loopback gRPC without TLS configured | Server with `server.listen = "0.0.0.0:7890"` and no TLS cert starts successfully but logs `WARN` with `event_type: "security.misconfiguration"`, `check_id: "SEC-TLS-MISSING"`, `detail: "plaintext gRPC on non-loopback address; configure [server.tls] to suppress"` (**[SEC-033][5_SECURITY_DESIGN-REQ-033]**) |
 | EC-SEC-002 | Docker-based agent stage tries to connect back to MCP server | Agent receives `DEVS_MCP_ADDR` injected by `devs-executor` with `http://host-gateway:7891` or `http://host.docker.internal:7891`; standard loopback trust model applies from the host's perspective |
 | EC-SEC-003 | Two `devs-mcp-bridge` instances connect simultaneously to MCP server | Both connections accepted; each assigned a distinct `connection_id`; MCP server handles ≥64 concurrent connections (**[MCP-BR-042]**) |
 | EC-SEC-004 | Client connects to MCP port and sends malformed HTTP (not JSON-RPC 2.0) | Returns HTTP 400; `ConnectionContext` emits `WARN` log with remote addr and connection_id |
@@ -886,14 +886,14 @@ stateDiagram-v2
 
 ### 2.2 Agent Role Separation (Software-Enforced, Not Cryptographic)
 
-**[SEC-017]** Two agent sub-roles exist with different intended MCP tool sets. Role is determined by execution context — specifically whether `DEVS_MCP_ADDR` is set in the agent's environment by `devs-executor` — not by cryptographic identity. This is a defense-in-depth convention, not a security boundary.
+**[SEC-017][5_SECURITY_DESIGN-REQ-017]** Two agent sub-roles exist with different intended MCP tool sets. Role is determined by execution context — specifically whether `DEVS_MCP_ADDR` is set in the agent's environment by `devs-executor` — not by cryptographic identity. This is a defense-in-depth convention, not a security boundary.
 
 | Sub-Role | Detection Heuristic | Intended MCP Tools |
 |---|---|---|
 | **Orchestrated Agent** | `DEVS_MCP_ADDR` set in env (injected by `devs-executor`) | `report_progress`, `signal_completion`, `report_rate_limit` |
-| **Observing/Controlling Agent** | External process; `DEVS_MCP_ADDR` not injected by `devs-executor` | All 17 MCP tools + Filesystem MCP |
+| **Observing/Controlling Agent** | External process; `DEVS_MCP_ADDR` not injected by `devs-executor` | All 20 MCP tools + Filesystem MCP |
 
-**[SEC-018]** The MCP server MUST NOT enforce tool-level restrictions based on caller identity at MVP (documented in `[FEAT-BR-011]`). Tool-level authorization is a post-MVP capability. Any process that reaches `:7891` over the network can invoke all control tools. Operators must ensure network isolation is in place.
+**[SEC-018][5_SECURITY_DESIGN-REQ-018]** The MCP server MUST NOT enforce tool-level restrictions based on caller identity at MVP (documented in `[FEAT-BR-011]`). Tool-level authorization is a post-MVP capability. Any process that reaches `:7891` over the network can invoke all control tools. Operators must ensure network isolation is in place.
 
 #### 2.2.1 Role Detection Algorithm
 
@@ -901,9 +901,9 @@ Role detection is performed by `devs-executor` at agent spawn time, not by the M
 
 ```rust
 /// Build the subprocess environment for an orchestrated agent stage.
-/// [SEC-017-BR-001]: DEVS_MCP_ADDR MUST be injected into every stage.
-/// [SEC-017-BR-003]: DEVS_LISTEN, DEVS_MCP_PORT, DEVS_DISCOVERY_FILE MUST be stripped.
-/// [SEC-017-BR-004]: Stage env MUST NOT reintroduce stripped variables.
+/// [SEC-017-BR-001][5_SECURITY_DESIGN-REQ-356]: DEVS_MCP_ADDR MUST be injected into every stage.
+/// [SEC-017-BR-003][5_SECURITY_DESIGN-REQ-358]: DEVS_LISTEN, DEVS_MCP_PORT, DEVS_DISCOVERY_FILE MUST be stripped.
+/// [SEC-017-BR-004][5_SECURITY_DESIGN-REQ-359]: Stage env MUST NOT reintroduce stripped variables.
 pub fn build_agent_env(
     server_config: &ServerConfig,
     stage_def: &StageDefinition,
@@ -975,19 +975,19 @@ The `DEVS_MCP_ADDR` variable is injected into every orchestrated agent's environ
 
 #### 2.2.2 Agent Role Business Rules
 
-**[SEC-017-BR-001]** `DEVS_MCP_ADDR` MUST be injected into every orchestrated agent subprocess environment by `devs-executor`, regardless of adapter type (claude, gemini, opencode, qwen, copilot) and regardless of stage-level configuration. No workflow definition field can suppress this injection.
+**[SEC-017-BR-001][5_SECURITY_DESIGN-REQ-356]** `DEVS_MCP_ADDR` MUST be injected into every orchestrated agent subprocess environment by `devs-executor`, regardless of adapter type (claude, gemini, opencode, qwen, copilot) and regardless of stage-level configuration. No workflow definition field can suppress this injection.
 
-**[SEC-017-BR-002]** The value injected for `DEVS_MCP_ADDR` MUST be a valid HTTP URL in the format `http://<host>:<port>`. The host component depends on the execution environment: loopback for local, `host-gateway` or `host.docker.internal` for Docker, and `server.external_addr` for SSH remote stages. If `server.external_addr` is required but not configured, the stage MUST fail before subprocess spawn with `"invalid_argument: server.external_addr required for remote SSH execution but not configured"`.
+**[SEC-017-BR-002][5_SECURITY_DESIGN-REQ-357]** The value injected for `DEVS_MCP_ADDR` MUST be a valid HTTP URL in the format `http://<host>:<port>`. The host component depends on the execution environment: loopback for local, `host-gateway` or `host.docker.internal` for Docker, and `server.external_addr` for SSH remote stages. If `server.external_addr` is required but not configured, the stage MUST fail before subprocess spawn with `"invalid_argument: server.external_addr required for remote SSH execution but not configured"`.
 
-**[SEC-017-BR-003]** The three restricted server-internal variables (`DEVS_LISTEN`, `DEVS_MCP_PORT`, `DEVS_DISCOVERY_FILE`) MUST be stripped from the agent environment even if the server process inherited them from its own parent environment. Stripping occurs as the final step, after all env overrides are applied, so stage-level overrides cannot reintroduce them.
+**[SEC-017-BR-003][5_SECURITY_DESIGN-REQ-358]** The three restricted server-internal variables (`DEVS_LISTEN`, `DEVS_MCP_PORT`, `DEVS_DISCOVERY_FILE`) MUST be stripped from the agent environment even if the server process inherited them from its own parent environment. Stripping occurs as the final step, after all env overrides are applied, so stage-level overrides cannot reintroduce them.
 
-**[SEC-017-BR-004]** Stage and workflow `env` definitions MUST NOT declare `DEVS_LISTEN`, `DEVS_MCP_PORT`, `DEVS_DISCOVERY_FILE`, or `DEVS_MCP_ADDR`. Attempting to define any of these keys in a `env` block MUST be rejected at workflow validation with `"invalid_argument: env key '<KEY>' is reserved and may not be set in workflow definitions"`.
+**[SEC-017-BR-004][5_SECURITY_DESIGN-REQ-359]** Stage and workflow `env` definitions MUST NOT declare `DEVS_LISTEN`, `DEVS_MCP_PORT`, `DEVS_DISCOVERY_FILE`, or `DEVS_MCP_ADDR`. Attempting to define any of these keys in a `env` block MUST be rejected at workflow validation with `"invalid_argument: env key '<KEY>' is reserved and may not be set in workflow definitions"`.
 
-**[SEC-018-BR-001]** At MVP, the MCP server processes all 17 tool calls identically regardless of which process invokes them. No `ConnectionContext` attribute is checked against a tool allowlist. This is a documented known limitation contingent on network-perimeter isolation.
+**[SEC-018-BR-001][5_SECURITY_DESIGN-REQ-360]** At MVP, the MCP server processes all 17 tool calls identically regardless of which process invokes them. No `ConnectionContext` attribute is checked against a tool allowlist. This is a documented known limitation contingent on network-perimeter isolation.
 
-**[SEC-018-BR-002]** The `report_progress`, `signal_completion`, and `report_rate_limit` tools require a `stage_run_id` parameter matching an active `StageRun`. While this is not an authentication mechanism, it functions as implicit scoping: an agent can only signal completion for a stage whose `stage_run_id` it obtained from `.devs_context.json`, which is written exclusively by `devs-executor`.
+**[SEC-018-BR-002][5_SECURITY_DESIGN-REQ-361]** The `report_progress`, `signal_completion`, and `report_rate_limit` tools require a `stage_run_id` parameter matching an active `StageRun`. While this is not an authentication mechanism, it functions as implicit scoping: an agent can only signal completion for a stage whose `stage_run_id` it obtained from `.devs_context.json`, which is written exclusively by `devs-executor`.
 
-**[SEC-018-BR-003]** `stage_run_id` is a UUID4 generated by `devs` at stage dispatch time. It is included in `.devs_context.json` and in audit log events and is visible via `get_run`. It is not treated as a secret, but it is not publicly guessable for a newly dispatched stage.
+**[SEC-018-BR-003][5_SECURITY_DESIGN-REQ-362]** `stage_run_id` is a UUID4 generated by `devs` at stage dispatch time. It is included in `.devs_context.json` and in audit log events and is visible via `get_run`. It is not treated as a secret, but it is not publicly guessable for a newly dispatched stage.
 
 #### 2.2.3 Agent Role Separation Edge Cases
 
@@ -1005,7 +1005,7 @@ The `DEVS_MCP_ADDR` variable is injected into every orchestrated agent's environ
 
 ### 2.3 Filesystem MCP Access Control
 
-**[SEC-019]** The Filesystem MCP server enforces path-based access control independently of the `devs` Glass-Box MCP. All filesystem operations are subject to this policy before any OS-level filesystem call is made.
+**[SEC-019][5_SECURITY_DESIGN-REQ-019]** The Filesystem MCP server enforces path-based access control independently of the `devs` Glass-Box MCP. All filesystem operations are subject to this policy before any OS-level filesystem call is made.
 
 | Path Pattern | Read | Write | Rationale |
 |---|---|---|---|
@@ -1020,7 +1020,7 @@ The `DEVS_MCP_ADDR` variable is injected into every orchestrated agent's environ
 | `proto/` and all children | Allowed | Allowed | Protobuf definitions; agents update schema |
 | Any path resolving outside workspace root | **Denied** | **Denied** | Absolute boundary; path traversal prevention |
 
-**[SEC-020]** Path canonicalization (resolving symlinks and `..` segments to their final filesystem targets) MUST occur before access control evaluation, not after. Path traversal attempts — including paths containing `..` components, null bytes, or symlinks that escape the workspace root — MUST be rejected with a `permission_denied:` error prefix before any OS filesystem call is attempted.
+**[SEC-020][5_SECURITY_DESIGN-REQ-020]** Path canonicalization (resolving symlinks and `..` segments to their final filesystem targets) MUST occur before access control evaluation, not after. Path traversal attempts — including paths containing `..` components, null bytes, or symlinks that escape the workspace root — MUST be rejected with a `permission_denied:` error prefix before any OS filesystem call is attempted.
 
 #### 2.3.1 Workspace Root Definition
 
@@ -1041,8 +1041,8 @@ All paths received by Filesystem MCP tools MUST be processed through the followi
 /// Canonical path validation for Filesystem MCP access control.
 /// Returns the canonical absolute path if allowed, or a structured error.
 ///
-/// [SEC-020-BR-001]: uses std::fs::canonicalize(); no manual string manipulation.
-/// [SEC-020-BR-002]: uses Path::starts_with(); no string prefix matching.
+/// [SEC-020-BR-001][5_SECURITY_DESIGN-REQ-363]: uses std::fs::canonicalize(); no manual string manipulation.
+/// [SEC-020-BR-002][5_SECURITY_DESIGN-REQ-364]: uses Path::starts_with(); no string prefix matching.
 pub fn validate_path(
     workspace_root: &Path,   // pre-canonicalized at startup, cached
     requested_path: &str,
@@ -1122,15 +1122,15 @@ fn check_access_policy(relative: &Path, op: FsOperation) -> Result<(), FsAccessE
 }
 ```
 
-**[SEC-020-BR-001]** Canonicalization MUST use `std::fs::canonicalize()` (which calls `realpath(2)` on Unix or `GetFinalPathNameByHandleW` on Windows). Manual string manipulation of `..` segments is PROHIBITED. String-level traversal detection is insufficient because symlinks can route around string-based checks.
+**[SEC-020-BR-001][5_SECURITY_DESIGN-REQ-363]** Canonicalization MUST use `std::fs::canonicalize()` (which calls `realpath(2)` on Unix or `GetFinalPathNameByHandleW` on Windows). Manual string manipulation of `..` segments is PROHIBITED. String-level traversal detection is insufficient because symlinks can route around string-based checks.
 
-**[SEC-020-BR-002]** The workspace boundary check MUST use `Path::starts_with()` on `PathBuf` objects, not string prefix matching. String prefix matching is insufficient: `workspace/foo-bar` would incorrectly match a policy pattern for `workspace/foo` under naive string comparison.
+**[SEC-020-BR-002][5_SECURITY_DESIGN-REQ-364]** The workspace boundary check MUST use `Path::starts_with()` on `PathBuf` objects, not string prefix matching. String prefix matching is insufficient: `workspace/foo-bar` would incorrectly match a policy pattern for `workspace/foo` under naive string comparison.
 
-**[SEC-020-BR-003]** On Windows, path separators are normalized: both `\` and `/` are accepted as input and normalized to forward-slash for policy evaluation. Drive letter prefixes (e.g., `C:\`) are preserved during canonicalization. The workspace boundary check uses case-insensitive comparison on Windows because NTFS is case-insensitive by default.
+**[SEC-020-BR-003][5_SECURITY_DESIGN-REQ-365]** On Windows, path separators are normalized: both `\` and `/` are accepted as input and normalized to forward-slash for policy evaluation. Drive letter prefixes (e.g., `C:\`) are preserved during canonicalization. The workspace boundary check uses case-insensitive comparison on Windows because NTFS is case-insensitive by default.
 
-**[SEC-020-BR-004]** Glob patterns used in `search_files` MUST be evaluated within the workspace boundary. The glob expansion engine MUST NOT follow symlinks that would resolve outside the workspace root. Any glob match that — after resolution — falls outside the workspace root is silently excluded from results (not an error).
+**[SEC-020-BR-004][5_SECURITY_DESIGN-REQ-366]** Glob patterns used in `search_files` MUST be evaluated within the workspace boundary. The glob expansion engine MUST NOT follow symlinks that would resolve outside the workspace root. Any glob match that — after resolution — falls outside the workspace root is silently excluded from results (not an error).
 
-**[SEC-020-BR-005]** The regex engine used in `search_content` MUST be the `regex` crate (or an equivalent with guaranteed linear-time complexity). Backtracking regex engines that allow catastrophic backtracking (e.g., `"(?s).{10000000}"`) are PROHIBITED. A per-query timeout of 5 seconds MUST be enforced regardless of the engine's complexity guarantees.
+**[SEC-020-BR-005][5_SECURITY_DESIGN-REQ-367]** The regex engine used in `search_content` MUST be the `regex` crate (or an equivalent with guaranteed linear-time complexity). Backtracking regex engines that allow catastrophic backtracking (e.g., `"(?s).{10000000}"`) are PROHIBITED. A per-query timeout of 5 seconds MUST be enforced regardless of the engine's complexity guarantees.
 
 #### 2.3.3 Filesystem MCP Access Control — Edge Cases
 
@@ -1150,7 +1150,7 @@ fn check_access_policy(relative: &Path, op: FsOperation) -> Result<(), FsAccessE
 
 ### 2.4 Webhook Signing
 
-**[SEC-021]** Outbound webhooks carrying a configured `secret` MUST be signed using HMAC-SHA256. The signature is computed over the raw request body bytes (UTF-8 encoded JSON payload) using the secret as the key. The signature header format is:
+**[SEC-021][5_SECURITY_DESIGN-REQ-021]** Outbound webhooks carrying a configured `secret` MUST be signed using HMAC-SHA256. The signature is computed over the raw request body bytes (UTF-8 encoded JSON payload) using the secret as the key. The signature header format is:
 
 ```
 X-Devs-Signature-256: sha256=<lowercase hex digest>
@@ -1165,8 +1165,8 @@ use hmac::{Hmac, Mac};
 use sha2::Sha256;
 
 /// Sign a webhook payload body. Key is the raw UTF-8 bytes of the configured secret.
-/// [SEC-021-BR-001]: No KDF applied; secret used directly as HMAC key.
-/// [SEC-021-BR-002]: Signature computed over the exact bytes sent as the HTTP body.
+/// [SEC-021-BR-001][5_SECURITY_DESIGN-REQ-368]: No KDF applied; secret used directly as HMAC key.
+/// [SEC-021-BR-002][5_SECURITY_DESIGN-REQ-369]: Signature computed over the exact bytes sent as the HTTP body.
 fn sign_webhook_payload(secret: &[u8], body: &[u8]) -> String {
     let mut mac = Hmac::<Sha256>::new_from_slice(secret)
         .expect("HMAC key length validated at config time (≥32 bytes)");
@@ -1176,7 +1176,7 @@ fn sign_webhook_payload(secret: &[u8], body: &[u8]) -> String {
 }
 
 /// Reference verification implementation for receivers.
-/// [SEC-021-BR-004]: Constant-time comparison is mandatory.
+/// [SEC-021-BR-004][5_SECURITY_DESIGN-REQ-371]: Constant-time comparison is mandatory.
 fn verify_webhook_signature(secret: &[u8], body: &[u8], received_header: &str) -> bool {
     let expected = sign_webhook_payload(secret, body);
     // subtle::ConstantTimeEq prevents timing oracle attacks.
@@ -1187,15 +1187,15 @@ fn verify_webhook_signature(secret: &[u8], body: &[u8], received_header: &str) -
 
 #### 2.4.1 Webhook Signing Business Rules
 
-**[SEC-021-BR-001]** The HMAC key is the raw UTF-8 bytes of the `secret` string. No key derivation function (KDF) is applied. The `secret` MUST be at least 32 bytes to provide adequate entropy (**[SEC-054]**).
+**[SEC-021-BR-001][5_SECURITY_DESIGN-REQ-368]** The HMAC key is the raw UTF-8 bytes of the `secret` string. No key derivation function (KDF) is applied. The `secret` MUST be at least 32 bytes to provide adequate entropy (**[SEC-054][5_SECURITY_DESIGN-REQ-054]**).
 
-**[SEC-021-BR-002]** The signature is computed over the **exact bytes** that will be sent in the HTTP body. If the payload is truncated to 64 KiB before delivery, the signature is computed over the truncated bytes, not the original full payload.
+**[SEC-021-BR-002][5_SECURITY_DESIGN-REQ-369]** The signature is computed over the **exact bytes** that will be sent in the HTTP body. If the payload is truncated to 64 KiB before delivery, the signature is computed over the truncated bytes, not the original full payload.
 
-**[SEC-021-BR-003]** The `X-Devs-Signature-256` header MUST be present in every POST request when a `secret` is configured. It MUST be absent entirely when no `secret` is configured. Receivers MUST NOT receive an empty or zero-value signature header.
+**[SEC-021-BR-003][5_SECURITY_DESIGN-REQ-370]** The `X-Devs-Signature-256` header MUST be present in every POST request when a `secret` is configured. It MUST be absent entirely when no `secret` is configured. Receivers MUST NOT receive an empty or zero-value signature header.
 
-**[SEC-021-BR-004]** The comparison at the receiver side MUST be constant-time. Variable-time comparisons (e.g., `==` on `String`, early-exit byte comparisons) MUST NOT be used for signature validation because they enable timing-oracle attacks that allow an attacker to forge valid signatures incrementally.
+**[SEC-021-BR-004][5_SECURITY_DESIGN-REQ-371]** The comparison at the receiver side MUST be constant-time. Variable-time comparisons (e.g., `==` on `String`, early-exit byte comparisons) MUST NOT be used for signature validation because they enable timing-oracle attacks that allow an attacker to forge valid signatures incrementally.
 
-**[SEC-021-BR-005]** The `secret` value MUST NOT appear in any log entry, audit event, checkpoint file, webhook payload, or error message. Only the boolean outcome of HMAC computation (the resulting hex digest) is ever emitted externally.
+**[SEC-021-BR-005][5_SECURITY_DESIGN-REQ-372]** The `secret` value MUST NOT appear in any log entry, audit event, checkpoint file, webhook payload, or error message. Only the boolean outcome of HMAC computation (the resulting hex digest) is ever emitted externally.
 
 #### 2.4.2 Webhook Signing Edge Cases
 
@@ -1213,7 +1213,7 @@ fn verify_webhook_signature(secret: &[u8], body: &[u8], received_header: &str) -
 
 ### 2.5 Post-MVP Authentication Pathway
 
-**[SEC-022]** The following authentication architecture is reserved for post-MVP implementation. The MVP codebase is designed to be forward-compatible with these additions: no service handler signatures change, no wire format changes are required, and the additions are isolated to interceptor/middleware layers.
+**[SEC-022][5_SECURITY_DESIGN-REQ-022]** The following authentication architecture is reserved for post-MVP implementation. The MVP codebase is designed to be forward-compatible with these additions: no service handler signatures change, no wire format changes are required, and the additions are isolated to interceptor/middleware layers.
 
 - **gRPC mTLS**: Add a TLS interceptor to the `tonic` server builder; client certificates are issued per operator. All existing `tonic` service handler implementations remain unchanged because authentication is enforced in the interceptor before the handler is called.
 - **Bearer token auth**: Add a `tonic` layer that validates `Authorization: Bearer <token>` metadata on every RPC. Tokens are opaque UUID4 values with short TTLs (max 24 hours) stored in server memory. The token store is lost on restart in the initial post-MVP implementation.
@@ -1223,13 +1223,13 @@ fn verify_webhook_signature(secret: &[u8], body: &[u8], received_header: &str) -
 
 The following MVP design decisions directly enable post-MVP auth to be added without breaking changes:
 
-**[SEC-022-BR-001]** All gRPC service handler methods receive a `tonic::Request<T>` which carries request metadata. A future auth interceptor can examine `request.metadata().get("authorization")` without modifying handler signatures. No handler inspects the `authorization` metadata field at MVP.
+**[SEC-022-BR-001][5_SECURITY_DESIGN-REQ-373]** All gRPC service handler methods receive a `tonic::Request<T>` which carries request metadata. A future auth interceptor can examine `request.metadata().get("authorization")` without modifying handler signatures. No handler inspects the `authorization` metadata field at MVP.
 
-**[SEC-022-BR-002]** The `ConnectionContext` struct (§2.1.1) includes the `authenticated_as: Option<String>` field, which is always `None` at MVP but emitted as `null` in audit log entries. Post-MVP authentication layers populate this field; all existing log consumers treat `null` as anonymous access.
+**[SEC-022-BR-002][5_SECURITY_DESIGN-REQ-374]** The `ConnectionContext` struct (§2.1.1) includes the `authenticated_as: Option<String>` field, which is always `None` at MVP but emitted as `null` in audit log entries. Post-MVP authentication layers populate this field; all existing log consumers treat `null` as anonymous access.
 
-**[SEC-022-BR-003]** The MCP HTTP handler is implemented as a composable `tower::Service`. A post-MVP auth middleware can wrap the service at the server builder level without modifying any MCP tool dispatch logic.
+**[SEC-022-BR-003][5_SECURITY_DESIGN-REQ-375]** The MCP HTTP handler is implemented as a composable `tower::Service`. A post-MVP auth middleware can wrap the service at the server builder level without modifying any MCP tool dispatch logic.
 
-**[SEC-022-BR-004]** No auth-related configuration keys are valid in `devs.toml` at MVP. If an `[auth]` section appears in `devs.toml`, startup MUST fail before port binding with `"invalid_argument: [auth] section is not supported at MVP; remove it from devs.toml"`.
+**[SEC-022-BR-004][5_SECURITY_DESIGN-REQ-376]** No auth-related configuration keys are valid in `devs.toml` at MVP. If an `[auth]` section appears in `devs.toml`, startup MUST fail before port binding with `"invalid_argument: [auth] section is not supported at MVP; remove it from devs.toml"`.
 
 #### 2.5.2 Post-MVP Token Schema (Reserved, Not Implemented at MVP)
 
@@ -1251,7 +1251,7 @@ The following schema is defined to ensure the MVP data model is forward-compatib
 | Scope | Permitted tools |
 |---|---|
 | `read` | Observation tools: `list_runs`, `get_run`, `get_stage_output`, `stream_logs`, `get_pool_state`, `get_workflow_definition`, `list_checkpoints` |
-| `write` | All 17 MCP tools including control and testing tools |
+| `write` | All 20 MCP tools including control and testing tools |
 | `admin` | All `write` tools plus `ProjectService` gRPC RPCs (add/remove projects) |
 
 Token TTL: 24 hours maximum. The token store is in-process memory; tokens do not survive server restart in the initial post-MVP implementation. Persistent token storage is a further post-MVP iteration.
@@ -1308,24 +1308,24 @@ stateDiagram-v2
 
 ### 2.8 Section 2 Acceptance Criteria
 
-- **[AC-SEC-2-003]** A `write_file` request to the Filesystem MCP targeting `.devs/runs/<uuid>/checkpoint.json` returns HTTP 200 with `{"result": null, "error": "permission_denied: writes to .devs/runs/ are not permitted"}`.
-- **[AC-SEC-2-004]** A webhook with a `secret` of 31 bytes is rejected at `devs project add` with exit code 4 and error message containing `"webhook secret must be at least 32 bytes"`.
-- **[AC-SEC-2-005]** Server startup with `server.listen = "0.0.0.0:7890"` logs a `WARN` entry containing `event_type: "security.misconfiguration"` and `check_id: "SEC-BIND-ADDR"`.
-- **[AC-SEC-2-007]** `DEVS_MCP_ADDR` is present in the environment of every agent subprocess spawned by `devs-executor`, regardless of adapter type (verified for claude, gemini, opencode, qwen, and copilot adapters individually).
-- **[AC-SEC-2-008]** `DEVS_LISTEN`, `DEVS_MCP_PORT`, and `DEVS_DISCOVERY_FILE` are absent from the environment of every agent subprocess even when all three variables are set in the server process environment before startup.
-- **[AC-SEC-2-009]** A Filesystem MCP `read_file` request with path `../../etc/passwd` returns HTTP 200 with `{"result": null, "error": "permission_denied: path traversal detected: path resolves outside workspace root"}`.
-- **[AC-SEC-2-010]** A Filesystem MCP `read_file` request with a path containing a null byte returns HTTP 200 with `{"result": null, "error": "invalid_argument: path contains null byte"}`.
-- **[AC-SEC-2-011]** A symlink inside the workspace that resolves to a path outside the workspace root is rejected by Filesystem MCP `read_file` with `"permission_denied: path traversal detected"` (rejection occurs after `canonicalize()`, not on the raw path string).
-- **[AC-SEC-2-012]** A webhook HTTP POST includes `X-Devs-Signature-256: sha256=<hex>` when `secret` is configured; the header is completely absent when no `secret` is configured on the webhook target.
-- **[AC-SEC-2-013]** The HMAC signature on a webhook delivery is computed over the exact bytes of the HTTP request body; a test receiver computing `HMAC-SHA256(secret, body)` over those same bytes produces an identical digest, confirming correct signing.
-- **[AC-SEC-2-015]** Two concurrent `signal_completion` calls for the same `stage_run_id` result in exactly one successful state transition; the second caller receives `{"result": null, "error": "failed_precondition: signal_completion already called for this stage"}`.
-- **[AC-SEC-2-016]** A stage definition with `env = { DEVS_LISTEN = "127.0.0.1:9999" }` is rejected at workflow validation with `"invalid_argument: env key 'DEVS_LISTEN' is reserved and may not be set in workflow definitions"`.
-- **[AC-SEC-2-017]** A stage definition with `env = { DEVS_MCP_ADDR = "http://evil.com" }` is rejected at workflow validation with `"invalid_argument: env key 'DEVS_MCP_ADDR' is reserved and may not be set in workflow definitions"`.
-- **[AC-SEC-2-018]** Server startup with an `[auth]` section present in `devs.toml` fails before port binding with `"invalid_argument: [auth] section is not supported at MVP; remove it from devs.toml"`.
-- **[AC-SEC-2-020]** Every accepted TCP connection on the gRPC and MCP ports produces a `ConnectionContext` record; the `connection_id` (UUID4) appears in both the connection-open and connection-close audit log entries, enabling log correlation.
-- **[AC-SEC-2-021]** Server configured with `server.listen` port equal to `mcp_port` (both set to 7890) fails at config validation before any port binding with `"invalid_argument: server.listen and server.mcp_port must be different"`.
-- **[AC-SEC-2-023]** A remote SSH stage with no `server.external_addr` configured fails before subprocess spawn with `"invalid_argument: server.external_addr required for remote SSH execution but not configured"`; the stage transitions to `Failed` without spawning any process.
-- **[AC-SEC-2-024]** A `devs-mcp-bridge` process that loses its HTTP connection to the MCP server writes `{"result":null,"error":"internal: server connection lost","fatal":true}` to stdout and exits with code 1 without hanging.
+- **[AC-SEC-2-003][5_SECURITY_DESIGN-REQ-227]** A `write_file` request to the Filesystem MCP targeting `.devs/runs/<uuid>/checkpoint.json` returns HTTP 200 with `{"result": null, "error": "permission_denied: writes to .devs/runs/ are not permitted"}`.
+- **[AC-SEC-2-004][5_SECURITY_DESIGN-REQ-228]** A webhook with a `secret` of 31 bytes is rejected at `devs project add` with exit code 4 and error message containing `"webhook secret must be at least 32 bytes"`.
+- **[AC-SEC-2-005][5_SECURITY_DESIGN-REQ-229]** Server startup with `server.listen = "0.0.0.0:7890"` logs a `WARN` entry containing `event_type: "security.misconfiguration"` and `check_id: "SEC-BIND-ADDR"`.
+- **[AC-SEC-2-007][5_SECURITY_DESIGN-REQ-230]** `DEVS_MCP_ADDR` is present in the environment of every agent subprocess spawned by `devs-executor`, regardless of adapter type (verified for claude, gemini, opencode, qwen, and copilot adapters individually).
+- **[AC-SEC-2-008][5_SECURITY_DESIGN-REQ-231]** `DEVS_LISTEN`, `DEVS_MCP_PORT`, and `DEVS_DISCOVERY_FILE` are absent from the environment of every agent subprocess even when all three variables are set in the server process environment before startup.
+- **[AC-SEC-2-009][5_SECURITY_DESIGN-REQ-232]** A Filesystem MCP `read_file` request with path `../../etc/passwd` returns HTTP 200 with `{"result": null, "error": "permission_denied: path traversal detected: path resolves outside workspace root"}`.
+- **[AC-SEC-2-010][5_SECURITY_DESIGN-REQ-233]** A Filesystem MCP `read_file` request with a path containing a null byte returns HTTP 200 with `{"result": null, "error": "invalid_argument: path contains null byte"}`.
+- **[AC-SEC-2-011][5_SECURITY_DESIGN-REQ-234]** A symlink inside the workspace that resolves to a path outside the workspace root is rejected by Filesystem MCP `read_file` with `"permission_denied: path traversal detected"` (rejection occurs after `canonicalize()`, not on the raw path string).
+- **[AC-SEC-2-012][5_SECURITY_DESIGN-REQ-235]** A webhook HTTP POST includes `X-Devs-Signature-256: sha256=<hex>` when `secret` is configured; the header is completely absent when no `secret` is configured on the webhook target.
+- **[AC-SEC-2-013][5_SECURITY_DESIGN-REQ-236]** The HMAC signature on a webhook delivery is computed over the exact bytes of the HTTP request body; a test receiver computing `HMAC-SHA256(secret, body)` over those same bytes produces an identical digest, confirming correct signing.
+- **[AC-SEC-2-015][5_SECURITY_DESIGN-REQ-237]** Two concurrent `signal_completion` calls for the same `stage_run_id` result in exactly one successful state transition; the second caller receives `{"result": null, "error": "failed_precondition: signal_completion already called for this stage"}`.
+- **[AC-SEC-2-016][5_SECURITY_DESIGN-REQ-238]** A stage definition with `env = { DEVS_LISTEN = "127.0.0.1:9999" }` is rejected at workflow validation with `"invalid_argument: env key 'DEVS_LISTEN' is reserved and may not be set in workflow definitions"`.
+- **[AC-SEC-2-017][5_SECURITY_DESIGN-REQ-239]** A stage definition with `env = { DEVS_MCP_ADDR = "http://evil.com" }` is rejected at workflow validation with `"invalid_argument: env key 'DEVS_MCP_ADDR' is reserved and may not be set in workflow definitions"`.
+- **[AC-SEC-2-018][5_SECURITY_DESIGN-REQ-240]** Server startup with an `[auth]` section present in `devs.toml` fails before port binding with `"invalid_argument: [auth] section is not supported at MVP; remove it from devs.toml"`.
+- **[AC-SEC-2-020][5_SECURITY_DESIGN-REQ-241]** Every accepted TCP connection on the gRPC and MCP ports produces a `ConnectionContext` record; the `connection_id` (UUID4) appears in both the connection-open and connection-close audit log entries, enabling log correlation.
+- **[AC-SEC-2-021][5_SECURITY_DESIGN-REQ-242]** Server configured with `server.listen` port equal to `mcp_port` (both set to 7890) fails at config validation before any port binding with `"invalid_argument: server.listen and server.mcp_port must be different"`.
+- **[AC-SEC-2-023][5_SECURITY_DESIGN-REQ-243]** A remote SSH stage with no `server.external_addr` configured fails before subprocess spawn with `"invalid_argument: server.external_addr required for remote SSH execution but not configured"`; the stage transitions to `Failed` without spawning any process.
+- **[AC-SEC-2-024][5_SECURITY_DESIGN-REQ-244]** A `devs-mcp-bridge` process that loses its HTTP connection to the MCP server writes `{"result":null,"error":"internal: server connection lost","fatal":true}` to stdout and exits with code 1 without hanging.
 
 ---
 
@@ -1416,11 +1416,11 @@ flowchart TD
 
 #### 3.1.3 Data Lifecycle Business Rules
 
-**[SEC-DAT-001]** Every file written by `devs` to a stage working directory MUST be created before the agent subprocess is spawned and cleaned up after the subprocess exits, regardless of exit code.
+**[SEC-DAT-001][5_SECURITY_DESIGN-REQ-386]** Every file written by `devs` to a stage working directory MUST be created before the agent subprocess is spawned and cleaned up after the subprocess exits, regardless of exit code.
 
-**[SEC-DAT-002]** Sensitive in-memory values (API keys loaded from TOML, TLS private key bytes) MUST NOT be copied into any string that is logged via `tracing` at any level, serialized into a checkpoint file, or transmitted in any gRPC or MCP response.
+**[SEC-DAT-002][5_SECURITY_DESIGN-REQ-387]** Sensitive in-memory values (API keys loaded from TOML, TLS private key bytes) MUST NOT be copied into any string that is logged via `tracing` at any level, serialized into a checkpoint file, or transmitted in any gRPC or MCP response.
 
-**[SEC-DAT-003]** The `Redacted<T>` wrapper type (defined in `devs-core/src/redacted.rs`) MUST be used for all fields in config structs that hold credential values, ensuring they are `Debug`-printed as `[REDACTED]` and serialized to JSON as the literal string `"[REDACTED]"`. The actual value is accessible only through the `.expose()` method.
+**[SEC-DAT-003][5_SECURITY_DESIGN-REQ-388]** The `Redacted<T>` wrapper type (defined in `devs-core/src/redacted.rs`) MUST be used for all fields in config structs that hold credential values, ensuring they are `Debug`-printed as `[REDACTED]` and serialized to JSON as the literal string `"[REDACTED]"`. The actual value is accessible only through the `.expose()` method.
 
 ```rust
 /// Wraps a sensitive value to prevent accidental logging or serialization.
@@ -1450,22 +1450,22 @@ impl<T> serde::Serialize for Redacted<T> {
 
 #### 3.2.1 Credential Storage
 
-**[SEC-023]** API keys and tokens MUST be supplied to the server via OS environment variables. This is the **mandatory preferred mechanism**. Environment variables are not persisted to disk by the Rust process and are not inherited by child processes beyond what is explicitly configured.
+**[SEC-023][5_SECURITY_DESIGN-REQ-023]** API keys and tokens MUST be supplied to the server via OS environment variables. This is the **mandatory preferred mechanism**. Environment variables are not persisted to disk by the Rust process and are not inherited by child processes beyond what is explicitly configured.
 
-**[SEC-024]** When credentials are stored in `devs.toml` (fallback mechanism), the following controls apply:
+**[SEC-024][5_SECURITY_DESIGN-REQ-024]** When credentials are stored in `devs.toml` (fallback mechanism), the following controls apply:
 
 - The server MUST log a `WARN`-level message at startup for every key matching the pattern `*_API_KEY` or `*_TOKEN` found in `devs.toml`: `"SECURITY WARNING: Credential '<key>' found in devs.toml. Use environment variables instead."`.
 - `devs.toml` file permissions MUST be checked at startup. If the file is world-readable (`o+r`) on Unix systems, a `WARN`-level message MUST be logged: `"SECURITY WARNING: devs.toml is world-readable (mode %o). Restrict with chmod 600."`.
 - `devs.toml` MUST NOT be committed to project source control. The `.gitignore` template provided by `devs project add` MUST include `devs.toml`.
 
-**[SEC-025]** Credentials MUST NEVER appear in:
+**[SEC-025][5_SECURITY_DESIGN-REQ-025]** Credentials MUST NEVER appear in:
 - `tracing` log output at any level
 - Checkpoint files (`.devs/runs/*/checkpoint.json`)
 - Stage context files (`.devs_context.json`)
 - Template variable resolution (credential env vars are stripped from agent env, not injected into templates)
 - Webhook payloads
 
-**[SEC-026]** The environment variable inheritance chain for agent subprocesses is: server env → workflow default_env → stage env (later overrides earlier). The following variables are explicitly **stripped** from the agent environment before subprocess spawn, regardless of the inheritance chain: `DEVS_LISTEN`, `DEVS_MCP_PORT`, `DEVS_DISCOVERY_FILE`. Credential variables (`*_API_KEY`, `*_TOKEN`) are inherited by agents unless explicitly overridden — this is intentional, as agents require their own API keys.
+**[SEC-026][5_SECURITY_DESIGN-REQ-026]** The environment variable inheritance chain for agent subprocesses is: server env → workflow default_env → stage env (later overrides earlier). The following variables are explicitly **stripped** from the agent environment before subprocess spawn, regardless of the inheritance chain: `DEVS_LISTEN`, `DEVS_MCP_PORT`, `DEVS_DISCOVERY_FILE`. Credential variables (`*_API_KEY`, `*_TOKEN`) are inherited by agents unless explicitly overridden — this is intentional, as agents require their own API keys.
 
 **Credential Storage — Edge Cases:**
 
@@ -1478,17 +1478,17 @@ impl<T> serde::Serialize for Redacted<T> {
 | EC-SEC-049a | `devs.toml` has a credential entry but the file is deleted after server start | Server holds the credential in memory as `Redacted<String>`; restarting without the file causes config validation failure if the entry is required |
 | EC-SEC-049b | Stage `env` map contains a key matching `*_API_KEY` | Key is passed through; `WARN` logged: `"Stage env contains credential-like key '<key>'"` |
 
-**[SEC-DAT-004]** The `Redacted<T>` type MUST implement `serde::Serialize` to emit the literal string `"[REDACTED]"` when serialized to JSON or TOML. It MUST implement `std::fmt::Debug` to emit `[REDACTED]` in debug output. The actual value is accessible only through the `.expose()` method, which is `#[must_use]`. This is defined in `devs-core/src/redacted.rs`.
+**[SEC-DAT-004][5_SECURITY_DESIGN-REQ-389]** The `Redacted<T>` type MUST implement `serde::Serialize` to emit the literal string `"[REDACTED]"` when serialized to JSON or TOML. It MUST implement `std::fmt::Debug` to emit `[REDACTED]` in debug output. The actual value is accessible only through the `.expose()` method, which is `#[must_use]`. This is defined in `devs-core/src/redacted.rs`.
 
-**[SEC-DAT-005]** At startup, after loading `devs.toml`, the server MUST zeroize all TOML-sourced credential strings from the intermediate parsed TOML representation before the buffer goes out of scope. This is achieved by using the `zeroize` crate's `Zeroizing<String>` wrapper on the raw string buffer after extraction into `Redacted<String>` fields.
+**[SEC-DAT-005][5_SECURITY_DESIGN-REQ-390]** At startup, after loading `devs.toml`, the server MUST zeroize all TOML-sourced credential strings from the intermediate parsed TOML representation before the buffer goes out of scope. This is achieved by using the `zeroize` crate's `Zeroizing<String>` wrapper on the raw string buffer after extraction into `Redacted<String>` fields.
 
 #### 3.2.2 Git Checkpoint Store
 
-**[SEC-027]** The git checkpoint store at `~/.config/devs/state-repos/<project-id>.git` (bare clone) and project `.devs/` directory are not encrypted at rest. Stage outputs (stdout/stderr) committed to the checkpoint branch may contain sensitive data printed by agent processes. Operators requiring encryption at rest MUST use full-disk encryption (e.g., LUKS, FileVault, BitLocker) at the OS level.
+**[SEC-027][5_SECURITY_DESIGN-REQ-027]** The git checkpoint store at `~/.config/devs/state-repos/<project-id>.git` (bare clone) and project `.devs/` directory are not encrypted at rest. Stage outputs (stdout/stderr) committed to the checkpoint branch may contain sensitive data printed by agent processes. Operators requiring encryption at rest MUST use full-disk encryption (e.g., LUKS, FileVault, BitLocker) at the OS level.
 
-**[SEC-028]** The checkpoint branch (default: `devs/state`) SHOULD be a separate, dedicated branch isolated from the main project branch to reduce the risk of sensitive checkpoint data appearing in normal code review workflows. The `devs project add` command MUST default to `devs/state` and document this rationale.
+**[SEC-028][5_SECURITY_DESIGN-REQ-028]** The checkpoint branch (default: `devs/state`) SHOULD be a separate, dedicated branch isolated from the main project branch to reduce the risk of sensitive checkpoint data appearing in normal code review workflows. The `devs project add` command MUST default to `devs/state` and document this rationale.
 
-**[SEC-029]** Prompt files written to disk for file-based agent adapters are stored at `<working_dir>/.devs_prompt_<uuid>`. These files MUST be:
+**[SEC-029][5_SECURITY_DESIGN-REQ-029]** Prompt files written to disk for file-based agent adapters are stored at `<working_dir>/.devs_prompt_<uuid>`. These files MUST be:
 - Created with mode `0600` (owner read/write only) on Unix systems
 - Deleted immediately after the agent process exits, regardless of exit code
 - Written to the stage's isolated working directory, not a shared system temp directory
@@ -1504,15 +1504,15 @@ impl<T> serde::Serialize for Redacted<T> {
 | EC-SEC-053a | `~/.config/devs/state-repos/` does not exist on first startup | Created automatically with mode `0700`; `git2::Repository::init_bare()` called for each project |
 | EC-SEC-053b | Operator manually deletes a checkpoint commit from the `devs/state` branch | Next checkpoint write succeeds (push may fail if history diverged); server logs `WARN: checkpoint branch history diverged`; active run may become `Unrecoverable` if its `checkpoint.json` is deleted |
 
-**[SEC-DAT-006]** The bare clone directory `~/.config/devs/state-repos/<project-id>.git` MUST be created with mode `0700` (owner only). The parent `~/.config/devs/` directory MUST be created with mode `0700` if it does not already exist.
+**[SEC-DAT-006][5_SECURITY_DESIGN-REQ-391]** The bare clone directory `~/.config/devs/state-repos/<project-id>.git` MUST be created with mode `0700` (owner only). The parent `~/.config/devs/` directory MUST be created with mode `0700` if it does not already exist.
 
-**[SEC-DAT-007]** Git commit objects in the checkpoint branch contain stage stdout and stderr (up to 1 MiB each). If an agent prints a credential to stdout, it will appear in the checkpoint git history. The `devs project add` command MUST emit: `"NOTE: Stage stdout/stderr is committed to the git checkpoint branch. Avoid printing credentials in agent outputs."`.
+**[SEC-DAT-007][5_SECURITY_DESIGN-REQ-392]** Git commit objects in the checkpoint branch contain stage stdout and stderr (up to 1 MiB each). If an agent prints a credential to stdout, it will appear in the checkpoint git history. The `devs project add` command MUST emit: `"NOTE: Stage stdout/stderr is committed to the git checkpoint branch. Avoid printing credentials in agent outputs."`.
 
-**[SEC-DAT-008]** The `devs-checkpoint` crate MUST NOT expose the `git2::Repository` handle outside the crate. All interactions with the checkpoint store go through the `CheckpointStore` trait interface to prevent callers from bypassing security controls.
+**[SEC-DAT-008][5_SECURITY_DESIGN-REQ-393]** The `devs-checkpoint` crate MUST NOT expose the `git2::Repository` handle outside the crate. All interactions with the checkpoint store go through the `CheckpointStore` trait interface to prevent callers from bypassing security controls.
 
 #### 3.2.3 Discovery File
 
-**[SEC-030]** The server address discovery file at `~/.config/devs/server.addr` (or `DEVS_DISCOVERY_FILE`) contains the gRPC listen address in plaintext. This file MUST be created with mode `0600` on Unix systems and deleted on clean shutdown (`SIGTERM`) per **[2_TAS-REQ-002a]**.
+**[SEC-030][5_SECURITY_DESIGN-REQ-030]** The server address discovery file at `~/.config/devs/server.addr` (or `DEVS_DISCOVERY_FILE`) contains the gRPC listen address in plaintext. This file MUST be created with mode `0600` on Unix systems and deleted on clean shutdown (`SIGTERM`) per **[2_TAS-REQ-002a]**.
 
 **Edge Cases:**
 
@@ -1523,19 +1523,19 @@ impl<T> serde::Serialize for Redacted<T> {
 | EC-SEC-056 | Server fails to delete discovery file on SIGTERM (e.g., permissions changed) | Error logged at `WARN`; server exits 0; stale file causes clients to get connection refused (exit code 3) |
 | EC-SEC-056a | `DEVS_DISCOVERY_FILE` points to a symlink | The symlink target is written atomically (write-to-tmp → rename); symlink traversal is not followed for the rename operation to prevent TOCTOU; if the target path after symlink resolution already exists, it is overwritten |
 
-**[SEC-DAT-009]** On Unix systems, the server MUST verify after writing the discovery file that the resulting file mode is `0600`. If the process `umask` causes a different mode, the server MUST call `fs::set_permissions()` explicitly. If `set_permissions` fails, the server MUST log `ERROR` and exit non-zero — a world-readable discovery file exposes the gRPC address to all local users.
+**[SEC-DAT-009][5_SECURITY_DESIGN-REQ-394]** On Unix systems, the server MUST verify after writing the discovery file that the resulting file mode is `0600`. If the process `umask` causes a different mode, the server MUST call `fs::set_permissions()` explicitly. If `set_permissions` fails, the server MUST log `ERROR` and exit non-zero — a world-readable discovery file exposes the gRPC address to all local users.
 
-**[SEC-DAT-010]** On Windows, the discovery file is written to `%APPDATA%\devs\server.addr`. Windows ACL-level restrictions are not programmatically enforced at MVP (the directory is user-owned by default). A `WARN` is logged at startup: `"Discovery file Windows ACL enforcement is not implemented; ensure %APPDATA%\\devs is not shared."`.
+**[SEC-DAT-010][5_SECURITY_DESIGN-REQ-395]** On Windows, the discovery file is written to `%APPDATA%\devs\server.addr`. Windows ACL-level restrictions are not programmatically enforced at MVP (the directory is user-owned by default). A `WARN` is logged at startup: `"Discovery file Windows ACL enforcement is not implemented; ensure %APPDATA%\\devs is not shared."`.
 
 #### 3.2.4 Structured Output & Context Files
 
 Agents produce two critical files in their working directories. These files can contain sensitive data derived from prior stages and MUST be treated with the same security controls as checkpoint files.
 
-**[SEC-DAT-011]** The `.devs_context.json` file written by `devs-executor` before agent spawn MUST be created with mode `0600`. Its content includes `stdout` and `stderr` from all completed dependent stages (up to the 10 MiB total cap), which may contain sensitive information printed by prior agents.
+**[SEC-DAT-011][5_SECURITY_DESIGN-REQ-396]** The `.devs_context.json` file written by `devs-executor` before agent spawn MUST be created with mode `0600`. Its content includes `stdout` and `stderr` from all completed dependent stages (up to the 10 MiB total cap), which may contain sensitive information printed by prior agents.
 
-**[SEC-DAT-012]** The `.devs_output.json` file written by the agent (in `structured_output` completion mode) is read by `devs-executor` after the agent exits. The executor MUST validate that the file size does not exceed **4 MiB** before reading. Files exceeding this limit are rejected; the stage transitions to `Failed` with `"structured_output: file exceeds 4 MiB limit"`.
+**[SEC-DAT-012][5_SECURITY_DESIGN-REQ-397]** The `.devs_output.json` file written by the agent (in `structured_output` completion mode) is read by `devs-executor` after the agent exits. The executor MUST validate that the file size does not exceed **4 MiB** before reading. Files exceeding this limit are rejected; the stage transitions to `Failed` with `"structured_output: file exceeds 4 MiB limit"`.
 
-**[SEC-DAT-013]** Neither `.devs_context.json` nor `.devs_output.json` are persisted to the checkpoint git store as raw files. They exist only in the stage's isolated working directory and are deleted during cleanup. The executor copies the parsed structured output value into the in-memory `StageOutput.structured` field and the git-committed `stages/<name>/attempt_<N>/structured_output.json` before deleting the working directory.
+**[SEC-DAT-013][5_SECURITY_DESIGN-REQ-398]** Neither `.devs_context.json` nor `.devs_output.json` are persisted to the checkpoint git store as raw files. They exist only in the stage's isolated working directory and are deleted during cleanup. The executor copies the parsed structured output value into the in-memory `StageOutput.structured` field and the git-committed `stages/<name>/attempt_<N>/structured_output.json` before deleting the working directory.
 
 **Structured Output / Context File — Edge Cases:**
 
@@ -1550,17 +1550,17 @@ Agents produce two critical files in their working directories. These files can 
 
 Each stage execution runs in a fully isolated directory whose path incorporates both `run_id` and `stage_name` to prevent collision between concurrent stages.
 
-**[SEC-DAT-014]** Working directory paths are:
+**[SEC-DAT-014][5_SECURITY_DESIGN-REQ-399]** Working directory paths are:
 
 - **Tempdir**: `<os-tempdir>/devs-<run-id>-<stage-name>/` — created with mode `0700`
 - **Docker**: `/workspace/` inside the container — isolated by container filesystem namespace
 - **Remote SSH**: `~/devs-runs/<run-id>-<stage-name>/` on the remote host
 
-**[SEC-DAT-015]** The stage working directory MUST be deleted recursively after the stage completes, regardless of success or failure. If deletion fails (e.g., the agent left locked files on Windows), the failure MUST be logged at `WARN` and execution continues. The failed deletion does not affect the stage's `StageStatus`.
+**[SEC-DAT-015][5_SECURITY_DESIGN-REQ-400]** The stage working directory MUST be deleted recursively after the stage completes, regardless of success or failure. If deletion fails (e.g., the agent left locked files on Windows), the failure MUST be logged at `WARN` and execution continues. The failed deletion does not affect the stage's `StageStatus`.
 
-**[SEC-DAT-016]** For tempdir execution, the project repository is cloned into `<os-tempdir>/devs-<run-id>-<stage-name>/repo/` (a subdirectory of the working dir). Git clone credentials (SSH key or HTTPS token) MUST NOT be written to the working directory; they are passed via `git2` in-memory configuration only.
+**[SEC-DAT-016][5_SECURITY_DESIGN-REQ-401]** For tempdir execution, the project repository is cloned into `<os-tempdir>/devs-<run-id>-<stage-name>/repo/` (a subdirectory of the working dir). Git clone credentials (SSH key or HTTPS token) MUST NOT be written to the working directory; they are passed via `git2` in-memory configuration only.
 
-**[SEC-DAT-017]** The working directory MUST NOT be created inside the project's own repository tree. Creating the working directory within the repo would risk the agent committing working files as project changes. The executor MUST verify that the resolved absolute path of the working directory does not share a prefix with the project `repo_path`.
+**[SEC-DAT-017][5_SECURITY_DESIGN-REQ-402]** The working directory MUST NOT be created inside the project's own repository tree. Creating the working directory within the repo would risk the agent committing working files as project changes. The executor MUST verify that the resolved absolute path of the working directory does not share a prefix with the project `repo_path`.
 
 **Agent Working Directory — Edge Cases:**
 
@@ -1575,13 +1575,13 @@ Each stage execution runs in a fully isolated directory whose path incorporates 
 
 Stage stdout and stderr are persisted as raw log files and also committed to the git checkpoint branch.
 
-**[SEC-DAT-018]** Log files written to `.devs/logs/<run-id>/<stage-name>/attempt_<N>/stdout.log` and `stderr.log` MUST be created with mode `0600`. Parent directories MUST be created with mode `0700`.
+**[SEC-DAT-018][5_SECURITY_DESIGN-REQ-403]** Log files written to `.devs/logs/<run-id>/<stage-name>/attempt_<N>/stdout.log` and `stderr.log` MUST be created with mode `0600`. Parent directories MUST be created with mode `0700`.
 
-**[SEC-DAT-019]** Log files are written incrementally as the agent produces output (streaming write). If a single log line exceeds **32 KiB**, the line is truncated at 32 KiB and the truncation is appended as `[TRUNCATED]`. This prevents a pathological agent from consuming unbounded disk space with a single output line.
+**[SEC-DAT-019][5_SECURITY_DESIGN-REQ-404]** Log files are written incrementally as the agent produces output (streaming write). If a single log line exceeds **32 KiB**, the line is truncated at 32 KiB and the truncation is appended as `[TRUNCATED]`. This prevents a pathological agent from consuming unbounded disk space with a single output line.
 
-**[SEC-DAT-020]** Log retention is controlled by `retention.max_age_days` (default 30) and `retention.max_size_mb` (default 500). The retention sweep deletes entire run directories atomically; partial deletion within a run is not permitted.
+**[SEC-DAT-020][5_SECURITY_DESIGN-REQ-405]** Log retention is controlled by `retention.max_age_days` (default 30) and `retention.max_size_mb` (default 500). The retention sweep deletes entire run directories atomically; partial deletion within a run is not permitted.
 
-**[SEC-DAT-021]** Log files MUST NOT be served via the gRPC `StreamLogs` or MCP `stream_logs` APIs with more than **1 MiB** of content per request. Clients requesting full logs for stages with > 1 MiB of output receive the most recent 1 MiB with `"truncated": true`. The full content remains on disk and in the git checkpoint.
+**[SEC-DAT-021][5_SECURITY_DESIGN-REQ-406]** Log files MUST NOT be served via the gRPC `StreamLogs` or MCP `stream_logs` APIs with more than **1 MiB** of content per request. Clients requesting full logs for stages with > 1 MiB of output receive the most recent 1 MiB with `"truncated": true`. The full content remains on disk and in the git checkpoint.
 
 **Log File Security — Edge Cases:**
 
@@ -1619,22 +1619,22 @@ The following table is the authoritative reference for all files and directories
 | `.devs/agent-state/<session-id>/task_state.json` | Written by agent | Agent process | Retention sweep (30 days default) | Not managed by `devs`; agent-written |
 | `.devs/workflows/*.toml` | `0644` | Agent or operator | Agent or operator | Workflow definition files |
 
-**[SEC-DAT-022]** On Unix, after creating any file or directory in the above table, `devs` MUST call `fs::set_permissions()` explicitly rather than relying on the process `umask`. This ensures the intended mode is always applied regardless of the operator's shell environment.
+**[SEC-DAT-022][5_SECURITY_DESIGN-REQ-407]** On Unix, after creating any file or directory in the above table, `devs` MUST call `fs::set_permissions()` explicitly rather than relying on the process `umask`. This ensures the intended mode is always applied regardless of the operator's shell environment.
 
-**[SEC-DAT-023]** On Windows, `devs` MUST create files using `OpenOptions::new().create_new(true)` where atomic creation is required. Windows ACL manipulation is not implemented at MVP. A startup `INFO` log is emitted on Windows: `"File permission enforcement limited to creation flags on Windows; use NTFS ACLs for additional isolation."`.
+**[SEC-DAT-023][5_SECURITY_DESIGN-REQ-408]** On Windows, `devs` MUST create files using `OpenOptions::new().create_new(true)` where atomic creation is required. Windows ACL manipulation is not implemented at MVP. A startup `INFO` log is emitted on Windows: `"File permission enforcement limited to creation flags on Windows; use NTFS ACLs for additional isolation."`.
 
 ### 3.3 Data in Transit
 
 #### 3.3.1 gRPC Transport (TLS)
 
-**[SEC-031]** TLS is optional but strongly recommended for gRPC communication over non-loopback interfaces. When TLS is configured, the implementation MUST use `rustls` exclusively (via the `rustls-tls` feature of `reqwest` and `tonic`; OpenSSL is explicitly prohibited). Minimum TLS version: **TLS 1.2**. Preferred: **TLS 1.3**. Operating without TLS on a non-loopback interface is permitted but the server MUST emit a startup `WARN`.
+**[SEC-031][5_SECURITY_DESIGN-REQ-031]** TLS is optional but strongly recommended for gRPC communication over non-loopback interfaces. When TLS is configured, the implementation MUST use `rustls` exclusively (via the `rustls-tls` feature of `reqwest` and `tonic`; OpenSSL is explicitly prohibited). Minimum TLS version: **TLS 1.2**. Preferred: **TLS 1.3**. Operating without TLS on a non-loopback interface is permitted but the server MUST emit a startup `WARN`.
 
-**[SEC-032]** Cipher suite restrictions (rustls enforced defaults, no configuration override allowed):
+**[SEC-032][5_SECURITY_DESIGN-REQ-032]** Cipher suite restrictions (rustls enforced defaults, no configuration override allowed):
 - TLS 1.3: `TLS_AES_256_GCM_SHA384`, `TLS_AES_128_GCM_SHA256`, `TLS_CHACHA20_POLY1305_SHA256`
 - TLS 1.2: `TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`, `TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`
 - Explicitly disabled: RC4, 3DES, NULL ciphers, MD5-based cipher suites, export-grade ciphers
 
-**[SEC-033]** For loopback-only deployments (default), TLS is optional. When the bind address is changed to any non-loopback interface and no `[server.tls]` section is configured, the server MUST emit a structured `WARN` log on startup: `{ "event_type": "security.misconfiguration", "check_id": "SEC-TLS-MISSING", "detail": "plaintext gRPC on non-loopback address; configure [server.tls] to suppress" }`. The server MUST still start and accept connections — TLS is not enforced at MVP.
+**[SEC-033][5_SECURITY_DESIGN-REQ-033]** For loopback-only deployments (default), TLS is optional. When the bind address is changed to any non-loopback interface and no `[server.tls]` section is configured, the server MUST emit a structured `WARN` log on startup: `{ "event_type": "security.misconfiguration", "check_id": "SEC-TLS-MISSING", "detail": "plaintext gRPC on non-loopback address; configure [server.tls] to suppress" }`. The server MUST still start and accept connections — TLS is not enforced at MVP.
 
 **TLS Configuration Data Model:**
 
@@ -1690,11 +1690,11 @@ Validation rules:
 | EC-SEC-060b | TLS private key file is deleted after server starts | Server continues to function (key already in memory); next restart will fail config validation |
 | EC-SEC-060c | Two server instances start with the same `cert_file` path | No conflict; both read the file independently; TLS state is per-process |
 
-**[SEC-TLS-001]** The `x-devs-client-version` gRPC metadata header MUST be verified on every RPC call after TLS establishment. A missing header returns `FAILED_PRECONDITION: "x-devs-client-version header is required"`. A major version mismatch returns `FAILED_PRECONDITION: "client major version <N> is incompatible with server major version <M>"`.
+**[SEC-TLS-001][5_SECURITY_DESIGN-REQ-433]** The `x-devs-client-version` gRPC metadata header MUST be verified on every RPC call after TLS establishment. A missing header returns `FAILED_PRECONDITION: "x-devs-client-version header is required"`. A major version mismatch returns `FAILED_PRECONDITION: "client major version <N> is incompatible with server major version <M>"`.
 
-**[SEC-TLS-002]** The TLS private key file MUST be read only once at startup during config validation. The parsed key bytes are held in memory for the server's lifetime. The file path MUST be wrapped in `Redacted<PathBuf>` in `TlsConfig` to prevent path leakage in debug output.
+**[SEC-TLS-002][5_SECURITY_DESIGN-REQ-434]** The TLS private key file MUST be read only once at startup during config validation. The parsed key bytes are held in memory for the server's lifetime. The file path MUST be wrapped in `Redacted<PathBuf>` in `TlsConfig` to prevent path leakage in debug output.
 
-**[SEC-TLS-003]** Both gRPC (default port 7890) and MCP HTTP (default port 7891) MUST use the same `[server.tls]` configuration when TLS is enabled. There is no separate TLS config per port. The same certificate and key are used for both listeners.
+**[SEC-TLS-003][5_SECURITY_DESIGN-REQ-435]** Both gRPC (default port 7890) and MCP HTTP (default port 7891) MUST use the same `[server.tls]` configuration when TLS is enabled. There is no separate TLS config per port. The same certificate and key are used for both listeners.
 
 **Certificate Validation Algorithm** (applied during config validation, before any port is bound):
 
@@ -1763,13 +1763,13 @@ stateDiagram-v2
 
 The MCP server (`devs-mcp`) listens on a dedicated HTTP port (default 7891) and serves JSON-RPC 2.0 requests at `POST /mcp/v1/call`. Unlike the gRPC transport which uses HTTP/2 with `tonic`, the MCP server uses HTTP/1.1. All security controls in this section apply to this HTTP listener.
 
-**[SEC-034]** The MCP HTTP server MUST apply the same TLS configuration as the gRPC server when operating over non-loopback interfaces. Specifically:
+**[SEC-034][5_SECURITY_DESIGN-REQ-034]** The MCP HTTP server MUST apply the same TLS configuration as the gRPC server when operating over non-loopback interfaces. Specifically:
 
 - If `server.listen` is a non-loopback address and `[server.tls]` is present, the MCP server MUST serve HTTPS using the same certificate and key as the gRPC server.
 - If `server.listen` is a loopback address (default), the MCP server MAY serve plaintext HTTP.
 - The MCP port MUST be bound to the same interface family as the gRPC port. If gRPC binds `0.0.0.0:7890`, MCP binds `0.0.0.0:7891`.
 
-**[SEC-MCP-001]** All MCP HTTP responses MUST include the following security headers regardless of whether TLS is in use:
+**[SEC-MCP-001][5_SECURITY_DESIGN-REQ-409]** All MCP HTTP responses MUST include the following security headers regardless of whether TLS is in use:
 
 | Header | Value | Rationale |
 |---|---|---|
@@ -1778,21 +1778,21 @@ The MCP server (`devs-mcp`) listens on a dedicated HTTP port (default 7891) and 
 | `Cache-Control` | `no-store` | Prevent caching of sensitive API responses |
 | `X-Frame-Options` | `DENY` | Prevent clickjacking (defense-in-depth) |
 
-**[SEC-MCP-002]** The MCP server MUST enforce a maximum request body size of **1 MiB** (1,048,576 bytes). Requests exceeding this limit MUST be rejected without reading the full body with HTTP 413 `{"result": null, "error": "request body exceeds 1 MiB limit"}`. The `Content-Length` header is checked first; if absent, the body is read up to 1 MiB + 1 byte; if the extra byte is present, the request is rejected.
+**[SEC-MCP-002][5_SECURITY_DESIGN-REQ-410]** The MCP server MUST enforce a maximum request body size of **1 MiB** (1,048,576 bytes). Requests exceeding this limit MUST be rejected without reading the full body with HTTP 413 `{"result": null, "error": "request body exceeds 1 MiB limit"}`. The `Content-Length` header is checked first; if absent, the body is read up to 1 MiB + 1 byte; if the extra byte is present, the request is rejected.
 
-**[SEC-MCP-003]** The MCP server MUST reject requests with `Content-Type` other than `application/json` with HTTP 415 `{"result": null, "error": "Content-Type must be application/json"}`.
+**[SEC-MCP-003][5_SECURITY_DESIGN-REQ-411]** The MCP server MUST reject requests with `Content-Type` other than `application/json` with HTTP 415 `{"result": null, "error": "Content-Type must be application/json"}`.
 
-**[SEC-MCP-004]** The MCP server MUST NOT handle `GET`, `PUT`, `DELETE`, `PATCH`, or `HEAD` methods. Only `POST` is accepted at `/mcp/v1/call`. Other methods return HTTP 405 with `Allow: POST` header and `{"result": null, "error": "method not allowed; use POST"}`.
+**[SEC-MCP-004][5_SECURITY_DESIGN-REQ-412]** The MCP server MUST NOT handle `GET`, `PUT`, `DELETE`, `PATCH`, or `HEAD` methods. Only `POST` is accepted at `/mcp/v1/call`. Other methods return HTTP 405 with `Allow: POST` header and `{"result": null, "error": "method not allowed; use POST"}`.
 
-**[SEC-MCP-005]** The MCP port MUST be different from the gRPC port. If they are configured to be equal, config validation MUST report `invalid_argument: gRPC port and MCP port must be different` before any binding attempt.
+**[SEC-MCP-005][5_SECURITY_DESIGN-REQ-413]** The MCP port MUST be different from the gRPC port. If they are configured to be equal, config validation MUST report `invalid_argument: gRPC port and MCP port must be different` before any binding attempt.
 
-**[SEC-MCP-006]** The MCP server MUST handle panics in tool handler functions without crashing the server. A panic in any tool handler MUST be caught by a `catch_unwind` boundary in the HTTP request dispatcher and returned as HTTP 500 `{"result": null, "error": "internal: tool handler panicked"}`. The panic backtrace is logged at `ERROR` but NOT included in the HTTP response.
+**[SEC-MCP-006][5_SECURITY_DESIGN-REQ-414]** The MCP server MUST handle panics in tool handler functions without crashing the server. A panic in any tool handler MUST be caught by a `catch_unwind` boundary in the HTTP request dispatcher and returned as HTTP 500 `{"result": null, "error": "internal: tool handler panicked"}`. The panic backtrace is logged at `ERROR` but NOT included in the HTTP response.
 
-**[SEC-MCP-007]** The MCP server MUST limit concurrent connections to **64** per **[MCP-BR-042]**. New connections beyond this limit receive HTTP 503 `{"result": null, "error": "resource_exhausted: max concurrent connections reached"}` and are immediately closed.
+**[SEC-MCP-007][5_SECURITY_DESIGN-REQ-415]** The MCP server MUST limit concurrent connections to **64** per **[MCP-BR-042]**. New connections beyond this limit receive HTTP 503 `{"result": null, "error": "resource_exhausted: max concurrent connections reached"}` and are immediately closed.
 
-**[SEC-MCP-008]** For `stream_logs` with `follow: true`, the HTTP response uses chunked transfer encoding. The streaming connection is subject to a **30-minute maximum lifetime** per stream. After 30 minutes, the server sends the terminal chunk `{"done": true, "truncated": false, "total_lines": <N>}` and closes the connection. Clients requiring a longer stream MUST reconnect using `from_sequence` to resume.
+**[SEC-MCP-008][5_SECURITY_DESIGN-REQ-416]** For `stream_logs` with `follow: true`, the HTTP response uses chunked transfer encoding. The streaming connection is subject to a **30-minute maximum lifetime** per stream. After 30 minutes, the server sends the terminal chunk `{"done": true, "truncated": false, "total_lines": <N>}` and closes the connection. Clients requiring a longer stream MUST reconnect using `from_sequence` to resume.
 
-**[SEC-MCP-009]** The MCP server MUST NOT log request bodies (which may contain workflow definitions, stage outputs, or sensitive data). Only the JSON-RPC `method` name and request `id` fields are logged at `DEBUG` level.
+**[SEC-MCP-009][5_SECURITY_DESIGN-REQ-417]** The MCP server MUST NOT log request bodies (which may contain workflow definitions, stage outputs, or sensitive data). Only the JSON-RPC `method` name and request `id` fields are logged at `DEBUG` level.
 
 **MCP HTTP Transport — Request Processing Pipeline:**
 
@@ -1858,9 +1858,9 @@ flowchart TD
 
 #### 3.3.3 Outbound Webhooks
 
-**[SEC-035]** Outbound webhook delivery MUST use HTTPS for all non-loopback URLs. HTTP (non-TLS) webhook targets MUST log a `WARN` on every delivery attempt: `"SECURITY WARNING: Delivering webhook to non-TLS URL '<url>'. Payload may be intercepted."`. HTTP webhook targets are permitted at MVP to support local testing (e.g., `http://localhost:8080/hook`).
+**[SEC-035][5_SECURITY_DESIGN-REQ-035]** Outbound webhook delivery MUST use HTTPS for all non-loopback URLs. HTTP (non-TLS) webhook targets MUST log a `WARN` on every delivery attempt: `"SECURITY WARNING: Delivering webhook to non-TLS URL '<url>'. Payload may be intercepted."`. HTTP webhook targets are permitted at MVP to support local testing (e.g., `http://localhost:8080/hook`).
 
-**[SEC-036]** Webhook SSRF mitigation: Before delivering any webhook, the resolved IP addresses of the target URL's hostname MUST be checked against a blocklist. The following IP ranges MUST be rejected with a `WARN` log and no delivery attempt:
+**[SEC-036][5_SECURITY_DESIGN-REQ-036]** Webhook SSRF mitigation: Before delivering any webhook, the resolved IP addresses of the target URL's hostname MUST be checked against a blocklist. The following IP ranges MUST be rejected with a `WARN` log and no delivery attempt:
 
 | Range | Reason |
 |---|---|
@@ -1875,9 +1875,9 @@ flowchart TD
 
 Exception: If `server.allow_local_webhooks = true` is set in `devs.toml` (for testing), loopback and RFC-1918 addresses are permitted with a startup `WARN`. This flag MUST NOT be set in production.
 
-**[SEC-037]** Webhook URL length MUST NOT exceed 2048 characters. URLs with non-`http`/`https` schemes (e.g., `file://`, `ftp://`, `gopher://`) MUST be rejected at configuration validation time before any delivery.
+**[SEC-037][5_SECURITY_DESIGN-REQ-037]** Webhook URL length MUST NOT exceed 2048 characters. URLs with non-`http`/`https` schemes (e.g., `file://`, `ftp://`, `gopher://`) MUST be rejected at configuration validation time before any delivery.
 
-**[SEC-WH-001]** Webhook delivery MUST use `reqwest` with the `rustls-tls` feature. The `reqwest::Client` used for webhook delivery MUST be constructed with:
+**[SEC-WH-001][5_SECURITY_DESIGN-REQ-436]** Webhook delivery MUST use `reqwest` with the `rustls-tls` feature. The `reqwest::Client` used for webhook delivery MUST be constructed with:
 
 - `.redirect(Policy::none())` — redirects are never followed
 - `.timeout(Duration::from_secs(10))` — 10-second per-request timeout
@@ -1898,21 +1898,21 @@ The webhook `reqwest::Client` is constructed once at server startup and reused a
 
 #### 3.3.4 Remote Execution Transports
 
-**[SEC-038]** SSH remote execution (via `ssh2` crate) MUST:
+**[SEC-038][5_SECURITY_DESIGN-REQ-038]** SSH remote execution (via `ssh2` crate) MUST:
 - Validate the remote host's public key against a known-hosts entry before executing any commands; unknown hosts MUST be rejected unless `ssh_config.StrictHostKeyChecking = no` is explicitly set (logged as `WARN`)
 - Use Ed25519 or ECDSA P-256/P-384 keys for authentication (RSA keys ≥ 3072 bits are permitted; RSA keys < 2048 bits MUST be rejected)
 - NEVER use password-based SSH authentication; only public-key authentication is permitted
 
-**[SEC-039]** Docker remote execution MUST validate the `DOCKER_HOST` TLS certificate when using a TCP-based Docker daemon (`tcp://` or `https://` scheme). Unix socket connections (`unix://`) are permitted for local Docker daemons without TLS. Unverified TLS connections to remote Docker daemons (`DOCKER_TLS_VERIFY=0`) MUST log a `WARN` and are not permitted in production configurations.
+**[SEC-039][5_SECURITY_DESIGN-REQ-039]** Docker remote execution MUST validate the `DOCKER_HOST` TLS certificate when using a TCP-based Docker daemon (`tcp://` or `https://` scheme). Unix socket connections (`unix://`) are permitted for local Docker daemons without TLS. Unverified TLS connections to remote Docker daemons (`DOCKER_TLS_VERIFY=0`) MUST log a `WARN` and are not permitted in production configurations.
 
-**[SEC-SSH-001]** The SSH known-hosts file path used by `devs-executor` is resolved in this order:
+**[SEC-SSH-001][5_SECURITY_DESIGN-REQ-431]** The SSH known-hosts file path used by `devs-executor` is resolved in this order:
 
 1. `stage.execution_env.ssh.known_hosts_file` (per-stage config)
 2. `~/.ssh/known_hosts` (user default)
 
 If neither path exists, the connection is rejected with `not_found: SSH known_hosts file not found; set ssh_config.known_hosts_file`.
 
-**[SEC-SSH-002]** SSH private key files used for `RemoteSshExecutor` connections MUST have mode `0600` (owner read only) on Unix. If the key file is more permissive (e.g., `0644`), the `ssh2` crate will typically reject the key. `devs-executor` additionally checks permissions before attempting connection and logs `WARN` if the file is group- or world-readable.
+**[SEC-SSH-002][5_SECURITY_DESIGN-REQ-432]** SSH private key files used for `RemoteSshExecutor` connections MUST have mode `0600` (owner read only) on Unix. If the key file is more permissive (e.g., `0644`), the `ssh2` crate will typically reject the key. `devs-executor` additionally checks permissions before attempting connection and logs `WARN` if the file is group- or world-readable.
 
 **Remote Execution — Edge Cases:**
 
@@ -1928,15 +1928,15 @@ If neither path exists, the connection is rejected with `not_found: SSH known_ho
 
 The `devs-mcp-bridge` binary provides a stdio-to-HTTP proxy that allows AI agents using the MCP stdio protocol to communicate with the `devs` MCP HTTP server. Because it forwards requests over a local or network HTTP connection, its transport security model requires specific consideration.
 
-**[SEC-BRIDGE-001]** The `devs-mcp-bridge` discovers the MCP server address by reading the discovery file (via `DEVS_DISCOVERY_FILE` or `~/.config/devs/server.addr`) to obtain the gRPC address, then calling `ServerService.GetInfo` to retrieve the MCP port. This discovery MUST happen at bridge startup. If discovery fails, the bridge exits with code 1 and writes `{"result": null, "error": "server_unreachable: could not locate devs MCP server", "fatal": true}` to stdout.
+**[SEC-BRIDGE-001][5_SECURITY_DESIGN-REQ-381]** The `devs-mcp-bridge` discovers the MCP server address by reading the discovery file (via `DEVS_DISCOVERY_FILE` or `~/.config/devs/server.addr`) to obtain the gRPC address, then calling `ServerService.GetInfo` to retrieve the MCP port. This discovery MUST happen at bridge startup. If discovery fails, the bridge exits with code 1 and writes `{"result": null, "error": "server_unreachable: could not locate devs MCP server", "fatal": true}` to stdout.
 
-**[SEC-BRIDGE-002]** The bridge connects to the MCP HTTP endpoint at `http://<host>:<mcp_port>/mcp/v1/call`. If the discovered gRPC host is non-loopback, the bridge MUST use `https://` instead of `http://`. The bridge uses `rustls` for HTTPS connections (same library as the main server) and validates the server's TLS certificate against the system trust store. Self-signed certificates require explicit configuration via `DEVS_BRIDGE_CA_CERT` environment variable (path to a PEM CA cert bundle).
+**[SEC-BRIDGE-002][5_SECURITY_DESIGN-REQ-382]** The bridge connects to the MCP HTTP endpoint at `http://<host>:<mcp_port>/mcp/v1/call`. If the discovered gRPC host is non-loopback, the bridge MUST use `https://` instead of `http://`. The bridge uses `rustls` for HTTPS connections (same library as the main server) and validates the server's TLS certificate against the system trust store. Self-signed certificates require explicit configuration via `DEVS_BRIDGE_CA_CERT` environment variable (path to a PEM CA cert bundle).
 
-**[SEC-BRIDGE-003]** The `devs-mcp-bridge` MUST NOT buffer requests. Each JSON-RPC request received on stdin (one per line) is forwarded immediately to the MCP HTTP server. The response from the server is written to stdout immediately (one JSON object per line) with no buffering. This prevents request pipelining and reduces the window for in-memory sensitive data accumulation.
+**[SEC-BRIDGE-003][5_SECURITY_DESIGN-REQ-383]** The `devs-mcp-bridge` MUST NOT buffer requests. Each JSON-RPC request received on stdin (one per line) is forwarded immediately to the MCP HTTP server. The response from the server is written to stdout immediately (one JSON object per line) with no buffering. This prevents request pipelining and reduces the window for in-memory sensitive data accumulation.
 
-**[SEC-BRIDGE-004]** The bridge MUST NOT log stdin or stdout content (which may contain workflow definitions, tool outputs, or sensitive data). Only connection lifecycle events are logged: `"devs-mcp-bridge: connected to <host>:<port>"`, `"devs-mcp-bridge: server connection lost; exiting"`.
+**[SEC-BRIDGE-004][5_SECURITY_DESIGN-REQ-384]** The bridge MUST NOT log stdin or stdout content (which may contain workflow definitions, tool outputs, or sensitive data). Only connection lifecycle events are logged: `"devs-mcp-bridge: connected to <host>:<port>"`, `"devs-mcp-bridge: server connection lost; exiting"`.
 
-**[SEC-BRIDGE-005]** After one failed reconnect attempt (1-second delay), the bridge exits with code 1 and emits: `{"result": null, "error": "internal: server connection lost", "fatal": true}`. The bridge does NOT attempt indefinite reconnection, as this would cause the AI agent using it to block indefinitely. Per **[MCP-057]**, the agent MUST handle this fatal error and write `task_state.json` before terminating.
+**[SEC-BRIDGE-005][5_SECURITY_DESIGN-REQ-385]** After one failed reconnect attempt (1-second delay), the bridge exits with code 1 and emits: `{"result": null, "error": "internal: server connection lost", "fatal": true}`. The bridge does NOT attempt indefinite reconnection, as this would cause the AI agent using it to block indefinitely. Per **[MCP-057]**, the agent MUST handle this fatal error and write `task_state.json` before terminating.
 
 **`devs-mcp-bridge` — Edge Cases:**
 
@@ -1955,7 +1955,7 @@ This section specifies controls for sensitive data in process memory and subproc
 
 #### 3.4.1 Credential Zeroization
 
-**[SEC-MEM-001]** API key strings loaded from `devs.toml` MUST be zeroized (overwritten with zeros) when the intermediate TOML parse buffer goes out of scope. This is implemented by wrapping the raw TOML credential string in a `Zeroizing<String>` buffer (from the `zeroize` crate) before the value is moved into a `Redacted<String>`.
+**[SEC-MEM-001][5_SECURITY_DESIGN-REQ-418]** API key strings loaded from `devs.toml` MUST be zeroized (overwritten with zeros) when the intermediate TOML parse buffer goes out of scope. This is implemented by wrapping the raw TOML credential string in a `Zeroizing<String>` buffer (from the `zeroize` crate) before the value is moved into a `Redacted<String>`.
 
 ```rust
 use zeroize::Zeroizing;
@@ -1969,27 +1969,27 @@ fn load_credential(raw: &str) -> Redacted<String> {
 }
 ```
 
-**[SEC-MEM-002]** TLS private key bytes MUST be held in `zeroize::Zeroizing<Vec<u8>>` until they are consumed by `rustls::PrivateKey::from()`. After the `rustls` key object is constructed, the raw bytes buffer is dropped and zeroed. The constructed `rustls::PrivateKey` is held in a `Redacted<rustls::PrivateKey>` wrapper for the lifetime of the server.
+**[SEC-MEM-002][5_SECURITY_DESIGN-REQ-419]** TLS private key bytes MUST be held in `zeroize::Zeroizing<Vec<u8>>` until they are consumed by `rustls::PrivateKey::from()`. After the `rustls` key object is constructed, the raw bytes buffer is dropped and zeroed. The constructed `rustls::PrivateKey` is held in a `Redacted<rustls::PrivateKey>` wrapper for the lifetime of the server.
 
-**[SEC-MEM-003]** Webhook secret strings (HMAC-SHA256 keys) MUST be stored as `Redacted<String>` in `WebhookTarget.secret`. The HMAC computation reads the key via `.expose()` only for the duration of the hash computation and does not retain a reference after the result is produced.
+**[SEC-MEM-003][5_SECURITY_DESIGN-REQ-420]** Webhook secret strings (HMAC-SHA256 keys) MUST be stored as `Redacted<String>` in `WebhookTarget.secret`. The HMAC computation reads the key via `.expose()` only for the duration of the hash computation and does not retain a reference after the result is produced.
 
 #### 3.4.2 Core Dump Prevention
 
-**[SEC-MEM-004]** On Linux, the server MUST attempt to disable core dumps at startup by calling `setrlimit(RLIMIT_CORE, {rlim_cur: 0, rlim_max: 0})` via `libc`. If this call fails (e.g., running in a container without `CAP_SYS_RESOURCE`), a `WARN` is logged but the server continues: `"WARN: Could not disable core dumps; process credentials may be exposed in crash dumps."`.
+**[SEC-MEM-004][5_SECURITY_DESIGN-REQ-421]** On Linux, the server MUST attempt to disable core dumps at startup by calling `setrlimit(RLIMIT_CORE, {rlim_cur: 0, rlim_max: 0})` via `libc`. If this call fails (e.g., running in a container without `CAP_SYS_RESOURCE`), a `WARN` is logged but the server continues: `"WARN: Could not disable core dumps; process credentials may be exposed in crash dumps."`.
 
-**[SEC-MEM-005]** On macOS, `ptrace(PT_DENY_ATTACH, 0, 0, 0)` is attempted to prevent debugger attachment to the server process. Failure (common in containerized environments) is logged at `DEBUG` and does not prevent startup.
+**[SEC-MEM-005][5_SECURITY_DESIGN-REQ-422]** On macOS, `ptrace(PT_DENY_ATTACH, 0, 0, 0)` is attempted to prevent debugger attachment to the server process. Failure (common in containerized environments) is logged at `DEBUG` and does not prevent startup.
 
-**[SEC-MEM-006]** On Windows, core dump prevention is not implemented at MVP. The server logs a startup `INFO`: `"Core dump prevention not implemented on Windows; use Windows Error Reporting settings to restrict dump capture."`.
+**[SEC-MEM-006][5_SECURITY_DESIGN-REQ-423]** On Windows, core dump prevention is not implemented at MVP. The server logs a startup `INFO`: `"Core dump prevention not implemented on Windows; use Windows Error Reporting settings to restrict dump capture."`.
 
-**[SEC-MEM-007]** The server MUST call `mlockall(MCL_CURRENT | MCL_FUTURE)` on Linux if and only if running as root or with `CAP_IPC_LOCK`. If the call succeeds, a startup `INFO` is logged: `"Memory locked; credentials will not be swapped to disk."`. If the call fails for a non-privileged process, no `WARN` is emitted (non-root operation is the common case).
+**[SEC-MEM-007][5_SECURITY_DESIGN-REQ-424]** The server MUST call `mlockall(MCL_CURRENT | MCL_FUTURE)` on Linux if and only if running as root or with `CAP_IPC_LOCK`. If the call succeeds, a startup `INFO` is logged: `"Memory locked; credentials will not be swapped to disk."`. If the call fails for a non-privileged process, no `WARN` is emitted (non-root operation is the common case).
 
 #### 3.4.3 Agent Subprocess Isolation
 
-**[SEC-MEM-008]** Agent subprocesses MUST NOT inherit the server process's file descriptors beyond `stdin`, `stdout`, and `stderr`. All other file descriptors (gRPC server sockets, MCP server socket, git2 handles, log file handles) MUST be closed in the child process before `exec`. This is achieved by setting `O_CLOEXEC` on all file descriptors opened by the server.
+**[SEC-MEM-008][5_SECURITY_DESIGN-REQ-425]** Agent subprocesses MUST NOT inherit the server process's file descriptors beyond `stdin`, `stdout`, and `stderr`. All other file descriptors (gRPC server sockets, MCP server socket, git2 handles, log file handles) MUST be closed in the child process before `exec`. This is achieved by setting `O_CLOEXEC` on all file descriptors opened by the server.
 
-**[SEC-MEM-009]** On Unix, the server MUST set `O_CLOEXEC` (`FD_CLOEXEC`) on every file descriptor it opens (server sockets, log files, git repo handles). In Rust, `std::fs::File` and `std::net::TcpListener` set `O_CLOEXEC` by default on Linux 2.6.23+ and macOS 10.12+; this default MUST NOT be overridden.
+**[SEC-MEM-009][5_SECURITY_DESIGN-REQ-426]** On Unix, the server MUST set `O_CLOEXEC` (`FD_CLOEXEC`) on every file descriptor it opens (server sockets, log files, git repo handles). In Rust, `std::fs::File` and `std::net::TcpListener` set `O_CLOEXEC` by default on Linux 2.6.23+ and macOS 10.12+; this default MUST NOT be overridden.
 
-**[SEC-MEM-010]** The `portable-pty` crate used for PTY allocation MUST be configured to not leak non-PTY file descriptors to child processes. Verify that the `portable-pty` version in use does not inadvertently clear `O_CLOEXEC` on the pty master fd before forking.
+**[SEC-MEM-010][5_SECURITY_DESIGN-REQ-427]** The `portable-pty` crate used for PTY allocation MUST be configured to not leak non-PTY file descriptors to child processes. Verify that the `portable-pty` version in use does not inadvertently clear `O_CLOEXEC` on the pty master fd before forking.
 
 **Memory & Process Security — Edge Cases:**
 
@@ -2064,76 +2064,76 @@ Each acceptance criterion below is a testable assertion that MUST be covered by 
 
 **Data Classification & Lifecycle:**
 
-- **[AC-SEC-3-001]** Starting the server with `server.listen = "0.0.0.0:7890"` and no `[server.tls]` section in `devs.toml` causes the server to log a `WARN` with `check_id: "SEC-TLS-MISSING"` and `detail: "plaintext gRPC on non-loopback address; configure [server.tls] to suppress"`, and the server MUST still start successfully (exit 0 when subsequently shut down cleanly).
-- **[AC-SEC-3-020]** A `WorkflowRun`'s `definition_snapshot` field returned by the `get_run` MCP tool MUST NOT contain any raw `*_API_KEY` or `*_TOKEN` string values; such values appear as `"[REDACTED]"`.
-- **[AC-SEC-3-021]** A `checkpoint.json` file written to disk MUST NOT contain any string matching the pattern `sk-[a-zA-Z0-9]{10,}`. Verified by running a stage that prints `$CLAUDE_API_KEY` to stdout and asserting the checkpoint file does not contain the value.
-- **[AC-SEC-3-022]** The file `.devs/logs/<run-id>/<stage>/attempt_1/stdout.log` is created with mode `0600` on Linux (verified by `fs::metadata(path)?.permissions().mode() & 0o777 == 0o600`).
+- **[AC-SEC-3-001][5_SECURITY_DESIGN-REQ-245]** Starting the server with `server.listen = "0.0.0.0:7890"` and no `[server.tls]` section in `devs.toml` causes the server to log a `WARN` with `check_id: "SEC-TLS-MISSING"` and `detail: "plaintext gRPC on non-loopback address; configure [server.tls] to suppress"`, and the server MUST still start successfully (exit 0 when subsequently shut down cleanly).
+- **[AC-SEC-3-020][5_SECURITY_DESIGN-REQ-251]** A `WorkflowRun`'s `definition_snapshot` field returned by the `get_run` MCP tool MUST NOT contain any raw `*_API_KEY` or `*_TOKEN` string values; such values appear as `"[REDACTED]"`.
+- **[AC-SEC-3-021][5_SECURITY_DESIGN-REQ-252]** A `checkpoint.json` file written to disk MUST NOT contain any string matching the pattern `sk-[a-zA-Z0-9]{10,}`. Verified by running a stage that prints `$CLAUDE_API_KEY` to stdout and asserting the checkpoint file does not contain the value.
+- **[AC-SEC-3-022][5_SECURITY_DESIGN-REQ-253]** The file `.devs/logs/<run-id>/<stage>/attempt_1/stdout.log` is created with mode `0600` on Linux (verified by `fs::metadata(path)?.permissions().mode() & 0o777 == 0o600`).
 
 **Credential Storage:**
 
-- **[AC-SEC-3-002]** A prompt file for a file-based adapter is created with mode `0600` on Linux and is absent after the agent process exits (path no longer exists).
-- **[AC-SEC-3-023]** When `devs.toml` contains `claude_api_key = "sk-test-xxx"`, the server logs a WARN matching `"Credential 'claude_api_key' found in devs.toml"` and the log message does NOT contain `"sk-test-xxx"`.
-- **[AC-SEC-3-024]** When `devs.toml` is world-readable (`chmod o+r`), the server logs a WARN matching `"devs.toml is world-readable"` at startup.
-- **[AC-SEC-3-025]** `Redacted<String>::serialize()` via `serde_json::to_string()` produces the literal `"[REDACTED]"` regardless of the inner value.
-- **[AC-SEC-3-026]** `format!("{:?}", Redacted::new("secret"))` produces `"[REDACTED]"`.
+- **[AC-SEC-3-002][5_SECURITY_DESIGN-REQ-246]** A prompt file for a file-based adapter is created with mode `0600` on Linux and is absent after the agent process exits (path no longer exists).
+- **[AC-SEC-3-023][5_SECURITY_DESIGN-REQ-254]** When `devs.toml` contains `claude_api_key = "sk-test-xxx"`, the server logs a WARN matching `"Credential 'claude_api_key' found in devs.toml"` and the log message does NOT contain `"sk-test-xxx"`.
+- **[AC-SEC-3-024][5_SECURITY_DESIGN-REQ-255]** When `devs.toml` is world-readable (`chmod o+r`), the server logs a WARN matching `"devs.toml is world-readable"` at startup.
+- **[AC-SEC-3-025][5_SECURITY_DESIGN-REQ-256]** `Redacted<String>::serialize()` via `serde_json::to_string()` produces the literal `"[REDACTED]"` regardless of the inner value.
+- **[AC-SEC-3-026][5_SECURITY_DESIGN-REQ-257]** `format!("{:?}", Redacted::new("secret"))` produces `"[REDACTED]"`.
 
 **Git Checkpoint Store:**
 
-- **[AC-SEC-3-027]** The `~/.config/devs/state-repos/` directory is created with mode `0700` on Linux.
-- **[AC-SEC-3-028]** The `checkpoint.json` file within `.devs/runs/<run-id>/` is created with mode `0600` on Linux.
+- **[AC-SEC-3-027][5_SECURITY_DESIGN-REQ-258]** The `~/.config/devs/state-repos/` directory is created with mode `0700` on Linux.
+- **[AC-SEC-3-028][5_SECURITY_DESIGN-REQ-259]** The `checkpoint.json` file within `.devs/runs/<run-id>/` is created with mode `0600` on Linux.
 
 **Discovery File:**
 
-- **[AC-SEC-3-029]** The discovery file is created with mode `0600` on Linux; verified by `fs::metadata(path)?.permissions().mode() & 0o777 == 0o600`.
-- **[AC-SEC-3-030]** The discovery file is absent after a clean server shutdown triggered by SIGTERM.
+- **[AC-SEC-3-029][5_SECURITY_DESIGN-REQ-260]** The discovery file is created with mode `0600` on Linux; verified by `fs::metadata(path)?.permissions().mode() & 0o777 == 0o600`.
+- **[AC-SEC-3-030][5_SECURITY_DESIGN-REQ-261]** The discovery file is absent after a clean server shutdown triggered by SIGTERM.
 
 **Structured Output & Context Files:**
 
-- **[AC-SEC-3-031]** The `.devs_context.json` file is created with mode `0600` before the agent is spawned; it is absent after the stage working directory is cleaned up.
-- **[AC-SEC-3-032]** A `.devs_output.json` file exceeding 4 MiB causes the stage to transition to `Failed` with an error message containing `"structured_output: file exceeds 4 MiB limit"`.
+- **[AC-SEC-3-031][5_SECURITY_DESIGN-REQ-262]** The `.devs_context.json` file is created with mode `0600` before the agent is spawned; it is absent after the stage working directory is cleaned up.
+- **[AC-SEC-3-032][5_SECURITY_DESIGN-REQ-263]** A `.devs_output.json` file exceeding 4 MiB causes the stage to transition to `Failed` with an error message containing `"structured_output: file exceeds 4 MiB limit"`.
 
 **TLS (gRPC & MCP):**
 
-- **[AC-SEC-3-003]** Configuring a webhook target with URL `http://169.254.169.254/metadata` and triggering a `run.started` event results in: no HTTP request to that URL, and a `WARN` log entry with `event_type: "security.ssrf_blocked"`.
-- **[AC-SEC-3-004]** Configuring a webhook target with a `secret` shorter than 32 bytes is rejected at `devs project add` time with exit code 4.
-- **[AC-SEC-3-005]** The `devs.toml` file is checked for world-readable permissions at server startup; if world-readable, a `WARN` log entry with `check_id: "SEC-FILE-PERM-TOML"` is emitted.
-- **[AC-SEC-3-033]** A TLS certificate that has already expired at server startup causes the server to exit non-zero with an error containing `"TLS cert expired"`.
-- **[AC-SEC-3-034]** A TLS certificate expiring within 30 days causes a `WARN` log at startup containing `"TLS certificate expires in"` but does NOT prevent the server from starting.
-- **[AC-SEC-3-035]** A TLS private key with RSA < 3072 bits is rejected at config validation with an error containing `"TLS key is too weak"`.
-- **[AC-SEC-3-036]** A TLS private key that does not match the certificate is rejected at config validation with an error containing `"TLS key does not match certificate"`.
-- **[AC-SEC-3-037]** A client connecting with TLS 1.1 is rejected by the server; the server does not crash; the client receives a TLS protocol alert.
+- **[AC-SEC-3-003][5_SECURITY_DESIGN-REQ-247]** Configuring a webhook target with URL `http://169.254.169.254/metadata` and triggering a `run.started` event results in: no HTTP request to that URL, and a `WARN` log entry with `event_type: "security.ssrf_blocked"`.
+- **[AC-SEC-3-004][5_SECURITY_DESIGN-REQ-248]** Configuring a webhook target with a `secret` shorter than 32 bytes is rejected at `devs project add` time with exit code 4.
+- **[AC-SEC-3-005][5_SECURITY_DESIGN-REQ-249]** The `devs.toml` file is checked for world-readable permissions at server startup; if world-readable, a `WARN` log entry with `check_id: "SEC-FILE-PERM-TOML"` is emitted.
+- **[AC-SEC-3-033][5_SECURITY_DESIGN-REQ-264]** A TLS certificate that has already expired at server startup causes the server to exit non-zero with an error containing `"TLS cert expired"`.
+- **[AC-SEC-3-034][5_SECURITY_DESIGN-REQ-265]** A TLS certificate expiring within 30 days causes a `WARN` log at startup containing `"TLS certificate expires in"` but does NOT prevent the server from starting.
+- **[AC-SEC-3-035][5_SECURITY_DESIGN-REQ-266]** A TLS private key with RSA < 3072 bits is rejected at config validation with an error containing `"TLS key is too weak"`.
+- **[AC-SEC-3-036][5_SECURITY_DESIGN-REQ-267]** A TLS private key that does not match the certificate is rejected at config validation with an error containing `"TLS key does not match certificate"`.
+- **[AC-SEC-3-037][5_SECURITY_DESIGN-REQ-268]** A client connecting with TLS 1.1 is rejected by the server; the server does not crash; the client receives a TLS protocol alert.
 
 **MCP HTTP Transport:**
 
-- **[AC-SEC-3-038]** A POST to `/mcp/v1/call` with `Content-Type: text/plain` returns HTTP 415 with body `{"result": null, "error": "Content-Type must be application/json"}`.
-- **[AC-SEC-3-039]** A POST to `/mcp/v1/call` with a body of exactly 1,048,577 bytes returns HTTP 413.
-- **[AC-SEC-3-040]** A GET request to `/mcp/v1/call` returns HTTP 405 with an `Allow: POST` header.
-- **[AC-SEC-3-041]** A POST to an unknown path (e.g., `/wrong/path`) returns HTTP 404 with body `{"result": null, "error": "not_found: ..."}`.
-- **[AC-SEC-3-042]** MCP HTTP responses include `X-Content-Type-Options: nosniff` and `Cache-Control: no-store` headers on ALL response codes (200, 400, 404, 405, 413, 415, 500).
-- **[AC-SEC-3-043]** A tool handler that panics returns HTTP 500 with body `{"result": null, "error": "internal: tool handler panicked"}` and the server continues to serve subsequent requests normally.
+- **[AC-SEC-3-038][5_SECURITY_DESIGN-REQ-269]** A POST to `/mcp/v1/call` with `Content-Type: text/plain` returns HTTP 415 with body `{"result": null, "error": "Content-Type must be application/json"}`.
+- **[AC-SEC-3-039][5_SECURITY_DESIGN-REQ-270]** A POST to `/mcp/v1/call` with a body of exactly 1,048,577 bytes returns HTTP 413.
+- **[AC-SEC-3-040][5_SECURITY_DESIGN-REQ-271]** A GET request to `/mcp/v1/call` returns HTTP 405 with an `Allow: POST` header.
+- **[AC-SEC-3-041][5_SECURITY_DESIGN-REQ-272]** A POST to an unknown path (e.g., `/wrong/path`) returns HTTP 404 with body `{"result": null, "error": "not_found: ..."}`.
+- **[AC-SEC-3-042][5_SECURITY_DESIGN-REQ-273]** MCP HTTP responses include `X-Content-Type-Options: nosniff` and `Cache-Control: no-store` headers on ALL response codes (200, 400, 404, 405, 413, 415, 500).
+- **[AC-SEC-3-043][5_SECURITY_DESIGN-REQ-274]** A tool handler that panics returns HTTP 500 with body `{"result": null, "error": "internal: tool handler panicked"}` and the server continues to serve subsequent requests normally.
 
 **SSRF & Webhooks:**
 
-- **[AC-SEC-3-006]** A webhook redirect (HTTP 301) to a private IP address does NOT result in an HTTP request to the private IP; the delivery is treated as failed.
-- **[AC-SEC-3-044]** A webhook URL `http://10.0.0.1/hook` is blocked; `WARN` logged; no HTTP request made.
-- **[AC-SEC-3-045]** A webhook URL `http://[::1]/hook` (IPv6 loopback) is blocked.
-- **[AC-SEC-3-046]** A webhook URL `file:///etc/passwd` is rejected at `devs project add` configuration validation time with exit code 4.
-- **[AC-SEC-3-047]** A webhook hostname resolving to both `8.8.8.8` (public) and `192.168.1.1` (private) results in delivery being blocked (any private IP in the resolved set triggers the block).
+- **[AC-SEC-3-006][5_SECURITY_DESIGN-REQ-250]** A webhook redirect (HTTP 301) to a private IP address does NOT result in an HTTP request to the private IP; the delivery is treated as failed.
+- **[AC-SEC-3-044][5_SECURITY_DESIGN-REQ-275]** A webhook URL `http://10.0.0.1/hook` is blocked; `WARN` logged; no HTTP request made.
+- **[AC-SEC-3-045][5_SECURITY_DESIGN-REQ-276]** A webhook URL `http://[::1]/hook` (IPv6 loopback) is blocked.
+- **[AC-SEC-3-046][5_SECURITY_DESIGN-REQ-277]** A webhook URL `file:///etc/passwd` is rejected at `devs project add` configuration validation time with exit code 4.
+- **[AC-SEC-3-047][5_SECURITY_DESIGN-REQ-278]** A webhook hostname resolving to both `8.8.8.8` (public) and `192.168.1.1` (private) results in delivery being blocked (any private IP in the resolved set triggers the block).
 
 **SSH & Docker:**
 
-- **[AC-SEC-3-048]** An SSH connection attempt to a host not in known_hosts (with `StrictHostKeyChecking` not disabled) causes the stage to fail with an error containing `"SSH host key"`.
-- **[AC-SEC-3-049]** An SSH RSA key with fewer than 2048 bits is rejected with an error containing `"SSH key too weak"`.
+- **[AC-SEC-3-048][5_SECURITY_DESIGN-REQ-279]** An SSH connection attempt to a host not in known_hosts (with `StrictHostKeyChecking` not disabled) causes the stage to fail with an error containing `"SSH host key"`.
+- **[AC-SEC-3-049][5_SECURITY_DESIGN-REQ-280]** An SSH RSA key with fewer than 2048 bits is rejected with an error containing `"SSH key too weak"`.
 
 **`devs-mcp-bridge`:**
 
-- **[AC-SEC-3-050]** When `devs-mcp-bridge` cannot locate the devs server (discovery file absent), it exits with code 1 and writes `{"result": null, "error": "server_unreachable: ...", "fatal": true}` to stdout.
-- **[AC-SEC-3-051]** When the MCP server returns HTTP 413 for an oversized request forwarded by the bridge, the bridge writes `{"result": null, "error": "request body exceeds 1 MiB limit"}` to stdout and continues operating (does not exit).
+- **[AC-SEC-3-050][5_SECURITY_DESIGN-REQ-281]** When `devs-mcp-bridge` cannot locate the devs server (discovery file absent), it exits with code 1 and writes `{"result": null, "error": "server_unreachable: ...", "fatal": true}` to stdout.
+- **[AC-SEC-3-051][5_SECURITY_DESIGN-REQ-282]** When the MCP server returns HTTP 413 for an oversized request forwarded by the bridge, the bridge writes `{"result": null, "error": "request body exceeds 1 MiB limit"}` to stdout and continues operating (does not exit).
 
 **Memory & Process Security:**
 
-- **[AC-SEC-3-052]** `devs-server` attempts `setrlimit(RLIMIT_CORE, 0)` on Linux at startup; if the call fails, a `WARN` log is emitted but startup continues normally.
-- **[AC-SEC-3-053]** A `Redacted<String>` serialized to JSON via `serde_json::to_string()` produces `"\"[REDACTED]\""` and NOT the actual credential value.
+- **[AC-SEC-3-052][5_SECURITY_DESIGN-REQ-283]** `devs-server` attempts `setrlimit(RLIMIT_CORE, 0)` on Linux at startup; if the call fails, a `WARN` log is emitted but startup continues normally.
+- **[AC-SEC-3-053][5_SECURITY_DESIGN-REQ-284]** A `Redacted<String>` serialized to JSON via `serde_json::to_string()` produces `"\"[REDACTED]\""` and NOT the actual credential value.
 
 ---
 
@@ -2159,7 +2159,7 @@ Section 4 defines the runtime security controls enforced by `devs` across all su
 
 **Invariants that span all subsections:**
 - All input validation errors are collected before returning; no short-circuit (**[FEAT-BR-016]**).
-- All credential values are wrapped in `Redacted<T>` before being passed to `tracing` (**[SEC-100]**).
+- All credential values are wrapped in `Redacted<T>` before being passed to `tracing` (**[SEC-100][5_SECURITY_DESIGN-REQ-100]**).
 - No `unsafe` code is permitted in any crate (**[2_TAS-REQ-004b]**); memory safety vulnerabilities inherent to unsafe Rust are eliminated.
 - All subprocess invocations use `tokio::process::Command` with discrete argument arrays; no shell string interpolation anywhere.
 
@@ -2167,13 +2167,13 @@ Section 4 defines the runtime security controls enforced by `devs` across all su
 
 #### 4.1.1 Template Injection (Prompt Injection)
 
-**[SEC-040]** Template variable resolution (`{{...}}`) MUST be **single-pass only**. After resolving a template variable's value, the resulting string MUST NOT be scanned for further `{{...}}` expressions. This prevents second-order prompt injection where a malicious agent output contains `{{stage.other.stdout}}` to extract data from a sibling stage.
+**[SEC-040][5_SECURITY_DESIGN-REQ-040]** Template variable resolution (`{{...}}`) MUST be **single-pass only**. After resolving a template variable's value, the resulting string MUST NOT be scanned for further `{{...}}` expressions. This prevents second-order prompt injection where a malicious agent output contains `{{stage.other.stdout}}` to extract data from a sibling stage.
 
-**[SEC-041]** Template variable names that reference stages not in the current stage's transitive `depends_on` closure MUST cause an immediate stage failure with `TemplateError::UnreachableStage` before any agent spawn. This prevents lateral movement across the DAG via template references.
+**[SEC-041][5_SECURITY_DESIGN-REQ-041]** Template variable names that reference stages not in the current stage's transitive `depends_on` closure MUST cause an immediate stage failure with `TemplateError::UnreachableStage` before any agent spawn. This prevents lateral movement across the DAG via template references.
 
-**[SEC-042]** Stage stdout and stderr values used in template resolution are truncated to **10,240 bytes** (the last 10,240 bytes, preserving most-recent content). Values exceeding this limit are truncated silently with no error. This limits the volume of attacker-controlled data injected into downstream prompts.
+**[SEC-042][5_SECURITY_DESIGN-REQ-042]** Stage stdout and stderr values used in template resolution are truncated to **10,240 bytes** (the last 10,240 bytes, preserving most-recent content). Values exceeding this limit are truncated silently with no error. This limits the volume of attacker-controlled data injected into downstream prompts.
 
-**[SEC-043]** Template variables resolved from structured JSON output (`{{stage.<name>.output.<field>}}`) extract only the leaf string/number/boolean value of the named field. If the field value is a JSON object or array, resolution fails with `TemplateError::NonScalarField` rather than serializing the structure into the prompt. This prevents embedding large JSON blobs into prompts as an exfiltration channel.
+**[SEC-043][5_SECURITY_DESIGN-REQ-043]** Template variables resolved from structured JSON output (`{{stage.<name>.output.<field>}}`) extract only the leaf string/number/boolean value of the named field. If the field value is a JSON object or array, resolution fails with `TemplateError::NonScalarField` rather than serializing the structure into the prompt. This prevents embedding large JSON blobs into prompts as an exfiltration channel.
 
 **Template Injection — Edge Cases:**
 
@@ -2234,11 +2234,11 @@ flowchart TD
 
 #### 4.1.2 Command Injection (Agent Adapter Layer)
 
-**[SEC-044]** Agent subprocess invocation MUST use `tokio::process::Command` with separate argument arrays — never shell string interpolation. The prompt string, prompt file path, and all flags MUST be passed as discrete `arg()` entries, not concatenated into a single shell command string. This prevents shell metacharacter injection (`; rm -rf`, `$(...)`, backtick execution) from appearing in prompts or file paths.
+**[SEC-044][5_SECURITY_DESIGN-REQ-044]** Agent subprocess invocation MUST use `tokio::process::Command` with separate argument arrays — never shell string interpolation. The prompt string, prompt file path, and all flags MUST be passed as discrete `arg()` entries, not concatenated into a single shell command string. This prevents shell metacharacter injection (`; rm -rf`, `$(...)`, backtick execution) from appearing in prompts or file paths.
 
-**[SEC-045]** Prompt files written to disk for file-based adapters (opencode, copilot) MUST use a generated UUID filename (`<working_dir>/.devs_prompt_<uuid4>`) — not any user-provided or stage-derived filename. The path passed to the agent adapter is the generated path, never a user-controlled value.
+**[SEC-045][5_SECURITY_DESIGN-REQ-045]** Prompt files written to disk for file-based adapters (opencode, copilot) MUST use a generated UUID filename (`<working_dir>/.devs_prompt_<uuid4>`) — not any user-provided or stage-derived filename. The path passed to the agent adapter is the generated path, never a user-controlled value.
 
-**[SEC-046]** Environment variable keys injected into agent processes MUST match the regex `[A-Z_][A-Z0-9_]{0,127}` (enforced by the `EnvKey` type in `devs-core`). This prevents injection of keys with shell-special characters. Environment variable values are passed verbatim with no escaping; implementors must ensure no shell interpolation occurs in the subprocess spawn path.
+**[SEC-046][5_SECURITY_DESIGN-REQ-046]** Environment variable keys injected into agent processes MUST match the regex `[A-Z_][A-Z0-9_]{0,127}` (enforced by the `EnvKey` type in `devs-core`). This prevents injection of keys with shell-special characters. Environment variable values are passed verbatim with no escaping; implementors must ensure no shell interpolation occurs in the subprocess spawn path.
 
 **Command Injection — Edge Cases:**
 
@@ -2250,9 +2250,9 @@ flowchart TD
 
 #### 4.1.3 Path Traversal
 
-**[SEC-047]** All user-supplied file paths (workflow `prompt_file`, execution environment paths, project `repo_path`) MUST be canonicalized using `std::fs::canonicalize()` (or equivalent that resolves symlinks and `..` segments) before use. Paths that escape their intended root directory after canonicalization MUST be rejected with `invalid_argument: path traversal detected`.
+**[SEC-047][5_SECURITY_DESIGN-REQ-047]** All user-supplied file paths (workflow `prompt_file`, execution environment paths, project `repo_path`) MUST be canonicalized using `std::fs::canonicalize()` (or equivalent that resolves symlinks and `..` segments) before use. Paths that escape their intended root directory after canonicalization MUST be rejected with `invalid_argument: path traversal detected`.
 
-**[SEC-048]** The `prompt_file` field in stage definitions is resolved at execution time relative to the project's workflow search directories. Path components that are absolute (begin with `/` or a drive letter on Windows) or contain `..` segments MUST be rejected at workflow validation time, not only at execution time.
+**[SEC-048][5_SECURITY_DESIGN-REQ-048]** The `prompt_file` field in stage definitions is resolved at execution time relative to the project's workflow search directories. Path components that are absolute (begin with `/` or a drive letter on Windows) or contain `..` segments MUST be rejected at workflow validation time, not only at execution time.
 
 **Path Traversal — Edge Cases:**
 
@@ -2264,9 +2264,9 @@ flowchart TD
 
 #### 4.1.4 JSON Injection in Structured Output
 
-**[SEC-049]** Structured output parsing (`.devs_output.json` and stdout JSON) MUST use `serde_json`'s safe deserialization with a depth limit of 128 nested levels. JSON with deeper nesting MUST cause stage failure with `structured_output_parse_error`. This prevents stack overflow attacks via deeply nested JSON.
+**[SEC-049][5_SECURITY_DESIGN-REQ-049]** Structured output parsing (`.devs_output.json` and stdout JSON) MUST use `serde_json`'s safe deserialization with a depth limit of 128 nested levels. JSON with deeper nesting MUST cause stage failure with `structured_output_parse_error`. This prevents stack overflow attacks via deeply nested JSON.
 
-**[SEC-050]** The `"success"` field in `.devs_output.json` MUST be a JSON boolean literal. String values (`"true"`, `"false"`, `"1"`, `"0"`) and numeric values (`1`, `0`) MUST cause stage failure with `Failed` status and log message `"structured_output: 'success' must be a boolean; got <actual_type>"`. This prevents type confusion attacks.
+**[SEC-050][5_SECURITY_DESIGN-REQ-050]** The `"success"` field in `.devs_output.json` MUST be a JSON boolean literal. String values (`"true"`, `"false"`, `"1"`, `"0"`) and numeric values (`1`, `0`) MUST cause stage failure with `Failed` status and log message `"structured_output: 'success' must be a boolean; got <actual_type>"`. This prevents type confusion attacks.
 
 **JSON Injection — Edge Cases:**
 
@@ -2281,13 +2281,13 @@ flowchart TD
 
 #### A01 — Broken Access Control
 
-**[SEC-051]** MVP access control is network-perimeter-based (see §2.1). Within the network perimeter, all authenticated connections have equivalent access. There is no role-based or resource-based access control on gRPC or MCP endpoints at MVP. This is a documented and accepted risk. Operators MUST restrict network access.
+**[SEC-051][5_SECURITY_DESIGN-REQ-051]** MVP access control is network-perimeter-based (see §2.1). Within the network perimeter, all authenticated connections have equivalent access. There is no role-based or resource-based access control on gRPC or MCP endpoints at MVP. This is a documented and accepted risk. Operators MUST restrict network access.
 
-**[SEC-052]** The Filesystem MCP enforces workspace-boundary access control (see **[SEC-019]** and **[SEC-020]**). This is the only enforced access control policy at MVP.
+**[SEC-052][5_SECURITY_DESIGN-REQ-052]** The Filesystem MCP enforces workspace-boundary access control (see **[SEC-019][5_SECURITY_DESIGN-REQ-019]** and **[SEC-020][5_SECURITY_DESIGN-REQ-020]**). This is the only enforced access control policy at MVP.
 
 #### A02 — Cryptographic Failures
 
-**[SEC-053]** The following cryptographic primitives are **prohibited** in all `devs` crates:
+**[SEC-053][5_SECURITY_DESIGN-REQ-053]** The following cryptographic primitives are **prohibited** in all `devs` crates:
 - MD5 (for any purpose, including non-security uses)
 - SHA-1 (for any purpose, including checksums)
 - DES, 3DES
@@ -2297,25 +2297,25 @@ flowchart TD
 - ECB cipher mode for any symmetric encryption
 - Random number generation via `rand::thread_rng()` for security-sensitive purposes; use `ring::rand::SystemRandom` or `getrandom` crate directly
 
-**[SEC-054]** Webhook HMAC-SHA256 signing MUST use the `hmac` and `sha2` crates from the RustCrypto ecosystem (or `ring`). The HMAC key (webhook `secret` field) MUST be at minimum 32 bytes (256 bits). Keys shorter than 32 bytes MUST be rejected at project configuration validation.
+**[SEC-054][5_SECURITY_DESIGN-REQ-054]** Webhook HMAC-SHA256 signing MUST use the `hmac` and `sha2` crates from the RustCrypto ecosystem (or `ring`). The HMAC key (webhook `secret` field) MUST be at minimum 32 bytes (256 bits). Keys shorter than 32 bytes MUST be rejected at project configuration validation.
 
-**[SEC-055]** UUID generation (run IDs, delivery IDs, session IDs) MUST use UUID v4 (random). The UUID `v4` feature of the `uuid` crate uses the `getrandom` crate, which sources entropy from the OS CSPRNG. No UUID generation in security-relevant contexts (session IDs, delivery IDs) may use sequential or timestamp-based UUIDs (v1, v7).
+**[SEC-055][5_SECURITY_DESIGN-REQ-055]** UUID generation (run IDs, delivery IDs, session IDs) MUST use UUID v4 (random). The UUID `v4` feature of the `uuid` crate uses the `getrandom` crate, which sources entropy from the OS CSPRNG. No UUID generation in security-relevant contexts (session IDs, delivery IDs) may use sequential or timestamp-based UUIDs (v1, v7).
 
 #### A03 — Injection
 
-**[SEC-056]** All injection controls are defined in §4.1 above. Key summary:
-- Template: single-pass only (**[SEC-040]**)
-- Command: no shell string interpolation (**[SEC-044]**)
-- Path: canonicalize before use (**[SEC-047]**)
-- JSON: depth-limited deserialization (**[SEC-049]**)
+**[SEC-056][5_SECURITY_DESIGN-REQ-056]** All injection controls are defined in §4.1 above. Key summary:
+- Template: single-pass only (**[SEC-040][5_SECURITY_DESIGN-REQ-040]**)
+- Command: no shell string interpolation (**[SEC-044][5_SECURITY_DESIGN-REQ-044]**)
+- Path: canonicalize before use (**[SEC-047][5_SECURITY_DESIGN-REQ-047]**)
+- JSON: depth-limited deserialization (**[SEC-049][5_SECURITY_DESIGN-REQ-049]**)
 
 #### A04 — Insecure Design
 
-**[SEC-057]** The Glass-Box MCP architecture is a deliberate design choice that trades confidentiality for observability. This is acceptable for the primary persona (sole developer using trusted AI agents on a local machine). Operators hosting `devs` for multiple users or in shared environments must treat this as a high-risk configuration at MVP and defer deployment until post-MVP authentication is available.
+**[SEC-057][5_SECURITY_DESIGN-REQ-057]** The Glass-Box MCP architecture is a deliberate design choice that trades confidentiality for observability. This is acceptable for the primary persona (sole developer using trusted AI agents on a local machine). Operators hosting `devs` for multiple users or in shared environments must treat this as a high-risk configuration at MVP and defer deployment until post-MVP authentication is available.
 
 #### A05 — Security Misconfiguration
 
-**[SEC-058]** The `devs` server MUST perform the following security checks on startup and log `WARN` for each violated condition:
+**[SEC-058][5_SECURITY_DESIGN-REQ-058]** The `devs` server MUST perform the following security checks on startup and log `WARN` for each violated condition:
 
 1. `server.listen` or `server.mcp_port` bind to non-loopback address
 2. Any `*_API_KEY` or `*_TOKEN` field found in `devs.toml`
@@ -2334,11 +2334,11 @@ flowchart TD
 
 #### A06 — Vulnerable and Outdated Components
 
-**[SEC-060]** The `./do lint` script MUST include execution of `cargo audit --deny warnings` against the RustSec Advisory Database. Any `cargo audit` finding at `WARN` or higher severity MUST cause `./do lint` to exit non-zero, blocking `./do presubmit`. The `cargo audit` tool MUST be installed by `./do setup` (pinned to a specific version in the authoritative dependency table).
+**[SEC-060][5_SECURITY_DESIGN-REQ-060]** The `./do lint` script MUST include execution of `cargo audit --deny warnings` against the RustSec Advisory Database. Any `cargo audit` finding at `WARN` or higher severity MUST cause `./do lint` to exit non-zero, blocking `./do presubmit`. The `cargo audit` tool MUST be installed by `./do setup` (pinned to a specific version in the authoritative dependency table).
 
-**[SEC-061]** The GitLab CI pipeline MUST run `cargo audit` as a separate job that runs on every commit, independent of the main `presubmit` job. This job MUST fail the pipeline on any new advisory, even if `./do presubmit` would otherwise pass.
+**[SEC-061][5_SECURITY_DESIGN-REQ-061]** The GitLab CI pipeline MUST run `cargo audit` as a separate job that runs on every commit, independent of the main `presubmit` job. This job MUST fail the pipeline on any new advisory, even if `./do presubmit` would otherwise pass.
 
-**[SEC-062]** Known false-positive or acceptable advisories MAY be suppressed via an `audit.toml` file at the repository root. Each suppressed advisory MUST include a comment documenting the justification and an expiry date. Suppression entries with expired dates MUST cause `cargo audit` to fail.
+**[SEC-062][5_SECURITY_DESIGN-REQ-062]** Known false-positive or acceptable advisories MAY be suppressed via an `audit.toml` file at the repository root. Each suppressed advisory MUST include a comment documenting the justification and an expiry date. Suppression entries with expired dates MUST cause `cargo audit` to fail.
 
 **`audit.toml` Schema (advisory suppression):**
 
@@ -2381,17 +2381,17 @@ expires = "2025-06-30"
 
 #### A07 — Identification and Authentication Failures
 
-**[SEC-063]** At MVP, there are no authentication credentials to protect (no client accounts, no session tokens). The API keys stored in server environment are credentials for upstream AI provider services, not for `devs` itself. Authentication failure handling is therefore not applicable to MVP client interactions.
+**[SEC-063][5_SECURITY_DESIGN-REQ-063]** At MVP, there are no authentication credentials to protect (no client accounts, no session tokens). The API keys stored in server environment are credentials for upstream AI provider services, not for `devs` itself. Authentication failure handling is therefore not applicable to MVP client interactions.
 
-**[SEC-064]** Webhook `secret` values used for HMAC-SHA256 signing MUST be treated as credentials: subject to the same logging prohibition (**[SEC-025]**), stored as `Option<String>` in the `WebhookTarget` struct, and NEVER serialized into checkpoint files or log output.
+**[SEC-064][5_SECURITY_DESIGN-REQ-064]** Webhook `secret` values used for HMAC-SHA256 signing MUST be treated as credentials: subject to the same logging prohibition (**[SEC-025][5_SECURITY_DESIGN-REQ-025]**), stored as `Option<String>` in the `WebhookTarget` struct, and NEVER serialized into checkpoint files or log output.
 
 #### A08 — Software and Data Integrity Failures
 
-**[SEC-065]** Checkpoint files (`checkpoint.json`, `workflow_snapshot.json`) are committed to git with SHA-1 content-addressed history. While SHA-1 is deprecated for cryptographic purposes, git's use of it for content addressing (with collision resistance improvements in modern git) is an acceptable integrity mechanism for checkpoint data. No additional integrity signing of checkpoint files is required at MVP.
+**[SEC-065][5_SECURITY_DESIGN-REQ-065]** Checkpoint files (`checkpoint.json`, `workflow_snapshot.json`) are committed to git with SHA-1 content-addressed history. While SHA-1 is deprecated for cryptographic purposes, git's use of it for content addressing (with collision resistance improvements in modern git) is an acceptable integrity mechanism for checkpoint data. No additional integrity signing of checkpoint files is required at MVP.
 
-**[SEC-066]** Workflow definition snapshots stored at `.devs/runs/<run-id>/workflow_snapshot.json` are written before the first stage transition and MUST NOT be modified after `Pending → Running` transition. Implementors MUST verify this immutability invariant in the `devs-checkpoint` layer by checking that the file does not exist before writing (returning an error if it already exists, rather than overwriting).
+**[SEC-066][5_SECURITY_DESIGN-REQ-066]** Workflow definition snapshots stored at `.devs/runs/<run-id>/workflow_snapshot.json` are written before the first stage transition and MUST NOT be modified after `Pending → Running` transition. Implementors MUST verify this immutability invariant in the `devs-checkpoint` layer by checking that the file does not exist before writing (returning an error if it already exists, rather than overwriting).
 
-**[SEC-067]** The `devs-mcp-bridge` stdin-to-HTTP forwarding proxy MUST validate that every forwarded request body is valid JSON before transmitting to the MCP server. Malformed JSON on stdin MUST produce a structured error to stdout (`{"result":null,"error":"invalid_argument: malformed JSON input","fatal":false}`) and discard the request, rather than forwarding garbage to the MCP server.
+**[SEC-067][5_SECURITY_DESIGN-REQ-067]** The `devs-mcp-bridge` stdin-to-HTTP forwarding proxy MUST validate that every forwarded request body is valid JSON before transmitting to the MCP server. Malformed JSON on stdin MUST produce a structured error to stdout (`{"result":null,"error":"invalid_argument: malformed JSON input","fatal":false}`) and discard the request, rather than forwarding garbage to the MCP server.
 
 #### A09 — Security Logging and Monitoring Failures
 
@@ -2399,28 +2399,28 @@ See §5 (Logging, Monitoring & Audit Trails) for full coverage.
 
 #### A10 — Server-Side Request Forgery (SSRF)
 
-**[SEC-068]** SSRF mitigations for outbound webhooks are defined in **[SEC-036]** and **[SEC-037]**. The blocklist check MUST be performed after DNS resolution (to catch DNS rebinding attacks) and MUST be re-evaluated on each delivery attempt (not cached). This is implemented by resolving the hostname to IP addresses immediately before the HTTP connection is established, not at configuration validation time.
+**[SEC-068][5_SECURITY_DESIGN-REQ-068]** SSRF mitigations for outbound webhooks are defined in **[SEC-036][5_SECURITY_DESIGN-REQ-036]** and **[SEC-037][5_SECURITY_DESIGN-REQ-037]**. The blocklist check MUST be performed after DNS resolution (to catch DNS rebinding attacks) and MUST be re-evaluated on each delivery attempt (not cached). This is implemented by resolving the hostname to IP addresses immediately before the HTTP connection is established, not at configuration validation time.
 
-**[SEC-069]** The `ssh2`-based remote execution does not perform outbound HTTP requests to user-controlled addresses. SSH connection targets are configured in `devs.toml` and are operator-controlled, not user-controlled (users submit workflow runs, not SSH connection parameters). No additional SSRF mitigation is required for the SSH execution environment.
+**[SEC-069][5_SECURITY_DESIGN-REQ-069]** The `ssh2`-based remote execution does not perform outbound HTTP requests to user-controlled addresses. SSH connection targets are configured in `devs.toml` and are operator-controlled, not user-controlled (users submit workflow runs, not SSH connection parameters). No additional SSRF mitigation is required for the SSH execution environment.
 
 ### 4.3 Denial of Service Protections
 
-**[SEC-070]** gRPC request size limits are enforced at the `tonic` layer:
+**[SEC-070][5_SECURITY_DESIGN-REQ-070]** gRPC request size limits are enforced at the `tonic` layer:
 - `SubmitRun`: max 1 MiB request body (enforces workflow definition size)
 - `StreamLogs`: max 64 KiB request
 - All other RPCs: max 1 MiB request / 4 MiB response
 
-**[SEC-071]** MCP HTTP server enforces a 1 MiB maximum request body size (`Content-Length` or chunked transfer). Requests exceeding this limit MUST receive HTTP 413 with body `{"result":null,"error":"invalid_argument: request body exceeds 1 MiB limit"}`.
+**[SEC-071][5_SECURITY_DESIGN-REQ-071]** MCP HTTP server enforces a 1 MiB maximum request body size (`Content-Length` or chunked transfer). Requests exceeding this limit MUST receive HTTP 413 with body `{"result":null,"error":"invalid_argument: request body exceeds 1 MiB limit"}`.
 
-**[SEC-072]** Stage output buffers (stdout, stderr) are capped at 1 MiB each (see `BoundedBytes<1_048_576>` in `devs-core`). Output beyond this limit is truncated from the beginning (preserving most-recent content). This prevents agent processes from exhausting server memory by generating unbounded output.
+**[SEC-072][5_SECURITY_DESIGN-REQ-072]** Stage output buffers (stdout, stderr) are capped at 1 MiB each (see `BoundedBytes<1_048_576>` in `devs-core`). Output beyond this limit is truncated from the beginning (preserving most-recent content). This prevents agent processes from exhausting server memory by generating unbounded output.
 
-**[SEC-073]** The context file (`.devs_context.json`) has a maximum size of 10 MiB. If the accumulated stage outputs exceed this limit, stdout/stderr of each included stage are truncated proportionally. This limits the total size of data passed between stages.
+**[SEC-073][5_SECURITY_DESIGN-REQ-073]** The context file (`.devs_context.json`) has a maximum size of 10 MiB. If the accumulated stage outputs exceed this limit, stdout/stderr of each included stage are truncated proportionally. This limits the total size of data passed between stages.
 
-**[SEC-074]** Fan-out parallelism is capped at 64 sub-agents per stage (**[3_PRD-BR-031]**). Workflows with more than 256 stages are rejected at validation. These limits prevent resource exhaustion via combinatorial fan-out.
+**[SEC-074][5_SECURITY_DESIGN-REQ-074]** Fan-out parallelism is capped at 64 sub-agents per stage (**[3_PRD-BR-031]**). Workflows with more than 256 stages are rejected at validation. These limits prevent resource exhaustion via combinatorial fan-out.
 
-**[SEC-075]** The gRPC per-client event buffer is capped at 256 messages. On overflow, the oldest message is dropped (not the client connection). This prevents a slow or unresponsive client from blocking the scheduler's event dispatch.
+**[SEC-075][5_SECURITY_DESIGN-REQ-075]** The gRPC per-client event buffer is capped at 256 messages. On overflow, the oldest message is dropped (not the client connection). This prevents a slow or unresponsive client from blocking the scheduler's event dispatch.
 
-**[SEC-076]** Webhook delivery MUST enforce a connection timeout of 10 seconds per attempt. A maximum of `max_retries + 1` attempts are made per event. Webhook delivery failures MUST NOT block or slow the scheduler — delivery runs in a dedicated `tokio::spawn` task via the `webhook_tx` channel (buffer ≥ 1024).
+**[SEC-076][5_SECURITY_DESIGN-REQ-076]** Webhook delivery MUST enforce a connection timeout of 10 seconds per attempt. A maximum of `max_retries + 1` attempts are made per event. Webhook delivery failures MUST NOT block or slow the scheduler — delivery runs in a dedicated `tokio::spawn` task via the `webhook_tx` channel (buffer ≥ 1024).
 
 **Denial of Service — Edge Cases:**
 
@@ -2452,13 +2452,13 @@ See §5 (Logging, Monitoring & Audit Trails) for full coverage.
 
 ### 4.4 Input Validation
 
-**[SEC-077]** All workflow definition inputs (TOML, YAML, Rust builder API) MUST be validated through the 13-step validation pipeline (as defined in `[FEAT-BR-016]`) before any stage is dispatched. Validation collects all errors before returning; no short-circuit. Invalid definitions are rejected entirely.
+**[SEC-077][5_SECURITY_DESIGN-REQ-077]** All workflow definition inputs (TOML, YAML, Rust builder API) MUST be validated through the 13-step validation pipeline (as defined in `[FEAT-BR-016]`) before any stage is dispatched. Validation collects all errors before returning; no short-circuit. Invalid definitions are rejected entirely.
 
-**[SEC-078]** Run name and slug uniqueness is enforced under a per-project mutex (**[2_TAS-BR-016]**, **[2_TAS-BR-025]**) to prevent time-of-check/time-of-use (TOCTOU) races in duplicate name detection.
+**[SEC-078][5_SECURITY_DESIGN-REQ-078]** Run name and slug uniqueness is enforced under a per-project mutex (**[2_TAS-BR-016]**, **[2_TAS-BR-025]**) to prevent time-of-check/time-of-use (TOCTOU) races in duplicate name detection.
 
-**[SEC-079]** Workflow input parameters of type `Path` MUST NOT be resolved to absolute filesystem paths at submission time. Resolution occurs at execution time within the stage's isolated working directory. This prevents path-based SSRF or local file inclusion via submitted inputs.
+**[SEC-079][5_SECURITY_DESIGN-REQ-079]** Workflow input parameters of type `Path` MUST NOT be resolved to absolute filesystem paths at submission time. Resolution occurs at execution time within the stage's isolated working directory. This prevents path-based SSRF or local file inclusion via submitted inputs.
 
-**[SEC-080]** `BoundedString<N>` type constraints MUST be enforced at deserialization time using `serde` custom deserializers, not only at explicit validation call sites. This ensures constraints are applied to all code paths that accept user input, including MCP tool calls and gRPC requests.
+**[SEC-080][5_SECURITY_DESIGN-REQ-080]** `BoundedString<N>` type constraints MUST be enforced at deserialization time using `serde` custom deserializers, not only at explicit validation call sites. This ensures constraints are applied to all code paths that accept user input, including MCP tool calls and gRPC requests.
 
 **Input Validation Data Model — `BoundedString<N>` Deserializer Contract:**
 
@@ -2547,11 +2547,11 @@ These keys are stripped from the agent's process environment even if the operato
 
 ### 4.5 Supply Chain Security
 
-**[SEC-081]** The authoritative dependency version table in the TAS (§2.2) is enforced by `./do lint`. Any dependency not in the authoritative table, or at a different version, MUST cause lint failure. This prevents silent introduction of unreviewed transitive dependencies.
+**[SEC-081][5_SECURITY_DESIGN-REQ-081]** The authoritative dependency version table in the TAS (§2.2) is enforced by `./do lint`. Any dependency not in the authoritative table, or at a different version, MUST cause lint failure. This prevents silent introduction of unreviewed transitive dependencies.
 
-**[SEC-082]** `unsafe_code = "deny"` is enforced workspace-wide via the workspace lint table (**[2_TAS-REQ-004b]**). No `unsafe` blocks are permitted in authored code. This eliminates a large class of memory safety vulnerabilities (buffer overflows, use-after-free, data races) inherent to unsafe Rust.
+**[SEC-082][5_SECURITY_DESIGN-REQ-082]** `unsafe_code = "deny"` is enforced workspace-wide via the workspace lint table (**[2_TAS-REQ-004b]**). No `unsafe` blocks are permitted in authored code. This eliminates a large class of memory safety vulnerabilities (buffer overflows, use-after-free, data races) inherent to unsafe Rust.
 
-**[SEC-083]** The `reqwest` crate MUST be compiled with the `rustls-tls` feature only. The `native-tls` or `openssl` features MUST NOT be enabled. This ensures all outbound HTTP (webhooks, any future HTTP clients) uses the audited `rustls` stack, not platform-specific TLS implementations with varying security postures.
+**[SEC-083][5_SECURITY_DESIGN-REQ-083]** The `reqwest` crate MUST be compiled with the `rustls-tls` feature only. The `native-tls` or `openssl` features MUST NOT be enabled. This ensures all outbound HTTP (webhooks, any future HTTP clients) uses the audited `rustls` stack, not platform-specific TLS implementations with varying security postures.
 
 **[SEC-083a]** The dependency audit performed by `./do lint` MUST verify the following additional constraints beyond version pinning:
 
@@ -2586,7 +2586,7 @@ cargo tree -p reqwest --features rustls-tls \
 
 ### 4.6 `Redacted<T>` Type Definition
 
-**[SEC-100]** All credential and secret values passed to `tracing` instrumentation MUST be wrapped in the `Redacted<T>` type. This type renders as `"[REDACTED]"` in all log formatters (both JSON and text), preventing accidental secret disclosure through log output.
+**[SEC-100][5_SECURITY_DESIGN-REQ-100]** All credential and secret values passed to `tracing` instrumentation MUST be wrapped in the `Redacted<T>` type. This type renders as `"[REDACTED]"` in all log formatters (both JSON and text), preventing accidental secret disclosure through log output.
 
 ```rust
 /// A wrapper that renders as "[REDACTED]" in all log and display contexts.
@@ -2783,62 +2783,62 @@ Maximum total attempts = `max_retries + 1` (default: 4 attempts).
 
 **4.9.1 Injection Prevention (§4.1)**
 
-- **[AC-SEC-4-001]** A stage prompt containing `{{stage.upstream.stdout}}` where `upstream` produces output with the literal string `{{workflow.input.secret}}`: the downstream agent receives `{{workflow.input.secret}}` verbatim, not the value of `workflow.input.secret`. Single-pass expansion verified by inspecting the prompt file or `--print` argument passed to the agent.
-- **[AC-SEC-4-002]** An agent subprocess spawned by the `claude` adapter with a prompt containing `; cat /etc/passwd` receives the full string as the value of the `--print` argument; no shell execution occurs. Verified by asserting the `tokio::process::Command` `args` list contains the exact prompt string as a single element.
-- **[AC-SEC-4-003]** A template variable referencing `{{stage.X.stdout}}` where stage X is not in the current stage's transitive `depends_on` closure causes the stage to transition to `Failed` with `TemplateError::UnreachableStage`; no agent subprocess is spawned.
-- **[AC-SEC-4-004]** A template variable referencing `{{stage.X.output.nested_field}}` where `nested_field` is a JSON object (not a scalar) causes the stage to transition to `Failed` with `TemplateError::NonScalarField`.
-- **[AC-SEC-4-005]** A `prompt_file` value of `"../../etc/hosts"` is rejected at workflow validation with `invalid_argument: prompt_file path contains '..' segment`; no file read occurs.
-- **[AC-SEC-4-006]** A prompt containing `{{stage.X.stdout}}` where X's stdout is 20,000 bytes results in the downstream prompt containing only the last 10,240 bytes of X's stdout; a `WARN` log event with `event_type: "template.truncated"` is emitted.
-- **[AC-SEC-4-007]** `.devs_output.json` with `{"success": "true"}` (string, not boolean) causes the stage to transition to `Failed`; `get_stage_output` returns `structured` containing the parsed object and `exit_code` from the process.
-- **[AC-SEC-4-008]** `.devs_output.json` with 129 levels of JSON nesting causes `structured_output_parse_error: nesting depth limit exceeded`; stage transitions to `Failed`.
-- **[AC-SEC-4-009]** A stage env key of `DEVS_LISTEN` is rejected at workflow validation with `invalid_argument: env key 'DEVS_LISTEN' is reserved`. A stage env key of `FOO=BAR` is rejected with `invalid_argument: env key 'FOO=BAR' contains invalid characters`.
+- **[AC-SEC-4-001][5_SECURITY_DESIGN-REQ-285]** A stage prompt containing `{{stage.upstream.stdout}}` where `upstream` produces output with the literal string `{{workflow.input.secret}}`: the downstream agent receives `{{workflow.input.secret}}` verbatim, not the value of `workflow.input.secret`. Single-pass expansion verified by inspecting the prompt file or `--print` argument passed to the agent.
+- **[AC-SEC-4-002][5_SECURITY_DESIGN-REQ-286]** An agent subprocess spawned by the `claude` adapter with a prompt containing `; cat /etc/passwd` receives the full string as the value of the `--print` argument; no shell execution occurs. Verified by asserting the `tokio::process::Command` `args` list contains the exact prompt string as a single element.
+- **[AC-SEC-4-003][5_SECURITY_DESIGN-REQ-287]** A template variable referencing `{{stage.X.stdout}}` where stage X is not in the current stage's transitive `depends_on` closure causes the stage to transition to `Failed` with `TemplateError::UnreachableStage`; no agent subprocess is spawned.
+- **[AC-SEC-4-004][5_SECURITY_DESIGN-REQ-288]** A template variable referencing `{{stage.X.output.nested_field}}` where `nested_field` is a JSON object (not a scalar) causes the stage to transition to `Failed` with `TemplateError::NonScalarField`.
+- **[AC-SEC-4-005][5_SECURITY_DESIGN-REQ-289]** A `prompt_file` value of `"../../etc/hosts"` is rejected at workflow validation with `invalid_argument: prompt_file path contains '..' segment`; no file read occurs.
+- **[AC-SEC-4-006][5_SECURITY_DESIGN-REQ-290]** A prompt containing `{{stage.X.stdout}}` where X's stdout is 20,000 bytes results in the downstream prompt containing only the last 10,240 bytes of X's stdout; a `WARN` log event with `event_type: "template.truncated"` is emitted.
+- **[AC-SEC-4-007][5_SECURITY_DESIGN-REQ-291]** `.devs_output.json` with `{"success": "true"}` (string, not boolean) causes the stage to transition to `Failed`; `get_stage_output` returns `structured` containing the parsed object and `exit_code` from the process.
+- **[AC-SEC-4-008][5_SECURITY_DESIGN-REQ-292]** `.devs_output.json` with 129 levels of JSON nesting causes `structured_output_parse_error: nesting depth limit exceeded`; stage transitions to `Failed`.
+- **[AC-SEC-4-009][5_SECURITY_DESIGN-REQ-293]** A stage env key of `DEVS_LISTEN` is rejected at workflow validation with `invalid_argument: env key 'DEVS_LISTEN' is reserved`. A stage env key of `FOO=BAR` is rejected with `invalid_argument: env key 'FOO=BAR' contains invalid characters`.
 
 **4.9.2 OWASP Mitigations (§4.2)**
 
-- **[AC-SEC-4-010]** On server startup with `server.listen = "0.0.0.0:7890"`, a `WARN` log event is emitted with message containing `"server.listen"` and `"non-loopback"`. The server starts normally; the warning does not abort startup.
-- **[AC-SEC-4-011]** On server startup with a `devs.toml` containing `MY_API_KEY = "sk-..."`, a `WARN` log event is emitted with message containing `"API key"` or `"token"`. The key value itself is NOT present in the log output.
-- **[AC-SEC-4-013]** `cargo audit --deny warnings` exits 0 on the unmodified repository (no known advisories in current dependency set at build time).
-- **[AC-SEC-4-014]** `./do lint` exits non-zero when `cargo audit` reports any advisory at `WARN` or higher severity. When `audit.toml` contains a suppression entry with an expired `expires` date, `cargo audit` exits non-zero.
-- **[AC-SEC-4-015]** `cargo tree -p devs-core --edges normal` output does not contain `tokio`, `git2`, `reqwest`, or `tonic` — verifying the zero-I/O-dependency invariant of `devs-core` (**[ARCH-AC-009]**).
-- **[AC-SEC-4-016]** `cargo tree` output for a production build does not contain `openssl`, `openssl-sys`, or `native-tls` as crate names.
-- **[AC-SEC-4-017]** `workflow_snapshot.json` is written exactly once per run (before first stage transition). Attempting to write it again (e.g., via a second concurrent `submit_run` with the same `run_id`) returns an error from `devs-checkpoint`; the original file is not overwritten.
+- **[AC-SEC-4-010][5_SECURITY_DESIGN-REQ-294]** On server startup with `server.listen = "0.0.0.0:7890"`, a `WARN` log event is emitted with message containing `"server.listen"` and `"non-loopback"`. The server starts normally; the warning does not abort startup.
+- **[AC-SEC-4-011][5_SECURITY_DESIGN-REQ-295]** On server startup with a `devs.toml` containing `MY_API_KEY = "sk-..."`, a `WARN` log event is emitted with message containing `"API key"` or `"token"`. The key value itself is NOT present in the log output.
+- **[AC-SEC-4-013][5_SECURITY_DESIGN-REQ-296]** `cargo audit --deny warnings` exits 0 on the unmodified repository (no known advisories in current dependency set at build time).
+- **[AC-SEC-4-014][5_SECURITY_DESIGN-REQ-297]** `./do lint` exits non-zero when `cargo audit` reports any advisory at `WARN` or higher severity. When `audit.toml` contains a suppression entry with an expired `expires` date, `cargo audit` exits non-zero.
+- **[AC-SEC-4-015][5_SECURITY_DESIGN-REQ-298]** `cargo tree -p devs-core --edges normal` output does not contain `tokio`, `git2`, `reqwest`, or `tonic` — verifying the zero-I/O-dependency invariant of `devs-core` (**[ARCH-AC-009]**).
+- **[AC-SEC-4-016][5_SECURITY_DESIGN-REQ-299]** `cargo tree` output for a production build does not contain `openssl`, `openssl-sys`, or `native-tls` as crate names.
+- **[AC-SEC-4-017][5_SECURITY_DESIGN-REQ-300]** `workflow_snapshot.json` is written exactly once per run (before first stage transition). Attempting to write it again (e.g., via a second concurrent `submit_run` with the same `run_id`) returns an error from `devs-checkpoint`; the original file is not overwritten.
 
 **4.9.3 Denial of Service Protections (§4.3)**
 
-- **[AC-SEC-4-018]** An MCP HTTP request with `Content-Length: 1048577` (1 MiB + 1 byte) receives HTTP 413 with body `{"result":null,"error":"invalid_argument: request body exceeds 1 MiB limit"}`.
-- **[AC-SEC-4-019]** A workflow submitted with 257 stages is rejected with `invalid_argument` before any run is created; `list_runs` shows no new run.
-- **[AC-SEC-4-020]** A fan-out stage with `count = 65` is rejected at validation with `invalid_argument: fan_out.count must be between 1 and 64; got 65`.
-- **[AC-SEC-4-021]** When 64 concurrent MCP HTTP requests are active simultaneously, a 65th request is accepted (not refused); it may block on lock acquisition for up to 5 seconds before returning a response.
-- **[AC-SEC-4-022]** A `StreamRunEvents` gRPC stream that is not consuming events (slow client) does not block the DAG scheduler from advancing; the oldest buffered event is silently dropped when the 257th event is enqueued for that client.
+- **[AC-SEC-4-018][5_SECURITY_DESIGN-REQ-301]** An MCP HTTP request with `Content-Length: 1048577` (1 MiB + 1 byte) receives HTTP 413 with body `{"result":null,"error":"invalid_argument: request body exceeds 1 MiB limit"}`.
+- **[AC-SEC-4-019][5_SECURITY_DESIGN-REQ-302]** A workflow submitted with 257 stages is rejected with `invalid_argument` before any run is created; `list_runs` shows no new run.
+- **[AC-SEC-4-020][5_SECURITY_DESIGN-REQ-303]** A fan-out stage with `count = 65` is rejected at validation with `invalid_argument: fan_out.count must be between 1 and 64; got 65`.
+- **[AC-SEC-4-021][5_SECURITY_DESIGN-REQ-304]** When 64 concurrent MCP HTTP requests are active simultaneously, a 65th request is accepted (not refused); it may block on lock acquisition for up to 5 seconds before returning a response.
+- **[AC-SEC-4-022][5_SECURITY_DESIGN-REQ-305]** A `StreamRunEvents` gRPC stream that is not consuming events (slow client) does not block the DAG scheduler from advancing; the oldest buffered event is silently dropped when the 257th event is enqueued for that client.
 
 **4.9.4 Input Validation (§4.4)**
 
-- **[AC-SEC-4-023]** A `BoundedString<128>` field submitted with 129 UTF-8 bytes is rejected at MCP `submit_run` with HTTP 200 and `"error": "invalid_argument: ..."` before any run is created; `list_runs` shows no new run.
-- **[AC-SEC-4-024]** `submit_run` with an extra input key not declared in the workflow returns `invalid_argument: unknown input key '<name>'`; no run is created.
-- **[AC-SEC-4-025]** `submit_run` with a `boolean` input value of the string `"1"` returns `invalid_argument: cannot coerce '1' to boolean`; values `"true"` and `"false"` (lowercase strings) are accepted.
-- **[AC-SEC-4-026]** A webhook `secret` shorter than 32 bytes is rejected at project registration with `invalid_argument: webhook secret must be at least 32 bytes`.
-- **[AC-SEC-4-027]** A project registered with `weight = 0` is rejected with `invalid_argument: project weight must be at least 1`.
-- **[AC-SEC-4-028]** An `AgentPool` configured with `max_concurrent = 1025` is rejected at server startup config validation with a clear error before any port is bound.
+- **[AC-SEC-4-023][5_SECURITY_DESIGN-REQ-306]** A `BoundedString<128>` field submitted with 129 UTF-8 bytes is rejected at MCP `submit_run` with HTTP 200 and `"error": "invalid_argument: ..."` before any run is created; `list_runs` shows no new run.
+- **[AC-SEC-4-024][5_SECURITY_DESIGN-REQ-307]** `submit_run` with an extra input key not declared in the workflow returns `invalid_argument: unknown input key '<name>'`; no run is created.
+- **[AC-SEC-4-025][5_SECURITY_DESIGN-REQ-308]** `submit_run` with a `boolean` input value of the string `"1"` returns `invalid_argument: cannot coerce '1' to boolean`; values `"true"` and `"false"` (lowercase strings) are accepted.
+- **[AC-SEC-4-026][5_SECURITY_DESIGN-REQ-309]** A webhook `secret` shorter than 32 bytes is rejected at project registration with `invalid_argument: webhook secret must be at least 32 bytes`.
+- **[AC-SEC-4-027][5_SECURITY_DESIGN-REQ-310]** A project registered with `weight = 0` is rejected with `invalid_argument: project weight must be at least 1`.
+- **[AC-SEC-4-028][5_SECURITY_DESIGN-REQ-311]** An `AgentPool` configured with `max_concurrent = 1025` is rejected at server startup config validation with a clear error before any port is bound.
 
 **4.9.5 Supply Chain Security (§4.5)**
 
-- **[AC-SEC-4-029]** `./do lint` exits non-zero when a `Cargo.toml` in the workspace declares a dependency not present in the TAS authoritative version table; the error message names the specific crate and version.
-- **[AC-SEC-4-030]** `./do lint` exits non-zero when `reqwest` is found with `native-tls` feature enabled; exits 0 when `reqwest` is `rustls-tls` only.
-- **[AC-SEC-4-031]** `audit.toml` with an `expires` date in the past causes `./do lint` to exit non-zero with a message referencing the specific advisory ID and the expired date.
-- **[AC-SEC-4-032]** `cargo grep unsafe` (or equivalent) across all workspace `.rs` files returns zero matches (no `unsafe` blocks in authored code).
+- **[AC-SEC-4-029][5_SECURITY_DESIGN-REQ-312]** `./do lint` exits non-zero when a `Cargo.toml` in the workspace declares a dependency not present in the TAS authoritative version table; the error message names the specific crate and version.
+- **[AC-SEC-4-030][5_SECURITY_DESIGN-REQ-313]** `./do lint` exits non-zero when `reqwest` is found with `native-tls` feature enabled; exits 0 when `reqwest` is `rustls-tls` only.
+- **[AC-SEC-4-031][5_SECURITY_DESIGN-REQ-314]** `audit.toml` with an `expires` date in the past causes `./do lint` to exit non-zero with a message referencing the specific advisory ID and the expired date.
+- **[AC-SEC-4-032][5_SECURITY_DESIGN-REQ-315]** `cargo grep unsafe` (or equivalent) across all workspace `.rs` files returns zero matches (no `unsafe` blocks in authored code).
 
 **4.9.6 Credential Redaction (§4.6)**
 
-- **[AC-SEC-4-033]** `Redacted<String>` formats as `"[REDACTED]"` in both `{:?}` (Debug) and `{}` (Display) format specifiers. Unit test: `assert_eq!(format!("{:?}", Redacted("secret")), "[REDACTED]")`.
-- **[AC-SEC-4-034]** When a webhook delivery event is logged at `WARN` with the `secret` field, the JSON log output contains `"secret": "[REDACTED]"`, not the actual secret value.
-- **[AC-SEC-4-035]** When the server starts with an `ANTHROPIC_API_KEY` environment variable set, that value does NOT appear in any log line at any level, including `DEBUG` and `TRACE`.
+- **[AC-SEC-4-033][5_SECURITY_DESIGN-REQ-316]** `Redacted<String>` formats as `"[REDACTED]"` in both `{:?}` (Debug) and `{}` (Display) format specifiers. Unit test: `assert_eq!(format!("{:?}", Redacted("secret")), "[REDACTED]")`.
+- **[AC-SEC-4-034][5_SECURITY_DESIGN-REQ-317]** When a webhook delivery event is logged at `WARN` with the `secret` field, the JSON log output contains `"secret": "[REDACTED]"`, not the actual secret value.
+- **[AC-SEC-4-035][5_SECURITY_DESIGN-REQ-318]** When the server starts with an `ANTHROPIC_API_KEY` environment variable set, that value does NOT appear in any log line at any level, including `DEBUG` and `TRACE`.
 
 **4.9.7 SSRF Mitigation (§4.7)**
 
-- **[AC-SEC-4-036]** A webhook configured with URL `http://192.168.1.1/hook` is NOT delivered; `WARN` log event is emitted with `"ssrf"` in the message and reason `"private network (RFC 1918)"`; no retry is attempted (blocked at SSRF check, not delivery failure).
-- **[AC-SEC-4-037]** A webhook configured with URL `http://localhost/hook` is NOT delivered; blocked with reason `"loopback (127.0.0.0/8)"`. With `server.allow_local_webhooks = true`, delivery IS attempted and a `WARN` log is emitted indicating the SSRF check was bypassed.
-- **[AC-SEC-4-038]** Each webhook delivery attempt performs a fresh DNS resolution; a hostname that resolves to different IPs on successive calls is re-checked on each retry. (Verified by mocking DNS to return a private IP on the second resolution; second delivery attempt is blocked.)
-- **[AC-SEC-4-039]** A webhook URL whose hostname resolves to both a public IP and `10.0.0.1` is blocked; the `SsrfError::BlockedAddress` error identifies the specific blocked IP and its range classification.
+- **[AC-SEC-4-036][5_SECURITY_DESIGN-REQ-319]** A webhook configured with URL `http://192.168.1.1/hook` is NOT delivered; `WARN` log event is emitted with `"ssrf"` in the message and reason `"private network (RFC 1918)"`; no retry is attempted (blocked at SSRF check, not delivery failure).
+- **[AC-SEC-4-037][5_SECURITY_DESIGN-REQ-320]** A webhook configured with URL `http://localhost/hook` is NOT delivered; blocked with reason `"loopback (127.0.0.0/8)"`. With `server.allow_local_webhooks = true`, delivery IS attempted and a `WARN` log is emitted indicating the SSRF check was bypassed.
+- **[AC-SEC-4-038][5_SECURITY_DESIGN-REQ-321]** Each webhook delivery attempt performs a fresh DNS resolution; a hostname that resolves to different IPs on successive calls is re-checked on each retry. (Verified by mocking DNS to return a private IP on the second resolution; second delivery attempt is blocked.)
+- **[AC-SEC-4-039][5_SECURITY_DESIGN-REQ-322]** A webhook URL whose hostname resolves to both a public IP and `10.0.0.1` is blocked; the `SsrfError::BlockedAddress` error identifies the specific blocked IP and its range classification.
 
 ---
 
@@ -2846,11 +2846,11 @@ Maximum total attempts = `max_retries + 1` (default: 4 attempts).
 
 ### 5.1 Structured Logging Architecture
 
-**[SEC-084]** All logging MUST use the `tracing` crate with structured key-value fields. `println!`, `eprintln!`, and `log::` macros are prohibited in library crates (**[ARCH-BR-008]**). Log output is formatted as newline-delimited JSON (`tracing-subscriber` with `json` format) for machine consumption, or human-readable text for interactive use. The output format is controlled by the `DEVS_LOG_FORMAT` environment variable (`json` or `text`; default `text`).
+**[SEC-084][5_SECURITY_DESIGN-REQ-084]** All logging MUST use the `tracing` crate with structured key-value fields. `println!`, `eprintln!`, and `log::` macros are prohibited in library crates (**[ARCH-BR-008]**). Log output is formatted as newline-delimited JSON (`tracing-subscriber` with `json` format) for machine consumption, or human-readable text for interactive use. The output format is controlled by the `DEVS_LOG_FORMAT` environment variable (`json` or `text`; default `text`).
 
-**[SEC-085]** Log verbosity is controlled by `RUST_LOG` environment variable using `tracing-subscriber`'s `env-filter`. Default production log level: `INFO`. The `DEBUG` and `TRACE` levels MUST NOT produce output in release builds by default, as they may include sensitive data (template variable values, stage outputs) for debugging purposes.
+**[SEC-085][5_SECURITY_DESIGN-REQ-085]** Log verbosity is controlled by `RUST_LOG` environment variable using `tracing-subscriber`'s `env-filter`. Default production log level: `INFO`. The `DEBUG` and `TRACE` levels MUST NOT produce output in release builds by default, as they may include sensitive data (template variable values, stage outputs) for debugging purposes.
 
-**[SEC-098]** The `tracing-subscriber` is initialized exactly once at server startup and MUST NOT be re-initialized at runtime. Log level and format changes require a server restart. The subscriber MUST be configured with: `env-filter` driven by `RUST_LOG` (default: `info`), the formatter selected by `DEVS_LOG_FORMAT`, all output directed to `stderr`, and timestamps in RFC 3339 format with millisecond precision.
+**[SEC-098][5_SECURITY_DESIGN-REQ-098]** The `tracing-subscriber` is initialized exactly once at server startup and MUST NOT be re-initialized at runtime. Log level and format changes require a server restart. The subscriber MUST be configured with: `env-filter` driven by `RUST_LOG` (default: `info`), the formatter selected by `DEVS_LOG_FORMAT`, all output directed to `stderr`, and timestamps in RFC 3339 format with millisecond precision.
 
 **Log configuration environment variables:**
 
@@ -2884,7 +2884,7 @@ graph TD
 
 All `tracing::info!`, `warn!`, and `error!` calls within a stage executor task carry `run_id`, `stage_name`, and `attempt` automatically via the enclosing span, without requiring each call site to pass these values explicitly. Cross-crate async calls inherit the span via `tokio`'s task-local storage when using `.instrument(span)`.
 
-**[SEC-099]** Log output is written to `stderr` exclusively. The server MUST NOT write operational log output to any file path. Stage output (agent stdout/stderr) is written to dedicated log files at `.devs/logs/`. These are distinct streams that MUST NOT be mixed.
+**[SEC-099][5_SECURITY_DESIGN-REQ-099]** Log output is written to `stderr` exclusively. The server MUST NOT write operational log output to any file path. Stage output (agent stdout/stderr) is written to dedicated log files at `.devs/logs/`. These are distinct streams that MUST NOT be mixed.
 
 **Structured Logging — Edge Cases:**
 
@@ -2900,7 +2900,7 @@ All `tracing::info!`, `warn!`, and `error!` calls within a stage executor task c
 
 ### 5.2 Mandatory Audit Events
 
-**[SEC-086]** The following events MUST be logged at the specified level with structured fields, forming the audit trail. Each log entry MUST include: `timestamp` (RFC 3339 with ms precision), `event_type`, `run_id` (where applicable), `project_id` (where applicable), and `actor` (see complete enum below).
+**[SEC-086][5_SECURITY_DESIGN-REQ-086]** The following events MUST be logged at the specified level with structured fields, forming the audit trail. Each log entry MUST include: `timestamp` (RFC 3339 with ms precision), `event_type`, `run_id` (where applicable), `project_id` (where applicable), and `actor` (see complete enum below).
 
 **Actor field — complete enumeration:**
 
@@ -2956,9 +2956,9 @@ The `actor` field is a plain string. At MVP there is no per-connection identity;
 | Project registered | `project_id`, `name`, `repo_path`, `actor` | `INFO` |
 | Project removed | `project_id`, `name`, `actor` | `INFO` |
 
-**[SEC-087]** Webhook URLs logged in audit events MUST have query parameters redacted. The URL is logged as `<scheme>://<host><path>?<redacted>`. This prevents logging of API keys or tokens accidentally placed in webhook query strings by operators. If the URL has no query parameters, it is logged as-is.
+**[SEC-087][5_SECURITY_DESIGN-REQ-087]** Webhook URLs logged in audit events MUST have query parameters redacted. The URL is logged as `<scheme>://<host><path>?<redacted>`. This prevents logging of API keys or tokens accidentally placed in webhook query strings by operators. If the URL has no query parameters, it is logged as-is.
 
-**[SEC-100]** Audit event field validation: `run_id` fields MUST be lowercase-hyphenated UUID4; `attempt` fields MUST be ≥ 1; `duration_ms` fields MUST be ≥ 0. Log events containing invalid field values (caused by internal bugs) are emitted anyway but include an additional `"field_validation_error": true` field to enable filtering.
+**[SEC-100][5_SECURITY_DESIGN-REQ-100]** Audit event field validation: `run_id` fields MUST be lowercase-hyphenated UUID4; `attempt` fields MUST be ≥ 1; `duration_ms` fields MUST be ≥ 0. Log events containing invalid field values (caused by internal bugs) are emitted anyway but include an additional `"field_validation_error": true` field to enable filtering.
 
 **Mandatory Audit Events — Edge Cases:**
 
@@ -3112,13 +3112,13 @@ Every structured audit log entry emitted by `tracing` in JSON format MUST confor
 }
 ```
 
-**[SEC-101]** The `event_type` field MUST use only the values from the registry table above. Custom `event_type` values are prohibited in `devs` production code. Internal diagnostic `tracing` events not in the registry MUST use `level: "DEBUG"` or `level: "TRACE"` so they are suppressed in production by default.
+**[SEC-101][5_SECURITY_DESIGN-REQ-101]** The `event_type` field MUST use only the values from the registry table above. Custom `event_type` values are prohibited in `devs` production code. Internal diagnostic `tracing` events not in the registry MUST use `level: "DEBUG"` or `level: "TRACE"` so they are suppressed in production by default.
 
 ---
 
 ### 5.4 Credential Redaction in Logs
 
-**[SEC-088]** Log fields containing credential values MUST be redacted. Implementors MUST use a custom `tracing` field type `Redacted<T>` (defined in `devs-core/src/redacted.rs`) that implements `fmt::Debug` and `fmt::Display` as `"[REDACTED]"`. This type MUST be applied to:
+**[SEC-088][5_SECURITY_DESIGN-REQ-088]** Log fields containing credential values MUST be redacted. Implementors MUST use a custom `tracing` field type `Redacted<T>` (defined in `devs-core/src/redacted.rs`) that implements `fmt::Debug` and `fmt::Display` as `"[REDACTED]"`. This type MUST be applied to:
 - Webhook `secret` fields in all log events and struct `Debug` impls
 - Any field with a name matching the case-insensitive suffixes `_api_key`, `_token`, `_secret`, `_password`
 - SSH private key content or file paths containing key material
@@ -3166,9 +3166,9 @@ impl<T: serde::Serialize> serde::Serialize for Redacted<T> {
 }
 ```
 
-**[SEC-102]** `Redacted<T>` MUST implement `serde::Serialize` as the literal string `"[REDACTED]"`. This ensures that if a `Redacted<T>` value is accidentally included in a JSON-serialized response (webhook payload, MCP result, checkpoint JSON), it produces `"[REDACTED]"` instead of the underlying value. The inner value MUST NOT be reachable through the `Serialize` implementation.
+**[SEC-102][5_SECURITY_DESIGN-REQ-102]** `Redacted<T>` MUST implement `serde::Serialize` as the literal string `"[REDACTED]"`. This ensures that if a `Redacted<T>` value is accidentally included in a JSON-serialized response (webhook payload, MCP result, checkpoint JSON), it produces `"[REDACTED]"` instead of the underlying value. The inner value MUST NOT be reachable through the `Serialize` implementation.
 
-**[SEC-089]** Stage stdout and stderr MUST NOT be included in `tracing` log output at any level. Stage output is written to dedicated log files at `.devs/logs/<run-id>/<stage>/attempt_<N>/stdout.log` and `stderr.log`. Structured log events MUST reference the log file path (`log_path` field), never the content.
+**[SEC-089][5_SECURITY_DESIGN-REQ-089]** Stage stdout and stderr MUST NOT be included in `tracing` log output at any level. Stage output is written to dedicated log files at `.devs/logs/<run-id>/<stage>/attempt_<N>/stdout.log` and `stderr.log`. Structured log events MUST reference the log file path (`log_path` field), never the content.
 
 **Startup credential detection algorithm** (runs during `devs.toml` parsing, before port binding):
 
@@ -3181,7 +3181,7 @@ FOR each (key, value) in devs.toml flat key-value pairs:
     # The value is NOT included in the log entry under any circumstances
 ```
 
-This scan is advisory: the server starts (with `WARN`) even when credentials are found in TOML, as per **[SEC-058]**. The detection is based on key name patterns only; values are never examined for content.
+This scan is advisory: the server starts (with `WARN`) even when credentials are found in TOML, as per **[SEC-058][5_SECURITY_DESIGN-REQ-058]**. The detection is based on key name patterns only; values are never examined for content.
 
 **Credential Redaction — Edge Cases:**
 
@@ -3197,13 +3197,13 @@ This scan is advisory: the server starts (with `WARN`) even when credentials are
 
 ### 5.5 Log Injection Mitigation
 
-**[SEC-090]** When writing stage stdout/stderr to log files, content MUST be written verbatim (binary-safe) to the log file without any parsing or interpretation. ANSI escape sequences are NOT stripped from raw log files; stripping occurs only in the TUI display layer. This preserves full forensic fidelity while preventing log injection from interfering with the log pipeline.
+**[SEC-090][5_SECURITY_DESIGN-REQ-090]** When writing stage stdout/stderr to log files, content MUST be written verbatim (binary-safe) to the log file without any parsing or interpretation. ANSI escape sequences are NOT stripped from raw log files; stripping occurs only in the TUI display layer. This preserves full forensic fidelity while preventing log injection from interfering with the log pipeline.
 
-**[SEC-091]** JSON-formatted structured logs from `tracing-subscriber` inherently prevent log injection by serializing all field values as JSON strings with proper escaping of `"`, `\n`, `\r`, and control characters. Newlines within a single log event MUST be escaped as `\n` in the JSON output, never emitted as literal newlines that would split a log record. This is guaranteed by the `tracing-subscriber` JSON formatter without additional intervention.
+**[SEC-091][5_SECURITY_DESIGN-REQ-091]** JSON-formatted structured logs from `tracing-subscriber` inherently prevent log injection by serializing all field values as JSON strings with proper escaping of `"`, `\n`, `\r`, and control characters. Newlines within a single log event MUST be escaped as `\n` in the JSON output, never emitted as literal newlines that would split a log record. This is guaranteed by the `tracing-subscriber` JSON formatter without additional intervention.
 
-**[SEC-103]** Log field values that exceed 64 KiB in a single `tracing` event field are truncated to 64 KiB with `" ...[TRUNCATED: N bytes]"` appended. Stage output is always referenced via a `log_path` field (never inlined), so this limit primarily constrains error message strings and validation error arrays.
+**[SEC-103][5_SECURITY_DESIGN-REQ-103]** Log field values that exceed 64 KiB in a single `tracing` event field are truncated to 64 KiB with `" ...[TRUNCATED: N bytes]"` appended. Stage output is always referenced via a `log_path` field (never inlined), so this limit primarily constrains error message strings and validation error arrays.
 
-**[SEC-104]** Tracing span context MUST NOT include any user-controlled string that has not been validated against a known-safe character set. Fields used in span context and their validated character sets:
+**[SEC-104][5_SECURITY_DESIGN-REQ-104]** Tracing span context MUST NOT include any user-controlled string that has not been validated against a known-safe character set. Fields used in span context and their validated character sets:
 
 | Span Field | Validated Character Set | Validation Point |
 |---|---|---|
@@ -3230,11 +3230,11 @@ Fields accepting arbitrary user-controlled strings (e.g., run `slug`, `message` 
 
 ### 5.6 Log Retention and Access
 
-**[SEC-092]** Stage log files in `.devs/logs/` are subject to the same retention policy as checkpoint data: `max_age_days` (default 30) and `max_size_mb` (default 500). Retention sweeps occur at startup (after checkpoint recovery) and on a 24-hour periodic timer. Logs of active (`Running` or `Paused`) runs MUST NOT be deleted during a sweep.
+**[SEC-092][5_SECURITY_DESIGN-REQ-092]** Stage log files in `.devs/logs/` are subject to the same retention policy as checkpoint data: `max_age_days` (default 30) and `max_size_mb` (default 500). Retention sweeps occur at startup (after checkpoint recovery) and on a 24-hour periodic timer. Logs of active (`Running` or `Paused`) runs MUST NOT be deleted during a sweep.
 
-**[SEC-093]** Log files MUST be created with mode `0600` (owner read/write only) on Unix systems. Parent directories MUST be created with mode `0700` (owner only). On Windows, directory ACLs are not set by `devs` at MVP; this is documented as a deployment caveat requiring operators to configure appropriate ACLs. The intent is that no local user other than the server process owner can read stage output files.
+**[SEC-093][5_SECURITY_DESIGN-REQ-093]** Log files MUST be created with mode `0600` (owner read/write only) on Unix systems. Parent directories MUST be created with mode `0700` (owner only). On Windows, directory ACLs are not set by `devs` at MVP; this is documented as a deployment caveat requiring operators to configure appropriate ACLs. The intent is that no local user other than the server process owner can read stage output files.
 
-**[SEC-094]** The `tracing` process-level log output (server operational logs) is written to `stderr` by default. Operators SHOULD redirect `stderr` to a log aggregation system in production. Log rotation of stage output files is handled by the retention sweep; process-level log rotation is the operator's responsibility.
+**[SEC-094][5_SECURITY_DESIGN-REQ-094]** The `tracing` process-level log output (server operational logs) is written to `stderr` by default. Operators SHOULD redirect `stderr` to a log aggregation system in production. Log rotation of stage output files is handled by the retention sweep; process-level log rotation is the operator's responsibility.
 
 **Complete file and directory permission model:**
 
@@ -3252,7 +3252,7 @@ Fields accepting arbitrary user-controlled strings (e.g., run `slug`, `message` 
 | `.devs/runs/<run-id>/checkpoint.json` | `0600` | Each state transition (atomic write) |
 | `.devs/runs/<run-id>/stages/<stage>/attempt_<N>/structured_output.json` | `0600` | Stage completion with `structured_output` mechanism |
 
-**[SEC-105]** On server startup, if `.devs/` exists with a mode that does not include `0700`, `devs` MUST attempt `chmod 0700` before proceeding. If `chmod` fails (e.g., owned by a different user), the server logs `WARN` with `event_type: "security.misconfiguration"` and `check_id: "SEC-FILE-PERM"` and proceeds anyway (to allow crash recovery of in-flight runs).
+**[SEC-105][5_SECURITY_DESIGN-REQ-105]** On server startup, if `.devs/` exists with a mode that does not include `0700`, `devs` MUST attempt `chmod 0700` before proceeding. If `chmod` fails (e.g., owned by a different user), the server logs `WARN` with `event_type: "security.misconfiguration"` and `check_id: "SEC-FILE-PERM"` and proceeds anyway (to allow crash recovery of in-flight runs).
 
 **Retention sweep algorithm:**
 
@@ -3359,11 +3359,11 @@ tokio::io::AsyncBufReadExt::lines()
               Feeds stream_logs from disk for completed stages
 ```
 
-**[SEC-106]** The disk write MUST NOT be blocked by the in-memory buffer write and vice versa. If the disk write fails (disk full), the in-memory buffer continues; the stage does not fail solely due to a log write error. If the in-memory buffer is full (1 MiB exceeded), only the buffer evicts data; the disk file continues receiving all output.
+**[SEC-106][5_SECURITY_DESIGN-REQ-106]** The disk write MUST NOT be blocked by the in-memory buffer write and vice versa. If the disk write fails (disk full), the in-memory buffer continues; the stage does not fail solely due to a log write error. If the in-memory buffer is full (1 MiB exceeded), only the buffer evicts data; the disk file continues receiving all output.
 
 **`StageOutput.log_path` field:** Set to the relative directory path from the project root: `.devs/logs/<run-id>/<stage-name>/attempt_<N>/`. This is a directory, not a file path; callers specify `stream: "stdout"` or `stream: "stderr"` when requesting log content.
 
-**[SEC-107]** On retry (attempt N > 1), a new `attempt_<N>/` directory is created with new empty log files. The previous attempt's log files MUST NOT be overwritten. Both remain independently accessible via `get_stage_output(run_id, stage_name, attempt=N)`.
+**[SEC-107][5_SECURITY_DESIGN-REQ-107]** On retry (attempt N > 1), a new `attempt_<N>/` directory is created with new empty log files. The previous attempt's log files MUST NOT be overwritten. Both remain independently accessible via `get_stage_output(run_id, stage_name, attempt=N)`.
 
 **Stage Log File Lifecycle — Edge Cases:**
 
@@ -3383,7 +3383,7 @@ Correlating log events across server components — gRPC handler, scheduler, exe
 
 **Request ID propagation:**
 
-**[SEC-108]** Every gRPC unary response MUST include a `request_id` field (UUID4, lowercase-hyphenated) in its response proto message. Every MCP tool call response MUST include `"request_id": "<uuid>"` in the `result` JSON object. All `tracing` log events emitted within the scope of that request handler carry this `request_id` in the enclosing `grpc_request` or `mcp_request` span.
+**[SEC-108][5_SECURITY_DESIGN-REQ-108]** Every gRPC unary response MUST include a `request_id` field (UUID4, lowercase-hyphenated) in its response proto message. Every MCP tool call response MUST include `"request_id": "<uuid>"` in the `result` JSON object. All `tracing` log events emitted within the scope of that request handler carry this `request_id` in the enclosing `grpc_request` or `mcp_request` span.
 
 ```mermaid
 flowchart LR
@@ -3412,7 +3412,7 @@ graph TD
     A --> F["mcp_request_span\nrequest_id=<uuid>, tool='get_run'"]
 ```
 
-**[SEC-109]** Log events emitted outside any run span (startup, retention sweep, responses to `list_runs`) have an empty `span` object `{}`. This is not an error; these events are identifiable by their `event_type` prefix (`server.*`, `retention.*`, `project.*`).
+**[SEC-109][5_SECURITY_DESIGN-REQ-109]** Log events emitted outside any run span (startup, retention sweep, responses to `list_runs`) have an empty `span` object `{}`. This is not an error; these events are identifiable by their `event_type` prefix (`server.*`, `retention.*`, `project.*`).
 
 **Cross-component correlation example:**
 
@@ -3431,7 +3431,7 @@ A failing stage with one retry produces the following log chain, all filterable 
 
 A log aggregation query for `span.run_id = "550e8400-e29b-41d4-a716-446655440000"` retrieves the complete causal history from all components without requiring knowledge of which internal modules were involved.
 
-**[SEC-110]** The `list_checkpoints` MCP tool returns `commit_sha` values for each checkpoint commit. These SHAs can be used with the Filesystem MCP `read_file` to read the exact `checkpoint.json` state at any historical point, providing a time-series view of state transitions that complements the structured log stream.
+**[SEC-110][5_SECURITY_DESIGN-REQ-110]** The `list_checkpoints` MCP tool returns `commit_sha` values for each checkpoint commit. These SHAs can be used with the Filesystem MCP `read_file` to read the exact `checkpoint.json` state at any historical point, providing a time-series view of state transitions that complements the structured log stream.
 
 **Log Correlation — Edge Cases:**
 
@@ -3446,7 +3446,7 @@ A log aggregation query for `span.run_id = "550e8400-e29b-41d4-a716-446655440000
 
 ### 5.9 Monitoring and Alerting
 
-**[SEC-095]** The following conditions MUST be detectable from the structured log stream and SHOULD trigger operator alerts in production environments. The `devs` server does not implement a built-in alerting engine; operators use external log aggregation systems (Grafana Loki, Elasticsearch, Datadog, etc.) that consume the structured JSON log stream.
+**[SEC-095][5_SECURITY_DESIGN-REQ-095]** The following conditions MUST be detectable from the structured log stream and SHOULD trigger operator alerts in production environments. The `devs` server does not implement a built-in alerting engine; operators use external log aggregation systems (Grafana Loki, Elasticsearch, Datadog, etc.) that consume the structured JSON log stream.
 
 **Alert conditions, thresholds, and recommended cooldowns:**
 
@@ -3463,7 +3463,7 @@ A log aggregation query for `span.run_id = "550e8400-e29b-41d4-a716-446655440000
 | Rate limit cascade (pool exhausted after multiple rate limits) | `pool.exhausted` following `pool.rate_limited` events | Any occurrence | HIGH | 10 minutes |
 | Dependency advisory detected | `cargo audit` output in `./do lint` CI job | Any advisory | HIGH | Until patched |
 
-**[SEC-096]** The outbound webhook system provides a native monitoring integration: operators MAY configure a `state.changed` webhook target pointing to their alerting system to receive all state transitions in real time. The webhook payload is signed with HMAC-SHA256 (**[SEC-021]**) allowing the receiver to verify event origin. This approach delivers events with lower latency than polling a log aggregation system and is the recommended production monitoring integration.
+**[SEC-096][5_SECURITY_DESIGN-REQ-096]** The outbound webhook system provides a native monitoring integration: operators MAY configure a `state.changed` webhook target pointing to their alerting system to receive all state transitions in real time. The webhook payload is signed with HMAC-SHA256 (**[SEC-021][5_SECURITY_DESIGN-REQ-021]**) allowing the receiver to verify event origin. This approach delivers events with lower latency than polling a log aggregation system and is the recommended production monitoring integration.
 
 **Stage failure rate — detection query pattern:**
 
@@ -3493,7 +3493,7 @@ stateDiagram-v2
     Normal --> Normal: Condition not met (no transition)
 ```
 
-**[SEC-111]** The `pool.exhausted` event fires at most once per exhaustion episode (**[3_PRD-BR-026]**, **[2_TAS-BR-WH-003]**). An exhaustion episode begins when all agents in a pool are simultaneously unavailable and ends when at least one becomes available again (signalled by `pool.recovered`). This prevents alert floods during prolonged pool unavailability. Operators SHOULD use `pool.recovered` to auto-resolve pool exhaustion alerts.
+**[SEC-111][5_SECURITY_DESIGN-REQ-111]** The `pool.exhausted` event fires at most once per exhaustion episode (**[3_PRD-BR-026]**, **[2_TAS-BR-WH-003]**). An exhaustion episode begins when all agents in a pool are simultaneously unavailable and ends when at least one becomes available again (signalled by `pool.recovered`). This prevents alert floods during prolonged pool unavailability. Operators SHOULD use `pool.recovered` to auto-resolve pool exhaustion alerts.
 
 **Monitoring and Alerting — Edge Cases:**
 
@@ -3508,28 +3508,28 @@ stateDiagram-v2
 
 ### 5.10 Test Coverage Requirements for Security Controls
 
-**[SEC-097]** Every security control in this document that is enforced in code MUST have at least one automated test annotated `// Covers: SEC-NNN`. The following controls MUST have dedicated E2E tests (not unit tests) to satisfy QG-003/004/005.
+**[SEC-097][5_SECURITY_DESIGN-REQ-097]** Every security control in this document that is enforced in code MUST have at least one automated test annotated `// Covers: SEC-NNN`. The following controls MUST have dedicated E2E tests (not unit tests) to satisfy QG-003/004/005.
 
 **Required E2E and integration tests:**
 
 | Control | Test Interface | Test Description |
 |---|---|---|
-| **[SEC-036]** SSRF blocklist enforcement | MCP E2E | Configure webhook URL targeting `127.0.0.1`; trigger delivery; verify `"webhook.ssrf_blocked"` in JSON log; verify no outbound TCP connection to that address |
-| **[SEC-040]** Single-pass template expansion | MCP E2E | Submit workflow where stage A output contains `{{workflow.input.name}}`; verify stage B receives the literal string unchanged, not a recursively expanded value |
-| **[SEC-044]** No shell interpolation in agent spawn | Unit (adapter) | Assert that `AdapterCommand` populates `Command::args()` as a `Vec<String>` and does not construct a shell command string; inspect spawned args vector directly |
-| **[SEC-050]** String `"success"` rejected | MCP E2E | `inject_stage_input` with `{"success": "true"}` (string value); verify stage transitions to `Failed`; verify `stage.failed` audit event with `failure_reason: "invalid_structured_output"` |
-| **[SEC-060]** `cargo audit` in `./do lint` | Integration | Create a test Cargo workspace with a crate depending on a known-advisory version; run `./do lint`; assert exit code is non-zero and stderr contains advisory description |
-| **[SEC-088]** Credential redaction in logs | Unit | Three assertions: `format!("{:?}", Redacted("sk-ant-secret")) == "[REDACTED]"`; `format!("{}", Redacted("sk-ant-secret")) == "[REDACTED]"`; `serde_json::to_string(&Redacted("sk-ant-secret")).unwrap() == "\"[REDACTED]\""` |
-| **[SEC-093]** Log file permissions | Integration | After a stage completes, `fs::metadata("stdout.log").permissions().mode() & 0o777 == 0o600`; same check for `stderr.log`; same check for containing directories with `0o700` |
-| **[SEC-019]** Filesystem MCP write denial for `.devs/runs/` | MCP E2E | `write_file` to `.devs/runs/<uuid>/test.json` returns `"error": "permission_denied: ..."` with HTTP 200 |
-| **[SEC-091]** JSON log newline escaping | Unit | Write a `tracing` event with a field containing a literal `\n` character; capture `stderr` output; parse each line as JSON; assert exactly one JSON object per line; assert the field value contains `\\n` not a raw newline |
-| **[SEC-108]** `request_id` in responses | CLI E2E | `devs submit --format json` output contains `"request_id"` with UUID4 format matching `[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}` |
-| **[SEC-084]** No `println!` in library crates | CI (lint) | `./do lint` fails if any `crates/devs-{core,config,checkpoint,adapters,pool,executor,scheduler,webhook,grpc,mcp}/src/` file contains `println!` or `eprintln!` |
-| **[SEC-100]** Audit event required fields | Unit | Assert that a workflow run through a full success path produces JSON log events where every event of type `run.*` contains `run_id` (non-null, UUID4 format) and every event of type `stage.*` contains `stage_name` (non-null, non-empty) |
+| **[SEC-036][5_SECURITY_DESIGN-REQ-036]** SSRF blocklist enforcement | MCP E2E | Configure webhook URL targeting `127.0.0.1`; trigger delivery; verify `"webhook.ssrf_blocked"` in JSON log; verify no outbound TCP connection to that address |
+| **[SEC-040][5_SECURITY_DESIGN-REQ-040]** Single-pass template expansion | MCP E2E | Submit workflow where stage A output contains `{{workflow.input.name}}`; verify stage B receives the literal string unchanged, not a recursively expanded value |
+| **[SEC-044][5_SECURITY_DESIGN-REQ-044]** No shell interpolation in agent spawn | Unit (adapter) | Assert that `AdapterCommand` populates `Command::args()` as a `Vec<String>` and does not construct a shell command string; inspect spawned args vector directly |
+| **[SEC-050][5_SECURITY_DESIGN-REQ-050]** String `"success"` rejected | MCP E2E | `inject_stage_input` with `{"success": "true"}` (string value); verify stage transitions to `Failed`; verify `stage.failed` audit event with `failure_reason: "invalid_structured_output"` |
+| **[SEC-060][5_SECURITY_DESIGN-REQ-060]** `cargo audit` in `./do lint` | Integration | Create a test Cargo workspace with a crate depending on a known-advisory version; run `./do lint`; assert exit code is non-zero and stderr contains advisory description |
+| **[SEC-088][5_SECURITY_DESIGN-REQ-088]** Credential redaction in logs | Unit | Three assertions: `format!("{:?}", Redacted("sk-ant-secret")) == "[REDACTED]"`; `format!("{}", Redacted("sk-ant-secret")) == "[REDACTED]"`; `serde_json::to_string(&Redacted("sk-ant-secret")).unwrap() == "\"[REDACTED]\""` |
+| **[SEC-093][5_SECURITY_DESIGN-REQ-093]** Log file permissions | Integration | After a stage completes, `fs::metadata("stdout.log").permissions().mode() & 0o777 == 0o600`; same check for `stderr.log`; same check for containing directories with `0o700` |
+| **[SEC-019][5_SECURITY_DESIGN-REQ-019]** Filesystem MCP write denial for `.devs/runs/` | MCP E2E | `write_file` to `.devs/runs/<uuid>/test.json` returns `"error": "permission_denied: ..."` with HTTP 200 |
+| **[SEC-091][5_SECURITY_DESIGN-REQ-091]** JSON log newline escaping | Unit | Write a `tracing` event with a field containing a literal `\n` character; capture `stderr` output; parse each line as JSON; assert exactly one JSON object per line; assert the field value contains `\\n` not a raw newline |
+| **[SEC-108][5_SECURITY_DESIGN-REQ-108]** `request_id` in responses | CLI E2E | `devs submit --format json` output contains `"request_id"` with UUID4 format matching `[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}` |
+| **[SEC-084][5_SECURITY_DESIGN-REQ-084]** No `println!` in library crates | CI (lint) | `./do lint` fails if any `crates/devs-{core,config,checkpoint,adapters,pool,executor,scheduler,webhook,grpc,mcp}/src/` file contains `println!` or `eprintln!` |
+| **[SEC-100][5_SECURITY_DESIGN-REQ-100]** Audit event required fields | Unit | Assert that a workflow run through a full success path produces JSON log events where every event of type `run.*` contains `run_id` (non-null, UUID4 format) and every event of type `stage.*` contains `stage_name` (non-null, non-empty) |
 
-**[SEC-112]** Test annotations MUST correspond to genuine behavioral coverage. A test that calls `Redacted::new()` and asserts `Debug` output covers **[SEC-088]**. A test that merely imports `Redacted` without asserting behavior at an interface boundary does NOT satisfy the coverage requirement.
+**[SEC-112][5_SECURITY_DESIGN-REQ-112]** Test annotations MUST correspond to genuine behavioral coverage. A test that calls `Redacted::new()` and asserts `Debug` output covers **[SEC-088][5_SECURITY_DESIGN-REQ-088]**. A test that merely imports `Redacted` without asserting behavior at an interface boundary does NOT satisfy the coverage requirement.
 
-**[SEC-113]** File permission tests (**[SEC-093]**) MUST run on all three CI platforms. On Windows, the test asserts that the file is created and the test documents that mode `0o600` is not enforced, emitting a `WARN` log: `"file permission enforcement not supported on Windows; .devs/ directory security relies on OS-level ACLs"`.
+**[SEC-113][5_SECURITY_DESIGN-REQ-113]** File permission tests (**[SEC-093][5_SECURITY_DESIGN-REQ-093]**) MUST run on all three CI platforms. On Windows, the test asserts that the file is created and the test documents that mode `0o600` is not enforced, emitting a `WARN` log: `"file permission enforcement not supported on Windows; .devs/ directory security relies on OS-level ACLs"`.
 
 ---
 
@@ -3559,37 +3559,37 @@ This section depends on and is depended upon by the following components:
 
 ### 5.12 Section 5 Acceptance Criteria
 
-- **[AC-SEC-5-001]** Every `tracing` log event in JSON format (`DEVS_LOG_FORMAT=json`) contains top-level fields `timestamp`, `level`, `target`, `span`, and `fields`. The `fields` object contains `event_type` (non-null string) and `message` (non-null string). Verified by running a standard workflow run and parsing every line of server `stderr` output as JSON with no parse errors.
+- **[AC-SEC-5-001][5_SECURITY_DESIGN-REQ-323]** Every `tracing` log event in JSON format (`DEVS_LOG_FORMAT=json`) contains top-level fields `timestamp`, `level`, `target`, `span`, and `fields`. The `fields` object contains `event_type` (non-null string) and `message` (non-null string). Verified by running a standard workflow run and parsing every line of server `stderr` output as JSON with no parse errors.
 
-- **[AC-SEC-5-002]** When `devs.toml` contains `CLAUDE_API_KEY = "test"`, server startup emits a `WARN` log entry with `event_type: "security.misconfiguration"` and `check_id: "SEC-TOML-CRED"`. The string `"test"` does NOT appear anywhere in the server's `stderr` output. Verified by grep on captured stderr after startup.
+- **[AC-SEC-5-002][5_SECURITY_DESIGN-REQ-324]** When `devs.toml` contains `CLAUDE_API_KEY = "test"`, server startup emits a `WARN` log entry with `event_type: "security.misconfiguration"` and `check_id: "SEC-TOML-CRED"`. The string `"test"` does NOT appear anywhere in the server's `stderr` output. Verified by grep on captured stderr after startup.
 
-- **[AC-SEC-5-003]** Stage `stdout.log` and `stderr.log` files are created with Unix permissions `0o600`. Verified by `fs::metadata(path).permissions().mode() & 0o777 == 0o600` in an integration test after a stage completes.
+- **[AC-SEC-5-003][5_SECURITY_DESIGN-REQ-325]** Stage `stdout.log` and `stderr.log` files are created with Unix permissions `0o600`. Verified by `fs::metadata(path).permissions().mode() & 0o777 == 0o600` in an integration test after a stage completes.
 
-- **[AC-SEC-5-004]** The parent directory `.devs/logs/` and all intermediate directories up to `attempt_<N>/` are created with Unix permissions `0o700`. Verified by the same mechanism as AC-SEC-5-003.
+- **[AC-SEC-5-004][5_SECURITY_DESIGN-REQ-326]** The parent directory `.devs/logs/` and all intermediate directories up to `attempt_<N>/` are created with Unix permissions `0o700`. Verified by the same mechanism as AC-SEC-5-003.
 
-- **[AC-SEC-5-005]** An agent that prints `CLAUDE_API_KEY=sk-ant-secret` to stdout: the string `sk-ant-secret` appears in `.devs/logs/<run-id>/<stage>/attempt_1/stdout.log` AND does NOT appear in any line of the server's `tracing` log output. Verified by grep on both the log file and captured server `stderr`.
+- **[AC-SEC-5-005][5_SECURITY_DESIGN-REQ-327]** An agent that prints `CLAUDE_API_KEY=sk-ant-secret` to stdout: the string `sk-ant-secret` appears in `.devs/logs/<run-id>/<stage>/attempt_1/stdout.log` AND does NOT appear in any line of the server's `tracing` log output. Verified by grep on both the log file and captured server `stderr`.
 
-- **[AC-SEC-5-006]** After running `./do test`, `target/traceability.json` contains `covered: true` entries for `SEC-036`, `SEC-040`, `SEC-044`, `SEC-050`, `SEC-060`, `SEC-088`, `SEC-091`, `SEC-108`. Verified by parsing `target/traceability.json`.
+- **[AC-SEC-5-006][5_SECURITY_DESIGN-REQ-328]** After running `./do test`, `target/traceability.json` contains `covered: true` entries for `SEC-036`, `SEC-040`, `SEC-044`, `SEC-050`, `SEC-060`, `SEC-088`, `SEC-091`, `SEC-108`. Verified by parsing `target/traceability.json`.
 
-- **[AC-SEC-5-007]** A webhook URL `https://example.com/hook?token=secret` is logged in all audit events referencing that webhook as `https://example.com/hook?<redacted>`. The string `"secret"` does NOT appear in any log line. Verified by configuring such a webhook, triggering a delivery, and grepping server `stderr` output.
+- **[AC-SEC-5-007][5_SECURITY_DESIGN-REQ-329]** A webhook URL `https://example.com/hook?token=secret` is logged in all audit events referencing that webhook as `https://example.com/hook?<redacted>`. The string `"secret"` does NOT appear in any log line. Verified by configuring such a webhook, triggering a delivery, and grepping server `stderr` output.
 
-- **[AC-SEC-5-008]** Retention sweep at startup deletes all runs whose `completed_at` is older than `max_age_days` but does NOT delete any run currently in `Running` or `Paused` status. Verified by a test that: (a) starts a run, (b) stops the server, (c) manually ages `completed_at` in checkpoint JSON for other terminal runs, (d) restarts the server, (e) confirms only the aged runs are absent.
+- **[AC-SEC-5-008][5_SECURITY_DESIGN-REQ-330]** Retention sweep at startup deletes all runs whose `completed_at` is older than `max_age_days` but does NOT delete any run currently in `Running` or `Paused` status. Verified by a test that: (a) starts a run, (b) stops the server, (c) manually ages `completed_at` in checkpoint JSON for other terminal runs, (d) restarts the server, (e) confirms only the aged runs are absent.
 
-- **[AC-SEC-5-009]** `format!("{:?}", Redacted("test"))` returns `"[REDACTED]"`. `format!("{}", Redacted("test"))` returns `"[REDACTED]"`. `serde_json::to_string(&Redacted("test")).unwrap()` returns `"\"[REDACTED]\""`. All three assertions pass in a dedicated unit test annotated `// Covers: SEC-088`.
+- **[AC-SEC-5-009][5_SECURITY_DESIGN-REQ-331]** `format!("{:?}", Redacted("test"))` returns `"[REDACTED]"`. `format!("{}", Redacted("test"))` returns `"[REDACTED]"`. `serde_json::to_string(&Redacted("test")).unwrap()` returns `"\"[REDACTED]\""`. All three assertions pass in a dedicated unit test annotated `// Covers: SEC-088`.
 
-- **[AC-SEC-5-010]** Every gRPC unary response proto contains a non-null `request_id` field in UUID4 lowercase-hyphenated format. `devs submit --format json` output contains `"request_id"` matching the regex `[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}`. Verified in a CLI E2E test annotated `// Covers: SEC-108`.
+- **[AC-SEC-5-010][5_SECURITY_DESIGN-REQ-332]** Every gRPC unary response proto contains a non-null `request_id` field in UUID4 lowercase-hyphenated format. `devs submit --format json` output contains `"request_id"` matching the regex `[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}`. Verified in a CLI E2E test annotated `// Covers: SEC-108`.
 
-- **[AC-SEC-5-011]** A workflow with two stages dispatched concurrently produces log events where (a) both `stage.dispatched` events carry the same `run_id` in their `span` object, (b) each carries a distinct `stage_name`, and (c) each carries `attempt: 1`. Verified by parsing JSON log output from a parallel-stage workflow E2E test.
+- **[AC-SEC-5-011][5_SECURITY_DESIGN-REQ-333]** A workflow with two stages dispatched concurrently produces log events where (a) both `stage.dispatched` events carry the same `run_id` in their `span` object, (b) each carries a distinct `stage_name`, and (c) each carries `attempt: 1`. Verified by parsing JSON log output from a parallel-stage workflow E2E test.
 
-- **[AC-SEC-5-012]** `DEVS_LOG_FORMAT=invalid` causes the server to write an error to `stderr` and exit non-zero before binding any TCP ports. Verified by spawning the server binary with this env var and asserting: exit code is non-zero AND the `~/.config/devs/server.addr` discovery file does NOT exist.
+- **[AC-SEC-5-012][5_SECURITY_DESIGN-REQ-334]** `DEVS_LOG_FORMAT=invalid` causes the server to write an error to `stderr` and exit non-zero before binding any TCP ports. Verified by spawning the server binary with this env var and asserting: exit code is non-zero AND the `~/.config/devs/server.addr` discovery file does NOT exist.
 
-- **[AC-SEC-5-013]** A stage that produces 1,048,577 bytes of stdout output has `StageOutput.truncated == true` and `StageOutput.stdout.len() == 1_048_576` (in-memory cap), while the on-disk `stdout.log` file has size ≥ 1,048,577 bytes. Verified in an integration test using a mock agent binary that writes a controlled byte count.
+- **[AC-SEC-5-013][5_SECURITY_DESIGN-REQ-335]** A stage that produces 1,048,577 bytes of stdout output has `StageOutput.truncated == true` and `StageOutput.stdout.len() == 1_048_576` (in-memory cap), while the on-disk `stdout.log` file has size ≥ 1,048,577 bytes. Verified in an integration test using a mock agent binary that writes a controlled byte count.
 
-- **[AC-SEC-5-014]** After a `cancel_run`, no `stage.dispatched`, `stage.completed`, or `stage.failed` audit events appear in the log for stages that were in `Waiting` or `Eligible` state at the time of cancellation. Verified by parsing the complete JSON log stream in a CLI E2E test that cancels a multi-stage run mid-flight.
+- **[AC-SEC-5-014][5_SECURITY_DESIGN-REQ-336]** After a `cancel_run`, no `stage.dispatched`, `stage.completed`, or `stage.failed` audit events appear in the log for stages that were in `Waiting` or `Eligible` state at the time of cancellation. Verified by parsing the complete JSON log stream in a CLI E2E test that cancels a multi-stage run mid-flight.
 
-- **[AC-SEC-5-015]** `./do lint` exits non-zero if any source file in `crates/devs-{core,config,checkpoint,adapters,pool,executor,scheduler,webhook,grpc,mcp}/src/` contains an invocation of `println!` or `eprintln!`. Verified by injecting `println!("test");` into `devs-core/src/lib.rs`, running `./do lint`, and asserting exit code is non-zero with the offending file and line reported on `stderr`.
+- **[AC-SEC-5-015][5_SECURITY_DESIGN-REQ-337]** `./do lint` exits non-zero if any source file in `crates/devs-{core,config,checkpoint,adapters,pool,executor,scheduler,webhook,grpc,mcp}/src/` contains an invocation of `println!` or `eprintln!`. Verified by injecting `println!("test");` into `devs-core/src/lib.rs`, running `./do lint`, and asserting exit code is non-zero with the offending file and line reported on `stderr`.
 
-- **[AC-SEC-5-016]** A `stream_logs(follow: true)` HTTP client that disconnects mid-stream causes the server to release all associated resources (`broadcast::Receiver`, log file read handle) within 500ms of disconnect detection. Verified by an integration test that connects, reads one line, drops the connection, and then asserts that a per-connection resource counter decrements within the 500ms window.
+- **[AC-SEC-5-016][5_SECURITY_DESIGN-REQ-338]** A `stream_logs(follow: true)` HTTP client that disconnects mid-stream causes the server to release all associated resources (`broadcast::Receiver`, log file read handle) within 500ms of disconnect detection. Verified by an integration test that connects, reads one line, drops the connection, and then asserts that a per-connection resource counter decrements within the 500ms window.
 
 ---
 

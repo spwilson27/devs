@@ -1,0 +1,80 @@
+{
+  "01_Core Domain Models & State Machine": [
+    "2_TAS-REQ-019",
+    "2_TAS-REQ-020",
+    "2_TAS-REQ-025",
+    "2_TAS-REQ-027",
+    "1_PRD-REQ-008",
+    "2_TAS-REQ-030",
+    "2_TAS-REQ-076",
+    "2_TAS-REQ-032"
+  ],
+  "02_Configuration & Identification": [
+    "1_PRD-REQ-042",
+    "2_TAS-REQ-024",
+    "1_PRD-REQ-007"
+  ],
+  "03_Template Resolution & Context": [
+    "2_TAS-REQ-088",
+    "2_TAS-REQ-073",
+    "2_TAS-REQ-074",
+    "2_TAS-REQ-075",
+    "1_PRD-REQ-010",
+    "2_TAS-REQ-089",
+    "2_TAS-REQ-090"
+  ],
+  "04_Persistence & Checkpoints": [
+    "2_TAS-REQ-017",
+    "2_TAS-REQ-018",
+    "1_PRD-REQ-009",
+    "1_PRD-REQ-029",
+    "2_TAS-REQ-087",
+    "1_PRD-REQ-030"
+  ],
+  "05_Agent Adapter Infrastructure": [
+    "1_PRD-REQ-014",
+    "2_TAS-REQ-034",
+    "1_PRD-REQ-013",
+    "2_TAS-REQ-035",
+    "1_PRD-REQ-015",
+    "1_PRD-REQ-016",
+    "2_TAS-REQ-037"
+  ],
+  "06_Mid-Run Interaction & Signal Handling": [
+    "1_PRD-REQ-017",
+    "2_TAS-REQ-038",
+    "2_TAS-REQ-039",
+    "1_PRD-REQ-018",
+    "2_TAS-REQ-036"
+  ],
+  "07_Agent Pools & Routing": [
+    "1_PRD-REQ-019",
+    "1_PRD-REQ-020",
+    "1_PRD-REQ-021",
+    "1_PRD-REQ-033"
+  ],
+  "08_Execution Environments": [
+    "2_TAS-REQ-040",
+    "1_PRD-REQ-022",
+    "2_TAS-REQ-044C",
+    "2_TAS-REQ-041",
+    "2_TAS-REQ-042",
+    "2_TAS-REQ-043"
+  ],
+  "09_Artifact Collection": [
+    "1_PRD-REQ-023",
+    "2_TAS-REQ-044"
+  ],
+  "10_Phase 1 Acceptance Criteria": [
+    "AC-ROAD-P1-001",
+    "AC-ROAD-P1-002",
+    "AC-ROAD-P1-003",
+    "AC-ROAD-P1-004",
+    "AC-ROAD-P1-005",
+    "AC-ROAD-P1-006",
+    "AC-ROAD-P1-007",
+    "AC-ROAD-P1-008",
+    "AC-ROAD-P1-009",
+    "ROAD-P1-DEP-001"
+  ]
+}

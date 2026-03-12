@@ -1,0 +1,712 @@
+{
+  "001_Workspace & Toolchain Setup": [
+    "1_PRD-REQ-002",
+    "2_TAS-REQ-003",
+    "2_TAS-REQ-004",
+    "2_TAS-REQ-005",
+    "2_TAS-REQ-021"
+  ],
+  "002_Workspace Toolchain Extensions": [
+    "2_TAS-REQ-006",
+    "2_TAS-REQ-007"
+  ],
+  "003_Developer Entrypoint Script": [
+    "1_PRD-REQ-045",
+    "1_PRD-BR-001",
+    "1_PRD-BR-002",
+    "1_PRD-BR-003",
+    "2_TAS-REQ-014"
+  ],
+  "004_Developer Script Behaviors": [
+    "2_TAS-REQ-083",
+    "2_TAS-REQ-084",
+    "2_TAS-REQ-085"
+  ],
+  "005_Verification Infrastructure": [
+    "1_PRD-REQ-046",
+    "1_PRD-REQ-047",
+    "1_PRD-REQ-048",
+    "1_PRD-BR-006",
+    "1_PRD-BR-007"
+  ],
+  "006_Quality Gate Enforcement": [
+    "1_PRD-KPI-BR-001",
+    "2_TAS-REQ-010",
+    "2_TAS-REQ-012",
+    "2_TAS-REQ-013",
+    "2_TAS-REQ-015"
+  ],
+  "007_Traceability and Reporting Schema": [
+    "2_TAS-REQ-079",
+    "2_TAS-REQ-080",
+    "2_TAS-REQ-081"
+  ],
+  "008_Proto & Core Foundation": [
+    "2_TAS-REQ-008",
+    "2_TAS-REQ-009",
+    "2_TAS-REQ-016",
+    "2_TAS-REQ-022",
+    "2_TAS-REQ-023"
+  ],
+  "009_Core Domain Types": [
+    "2_TAS-REQ-028",
+    "2_TAS-REQ-029",
+    "2_TAS-REQ-031",
+    "2_TAS-REQ-067",
+    "2_TAS-REQ-068"
+  ],
+  "010_Foundational Technical Requirements (Part 1)": [
+    "1_PRD-BR-004",
+    "1_PRD-BR-005",
+    "2_PRD-BR-001",
+    "2_PRD-BR-002",
+    "2_PRD-BR-003"
+  ],
+  "011_Foundational Technical Requirements (Part 2)": [
+    "2_PRD-BR-004",
+    "2_PRD-BR-005",
+    "2_PRD-BR-006",
+    "2_PRD-BR-007",
+    "2_PRD-BR-008"
+  ],
+  "012_Foundational Technical Requirements (Part 3)": [
+    "2_PRD-BR-009",
+    "2_PRD-BR-010",
+    "2_PRD-BR-011",
+    "2_PRD-BR-012",
+    "2_TAS-BR-013"
+  ],
+  "013_Foundational Technical Requirements (Part 4)": [
+    "2_TAS-BR-016",
+    "2_TAS-BR-021",
+    "2_TAS-BR-025",
+    "2_TAS-BR-WH-003",
+    "2_TAS-REQ-001A"
+  ],
+  "014_Foundational Technical Requirements (Part 5)": [
+    "2_TAS-REQ-001B",
+    "2_TAS-REQ-001C",
+    "2_TAS-REQ-001D",
+    "2_TAS-REQ-001E",
+    "2_TAS-REQ-001F"
+  ],
+  "015_Foundational Technical Requirements (Part 6)": [
+    "2_TAS-REQ-001G",
+    "2_TAS-REQ-001H",
+    "2_TAS-REQ-001I",
+    "2_TAS-REQ-001J",
+    "2_TAS-REQ-001K"
+  ],
+  "016_Foundational Technical Requirements (Part 7)": [
+    "2_TAS-REQ-001L",
+    "2_TAS-REQ-001M",
+    "2_TAS-REQ-001N",
+    "2_TAS-REQ-002A",
+    "2_TAS-REQ-002B"
+  ],
+  "017_Foundational Technical Requirements (Part 8)": [
+    "2_TAS-REQ-002C",
+    "2_TAS-REQ-002D",
+    "2_TAS-REQ-002E",
+    "2_TAS-REQ-002F",
+    "2_TAS-REQ-002G"
+  ],
+  "018_Foundational Technical Requirements (Part 9)": [
+    "2_TAS-REQ-002H",
+    "2_TAS-REQ-002I",
+    "2_TAS-REQ-002J",
+    "2_TAS-REQ-002K",
+    "2_TAS-REQ-002L"
+  ],
+  "019_Foundational Technical Requirements (Part 10)": [
+    "2_TAS-REQ-002M",
+    "2_TAS-REQ-002N",
+    "2_TAS-REQ-002O",
+    "2_TAS-REQ-002P",
+    "2_TAS-REQ-002Q"
+  ],
+  "020_Foundational Technical Requirements (Part 11)": [
+    "2_TAS-REQ-002R",
+    "2_TAS-REQ-002S",
+    "2_TAS-REQ-002T",
+    "2_TAS-REQ-002U",
+    "2_TAS-REQ-004A"
+  ],
+  "021_Foundational Technical Requirements (Part 12)": [
+    "2_TAS-REQ-004B",
+    "2_TAS-REQ-004C",
+    "2_TAS-REQ-004D",
+    "2_TAS-REQ-004E",
+    "2_TAS-REQ-004F"
+  ],
+  "022_Foundational Technical Requirements (Part 13)": [
+    "2_TAS-REQ-004G",
+    "2_TAS-REQ-005A",
+    "2_TAS-REQ-007A",
+    "2_TAS-REQ-007B",
+    "2_TAS-REQ-008A"
+  ],
+  "023_Foundational Technical Requirements (Part 14)": [
+    "2_TAS-REQ-008B",
+    "2_TAS-REQ-008C",
+    "2_TAS-REQ-008D",
+    "2_TAS-REQ-009A",
+    "2_TAS-REQ-009B"
+  ],
+  "024_Foundational Technical Requirements (Part 15)": [
+    "2_TAS-REQ-010A",
+    "2_TAS-REQ-010B",
+    "2_TAS-REQ-010C",
+    "2_TAS-REQ-010D",
+    "2_TAS-REQ-010E"
+  ],
+  "025_Foundational Technical Requirements (Part 16)": [
+    "2_TAS-REQ-010F",
+    "2_TAS-REQ-012A",
+    "2_TAS-REQ-012B",
+    "2_TAS-REQ-012C",
+    "2_TAS-REQ-012D"
+  ],
+  "026_Foundational Technical Requirements (Part 17)": [
+    "2_TAS-REQ-013A",
+    "2_TAS-REQ-014A",
+    "2_TAS-REQ-014B",
+    "2_TAS-REQ-014C",
+    "2_TAS-REQ-014D"
+  ],
+  "027_Foundational Technical Requirements (Part 18)": [
+    "2_TAS-REQ-014E",
+    "2_TAS-REQ-014F",
+    "2_TAS-REQ-015A",
+    "2_TAS-REQ-015B",
+    "2_TAS-REQ-015C"
+  ],
+  "028_Foundational Technical Requirements (Part 19)": [
+    "2_TAS-REQ-015D",
+    "2_TAS-REQ-015E",
+    "2_TAS-REQ-015F",
+    "2_TAS-REQ-020A",
+    "2_TAS-REQ-020B"
+  ],
+  "029_Foundational Technical Requirements (Part 20)": [
+    "2_TAS-REQ-021A",
+    "2_TAS-REQ-021B",
+    "2_TAS-REQ-021C",
+    "2_TAS-REQ-022A",
+    "2_TAS-REQ-022B"
+  ],
+  "030_Foundational Technical Requirements (Part 21)": [
+    "2_TAS-REQ-022C",
+    "2_TAS-REQ-023A",
+    "2_TAS-REQ-023B",
+    "2_TAS-REQ-023C",
+    "2_TAS-REQ-023D"
+  ],
+  "031_Foundational Technical Requirements (Part 22)": [
+    "2_TAS-REQ-024A",
+    "2_TAS-REQ-024B",
+    "2_TAS-REQ-024C",
+    "2_TAS-REQ-030A",
+    "2_TAS-REQ-030B"
+  ],
+  "032_Foundational Technical Requirements (Part 23)": [
+    "2_TAS-REQ-030C",
+    "2_TAS-REQ-033A",
+    "2_TAS-REQ-033B",
+    "2_TAS-REQ-044A",
+    "2_TAS-REQ-044B"
+  ],
+  "033_Foundational Technical Requirements (Part 24)": [
+    "2_TAS-REQ-051A",
+    "2_TAS-REQ-086A",
+    "2_TAS-REQ-086B",
+    "2_TAS-REQ-086C",
+    "2_TAS-REQ-086D"
+  ],
+  "034_Foundational Technical Requirements (Part 25)": [
+    "2_TAS-REQ-086E",
+    "2_TAS-REQ-086F",
+    "2_TAS-REQ-086G",
+    "2_TAS-REQ-086H",
+    "2_TAS-REQ-086I"
+  ],
+  "035_Foundational Technical Requirements (Part 26)": [
+    "2_TAS-REQ-086J",
+    "2_TAS-REQ-086K",
+    "2_TAS-REQ-086L",
+    "2_TAS-REQ-086M",
+    "2_TAS-REQ-086N"
+  ],
+  "036_Detailed Domain Specifications (Part 1)": [
+    "1_PRD-KPI-BR-002",
+    "1_PRD-KPI-BR-003",
+    "1_PRD-KPI-BR-004",
+    "1_PRD-KPI-BR-005",
+    "1_PRD-KPI-BR-006"
+  ],
+  "037_Detailed Domain Specifications (Part 2)": [
+    "1_PRD-KPI-BR-007",
+    "1_PRD-KPI-BR-008",
+    "1_PRD-KPI-BR-009",
+    "1_PRD-KPI-BR-010",
+    "1_PRD-KPI-BR-011"
+  ],
+  "038_Detailed Domain Specifications (Part 3)": [
+    "1_PRD-KPI-BR-012",
+    "1_PRD-KPI-BR-013",
+    "1_PRD-KPI-BR-014",
+    "1_PRD-REQ-043",
+    "1_PRD-REQ-044"
+  ],
+  "039_Detailed Domain Specifications (Part 4)": [
+    "1_PRD-REQ-049",
+    "1_PRD-REQ-050",
+    "1_PRD-REQ-051",
+    "1_PRD-REQ-052",
+    "1_PRD-REQ-053"
+  ],
+  "040_Detailed Domain Specifications (Part 5)": [
+    "1_PRD-REQ-054",
+    "1_PRD-REQ-055",
+    "1_PRD-REQ-056",
+    "1_PRD-REQ-057",
+    "1_PRD-REQ-058"
+  ],
+  "041_Detailed Domain Specifications (Part 6)": [
+    "1_PRD-REQ-059",
+    "1_PRD-REQ-060",
+    "1_PRD-REQ-061",
+    "1_PRD-REQ-062",
+    "1_PRD-REQ-063"
+  ],
+  "042_Detailed Domain Specifications (Part 7)": [
+    "1_PRD-REQ-064",
+    "1_PRD-REQ-065",
+    "1_PRD-REQ-066",
+    "1_PRD-REQ-067",
+    "1_PRD-REQ-068"
+  ],
+  "043_Detailed Domain Specifications (Part 8)": [
+    "1_PRD-REQ-069",
+    "1_PRD-REQ-070",
+    "1_PRD-REQ-071",
+    "1_PRD-REQ-072",
+    "1_PRD-REQ-073"
+  ],
+  "044_Detailed Domain Specifications (Part 9)": [
+    "1_PRD-REQ-074",
+    "1_PRD-REQ-075",
+    "1_PRD-REQ-076",
+    "1_PRD-REQ-077",
+    "1_PRD-REQ-078"
+  ],
+  "045_Detailed Domain Specifications (Part 10)": [
+    "1_PRD-REQ-079",
+    "1_PRD-REQ-080",
+    "1_PRD-REQ-081",
+    "1_PRD-REQ-NNN",
+    "2_TAS-REQ-100"
+  ],
+  "046_Detailed Domain Specifications (Part 11)": [
+    "2_TAS-REQ-101",
+    "2_TAS-REQ-102",
+    "2_TAS-REQ-103",
+    "2_TAS-REQ-104",
+    "2_TAS-REQ-105"
+  ],
+  "047_Detailed Domain Specifications (Part 12)": [
+    "2_TAS-REQ-106",
+    "2_TAS-REQ-107",
+    "2_TAS-REQ-108",
+    "2_TAS-REQ-109",
+    "2_TAS-REQ-110"
+  ],
+  "048_Detailed Domain Specifications (Part 13)": [
+    "2_TAS-REQ-111",
+    "2_TAS-REQ-112",
+    "2_TAS-REQ-113",
+    "2_TAS-REQ-114",
+    "2_TAS-REQ-115"
+  ],
+  "049_Detailed Domain Specifications (Part 14)": [
+    "2_TAS-REQ-116",
+    "2_TAS-REQ-117",
+    "2_TAS-REQ-118",
+    "2_TAS-REQ-119",
+    "2_TAS-REQ-120"
+  ],
+  "050_Detailed Domain Specifications (Part 15)": [
+    "2_TAS-REQ-121",
+    "2_TAS-REQ-122",
+    "2_TAS-REQ-123",
+    "2_TAS-REQ-124",
+    "2_TAS-REQ-125"
+  ],
+  "051_Detailed Domain Specifications (Part 16)": [
+    "2_TAS-REQ-126",
+    "2_TAS-REQ-127",
+    "2_TAS-REQ-128",
+    "2_TAS-REQ-129",
+    "2_TAS-REQ-130"
+  ],
+  "052_Detailed Domain Specifications (Part 17)": [
+    "2_TAS-REQ-131",
+    "2_TAS-REQ-132",
+    "2_TAS-REQ-133",
+    "2_TAS-REQ-134",
+    "2_TAS-REQ-135"
+  ],
+  "053_Detailed Domain Specifications (Part 18)": [
+    "2_TAS-REQ-136",
+    "2_TAS-REQ-137",
+    "2_TAS-REQ-138",
+    "2_TAS-REQ-139",
+    "2_TAS-REQ-140"
+  ],
+  "054_Detailed Domain Specifications (Part 19)": [
+    "2_TAS-REQ-141",
+    "2_TAS-REQ-142",
+    "2_TAS-REQ-143",
+    "2_TAS-REQ-144",
+    "2_TAS-REQ-145"
+  ],
+  "055_Detailed Domain Specifications (Part 20)": [
+    "2_TAS-REQ-146",
+    "2_TAS-REQ-147",
+    "2_TAS-REQ-148",
+    "2_TAS-REQ-149",
+    "2_TAS-REQ-150"
+  ],
+  "056_Detailed Domain Specifications (Part 21)": [
+    "2_TAS-REQ-151",
+    "2_TAS-REQ-152",
+    "2_TAS-REQ-153",
+    "2_TAS-REQ-154",
+    "2_TAS-REQ-155"
+  ],
+  "057_Detailed Domain Specifications (Part 22)": [
+    "2_TAS-REQ-156",
+    "2_TAS-REQ-157",
+    "2_TAS-REQ-158",
+    "2_TAS-REQ-159",
+    "2_TAS-REQ-160"
+  ],
+  "058_Detailed Domain Specifications (Part 23)": [
+    "2_TAS-REQ-161",
+    "2_TAS-REQ-206",
+    "2_TAS-REQ-230",
+    "2_TAS-REQ-234",
+    "2_TAS-REQ-237"
+  ],
+  "059_Detailed Domain Specifications (Part 24)": [
+    "2_TAS-REQ-238",
+    "2_TAS-REQ-240",
+    "2_TAS-REQ-244",
+    "2_TAS-REQ-245",
+    "2_TAS-REQ-246"
+  ],
+  "060_Detailed Domain Specifications (Part 25)": [
+    "2_TAS-REQ-251",
+    "2_TAS-REQ-254",
+    "2_TAS-REQ-255",
+    "2_TAS-REQ-256",
+    "2_TAS-REQ-259"
+  ],
+  "061_Detailed Domain Specifications (Part 26)": [
+    "2_TAS-REQ-261",
+    "2_TAS-REQ-268",
+    "2_TAS-REQ-269",
+    "2_TAS-REQ-270",
+    "2_TAS-REQ-271"
+  ],
+  "062_Detailed Domain Specifications (Part 27)": [
+    "2_TAS-REQ-272",
+    "2_TAS-REQ-273",
+    "2_TAS-REQ-274",
+    "2_TAS-REQ-275",
+    "2_TAS-REQ-276"
+  ],
+  "063_Detailed Domain Specifications (Part 28)": [
+    "2_TAS-REQ-278",
+    "2_TAS-REQ-279",
+    "2_TAS-REQ-280",
+    "2_TAS-REQ-281",
+    "2_TAS-REQ-282"
+  ],
+  "064_Detailed Domain Specifications (Part 29)": [
+    "2_TAS-REQ-283",
+    "2_TAS-REQ-286",
+    "2_TAS-REQ-287",
+    "2_TAS-REQ-288",
+    "2_TAS-REQ-289"
+  ],
+  "065_Detailed Domain Specifications (Part 30)": [
+    "2_TAS-REQ-400",
+    "2_TAS-REQ-401",
+    "2_TAS-REQ-402",
+    "2_TAS-REQ-403",
+    "2_TAS-REQ-404"
+  ],
+  "066_Detailed Domain Specifications (Part 31)": [
+    "2_TAS-REQ-405",
+    "2_TAS-REQ-406",
+    "2_TAS-REQ-407",
+    "2_TAS-REQ-408",
+    "2_TAS-REQ-409"
+  ],
+  "067_Detailed Domain Specifications (Part 32)": [
+    "2_TAS-REQ-410",
+    "2_TAS-REQ-411",
+    "2_TAS-REQ-412",
+    "2_TAS-REQ-413",
+    "2_TAS-REQ-414"
+  ],
+  "068_Detailed Domain Specifications (Part 33)": [
+    "2_TAS-REQ-415",
+    "2_TAS-REQ-416",
+    "2_TAS-REQ-417",
+    "2_TAS-REQ-418",
+    "2_TAS-REQ-419"
+  ],
+  "069_Detailed Domain Specifications (Part 34)": [
+    "2_TAS-REQ-420",
+    "2_TAS-REQ-421",
+    "2_TAS-REQ-422",
+    "2_TAS-REQ-423",
+    "2_TAS-REQ-424"
+  ],
+  "070_Detailed Domain Specifications (Part 35)": [
+    "2_TAS-REQ-425",
+    "2_TAS-REQ-426",
+    "2_TAS-REQ-427",
+    "2_TAS-REQ-428",
+    "2_TAS-REQ-429"
+  ],
+  "071_Detailed Domain Specifications (Part 36)": [
+    "2_TAS-REQ-430",
+    "2_TAS-REQ-431",
+    "2_TAS-REQ-432",
+    "2_TAS-REQ-433",
+    "2_TAS-REQ-434"
+  ],
+  "072_Detailed Domain Specifications (Part 37)": [
+    "2_TAS-REQ-435",
+    "2_TAS-REQ-436",
+    "2_TAS-REQ-437",
+    "2_TAS-REQ-438",
+    "2_TAS-REQ-439"
+  ],
+  "073_Detailed Domain Specifications (Part 38)": [
+    "2_TAS-REQ-440",
+    "2_TAS-REQ-441",
+    "2_TAS-REQ-442",
+    "2_TAS-REQ-443",
+    "2_TAS-REQ-444"
+  ],
+  "074_Detailed Domain Specifications (Part 39)": [
+    "2_TAS-REQ-445",
+    "2_TAS-REQ-446",
+    "2_TAS-REQ-447",
+    "2_TAS-REQ-448",
+    "2_TAS-REQ-449"
+  ],
+  "075_Detailed Domain Specifications (Part 40)": [
+    "2_TAS-REQ-450",
+    "2_TAS-REQ-451",
+    "2_TAS-REQ-452",
+    "2_TAS-REQ-453",
+    "2_TAS-REQ-454"
+  ],
+  "076_Detailed Domain Specifications (Part 41)": [
+    "2_TAS-REQ-455",
+    "2_TAS-REQ-456",
+    "2_TAS-REQ-457",
+    "2_TAS-REQ-458",
+    "2_TAS-REQ-459"
+  ],
+  "077_Detailed Domain Specifications (Part 42)": [
+    "2_TAS-REQ-460",
+    "2_TAS-REQ-461",
+    "2_TAS-REQ-462",
+    "2_TAS-REQ-463",
+    "2_TAS-REQ-464"
+  ],
+  "078_Detailed Domain Specifications (Part 43)": [
+    "2_TAS-REQ-465",
+    "2_TAS-REQ-466",
+    "2_TAS-REQ-467",
+    "2_TAS-REQ-468",
+    "2_TAS-REQ-469"
+  ],
+  "079_Detailed Domain Specifications (Part 44)": [
+    "2_TAS-REQ-470",
+    "2_TAS-REQ-471",
+    "2_TAS-REQ-472",
+    "2_TAS-REQ-473",
+    "2_TAS-REQ-474"
+  ],
+  "080_Detailed Domain Specifications (Part 45)": [
+    "2_TAS-REQ-475",
+    "2_TAS-REQ-476",
+    "2_TAS-REQ-477",
+    "2_TAS-REQ-478",
+    "2_TAS-REQ-479"
+  ],
+  "081_Detailed Domain Specifications (Part 46)": [
+    "2_TAS-REQ-480",
+    "2_TAS-REQ-481",
+    "2_TAS-REQ-482",
+    "2_TAS-REQ-483",
+    "2_TAS-REQ-484"
+  ],
+  "082_Detailed Domain Specifications (Part 47)": [
+    "2_TAS-REQ-485",
+    "2_TAS-REQ-486",
+    "2_TAS-REQ-487",
+    "2_TAS-REQ-488",
+    "2_TAS-REQ-489"
+  ],
+  "083_Detailed Domain Specifications (Part 48)": [
+    "2_TAS-REQ-490",
+    "2_TAS-REQ-491",
+    "2_TAS-REQ-492",
+    "2_TAS-REQ-493",
+    "2_TAS-REQ-494"
+  ],
+  "084_Detailed Domain Specifications (Part 49)": [
+    "2_TAS-REQ-495",
+    "2_TAS-REQ-496",
+    "2_TAS-REQ-497",
+    "2_TAS-REQ-498",
+    "2_TAS-REQ-499"
+  ],
+  "085_Detailed Domain Specifications (Part 50)": [
+    "2_TAS-REQ-500",
+    "2_TAS-REQ-501",
+    "2_TAS-REQ-502",
+    "2_TAS-REQ-503",
+    "2_TAS-REQ-504"
+  ],
+  "086_Detailed Domain Specifications (Part 51)": [
+    "2_TAS-REQ-505",
+    "2_TAS-REQ-506",
+    "2_TAS-REQ-507",
+    "2_TAS-REQ-508",
+    "2_TAS-REQ-509"
+  ],
+  "087_Detailed Domain Specifications (Part 52)": [
+    "2_TAS-REQ-510",
+    "2_TAS-REQ-511",
+    "2_TAS-REQ-512",
+    "2_TAS-REQ-513",
+    "2_TAS-REQ-514"
+  ],
+  "088_Detailed Domain Specifications (Part 53)": [
+    "2_TAS-REQ-515",
+    "2_TAS-REQ-516",
+    "2_TAS-REQ-517",
+    "2_TAS-REQ-600",
+    "2_TAS-REQ-601"
+  ],
+  "089_Detailed Domain Specifications (Part 54)": [
+    "2_TAS-REQ-602",
+    "2_TAS-REQ-603",
+    "2_TAS-REQ-604",
+    "2_TAS-REQ-605"
+  ],
+  "090_Acceptance Criteria & Roadmap (Part 1)": [
+    "AC-ASCII-006",
+    "AC-ASCII-007",
+    "AC-ASCII-010",
+    "AC-ASCII-016",
+    "AC-ASCII-017"
+  ],
+  "091_Acceptance Criteria & Roadmap (Part 2)": [
+    "AC-ASCII-018",
+    "AC-ASCII-019",
+    "AC-ASCII-020",
+    "AC-ASCII-021",
+    "AC-ASCII-022"
+  ],
+  "092_Acceptance Criteria & Roadmap (Part 3)": [
+    "AC-ASCII-023",
+    "AC-ASCII-024",
+    "AC-ASCII-025",
+    "AC-ASCII-026",
+    "AC-ASCII-027"
+  ],
+  "093_Acceptance Criteria & Roadmap (Part 4)": [
+    "AC-ASCII-028",
+    "AC-HELP-004",
+    "AC-HELP-005",
+    "AC-HELP-007",
+    "AC-KEY-004"
+  ],
+  "094_Acceptance Criteria & Roadmap (Part 5)": [
+    "AC-KEY-005",
+    "AC-KEY-006",
+    "AC-LOG-005",
+    "AC-LOG-006",
+    "AC-LOG-007"
+  ],
+  "095_Acceptance Criteria & Roadmap (Part 6)": [
+    "AC-ROAD-P0-001",
+    "AC-ROAD-P0-002",
+    "AC-ROAD-P0-003",
+    "AC-ROAD-P0-004",
+    "AC-ROAD-P0-005"
+  ],
+  "096_Acceptance Criteria & Roadmap (Part 7)": [
+    "AC-ROAD-P0-006",
+    "AC-ROAD-P0-007",
+    "AC-ROAD-P0-008",
+    "AC-TIMING-001",
+    "AC-TIMING-002"
+  ],
+  "097_Acceptance Criteria & Roadmap (Part 8)": [
+    "AC-TIMING-003",
+    "AC-TIMING-004",
+    "AC-TIMING-005",
+    "AC-TYP-001",
+    "AC-TYP-002"
+  ],
+  "098_Acceptance Criteria & Roadmap (Part 9)": [
+    "AC-TYP-003",
+    "AC-TYP-004",
+    "AC-TYP-005",
+    "AC-TYP-006",
+    "AC-TYP-007"
+  ],
+  "099_Acceptance Criteria & Roadmap (Part 10)": [
+    "AC-TYP-008",
+    "AC-TYP-009",
+    "AC-TYP-010",
+    "AC-TYP-011",
+    "AC-TYP-012"
+  ],
+  "100_Acceptance Criteria & Roadmap (Part 11)": [
+    "AC-TYP-013",
+    "AC-TYP-014",
+    "AC-TYP-015",
+    "AC-TYP-016",
+    "AC-TYP-017"
+  ],
+  "101_Acceptance Criteria & Roadmap (Part 12)": [
+    "AC-TYP-018",
+    "AC-TYP-019",
+    "AC-TYP-020",
+    "AC-TYP-021",
+    "AC-TYP-022"
+  ],
+  "102_Acceptance Criteria & Roadmap (Part 13)": [
+    "AC-TYP-023",
+    "AC-TYP-024",
+    "AC-TYP-025",
+    "AC-TYP-026",
+    "AC-TYP-027"
+  ],
+  "103_Acceptance Criteria & Roadmap (Part 14)": [
+    "AC-TYP-028",
+    "ROAD-P0-DEP-001"
+  ]
+}

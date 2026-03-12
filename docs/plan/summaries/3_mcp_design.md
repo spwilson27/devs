@@ -64,7 +64,7 @@ The `devs` system is developed by AI agents using its own infrastructure, with e
 - [MCP-SRV-001] `devs` Glass-Box MCP: HTTP/JSON-RPC on `:7891` (default); or via `devs-mcp-bridge` stdio.
 - [MCP-SRV-002] Filesystem MCP: stdio (`mcp-filesystem` or equivalent).
 
-**17 MCP tools in 4 categories:**
+**20 MCP tools in 4 categories:**
 
 - *Observation* [MCP-008–014]: `list_runs`, `get_run`, `get_stage_output`, `stream_logs`, `get_pool_state`, `get_workflow_definition`, `list_checkpoints`
 - *Control* [MCP-015–019]: `submit_run`, `cancel_run`/`cancel_stage`, `pause_run`/`pause_stage`, `resume_run`/`resume_stage`, `write_workflow_definition`

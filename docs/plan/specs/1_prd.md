@@ -5605,13 +5605,13 @@ The MCP server runs on a dedicated port (default: `server.mcp_port` in `devs.tom
 
 ### 8.1 Observation Tools
 
-#### `devs/list_runs`
+#### `list_runs`
 
 List workflow runs, optionally filtered.
 
 ```json
 {
-  "name": "devs/list_runs",
+  "name": "list_runs",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -5626,13 +5626,13 @@ List workflow runs, optionally filtered.
 
 **Output:** `{ "runs": [RunSummary], "next_page_token": "string|null" }`
 
-#### `devs/get_run`
+#### `get_run`
 
 Fetch a single run with all stage summaries.
 
 ```json
 {
-  "name": "devs/get_run",
+  "name": "get_run",
   "inputSchema": {
     "type": "object",
     "required": ["run_id"],
@@ -5645,13 +5645,13 @@ Fetch a single run with all stage summaries.
 
 **Output:** Full `RunSummary` object.
 
-#### `devs/get_stage_output`
+#### `get_stage_output`
 
 Retrieve captured output for a completed stage.
 
 ```json
 {
-  "name": "devs/get_stage_output",
+  "name": "get_stage_output",
   "inputSchema": {
     "type": "object",
     "required": ["run_id", "stage_name"],
@@ -5666,13 +5666,13 @@ Retrieve captured output for a completed stage.
 
 **Output:** `{ "stdout": "...", "stderr": "...", "structured": {}, "exit_code": 0, "truncated": false }`
 
-#### `devs/get_pool_status`
+#### `get_pool_state`
 
 Get real-time pool utilisation.
 
 ```json
 {
-  "name": "devs/get_pool_status",
+  "name": "get_pool_state",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -5684,26 +5684,26 @@ Get real-time pool utilisation.
 
 **Output:** One or more `GetPoolStatusResponse` objects.
 
-#### `devs/get_internal_state`
+#### `get_internal_state`
 
 Dump the full scheduler, pool, and project state as a JSON snapshot. Only available when the server is running; intended for AI agent debugging and test assertions.
 
 ```json
 {
-  "name": "devs/get_internal_state",
+  "name": "get_internal_state",
   "inputSchema": { "type": "object", "properties": {} }
 }
 ```
 
 **Output:** `{ "scheduler": { "active_runs": [...], "queued_stages": [...] }, "pools": [...], "projects": [...] }`
 
-#### `devs/read_workflow`
+#### `read_workflow`
 
 Read a workflow definition by project and name.
 
 ```json
 {
-  "name": "devs/read_workflow",
+  "name": "read_workflow",
   "inputSchema": {
     "type": "object",
     "required": ["project_id", "workflow_name"],
@@ -5719,11 +5719,11 @@ Read a workflow definition by project and name.
 
 ### 8.2 Control Tools
 
-#### `devs/submit_run`
+#### `submit_run`
 
 ```json
 {
-  "name": "devs/submit_run",
+  "name": "submit_run",
   "inputSchema": {
     "type": "object",
     "required": ["project_id", "workflow_name"],
@@ -5739,21 +5739,21 @@ Read a workflow definition by project and name.
 
 **Output:** `{ "run_id": "<uuid>", "slug": "<slug>" }`
 
-#### `devs/cancel_run`
+#### `cancel_run`
 
 ```json
-{ "name": "devs/cancel_run", "inputSchema": { "type": "object", "required": ["run_id"], "properties": { "run_id": { "type": "string" } } } }
+{ "name": "cancel_run", "inputSchema": { "type": "object", "required": ["run_id"], "properties": { "run_id": { "type": "string" } } } }
 ```
 
-#### `devs/pause_run` / `devs/resume_run`
+#### `pause_run` / `resume_run`
 
-Same schema as `devs/cancel_run` with `run_id`.
+Same schema as `cancel_run` with `run_id`.
 
-#### `devs/pause_stage` / `devs/resume_stage` / `devs/retry_stage` / `devs/cancel_stage`
+#### `pause_stage` / `resume_stage` / `retry_stage` / `cancel_stage`
 
 ```json
 {
-  "name": "devs/pause_stage",
+  "name": "pause_stage",
   "inputSchema": {
     "type": "object",
     "required": ["run_id", "stage_name"],
@@ -5765,13 +5765,13 @@ Same schema as `devs/cancel_run` with `run_id`.
 }
 ```
 
-#### `devs/write_workflow`
+#### `write_workflow`
 
 Register or update a workflow definition at runtime.
 
 ```json
 {
-  "name": "devs/write_workflow",
+  "name": "write_workflow",
   "inputSchema": {
     "type": "object",
     "required": ["project_id", "definition", "format"],
@@ -5790,13 +5790,13 @@ Register or update a workflow definition at runtime.
 
 These tools are called by running agent processes during stage execution.
 
-#### `devs/signal_completion`
+#### `signal_completion`
 
 Signal stage completion for stages using the `mcp_tool_call` completion mechanism.
 
 ```json
 {
-  "name": "devs/signal_completion",
+  "name": "signal_completion",
   "inputSchema": {
     "type": "object",
     "required": ["stage_run_id", "success"],
@@ -5809,13 +5809,13 @@ Signal stage completion for stages using the `mcp_tool_call` completion mechanis
 }
 ```
 
-#### `devs/report_progress`
+#### `report_progress`
 
 Report mid-run progress without completing the stage.
 
 ```json
 {
-  "name": "devs/report_progress",
+  "name": "report_progress",
   "inputSchema": {
     "type": "object",
     "required": ["stage_run_id"],
@@ -5828,13 +5828,13 @@ Report mid-run progress without completing the stage.
 }
 ```
 
-#### `devs/report_rate_limit`
+#### `report_rate_limit`
 
 Proactively report a rate-limit condition; triggers immediate pool fallback.
 
 ```json
 {
-  "name": "devs/report_rate_limit",
+  "name": "report_rate_limit",
   "inputSchema": {
     "type": "object",
     "required": ["stage_run_id"],
@@ -5848,13 +5848,13 @@ Proactively report a rate-limit condition; triggers immediate pool fallback.
 
 **Output:** `{ "action": "fallback" }`
 
-#### `devs/get_context`
+#### `get_context`
 
 Retrieve prior stage outputs during execution.
 
 ```json
 {
-  "name": "devs/get_context",
+  "name": "get_context",
   "inputSchema": {
     "type": "object",
     "required": ["stage_run_id"],
@@ -5872,13 +5872,13 @@ Retrieve prior stage outputs during execution.
 
 These tools are available only when the server is started with `--test-mode`. Calls to these tools when the server is not in test mode return JSON-RPC error code `-32601` (Method not found).
 
-#### `devs/inject_test_input`
+#### `inject_stage_input`
 
 Inject a mock stage output, overriding real agent execution for the specified stage.
 
 ```json
 {
-  "name": "devs/inject_test_input",
+  "name": "inject_stage_input",
   "inputSchema": {
     "type": "object",
     "required": ["run_id", "stage_name", "mock_output"],
@@ -5899,13 +5899,13 @@ Inject a mock stage output, overriding real agent execution for the specified st
 }
 ```
 
-#### `devs/assert_stage_output`
+#### `assert_stage_output`
 
 Assert a stage's output matches an expected value. Returns a structured diff on failure.
 
 ```json
 {
-  "name": "devs/assert_stage_output",
+  "name": "assert_stage_output",
   "inputSchema": {
     "type": "object",
     "required": ["run_id", "stage_name", "expected"],
@@ -6086,7 +6086,7 @@ When `run_name` is not provided:
 
 ## 12. DAG Validation Rules
 
-When a workflow definition is registered via `RegisterWorkflow` or `devs/write_workflow`, or loaded from a file on server startup, the following validations MUST be applied in order. Failure at any step produces a descriptive error and rejects the definition.
+When a workflow definition is registered via `RegisterWorkflow` or `write_workflow`, or loaded from a file on server startup, the following validations MUST be applied in order. Failure at any step produces a descriptive error and rejects the definition.
 
 1. **Schema validity**: The definition MUST conform to the TOML/YAML schema (all required fields present, types correct).
 2. **Unique stage names**: All stage `name` values MUST be unique within the workflow. Error: `DUPLICATE_STAGE_NAME`.
@@ -6282,7 +6282,7 @@ timeout     = "30m"
 | TUI loses its gRPC connection | TUI displays a "Reconnecting…" banner. It attempts reconnection with exponential backoff (initial 1 s, capped at 30 s). Existing UI state is preserved during reconnection. |
 | CLI command references a run ID that does not exist | CLI exits with code `1` and prints: `error: run '<id>' not found`. |
 | MCP tool call is missing a required parameter | Server returns JSON-RPC error `{ "code": -32602, "message": "Invalid params: '<field>' is required" }`. |
-| `devs/inject_test_input` is called on a server not started in `--test-mode` | Server returns JSON-RPC error `{ "code": -32601, "message": "Method not found" }`. |
+| `inject_stage_input` is called on a server not started in `--test-mode` | Server returns JSON-RPC error `{ "code": -32601, "message": "Method not found" }`. |
 | `WatchRun` gRPC stream is interrupted mid-stream | Client reconnects and re-subscribes from the beginning (no cursor/offset resumption at MVP). |
 
 ---
@@ -6301,7 +6301,7 @@ The following rules are stated as concrete, testable assertions. Each is traceab
 | BR-006 | REQ-008 | A workflow run slug MUST be unique within a project. |
 | BR-007 | REQ-007 | Workflow input parameters MUST be validated against declared types at `SubmitRun` time; a type mismatch MUST prevent run creation. |
 | BR-008 | REQ-009 | The definition snapshot stored with a run at start time MUST remain immutable for the lifetime of that run, regardless of subsequent definition updates. |
-| BR-009 | REQ-018 | Pool fallback MUST be triggered automatically when an agent exits with a detected rate-limit error pattern or when `devs/report_rate_limit` is called. |
+| BR-009 | REQ-018 | Pool fallback MUST be triggered automatically when an agent exits with a detected rate-limit error pattern or when `report_rate_limit` is called. |
 | BR-010 | REQ-020 | Pool fallback MUST select the next agent in priority order that satisfies all required capability tags; agents not satisfying required tags MUST be skipped. |
 | BR-011 | REQ-021 | A pool MUST NOT dispatch more than `max_concurrent` agents simultaneously across all projects sharing that pool. |
 | BR-012 | REQ-028 | When a per-stage timeout is exceeded, the server MUST send `SIGTERM` to the agent process; if the process has not exited within 5 seconds, `SIGKILL` MUST be sent. |
@@ -6355,7 +6355,7 @@ The following rules are stated as concrete, testable assertions. Each is traceab
 - [ ] Dispatching a stage to a pool where no agent satisfies required capabilities fails immediately with `CAPABILITY_NOT_SATISFIED` without spawning any agent.
 - [ ] With `max_concurrent = 2`, a third stage remains in `Waiting` state until one of the first two stages completes.
 - [ ] When all pool agents are simultaneously rate-limited, a `pool_exhaustion` webhook event is delivered to the configured endpoint.
-- [ ] After a `devs/report_rate_limit` MCP call from an agent, the pool immediately falls back to the next eligible agent.
+- [ ] After a `report_rate_limit` MCP call from an agent, the pool immediately falls back to the next eligible agent.
 
 ### 16.4 State Persistence and Crash Recovery
 
@@ -6392,13 +6392,13 @@ The following rules are stated as concrete, testable assertions. Each is traceab
 
 ### 16.8 MCP Interface
 
-- [ ] `devs/submit_run` creates a run and returns a valid UUID run ID.
-- [ ] `devs/get_internal_state` returns a JSON snapshot containing `scheduler`, `pools`, and `projects` keys.
-- [ ] `devs/signal_completion` with `"success": true` transitions the corresponding stage to `Completed`.
-- [ ] `devs/report_rate_limit` triggers immediate pool fallback for the reporting stage without requiring the current agent process to exit first.
+- [ ] `submit_run` creates a run and returns a valid UUID run ID.
+- [ ] `get_internal_state` returns a JSON snapshot containing `scheduler`, `pools`, and `projects` keys.
+- [ ] `signal_completion` with `"success": true` transitions the corresponding stage to `Completed`.
+- [ ] `report_rate_limit` triggers immediate pool fallback for the reporting stage without requiring the current agent process to exit first.
 - [ ] A tool call missing a required parameter returns JSON-RPC error code `-32602`.
-- [ ] `devs/inject_test_input` is rejected (error code `-32601`) when the server is started without `--test-mode`.
-- [ ] `devs/assert_stage_output` returns `{ "passed": false }` with a non-null `diff` when the actual output does not match the expected value.
+- [ ] `inject_stage_input` is rejected (error code `-32601`) when the server is started without `--test-mode`.
+- [ ] `assert_stage_output` returns `{ "passed": false }` with a non-null `diff` when the actual output does not match the expected value.
 
 ### 16.9 Quality and Coverage
 
