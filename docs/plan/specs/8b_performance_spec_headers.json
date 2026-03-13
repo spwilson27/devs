@@ -1,0 +1,12 @@
+[
+  "# Performance Specification \u2014 `devs`",
+  "## 1. Performance Goals & Guiding Principles",
+  "## 2. SLO Summary Table",
+  "## 3. Latency Targets per Critical User-Facing Flow",
+  "## 4. Throughput & Concurrency Targets",
+  "## 5. Resource Utilisation Budgets",
+  "## 6. Scalability & Load Targets",
+  "## 7. Performance Testing Strategy",
+  "## 8. Alerting & Observability Requirements",
+  "## Appendix A: Requirements Traceability Index"
+]
