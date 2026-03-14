@@ -4,7 +4,7 @@
 - [1_PRD-REQ-035], [1_PRD-REQ-039], [2_TAS-REQ-061]
 
 ## Dependencies
-- depends_on: [01_cli_scaffold_and_global_flags.md]
+- depends_on: ["01_cli_scaffold_and_global_flags.md"]
 - shared_components: [devs-proto (consumer), devs-core (consumer), devs-scheduler (consumer — submit_run, list_runs RPCs via devs-grpc)]
 
 ## 1. Initial Test Written

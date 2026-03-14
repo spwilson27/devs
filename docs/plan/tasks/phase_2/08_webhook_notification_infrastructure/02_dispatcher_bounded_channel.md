@@ -4,7 +4,7 @@
 - [2_TAS-REQ-045]
 
 ## Dependencies
-- depends_on: [01_event_types_and_payload.md]
+- depends_on: ["01_event_types_and_payload.md"]
 - shared_components: [devs-webhook (owner)]
 
 ## 1. Initial Test Written

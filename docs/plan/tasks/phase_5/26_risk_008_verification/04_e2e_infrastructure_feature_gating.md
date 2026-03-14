@@ -4,7 +4,7 @@
 - [MIT-008], [RISK-008-BR-003]
 
 ## Dependencies
-- depends_on: [02_ssh_test_key_provisioning.md]
+- depends_on: ["02_ssh_test_key_provisioning.md"]
 - shared_components: [devs-executor]
 
 ## 1. Initial Test Written

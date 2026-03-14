@@ -4,7 +4,7 @@
 - [AC-TYP-020], [AC-TYP-021]
 
 ## Dependencies
-- depends_on: [01_tui_status_logic_and_labels.md]
+- depends_on: ["01_tui_status_logic_and_labels.md"]
 - shared_components: [devs-tui (owner of strings module)]
 
 ## 1. Initial Test Written

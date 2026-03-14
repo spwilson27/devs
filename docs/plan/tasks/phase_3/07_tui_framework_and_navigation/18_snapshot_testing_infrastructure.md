@@ -4,7 +4,7 @@
 - [6_UI_UX_ARCHITECTURE-REQ-324], [6_UI_UX_ARCHITECTURE-REQ-325], [6_UI_UX_ARCHITECTURE-REQ-326], [6_UI_UX_ARCHITECTURE-REQ-327], [6_UI_UX_ARCHITECTURE-REQ-328], [6_UI_UX_ARCHITECTURE-REQ-329], [6_UI_UX_ARCHITECTURE-REQ-330], [6_UI_UX_ARCHITECTURE-REQ-406], [6_UI_UX_ARCHITECTURE-REQ-407], [6_UI_UX_ARCHITECTURE-REQ-408], [6_UI_UX_ARCHITECTURE-REQ-409], [6_UI_UX_ARCHITECTURE-REQ-410], [6_UI_UX_ARCHITECTURE-REQ-411], [6_UI_UX_ARCHITECTURE-REQ-412], [6_UI_UX_ARCHITECTURE-REQ-413], [6_UI_UX_ARCHITECTURE-REQ-414], [6_UI_UX_ARCHITECTURE-REQ-415], [6_UI_UX_ARCHITECTURE-REQ-416], [6_UI_UX_ARCHITECTURE-REQ-417], [6_UI_UX_ARCHITECTURE-REQ-418], [6_UI_UX_ARCHITECTURE-REQ-419], [6_UI_UX_ARCHITECTURE-REQ-420], [6_UI_UX_ARCHITECTURE-REQ-421], [6_UI_UX_ARCHITECTURE-REQ-422]
 
 ## Dependencies
-- depends_on: [01_tui_crate_scaffold_and_event_loop.md, 02_app_state_and_state_management.md, 07_string_constants_and_styling.md]
+- depends_on: ["01_tui_crate_scaffold_and_event_loop.md", "02_app_state_and_state_management.md", "07_string_constants_and_styling.md"]
 - shared_components: [devs-core (consumer)]
 
 ## 1. Initial Test Written

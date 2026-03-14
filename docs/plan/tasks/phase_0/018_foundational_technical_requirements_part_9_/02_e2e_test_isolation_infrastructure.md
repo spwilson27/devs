@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002I]
 
 ## Dependencies
-- depends_on: [01_client_discovery_logic.md]
+- depends_on: ["01_client_discovery_logic.md"]
 - shared_components: [Server Discovery Protocol (consumer — uses DEVS_DISCOVERY_FILE env var contract), ./do Entrypoint Script & CI Pipeline (consumer — DEVS_DISCOVERY_FILE env var)]
 
 ## 1. Initial Test Written

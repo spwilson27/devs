@@ -4,7 +4,7 @@
 - [AC-TYP-018], [AC-TYP-019]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses RunStatus/StageStatus enums), devs-tui (owner of theme and label logic)]
 
 ## 1. Initial Test Written

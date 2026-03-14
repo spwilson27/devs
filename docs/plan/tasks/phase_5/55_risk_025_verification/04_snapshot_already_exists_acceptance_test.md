@@ -4,7 +4,7 @@
 - [AC-RISK-025-02]
 
 ## Dependencies
-- depends_on: [02_mit_025_mitigation_integration_test.md]
+- depends_on: ["02_mit_025_mitigation_integration_test.md"]
 - shared_components: [devs-checkpoint]
 
 ## 1. Initial Test Written

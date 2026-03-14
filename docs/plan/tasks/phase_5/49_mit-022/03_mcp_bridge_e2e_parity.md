@@ -4,7 +4,7 @@
 - [AC-RISK-022-04], [MIT-022]
 
 ## Dependencies
-- depends_on: [01_mcp_bridge_acceptance_hardening.md, 02_stage_completion_fallback.md]
+- depends_on: ["01_mcp_bridge_acceptance_hardening.md", "02_stage_completion_fallback.md"]
 - shared_components: [devs-mcp-bridge, devs-proto]
 
 ## 1. Initial Test Written

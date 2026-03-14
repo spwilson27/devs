@@ -4,7 +4,7 @@
 - [8_RISKS-REQ-133], [8_RISKS-REQ-134], [8_RISKS-REQ-135], [8_RISKS-REQ-136], [8_RISKS-REQ-137], [8_RISKS-REQ-138], [8_RISKS-REQ-139], [8_RISKS-REQ-140], [8_RISKS-REQ-141], [8_RISKS-REQ-142], [8_RISKS-REQ-143], [8_RISKS-REQ-144], [8_RISKS-REQ-145], [8_RISKS-REQ-146], [8_RISKS-REQ-147], [8_RISKS-REQ-148], [8_RISKS-REQ-149], [8_RISKS-REQ-150], [8_RISKS-REQ-151], [8_RISKS-REQ-152], [8_RISKS-REQ-153], [8_RISKS-REQ-154], [8_RISKS-REQ-155], [8_RISKS-REQ-156], [8_RISKS-REQ-157], [8_RISKS-REQ-158], [8_RISKS-REQ-159], [8_RISKS-REQ-160], [8_RISKS-REQ-161], [8_RISKS-REQ-162], [8_RISKS-REQ-163], [8_RISKS-REQ-164], [8_RISKS-REQ-165], [8_RISKS-REQ-166], [8_RISKS-REQ-167], [8_RISKS-REQ-168], [8_RISKS-REQ-169], [8_RISKS-REQ-170], [8_RISKS-REQ-171], [8_RISKS-REQ-172], [8_RISKS-REQ-173]
 
 ## Dependencies
-- depends_on: [01_risk_matrix_schema_and_validation_infrastructure.md]
+- depends_on: ["01_risk_matrix_schema_and_validation_infrastructure.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline (consumer), devs-core (consumer — TemplateResolver), devs-executor (consumer), Traceability & Coverage Infrastructure (consumer)]
 
 ## 1. Initial Test Written

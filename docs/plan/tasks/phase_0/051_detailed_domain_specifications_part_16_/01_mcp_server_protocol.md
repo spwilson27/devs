@@ -4,7 +4,7 @@
 - [2_TAS-REQ-126], [2_TAS-REQ-127]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-mcp (owner — this task creates the crate skeleton), devs-core (consumer — domain types)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002A], [2_TAS-REQ-002B]
 
 ## Dependencies
-- depends_on: [02_discovery_file_directory_creation.md]
+- depends_on: ["02_discovery_file_directory_creation.md"]
 - shared_components: [Server Discovery Protocol (consumer — implements deletion portion), devs-proto (consumer — uses gRPC service definitions)]
 
 ## 1. Initial Test Written

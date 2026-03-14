@@ -4,7 +4,7 @@
 - [1_PRD-REQ-030]
 
 ## Dependencies
-- depends_on: [02_atomic_checkpoint_save.md]
+- depends_on: ["02_atomic_checkpoint_save.md"]
 - shared_components: [devs-core (consume), devs-config (consume), devs-checkpoint (own)]
 
 ## 1. Initial Test Written

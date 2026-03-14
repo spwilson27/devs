@@ -4,7 +4,7 @@
 - [AC-PERF-010], [AC-PERF-011], [AC-PERF-012], [AC-PERF-013], [AC-PERF-014], [AC-PERF-015], [AC-PERF-016], [AC-PERF-017], [AC-PERF-018], [AC-PERF-019], [AC-PERF-020], [AC-PERF-021], [AC-PERF-022], [AC-PERF-023], [AC-PERF-024], [AC-PERF-025], [AC-PERF-026], [AC-PERF-027], [AC-PERF-028], [AC-PERF-029], [AC-PERF-030], [AC-PERF-031], [AC-PERF-032], [AC-PERF-033], [AC-PERF-034], [AC-PERF-035], [AC-PERF-036], [AC-PERF-037], [AC-PERF-038], [AC-PERF-039], [AC-PERF-040], [AC-PERF-041], [AC-PERF-042], [AC-PERF-043], [AC-PERF-044], [AC-PERF-045], [AC-PERF-046], [AC-PERF-047], [AC-PERF-048], [AC-PERF-049], [AC-PERF-050], [AC-PERF-051], [AC-PERF-052], [AC-PERF-053], [AC-PERF-054], [AC-PERF-055]
 
 ## Dependencies
-- depends_on: [01_e2e_infrastructure.md, 06_perf_core_infrastructure.md, 07_slo_constants_and_integration_tests.md, 11_observability_and_structured_logging.md]
+- depends_on: ["01_e2e_infrastructure.md", "06_perf_core_infrastructure.md", "07_slo_constants_and_integration_tests.md", "11_observability_and_structured_logging.md"]
 - shared_components: [devs-cli, devs-tui, devs-mcp, devs-core, devs-scheduler, devs-pool]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [ROAD-001], [ROAD-002], [ROAD-003], [ROAD-004], [ROAD-005], [ROAD-006], [ROAD-007], [ROAD-008], [ROAD-009], [ROAD-010], [ROAD-011], [ROAD-012], [ROAD-013], [ROAD-014], [ROAD-015], [ROAD-016], [ROAD-017], [ROAD-018], [ROAD-019], [ROAD-020], [ROAD-021], [ROAD-022], [ROAD-023], [ROAD-024], [ROAD-025], [9_PROJECT_ROADMAP-REQ-045], [9_PROJECT_ROADMAP-REQ-046], [9_PROJECT_ROADMAP-REQ-047], [9_PROJECT_ROADMAP-REQ-048], [ROAD-P3-DEP-001], [ROAD-P3-DEP-002], [ROAD-P3-DEP-003]
 
 ## Dependencies
-- depends_on: [03_workspace_build_validation.md]
+- depends_on: ["03_workspace_build_validation.md"]
 - shared_components: [devs-core, Phase Transition Checkpoint (PTC) Model, ./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

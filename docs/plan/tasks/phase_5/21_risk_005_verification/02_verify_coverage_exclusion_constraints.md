@@ -4,7 +4,7 @@
 - [RISK-006], [RISK-006-BR-001]
 
 ## Dependencies
-- depends_on: [01_verify_ci_performance_thresholds.md]
+- depends_on: ["01_verify_ci_performance_thresholds.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

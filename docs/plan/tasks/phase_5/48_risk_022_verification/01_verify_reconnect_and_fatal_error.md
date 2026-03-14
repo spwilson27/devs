@@ -4,7 +4,7 @@
 - [RISK-022], [RISK-022-BR-001], [RISK-022-BR-004]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-grpc, devs-proto]
 
 ## 1. Initial Test Written

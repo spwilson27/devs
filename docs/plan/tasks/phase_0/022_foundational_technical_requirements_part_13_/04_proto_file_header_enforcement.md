@@ -4,7 +4,7 @@
 - [2_TAS-REQ-008A]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-proto (Protobuf Definitions & Generated Types)"]
 
 ## 1. Initial Test Written

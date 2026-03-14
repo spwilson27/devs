@@ -4,7 +4,7 @@
 - [2_TAS-REQ-116], [2_TAS-REQ-117]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consume), devs-adapters (create types in)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-023-BR-001]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-adapters, devs-executor, ./do Entrypoint Script]
 
 ## 1. Initial Test Written

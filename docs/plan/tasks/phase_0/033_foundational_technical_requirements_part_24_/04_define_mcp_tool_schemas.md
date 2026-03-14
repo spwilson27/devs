@@ -4,7 +4,7 @@
 - [2_TAS-REQ-051A]
 
 ## Dependencies
-- depends_on: [01_define_normative_proto_files.md]
+- depends_on: ["01_define_normative_proto_files.md"]
 - shared_components: [devs-core (consumer — uses domain types), devs-proto (consumer — references proto message shapes for consistency)]
 
 ## 1. Initial Test Written

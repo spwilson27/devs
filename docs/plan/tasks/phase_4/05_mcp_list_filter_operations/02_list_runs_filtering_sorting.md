@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-002] (list_runs filtering and sorting support)
 
 ## Dependencies
-- depends_on: [01_list_runs_pagination.md]
+- depends_on: ["01_list_runs_pagination.md"]
 - shared_components: [devs-mcp, devs-core, devs-proto]
 
 ## Note

@@ -4,7 +4,7 @@
 - [ROAD-P2-DEP-001]: Phase 1 must be complete (all infrastructure crates at 90% unit coverage).
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — must be at 90% coverage), devs-config (consumer — must be at 90% coverage), devs-checkpoint (consumer — must be at 90% coverage), devs-adapters (consumer — must be at 90% coverage), devs-pool (consumer — must be at 90% coverage), devs-executor (consumer — must be at 90% coverage), ./do Entrypoint Script & CI Pipeline (consumer — runs coverage verification)]
 
 ## 1. Initial Test Written

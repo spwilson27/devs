@@ -4,7 +4,7 @@
 - [AC-RISK-003-02]
 
 ## Dependencies
-- depends_on: [01_checkpoint_write_failure_handling.md]
+- depends_on: ["01_checkpoint_write_failure_handling.md"]
 - shared_components: [devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written

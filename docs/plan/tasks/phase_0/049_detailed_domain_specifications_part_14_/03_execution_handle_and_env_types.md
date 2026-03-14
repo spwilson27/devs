@@ -4,7 +4,7 @@
 - [2_TAS-REQ-120]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-executor (create types in)]
 
 ## 1. Initial Test Written

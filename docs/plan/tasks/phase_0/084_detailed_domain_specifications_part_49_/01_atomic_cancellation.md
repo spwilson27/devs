@@ -4,7 +4,7 @@
 - [2_TAS-REQ-495]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consume — state machine enums and transition methods), devs-checkpoint (consume — checkpoint persistence)]
 
 ## 1. Initial Test Written

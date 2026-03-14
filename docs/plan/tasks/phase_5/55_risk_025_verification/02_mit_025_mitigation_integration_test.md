@@ -4,7 +4,7 @@
 - [MIT-025]
 
 ## Dependencies
-- depends_on: [01_toctou_mutex_atomicity_enforcement.md]
+- depends_on: ["01_toctou_mutex_atomicity_enforcement.md"]
 - shared_components: [devs-scheduler, devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written

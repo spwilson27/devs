@@ -4,7 +4,7 @@
 - [ROAD-BR-101], [ROAD-BR-102], [ROAD-BR-103], [ROAD-BR-104], [ROAD-BR-105], [ROAD-BR-106], [ROAD-BR-107], [ROAD-BR-108], [ROAD-BR-109], [ROAD-BR-110], [ROAD-BR-111], [ROAD-BR-112], [ROAD-BR-201], [ROAD-BR-202], [ROAD-BR-203], [ROAD-BR-204], [ROAD-BR-205], [ROAD-BR-206], [ROAD-BR-207], [ROAD-BR-208], [ROAD-BR-209], [ROAD-BR-210], [ROAD-BR-211], [ROAD-BR-212], [ROAD-BR-301], [ROAD-BR-302], [ROAD-BR-303], [ROAD-BR-304], [ROAD-BR-305], [ROAD-BR-306], [ROAD-BR-307], [ROAD-BR-308], [ROAD-BR-309], [ROAD-BR-311], [ROAD-BR-312], [ROAD-BR-401], [ROAD-BR-402], [ROAD-BR-403], [ROAD-BR-404], [ROAD-BR-405], [ROAD-BR-407], [ROAD-BR-408], [ROAD-BR-501], [ROAD-BR-502], [ROAD-BR-503], [ROAD-BR-504], [ROAD-BR-505], [ROAD-BR-506], [ROAD-BR-507], [ROAD-BR-508], [ROAD-BR-509], [ROAD-BR-510]
 
 ## Dependencies
-- depends_on: [09_roadmap_phase_definitions_and_dependency_graph.md, 10_presubmit_timing_timeout_and_lint_rules.md]
+- depends_on: ["09_roadmap_phase_definitions_and_dependency_graph.md", "10_presubmit_timing_timeout_and_lint_rules.md"]
 - shared_components: [devs-core, Phase Transition Checkpoint (PTC) Model, ./do Entrypoint Script & CI Pipeline, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

@@ -2,6 +2,14 @@
 
 ## Covered Requirements
 - [1_PRD-REQ-011], [2_TAS-REQ-091]
+- [9_PROJECT_ROADMAP-REQ-080]: `.devs_output.json` with `"success": true` (boolean) → `Completed`
+- [9_PROJECT_ROADMAP-REQ-081]: `.devs_output.json` with `"success": false` (boolean) → `Failed`
+- [9_PROJECT_ROADMAP-REQ-082]: `.devs_output.json` with `"success": "true"` (string) → `Failed` — string NOT accepted
+- [9_PROJECT_ROADMAP-REQ-083]: `.devs_output.json` with `"success"` field absent → `Failed`
+- [9_PROJECT_ROADMAP-REQ-084]: `.devs_output.json` with invalid JSON → `Failed`
+- [9_PROJECT_ROADMAP-REQ-085]: `.devs_output.json` absent, stdout last line valid JSON with `"success": bool` → use stdout
+- [9_PROJECT_ROADMAP-REQ-086]: `.devs_output.json` absent, stdout no valid JSON → `Failed`
+- [9_PROJECT_ROADMAP-REQ-087]: `.devs_output.json` takes strict priority over stdout JSON; sources not merged
 
 ## Dependencies
 - depends_on: ["01_completion_signal_types_and_exit_code_handler.md"]

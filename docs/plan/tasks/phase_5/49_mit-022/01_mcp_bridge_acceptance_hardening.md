@@ -4,7 +4,7 @@
 - [AC-RISK-022-01], [AC-RISK-022-03]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-grpc, devs-proto]
 
 ## 1. Initial Test Written

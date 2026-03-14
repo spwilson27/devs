@@ -4,7 +4,7 @@
 - [MIT-009]
 
 ## Dependencies
-- depends_on: [01_verify_workflow_definitions.md, 02_enforce_no_bootstrap_stubs.md, 03_implement_presubmit_e2e_test.md, 04_verify_presubmit_passes_on_linux.md]
+- depends_on: ["01_verify_workflow_definitions.md", "02_enforce_no_bootstrap_stubs.md", "03_implement_presubmit_e2e_test.md", "04_verify_presubmit_passes_on_linux.md"]
 - shared_components: [devs-server (Owner), devs-cli (Owner), devs-grpc (Owner), devs-scheduler (Owner), devs-checkpoint (Owner), ./do Entrypoint Script (Owner)]
 
 ## 1. Initial Test Written

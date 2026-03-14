@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-004] (get_workflow_definition normalization support)
 
 ## Dependencies
-- depends_on: [03_list_workflows_tool.md]
+- depends_on: ["03_list_workflows_tool.md"]
 - shared_components: [devs-mcp, devs-config]
 
 ## Note

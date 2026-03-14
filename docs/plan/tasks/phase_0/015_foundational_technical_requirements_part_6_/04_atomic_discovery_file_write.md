@@ -4,7 +4,7 @@
 - [2_TAS-REQ-001J]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: [Server Discovery Protocol (owner contribution)]
 
 ## 1. Initial Test Written

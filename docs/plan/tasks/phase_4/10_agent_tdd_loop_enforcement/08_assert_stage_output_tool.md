@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-031]
 
 ## Dependencies
-- depends_on: [01_define_core_tdd_workflows.md, 05_failure_classification_lookup_table.md]
+- depends_on: ["01_define_core_tdd_workflows.md", "05_failure_classification_lookup_table.md"]
 - shared_components: [devs-mcp, devs-scheduler, devs-proto]
 
 ## 1. Initial Test Written

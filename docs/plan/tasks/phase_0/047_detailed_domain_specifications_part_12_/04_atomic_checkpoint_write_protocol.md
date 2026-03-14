@@ -4,7 +4,7 @@
 - [2_TAS-REQ-109]
 
 ## Dependencies
-- depends_on: [03_git_checkpoint_store_foundation.md]
+- depends_on: ["03_git_checkpoint_store_foundation.md"]
 - shared_components: [devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written

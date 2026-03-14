@@ -4,7 +4,7 @@
 - [1_PRD-REQ-031], [2_TAS-REQ-026]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_3/02_state_recovery_and_lifecycle/02_checkpoint_restoration_service.md]
+- depends_on: ["phase_3/02_state_recovery_and_lifecycle/02_checkpoint_restoration_service.md"]
 - shared_components: [devs-server (owner of startup sequence), devs-scheduler (consumer — feed recovered runs), devs-pool (consumer — initialize semaphores), devs-config (consumer — read pool definitions), Server Discovery Protocol (consumer — write discovery file after recovery)]
 
 ## 1. Initial Test Written

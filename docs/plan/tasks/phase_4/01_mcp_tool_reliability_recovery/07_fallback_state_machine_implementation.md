@@ -4,7 +4,7 @@
 - [FB-SM-001], [FB-SM-002], [FB-SM-003], [FB-SM-004], [FB-SM-005]
 
 ## Dependencies
-- depends_on: [06_fallback_registry_data_model_and_validation.md]
+- depends_on: ["06_fallback_registry_data_model_and_validation.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

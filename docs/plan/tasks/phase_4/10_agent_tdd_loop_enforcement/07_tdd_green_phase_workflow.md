@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-031], [3_MCP_DESIGN-REQ-034], [3_MCP_DESIGN-REQ-035]
 
 ## Dependencies
-- depends_on: [05_failure_classification_lookup_table.md, 06_tdd_red_phase_workflow.md]
+- depends_on: ["07_agent_diagnostic_behaviors/03_failure_classification_and_targeted_fix.md", "06_tdd_red_phase_workflow.md"]
 - shared_components: [devs-mcp, devs-scheduler, devs-config, devs-core]
 
 ## 1. Initial Test Written

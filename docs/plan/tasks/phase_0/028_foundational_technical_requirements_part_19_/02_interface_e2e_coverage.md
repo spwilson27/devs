@@ -4,7 +4,7 @@
 - [2_TAS-REQ-015E]
 
 ## Dependencies
-- depends_on: [01_do_coverage_exit_logic.md]
+- depends_on: ["01_do_coverage_exit_logic.md"]
 - shared_components: [Traceability & Coverage Infrastructure, ./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [AC-TYP-008], [AC-TYP-009]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_0/098_acceptance_criteria_roadmap_part_9_/02_implement_truncate_with_tilde_base.md]
+- depends_on: ["phase_0/098_acceptance_criteria_roadmap_part_9_/02_implement_truncate_with_tilde_base.md"]
 - shared_components: [devs-tui]
 
 ## 1. Initial Test Written

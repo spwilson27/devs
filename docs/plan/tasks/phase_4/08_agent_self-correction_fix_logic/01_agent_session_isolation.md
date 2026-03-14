@@ -1,10 +1,10 @@
 # Task: Implement Agent Session Isolation and Discovery Protocol (Sub-Epic: 08_Agent Self-Correction & Fix Logic)
 
 ## Covered Requirements
-- [3_MCP_DESIGN-REQ-BR-003], [3_MCP_DESIGN-REQ-BR-008]
+- [3_MCP_DESIGN-REQ-BR-003], [3_MCP_DESIGN-REQ-BR-004], [3_MCP_DESIGN-REQ-BR-008]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-grpc, ./do Entrypoint Script]
 
 ## 1. Initial Test Written

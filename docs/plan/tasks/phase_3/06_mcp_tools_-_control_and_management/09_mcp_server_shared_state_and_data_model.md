@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-BR-001], [3_MCP_DESIGN-REQ-BR-002], [3_MCP_DESIGN-REQ-BR-005], [3_MCP_DESIGN-REQ-NEW-001], [3_MCP_DESIGN-REQ-NEW-004], [3_MCP_DESIGN-REQ-088], [3_MCP_DESIGN-REQ-092], [3_MCP_DESIGN-REQ-EC-MCP-001], [3_MCP_DESIGN-REQ-EC-MCP-005], [3_MCP_DESIGN-REQ-EC-MCP-007], [3_MCP_DESIGN-REQ-EC-MCP-008], [3_MCP_DESIGN-REQ-EC-MCP-014], [3_MCP_DESIGN-REQ-EC-MCP-017]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-scheduler (consumer — Arc<RwLock<ServerState>>)", "devs-proto (consumer — wire types for data model)", "Shared State & Concurrency Patterns (consumer)"]
 
 ## 1. Initial Test Written

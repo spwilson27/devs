@@ -4,7 +4,7 @@
 - [RISK-016-BR-004]
 
 ## Dependencies
-- depends_on: [02_create_code_review_workflow_toml.md]
+- depends_on: ["02_create_code_review_workflow_toml.md"]
 - shared_components: [devs-scheduler, devs-core]
 
 ## 1. Initial Test Written

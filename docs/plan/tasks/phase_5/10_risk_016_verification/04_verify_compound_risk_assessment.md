@@ -4,7 +4,7 @@
 - [RISK-BR-017], [8_RISKS-REQ-077]
 
 ## Dependencies
-- depends_on: [03_enforce_monitoring_and_interdependencies.md]
+- depends_on: ["03_enforce_monitoring_and_interdependencies.md"]
 - shared_components: [Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

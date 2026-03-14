@@ -4,7 +4,7 @@
 - [2_TAS-REQ-015F]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses domain types for mock data)]
 
 ## 1. Initial Test Written

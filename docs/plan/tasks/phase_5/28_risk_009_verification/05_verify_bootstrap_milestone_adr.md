@@ -4,7 +4,7 @@
 - [RISK-009-BR-006]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [.tools/verify_requirements.py]
 
 ## 1. Initial Test Written

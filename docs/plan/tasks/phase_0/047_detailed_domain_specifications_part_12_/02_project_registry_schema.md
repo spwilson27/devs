@@ -4,7 +4,7 @@
 - [2_TAS-REQ-107]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-config, devs-core]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-BR-007]
 
 ## Dependencies
-- depends_on: [01_agent_session_isolation.md]
+- depends_on: ["01_agent_session_isolation.md"]
 - shared_components: [devs-core, devs-checkpoint, devs-mcp, devs-scheduler]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [AC-RISK-010-03]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-pool, devs-proto, devs-server]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [7_UI_UX_DESIGN-REQ-060], [7_UI_UX_DESIGN-REQ-061], [7_UI_UX_DESIGN-REQ-062], [7_UI_UX_DESIGN-REQ-222], [7_UI_UX_DESIGN-REQ-223], [7_UI_UX_DESIGN-REQ-224], [7_UI_UX_DESIGN-REQ-225], [7_UI_UX_DESIGN-REQ-226], [7_UI_UX_DESIGN-REQ-227], [7_UI_UX_DESIGN-REQ-229], [7_UI_UX_DESIGN-REQ-230], [7_UI_UX_DESIGN-REQ-231], [7_UI_UX_DESIGN-REQ-232], [7_UI_UX_DESIGN-REQ-260], [7_UI_UX_DESIGN-REQ-261]
 
 ## Dependencies
-- depends_on: [06_event_loop_and_widget_architecture.md, 02_theme_and_color_mode_system.md]
+- depends_on: ["06_event_loop_and_widget_architecture.md", "02_theme_and_color_mode_system.md"]
 - shared_components: [devs-proto (consumer), devs-core (consumer)]
 
 ## 1. Initial Test Written

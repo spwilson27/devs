@@ -4,7 +4,7 @@
 - [2_TAS-REQ-278], [2_TAS-REQ-279]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses StageRunState enum and state machine)]
 
 ## 1. Initial Test Written

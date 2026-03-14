@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002K], [2_TAS-REQ-002L]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Shared State & Concurrency Patterns (consumer — implements the single-runtime and spawn_blocking patterns defined there)]
 
 ## 1. Initial Test Written

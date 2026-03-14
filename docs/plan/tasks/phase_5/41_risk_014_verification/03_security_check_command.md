@@ -4,7 +4,7 @@
 - [AC-RISK-014-04]
 
 ## Dependencies
-- depends_on: [02_mcp_server_hardening.md]
+- depends_on: ["02_mcp_server_hardening.md"]
 - shared_components: [devs-cli, devs-config]
 
 ## 1. Initial Test Written

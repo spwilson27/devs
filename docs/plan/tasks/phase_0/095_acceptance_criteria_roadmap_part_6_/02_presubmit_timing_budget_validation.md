@@ -4,7 +4,7 @@
 - [AC-ROAD-P0-004]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (Domain Types & Invariants)"]
 
 ## 1. Initial Test Written

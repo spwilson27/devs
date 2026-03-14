@@ -4,7 +4,7 @@
 - [1_PRD-REQ-025]
 
 ## Dependencies
-- depends_on: [02_fan_out_scheduler_integration.md]
+- depends_on: ["02_fan_out_scheduler_integration.md"]
 - shared_components: [devs-core (consume), devs-config (consume), devs-scheduler (consume)]
 
 ## 1. Initial Test Written

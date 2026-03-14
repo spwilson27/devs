@@ -4,7 +4,7 @@
 - [AC-RISK-021-01], [MIT-021]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-pool, devs-scheduler, devs-mcp]
 
 ## 1. Initial Test Written

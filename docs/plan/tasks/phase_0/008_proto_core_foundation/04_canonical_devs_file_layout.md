@@ -4,7 +4,7 @@
 - [2_TAS-REQ-016]
 
 ## Dependencies
-- depends_on: [03_devs_core_domain_types.md]
+- depends_on: ["03_devs_core_domain_types.md"]
 - shared_components: [devs-core (Owner)]
 
 ## 1. Initial Test Written

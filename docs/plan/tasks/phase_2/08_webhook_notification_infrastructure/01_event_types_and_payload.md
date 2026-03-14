@@ -4,7 +4,7 @@
 - [1_PRD-REQ-036], [2_TAS-REQ-046]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-webhook (owner), devs-core (consumer — uses domain types like RunId, ProjectRef)]
 
 ## 1. Initial Test Written

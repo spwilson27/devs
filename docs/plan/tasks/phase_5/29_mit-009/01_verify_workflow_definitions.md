@@ -4,7 +4,7 @@
 - [AC-RISK-009-02]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-config (Consumer), devs-cli (Consumer)]
 
 ## 1. Initial Test Written

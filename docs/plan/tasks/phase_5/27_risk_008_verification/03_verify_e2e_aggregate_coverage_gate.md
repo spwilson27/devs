@@ -4,7 +4,7 @@
 - [AC-RISK-008-04]
 
 ## Dependencies
-- depends_on: [01_verify_docker_e2e_ci_integration.md, 02_verify_ssh_e2e_localhost_integration.md]
+- depends_on: ["01_verify_docker_e2e_ci_integration.md", "02_verify_ssh_e2e_localhost_integration.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

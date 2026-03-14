@@ -4,7 +4,7 @@
 - [1_PRD-REQ-061]
 
 ## Dependencies
-- depends_on: [01_enforce_no_web_and_no_auth_policy.md]
+- depends_on: ["01_enforce_no_web_and_no_auth_policy.md"]
 - shared_components: [devs-proto]
 
 ## 1. Initial Test Written

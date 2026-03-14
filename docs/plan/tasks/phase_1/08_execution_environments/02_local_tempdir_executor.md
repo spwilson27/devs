@@ -4,7 +4,7 @@
 - [2_TAS-REQ-041], [2_TAS-REQ-042], [2_TAS-REQ-043]
 
 ## Dependencies
-- depends_on: [01_executor_trait.md]
+- depends_on: ["01_executor_trait.md"]
 - shared_components: [devs-executor (owner)]
 
 ## 1. Initial Test Written

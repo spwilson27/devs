@@ -4,7 +4,7 @@
 - [1_PRD-REQ-018], [2_TAS-REQ-036]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-adapters (owner: Phase 1 / Sub-Epic: devs-adapters — this task adds detect_rate_limit to the trait), devs-pool (consumer: receives RateLimitInfo to set cooldown)]
 
 ## 1. Initial Test Written

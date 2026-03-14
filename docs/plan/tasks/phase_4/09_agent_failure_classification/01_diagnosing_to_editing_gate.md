@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-BR-009]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core, devs-mcp]
 
 ## 1. Initial Test Written

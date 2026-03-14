@@ -4,7 +4,7 @@
 - [8_RISKS-REQ-091], [8_RISKS-REQ-092], [8_RISKS-REQ-093], [8_RISKS-REQ-094], [8_RISKS-REQ-095], [8_RISKS-REQ-096], [8_RISKS-REQ-097], [8_RISKS-REQ-098], [8_RISKS-REQ-099], [8_RISKS-REQ-100], [8_RISKS-REQ-101], [8_RISKS-REQ-102], [8_RISKS-REQ-103], [8_RISKS-REQ-104], [8_RISKS-REQ-105], [8_RISKS-REQ-106], [8_RISKS-REQ-107], [8_RISKS-REQ-108], [8_RISKS-REQ-109], [8_RISKS-REQ-110], [8_RISKS-REQ-111], [8_RISKS-REQ-112], [8_RISKS-REQ-113], [8_RISKS-REQ-114], [8_RISKS-REQ-115], [8_RISKS-REQ-116], [8_RISKS-REQ-117], [8_RISKS-REQ-118], [8_RISKS-REQ-119], [8_RISKS-REQ-120], [8_RISKS-REQ-121], [8_RISKS-REQ-122], [8_RISKS-REQ-123], [8_RISKS-REQ-124], [8_RISKS-REQ-125], [8_RISKS-REQ-126], [8_RISKS-REQ-127], [8_RISKS-REQ-128], [8_RISKS-REQ-129], [8_RISKS-REQ-130], [8_RISKS-REQ-131], [8_RISKS-REQ-132]
 
 ## Dependencies
-- depends_on: [01_risk_matrix_schema_and_validation_infrastructure.md]
+- depends_on: ["01_risk_matrix_schema_and_validation_infrastructure.md"]
 - shared_components: [devs-scheduler (consumer), devs-adapters (consumer), devs-checkpoint (consumer), devs-pool (consumer), devs-core (consumer)]
 
 ## 1. Initial Test Written

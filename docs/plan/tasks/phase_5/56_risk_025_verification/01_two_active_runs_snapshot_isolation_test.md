@@ -4,7 +4,7 @@
 - [AC-RISK-025-04]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-scheduler, devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written

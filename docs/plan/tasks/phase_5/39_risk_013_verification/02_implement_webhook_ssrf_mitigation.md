@@ -4,7 +4,7 @@
 - [RISK-014], [RISK-014-BR-001], [RISK-014-BR-002], [RISK-014-BR-003]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-webhook (Consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-AC-5.10]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core, devs-server]
 
 ## 1. Initial Test Written

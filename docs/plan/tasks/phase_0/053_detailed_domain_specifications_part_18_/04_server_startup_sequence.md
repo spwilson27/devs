@@ -4,7 +4,7 @@
 - [2_TAS-REQ-139]
 
 ## Dependencies
-- depends_on: [05_discovery_file_write_protocol.md]
+- depends_on: ["05_discovery_file_write_protocol.md"]
 - shared_components: [devs-core (consumer), devs-config (consumer — config loading/validation), devs-checkpoint (consumer — checkpoint recovery), devs-pool (consumer — pool initialization), Server Discovery Protocol (consumer)]
 
 ## 1. Initial Test Written

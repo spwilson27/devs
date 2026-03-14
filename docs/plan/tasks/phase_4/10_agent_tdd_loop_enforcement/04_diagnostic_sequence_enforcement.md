@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-034], [3_MCP_DESIGN-REQ-035]
 
 ## Dependencies
-- depends_on: [01_define_core_tdd_workflows.md]
+- depends_on: ["01_define_core_tdd_workflows.md"]
 - shared_components: [devs-mcp, devs-cli]
 
 ## 1. Initial Test Written

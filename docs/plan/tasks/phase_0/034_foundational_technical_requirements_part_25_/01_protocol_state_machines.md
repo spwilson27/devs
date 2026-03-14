@@ -4,7 +4,7 @@
 - [2_TAS-REQ-086E]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (owner of state machine types)]
 
 ## 1. Initial Test Written

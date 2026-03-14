@@ -4,7 +4,7 @@
 - [2_TAS-REQ-129]
 
 ## Dependencies
-- depends_on: [01_mcp_server_protocol.md]
+- depends_on: ["01_mcp_server_protocol.md"]
 - shared_components: [devs-mcp-bridge (owner — this task creates the binary crate)]
 
 ## 1. Initial Test Written

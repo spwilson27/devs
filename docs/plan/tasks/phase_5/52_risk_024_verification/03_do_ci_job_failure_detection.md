@@ -4,7 +4,7 @@
 - [RISK-024], [RISK-024-BR-001]
 
 ## Dependencies
-- depends_on: [01_gitlab_ci_yml_pipeline_structure.md, 02_do_lint_yamllint_validation.md]
+- depends_on: ["01_gitlab_ci_yml_pipeline_structure.md", "02_do_lint_yamllint_validation.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

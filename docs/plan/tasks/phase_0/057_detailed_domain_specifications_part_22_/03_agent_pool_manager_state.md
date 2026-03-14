@@ -4,7 +4,7 @@
 - [2_TAS-REQ-160]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-pool (consumer — this task defines domain-level specifications and tests for the pool manager state; the devs-pool crate is owned by Phase 1)"]
 
 ## 1. Initial Test Written

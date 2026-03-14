@@ -4,7 +4,7 @@
 - [2_TAS-REQ-448]
 
 ## Dependencies
-- depends_on: [02_verify_formatting_consistency.md]
+- depends_on: ["02_verify_formatting_consistency.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

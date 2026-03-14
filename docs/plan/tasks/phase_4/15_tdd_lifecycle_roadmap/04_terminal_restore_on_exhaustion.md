@@ -4,7 +4,7 @@
 - [AC-RLOOP-005]
 
 ## Dependencies
-- depends_on: [02_event_loop_config_throttling.md]
+- depends_on: ["02_event_loop_config_throttling.md"]
 - shared_components: [devs-tui]
 
 ## 1. Initial Test Written

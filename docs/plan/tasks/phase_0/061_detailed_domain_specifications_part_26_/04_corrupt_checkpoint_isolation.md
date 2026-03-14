@@ -4,7 +4,7 @@
 - [2_TAS-REQ-270]
 
 ## Dependencies
-- depends_on: [01_checkpoint_schema_version_enforcement.md]
+- depends_on: ["01_checkpoint_schema_version_enforcement.md"]
 - shared_components: [devs-checkpoint (consumer)]
 
 ## 1. Initial Test Written

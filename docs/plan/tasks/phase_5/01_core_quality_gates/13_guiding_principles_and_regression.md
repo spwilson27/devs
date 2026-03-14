@@ -7,7 +7,7 @@
 - [PERF-BR-610], [PERF-BR-611], [PERF-BR-612], [PERF-BR-613], [PERF-BR-614], [PERF-BR-615], [PERF-BR-616]
 
 ## Dependencies
-- depends_on: [06_perf_core_infrastructure.md, 07_slo_constants_and_integration_tests.md]
+- depends_on: ["06_perf_core_infrastructure.md", "07_slo_constants_and_integration_tests.md"]
 - shared_components: [devs-core, ./do Entrypoint Script]
 
 ## 1. Initial Test Written

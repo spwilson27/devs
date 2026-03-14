@@ -4,7 +4,7 @@
 - [2_TAS-REQ-115]
 
 ## Dependencies
-- depends_on: [04_implement_rate_limit_cooldown.md]
+- depends_on: ["04_implement_rate_limit_cooldown.md"]
 - shared_components: [devs-pool (owner — creates exhaustion tracking), devs-webhook (consumer — receives PoolExhausted events)]
 
 ## 1. Initial Test Written

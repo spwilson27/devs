@@ -4,7 +4,7 @@
 - [2_TAS-REQ-419]
 
 ## Dependencies
-- depends_on: [04_server_config_failure_exit.md]
+- depends_on: ["04_server_config_failure_exit.md"]
 - shared_components: [devs-server (consumer)]
 
 ## 1. Initial Test Written

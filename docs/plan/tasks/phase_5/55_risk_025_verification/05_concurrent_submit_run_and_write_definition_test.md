@@ -4,7 +4,7 @@
 - [AC-RISK-025-03]
 
 ## Dependencies
-- depends_on: [01_toctou_mutex_atomicity_enforcement.md, 04_snapshot_already_exists_acceptance_test.md]
+- depends_on: ["01_toctou_mutex_atomicity_enforcement.md", "04_snapshot_already_exists_acceptance_test.md"]
 - shared_components: [devs-scheduler, devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written

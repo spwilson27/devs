@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-091]
 
 ## Dependencies
-- depends_on: [03_retry_stage_attempt_reset.md]
+- depends_on: ["03_retry_stage_attempt_reset.md"]
 - shared_components: [devs-mcp, devs-scheduler, devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [ROAD-P4-DEP-002] (full validation), [ROAD-P4-DEP-003]
 
 ## Dependencies
-- depends_on: [01_define_additional_workflows.md, 02_verify_phase_3_readiness.md]
+- depends_on: ["01_define_additional_workflows.md", "02_verify_phase_3_readiness.md"]
 - shared_components: [devs-server, devs-cli, devs-config]
 
 ## 1. Initial Test Written

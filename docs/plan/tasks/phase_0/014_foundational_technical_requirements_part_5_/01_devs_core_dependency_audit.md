@@ -4,7 +4,7 @@
 - [2_TAS-REQ-001E]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer), ./do Entrypoint Script & CI Pipeline (consumer)]
 
 ## 1. Initial Test Written

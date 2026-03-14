@@ -4,7 +4,7 @@
 - [1_PRD-REQ-042], [2_TAS-REQ-024]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer)", "devs-config (owner)"]
 
 ## 1. Initial Test Written

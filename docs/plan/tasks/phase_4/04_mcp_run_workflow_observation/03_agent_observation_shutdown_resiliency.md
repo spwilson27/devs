@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-006], [3_MCP_DESIGN-REQ-058]
 
 ## Dependencies
-- depends_on: [02_agent_observation_wait_logic.md]
+- depends_on: ["02_agent_observation_wait_logic.md"]
 - shared_components: [devs-mcp (Owner), devs-grpc (Consumer), devs-server (Consumer), devs-checkpoint (Consumer)]
 
 ## 1. Initial Test Written

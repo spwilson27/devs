@@ -4,7 +4,7 @@
 - [SEC-054], [5_SECURITY_DESIGN-REQ-054]
 
 ## Dependencies
-- depends_on: [11_redacted_wrapper_credential_security.md, 15_webhook_ssrf_security.md]
+- depends_on: ["11_redacted_wrapper_credential_security.md", "15_webhook_ssrf_security.md"]
 - shared_components: [devs-core (Owner), Redacted<T> Security Wrapper (Consumer), devs-config (Consumer)]
 
 ## 1. Initial Test Written

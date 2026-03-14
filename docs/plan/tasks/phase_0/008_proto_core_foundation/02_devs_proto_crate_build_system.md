@@ -4,7 +4,7 @@
 - [2_TAS-REQ-008B], [2_TAS-REQ-008C], [2_TAS-REQ-008D], [2_TAS-REQ-022]
 
 ## Dependencies
-- depends_on: [01_define_proto_files.md]
+- depends_on: ["01_define_proto_files.md"]
 - shared_components: [devs-proto (Owner)]
 
 ## 1. Initial Test Written

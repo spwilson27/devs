@@ -4,7 +4,7 @@
 - [2_TAS-REQ-086A]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-proto (owner — this task creates the six normative proto files and wires up tonic-build)]
 
 ## 1. Initial Test Written

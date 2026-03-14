@@ -5,7 +5,7 @@
 - [3_MCP_DESIGN-REQ-NEW-033]
 
 ## Dependencies
-- depends_on: [02_task_state_persistence.md]
+- depends_on: ["02_task_state_persistence.md"]
 - shared_components: [devs-core (TaskState, TraceabilityReport), devs-checkpoint (agent-state directory), devs-mcp (filesystem MCP tools)]
 
 ## 1. Initial Test Written

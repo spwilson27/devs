@@ -4,7 +4,7 @@
 - [2_TAS-REQ-082]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-proto, devs-grpc, ./do Entrypoint Script, Server Discovery Protocol]
 
 ## 1. Initial Test Written

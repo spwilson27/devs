@@ -4,7 +4,7 @@
 - [1_PRD-KPI-BR-001], [2_TAS-REQ-015]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script & CI Pipeline (consumer — the `./do` script skeleton must exist; this task implements the `coverage` subcommand), Traceability & Coverage Infrastructure (consumer — this task implements the coverage gates QG-001 through QG-005 that the infrastructure defines)]
 
 ## 1. Initial Test Written

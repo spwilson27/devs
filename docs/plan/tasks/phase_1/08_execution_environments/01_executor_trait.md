@@ -4,7 +4,7 @@
 - [2_TAS-REQ-040], [2_TAS-REQ-044C], [1_PRD-REQ-022]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-executor (owner), devs-core (consumer)]
 
 ## 1. Initial Test Written

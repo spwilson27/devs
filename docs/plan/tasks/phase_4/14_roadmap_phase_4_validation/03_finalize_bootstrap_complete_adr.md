@@ -4,7 +4,7 @@
 - [AC-ROAD-P4-004], [9_PROJECT_ROADMAP-REQ-298]
 
 ## Dependencies
-- depends_on: [01_implement_bootstrap_stub_lint.md, 02_verify_tdd_workflows.md]
+- depends_on: ["01_implement_bootstrap_stub_lint.md", "02_verify_tdd_workflows.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

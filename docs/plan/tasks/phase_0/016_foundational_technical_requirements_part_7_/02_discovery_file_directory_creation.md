@@ -4,7 +4,7 @@
 - [2_TAS-REQ-001N]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Server Discovery Protocol (consumer — implements directory creation portion)]
 
 ## 1. Initial Test Written

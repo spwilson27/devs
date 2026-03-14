@@ -4,7 +4,7 @@
 - [8_RISKS-REQ-174], [8_RISKS-REQ-175], [8_RISKS-REQ-176], [8_RISKS-REQ-177], [8_RISKS-REQ-178], [8_RISKS-REQ-179], [8_RISKS-REQ-180], [8_RISKS-REQ-181], [8_RISKS-REQ-182], [8_RISKS-REQ-183], [8_RISKS-REQ-184], [8_RISKS-REQ-185], [8_RISKS-REQ-186], [8_RISKS-REQ-187], [8_RISKS-REQ-188], [8_RISKS-REQ-189], [8_RISKS-REQ-190], [8_RISKS-REQ-191], [8_RISKS-REQ-192], [8_RISKS-REQ-193], [8_RISKS-REQ-194], [8_RISKS-REQ-195], [8_RISKS-REQ-196], [8_RISKS-REQ-197], [8_RISKS-REQ-198], [8_RISKS-REQ-199], [8_RISKS-REQ-200], [8_RISKS-REQ-201], [8_RISKS-REQ-202], [8_RISKS-REQ-203], [8_RISKS-REQ-204], [8_RISKS-REQ-205], [8_RISKS-REQ-206], [8_RISKS-REQ-207], [8_RISKS-REQ-208], [8_RISKS-REQ-209], [8_RISKS-REQ-210], [8_RISKS-REQ-211], [8_RISKS-REQ-212], [8_RISKS-REQ-213], [8_RISKS-REQ-214], [8_RISKS-REQ-215], [8_RISKS-REQ-216], [8_RISKS-REQ-217], [8_RISKS-REQ-218], [8_RISKS-REQ-219], [8_RISKS-REQ-220], [8_RISKS-REQ-221], [8_RISKS-REQ-222], [8_RISKS-REQ-223], [8_RISKS-REQ-224], [8_RISKS-REQ-225], [8_RISKS-REQ-226], [8_RISKS-REQ-227], [8_RISKS-REQ-228], [8_RISKS-REQ-229], [8_RISKS-REQ-230], [8_RISKS-REQ-231], [8_RISKS-REQ-232], [8_RISKS-REQ-233], [8_RISKS-REQ-234], [8_RISKS-REQ-235], [8_RISKS-REQ-236]
 
 ## Dependencies
-- depends_on: [01_risk_matrix_schema_and_validation_infrastructure.md]
+- depends_on: ["01_risk_matrix_schema_and_validation_infrastructure.md"]
 - shared_components: [devs-webhook (consumer), devs-mcp (consumer), devs-pool (consumer), devs-scheduler (consumer), devs-checkpoint (consumer), devs-mcp-bridge (consumer — if exists)]
 
 ## 1. Initial Test Written

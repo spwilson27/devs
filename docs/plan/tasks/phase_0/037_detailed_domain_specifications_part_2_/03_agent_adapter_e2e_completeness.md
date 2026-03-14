@@ -4,7 +4,7 @@
 - [1_PRD-KPI-BR-010]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-adapters, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [6_UI_UX_ARCHITECTURE-REQ-181], [6_UI_UX_ARCHITECTURE-REQ-182], [6_UI_UX_ARCHITECTURE-REQ-183], [6_UI_UX_ARCHITECTURE-REQ-184], [6_UI_UX_ARCHITECTURE-REQ-185], [6_UI_UX_ARCHITECTURE-REQ-186], [6_UI_UX_ARCHITECTURE-REQ-187], [6_UI_UX_ARCHITECTURE-REQ-188], [6_UI_UX_ARCHITECTURE-REQ-189], [6_UI_UX_ARCHITECTURE-REQ-190], [6_UI_UX_ARCHITECTURE-REQ-191], [6_UI_UX_ARCHITECTURE-REQ-192], [6_UI_UX_ARCHITECTURE-REQ-193], [6_UI_UX_ARCHITECTURE-REQ-194], [6_UI_UX_ARCHITECTURE-REQ-195], [6_UI_UX_ARCHITECTURE-REQ-371], [6_UI_UX_ARCHITECTURE-REQ-372], [6_UI_UX_ARCHITECTURE-REQ-373], [6_UI_UX_ARCHITECTURE-REQ-374], [6_UI_UX_ARCHITECTURE-REQ-375], [6_UI_UX_ARCHITECTURE-REQ-432]
 
 ## Dependencies
-- depends_on: [06_layout_system_and_terminal_constraints.md, 08_run_list_widget.md, 09_dag_view_widget.md, 10_stage_list_widget.md, 11_log_pane_and_ansi_stripping.md]
+- depends_on: ["06_layout_system_and_terminal_constraints.md", "08_run_list_widget.md", "09_dag_view_widget.md", "10_stage_list_widget.md", "11_log_pane_and_ansi_stripping.md"]
 - shared_components: [devs-proto (consumer)]
 
 ## 1. Initial Test Written

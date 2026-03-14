@@ -4,7 +4,7 @@
 - [RISK-013-BR-005], [MIT-013]
 
 ## Dependencies
-- depends_on: [37_risk_013_verification/01_enforce_traceability_gates.md, 37_risk_013_verification/05_implement_stale_annotation_detection.md]
+- depends_on: ["37_risk_013_verification/01_enforce_traceability_gates.md", "37_risk_013_verification/05_implement_stale_annotation_detection.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

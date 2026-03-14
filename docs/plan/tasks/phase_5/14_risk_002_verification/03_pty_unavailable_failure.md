@@ -4,7 +4,7 @@
 - [RISK-002-BR-004]
 
 ## Dependencies
-- depends_on: [02_pty_fallback_behavior.md]
+- depends_on: ["02_pty_fallback_behavior.md"]
 - shared_components: [devs-adapters, devs-scheduler, devs-core]
 
 ## 1. Initial Test Written

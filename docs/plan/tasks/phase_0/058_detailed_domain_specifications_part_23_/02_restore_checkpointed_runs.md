@@ -4,7 +4,7 @@
 - [2_TAS-REQ-206]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-checkpoint (Consumer — uses restore_checkpoints API)", "devs-scheduler (Consumer — re-queues restored runs)", "devs-core (Consumer — WorkflowRunState/StageRunState enums)"]
 
 ## 1. Initial Test Written

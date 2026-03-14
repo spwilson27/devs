@@ -4,7 +4,7 @@
 - [1_PRD-REQ-028]
 
 ## Dependencies
-- depends_on: [02_per_stage_timeout_enforcement.md]
+- depends_on: ["02_per_stage_timeout_enforcement.md"]
 - shared_components: [devs-scheduler (owner: Phase 2), devs-core (consumer)]
 
 ## 1. Initial Test Written

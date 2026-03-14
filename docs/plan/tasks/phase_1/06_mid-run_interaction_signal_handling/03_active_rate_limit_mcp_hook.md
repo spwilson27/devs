@@ -4,7 +4,7 @@
 - [1_PRD-REQ-018], [1_PRD-REQ-017]
 
 ## Dependencies
-- depends_on: [02_passive_rate_limit_detection.md]
+- depends_on: ["02_passive_rate_limit_detection.md"]
 - shared_components: [devs-adapters (owner: Phase 1 — this task adds the active reporting integration point), devs-pool (consumer: receives active rate-limit reports)]
 
 ## 1. Initial Test Written

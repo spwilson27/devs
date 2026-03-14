@@ -4,7 +4,7 @@
 - [1_PRD-REQ-020]
 
 ## Dependencies
-- depends_on: [01_pool_models.md]
+- depends_on: ["01_pool_models.md"]
 - shared_components: [devs-pool (create — routing module), devs-config (consume — PoolConfig)]
 
 ## 1. Initial Test Written

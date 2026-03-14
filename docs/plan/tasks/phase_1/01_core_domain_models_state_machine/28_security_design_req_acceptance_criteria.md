@@ -6,7 +6,7 @@
 NOTE: These requirements map 1:1 to AC-SEC-N-NNN acceptance criteria. The implementation is covered by tasks 11-22 and 25-26 which implement the corresponding security controls and acceptance criteria. This task serves as the traceability anchor for the 5_SECURITY_DESIGN-REQ numbering scheme in the 201-436 range.
 
 ## Dependencies
-- depends_on: [27_security_design_req_core_controls.md]
+- depends_on: ["27_security_design_req_core_controls.md"]
 - shared_components: [devs-core (Consumer)]
 
 ## 1. Initial Test Written

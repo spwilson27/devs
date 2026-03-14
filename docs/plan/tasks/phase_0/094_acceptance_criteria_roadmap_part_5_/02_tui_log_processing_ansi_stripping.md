@@ -4,7 +4,7 @@
 - [AC-LOG-005]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-tui (owner of LogLine type)]
 
 ## 1. Initial Test Written

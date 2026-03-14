@@ -4,7 +4,7 @@
 - [2_TAS-REQ-033B]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer — uses Duration and error types)"]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-001B], [2_TAS-REQ-001C]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer), Shared State & Concurrency Patterns (consumer)]
 
 ## 1. Initial Test Written

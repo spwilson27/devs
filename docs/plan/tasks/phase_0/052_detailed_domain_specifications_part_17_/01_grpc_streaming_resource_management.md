@@ -4,7 +4,7 @@
 - [2_TAS-REQ-131], [2_TAS-REQ-132]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-proto, devs-core, devs-grpc]
 
 ## 1. Initial Test Written

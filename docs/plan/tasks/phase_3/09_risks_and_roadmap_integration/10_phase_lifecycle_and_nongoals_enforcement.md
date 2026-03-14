@@ -4,7 +4,7 @@
 - [9_PROJECT_ROADMAP-REQ-448], [9_PROJECT_ROADMAP-REQ-449], [9_PROJECT_ROADMAP-REQ-450], [9_PROJECT_ROADMAP-REQ-451], [9_PROJECT_ROADMAP-REQ-452], [9_PROJECT_ROADMAP-REQ-453], [9_PROJECT_ROADMAP-REQ-454], [9_PROJECT_ROADMAP-REQ-455], [9_PROJECT_ROADMAP-REQ-456], [9_PROJECT_ROADMAP-REQ-457], [9_PROJECT_ROADMAP-REQ-458], [9_PROJECT_ROADMAP-REQ-459], [9_PROJECT_ROADMAP-REQ-460], [9_PROJECT_ROADMAP-REQ-461], [9_PROJECT_ROADMAP-REQ-462], [9_PROJECT_ROADMAP-REQ-463]
 
 ## Dependencies
-- depends_on: [07_roadmap_phase_definitions_and_ptc_validation.md, 09_critical_path_and_checkpoint_records.md]
+- depends_on: ["07_roadmap_phase_definitions_and_ptc_validation.md", "09_critical_path_and_checkpoint_records.md"]
 - shared_components: [Phase Transition Checkpoint (PTC) Model (consumer), ./do Entrypoint Script & CI Pipeline (consumer), devs-config (consumer), devs-server (consumer)]
 
 ## 1. Initial Test Written

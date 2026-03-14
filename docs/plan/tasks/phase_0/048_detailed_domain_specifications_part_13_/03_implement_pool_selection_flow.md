@@ -4,7 +4,7 @@
 - [2_TAS-REQ-113]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-pool (owner — creates selection module), devs-core (consumer — uses domain types)]
 
 ## 1. Initial Test Written

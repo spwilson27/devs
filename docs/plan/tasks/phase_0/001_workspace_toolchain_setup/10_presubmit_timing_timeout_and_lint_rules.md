@@ -4,7 +4,7 @@
 - [ROAD-BR-LF-001], [ROAD-BR-LF-002], [ROAD-BR-LF-003], [ROAD-BR-LF-004], [ROAD-BR-LF-005], [ROAD-BR-LF-006], [ROAD-BR-LF-007], [ROAD-BR-LF-008], [ROAD-BR-LF-009], [ROAD-BR-LF-010], [ROAD-BR-LF-011], [ROAD-BR-LF-012], [ROAD-BR-LF-013], [ROAD-BR-LF-014], [ROAD-BR-LF-015], [ROAD-BR-LF-016], [ROAD-BR-LF-017], [ROAD-BR-LF-018], [ROAD-BR-LF-019], [ROAD-BR-LF-020], [AC-ROAD-LF-001], [AC-ROAD-LF-002], [AC-ROAD-LF-003], [AC-ROAD-LF-004], [AC-ROAD-LF-005], [AC-ROAD-LF-006], [AC-ROAD-LF-007], [AC-ROAD-LF-008], [AC-ROAD-LF-009], [AC-ROAD-LF-010], [ROAD-CONS-003]
 
 ## Dependencies
-- depends_on: [03_workspace_build_validation.md]
+- depends_on: ["03_workspace_build_validation.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

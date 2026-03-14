@@ -8,7 +8,7 @@
 - [PERF-BR-620], [PERF-BR-621], [PERF-BR-622], [PERF-BR-623], [PERF-BR-624], [PERF-BR-625], [PERF-BR-626], [PERF-BR-627], [PERF-BR-628], [PERF-BR-629], [PERF-BR-630], [PERF-BR-631], [PERF-BR-632], [PERF-BR-633], [PERF-BR-634], [PERF-BR-635]
 
 ## Dependencies
-- depends_on: [06_perf_core_infrastructure.md]
+- depends_on: ["06_perf_core_infrastructure.md"]
 - shared_components: [devs-core, devs-scheduler, devs-pool, devs-mcp, devs-adapters]
 
 ## 1. Initial Test Written

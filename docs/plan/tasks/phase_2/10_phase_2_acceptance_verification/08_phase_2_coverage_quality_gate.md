@@ -4,7 +4,7 @@
 - [AC-ROAD-P2-008]
 
 ## Dependencies
-- depends_on: [01_dag_dispatch_latency_verification.md, 02_cancel_run_atomic_checkpoint.md, 03_cycle_detection_validation.md, 04_workflow_snapshot_immutability.md, 05_pool_exhausted_webhook_deduplication.md, 06_ssrf_protection_validation.md, 07_weighted_fair_queuing_ratio.md]
+- depends_on: ["01_dag_dispatch_latency_verification.md", "02_cancel_run_atomic_checkpoint.md", "03_cycle_detection_validation.md", "04_workflow_snapshot_immutability.md", "05_pool_exhausted_webhook_deduplication.md", "06_ssrf_protection_validation.md", "07_weighted_fair_queuing_ratio.md"]
 - shared_components: [devs-scheduler (consumer), devs-webhook (consumer), Traceability & Coverage Infrastructure (consumer)]
 
 ## 1. Initial Test Written

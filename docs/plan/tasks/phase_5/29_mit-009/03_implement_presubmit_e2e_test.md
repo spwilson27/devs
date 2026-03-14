@@ -4,7 +4,7 @@
 - [AC-RISK-009-01]
 
 ## Dependencies
-- depends_on: [01_verify_workflow_definitions.md]
+- depends_on: ["01_verify_workflow_definitions.md"]
 - shared_components: [devs-cli (Consumer), devs-server (Consumer), devs-grpc (Consumer), devs-scheduler (Consumer)]
 
 ## 1. Initial Test Written

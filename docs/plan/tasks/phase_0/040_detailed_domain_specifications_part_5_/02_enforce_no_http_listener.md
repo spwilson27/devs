@@ -4,7 +4,7 @@
 - [1_PRD-REQ-055]
 
 ## Dependencies
-- depends_on: [01_enforce_no_web_policy.md]
+- depends_on: ["01_enforce_no_web_policy.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

@@ -8,7 +8,7 @@
 - [PERF-005], [PERF-005-BR-001], [PERF-005-BR-002], [PERF-005-BR-003], [PERF-005-BR-004]
 
 ## Dependencies
-- depends_on: [06_perf_core_infrastructure.md]
+- depends_on: ["06_perf_core_infrastructure.md"]
 - shared_components: [devs-core, devs-scheduler, devs-pool, devs-checkpoint]
 
 ## 1. Initial Test Written

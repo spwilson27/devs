@@ -4,7 +4,7 @@
 - [AC-TYP-023], [AC-TYP-026]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — stage/run display types)]
 
 ## 1. Initial Test Written

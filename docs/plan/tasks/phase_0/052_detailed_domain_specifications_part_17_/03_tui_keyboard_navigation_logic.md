@@ -4,7 +4,7 @@
 - [2_TAS-REQ-133]
 
 ## Dependencies
-- depends_on: [02_tui_test_infrastructure_setup.md]
+- depends_on: ["02_tui_test_infrastructure_setup.md"]
 - shared_components: [devs-tui]
 
 ## 1. Initial Test Written

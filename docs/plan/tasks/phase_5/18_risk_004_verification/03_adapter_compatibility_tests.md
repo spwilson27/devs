@@ -4,7 +4,7 @@
 - [MIT-004], [AC-RISK-004-01]
 
 ## Dependencies
-- depends_on: [01_adapter_version_tracking.md]
+- depends_on: ["01_adapter_version_tracking.md"]
 - shared_components: [devs-adapters]
 
 ## 1. Initial Test Written

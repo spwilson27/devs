@@ -4,7 +4,7 @@
 - [2_TAS-REQ-148]
 
 ## Dependencies
-- depends_on: [02_webhook_payload_schema.md]
+- depends_on: ["02_webhook_payload_schema.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

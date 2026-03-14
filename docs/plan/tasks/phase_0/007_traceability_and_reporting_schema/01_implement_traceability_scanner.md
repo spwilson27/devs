@@ -4,7 +4,7 @@
 - [2_TAS-REQ-080]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Traceability & Coverage Infrastructure (consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-086H], [2_TAS-REQ-086I]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (owns version module and compatibility logic)]
 
 ## 1. Initial Test Written

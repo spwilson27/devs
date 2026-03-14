@@ -4,7 +4,7 @@
 - [1_PRD-REQ-069], [1_PRD-REQ-070]
 
 ## Dependencies
-- depends_on: [02_server_config_secrets_section.md]
+- depends_on: ["02_server_config_secrets_section.md"]
 - shared_components: [devs-config (consumer), Redacted<T> Security Wrapper (consumer)]
 
 ## 1. Initial Test Written

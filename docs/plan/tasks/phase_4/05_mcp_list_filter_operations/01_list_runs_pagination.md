@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-001] (list_runs pagination support)
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-mcp, devs-core, devs-proto]
 
 ## Note

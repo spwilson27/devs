@@ -4,7 +4,7 @@
 - [2_TAS-BR-016], [2_TAS-BR-025]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses domain types and error enums)]
 
 ## 1. Initial Test Written

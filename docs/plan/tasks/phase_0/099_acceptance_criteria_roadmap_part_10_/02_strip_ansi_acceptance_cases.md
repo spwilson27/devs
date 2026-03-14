@@ -4,7 +4,7 @@
 - [AC-TYP-010], [AC-TYP-011], [AC-TYP-012]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_0/090_acceptance_criteria_roadmap_part_1_/01_implement_ansi_string_utils.md]
+- depends_on: ["phase_0/090_acceptance_criteria_roadmap_part_1_/01_implement_ansi_string_utils.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

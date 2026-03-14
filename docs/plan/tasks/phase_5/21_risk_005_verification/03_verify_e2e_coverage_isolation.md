@@ -4,7 +4,7 @@
 - [RISK-006-BR-002]
 
 ## Dependencies
-- depends_on: [02_verify_coverage_exclusion_constraints.md]
+- depends_on: ["02_verify_coverage_exclusion_constraints.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-025-BR-004]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-scheduler, devs-checkpoint]
 
 ## 1. Initial Test Written

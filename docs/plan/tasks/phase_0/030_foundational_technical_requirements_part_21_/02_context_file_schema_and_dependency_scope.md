@@ -4,7 +4,7 @@
 - [2_TAS-REQ-023A], [2_TAS-REQ-023D]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer — uses domain types for stage outputs and dependency graphs)"]
 
 ## 1. Initial Test Written

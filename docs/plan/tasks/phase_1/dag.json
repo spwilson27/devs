@@ -1,26 +1,11 @@
 {
-  "01_core_domain_models_state_machine/01_run_status_state_machine.md": [],
   "01_core_domain_models_state_machine/01_status_state_machines.md": [],
   "01_core_domain_models_state_machine/02_run_models_cascade_cancellation.md": [
     "01_core_domain_models_state_machine/01_status_state_machines.md"
   ],
-  "01_core_domain_models_state_machine/02_stage_status_state_machine.md": [
-    "01_core_domain_models_state_machine/01_run_status_state_machine.md"
-  ],
-  "01_core_domain_models_state_machine/03_run_slug_generation.md": [
-    "01_core_domain_models_state_machine/01_status_state_machines.md"
-  ],
-  "01_core_domain_models_state_machine/03_server_state_structure.md": [
-    "01_core_domain_models_state_machine/01_run_status_state_machine.md",
-    "01_core_domain_models_state_machine/02_stage_status_state_machine.md"
-  ],
+  "01_core_domain_models_state_machine/03_server_state_structure.md": [],
   "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md": [
-    "01_core_domain_models_state_machine/01_run_status_state_machine.md",
-    "01_core_domain_models_state_machine/02_stage_status_state_machine.md",
     "01_core_domain_models_state_machine/03_server_state_structure.md"
-  ],
-  "01_core_domain_models_state_machine/04_validation_error_infrastructure.md": [
-    "01_core_domain_models_state_machine/01_status_state_machines.md"
   ],
   "01_core_domain_models_state_machine/05_run_slug_generation.md": [
     "01_core_domain_models_state_machine/03_server_state_structure.md",
@@ -112,20 +97,62 @@
     "01_core_domain_models_state_machine/15_webhook_ssrf_security.md",
     "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
   ],
-  "02_configuration_identification/01_server_config_implementation.md": [
-    "01_core_domain_models_state_machine/01_status_state_machines.md"
+  "01_core_domain_models_state_machine/30_config_validation_2_tas_req_013.md": [
+    "01_core_domain_models_state_machine/06_validation_error_collection.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md",
+    "01_core_domain_models_state_machine/29_webhook_hmac_signing_key_validation.md"
+  ],
+  "01_core_domain_models_state_machine/31_pty_mode_risk_002_mitigation.md": [
+    "01_core_domain_models_state_machine/14_subprocess_execution_security.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/32_presubmit_timeout_risk_005_mitigation.md": [
+    "01_core_domain_models_state_machine/24_roadmap_dependency_graph.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/33_template_injection_risk_007_acceptance.md": [
+    "01_core_domain_models_state_machine/13_template_injection_prevention.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/34_rate_limit_risk_010_acceptance.md": [
+    "01_core_domain_models_state_machine/11_redacted_wrapper_credential_security.md",
+    "01_core_domain_models_state_machine/15_webhook_ssrf_security.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/35_cross_platform_risk_012_acceptance.md": [
+    "01_core_domain_models_state_machine/12_file_permission_security.md",
+    "01_core_domain_models_state_machine/24_roadmap_dependency_graph.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/36_mcp_glass_box_risk_015_acceptance.md": [
+    "01_core_domain_models_state_machine/11_redacted_wrapper_credential_security.md",
+    "01_core_domain_models_state_machine/18_mcp_bridge_security.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/37_ci_pipeline_risk_024_acceptance.md": [
+    "01_core_domain_models_state_machine/24_roadmap_dependency_graph.md",
+    "01_core_domain_models_state_machine/32_presubmit_timeout_risk_005_mitigation.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/38_risk_matrix_acceptance_criteria.md": [
+    "01_core_domain_models_state_machine/24_roadmap_dependency_graph.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/39_checkpoint_corruption_risk_003_mitigation.md": [
+    "01_core_domain_models_state_machine/12_file_permission_security.md",
+    "01_core_domain_models_state_machine/22_checkpoint_crash_recovery_security.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md"
+  ],
+  "01_core_domain_models_state_machine/40_dag_scheduler_race_condition_mitigation.md": [
+    "01_core_domain_models_state_machine/01_status_state_machines.md",
+    "01_core_domain_models_state_machine/02_run_models_cascade_cancellation.md",
+    "01_core_domain_models_state_machine/23_race_condition_concurrency_safety.md",
+    "01_core_domain_models_state_machine/04_server_state_mutation_protocol.md",
+    "01_core_domain_models_state_machine/33_template_injection_risk_007_acceptance.md"
   ],
   "02_configuration_identification/01_server_config_toml_parsing.md": [],
-  "02_configuration_identification/02_project_registry_implementation.md": [
-    "02_configuration_identification/01_server_config_implementation.md",
-    "01_core_domain_models_state_machine/01_status_state_machines.md"
-  ],
   "02_configuration_identification/02_project_registry_parsing.md": [
     "02_configuration_identification/01_server_config_toml_parsing.md"
-  ],
-  "02_configuration_identification/03_workflow_definition_inputs_parsing.md": [
-    "02_configuration_identification/01_server_config_implementation.md",
-    "01_core_domain_models_state_machine/01_status_state_machines.md"
   ],
   "02_configuration_identification/03_workflow_input_parameters.md": [
     "02_configuration_identification/01_server_config_toml_parsing.md"
@@ -159,16 +186,8 @@
     "03_template_resolution_context/04_stage_input_resolution.md"
   ],
   "04_persistence_checkpoints/01_checkpoint_crate_scaffold_and_store_trait.md": [],
-  "04_persistence_checkpoints/01_devs_checkpoint_crate_setup_atomic_write.md": [
-    "01_core_domain_models_state_machine/01_status_state_machines.md"
-  ],
   "04_persistence_checkpoints/02_atomic_checkpoint_save.md": [
     "04_persistence_checkpoints/01_checkpoint_crate_scaffold_and_store_trait.md"
-  ],
-  "04_persistence_checkpoints/02_git_backed_persistence_configurable_branch.md": [
-    "04_persistence_checkpoints/01_devs_checkpoint_crate_setup_atomic_write.md",
-    "01_core_domain_models_state_machine/01_status_state_machines.md",
-    "02_configuration_identification/01_server_config_implementation.md"
   ],
   "04_persistence_checkpoints/03_workflow_snapshot_persistence.md": [
     "04_persistence_checkpoints/02_atomic_checkpoint_save.md",
@@ -178,10 +197,6 @@
     "04_persistence_checkpoints/02_atomic_checkpoint_save.md",
     "04_persistence_checkpoints/01_checkpoint_crate_scaffold_and_store_trait.md",
     "04_persistence_checkpoints/03_workflow_snapshot_persistence.md"
-  ],
-  "04_persistence_checkpoints/04_run_deletion_persistence.md": [
-    "04_persistence_checkpoints/02_git_backed_persistence_configurable_branch.md",
-    "01_core_domain_models_state_machine/01_status_state_machines.md"
   ],
   "04_persistence_checkpoints/05_checkpoint_restore.md": [
     "04_persistence_checkpoints/02_atomic_checkpoint_save.md",
@@ -270,7 +285,6 @@
   ],
   "10_phase_1_acceptance_criteria/05_pool_and_executor_lifecycle_tests.md": [
     "10_phase_1_acceptance_criteria/01_phase_0_dependency_verification.md",
-    "02_configuration_identification/01_server_config_implementation.md",
     "03_template_resolution_context/04_stage_input_resolution.md"
   ],
   "10_phase_1_acceptance_criteria/06_phase_1_coverage_and_doc_gate.md": [

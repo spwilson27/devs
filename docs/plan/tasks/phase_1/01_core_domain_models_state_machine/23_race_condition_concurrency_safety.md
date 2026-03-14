@@ -4,7 +4,7 @@
 - [AC-RISK-NNN-NN], [AC-SEC-N-NNN], [SEC-NNN], [AC-SEC-1-007], [AC-SEC-1-025]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (Owner)]
 
 ## 1. Initial Test Written

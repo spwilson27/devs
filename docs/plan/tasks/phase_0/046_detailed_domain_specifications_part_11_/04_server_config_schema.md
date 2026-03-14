@@ -4,7 +4,7 @@
 - [2_TAS-REQ-105]
 
 ## Dependencies
-- depends_on: [03_multi_error_validation_framework.md]
+- depends_on: ["03_multi_error_validation_framework.md"]
 - shared_components: [devs-config (owner — creates ServerConfig), devs-core (consumer — uses ValidationError/ValidationErrorCode for validation)]
 
 ## 1. Initial Test Written

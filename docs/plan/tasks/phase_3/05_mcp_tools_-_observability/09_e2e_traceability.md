@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-EC-OBS-DBG-004], [3_MCP_DESIGN-REQ-EC-OBS-DBG-005], [3_MCP_DESIGN-REQ-EC-OBS-DBG-006]
 
 ## Dependencies
-- depends_on: [01_mcp_bridge.md, 04_stream_logs.md, 08_cancel_tools.md]
+- depends_on: ["01_mcp_bridge.md", "04_stream_logs.md", "08_cancel_tools.md"]
 - shared_components: [devs-server, devs-mcp-bridge, devs-cli]
 
 ## 1. Initial Test Written

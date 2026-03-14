@@ -4,7 +4,7 @@
 - [2_TAS-REQ-022A], [2_TAS-REQ-022B]
 
 ## Dependencies
-- depends_on: [01_checkpoint_persistence_atomic_null.md]
+- depends_on: ["01_checkpoint_persistence_atomic_null.md"]
 - shared_components: [devs-checkpoint (consumer), devs-core (consumer: WorkflowDefinition type)]
 
 ## 1. Initial Test Written

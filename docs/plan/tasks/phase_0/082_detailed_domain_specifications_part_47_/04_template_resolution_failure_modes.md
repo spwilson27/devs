@@ -4,7 +4,7 @@
 - [2_TAS-REQ-488]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: [devs-core (consumer — TemplateResolver, TemplateError types)]
 
 ## 1. Initial Test Written

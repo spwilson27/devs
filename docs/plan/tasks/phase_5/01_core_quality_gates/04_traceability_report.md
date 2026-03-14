@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-055]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Traceability & Verification Infrastructure, ./do Entrypoint Script]
 
 ## 1. Initial Test Written

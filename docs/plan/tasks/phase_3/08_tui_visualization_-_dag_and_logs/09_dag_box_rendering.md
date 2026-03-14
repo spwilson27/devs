@@ -4,7 +4,7 @@
 - [2_TAS-REQ-057], [7_UI_UX_DESIGN-REQ-118], [7_UI_UX_DESIGN-REQ-119], [7_UI_UX_DESIGN-REQ-120], [7_UI_UX_DESIGN-REQ-121], [7_UI_UX_DESIGN-REQ-122], [7_UI_UX_DESIGN-REQ-270], [7_UI_UX_DESIGN-REQ-309], [7_UI_UX_DESIGN-REQ-310], [7_UI_UX_DESIGN-REQ-420], [7_UI_UX_DESIGN-REQ-435]
 
 ## Dependencies
-- depends_on: [08_dag_tier_precomputation.md, 02_theme_and_color_mode_system.md, 03_status_labels_typography_render_utils.md]
+- depends_on: ["08_dag_tier_precomputation.md", "02_theme_and_color_mode_system.md", "03_status_labels_typography_render_utils.md"]
 - shared_components: [devs-core (consumer), devs-proto (consumer)]
 
 ## 1. Initial Test Written

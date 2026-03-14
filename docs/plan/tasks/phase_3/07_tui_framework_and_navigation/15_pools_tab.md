@@ -4,7 +4,7 @@
 - [6_UI_UX_ARCHITECTURE-REQ-266], [6_UI_UX_ARCHITECTURE-REQ-267], [6_UI_UX_ARCHITECTURE-REQ-268], [6_UI_UX_ARCHITECTURE-REQ-269], [6_UI_UX_ARCHITECTURE-REQ-270], [6_UI_UX_ARCHITECTURE-REQ-271], [6_UI_UX_ARCHITECTURE-REQ-272], [6_UI_UX_ARCHITECTURE-REQ-273], [6_UI_UX_ARCHITECTURE-REQ-274], [6_UI_UX_ARCHITECTURE-REQ-275], [6_UI_UX_ARCHITECTURE-REQ-276], [6_UI_UX_ARCHITECTURE-REQ-277], [6_UI_UX_ARCHITECTURE-REQ-278], [6_UI_UX_ARCHITECTURE-REQ-279], [6_UI_UX_ARCHITECTURE-REQ-280], [6_UI_UX_ARCHITECTURE-REQ-386], [6_UI_UX_ARCHITECTURE-REQ-387], [6_UI_UX_ARCHITECTURE-REQ-388], [6_UI_UX_ARCHITECTURE-REQ-389], [6_UI_UX_ARCHITECTURE-REQ-390]
 
 ## Dependencies
-- depends_on: [06_layout_system_and_terminal_constraints.md, 02_app_state_and_state_management.md]
+- depends_on: ["06_layout_system_and_terminal_constraints.md", "02_app_state_and_state_management.md"]
 - shared_components: [devs-pool (consumer — PoolState types), devs-proto (consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [AC-RISK-013-04]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script & CI Pipeline (Consumer), Traceability & Coverage Infrastructure (Consumer)]
 
 ## 1. Initial Test Written

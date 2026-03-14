@@ -4,7 +4,7 @@
 - [2_TAS-REQ-021C]
 
 ## Dependencies
-- depends_on: [01_checkpoint_persistence_atomic_null.md]
+- depends_on: ["01_checkpoint_persistence_atomic_null.md"]
 - shared_components: [devs-checkpoint (consumer)]
 
 ## 1. Initial Test Written

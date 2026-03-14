@@ -4,7 +4,7 @@
 - [2_TAS-REQ-453]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["./do Entrypoint Script & CI Pipeline"]
 
 ## 1. Initial Test Written

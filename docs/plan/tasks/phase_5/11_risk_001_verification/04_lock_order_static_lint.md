@@ -4,7 +4,7 @@
 - [RISK-001], [AC-RISK-001-06]
 
 ## Dependencies
-- depends_on: [03_scheduler_stress_testing.md]
+- depends_on: ["03_scheduler_stress_testing.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-KPI-BR-003]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: ["./do Entrypoint Script"]
 
 ## 1. Initial Test Written

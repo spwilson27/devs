@@ -4,7 +4,7 @@
 - [2_TAS-REQ-156]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-checkpoint (consumer — this task defines the domain logic and tests for the orphan branch creation behavior; the actual `devs-checkpoint` crate is owned by Phase 1)"]
 
 ## 1. Initial Test Written

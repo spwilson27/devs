@@ -4,7 +4,7 @@
 - [RISK-001], [RISK-001-BR-001], [RISK-001-BR-002], [AC-RISK-001-01], [AC-RISK-001-02]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core, devs-checkpoint]
 
 ## 1. Initial Test Written

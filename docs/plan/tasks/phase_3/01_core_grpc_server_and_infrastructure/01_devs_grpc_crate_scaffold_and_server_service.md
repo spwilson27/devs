@@ -4,7 +4,7 @@
 - [1_PRD-REQ-001], [2_TAS-REQ-052], [2_TAS-REQ-069], [2_TAS-REQ-070]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-proto (consumer)", "devs-core (consumer)"]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [AC-KEY-005], [AC-KEY-006]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-tui (owner of dispatch_key and AppState), devs-core (consumed for domain types)]
 
 ## 1. Initial Test Written

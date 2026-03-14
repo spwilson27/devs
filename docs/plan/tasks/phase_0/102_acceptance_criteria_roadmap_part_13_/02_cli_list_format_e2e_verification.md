@@ -4,7 +4,7 @@
 - [AC-TYP-024], [AC-TYP-025]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-cli (consumer — list subcommand), devs-core (consumer — run summary types)]
 
 ## 1. Initial Test Written

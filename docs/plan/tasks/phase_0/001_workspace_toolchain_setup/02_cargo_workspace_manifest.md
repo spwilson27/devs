@@ -4,7 +4,7 @@
 - [1_PRD-REQ-002], [2_TAS-REQ-021], [2_TAS-REQ-004], [2_TAS-REQ-005]
 
 ## Dependencies
-- depends_on: [01_rust_toolchain_pinning.md]
+- depends_on: ["01_rust_toolchain_pinning.md"]
 - shared_components: []
 
 ## 1. Initial Test Written

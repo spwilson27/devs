@@ -4,7 +4,7 @@
 - [2_TAS-REQ-017], [1_PRD-REQ-029]
 
 ## Dependencies
-- depends_on: [01_checkpoint_crate_scaffold_and_store_trait.md]
+- depends_on: ["01_checkpoint_crate_scaffold_and_store_trait.md"]
 - shared_components: [devs-core (consume), devs-proto (consume), devs-checkpoint (own)]
 
 ## 1. Initial Test Written

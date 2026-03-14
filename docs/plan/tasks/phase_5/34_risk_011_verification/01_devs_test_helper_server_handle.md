@@ -4,7 +4,7 @@
 - [AC-RISK-011-03], [AC-RISK-011-04]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [none]
 
 ## 1. Initial Test Written

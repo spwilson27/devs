@@ -4,7 +4,7 @@
 - [RISK-001], [AC-RISK-001-04]
 
 ## Dependencies
-- depends_on: [02_verify_dag_logic_and_cascading.md]
+- depends_on: ["02_verify_dag_logic_and_cascading.md"]
 - shared_components: [devs-scheduler]
 
 ## 1. Initial Test Written

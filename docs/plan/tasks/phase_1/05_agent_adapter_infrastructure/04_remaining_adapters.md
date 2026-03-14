@@ -4,7 +4,7 @@
 - [1_PRD-REQ-013], [2_TAS-REQ-035]
 
 ## Dependencies
-- depends_on: [03_claude_gemini_adapters.md]
+- depends_on: ["03_claude_gemini_adapters.md"]
 - shared_components: [devs-adapters (extend)]
 
 ## 1. Initial Test Written

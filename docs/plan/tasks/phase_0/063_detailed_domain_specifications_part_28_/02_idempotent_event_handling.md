@@ -4,7 +4,7 @@
 - [2_TAS-REQ-280]
 
 ## Dependencies
-- depends_on: [01_scheduler_state_transitions.md]
+- depends_on: ["01_scheduler_state_transitions.md"]
 - shared_components: [devs-core (consumer — uses StageRunState enum and event processing)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-REQ-019]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consume — BoundedString, domain error types), devs-config (consume — PoolConfig, AgentMemberConfig parsed from devs.toml), devs-pool (create — new crate)]
 
 ## 1. Initial Test Written

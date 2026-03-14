@@ -4,7 +4,7 @@
 - [2_TAS-REQ-237]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-proto (Consumer — proto files are checked)", "./do Entrypoint Script (Consumer — lint integration)"]
 
 ## 1. Initial Test Written

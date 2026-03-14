@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-031] (partial)
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-config]
 
 ## 1. Initial Test Written

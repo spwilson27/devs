@@ -4,7 +4,7 @@
 - [AC-TIMING-004], [AC-TIMING-005]
 
 ## Dependencies
-- depends_on: [02_tui_event_loop_tick.md]
+- depends_on: ["02_tui_event_loop_tick.md"]
 - shared_components: [devs-tui]
 
 ## 1. Initial Test Written

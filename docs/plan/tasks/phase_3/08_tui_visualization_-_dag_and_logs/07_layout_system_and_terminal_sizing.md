@@ -4,7 +4,7 @@
 - [7_UI_UX_DESIGN-REQ-004], [7_UI_UX_DESIGN-REQ-006], [7_UI_UX_DESIGN-REQ-007], [7_UI_UX_DESIGN-REQ-008], [7_UI_UX_DESIGN-REQ-009], [7_UI_UX_DESIGN-REQ-018], [7_UI_UX_DESIGN-REQ-113], [7_UI_UX_DESIGN-REQ-114], [7_UI_UX_DESIGN-REQ-115], [7_UI_UX_DESIGN-REQ-116], [7_UI_UX_DESIGN-REQ-173], [7_UI_UX_DESIGN-REQ-174], [7_UI_UX_DESIGN-REQ-175], [7_UI_UX_DESIGN-REQ-176], [7_UI_UX_DESIGN-REQ-185], [7_UI_UX_DESIGN-REQ-186], [7_UI_UX_DESIGN-REQ-187], [7_UI_UX_DESIGN-REQ-188], [7_UI_UX_DESIGN-REQ-189], [7_UI_UX_DESIGN-REQ-190], [7_UI_UX_DESIGN-REQ-470]
 
 ## Dependencies
-- depends_on: [06_event_loop_and_widget_architecture.md]
+- depends_on: ["06_event_loop_and_widget_architecture.md"]
 - shared_components: [devs-core (consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [AC-RISK-007-01], [AC-RISK-007-02]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_5/23_risk_006_verification/02_template_resolver_single_pass.md, docs/plan/tasks/phase_5/23_risk_006_verification/03_template_resolver_scalar_restriction.md]
+- depends_on: ["phase_5/23_risk_006_verification/02_template_resolver_single_pass.md", "phase_5/23_risk_006_verification/03_template_resolver_scalar_restriction.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

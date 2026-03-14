@@ -4,7 +4,7 @@
 - [1_PRD-KPI-BR-007], [1_PRD-KPI-BR-008]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

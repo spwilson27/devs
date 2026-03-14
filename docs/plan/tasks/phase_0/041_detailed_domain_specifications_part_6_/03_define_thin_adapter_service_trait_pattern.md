@@ -4,7 +4,7 @@
 - [1_PRD-REQ-062]
 
 ## Dependencies
-- depends_on: [02_enforce_proto_as_api_source_of_truth.md]
+- depends_on: ["02_enforce_proto_as_api_source_of_truth.md"]
 - shared_components: [devs-core, devs-proto]
 
 ## 1. Initial Test Written

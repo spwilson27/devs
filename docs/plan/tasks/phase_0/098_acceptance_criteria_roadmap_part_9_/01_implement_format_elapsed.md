@@ -4,7 +4,7 @@
 - [AC-TYP-003], [AC-TYP-004], [AC-TYP-005], [AC-TYP-006]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [none]
 
 ## 1. Initial Test Written

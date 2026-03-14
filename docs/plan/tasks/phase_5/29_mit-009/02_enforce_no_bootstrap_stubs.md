@@ -4,7 +4,7 @@
 - [AC-RISK-009-04]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script (Owner)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-NEW-003], [3_MCP_DESIGN-REQ-BR-013], [3_MCP_DESIGN-REQ-BR-014], [3_MCP_DESIGN-REQ-BR-015], [3_MCP_DESIGN-REQ-BR-016], [3_MCP_DESIGN-REQ-BR-017], [3_MCP_DESIGN-REQ-EC-FS-001], [3_MCP_DESIGN-REQ-EC-FS-002], [3_MCP_DESIGN-REQ-EC-FS-003], [3_MCP_DESIGN-REQ-EC-FS-004], [3_MCP_DESIGN-REQ-EC-FS-005], [3_MCP_DESIGN-REQ-EC-FS-006]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer — path validation utilities)"]
 
 ## 1. Initial Test Written

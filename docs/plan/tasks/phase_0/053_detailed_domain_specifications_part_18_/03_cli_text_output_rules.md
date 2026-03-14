@@ -4,7 +4,7 @@
 - [2_TAS-REQ-138]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses domain types like `WorkflowRunSummary`, `StageRunSummary`)]
 
 ## 1. Initial Test Written

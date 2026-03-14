@@ -4,7 +4,7 @@
 - [2_TAS-REQ-044], [1_PRD-REQ-023]
 
 ## Dependencies
-- depends_on: [01_define_artifact_collection_strategy_schema.md]
+- depends_on: ["01_define_artifact_collection_strategy_schema.md"]
 - shared_components: [devs-executor (consumer — implement collect_artifacts for local target), devs-checkpoint (consumer — uses same checkpoint branch config)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-BR-007], [RISK-BR-010]
 
 ## Dependencies
-- depends_on: [02_high_severity_risk_merge_gating.md]
+- depends_on: ["02_high_severity_risk_merge_gating.md"]
 - shared_components: [Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-REQ-032], [2_TAS-REQ-086]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_2/07_logging_retention/01_retention_policy_config_and_delete_primitive.md]
+- depends_on: ["phase_2/07_logging_retention/01_retention_policy_config_and_delete_primitive.md"]
 - shared_components: [devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written

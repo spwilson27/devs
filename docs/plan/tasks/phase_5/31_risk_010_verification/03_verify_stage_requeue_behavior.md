@@ -4,7 +4,7 @@
 - [RISK-010-BR-004], [MIT-010]
 
 ## Dependencies
-- depends_on: [01_verify_report_rate_limit_mcp]
+- depends_on: ["01_verify_report_rate_limit_mcp"]
 - shared_components: [devs-scheduler, devs-pool, devs-core]
 
 ## 1. Initial Test Written

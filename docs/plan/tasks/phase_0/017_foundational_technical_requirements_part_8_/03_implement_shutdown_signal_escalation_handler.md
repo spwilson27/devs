@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002D]
 
 ## Dependencies
-- depends_on: [02_implement_shutdown_state_persistence_logic.md]
+- depends_on: ["02_implement_shutdown_state_persistence_logic.md"]
 - shared_components: [devs-core (owner — this task adds the signal escalation state machine used by the server shutdown sequence)]
 
 ## 1. Initial Test Written

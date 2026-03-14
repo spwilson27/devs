@@ -4,7 +4,7 @@
 - [1_PRD-REQ-045], [1_PRD-BR-003], [2_TAS-REQ-014]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

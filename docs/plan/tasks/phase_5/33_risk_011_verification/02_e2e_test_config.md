@@ -4,7 +4,7 @@
 - [RISK-011-BR-003], [RISK-011-BR-004], [MIT-011]
 
 ## Dependencies
-- depends_on: [01_server_handle_shutdown.md]
+- depends_on: ["01_server_handle_shutdown.md"]
 - shared_components: [devs-grpc]
 
 ## 1. Initial Test Written

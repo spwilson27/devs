@@ -4,7 +4,7 @@
 - [RISK-007], [RISK-007-BR-001]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_1/03_template_resolution_context/02_strict_resolution_engine.md]
+- depends_on: ["phase_1/03_template_resolution_context/02_strict_resolution_engine.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

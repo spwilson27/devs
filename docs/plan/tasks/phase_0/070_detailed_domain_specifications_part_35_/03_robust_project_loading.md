@@ -4,7 +4,7 @@
 - [2_TAS-REQ-427]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-config", "devs-core", "devs-scheduler"]
 
 ## 1. Initial Test Written

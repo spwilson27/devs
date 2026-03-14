@@ -4,7 +4,7 @@
 - [1_PRD-REQ-024], [1_PRD-REQ-025]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consume), devs-config (consume)]
 
 ## 1. Initial Test Written

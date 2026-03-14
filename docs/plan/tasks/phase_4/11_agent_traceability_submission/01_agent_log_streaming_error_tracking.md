@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-036], [3_MCP_DESIGN-REQ-037]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-proto, devs-grpc, devs-mcp]
 
 ## 1. Initial Test Written

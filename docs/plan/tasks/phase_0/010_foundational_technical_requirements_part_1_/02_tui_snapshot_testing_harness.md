@@ -4,7 +4,7 @@
 - [1_PRD-BR-005]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [none — this creates reusable test infrastructure for Phase 3 devs-tui]
 
 ## 1. Initial Test Written

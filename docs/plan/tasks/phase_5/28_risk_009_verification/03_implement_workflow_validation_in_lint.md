@@ -4,7 +4,7 @@
 - [RISK-009-BR-004]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do, devs-config]
 
 ## 1. Initial Test Written

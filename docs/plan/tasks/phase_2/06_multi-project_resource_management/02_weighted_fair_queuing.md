@@ -4,7 +4,7 @@
 - [1_PRD-REQ-034]
 
 ## Dependencies
-- depends_on: [01_global_dispatcher_strict_priority.md]
+- depends_on: ["01_global_dispatcher_strict_priority.md"]
 - shared_components: [devs-scheduler (owner — extends GlobalDispatcher), devs-config (consumer — project weight from ProjectEntry)]
 
 ## 1. Initial Test Written

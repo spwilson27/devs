@@ -4,7 +4,7 @@
 - [2_TAS-REQ-001A]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses domain types), devs-proto (consumer — uses generated wire types)]
 
 ## 1. Initial Test Written

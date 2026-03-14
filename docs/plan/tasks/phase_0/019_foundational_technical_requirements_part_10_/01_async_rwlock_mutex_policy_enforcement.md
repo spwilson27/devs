@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002M]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (Owner — concurrency policy types defined here)]
 
 ## 1. Initial Test Written

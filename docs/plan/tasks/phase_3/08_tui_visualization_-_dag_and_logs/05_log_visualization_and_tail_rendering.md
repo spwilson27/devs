@@ -4,7 +4,7 @@
 - [7_UI_UX_DESIGN-REQ-112], [7_UI_UX_DESIGN-REQ-124], [7_UI_UX_DESIGN-REQ-125], [7_UI_UX_DESIGN-REQ-136], [7_UI_UX_DESIGN-REQ-137], [7_UI_UX_DESIGN-REQ-138], [7_UI_UX_DESIGN-REQ-139], [7_UI_UX_DESIGN-REQ-171], [7_UI_UX_DESIGN-REQ-180], [7_UI_UX_DESIGN-REQ-181], [7_UI_UX_DESIGN-REQ-182], [7_UI_UX_DESIGN-REQ-183], [7_UI_UX_DESIGN-REQ-184], [7_UI_UX_DESIGN-REQ-235]
 
 ## Dependencies
-- depends_on: [04_ansi_stripping_and_log_buffer.md, 02_theme_and_color_mode_system.md]
+- depends_on: ["04_ansi_stripping_and_log_buffer.md", "02_theme_and_color_mode_system.md"]
 - shared_components: [devs-proto (consumer)]
 
 ## 1. Initial Test Written

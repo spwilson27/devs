@@ -4,7 +4,7 @@
 - [2_TAS-REQ-103]
 
 ## Dependencies
-- depends_on: [01_workflow_stage_state_machines.md]
+- depends_on: ["01_workflow_stage_state_machines.md"]
 - shared_components: [devs-core (owner — creates TemplateResolver, TemplateContext, TemplateError)]
 
 ## 1. Initial Test Written

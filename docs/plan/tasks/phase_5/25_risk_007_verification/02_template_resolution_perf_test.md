@@ -4,7 +4,7 @@
 - [AC-RISK-007-05]
 
 ## Dependencies
-- depends_on: [01_template_truncation_and_boolean.md]
+- depends_on: ["01_template_truncation_and_boolean.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

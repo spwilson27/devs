@@ -4,7 +4,7 @@
 - [1_PRD-REQ-027]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-scheduler (owner: Phase 2), devs-core (consumer), devs-adapters (consumer)]
 
 ## 1. Initial Test Written

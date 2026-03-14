@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-041]
 
 ## Dependencies
-- depends_on: [01_agent_session_isolation.md, 02_workflow_snapshot_integrity.md]
+- depends_on: ["01_agent_session_isolation.md", "02_workflow_snapshot_integrity.md"]
 - shared_components: [devs-mcp, devs-checkpoint, devs-cli]
 
 ## 1. Initial Test Written

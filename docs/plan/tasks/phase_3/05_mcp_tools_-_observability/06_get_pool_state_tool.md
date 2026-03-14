@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-012], [3_MCP_DESIGN-REQ-EC-OBS-005], [3_MCP_DESIGN-REQ-EC-OBS-DBG-007]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-pool (consumer)", "devs-proto (consumer)"]
 
 ## 1. Initial Test Written

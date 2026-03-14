@@ -4,7 +4,7 @@
 - [AC-TYP-013], [AC-TYP-014]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_0/099_acceptance_criteria_roadmap_part_10_/02_strip_ansi_acceptance_cases.md]
+- depends_on: ["phase_0/099_acceptance_criteria_roadmap_part_10_/02_strip_ansi_acceptance_cases.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-REQ-023]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — add enum here), devs-config (consumer — parse from TOML), devs-executor (consumer — use in trait)]
 
 ## 1. Initial Test Written

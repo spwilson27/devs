@@ -4,7 +4,7 @@
 - [2_TAS-REQ-022C]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer — uses domain types)", "devs-checkpoint (consumer — will use these constants for git commit creation)"]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-471]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (Consumer — add validation to domain types)"]
 
 ## 1. Initial Test Written

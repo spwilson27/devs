@@ -4,7 +4,7 @@
 - [RISK-010], [RISK-010-BR-001], [RISK-010-BR-002]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-pool, devs-core, devs-adapters]
 
 ## 1. Initial Test Written

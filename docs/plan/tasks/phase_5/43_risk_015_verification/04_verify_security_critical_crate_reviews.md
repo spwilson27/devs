@@ -4,7 +4,7 @@
 - [RISK-016-BR-003]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

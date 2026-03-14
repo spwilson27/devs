@@ -4,7 +4,7 @@
 - [1_PRD-REQ-019], [1_PRD-REQ-020], [1_PRD-REQ-021], [1_PRD-REQ-033]
 
 ## Dependencies
-- depends_on: [01_pool_models.md, 02_routing_logic.md, 03_concurrency_control.md, 04_pool_registry.md]
+- depends_on: ["01_pool_models.md", "02_routing_logic.md", "03_concurrency_control.md", "04_pool_registry.md"]
 - shared_components: [devs-pool (create — exhaustion/rate-limit integration), Shared State & Concurrency Patterns (consume — mpsc channel pattern)]
 
 ## 1. Initial Test Written

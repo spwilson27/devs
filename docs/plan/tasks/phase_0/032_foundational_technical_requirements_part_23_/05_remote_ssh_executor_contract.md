@@ -4,7 +4,7 @@
 - [2_TAS-REQ-044B]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer — uses domain types)", "devs-executor (owner in Phase 1 — this task defines the foundational contract)"]
 
 ## 1. Initial Test Written

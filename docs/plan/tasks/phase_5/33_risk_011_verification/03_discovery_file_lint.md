@@ -4,7 +4,7 @@
 - [RISK-011-BR-004], [MIT-011]
 
 ## Dependencies
-- depends_on: [02_e2e_test_config.md]
+- depends_on: ["02_e2e_test_config.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

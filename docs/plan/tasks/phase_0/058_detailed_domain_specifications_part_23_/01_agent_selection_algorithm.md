@@ -4,7 +4,7 @@
 - [2_TAS-REQ-161]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-pool (Consumer — design specification for selection logic)", "devs-core (Consumer — domain types for capabilities, agent IDs)"]
 
 ## 1. Initial Test Written

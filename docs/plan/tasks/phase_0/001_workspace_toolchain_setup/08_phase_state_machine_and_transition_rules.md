@@ -4,7 +4,7 @@
 - [ROAD-STATEM-001], [ROAD-STATEM-002], [ROAD-STATEM-003], [ROAD-STATEM-004], [ROAD-STATEM-005], [ROAD-BR-013], [ROAD-BR-014], [ROAD-BR-015], [ROAD-BR-016], [ROAD-BR-017], [ROAD-BR-018], [ROAD-BR-019], [ROAD-BR-020]
 
 ## Dependencies
-- depends_on: [07_ptc_json_schema_and_checkpoint_validation.md]
+- depends_on: ["07_ptc_json_schema_and_checkpoint_validation.md"]
 - shared_components: [devs-core, Phase Transition Checkpoint (PTC) Model]
 
 ## 1. Initial Test Written

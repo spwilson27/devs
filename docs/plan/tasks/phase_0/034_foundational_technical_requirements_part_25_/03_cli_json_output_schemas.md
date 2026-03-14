@@ -4,7 +4,7 @@
 - [2_TAS-REQ-086G]
 
 ## Dependencies
-- depends_on: [01_protocol_state_machines.md]
+- depends_on: ["01_protocol_state_machines.md"]
 - shared_components: [devs-core (consumes state types, owns CLI output types for Phase 0)]
 
 ## 1. Initial Test Written

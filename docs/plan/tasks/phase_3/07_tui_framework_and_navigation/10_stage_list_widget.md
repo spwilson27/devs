@@ -4,7 +4,7 @@
 - [6_UI_UX_ARCHITECTURE-REQ-096], [6_UI_UX_ARCHITECTURE-REQ-097], [6_UI_UX_ARCHITECTURE-REQ-098], [6_UI_UX_ARCHITECTURE-REQ-099], [6_UI_UX_ARCHITECTURE-REQ-121], [6_UI_UX_ARCHITECTURE-REQ-122], [6_UI_UX_ARCHITECTURE-REQ-123], [6_UI_UX_ARCHITECTURE-REQ-124], [6_UI_UX_ARCHITECTURE-REQ-125], [6_UI_UX_ARCHITECTURE-REQ-126], [6_UI_UX_ARCHITECTURE-REQ-127], [6_UI_UX_ARCHITECTURE-REQ-128], [6_UI_UX_ARCHITECTURE-REQ-129], [6_UI_UX_ARCHITECTURE-REQ-361], [6_UI_UX_ARCHITECTURE-REQ-362], [6_UI_UX_ARCHITECTURE-REQ-363], [6_UI_UX_ARCHITECTURE-REQ-364], [6_UI_UX_ARCHITECTURE-REQ-365]
 
 ## Dependencies
-- depends_on: [02_app_state_and_state_management.md, 07_string_constants_and_styling.md]
+- depends_on: ["02_app_state_and_state_management.md", "07_string_constants_and_styling.md"]
 - shared_components: [devs-proto (consumer)]
 
 ## 1. Initial Test Written

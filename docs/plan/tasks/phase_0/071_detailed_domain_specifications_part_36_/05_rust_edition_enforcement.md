@@ -4,7 +4,7 @@
 - [2_TAS-REQ-434]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: []
 
 ## 1. Initial Test Written

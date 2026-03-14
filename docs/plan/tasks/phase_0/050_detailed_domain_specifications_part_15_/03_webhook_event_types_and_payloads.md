@@ -4,7 +4,7 @@
 - [2_TAS-REQ-124]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-webhook (Consumer)", "devs-core (Consumer)"]
 
 ## 1. Initial Test Written

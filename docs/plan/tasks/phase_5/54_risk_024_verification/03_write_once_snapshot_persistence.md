@@ -4,7 +4,7 @@
 - [RISK-025-BR-002]
 
 ## Dependencies
-- depends_on: [02_snapshot_deep_clone_at_submit_time.md]
+- depends_on: ["02_snapshot_deep_clone_at_submit_time.md"]
 - shared_components: [devs-checkpoint]
 
 ## 1. Initial Test Written

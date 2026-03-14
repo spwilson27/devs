@@ -4,7 +4,7 @@
 - [2_TAS-REQ-030B]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer — uses WorkflowRunState, StageRunState)", "devs-scheduler (this task defines foundational dispatch latency contract for the scheduler)"]
 
 ## 1. Initial Test Written

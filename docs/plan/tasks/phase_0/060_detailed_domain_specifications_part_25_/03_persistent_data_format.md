@@ -4,7 +4,7 @@
 - [2_TAS-REQ-259]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: ["devs-core", "devs-checkpoint"]
 
 ## 1. Initial Test Written

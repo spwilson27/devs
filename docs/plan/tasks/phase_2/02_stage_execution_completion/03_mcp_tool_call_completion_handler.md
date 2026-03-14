@@ -1,7 +1,7 @@
 # Task: Implement MCP Tool Call Completion Handler (Sub-Epic: 02_Stage Execution & Completion)
 
 ## Covered Requirements
-- [1_PRD-REQ-011], [2_TAS-REQ-091]
+- [1_PRD-REQ-011], [2_TAS-REQ-091], [9_PROJECT_ROADMAP-REQ-088]
 
 ## Dependencies
 - depends_on: ["01_completion_signal_types_and_exit_code_handler.md"]

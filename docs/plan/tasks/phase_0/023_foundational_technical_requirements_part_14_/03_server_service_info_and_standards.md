@@ -4,7 +4,7 @@
 - [2_TAS-REQ-009A], [2_TAS-REQ-009B]
 
 ## Dependencies
-- depends_on: [01_proto_build_script_fallback.md]
+- depends_on: ["01_proto_build_script_fallback.md"]
 - shared_components: [devs-proto]
 
 ## 1. Initial Test Written

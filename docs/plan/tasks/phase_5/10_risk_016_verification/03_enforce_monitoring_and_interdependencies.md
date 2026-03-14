@@ -4,7 +4,7 @@
 - [RISK-BR-016], [8_RISKS-REQ-065], [RISK-BR-018], [8_RISKS-REQ-078], [AC-RISK-MATRIX-006], [8_RISKS-REQ-086], [AC-RISK-MATRIX-010], [8_RISKS-REQ-090], [8_RISKS-REQ-063], [8_RISKS-REQ-064], [RISK-BR-014], [RISK-BR-015], [8_RISKS-REQ-063]
 
 ## Dependencies
-- depends_on: [02_implement_risk_coverage_validation.md]
+- depends_on: ["02_implement_risk_coverage_validation.md"]
 - shared_components: [Traceability & Verification Infrastructure, ./do Entrypoint Script]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [AC-RISK-003-03], [AC-RISK-003-04]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-checkpoint]
 
 ## 1. Initial Test Written

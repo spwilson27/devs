@@ -4,7 +4,7 @@
 - [2_TAS-REQ-086F]
 
 ## Dependencies
-- depends_on: [01_protocol_state_machines.md]
+- depends_on: ["01_protocol_state_machines.md"]
 - shared_components: [devs-core (consumes state types), devs-webhook (owner of delivery types — Phase 0 defines types only; Phase 2 implements dispatcher)]
 
 ## 1. Initial Test Written

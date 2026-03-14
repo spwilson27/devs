@@ -4,7 +4,7 @@
 - [RISK-008-BR-004]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-executor]
 
 ## 1. Initial Test Written

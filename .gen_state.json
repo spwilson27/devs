@@ -46,8 +46,8 @@
     "requirements_ordered": true,
     "phases_completed": true,
     "tasks_completed": true,
-    "tasks_reviewed": false,
-    "cross_phase_reviewed": false,
+    "tasks_reviewed": true,
+    "cross_phase_reviewed": true,
     "tasks_generated": [
         "phase_0/001_workspace_toolchain_setup",
         "phase_0/002_workspace_toolchain_extensions",
@@ -253,7 +253,7 @@
         "phase_5/55_risk_025_verification",
         "phase_5/56_risk_025_verification"
     ],
-    "dag_completed": false,
+    "dag_completed": true,
     "dag_reviewed": false,
     "summarized": [
         "market_research",
@@ -277,10 +277,11 @@
     "shared_components_completed": true,
     "interface_contracts_completed": true,
     "fixup_validation_completed": true,
-    "cross_phase_reviewed_pass_1": false,
-    "cross_phase_reviewed_pass_2": false,
-    "tasks_reordered_pass_1": false,
-    "tasks_reordered_pass_2": false,
-    "integration_test_plan_completed": false,
-    "ordered_phases_generated": []
+    "cross_phase_reviewed_pass_1": true,
+    "cross_phase_reviewed_pass_2": true,
+    "tasks_reordered_pass_1": true,
+    "tasks_reordered_pass_2": true,
+    "integration_test_plan_completed": true,
+    "ordered_phases_generated": [],
+    "depends_on_validated": true
 }

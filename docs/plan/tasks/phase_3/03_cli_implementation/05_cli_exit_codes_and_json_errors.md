@@ -4,7 +4,7 @@
 - [2_TAS-REQ-062], [2_TAS-REQ-063]
 
 ## Dependencies
-- depends_on: [01_cli_scaffold_and_global_flags.md]
+- depends_on: ["01_cli_scaffold_and_global_flags.md"]
 - shared_components: [devs-core (consumer)]
 
 ## 1. Initial Test Written

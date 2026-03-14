@@ -4,7 +4,7 @@
 - [2_TAS-REQ-001K]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: [devs-checkpoint (consumer), devs-core (consumer)]
 
 ## 1. Initial Test Written

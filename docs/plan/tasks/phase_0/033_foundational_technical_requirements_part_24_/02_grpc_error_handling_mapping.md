@@ -4,7 +4,7 @@
 - [2_TAS-REQ-086B], [2_TAS-REQ-086C]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (owner of domain error types — this task defines the error enum and gRPC status mapping)]
 
 ## 1. Initial Test Written

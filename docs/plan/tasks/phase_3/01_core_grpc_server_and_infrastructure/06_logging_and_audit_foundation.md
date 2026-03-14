@@ -4,7 +4,7 @@
 - [5_SECURITY_DESIGN-REQ-011], [5_SECURITY_DESIGN-REQ-014], [5_SECURITY_DESIGN-REQ-053], [5_SECURITY_DESIGN-REQ-055], [5_SECURITY_DESIGN-REQ-060], [5_SECURITY_DESIGN-REQ-061], [5_SECURITY_DESIGN-REQ-062]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-grpc, devs-core]
 
 ## 1. Initial Test Written

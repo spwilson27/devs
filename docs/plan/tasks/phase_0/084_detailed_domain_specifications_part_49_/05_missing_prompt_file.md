@@ -4,7 +4,7 @@
 - [2_TAS-REQ-499]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-scheduler (consume — stage dispatch logic), devs-executor (consume — environment preparation), devs-adapters (consume — AgentAdapter trait)]
 
 ## 1. Initial Test Written

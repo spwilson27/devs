@@ -4,7 +4,7 @@
 - [2_TAS-REQ-090]
 
 ## Dependencies
-- depends_on: [05_context_json_schema.md]
+- depends_on: ["05_context_json_schema.md"]
 - shared_components: [devs-executor]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [MIT-023], [AC-RISK-023-03]
 
 ## Dependencies
-- depends_on: [01_e2e_subprocess_helper_llvm_profile.md]
+- depends_on: ["01_e2e_subprocess_helper_llvm_profile.md"]
 - shared_components: [devs-grpc]
 
 ## 1. Initial Test Written

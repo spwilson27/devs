@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-080], [3_MCP_DESIGN-REQ-AC-1.19]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-mcp (Owner), devs-grpc (Consumer), devs-server (Consumer), devs-scheduler (Consumer)]
 
 ## 1. Initial Test Written

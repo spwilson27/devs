@@ -4,7 +4,7 @@
 - [FB-DATA-001], [FB-DATA-002], [FB-DATA-003], [FB-DATA-004], [FB-BR-007]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

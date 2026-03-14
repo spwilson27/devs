@@ -4,7 +4,7 @@
 - [2_TAS-REQ-059], [6_UI_UX_ARCHITECTURE-REQ-137], [6_UI_UX_ARCHITECTURE-REQ-153], [6_UI_UX_ARCHITECTURE-REQ-154], [6_UI_UX_ARCHITECTURE-REQ-155], [6_UI_UX_ARCHITECTURE-REQ-156], [6_UI_UX_ARCHITECTURE-REQ-157], [6_UI_UX_ARCHITECTURE-REQ-158], [6_UI_UX_ARCHITECTURE-REQ-159], [6_UI_UX_ARCHITECTURE-REQ-160], [6_UI_UX_ARCHITECTURE-REQ-161], [6_UI_UX_ARCHITECTURE-REQ-162], [6_UI_UX_ARCHITECTURE-REQ-163], [6_UI_UX_ARCHITECTURE-REQ-164], [6_UI_UX_ARCHITECTURE-REQ-165], [6_UI_UX_ARCHITECTURE-REQ-166], [6_UI_UX_ARCHITECTURE-REQ-167], [6_UI_UX_ARCHITECTURE-REQ-168], [6_UI_UX_ARCHITECTURE-REQ-169], [6_UI_UX_ARCHITECTURE-REQ-170], [6_UI_UX_ARCHITECTURE-REQ-434], [6_UI_UX_ARCHITECTURE-REQ-435], [6_UI_UX_ARCHITECTURE-REQ-436], [6_UI_UX_ARCHITECTURE-REQ-437]
 
 ## Dependencies
-- depends_on: [01_tui_crate_scaffold_and_event_loop.md, 02_app_state_and_state_management.md, 03_grpc_client_and_discovery.md]
+- depends_on: ["01_tui_crate_scaffold_and_event_loop.md", "02_app_state_and_state_management.md", "03_grpc_client_and_discovery.md"]
 - shared_components: [devs-core (consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-013], [RISK-013-BR-001], [RISK-013-BR-002], [RISK-013-BR-003], [RISK-013-BR-004]
 
 ## Dependencies
-- depends_on: [01_enforce_traceability_gates.md, 02_commit_atomic_traceability_verification.md, 03_implement_traceability_scanner.md, 04_implement_traceability_exit_logic.md, 05_implement_stale_annotation_detection.md, 06_implement_commit_atomic_check.md]
+- depends_on: ["01_enforce_traceability_gates.md", "02_commit_atomic_traceability_verification.md", "03_implement_traceability_scanner.md", "04_implement_traceability_exit_logic.md", "05_implement_stale_annotation_detection.md", "06_implement_commit_atomic_check.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

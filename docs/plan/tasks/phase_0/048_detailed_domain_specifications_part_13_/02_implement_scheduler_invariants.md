@@ -4,7 +4,7 @@
 - [2_TAS-REQ-112]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-scheduler (owner — creates invariant enforcement), devs-core (consumer — uses WorkflowRunState/StageRunState enums)]
 
 ## 1. Initial Test Written

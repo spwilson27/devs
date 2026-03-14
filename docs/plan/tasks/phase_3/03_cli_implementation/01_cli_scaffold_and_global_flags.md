@@ -4,7 +4,7 @@
 - [2_TAS-REQ-060]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-proto (consumer), devs-core (consumer — Server Discovery Protocol), ./do Entrypoint Script & CI Pipeline (consumer)]
 
 ## 1. Initial Test Written

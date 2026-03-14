@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-044]
 
 ## Dependencies
-- depends_on: [01_e2e_infrastructure.md, 03_coverage_gates.md]
+- depends_on: ["01_e2e_infrastructure.md", "03_coverage_gates.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

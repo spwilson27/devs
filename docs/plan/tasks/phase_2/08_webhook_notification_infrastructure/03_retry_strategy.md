@@ -4,7 +4,7 @@
 - [2_TAS-REQ-093]
 
 ## Dependencies
-- depends_on: [02_dispatcher_bounded_channel.md]
+- depends_on: ["02_dispatcher_bounded_channel.md"]
 - shared_components: [devs-webhook (owner)]
 
 ## 1. Initial Test Written

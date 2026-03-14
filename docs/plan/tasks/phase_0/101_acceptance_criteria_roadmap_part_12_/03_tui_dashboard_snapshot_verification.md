@@ -4,7 +4,7 @@
 - [AC-TYP-022]
 
 ## Dependencies
-- depends_on: [02_tui_string_constants_and_lint.md]
+- depends_on: ["02_tui_string_constants_and_lint.md"]
 - shared_components: [devs-tui (owner of dashboard widget and snapshot tests), devs-core (consumer — uses RunStatus/StageStatus types)]
 
 ## 1. Initial Test Written

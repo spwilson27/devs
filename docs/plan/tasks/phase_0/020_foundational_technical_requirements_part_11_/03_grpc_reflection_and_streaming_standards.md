@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002T], [2_TAS-REQ-002U]
 
 ## Dependencies
-- depends_on: [02_grpc_standard_unary_responses_and_error_mapping.md]
+- depends_on: ["02_grpc_standard_unary_responses_and_error_mapping.md"]
 - shared_components: [devs-proto (consumer — descriptor sets for reflection)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [AC-TIMING-001]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (state types)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [ROAD-BR-001], [ROAD-BR-002], [ROAD-BR-003], [ROAD-BR-004], [ROAD-BR-005], [ROAD-BR-006], [ROAD-BR-007], [ROAD-BR-008], [ROAD-BR-009], [ROAD-BR-010], [ROAD-BR-011], [ROAD-BR-012], [ROAD-CONS-001], [ROAD-CONS-002], [ROAD-CONS-004], [ROAD-CONS-005], [ROAD-CONS-006], [ROAD-CONS-007], [ROAD-CONS-008], [ROAD-CRIT-001], [ROAD-CRIT-002], [ROAD-CRIT-003], [ROAD-CRIT-004], [ROAD-CRIT-005], [ROAD-CRIT-006], [ROAD-CRIT-007], [ROAD-CRIT-008], [ROAD-CRIT-009], [ROAD-CRIT-010], [ROAD-CRIT-011], [ROAD-CRIT-012], [ROAD-NGOAL-001], [ROAD-NGOAL-002], [ROAD-NGOAL-003], [ROAD-NGOAL-004], [ROAD-RISK-001], [ROAD-RISK-002], [ROAD-RISK-003]
 
 ## Dependencies
-- depends_on: [07_ptc_json_schema_and_checkpoint_validation.md, 08_phase_state_machine_and_transition_rules.md]
+- depends_on: ["07_ptc_json_schema_and_checkpoint_validation.md", "08_phase_state_machine_and_transition_rules.md"]
 - shared_components: [devs-core, Phase Transition Checkpoint (PTC) Model]
 
 ## 1. Initial Test Written

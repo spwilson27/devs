@@ -4,7 +4,7 @@
 - [1_PRD-REQ-078]
 
 ## Dependencies
-- depends_on: [03_enforce_no_http_listener_no_filewatch.md]
+- depends_on: ["03_enforce_no_http_listener_no_filewatch.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline (Consumer), Traceability & Coverage Infrastructure (Consumer)]
 
 ## 1. Initial Test Written

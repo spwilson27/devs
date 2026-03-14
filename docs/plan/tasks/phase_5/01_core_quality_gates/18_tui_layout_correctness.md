@@ -4,7 +4,7 @@
 - [AC-SGL-001], [AC-SGL-002], [AC-SGL-003], [AC-SGL-004], [AC-SGL-005], [AC-SGL-006], [AC-SGL-007], [AC-SGL-008], [AC-SGL-009], [AC-SGL-010], [AC-SGL-011], [AC-SGL-012], [AC-SGL-013], [AC-SGL-014], [AC-SGL-015], [AC-SGL-016], [AC-SGL-017], [AC-SGL-018], [AC-SGL-019], [AC-SGL-020], [AC-SGL-021], [AC-SGL-022], [AC-SGL-023], [AC-SGL-024], [AC-SGL-025], [AC-SGL-026], [AC-SGL-027], [AC-SGL-028], [AC-SGL-029], [AC-SGL-030], [AC-SGL-031]
 
 ## Dependencies
-- depends_on: [02_tui_snapshots.md]
+- depends_on: ["02_tui_snapshots.md"]
 - shared_components: [devs-tui]
 
 ## 1. Initial Test Written

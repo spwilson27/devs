@@ -4,7 +4,7 @@
 - [RISK-BR-014]
 
 ## Dependencies
-- depends_on: [01_risk_matrix_schema_and_timestamp_validation.md]
+- depends_on: ["01_risk_matrix_schema_and_timestamp_validation.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

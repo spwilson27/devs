@@ -4,7 +4,7 @@
 - [2_TAS-REQ-048], [2_TAS-REQ-071], [3_MCP_DESIGN-REQ-SRV-001], [3_MCP_DESIGN-REQ-003]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-proto (consumer)", "devs-core (consumer)", "devs-scheduler (consumer)"]
 
 ## 1. Initial Test Written

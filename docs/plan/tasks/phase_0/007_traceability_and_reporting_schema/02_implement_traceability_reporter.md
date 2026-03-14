@@ -5,7 +5,7 @@
 - [2_TAS-REQ-080]
 
 ## Dependencies
-- depends_on: [01_implement_traceability_scanner.md]
+- depends_on: ["01_implement_traceability_scanner.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline (consumer), Traceability & Coverage Infrastructure (owner — traceability report schema)]
 
 ## 1. Initial Test Written

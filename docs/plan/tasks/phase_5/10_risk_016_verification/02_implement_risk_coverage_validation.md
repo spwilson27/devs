@@ -4,7 +4,7 @@
 - [RISK-BR-020], [8_RISKS-REQ-080], [AC-RISK-MATRIX-003], [8_RISKS-REQ-083], [8_RISKS-REQ-027], [AC-RISK-MATRIX-009], [8_RISKS-REQ-089], [RISK-BR-002], [RISK-BR-006], [8_RISKS-REQ-032], [8_RISKS-REQ-036], [8_RISKS-REQ-037]
 
 ## Dependencies
-- depends_on: [01_implement_risk_matrix_parser.md]
+- depends_on: ["01_implement_risk_matrix_parser.md"]
 - shared_components: [Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

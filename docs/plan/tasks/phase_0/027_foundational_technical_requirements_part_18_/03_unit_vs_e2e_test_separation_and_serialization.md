@@ -4,7 +4,7 @@
 - [2_TAS-REQ-015A], [2_TAS-REQ-015B]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script & CI Pipeline (consumer), Server Discovery Protocol (consumer — DEVS_DISCOVERY_FILE)]
 
 ## 1. Initial Test Written

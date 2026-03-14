@@ -4,7 +4,7 @@
 - [1_PRD-REQ-081]
 
 ## Dependencies
-- depends_on: [01_changelog_and_non_goals.md]
+- depends_on: ["01_changelog_and_non_goals.md"]
 - shared_components: [Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

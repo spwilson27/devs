@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002R], [2_TAS-REQ-002S]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-proto (consumer — proto definitions), devs-core (consumer — domain error types)]
 
 ## 1. Initial Test Written

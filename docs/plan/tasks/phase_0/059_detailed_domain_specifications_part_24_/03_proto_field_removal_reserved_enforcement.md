@@ -4,7 +4,7 @@
 - [2_TAS-REQ-245]
 
 ## Dependencies
-- depends_on: [01_proto_timestamp_and_build_logic.md]
+- depends_on: ["01_proto_timestamp_and_build_logic.md"]
 - shared_components: [./do Entrypoint Script, devs-proto]
 
 ## 1. Initial Test Written

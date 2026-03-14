@@ -4,7 +4,7 @@
 - [RISK-010-BR-003]
 
 ## Dependencies
-- depends_on: [02_implement_rate_limit_logic.md]
+- depends_on: ["02_implement_rate_limit_logic.md"]
 - shared_components: [devs-webhook, devs-pool]
 
 ## 1. Initial Test Written

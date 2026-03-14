@@ -1,10 +1,10 @@
 # Task: Implement In-Flight Run Recovery Logic (Sub-Epic: 07_Agent Diagnostic Behaviors)
 
 ## Covered Requirements
-- [3_MCP_DESIGN-REQ-028]
+- [3_MCP_DESIGN-REQ-028], [3_MCP_DESIGN-REQ-049], [3_MCP_DESIGN-REQ-050]
 
 ## Dependencies
-- depends_on: [01_diagnostic_investigation_sequence.md]
+- depends_on: ["01_diagnostic_investigation_sequence.md"]
 - shared_components: [devs-mcp, devs-checkpoint, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

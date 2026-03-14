@@ -4,7 +4,7 @@
 - [1_PRD-REQ-031], [2_TAS-REQ-026]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_3/02_state_recovery_and_lifecycle/01_crash_recovery_logic.md]
+- depends_on: ["phase_3/02_state_recovery_and_lifecycle/01_crash_recovery_logic.md"]
 - shared_components: [devs-checkpoint (consumer — uses restore_checkpoints), devs-config (consumer — uses ProjectEntry/ProjectRegistry), devs-core (consumer — uses apply_crash_recovery)]
 
 ## 1. Initial Test Written

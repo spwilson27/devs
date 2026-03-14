@@ -4,7 +4,7 @@
 - [RISK-BR-012], [RISK-BR-013]
 
 ## Dependencies
-- depends_on: [01_risk_matrix_schema_and_timestamp_validation.md]
+- depends_on: ["01_risk_matrix_schema_and_timestamp_validation.md"]
 - shared_components: [none]
 
 ## 1. Initial Test Written

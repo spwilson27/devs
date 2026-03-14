@@ -4,7 +4,7 @@
 - [2_TAS-REQ-415]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer), devs-proto (consumer), devs-scheduler (consumer), devs-executor (consumer), devs-pool (consumer)]
 
 ## 1. Initial Test Written

@@ -6,7 +6,7 @@
 - [PERF-GP-019], [PERF-GP-020]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

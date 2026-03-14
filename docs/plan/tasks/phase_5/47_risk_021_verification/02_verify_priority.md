@@ -4,7 +4,7 @@
 - [AC-RISK-021-03]
 
 ## Dependencies
-- depends_on: [01_verify_cancellation.md]
+- depends_on: ["01_verify_cancellation.md"]
 - shared_components: [devs-pool, devs-scheduler, devs-grpc]
 
 ## 1. Initial Test Written

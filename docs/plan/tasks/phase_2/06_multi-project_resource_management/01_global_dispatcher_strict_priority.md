@@ -4,7 +4,7 @@
 - [1_PRD-REQ-034]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-scheduler (owner — new module added), devs-pool (consumer — `acquire_agent` API), devs-config (consumer — `SchedulingPolicy` from `ServerConfig`), devs-core (consumer — `ProjectId`, `StageRunId`, `BoundedString`)]
 
 ## 1. Initial Test Written

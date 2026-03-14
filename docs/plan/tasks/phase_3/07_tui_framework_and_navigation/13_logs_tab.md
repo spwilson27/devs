@@ -4,7 +4,7 @@
 - [6_UI_UX_ARCHITECTURE-REQ-196], [6_UI_UX_ARCHITECTURE-REQ-197], [6_UI_UX_ARCHITECTURE-REQ-198], [6_UI_UX_ARCHITECTURE-REQ-199], [6_UI_UX_ARCHITECTURE-REQ-200], [6_UI_UX_ARCHITECTURE-REQ-201], [6_UI_UX_ARCHITECTURE-REQ-202], [6_UI_UX_ARCHITECTURE-REQ-203], [6_UI_UX_ARCHITECTURE-REQ-204], [6_UI_UX_ARCHITECTURE-REQ-205], [6_UI_UX_ARCHITECTURE-REQ-376], [6_UI_UX_ARCHITECTURE-REQ-377], [6_UI_UX_ARCHITECTURE-REQ-378], [6_UI_UX_ARCHITECTURE-REQ-379], [6_UI_UX_ARCHITECTURE-REQ-380]
 
 ## Dependencies
-- depends_on: [06_layout_system_and_terminal_constraints.md, 11_log_pane_and_ansi_stripping.md]
+- depends_on: ["06_layout_system_and_terminal_constraints.md", "11_log_pane_and_ansi_stripping.md"]
 - shared_components: [devs-proto (consumer)]
 
 ## 1. Initial Test Written

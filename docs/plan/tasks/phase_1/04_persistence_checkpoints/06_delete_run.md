@@ -4,7 +4,7 @@
 - [2_TAS-REQ-087]
 
 ## Dependencies
-- depends_on: [02_atomic_checkpoint_save.md, 04_configurable_checkpoint_branch.md]
+- depends_on: ["02_atomic_checkpoint_save.md", "04_configurable_checkpoint_branch.md"]
 - shared_components: [devs-checkpoint (own)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-505]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses TemplateResolver and stage completion types)]
 
 ## 1. Initial Test Written

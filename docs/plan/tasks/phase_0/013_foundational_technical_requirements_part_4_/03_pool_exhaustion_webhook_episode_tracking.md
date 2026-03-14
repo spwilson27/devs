@@ -4,7 +4,7 @@
 - [2_TAS-BR-WH-003]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses domain types for pool state and event definitions)]
 
 ## 1. Initial Test Written

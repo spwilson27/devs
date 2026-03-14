@@ -4,7 +4,7 @@
 - [2_TAS-REQ-033], [2_TAS-REQ-047]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-pool (consumer — add exhaustion tracking to existing pool), devs-core (consumer — use domain event types)]
 
 ## 1. Initial Test Written

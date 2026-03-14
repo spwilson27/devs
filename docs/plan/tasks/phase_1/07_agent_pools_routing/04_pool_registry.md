@@ -4,7 +4,7 @@
 - [1_PRD-REQ-033]
 
 ## Dependencies
-- depends_on: [01_pool_models.md, 02_routing_logic.md, 03_concurrency_control.md]
+- depends_on: ["01_pool_models.md", "02_routing_logic.md", "03_concurrency_control.md"]
 - shared_components: [devs-pool (create — registry module), devs-config (consume — ServerConfig with pool definitions)]
 
 ## 1. Initial Test Written

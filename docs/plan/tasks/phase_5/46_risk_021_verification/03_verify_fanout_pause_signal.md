@@ -4,7 +4,7 @@
 - [RISK-021-BR-002]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-adapters, devs-scheduler, devs-cli]
 
 ## 1. Initial Test Written

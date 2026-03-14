@@ -4,7 +4,7 @@
 - [AC-RISK-003-02]
 
 ## Dependencies
-- depends_on: [06_checkpoint_json_validation_function.md]
+- depends_on: ["06_checkpoint_json_validation_function.md"]
 - shared_components: [devs-checkpoint, devs-core, devs-scheduler]
 
 ## 1. Initial Test Written

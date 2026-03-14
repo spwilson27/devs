@@ -4,7 +4,7 @@
 - [2_TAS-REQ-271]
 
 ## Dependencies
-- depends_on: [02_persistence_before_event_broadcast.md, 04_corrupt_checkpoint_isolation.md]
+- depends_on: ["02_persistence_before_event_broadcast.md", "04_corrupt_checkpoint_isolation.md"]
 - shared_components: [devs-core (consumer), devs-checkpoint (consumer)]
 
 ## 1. Initial Test Written

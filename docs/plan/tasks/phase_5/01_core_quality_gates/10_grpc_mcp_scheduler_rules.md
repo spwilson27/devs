@@ -4,7 +4,7 @@
 - [PERF-GRP-001], [PERF-GRP-002], [PERF-GRP-003], [PERF-GRP-004], [PERF-GRP-005], [PERF-GRP-006], [PERF-GRP-007], [PERF-GRP-008], [PERF-GRP-009], [PERF-GRP-010], [PERF-GRP-011], [PERF-GRP-012], [PERF-GRP-013], [PERF-GRP-014], [PERF-GRP-015], [PERF-GRP-016], [PERF-GRP-017], [PERF-GRP-018], [PERF-GRP-019], [PERF-GRP-020], [PERF-GRP-021], [PERF-GRP-022], [PERF-GRP-023]
 
 ## Dependencies
-- depends_on: [06_perf_core_infrastructure.md, 07_slo_constants_and_integration_tests.md]
+- depends_on: ["06_perf_core_infrastructure.md", "07_slo_constants_and_integration_tests.md"]
 - shared_components: [devs-grpc, devs-mcp, devs-scheduler, devs-core, devs-checkpoint, devs-cli]
 
 ## 1. Initial Test Written

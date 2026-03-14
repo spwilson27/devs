@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-027], [3_MCP_DESIGN-REQ-BR-004]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-mcp, devs-grpc, Server Discovery Protocol]
 
 ## 1. Initial Test Written

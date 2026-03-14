@@ -4,7 +4,7 @@
 - [2_TAS-REQ-430]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core", "devs-scheduler", "devs-grpc", "devs-mcp"]
 
 ## 1. Initial Test Written

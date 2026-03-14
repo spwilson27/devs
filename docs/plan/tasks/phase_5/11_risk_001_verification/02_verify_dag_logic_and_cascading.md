@@ -4,7 +4,7 @@
 - [RISK-001], [RISK-001-BR-003], [RISK-001-BR-004], [AC-RISK-001-03], [AC-RISK-001-05]
 
 ## Dependencies
-- depends_on: [01_verify_statemachine_concurrency.md]
+- depends_on: ["01_verify_statemachine_concurrency.md"]
 - shared_components: [devs-core, devs-scheduler, devs-checkpoint]
 
 ## 1. Initial Test Written

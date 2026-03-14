@@ -1,10 +1,10 @@
 # Task: Configure Server Infrastructure for Workflow Submission (Sub-Epic: 13_Roadmap Phase 4 Infrastructure)
 
 ## Covered Requirements
-- [AC-ROAD-P4-001], [AC-ROAD-P4-002]
+- [AC-ROAD-P4-001], [AC-ROAD-P4-002], [ROAD-P4-DEP-001]
 
 ## Dependencies
-- depends_on: [01_define_standard_workflows.md]
+- depends_on: ["10_agent_tdd_loop_enforcement/01_define_core_tdd_workflows.md", "12_roadmap_dependency_verification/01_define_additional_workflows.md"]
 - shared_components: [devs-config, devs-pool, devs-grpc, devs-cli, Server Discovery Protocol]
 
 ## 1. Initial Test Written

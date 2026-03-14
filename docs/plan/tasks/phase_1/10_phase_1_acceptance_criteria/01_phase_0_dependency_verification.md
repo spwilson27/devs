@@ -4,7 +4,7 @@
 - [ROAD-P1-DEP-001]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["Phase Transition Checkpoint (PTC) Model", "devs-proto", "devs-core", "./do Entrypoint Script & CI Pipeline"]
 
 ## 1. Initial Test Written

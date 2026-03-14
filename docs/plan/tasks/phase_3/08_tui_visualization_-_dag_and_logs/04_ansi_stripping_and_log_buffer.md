@@ -4,7 +4,7 @@
 - [7_UI_UX_DESIGN-REQ-017], [7_UI_UX_DESIGN-REQ-100], [7_UI_UX_DESIGN-REQ-101], [7_UI_UX_DESIGN-REQ-102], [7_UI_UX_DESIGN-REQ-103], [7_UI_UX_DESIGN-REQ-104], [7_UI_UX_DESIGN-REQ-117], [7_UI_UX_DESIGN-REQ-126], [7_UI_UX_DESIGN-REQ-127], [7_UI_UX_DESIGN-REQ-128], [7_UI_UX_DESIGN-REQ-129], [7_UI_UX_DESIGN-REQ-130], [7_UI_UX_DESIGN-REQ-131], [7_UI_UX_DESIGN-REQ-132], [7_UI_UX_DESIGN-REQ-133], [7_UI_UX_DESIGN-REQ-134], [7_UI_UX_DESIGN-REQ-135], [7_UI_UX_DESIGN-REQ-228], [7_UI_UX_DESIGN-REQ-233], [7_UI_UX_DESIGN-REQ-234], [7_UI_UX_DESIGN-REQ-236], [7_UI_UX_DESIGN-REQ-237], [7_UI_UX_DESIGN-REQ-238]
 
 ## Dependencies
-- depends_on: [01_string_constants_and_ascii_hygiene.md, 02_theme_and_color_mode_system.md]
+- depends_on: ["01_string_constants_and_ascii_hygiene.md", "02_theme_and_color_mode_system.md"]
 - shared_components: [devs-core (consumer), devs-proto (consumer)]
 
 ## 1. Initial Test Written

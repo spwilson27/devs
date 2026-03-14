@@ -4,7 +4,7 @@
 - [2_TAS-REQ-025]
 
 ## Dependencies
-- depends_on: [01_run_status_state_machine.md, 02_stage_status_state_machine.md]
+- depends_on: ["01_run_status_state_machine.md", "02_stage_status_state_machine.md"]
 - shared_components: [devs-core (Owner — defines ServerState), devs-proto (Consumer — uses wire types for conversion only)]
 
 ## 1. Initial Test Written

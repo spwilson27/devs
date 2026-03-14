@@ -4,7 +4,7 @@
 - [AC-RISK-021-02], [AC-RISK-021-06]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-pool, devs-scheduler, devs-grpc]
 
 ## 1. Initial Test Written

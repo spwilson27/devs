@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002C]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (owner — this task adds shutdown checkpoint preparation types and logic), devs-checkpoint (consumer — actual git persistence is delegated to devs-checkpoint in Phase 1, but the domain logic for identifying and preparing state lives here)]
 
 ## 1. Initial Test Written

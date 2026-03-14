@@ -4,7 +4,7 @@
 - [1_PRD-BR-004], [2_PRD-BR-003]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_0/007_traceability_and_reporting_schema/01_implement_traceability_scanner.md, docs/plan/tasks/phase_0/007_traceability_and_reporting_schema/02_implement_traceability_reporter.md]
+- depends_on: ["phase_0/007_traceability_and_reporting_schema/01_implement_traceability_scanner.md", "phase_0/007_traceability_and_reporting_schema/02_implement_traceability_reporter.md"]
 - shared_components: [Traceability & Coverage Infrastructure (consumer — uses `// Covers: REQ-ID` scanner and `target/traceability.json` output)]
 
 ## 1. Initial Test Written

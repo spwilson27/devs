@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-084]
 
 ## Dependencies
-- depends_on: [01_agent_diagnostic_pool_inspection.md]
+- depends_on: ["01_agent_diagnostic_pool_inspection.md"]
 - shared_components: [devs-mcp, devs-scheduler, devs-pool]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-086]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-mcp, ./do Entrypoint Script, devs-scheduler]
 
 ## 1. Initial Test Written

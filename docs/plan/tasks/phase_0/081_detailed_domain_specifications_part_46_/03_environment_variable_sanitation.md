@@ -4,7 +4,7 @@
 - [2_TAS-REQ-482]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core", "devs-executor", "devs-adapters"]
 
 ## 1. Initial Test Written

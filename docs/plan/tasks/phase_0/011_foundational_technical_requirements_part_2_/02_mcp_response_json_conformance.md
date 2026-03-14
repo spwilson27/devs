@@ -4,7 +4,7 @@
 - [2_PRD-BR-007], [2_PRD-BR-008]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — domain types)]
 
 ## 1. Initial Test Written

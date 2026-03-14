@@ -4,7 +4,7 @@
 - [7_UI_UX_DESIGN-REQ-201], [7_UI_UX_DESIGN-REQ-202], [7_UI_UX_DESIGN-REQ-203], [7_UI_UX_DESIGN-REQ-204], [7_UI_UX_DESIGN-REQ-205], [7_UI_UX_DESIGN-REQ-206], [7_UI_UX_DESIGN-REQ-207], [7_UI_UX_DESIGN-REQ-208], [7_UI_UX_DESIGN-REQ-209], [7_UI_UX_DESIGN-REQ-210]
 
 ## Dependencies
-- depends_on: [06_event_loop_and_widget_architecture.md, 07_layout_system_and_terminal_sizing.md]
+- depends_on: ["06_event_loop_and_widget_architecture.md", "07_layout_system_and_terminal_sizing.md"]
 - shared_components: [devs-core (consumer)]
 
 ## 1. Initial Test Written

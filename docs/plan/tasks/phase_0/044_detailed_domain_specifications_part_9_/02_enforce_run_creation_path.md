@@ -4,7 +4,7 @@
 - [1_PRD-REQ-077]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (Consumer), devs-proto (Consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-023-BR-002]
 
 ## Dependencies
-- depends_on: [01_e2e_subprocess_coverage_config.md]
+- depends_on: ["01_e2e_subprocess_coverage_config.md"]
 - shared_components: [devs-grpc, ./do Entrypoint Script]
 
 ## 1. Initial Test Written

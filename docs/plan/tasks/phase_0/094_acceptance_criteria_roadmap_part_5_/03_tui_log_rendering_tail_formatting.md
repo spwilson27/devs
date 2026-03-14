@@ -4,7 +4,7 @@
 - [AC-LOG-006], [AC-LOG-007]
 
 ## Dependencies
-- depends_on: [02_tui_log_processing_ansi_stripping.md]
+- depends_on: ["02_tui_log_processing_ansi_stripping.md"]
 - shared_components: [devs-tui (owner of LogPane, LogTail, LogLine)]
 
 ## 1. Initial Test Written

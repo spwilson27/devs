@@ -4,7 +4,7 @@
 - [RISK-024-BR-002]
 
 ## Dependencies
-- depends_on: [03_do_ci_job_failure_detection.md]
+- depends_on: ["03_do_ci_job_failure_detection.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

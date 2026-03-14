@@ -4,7 +4,7 @@
 - [1_PRD-REQ-045], [2_TAS-REQ-014]
 
 ## Dependencies
-- depends_on: [01_scaffold_do_script.md, 02_implement_setup_command.md]
+- depends_on: ["01_scaffold_do_script.md", "02_implement_setup_command.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [AC-ASCII-018], [AC-ASCII-019], [AC-ASCII-020]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

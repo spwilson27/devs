@@ -4,7 +4,7 @@
 - [RISK-BR-004], [RISK-BR-005]
 
 ## Dependencies
-- depends_on: [03_high_risk_coverage.md]
+- depends_on: ["03_high_risk_coverage.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

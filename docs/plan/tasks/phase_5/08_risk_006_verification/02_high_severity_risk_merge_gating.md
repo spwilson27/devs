@@ -4,7 +4,7 @@
 - [RISK-BR-006], [RISK-BR-010]
 
 ## Dependencies
-- depends_on: [01_automated_risk_state_transitions.md]
+- depends_on: ["01_automated_risk_state_transitions.md"]
 - shared_components: [Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

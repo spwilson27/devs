@@ -4,7 +4,7 @@
 - [RISK-013], [RISK-013-BR-003]
 
 ## Dependencies
-- depends_on: [01_enforce_traceability_gates.md]
+- depends_on: ["01_enforce_traceability_gates.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

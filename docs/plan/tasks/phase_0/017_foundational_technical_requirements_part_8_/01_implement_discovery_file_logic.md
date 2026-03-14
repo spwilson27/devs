@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002E], [2_TAS-REQ-002F], [2_TAS-REQ-002G]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (owner of Server Discovery Protocol — this task implements the core discovery types and logic)]
 
 ## 1. Initial Test Written

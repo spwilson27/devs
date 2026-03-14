@@ -4,7 +4,7 @@
 - [5_SECURITY_DESIGN-REQ-019], [5_SECURITY_DESIGN-REQ-020], [5_SECURITY_DESIGN-REQ-027], [5_SECURITY_DESIGN-REQ-028], [5_SECURITY_DESIGN-REQ-029], [5_SECURITY_DESIGN-REQ-031], [5_SECURITY_DESIGN-REQ-048], [5_SECURITY_DESIGN-REQ-052], [5_SECURITY_DESIGN-REQ-065], [5_SECURITY_DESIGN-REQ-066]
 
 ## Dependencies
-- depends_on: [01_core_grpc_server_and_lifecycle.md]
+- depends_on: ["01_core_grpc_server_and_lifecycle.md"]
 - shared_components: [devs-core, devs-checkpoint]
 
 ## 1. Initial Test Written

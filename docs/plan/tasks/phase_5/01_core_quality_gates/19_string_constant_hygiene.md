@@ -4,7 +4,7 @@
 - [AC-STR-001], [AC-STR-002], [AC-STR-003], [AC-STR-004], [AC-STR-005], [AC-STR-006], [AC-STR-007], [AC-STR-008], [AC-STR-009], [AC-STR-010], [AC-STR-011], [AC-STR-012], [AC-STR-013], [AC-STR-014], [AC-STR-015]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-tui, devs-cli, devs-mcp]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-REQ-065], [1_PRD-REQ-067], [1_PRD-REQ-068]
 
 ## Dependencies
-- depends_on: [01_security_posture_and_mcp_auth_exclusion.md]
+- depends_on: ["01_security_posture_and_mcp_auth_exclusion.md"]
 - shared_components: [devs-proto, devs-core, devs-config]
 
 ## 1. Initial Test Written

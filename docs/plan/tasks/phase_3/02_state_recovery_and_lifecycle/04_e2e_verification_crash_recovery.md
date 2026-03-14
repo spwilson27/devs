@@ -4,7 +4,7 @@
 - [1_PRD-REQ-031], [2_TAS-REQ-026]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_3/02_state_recovery_and_lifecycle/03_server_startup_recovery_integration.md]
+- depends_on: ["phase_3/02_state_recovery_and_lifecycle/03_server_startup_recovery_integration.md"]
 - shared_components: [devs-server (consumer), devs-cli (consumer — submit/status/list commands), devs-checkpoint (consumer — checkpoint persistence verification)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-REQ-031], [2_TAS-REQ-026]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses WorkflowRunState/StageRunState enums and state machine transitions)]
 
 ## 1. Initial Test Written

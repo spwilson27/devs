@@ -4,7 +4,7 @@
 - [2_TAS-REQ-030], [2_TAS-REQ-076], [1_PRD-REQ-008]
 
 ## Dependencies
-- depends_on: [03_server_state_structure.md]
+- depends_on: ["03_server_state_structure.md"]
 - shared_components: [devs-core (Owner)]
 
 ## 1. Initial Test Written

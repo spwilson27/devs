@@ -4,7 +4,7 @@
 - [2_TAS-REQ-461], [2_TAS-REQ-462]
 
 ## Dependencies
-- depends_on: [008_proto_core_foundation/02_setup_devs_proto_crate.md]
+- depends_on: ["008_proto_core_foundation/02_setup_devs_proto_crate.md"]
 - shared_components: [devs-proto]
 
 ## 1. Initial Test Written

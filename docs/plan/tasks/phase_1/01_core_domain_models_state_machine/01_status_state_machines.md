@@ -4,7 +4,7 @@
 - [2_TAS-REQ-019], [2_TAS-REQ-020], [2_TAS-REQ-025], [2_TAS-REQ-020A]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

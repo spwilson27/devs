@@ -5,7 +5,7 @@
 - [AC-PERF-7-031], [AC-PERF-7-032], [AC-PERF-7-033], [AC-PERF-7-034], [AC-PERF-7-035], [AC-PERF-7-036], [AC-PERF-7-037], [AC-PERF-7-038]
 
 ## Dependencies
-- depends_on: [01_e2e_infrastructure.md, 07_slo_constants_and_integration_tests.md, 08_dispatch_latency_targets.md, 10_grpc_mcp_scheduler_rules.md]
+- depends_on: ["01_e2e_infrastructure.md", "07_slo_constants_and_integration_tests.md", "08_dispatch_latency_targets.md", "10_grpc_mcp_scheduler_rules.md"]
 - shared_components: [devs-grpc, devs-mcp, devs-scheduler, devs-checkpoint, devs-core, devs-pool]
 
 ## 1. Initial Test Written

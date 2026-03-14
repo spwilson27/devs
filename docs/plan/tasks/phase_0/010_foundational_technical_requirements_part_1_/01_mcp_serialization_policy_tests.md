@@ -4,7 +4,7 @@
 - [2_PRD-BR-001], [2_PRD-BR-002]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses domain types once available; initial policy module can be scaffolded independently)]
 
 ## 1. Initial Test Written

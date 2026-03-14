@@ -4,7 +4,7 @@
 - [2_TAS-REQ-460], [2_TAS-REQ-464]
 
 ## Dependencies
-- depends_on: [003_developer_entrypoint_script/01_scaffold_do_script.md]
+- depends_on: ["003_developer_entrypoint_script/01_scaffold_do_script.md"]
 - shared_components: [none]
 
 ## 1. Initial Test Written

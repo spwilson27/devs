@@ -4,7 +4,7 @@
 - [1_PRD-REQ-034]
 
 ## Dependencies
-- depends_on: [02_weighted_fair_queuing.md]
+- depends_on: ["02_weighted_fair_queuing.md"]
 - shared_components: [devs-scheduler (owner — integrates GlobalDispatcher into DagScheduler dispatch loop), devs-pool (consumer — `acquire_agent`/`release_agent`), devs-config (consumer — `ServerConfig.scheduling_policy`, `ProjectEntry.priority`, `ProjectEntry.weight`)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-054]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-executor, devs-core, devs-scheduler]
 
 ## 1. Initial Test Written

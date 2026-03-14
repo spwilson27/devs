@@ -4,7 +4,7 @@
 - [1_PRD-REQ-046], [1_PRD-REQ-047]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script & CI Pipeline (consumer — the `./do` script must exist before this task can validate end-to-end)]
 
 ## 1. Initial Test Written

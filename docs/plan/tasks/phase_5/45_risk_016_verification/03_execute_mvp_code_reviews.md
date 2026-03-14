@@ -4,7 +4,7 @@
 - [AC-RISK-016-03]
 
 ## Dependencies
-- depends_on: [02_verify_code_review_halt_logic.md]
+- depends_on: ["02_verify_code_review_halt_logic.md"]
 - shared_components: [devs-scheduler, devs-config]
 
 ## 1. Initial Test Written

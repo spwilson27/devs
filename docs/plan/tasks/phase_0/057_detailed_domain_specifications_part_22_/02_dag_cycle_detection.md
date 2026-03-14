@@ -4,7 +4,7 @@
 - [2_TAS-REQ-159]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer — validation logic lives in devs-core domain types)"]
 
 ## 1. Initial Test Written

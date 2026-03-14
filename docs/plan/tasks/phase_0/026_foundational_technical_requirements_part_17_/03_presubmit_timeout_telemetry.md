@@ -4,7 +4,7 @@
 - [2_TAS-REQ-014C], [2_TAS-REQ-014D]
 
 ## Dependencies
-- depends_on: [02_idempotent_setup_tools.md]
+- depends_on: ["02_idempotent_setup_tools.md"]
 - shared_components: ["./do Entrypoint Script & CI Pipeline"]
 
 ## 1. Initial Test Written

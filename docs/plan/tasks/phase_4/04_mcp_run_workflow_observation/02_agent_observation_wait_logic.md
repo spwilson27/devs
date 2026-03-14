@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-081]
 
 ## Dependencies
-- depends_on: [01_agent_observation_run_tracking.md]
+- depends_on: ["01_agent_observation_run_tracking.md"]
 - shared_components: [devs-mcp (Owner), devs-grpc (Consumer), devs-server (Consumer), devs-scheduler (Consumer)]
 
 ## 1. Initial Test Written

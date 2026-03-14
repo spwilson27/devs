@@ -4,7 +4,7 @@
 - [2_TAS-REQ-015C]
 
 ## Dependencies
-- depends_on: [03_unit_vs_e2e_test_separation_and_serialization.md]
+- depends_on: ["03_unit_vs_e2e_test_separation_and_serialization.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline (consumer), Traceability & Coverage Infrastructure (owner of coverage report generator)]
 
 ## 1. Initial Test Written

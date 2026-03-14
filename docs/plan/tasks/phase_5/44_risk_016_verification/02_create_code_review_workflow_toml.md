@@ -4,7 +4,7 @@
 - [RISK-016-BR-005]
 
 ## Dependencies
-- depends_on: [01_parse_mit_016_mitigation_strategy.md]
+- depends_on: ["01_parse_mit_016_mitigation_strategy.md"]
 - shared_components: [devs-config]
 
 ## 1. Initial Test Written

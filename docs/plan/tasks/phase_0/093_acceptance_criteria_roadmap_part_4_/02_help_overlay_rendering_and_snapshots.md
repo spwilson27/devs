@@ -5,7 +5,7 @@
 - [AC-HELP-005]
 
 ## Dependencies
-- depends_on: [01_dag_arrow_constants_and_help_content.md]
+- depends_on: ["01_dag_arrow_constants_and_help_content.md"]
 - shared_components: [none]
 
 ## 1. Initial Test Written

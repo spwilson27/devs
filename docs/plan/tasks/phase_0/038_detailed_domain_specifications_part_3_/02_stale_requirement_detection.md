@@ -4,7 +4,7 @@
 - [1_PRD-KPI-BR-012]
 
 ## Dependencies
-- depends_on: [01_authoritative_tag_extraction.md]
+- depends_on: ["01_authoritative_tag_extraction.md"]
 - shared_components: [Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

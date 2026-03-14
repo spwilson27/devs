@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-031], [3_MCP_DESIGN-REQ-035]
 
 ## Dependencies
-- depends_on: [01_define_core_tdd_workflows.md, 05_failure_classification_lookup_table.md]
+- depends_on: ["01_define_core_tdd_workflows.md", "07_agent_diagnostic_behaviors/03_failure_classification_and_targeted_fix.md"]
 - shared_components: [devs-mcp, devs-cli, devs-config]
 
 ## 1. Initial Test Written

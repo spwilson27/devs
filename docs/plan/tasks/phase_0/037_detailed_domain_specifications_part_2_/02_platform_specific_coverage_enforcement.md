@@ -4,7 +4,7 @@
 - [1_PRD-KPI-BR-009]
 
 ## Dependencies
-- depends_on: [01_ci_multi_platform_quality_gates.md]
+- depends_on: ["01_ci_multi_platform_quality_gates.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-128]
 
 ## Dependencies
-- depends_on: [01_mcp_server_protocol.md]
+- depends_on: ["01_mcp_server_protocol.md"]
 - shared_components: [devs-mcp (owner — extends with stream_logs tool), devs-core (consumer — log/stage types)]
 
 ## 1. Initial Test Written

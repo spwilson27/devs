@@ -4,7 +4,7 @@
 - [7_UI_UX_DESIGN-REQ-239], [7_UI_UX_DESIGN-REQ-240], [7_UI_UX_DESIGN-REQ-241], [7_UI_UX_DESIGN-REQ-242], [7_UI_UX_DESIGN-REQ-243], [7_UI_UX_DESIGN-REQ-244], [7_UI_UX_DESIGN-REQ-245], [7_UI_UX_DESIGN-REQ-246], [7_UI_UX_DESIGN-REQ-247], [7_UI_UX_DESIGN-REQ-248], [7_UI_UX_DESIGN-REQ-249], [7_UI_UX_DESIGN-REQ-250], [7_UI_UX_DESIGN-REQ-321], [7_UI_UX_DESIGN-REQ-322], [7_UI_UX_DESIGN-REQ-323], [7_UI_UX_DESIGN-REQ-324], [7_UI_UX_DESIGN-REQ-325], [7_UI_UX_DESIGN-REQ-326], [7_UI_UX_DESIGN-REQ-327], [7_UI_UX_DESIGN-REQ-328]
 
 ## Dependencies
-- depends_on: [11_keyboard_input_and_tab_navigation.md, 02_theme_and_color_mode_system.md]
+- depends_on: ["11_keyboard_input_and_tab_navigation.md", "02_theme_and_color_mode_system.md"]
 - shared_components: [devs-core (consumer)]
 
 ## 1. Initial Test Written

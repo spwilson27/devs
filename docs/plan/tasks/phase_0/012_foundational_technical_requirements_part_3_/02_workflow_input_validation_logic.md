@@ -4,7 +4,7 @@
 - [2_PRD-BR-009]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (owner — domain types for input validation)]
 
 ## 1. Initial Test Written

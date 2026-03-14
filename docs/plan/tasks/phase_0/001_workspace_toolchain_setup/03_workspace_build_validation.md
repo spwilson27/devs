@@ -4,7 +4,7 @@
 - [1_PRD-REQ-002], [2_TAS-REQ-003], [2_TAS-REQ-021], [2_TAS-REQ-005]
 
 ## Dependencies
-- depends_on: [02_cargo_workspace_manifest.md]
+- depends_on: ["02_cargo_workspace_manifest.md"]
 - shared_components: []
 
 ## 1. Initial Test Written

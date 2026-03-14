@@ -4,7 +4,7 @@
 - [AC-RISK-010-04]
 
 ## Dependencies
-- depends_on: [01_verify_pool_rate_limit_mcp.md]
+- depends_on: ["01_verify_pool_rate_limit_mcp.md"]
 - shared_components: [devs-pool, devs-adapters, devs-proto, devs-server]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-REQ-021]
 
 ## Dependencies
-- depends_on: [01_pool_models.md]
+- depends_on: ["01_pool_models.md"]
 - shared_components: [devs-pool (create — concurrency module), Shared State & Concurrency Patterns (consume — tokio::sync::Semaphore pattern)]
 
 ## 1. Initial Test Written

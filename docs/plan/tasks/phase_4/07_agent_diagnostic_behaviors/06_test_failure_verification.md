@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-029]
 
 ## Dependencies
-- depends_on: [05_test_annotation_enforcement.md]
+- depends_on: ["05_test_annotation_enforcement.md"]
 - shared_components: [devs-mcp, ./do Entrypoint Script, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

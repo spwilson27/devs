@@ -4,7 +4,7 @@
 - [1_PRD-REQ-039], [2_TAS-REQ-061], [2_TAS-REQ-064]
 
 ## Dependencies
-- depends_on: [02_workflow_submission_and_listing.md]
+- depends_on: ["02_workflow_submission_and_listing.md"]
 - shared_components: [devs-proto (consumer), devs-core (consumer)]
 
 ## 1. Initial Test Written

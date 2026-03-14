@@ -4,7 +4,7 @@
 - [7_UI_UX_DESIGN-REQ-168], [7_UI_UX_DESIGN-REQ-211], [7_UI_UX_DESIGN-REQ-262], [7_UI_UX_DESIGN-REQ-263], [7_UI_UX_DESIGN-REQ-264], [7_UI_UX_DESIGN-REQ-265], [7_UI_UX_DESIGN-REQ-266], [7_UI_UX_DESIGN-REQ-267], [7_UI_UX_DESIGN-REQ-268], [7_UI_UX_DESIGN-REQ-269], [7_UI_UX_DESIGN-REQ-271], [7_UI_UX_DESIGN-REQ-370], [7_UI_UX_DESIGN-REQ-371], [7_UI_UX_DESIGN-REQ-372], [7_UI_UX_DESIGN-REQ-373], [7_UI_UX_DESIGN-REQ-374], [7_UI_UX_DESIGN-REQ-375], [7_UI_UX_DESIGN-REQ-396], [7_UI_UX_DESIGN-REQ-397], [7_UI_UX_DESIGN-REQ-398], [7_UI_UX_DESIGN-REQ-399], [7_UI_UX_DESIGN-REQ-400]
 
 ## Dependencies
-- depends_on: [03_status_labels_typography_render_utils.md, 06_event_loop_and_widget_architecture.md]
+- depends_on: ["03_status_labels_typography_render_utils.md", "06_event_loop_and_widget_architecture.md"]
 - shared_components: [devs-core (consumer), devs-proto (consumer)]
 
 ## 1. Initial Test Written

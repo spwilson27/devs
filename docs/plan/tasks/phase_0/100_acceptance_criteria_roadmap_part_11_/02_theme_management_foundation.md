@@ -4,7 +4,7 @@
 - [AC-TYP-015], [AC-TYP-016], [AC-TYP-017]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_0/008_proto_core_foundation/03_setup_devs_core_foundation.md]
+- depends_on: ["phase_0/008_proto_core_foundation/03_setup_devs_core_foundation.md"]
 - shared_components: [devs-tui, devs-core]
 
 ## 1. Initial Test Written

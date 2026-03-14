@@ -4,7 +4,7 @@
 - [1_PRD-REQ-052]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: ["./do Entrypoint Script & CI Pipeline" (consume)]
 
 ## 1. Initial Test Written

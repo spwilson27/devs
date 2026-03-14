@@ -4,7 +4,7 @@
 - [RISK-023], [RISK-023-BR-003], [RISK-023-BR-004]
 
 ## Dependencies
-- depends_on: [01_e2e_subprocess_coverage_config.md, 02_tui_in_process_coverage.md]
+- depends_on: ["01_e2e_subprocess_coverage_config.md", "02_tui_in_process_coverage.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

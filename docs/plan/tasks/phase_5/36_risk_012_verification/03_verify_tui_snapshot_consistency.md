@@ -4,7 +4,7 @@
 - [AC-RISK-012-04]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-tui]
 
 ## 1. Initial Test Written

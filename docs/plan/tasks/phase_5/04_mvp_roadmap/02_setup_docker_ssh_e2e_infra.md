@@ -4,7 +4,7 @@
 - [ROAD-P5-DEP-002], [ROAD-P5-DEP-003]
 
 ## Dependencies
-- depends_on: [01_verify_bootstrap_milestone.md]
+- depends_on: ["01_verify_bootstrap_milestone.md"]
 - shared_components: [./do Entrypoint Script, devs-executor]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [MIT-023]
 
 ## Dependencies
-- depends_on: [01_e2e_subprocess_helper_llvm_profile.md]
+- depends_on: ["01_e2e_subprocess_helper_llvm_profile.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

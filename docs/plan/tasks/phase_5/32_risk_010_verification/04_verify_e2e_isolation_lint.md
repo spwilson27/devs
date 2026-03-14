@@ -5,7 +5,7 @@
 - [RISK-011-BR-001]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs_test_helper]
 
 ## 1. Initial Test Written

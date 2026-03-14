@@ -7,7 +7,7 @@
 - [3_MCP_DESIGN-REQ-NEW-032]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (TaskState schema), devs-checkpoint (agent-state directory), devs-mcp (filesystem MCP tools)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-012-BR-001]
 
 ## Dependencies
-- depends_on: [03_secure_permission_helpers.md]
+- depends_on: ["03_secure_permission_helpers.md"]
 - shared_components: [none]
 
 ## 1. Initial Test Written

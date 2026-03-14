@@ -4,7 +4,7 @@
 - [2_TAS-REQ-143]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consume), devs-scheduler (consume — define mock trait), devs-checkpoint (consume — define mock trait)]
 
 ## 1. Initial Test Written

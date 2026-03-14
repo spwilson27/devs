@@ -4,7 +4,7 @@
 - [1_PRD-REQ-072]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

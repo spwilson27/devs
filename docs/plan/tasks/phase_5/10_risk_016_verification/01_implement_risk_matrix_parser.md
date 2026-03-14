@@ -4,7 +4,7 @@
 - [RISK-BR-019], [8_RISKS-REQ-079], [AC-RISK-MATRIX-001], [8_RISKS-REQ-081], [AC-RISK-MATRIX-002], [8_RISKS-REQ-082], [AC-RISK-MATRIX-004], [8_RISKS-REQ-084], [AC-RISK-MATRIX-005], [8_RISKS-REQ-085], [AC-RISK-MATRIX-007], [8_RISKS-REQ-087], [8_RISKS-REQ-025], [8_RISKS-REQ-026]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Traceability & Verification Infrastructure, devs-config]
 
 ## 1. Initial Test Written

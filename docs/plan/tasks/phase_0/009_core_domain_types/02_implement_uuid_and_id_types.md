@@ -4,7 +4,7 @@
 - [2_TAS-REQ-031]
 
 ## Dependencies
-- depends_on: [01_implement_bounded_string_and_env_key.md]
+- depends_on: ["01_implement_bounded_string_and_env_key.md"]
 - shared_components: [devs-core (owner — this task adds ID types to devs-core)]
 
 ## 1. Initial Test Written

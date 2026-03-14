@@ -1,10 +1,10 @@
 # Task: Define CompletionSignal Enum and Exit Code Handler (Sub-Epic: 02_Stage Execution & Completion)
 
 ## Covered Requirements
-- [1_PRD-REQ-011], [2_TAS-REQ-091]
+- [1_PRD-REQ-011], [2_TAS-REQ-091], [2_TAS-BR-015]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (Consumer — uses StageRunState, error types)", "devs-adapters (Consumer — uses ProcessOutput)", "devs-scheduler (Owner context — this code lives in devs-scheduler)"]
 
 ## 1. Initial Test Written

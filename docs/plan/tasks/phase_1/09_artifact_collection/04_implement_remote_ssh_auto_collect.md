@@ -4,7 +4,7 @@
 - [2_TAS-REQ-044], [1_PRD-REQ-023]
 
 ## Dependencies
-- depends_on: [01_define_artifact_collection_strategy_schema.md, 02_implement_local_auto_collect.md]
+- depends_on: ["01_define_artifact_collection_strategy_schema.md", "02_implement_local_auto_collect.md"]
 - shared_components: [devs-executor (consumer — implement collect_artifacts for remote SSH target)]
 
 ## 1. Initial Test Written

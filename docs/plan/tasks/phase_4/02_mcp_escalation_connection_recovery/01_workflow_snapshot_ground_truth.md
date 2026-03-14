@@ -7,7 +7,7 @@
 - [3_MCP_DESIGN-REQ-062]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (WorkflowDefinition types), devs-checkpoint (snapshot storage), devs-mcp (filesystem MCP tools)]
 
 ## 1. Initial Test Written

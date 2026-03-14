@@ -4,7 +4,7 @@
 - [2_TAS-REQ-602]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["Server Discovery Protocol", "devs-core"]
 
 ## 1. Initial Test Written

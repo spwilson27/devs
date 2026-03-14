@@ -4,7 +4,7 @@
 - [2_TAS-REQ-001I]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: [devs-core (consumer)]
 
 ## 1. Initial Test Written

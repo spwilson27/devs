@@ -4,7 +4,7 @@
 - [AC-RISK-014-01], [AC-RISK-014-03], [MIT-014]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-webhook]
 
 ## 1. Initial Test Written

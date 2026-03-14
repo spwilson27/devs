@@ -4,7 +4,7 @@
 - [RISK-006-BR-004]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_5/22_risk_006_verification/01_coverage_gate_enforcement.md]
+- depends_on: ["phase_5/22_risk_006_verification/01_coverage_gate_enforcement.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

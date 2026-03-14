@@ -4,7 +4,7 @@
 - [MIT-023], [AC-RISK-023-01]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-adapters, ./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

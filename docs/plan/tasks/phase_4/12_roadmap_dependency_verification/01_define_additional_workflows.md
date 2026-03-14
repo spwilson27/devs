@@ -4,7 +4,7 @@
 - [ROAD-P4-DEP-002] (partial)
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-config]
 
 ## 1. Initial Test Written

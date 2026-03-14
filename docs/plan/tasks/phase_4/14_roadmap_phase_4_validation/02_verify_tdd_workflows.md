@@ -4,7 +4,7 @@
 - [AC-ROAD-P4-006], [9_PROJECT_ROADMAP-REQ-300]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-server, devs-cli, devs-scheduler]
 
 ## 1. Initial Test Written

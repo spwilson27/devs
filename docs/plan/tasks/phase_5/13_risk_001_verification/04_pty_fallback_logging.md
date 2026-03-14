@@ -4,7 +4,7 @@
 - [RISK-002-BR-002]
 
 ## Dependencies
-- depends_on: [03_pty_capability_probe_mitigation.md]
+- depends_on: ["03_pty_capability_probe_mitigation.md"]
 - shared_components: [devs-adapters, devs-scheduler]
 
 ## 1. Initial Test Written

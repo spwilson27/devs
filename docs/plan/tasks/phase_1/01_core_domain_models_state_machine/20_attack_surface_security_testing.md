@@ -4,7 +4,7 @@
 - [SEC-ATK-001], [SEC-ATK-002], [SEC-ATK-003], [SEC-ATK-004], [SEC-RISK-001], [SEC-RISK-002], [SEC-RISK-003], [5_SECURITY_DESIGN-REQ-354], [5_SECURITY_DESIGN-REQ-355], [5_SECURITY_DESIGN-REQ-356], [5_SECURITY_DESIGN-REQ-357], [5_SECURITY_DESIGN-REQ-358], [5_SECURITY_DESIGN-REQ-359], [5_SECURITY_DESIGN-REQ-360], [AC-SEC-4-001], [AC-SEC-4-002], [AC-SEC-4-003], [AC-SEC-4-004], [AC-SEC-4-005], [AC-SEC-4-006], [AC-SEC-4-007], [AC-SEC-4-008], [AC-SEC-4-009], [AC-SEC-4-010], [AC-SEC-4-011]
 
 ## Dependencies
-- depends_on: [11_redacted_wrapper_credential_security.md, 13_template_injection_prevention.md]
+- depends_on: ["11_redacted_wrapper_credential_security.md", "13_template_injection_prevention.md"]
 - shared_components: [devs-core (Owner)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-BR-013]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (owner — WorkflowRun state machine and snapshot immutability)]
 
 ## 1. Initial Test Written

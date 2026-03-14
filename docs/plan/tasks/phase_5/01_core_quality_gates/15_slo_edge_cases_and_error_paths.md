@@ -5,7 +5,7 @@
 - [PERF-124], [PERF-125], [PERF-126], [PERF-127], [PERF-128], [PERF-129], [PERF-130], [PERF-131], [PERF-132], [PERF-133], [PERF-134], [PERF-135], [PERF-136], [PERF-137], [PERF-138], [PERF-139], [PERF-140], [PERF-141], [PERF-142], [PERF-143], [PERF-144], [PERF-145], [PERF-146], [PERF-147], [PERF-148], [PERF-149], [PERF-150], [PERF-151], [PERF-152], [PERF-153], [PERF-154], [PERF-155], [PERF-156], [PERF-157], [PERF-158], [PERF-159], [PERF-160], [PERF-161], [PERF-162], [PERF-163], [PERF-164], [PERF-165], [PERF-166], [PERF-167], [PERF-168], [PERF-169], [PERF-170], [PERF-171], [PERF-172], [PERF-173], [PERF-174], [PERF-175], [PERF-176], [PERF-177], [PERF-178], [PERF-179], [PERF-180], [PERF-181], [PERF-182], [PERF-183], [PERF-184], [PERF-185], [PERF-186], [PERF-187], [PERF-188], [PERF-189], [PERF-190], [PERF-191], [PERF-192], [PERF-193], [PERF-194], [PERF-195], [PERF-196], [PERF-197], [PERF-198], [PERF-199]
 
 ## Dependencies
-- depends_on: [07_slo_constants_and_integration_tests.md, 10_grpc_mcp_scheduler_rules.md]
+- depends_on: ["07_slo_constants_and_integration_tests.md", "10_grpc_mcp_scheduler_rules.md"]
 - shared_components: [devs-grpc, devs-mcp, devs-scheduler, devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written

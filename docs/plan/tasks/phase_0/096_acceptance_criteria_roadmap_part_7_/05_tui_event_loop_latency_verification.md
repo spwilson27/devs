@@ -4,7 +4,7 @@
 - [AC-TIMING-002]
 
 ## Dependencies
-- depends_on: [04_tui_rendering_performance_benchmark.md]
+- depends_on: ["04_tui_rendering_performance_benchmark.md"]
 - shared_components: [devs-core (state types)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-447]
 
 ## Dependencies
-- depends_on: [01_verify_toolchain_and_multiplatform_build.md]
+- depends_on: ["01_verify_toolchain_and_multiplatform_build.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

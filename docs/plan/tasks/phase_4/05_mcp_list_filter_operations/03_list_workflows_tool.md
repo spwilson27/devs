@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-003] (list_workflows tool support)
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-mcp, devs-config]
 
 ## Note

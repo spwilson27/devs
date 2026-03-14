@@ -4,7 +4,7 @@
 - [MIT-024], [AC-RISK-024-02]
 
 ## Dependencies
-- depends_on: [01_gitlab_ci_yml_definition.md, 02_do_lint_yamllint_integration.md, 03_do_ci_gitlab_api_implementation.md]
+- depends_on: ["01_gitlab_ci_yml_definition.md", "02_do_lint_yamllint_integration.md", "03_do_ci_gitlab_api_implementation.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

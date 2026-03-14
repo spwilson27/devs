@@ -1,28 +1,15 @@
 {
-  "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md": [],
   "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md": [],
   "01_core_grpc_server_and_infrastructure/02_grpc_client_version_interceptor.md": [
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
   ],
-  "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md": [
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md"
-  ],
   "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md": [
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
-  ],
-  "01_core_grpc_server_and_infrastructure/03_streaming_infrastructure.md": [
-    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md",
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md"
   ],
   "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md": [
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
   ],
-  "01_core_grpc_server_and_infrastructure/04_networking_security_baseline.md": [
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
-    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md"
-  ],
-  "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md": [],
   "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md": [
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
@@ -30,13 +17,9 @@
   "01_core_grpc_server_and_infrastructure/06_discovery_file_protocol.md": [
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
   ],
-  "01_core_grpc_server_and_infrastructure/06_logging_and_audit_foundation.md": [
-    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
-  ],
+  "01_core_grpc_server_and_infrastructure/06_logging_and_audit_foundation.md": [],
   "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md": [
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+    "01_core_grpc_server_and_infrastructure/06_logging_and_audit_foundation.md"
   ],
   "01_core_grpc_server_and_infrastructure/07_security_startup_checks_and_network_policy.md": [
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
@@ -45,37 +28,14 @@
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
   ],
-  "01_core_grpc_server_and_infrastructure/08_webhook_security_ssrf_and_hmac.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
-  ],
   "01_core_grpc_server_and_infrastructure/09_input_validation_and_injection_prevention.md": [
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
-  ],
-  "01_core_grpc_server_and_infrastructure/09_transport_layer_security.md": [
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
-    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md"
   ],
   "01_core_grpc_server_and_infrastructure/10_network_security_webhook_ssrf_tls_size_limits.md": [
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
   ],
-  "01_core_grpc_server_and_infrastructure/10_remote_execution_security.md": [
-    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md"
-  ],
   "01_core_grpc_server_and_infrastructure/11_crypto_policy_and_dependency_audit.md": [
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
-  ],
-  "01_core_grpc_server_and_infrastructure/11_injection_prevention_and_subprocess_safety.md": [
-    "01_core_grpc_server_and_infrastructure/06_logging_and_audit_foundation.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
-  ],
-  "01_core_grpc_server_and_infrastructure/12_input_validation_and_state_integrity.md": [
-    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
-  ],
-  "01_core_grpc_server_and_infrastructure/13_architecture_forward_compatibility.md": [
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
-    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md",
-    "01_core_grpc_server_and_infrastructure/10_remote_execution_security.md"
   ],
   "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md": [
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
@@ -209,6 +169,10 @@
     "02_state_recovery_and_lifecycle/03_server_startup_recovery_integration.md",
     "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
   ],
+  "02_state_recovery_and_lifecycle/05_retention_background_task.md": [
+    "02_state_recovery_and_lifecycle/03_server_startup_recovery_integration.md",
+    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md"
+  ],
   "03_cli_implementation/01_cli_scaffold_and_global_flags.md": [
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
@@ -234,21 +198,9 @@
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
   ],
-  "04_mcp_server_framework/01_mcp_server_foundation.md": [
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
-  ],
   "04_mcp_server_framework/02_mcp_response_envelope_and_error_atomicity.md": [
     "04_mcp_server_framework/01_mcp_crate_scaffold_and_jsonrpc_server.md",
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
-  ],
-  "04_mcp_server_framework/02_mcp_stdio_bridge.md": [
-    "04_mcp_server_framework/01_mcp_server_foundation.md",
-    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md"
-  ],
-  "04_mcp_server_framework/03_mcp_observation_framework.md": [
-    "04_mcp_server_framework/01_mcp_server_foundation.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
   ],
   "04_mcp_server_framework/03_mcp_tool_registry_and_categorization.md": [
     "04_mcp_server_framework/01_mcp_crate_scaffold_and_jsonrpc_server.md",
@@ -260,17 +212,6 @@
     "04_mcp_server_framework/01_mcp_crate_scaffold_and_jsonrpc_server.md",
     "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md"
   ],
-  "05_mcp_tools_-_observability/01_mcp_bridge.md": [
-    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md",
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md"
-  ],
-  "05_mcp_tools_-_observability/01_mcp_stdio_bridge_binary.md": [
-    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
-    "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md"
-  ],
-  "05_mcp_tools_-_observability/02_list_get_run.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
-  ],
   "05_mcp_tools_-_observability/02_list_runs_tool.md": [
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
@@ -280,25 +221,10 @@
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
   ],
-  "05_mcp_tools_-_observability/03_get_stage_output.md": [
-    "05_mcp_tools_-_observability/02_list_get_run.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md"
-  ],
   "05_mcp_tools_-_observability/04_get_stage_output_tool.md": [
     "05_mcp_tools_-_observability/03_get_run_tool.md",
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
-  ],
-  "05_mcp_tools_-_observability/04_stream_logs.md": [
-    "05_mcp_tools_-_observability/03_get_stage_output.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
-  ],
-  "05_mcp_tools_-_observability/05_pool_workflow_obs.md": [
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
   ],
   "05_mcp_tools_-_observability/05_stream_logs_tool.md": [
     "05_mcp_tools_-_observability/03_get_run_tool.md",
@@ -309,25 +235,10 @@
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
   ],
-  "05_mcp_tools_-_observability/06_list_checkpoints.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
-  ],
   "05_mcp_tools_-_observability/07_get_workflow_definition_tool.md": [
     "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
     "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
-  ],
-  "05_mcp_tools_-_observability/07_submit_run.md": [
-    "05_mcp_tools_-_observability/05_pool_workflow_obs.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
-  ],
-  "05_mcp_tools_-_observability/08_cancel_tools.md": [
-    "05_mcp_tools_-_observability/07_submit_run.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
   ],
   "05_mcp_tools_-_observability/08_list_checkpoints_tool.md": [
     "05_mcp_tools_-_observability/03_get_run_tool.md",
@@ -335,14 +246,7 @@
     "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
   ],
   "05_mcp_tools_-_observability/09_e2e_traceability.md": [
-    "05_mcp_tools_-_observability/01_mcp_bridge.md",
-    "05_mcp_tools_-_observability/04_stream_logs.md",
-    "05_mcp_tools_-_observability/08_cancel_tools.md"
-  ],
-  "05_mcp_tools_-_observability/09_submit_and_cancel_tools.md": [
-    "05_mcp_tools_-_observability/02_list_runs_tool.md",
-    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
-    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+    "02_state_recovery_and_lifecycle/05_retention_background_task.md"
   ],
   "05_mcp_tools_-_observability/10_e2e_observability_edge_cases.md": [
     "05_mcp_tools_-_observability/04_get_stage_output_tool.md",
@@ -351,48 +255,52 @@
     "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
     "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
   ],
-  "06_mcp_tools_-_control_and_management/01_mcp_control_tools.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md",
-    "05_mcp_tools_-_observability/07_submit_run.md"
+  "05_mcp_tools_-_observability/10_submit_run_tool.md": [
+    "05_mcp_tools_-_observability/02_list_runs_tool.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "05_mcp_tools_-_observability/11_cancel_tools.md": [
+    "05_mcp_tools_-_observability/10_submit_run_tool.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "05_mcp_tools_-_observability/12_validation_and_completion_requirements.md": [
+    "05_mcp_tools_-_observability/04_get_stage_output_tool.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/10_network_security_webhook_ssrf_tls_size_limits.md"
+  ],
+  "05_mcp_tools_-_observability/13_timeout_and_retry_requirements.md": [
+    "05_mcp_tools_-_observability/10_submit_run_tool.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "05_mcp_tools_-_observability/14_atomic_operations_requirements.md": [
+    "05_mcp_tools_-_observability/10_submit_run_tool.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "05_mcp_tools_-_observability/15_mcp_stdio_bridge.md": [
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md",
+    "01_core_grpc_server_and_infrastructure/34_mcp_client_bridge_features.md"
   ],
   "06_mcp_tools_-_control_and_management/01_submit_run_tool.md": [],
   "06_mcp_tools_-_control_and_management/02_cancel_run_and_stage_tools.md": [
     "06_mcp_tools_-_control_and_management/01_submit_run_tool.md"
   ],
-  "06_mcp_tools_-_control_and_management/02_mcp_workflow_updates.md": [
-    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
-  ],
-  "06_mcp_tools_-_control_and_management/03_mcp_testing_tools.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md",
-    "05_mcp_tools_-_observability/07_submit_run.md"
-  ],
   "06_mcp_tools_-_control_and_management/03_pause_resume_tools.md": [
     "06_mcp_tools_-_control_and_management/02_cancel_run_and_stage_tools.md"
-  ],
-  "06_mcp_tools_-_control_and_management/04_mcp_mid_run_tools.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md",
-    "05_mcp_tools_-_observability/07_submit_run.md",
-    "05_mcp_tools_-_observability/05_pool_workflow_obs.md"
   ],
   "06_mcp_tools_-_control_and_management/04_signal_completion_tool.md": [
     "06_mcp_tools_-_control_and_management/01_submit_run_tool.md",
     "06_mcp_tools_-_control_and_management/02_cancel_run_and_stage_tools.md"
   ],
-  "06_mcp_tools_-_control_and_management/05_mcp_filesystem_server.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
-  ],
   "06_mcp_tools_-_control_and_management/05_report_progress_and_rate_limit_tools.md": [
     "06_mcp_tools_-_control_and_management/01_submit_run_tool.md"
-  ],
-  "06_mcp_tools_-_control_and_management/06_mcp_protocol_invariants.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
   ],
   "06_mcp_tools_-_control_and_management/06_write_workflow_definition_tool.md": [
     "06_mcp_tools_-_control_and_management/01_submit_run_tool.md"
@@ -402,32 +310,8 @@
     "06_mcp_tools_-_control_and_management/04_signal_completion_tool.md",
     "06_mcp_tools_-_control_and_management/02_cancel_run_and_stage_tools.md"
   ],
-  "06_mcp_tools_-_control_and_management/07_mcp_submission_listing_refinement.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md",
-    "05_mcp_tools_-_observability/07_submit_run.md"
-  ],
   "06_mcp_tools_-_control_and_management/08_filesystem_mcp_tools.md": [],
-  "06_mcp_tools_-_control_and_management/08_mcp_glass_box_observability.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md",
-    "05_mcp_tools_-_observability/07_submit_run.md",
-    "05_mcp_tools_-_observability/05_pool_workflow_obs.md"
-  ],
-  "06_mcp_tools_-_control_and_management/09_agentic_infrastructure.md": [
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md",
-    "01_core_grpc_server_and_infrastructure/10_remote_execution_security.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
-  ],
   "06_mcp_tools_-_control_and_management/09_mcp_server_shared_state_and_data_model.md": [],
-  "06_mcp_tools_-_control_and_management/10_agentic_loop_support.md": [
-    "06_mcp_tools_-_control_and_management/09_agentic_infrastructure.md",
-    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
-    "01_core_grpc_server_and_infrastructure/10_remote_execution_security.md",
-    "05_mcp_tools_-_observability/02_list_get_run.md"
-  ],
   "06_mcp_tools_-_control_and_management/10_observation_tool_data_and_streaming.md": [
     "06_mcp_tools_-_control_and_management/09_mcp_server_shared_state_and_data_model.md"
   ],

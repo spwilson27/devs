@@ -4,7 +4,7 @@
 - [AC-ROAD-001], [AC-ROAD-002], [AC-ROAD-003], [AC-ROAD-004], [AC-ROAD-005], [AC-ROAD-006], [AC-ROAD-008], [AC-ROAD-009], [AC-ROAD-010], [AC-ROAD-P3-001], [AC-ROAD-P3-002], [AC-ROAD-P3-003], [AC-ROAD-P3-004], [AC-ROAD-P3-005], [AC-ROAD-P3-006], [AC-ROAD-P3-007], [AC-ROAD-P3-008], [AC-ROAD-P3-009], [TECH-AC-011], [A-Z0-9-]
 
 ## Dependencies
-- depends_on: [07_ptc_json_schema_and_checkpoint_validation.md, 09_roadmap_phase_definitions_and_dependency_graph.md, 10_presubmit_timing_timeout_and_lint_rules.md]
+- depends_on: ["07_ptc_json_schema_and_checkpoint_validation.md", "09_roadmap_phase_definitions_and_dependency_graph.md", "10_presubmit_timing_timeout_and_lint_rules.md"]
 - shared_components: [devs-core, Phase Transition Checkpoint (PTC) Model, ./do Entrypoint Script & CI Pipeline, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

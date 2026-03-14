@@ -4,7 +4,7 @@
 - [MIT-NNN], [RISK-NNN]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

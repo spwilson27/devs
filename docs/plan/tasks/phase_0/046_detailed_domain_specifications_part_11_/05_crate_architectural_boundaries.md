@@ -4,7 +4,7 @@
 - [2_TAS-REQ-101]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [none (cross-cutting lint, not owned by a single crate)]
 
 ## 1. Initial Test Written

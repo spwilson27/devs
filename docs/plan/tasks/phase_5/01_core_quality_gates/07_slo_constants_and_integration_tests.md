@@ -6,7 +6,7 @@
 - [AC-PERF-SLO-001], [AC-PERF-SLO-002], [AC-PERF-SLO-003], [AC-PERF-SLO-004], [AC-PERF-SLO-005], [AC-PERF-SLO-006], [AC-PERF-SLO-007], [AC-PERF-SLO-008], [AC-PERF-SLO-009], [AC-PERF-SLO-010], [AC-PERF-SLO-011], [AC-PERF-SLO-012], [AC-PERF-SLO-013], [AC-PERF-SLO-014], [AC-PERF-SLO-015], [AC-PERF-SLO-016], [AC-PERF-SLO-017], [AC-PERF-SLO-018], [AC-PERF-SLO-019], [AC-PERF-SLO-020]
 
 ## Dependencies
-- depends_on: [06_perf_core_infrastructure.md, 01_e2e_infrastructure.md]
+- depends_on: ["06_perf_core_infrastructure.md", "01_e2e_infrastructure.md"]
 - shared_components: [devs-core, devs-grpc, devs-mcp, devs-cli, devs-scheduler]
 
 ## 1. Initial Test Written

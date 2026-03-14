@@ -4,7 +4,7 @@
 - [2_TAS-REQ-418]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-config (consumer), devs-server (consumer)]
 
 ## 1. Initial Test Written

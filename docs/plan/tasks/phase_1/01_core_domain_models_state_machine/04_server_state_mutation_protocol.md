@@ -4,7 +4,7 @@
 - [2_TAS-REQ-027]
 
 ## Dependencies
-- depends_on: [01_run_status_state_machine.md, 02_stage_status_state_machine.md, 03_server_state_structure.md]
+- depends_on: ["01_run_status_state_machine.md", "02_stage_status_state_machine.md", "03_server_state_structure.md"]
 - shared_components: [devs-core (Owner), devs-checkpoint (Consumer — checkpoint persistence called after mutation)]
 
 ## 1. Initial Test Written

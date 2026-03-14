@@ -4,7 +4,7 @@
 - [AC-RISK-011-01], [MIT-011]
 
 ## Dependencies
-- depends_on: [01_server_handle_shutdown.md, 02_e2e_test_config.md, 03_discovery_file_lint.md]
+- depends_on: ["01_server_handle_shutdown.md", "02_e2e_test_config.md", "03_discovery_file_lint.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

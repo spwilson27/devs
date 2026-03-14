@@ -4,7 +4,7 @@
 - [2_TAS-REQ-141], [2_TAS-REQ-142]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consume — Shared State & Concurrency Patterns, Server Discovery Protocol), devs-server (create server state types)]
 
 ## 1. Initial Test Written

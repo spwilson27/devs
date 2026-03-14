@@ -4,7 +4,7 @@
 - [8_RISKS-REQ-321], [8_RISKS-REQ-322], [8_RISKS-REQ-323], [8_RISKS-REQ-324], [8_RISKS-REQ-325], [8_RISKS-REQ-326], [8_RISKS-REQ-327], [8_RISKS-REQ-328], [8_RISKS-REQ-329], [8_RISKS-REQ-330], [8_RISKS-REQ-331], [8_RISKS-REQ-332], [8_RISKS-REQ-333], [8_RISKS-REQ-334], [8_RISKS-REQ-335], [8_RISKS-REQ-336], [8_RISKS-REQ-337], [8_RISKS-REQ-338], [8_RISKS-REQ-339], [8_RISKS-REQ-340], [8_RISKS-REQ-341], [8_RISKS-REQ-342], [8_RISKS-REQ-343], [8_RISKS-REQ-344], [8_RISKS-REQ-345], [8_RISKS-REQ-346], [8_RISKS-REQ-347], [8_RISKS-REQ-348], [8_RISKS-REQ-349], [8_RISKS-REQ-350], [8_RISKS-REQ-351], [8_RISKS-REQ-352], [8_RISKS-REQ-353], [8_RISKS-REQ-354], [8_RISKS-REQ-355], [8_RISKS-REQ-356], [8_RISKS-REQ-357], [8_RISKS-REQ-358], [8_RISKS-REQ-359], [8_RISKS-REQ-360], [8_RISKS-REQ-361], [8_RISKS-REQ-362], [8_RISKS-REQ-363], [8_RISKS-REQ-364], [8_RISKS-REQ-365], [8_RISKS-REQ-366], [8_RISKS-REQ-367]
 
 ## Dependencies
-- depends_on: [01_risk_matrix_schema_and_validation_infrastructure.md]
+- depends_on: ["01_risk_matrix_schema_and_validation_infrastructure.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline (consumer), Redacted<T> Security Wrapper (consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-067], [2_TAS-REQ-068]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-proto (consumer — proto files and build system must already exist from sub-epic 008_proto_core_foundation)]
 
 ## 1. Initial Test Written

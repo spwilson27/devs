@@ -4,7 +4,7 @@
 - [RISK-022-BR-002], [RISK-022-BR-003]
 
 ## Dependencies
-- depends_on: [01_verify_reconnect_and_fatal_error.md]
+- depends_on: ["01_verify_reconnect_and_fatal_error.md"]
 - shared_components: [devs-grpc, devs-proto]
 
 ## 1. Initial Test Written

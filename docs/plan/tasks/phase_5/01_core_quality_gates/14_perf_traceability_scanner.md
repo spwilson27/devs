@@ -5,7 +5,7 @@
 - [PERF-TRACE-AC-001], [PERF-TRACE-AC-002], [PERF-TRACE-AC-003], [PERF-TRACE-AC-004], [PERF-TRACE-AC-005], [PERF-TRACE-AC-006], [PERF-TRACE-AC-007], [PERF-TRACE-AC-008], [PERF-TRACE-AC-009], [PERF-TRACE-AC-010]
 
 ## Dependencies
-- depends_on: [04_traceability_report.md, 06_perf_core_infrastructure.md]
+- depends_on: ["04_traceability_report.md", "06_perf_core_infrastructure.md"]
 - shared_components: [Traceability & Verification Infrastructure, ./do Entrypoint Script]
 
 ## 1. Initial Test Written

@@ -6,7 +6,7 @@
 NOTE: Many of these acceptance criteria are verified by the implementation tasks they reference (tasks 11-22). This task serves as a traceability anchor ensuring every AC-SEC requirement ID appears in at least one task file.
 
 ## Dependencies
-- depends_on: [25_security_acceptance_criteria_group1.md]
+- depends_on: ["25_security_acceptance_criteria_group1.md"]
 - shared_components: [devs-core (Consumer)]
 
 ## 1. Initial Test Written

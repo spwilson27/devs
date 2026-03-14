@@ -4,7 +4,7 @@
 - [2_TAS-REQ-020B]
 
 ## Dependencies
-- depends_on: [04_state_machine_transition_validation.md]
+- depends_on: ["04_state_machine_transition_validation.md"]
 - shared_components: [devs-core (owner — extends state machine with cascade logic), devs-checkpoint (consumer — uses atomic checkpoint write)]
 
 ## 1. Initial Test Written

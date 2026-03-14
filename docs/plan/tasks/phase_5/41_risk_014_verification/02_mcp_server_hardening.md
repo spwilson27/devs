@@ -4,7 +4,7 @@
 - [RISK-015], [RISK-015-BR-001], [RISK-015-BR-002]
 
 ## Dependencies
-- depends_on: [01_credential_redaction.md]
+- depends_on: ["01_credential_redaction.md"]
 - shared_components: [devs-mcp, devs-config]
 
 ## 1. Initial Test Written

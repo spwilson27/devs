@@ -4,7 +4,7 @@
 - [2_TAS-REQ-033], [2_TAS-REQ-047]
 
 ## Dependencies
-- depends_on: [01_pool_exhaustion_tracking.md]
+- depends_on: ["01_pool_exhaustion_tracking.md"]
 - shared_components: [devs-pool (consumer), devs-webhook (consumer — use existing WebhookDispatcher), devs-core (consumer)]
 
 ## 1. Initial Test Written

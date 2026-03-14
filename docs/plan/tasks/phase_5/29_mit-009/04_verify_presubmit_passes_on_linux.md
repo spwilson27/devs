@@ -4,7 +4,7 @@
 - [AC-RISK-009-03]
 
 ## Dependencies
-- depends_on: [01_verify_workflow_definitions.md, 02_enforce_no_bootstrap_stubs.md]
+- depends_on: ["01_verify_workflow_definitions.md", "02_enforce_no_bootstrap_stubs.md"]
 - shared_components: [./do Entrypoint Script (Owner), devs-core (Consumer), devs-config (Consumer), devs-checkpoint (Consumer), devs-adapters (Consumer), devs-pool (Consumer), devs-executor (Consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-REQ-013], [2_TAS-REQ-035]
 
 ## Dependencies
-- depends_on: [02_pty_and_prompt_modes.md]
+- depends_on: ["02_pty_and_prompt_modes.md"]
 - shared_components: [devs-adapters (extend)]
 
 ## 1. Initial Test Written

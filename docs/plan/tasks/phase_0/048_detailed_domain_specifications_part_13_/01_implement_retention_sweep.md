@@ -4,7 +4,7 @@
 - [2_TAS-REQ-111]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-checkpoint (owner — creates retention module), devs-core (consumer — uses domain types)]
 
 ## 1. Initial Test Written

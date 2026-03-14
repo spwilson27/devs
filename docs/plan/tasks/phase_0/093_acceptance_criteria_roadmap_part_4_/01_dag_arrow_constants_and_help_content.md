@@ -5,7 +5,7 @@
 - [AC-HELP-007]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [none]
 
 ## 1. Initial Test Written

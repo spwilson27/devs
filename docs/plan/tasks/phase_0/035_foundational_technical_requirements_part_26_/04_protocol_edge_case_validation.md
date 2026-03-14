@@ -4,7 +4,7 @@
 - [2_TAS-REQ-086N]
 
 ## Dependencies
-- depends_on: [01_json_serialization_rules.md]
+- depends_on: ["01_json_serialization_rules.md"]
 - shared_components: [devs-core (consumer), devs-proto (consumer)]
 
 ## 1. Initial Test Written

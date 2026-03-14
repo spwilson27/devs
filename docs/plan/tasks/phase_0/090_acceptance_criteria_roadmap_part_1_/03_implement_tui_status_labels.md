@@ -4,7 +4,7 @@
 - [AC-ASCII-016], [AC-ASCII-017]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: [devs-tui, devs-core]
 
 ## 1. Initial Test Written

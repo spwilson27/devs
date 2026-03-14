@@ -13,9 +13,6 @@
     "01_dag_scheduling_engine/03_rust_builder_api.md"
   ],
   "01_dag_scheduling_engine/05_phase_1_completion_gate.md": [],
-  "01_dag_scheduling_engine/06_stage_completion_signal_processing.md": [
-    "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md"
-  ],
   "01_dag_scheduling_engine/07_checkpoint_corruption_and_disk_resilience.md": [
     "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md"
   ],
@@ -26,15 +23,49 @@
     "01_dag_scheduling_engine/05_phase_1_completion_gate.md",
     "01_dag_scheduling_engine/04_declarative_workflow_parser.md"
   ],
-  "01_dag_scheduling_engine/10_dag_dispatch_latency_goal_verification.md": [
+  "01_dag_scheduling_engine/10_config_override_chain_and_credentials.md": [
+    "01_dag_scheduling_engine/05_phase_1_completion_gate.md"
+  ],
+  "01_dag_scheduling_engine/11_do_script_implementation.md": [
+    "01_dag_scheduling_engine/05_phase_1_completion_gate.md"
+  ],
+  "01_dag_scheduling_engine/12_webhook_infrastructure.md": [
+    "01_dag_scheduling_engine/05_phase_1_completion_gate.md",
+    "01_dag_scheduling_engine/07_checkpoint_corruption_and_disk_resilience.md"
+  ],
+  "01_dag_scheduling_engine/13_server_discovery_state_wiring.md": [
+    "01_dag_scheduling_engine/05_phase_1_completion_gate.md"
+  ],
+  "01_dag_scheduling_engine/14_validation_and_limits.md": [
+    "01_dag_scheduling_engine/05_phase_1_completion_gate.md",
+    "01_dag_scheduling_engine/04_declarative_workflow_parser.md"
+  ],
+  "01_dag_scheduling_engine/15_error_handling_and_recovery.md": [
+    "01_dag_scheduling_engine/05_phase_1_completion_gate.md",
     "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md"
+  ],
+  "01_dag_scheduling_engine/16_architecture_and_integration_tests.md": [
+    "01_dag_scheduling_engine/13_server_discovery_state_wiring.md",
+    "01_dag_scheduling_engine/11_do_script_implementation.md"
+  ],
+  "01_dag_scheduling_engine/17_traceability_and_coverage_infrastructure.md": [
+    "01_dag_scheduling_engine/11_do_script_implementation.md"
+  ],
+  "01_dag_scheduling_engine/18_dag_performance_goals.md": [
+    "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md",
+    "01_dag_scheduling_engine/15_error_handling_and_recovery.md"
+  ],
+  "01_dag_scheduling_engine/19_linting_and_formatting_policies.md": [
+    "01_dag_scheduling_engine/11_do_script_implementation.md",
+    "01_dag_scheduling_engine/17_traceability_and_coverage_infrastructure.md"
+  ],
+  "01_dag_scheduling_engine/20_acceptance_tests_error_handling_resilience.md": [
+    "01_dag_scheduling_engine/07_checkpoint_corruption_and_disk_resilience.md",
+    "01_dag_scheduling_engine/14_validation_and_limits.md",
+    "01_dag_scheduling_engine/15_error_handling_and_recovery.md"
   ],
   "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md": [
     "01_dag_scheduling_engine/07_checkpoint_corruption_and_disk_resilience.md"
-  ],
-  "02_stage_execution_completion/01_exit_code_completion.md": [],
-  "02_stage_execution_completion/02_structured_output_completion.md": [
-    "02_stage_execution_completion/01_exit_code_completion.md"
   ],
   "02_stage_execution_completion/02_structured_output_handler.md": [
     "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md"
@@ -42,9 +73,6 @@
   "02_stage_execution_completion/03_mcp_tool_call_completion_handler.md": [
     "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md",
     "02_stage_execution_completion/02_structured_output_handler.md"
-  ],
-  "02_stage_execution_completion/03_mcp_tool_completion.md": [
-    "02_stage_execution_completion/01_exit_code_completion.md"
   ],
   "02_stage_execution_completion/04_rate_limit_detection_and_requeue.md": [
     "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md",
@@ -79,20 +107,9 @@
   "05_error_handling_timeouts/01_per_stage_retry_with_backoff.md": [
     "03_data_flow_stage_communication/02_context_file_generation.md"
   ],
-  "05_error_handling_timeouts/01_stage_timeout_enforcement.md": [
-    "02_stage_execution_completion/01_exit_code_completion.md",
-    "02_stage_execution_completion/02_structured_output_completion.md"
-  ],
   "05_error_handling_timeouts/02_per_stage_timeout_enforcement.md": [
     "05_error_handling_timeouts/01_per_stage_retry_with_backoff.md",
     "03_data_flow_stage_communication/02_context_file_generation.md"
-  ],
-  "05_error_handling_timeouts/02_workflow_timeout_enforcement.md": [
-    "05_error_handling_timeouts/01_stage_timeout_enforcement.md",
-    "02_stage_execution_completion/01_exit_code_completion.md"
-  ],
-  "05_error_handling_timeouts/03_automatic_stage_retry.md": [
-    "02_stage_execution_completion/01_exit_code_completion.md"
   ],
   "05_error_handling_timeouts/03_workflow_level_timeout.md": [
     "05_error_handling_timeouts/02_per_stage_timeout_enforcement.md",
@@ -106,16 +123,9 @@
   "06_multi-project_resource_management/03_scheduling_integration_validation.md": [
     "06_multi-project_resource_management/02_weighted_fair_queuing.md"
   ],
-  "07_logging_retention/01_retention_policy_config_and_delete_primitive.md": [
-    "02_stage_execution_completion/01_exit_code_completion.md"
-  ],
+  "07_logging_retention/01_retention_policy_config_and_delete_primitive.md": [],
   "07_logging_retention/02_retention_sweep_logic.md": [
     "07_logging_retention/01_retention_policy_config_and_delete_primitive.md",
-    "02_stage_execution_completion/01_exit_code_completion.md",
-    "07_logging_retention/01_retention_policy_config_and_delete_primitive.md"
-  ],
-  "07_logging_retention/03_retention_background_task.md": [
-    "07_logging_retention/02_retention_sweep_logic.md",
     "07_logging_retention/01_retention_policy_config_and_delete_primitive.md"
   ],
   "08_webhook_notification_infrastructure/01_event_types_and_payload.md": [],

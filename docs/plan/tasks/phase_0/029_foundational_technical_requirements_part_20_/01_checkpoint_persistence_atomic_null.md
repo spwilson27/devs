@@ -4,7 +4,7 @@
 - [2_TAS-REQ-021A], [2_TAS-REQ-021B]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-checkpoint (owner: Phase 1, consumed here as foundational logic), devs-core (consumer: domain types)]
 
 ## 1. Initial Test Written

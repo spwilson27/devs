@@ -4,7 +4,7 @@
 - [2_TAS-REQ-074]
 
 ## Dependencies
-- depends_on: [02_strict_resolution_engine.md]
+- depends_on: ["02_strict_resolution_engine.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

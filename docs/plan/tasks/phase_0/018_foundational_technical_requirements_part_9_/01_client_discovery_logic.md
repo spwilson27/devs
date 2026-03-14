@@ -4,7 +4,7 @@
 - [2_TAS-REQ-002H], [2_TAS-REQ-002J]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Server Discovery Protocol (consumer — uses discovery file format defined in devs-core)]
 
 ## 1. Initial Test Written

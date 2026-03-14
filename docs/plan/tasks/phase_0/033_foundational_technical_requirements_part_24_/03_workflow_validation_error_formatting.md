@@ -4,7 +4,7 @@
 - [2_TAS-REQ-086D]
 
 ## Dependencies
-- depends_on: [02_grpc_error_handling_mapping.md]
+- depends_on: ["02_grpc_error_handling_mapping.md"]
 - shared_components: [devs-core (consumer — uses DevsError::InputValidation variant defined in task 02)]
 
 ## 1. Initial Test Written

@@ -5,7 +5,7 @@
 - [PERF-200], [PERF-201], [PERF-202], [PERF-203], [PERF-204], [PERF-205], [PERF-206], [PERF-207], [PERF-208], [PERF-209], [PERF-210], [PERF-211], [PERF-212], [PERF-213], [PERF-214], [PERF-215], [PERF-216], [PERF-217], [PERF-218], [PERF-219], [PERF-220], [PERF-221]
 
 ## Dependencies
-- depends_on: [06_perf_core_infrastructure.md, 09_structural_limits_and_resource_budgets.md]
+- depends_on: ["06_perf_core_infrastructure.md", "09_structural_limits_and_resource_budgets.md"]
 - shared_components: [devs-core, devs-scheduler, devs-pool, devs-mcp, devs-webhook]
 
 ## 1. Initial Test Written

@@ -1,10 +1,10 @@
 # Task: Implement Presubmit-Check Terminal Status and Output Assertion Verification (Sub-Epic: 10_Agent TDD Loop Enforcement)
 
 ## Covered Requirements
-- [3_MCP_DESIGN-REQ-031]
+- [3_MCP_DESIGN-REQ-030], [3_MCP_DESIGN-REQ-031]
 
 ## Dependencies
-- depends_on: [01_define_core_tdd_workflows.md]
+- depends_on: ["01_define_core_tdd_workflows.md", "08_assert_stage_output_tool.md"]
 - shared_components: [devs-mcp, devs-scheduler, devs-proto]
 
 ## 1. Initial Test Written

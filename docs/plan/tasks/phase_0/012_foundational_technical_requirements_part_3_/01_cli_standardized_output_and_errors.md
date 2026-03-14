@@ -4,7 +4,7 @@
 - [2_PRD-BR-010], [2_PRD-BR-011], [2_PRD-BR-012]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (consumer — error enums), devs-cli (owner — not yet created, this task scaffolds CLI output foundations)]
 
 ## 1. Initial Test Written

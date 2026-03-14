@@ -4,7 +4,7 @@
 - [2_TAS-REQ-465]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-core (consumer — uses BoundedString and error types)", "devs-config (consumer — WorkflowDefinition parsing)"]
 
 ## 1. Initial Test Written

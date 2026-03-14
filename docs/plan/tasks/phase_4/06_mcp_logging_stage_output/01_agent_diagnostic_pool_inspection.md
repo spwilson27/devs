@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-039]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-mcp, devs-scheduler, devs-pool]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-BR-002]
 
 ## Dependencies
-- depends_on: [01_risk_mitigation_audit.md]
+- depends_on: ["01_risk_mitigation_audit.md"]
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

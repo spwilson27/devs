@@ -4,7 +4,7 @@
 - [AC-RLOOP-002], [AC-RLOOP-004]
 
 ## Dependencies
-- depends_on: [01_immutable_render_contract.md]
+- depends_on: ["01_immutable_render_contract.md"]
 - shared_components: [devs-tui]
 
 ## 1. Initial Test Written

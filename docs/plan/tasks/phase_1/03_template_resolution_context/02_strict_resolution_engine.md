@@ -4,7 +4,7 @@
 - [2_TAS-REQ-075]
 
 ## Dependencies
-- depends_on: [01_template_resolver_skeleton.md]
+- depends_on: ["01_template_resolver_skeleton.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

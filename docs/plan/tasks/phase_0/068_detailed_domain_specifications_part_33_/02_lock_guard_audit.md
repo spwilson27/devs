@@ -4,7 +4,7 @@
 - [2_TAS-REQ-416]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [Shared State & Concurrency Patterns (consumer)]
 
 ## 1. Initial Test Written

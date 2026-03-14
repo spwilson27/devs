@@ -4,7 +4,7 @@
 - [1_PRD-REQ-073]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-scheduler (consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [1_PRD-REQ-037], [1_PRD-REQ-036]
 
 ## Dependencies
-- depends_on: [03_retry_strategy.md]
+- depends_on: ["03_retry_strategy.md"]
 - shared_components: [devs-webhook (owner), devs-config (consumer — reads webhook targets from ServerConfig/ProjectEntry), devs-core (consumer — ProjectRef, RunId)]
 
 ## 1. Initial Test Written

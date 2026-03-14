@@ -4,7 +4,7 @@
 - [2_TAS-REQ-281], [2_TAS-REQ-282]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-config (consumer — adds Docker execution env config), devs-executor (consumer — documents agent binary contract)]
 
 ## 1. Initial Test Written

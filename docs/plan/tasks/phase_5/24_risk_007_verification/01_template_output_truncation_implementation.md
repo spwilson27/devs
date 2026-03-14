@@ -4,7 +4,7 @@
 - [RISK-007-BR-003], [RISK-007-BR-004]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_1/03_template_resolution_context/01_template_resolver_skeleton.md]
+- depends_on: ["phase_1/03_template_resolution_context/01_template_resolver_skeleton.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

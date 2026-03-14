@@ -4,7 +4,7 @@
 - [AC-RISK-015-01], [MIT-015]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-server, devs-config]
 
 ## 1. Initial Test Written

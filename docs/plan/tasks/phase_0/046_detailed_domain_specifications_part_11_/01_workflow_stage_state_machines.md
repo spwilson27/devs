@@ -4,7 +4,7 @@
 - [2_TAS-REQ-102]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-core (owner — creates StateMachine trait and implementations)]
 
 ## 1. Initial Test Written

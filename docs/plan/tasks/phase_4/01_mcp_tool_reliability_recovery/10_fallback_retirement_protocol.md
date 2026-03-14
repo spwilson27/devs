@@ -4,7 +4,7 @@
 - [FB-RET-001], [FB-RET-002], [FB-RET-003], [FB-BR-008], [FB-BR-009]
 
 ## Dependencies
-- depends_on: [06_fallback_registry_data_model_and_validation.md, 07_fallback_state_machine_implementation.md]
+- depends_on: ["06_fallback_registry_data_model_and_validation.md", "07_fallback_state_machine_implementation.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

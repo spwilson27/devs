@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-082]
 
 ## Dependencies
-- depends_on: [03_mcp_assertion_snippet_truncation.md]
+- depends_on: ["03_mcp_assertion_snippet_truncation.md"]
 - shared_components: [devs-mcp, devs-scheduler, ./do Entrypoint Script, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

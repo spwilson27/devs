@@ -4,7 +4,7 @@
 - [1_PRD-REQ-048], [1_PRD-BR-006], [1_PRD-BR-007]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script & CI Pipeline (consumer — `./do lint` must be implemented before this task can validate)]
 
 ## 1. Initial Test Written

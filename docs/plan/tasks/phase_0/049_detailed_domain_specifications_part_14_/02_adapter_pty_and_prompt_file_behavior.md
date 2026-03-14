@@ -4,7 +4,7 @@
 - [2_TAS-REQ-118], [2_TAS-REQ-119]
 
 ## Dependencies
-- depends_on: [01_adapter_context_and_command_types.md]
+- depends_on: ["01_adapter_context_and_command_types.md"]
 - shared_components: [devs-adapters (create modules in)]
 
 ## 1. Initial Test Written

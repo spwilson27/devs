@@ -4,7 +4,7 @@
 - [1_PRD-REQ-012]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: [devs-core (consumer — uses TemplateResolver), devs-scheduler (consumer — integrates resolution into dispatch)]
 
 ## 1. Initial Test Written

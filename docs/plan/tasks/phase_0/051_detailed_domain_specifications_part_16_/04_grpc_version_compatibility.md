@@ -4,7 +4,7 @@
 - [2_TAS-REQ-130]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-grpc (owner — adds version interceptor), devs-proto (consumer — gRPC service definitions)]
 
 ## 1. Initial Test Written

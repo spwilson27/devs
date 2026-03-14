@@ -4,7 +4,7 @@
 - [1_PRD-REQ-010]
 
 ## Dependencies
-- depends_on: [03_dependency_validation.md]
+- depends_on: ["03_dependency_validation.md"]
 - shared_components: [devs-core, devs-executor]
 
 ## 1. Initial Test Written

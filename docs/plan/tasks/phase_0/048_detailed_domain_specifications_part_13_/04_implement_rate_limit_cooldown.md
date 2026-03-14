@@ -4,7 +4,7 @@
 - [2_TAS-REQ-114]
 
 ## Dependencies
-- depends_on: [03_implement_pool_selection_flow.md]
+- depends_on: ["03_implement_pool_selection_flow.md"]
 - shared_components: [devs-pool (owner — creates cooldown module), devs-adapters (consumer — passive rate-limit detection calls into pool)]
 
 ## 1. Initial Test Written

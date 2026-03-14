@@ -1,10 +1,11 @@
 # Task: Implement Failure Classification & Targeted Fix Protocol (Sub-Epic: 07_Agent Diagnostic Behaviors)
 
 ## Covered Requirements
-- [3_MCP_DESIGN-REQ-029], [3_MCP_DESIGN-REQ-030]
+- [3_MCP_DESIGN-REQ-029], [3_MCP_DESIGN-REQ-030], [3_MCP_DESIGN-REQ-034]
+- [3_MCP_DESIGN-REQ-BR-009], [3_MCP_DESIGN-REQ-BR-010], [3_MCP_DESIGN-REQ-BR-011], [3_MCP_DESIGN-REQ-BR-012], [3_MCP_DESIGN-REQ-BR-018]
 
 ## Dependencies
-- depends_on: [01_diagnostic_investigation_sequence.md, 06_test_failure_verification.md]
+- depends_on: ["01_diagnostic_investigation_sequence.md", "06_test_failure_verification.md"]
 - shared_components: [devs-mcp, ./do Entrypoint Script, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

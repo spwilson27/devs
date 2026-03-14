@@ -4,7 +4,7 @@
 - [2_TAS-REQ-039]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-adapters (owner: Phase 1 — this task adds non-retryable error variants)]
 
 ## 1. Initial Test Written

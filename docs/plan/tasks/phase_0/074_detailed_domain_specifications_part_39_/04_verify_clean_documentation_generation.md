@@ -4,7 +4,7 @@
 - [2_TAS-REQ-449]
 
 ## Dependencies
-- depends_on: [03_verify_clippy_cleanliness.md]
+- depends_on: ["03_verify_clippy_cleanliness.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written

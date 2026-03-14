@@ -4,7 +4,7 @@
 - [RISK-005], [RISK-005-BR-001]
 
 ## Dependencies
-- depends_on: [03_presubmit_incremental_timing_logging.md]
+- depends_on: ["03_presubmit_incremental_timing_logging.md"]
 - shared_components: [./do Entrypoint Script]
 
 ## 1. Initial Test Written

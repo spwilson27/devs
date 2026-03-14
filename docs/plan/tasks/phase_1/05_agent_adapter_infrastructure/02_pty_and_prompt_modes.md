@@ -4,7 +4,7 @@
 - [1_PRD-REQ-015], [1_PRD-REQ-016]
 
 ## Dependencies
-- depends_on: [01_agent_adapter_trait.md]
+- depends_on: ["01_agent_adapter_trait.md"]
 - shared_components: [devs-adapters (extend)]
 
 ## 1. Initial Test Written

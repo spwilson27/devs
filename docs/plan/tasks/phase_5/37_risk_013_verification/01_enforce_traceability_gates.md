@@ -4,7 +4,7 @@
 - [RISK-013-BR-001], [RISK-013-BR-002], [RISK-013-BR-004]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-017], [3_MCP_DESIGN-REQ-BR-022], [3_MCP_DESIGN-REQ-BR-023], [3_MCP_DESIGN-REQ-BR-024], [3_MCP_DESIGN-REQ-BR-025], [3_MCP_DESIGN-REQ-BR-026], [3_MCP_DESIGN-REQ-BR-027], [3_MCP_DESIGN-REQ-NEW-005], [3_MCP_DESIGN-REQ-AC-2.25], [3_MCP_DESIGN-REQ-EC-CTL-006], [3_MCP_DESIGN-REQ-EC-MCP-010], [1_PRD-REQ-041]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-scheduler (consumer — uses submit_run)", "devs-core (consumer — BoundedString, state machines)", "devs-proto (consumer — wire types)", "devs-config (consumer — WorkflowDefinition, ProjectEntry)"]
 
 ## 1. Initial Test Written

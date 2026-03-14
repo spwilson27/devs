@@ -4,7 +4,7 @@
 - [2_TAS-REQ-001L], [2_TAS-REQ-001M]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-config (consumer — uses config loading types)]
 
 ## 1. Initial Test Written

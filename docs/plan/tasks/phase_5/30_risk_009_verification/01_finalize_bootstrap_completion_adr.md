@@ -4,7 +4,7 @@
 - [AC-RISK-009-05]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [none]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-463]
 
 ## Dependencies
-- depends_on: [001_workspace_toolchain_setup/02_scaffold_workspace_crates.md]
+- depends_on: ["001_workspace_toolchain_setup/02_scaffold_workspace_crates.md"]
 - shared_components: [devs-tui]
 
 ## 1. Initial Test Written

@@ -6,7 +6,7 @@
 NOTE: These requirements map 1:1 to SEC-054 through SEC-113. The implementation is covered by tasks 11-22 which implement the SEC-NNN controls. This task serves as a traceability anchor for the 5_SECURITY_DESIGN-REQ numbering scheme.
 
 ## Dependencies
-- depends_on: [11_redacted_wrapper_credential_security.md, 12_file_permission_security.md, 13_template_injection_prevention.md, 14_subprocess_execution_security.md, 15_webhook_ssrf_security.md, 16_logging_audit_security.md]
+- depends_on: ["11_redacted_wrapper_credential_security.md", "12_file_permission_security.md", "13_template_injection_prevention.md", "14_subprocess_execution_security.md", "15_webhook_ssrf_security.md", "16_logging_audit_security.md"]
 - shared_components: [devs-core (Consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-230]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["./do Entrypoint Script (Consumer — lint integration)"]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [2_TAS-REQ-025], [2_TAS-REQ-020B], [2_TAS-REQ-027]
 
 ## Dependencies
-- depends_on: [01_status_state_machines.md]
+- depends_on: ["01_status_state_machines.md"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written

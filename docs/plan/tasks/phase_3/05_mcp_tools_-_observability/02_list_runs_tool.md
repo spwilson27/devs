@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-008], [3_MCP_DESIGN-REQ-EC-OBS-001]
 
 ## Dependencies
-- depends_on: ["none"]
+- depends_on: []
 - shared_components: ["devs-scheduler (consumer)", "devs-proto (consumer)"]
 
 ## 1. Initial Test Written

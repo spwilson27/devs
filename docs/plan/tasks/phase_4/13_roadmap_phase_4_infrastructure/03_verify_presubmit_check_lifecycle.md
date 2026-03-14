@@ -4,7 +4,7 @@
 - [AC-ROAD-P4-003]
 
 ## Dependencies
-- depends_on: [02_configure_server_infrastructure.md]
+- depends_on: ["02_configure_server_infrastructure.md"]
 - shared_components: [devs-scheduler, devs-cli, devs-grpc, ./do Entrypoint Script, devs-checkpoint]
 
 ## 1. Initial Test Written

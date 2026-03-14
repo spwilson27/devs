@@ -4,7 +4,7 @@
 - [AC-ROAD-P2-002]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-scheduler (consumer), devs-checkpoint (consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-014-BR-004], [AC-RISK-014-02]
 
 ## Dependencies
-- depends_on: [01_ssrf_core_unit_tests.md]
+- depends_on: ["01_ssrf_core_unit_tests.md"]
 - shared_components: [devs-webhook]
 
 ## 1. Initial Test Written

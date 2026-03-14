@@ -7,7 +7,7 @@
 - [PERF-GP-016], [PERF-GP-017], [PERF-GP-018], [PERF-GP-021]
 
 ## Dependencies
-- depends_on: [06_perf_core_infrastructure.md]
+- depends_on: ["06_perf_core_infrastructure.md"]
 - shared_components: [./do Entrypoint Script, devs-core]
 
 ## 1. Initial Test Written

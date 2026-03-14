@@ -4,7 +4,7 @@
 - [1_PRD-REQ-053]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: ["Traceability & Coverage Infrastructure" (consume), "./do Entrypoint Script & CI Pipeline" (consume)]
 
 ## 1. Initial Test Written

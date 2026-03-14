@@ -4,7 +4,7 @@
 - [3_MCP_DESIGN-REQ-038]
 
 ## Dependencies
-- depends_on: [01_agent_log_streaming_error_tracking.md]
+- depends_on: ["01_agent_log_streaming_error_tracking.md"]
 - shared_components: [devs-proto, devs-grpc, devs-mcp, devs-checkpoint]
 
 ## 1. Initial Test Written

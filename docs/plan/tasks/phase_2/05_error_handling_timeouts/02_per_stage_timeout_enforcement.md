@@ -4,7 +4,7 @@
 - [1_PRD-REQ-028], [2_TAS-REQ-092]
 
 ## Dependencies
-- depends_on: [01_per_stage_retry_with_backoff.md]
+- depends_on: ["01_per_stage_retry_with_backoff.md"]
 - shared_components: [devs-scheduler (owner: Phase 2), devs-core (consumer), devs-adapters (consumer), devs-executor (consumer)]
 
 ## 1. Initial Test Written

@@ -4,7 +4,7 @@
 - [RISK-BR-009]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-pool, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written

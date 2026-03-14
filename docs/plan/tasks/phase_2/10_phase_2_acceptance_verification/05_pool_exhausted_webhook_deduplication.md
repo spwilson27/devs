@@ -4,7 +4,7 @@
 - [AC-ROAD-P2-005]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: []
 - shared_components: [devs-pool (consumer), devs-webhook (consumer)]
 
 ## 1. Initial Test Written

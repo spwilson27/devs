@@ -4,7 +4,7 @@
 - [2_TAS-REQ-442], [2_TAS-REQ-444]
 
 ## Dependencies
-- depends_on: [01_implement_clippy_and_unsafe_lints.md]
+- depends_on: ["01_implement_clippy_and_unsafe_lints.md"]
 - shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written
