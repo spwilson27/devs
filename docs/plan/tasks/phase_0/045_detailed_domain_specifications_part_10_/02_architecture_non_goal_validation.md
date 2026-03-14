@@ -1,36 +1,40 @@
-# Task: Design Checkpoint - Non-Goal Architecture Validation (Sub-Epic: 045_Detailed Domain Specifications (Part 10))
+# Task: Architecture Validation Against Non-Goals at Design Checkpoint (Sub-Epic: 045_Detailed Domain Specifications (Part 10))
 
 ## Covered Requirements
 - [1_PRD-REQ-081]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: [none]
+- depends_on: [01_changelog_and_non_goals.md]
+- shared_components: [Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written
-- [ ] Create a shell script `tests/verify_arch_validation.sh` that checks for the existence of `docs/design/non-goal-validation.md`.
-- [ ] The script should check that the document contains a section for each non-goal (GUI, Web API, Client Auth, Secrets Manager, Automated Triggers).
-- [ ] The script should also check for an "Approval" section at the end of the document.
+- [ ] Create `tests/phase_0/test_non_goal_arch_validation.rs` (or shell script `tests/verify_arch_validation.sh`).
+- [ ] **Test 1 — Validation document exists** (`test_non_goal_validation_doc_exists`): Assert `docs/design/non-goal-architecture-validation.md` exists.
+- [ ] **Test 2 — All five non-goals have sections** (`test_all_non_goals_assessed`): Parse the document and assert it contains five assessment sections, one per non-goal: GUI, Web API, Client Authentication, External Secrets Manager, Automated Triggers.
+- [ ] **Test 3 — Each section has a verdict** (`test_each_section_has_verdict`): For each non-goal section, assert there is a line containing either `Verdict: No impediment` or `Verdict: Impediment found` (or similar structured verdict). Sections with impediments must also contain a `Resolution:` line.
+- [ ] **Test 4 — No impediments remain unresolved** (`test_no_unresolved_impediments`): If any section says `Impediment found`, assert a corresponding `Resolution:` line exists and is non-empty.
+- [ ] Add `// Covers: 1_PRD-REQ-081` to the test file.
 
 ## 2. Task Implementation
-- [ ] Create `docs/design/non-goal-validation.md`.
-- [ ] For each non-goal, write a brief technical assessment of the current TAS (Technical Architecture Specification) to ensure:
-    - The gRPC API is compatible with future GUI integration (e.g., streaming status updates).
-    - No HTTP listener is present in the current design.
-    - No authentication concepts are embedded in core types.
-    - No secrets manager SDKs are included in the workspace.
-    - No autonomous trigger background tasks exist.
-- [ ] Ensure that the assessment confirms the architecture does not "accidentally" implement any part of these non-goals.
-- [ ] Tag the document with `// Covers: 1_PRD-REQ-081` to satisfy the traceability tool.
+- [ ] Create `docs/design/non-goal-architecture-validation.md`.
+- [ ] For each of the five non-goals, write a technical assessment section that examines the current architecture (as defined in the TAS) for structural impediments to adding the feature post-MVP:
+    1. **GUI**: Verify gRPC API supports streaming for real-time UI updates; verify no terminal-specific assumptions in the server API; confirm the `devs-proto` service definitions are GUI-agnostic.
+    2. **Web API / REST**: Verify no HTTP listener exists in the codebase; confirm gRPC-to-REST transcoding could be added as a separate crate without modifying core; verify no REST-specific patterns are baked into `devs-server`.
+    3. **Client Authentication**: Verify no auth middleware or token concepts exist in core types; confirm gRPC interceptor injection points exist for future auth; verify `devs-core` has no auth-related dependencies.
+    4. **External Secrets Manager**: Verify no secrets manager SDK is in `Cargo.toml` dependencies; confirm the credential resolution path in `devs-config` uses a trait/abstraction that could be extended; verify `Redacted<T>` is the only credential handling mechanism.
+    5. **Automated Triggers**: Verify no cron, file-watch, or inbound webhook background tasks exist; confirm the `submit_run` path could be invoked by a future trigger module without modification; verify no polling loops exist in the server.
+- [ ] Each section must include: **Current state**, **Assessment**, **Verdict**, and (if needed) **Resolution**.
 
 ## 3. Code Review
-- [ ] Review the document for technical rigor. Ensure it doesn't just state "it's fine" but explains *why* the design is compatible or correctly limited.
+- [ ] Verify each assessment is technically rigorous — not just "it's fine" but explains the specific architectural elements examined.
+- [ ] Confirm assessments reference specific crates, traits, or config structures from the TAS.
+- [ ] Ensure no false positives: if the architecture actually has an impediment, it must be flagged and a resolution proposed.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `sh tests/verify_arch_validation.sh` and ensure it passes.
+- [ ] Run the test(s) from step 1 and confirm all pass.
 
 ## 5. Update Documentation
-- [ ] Link the validation document in the main `docs/plan/README.md` or a similar central index.
+- [ ] Add a link to `docs/design/non-goal-architecture-validation.md` from the phase 0 completion checklist or central design index if one exists.
 
 ## 6. Automated Verification
-- [ ] Run the traceability scanner to ensure `1_PRD-REQ-081` is covered by this document.
+- [ ] Run `./do test` (or the traceability scanner) and confirm `1_PRD-REQ-081` appears as covered.

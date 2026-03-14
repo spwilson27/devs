@@ -5,34 +5,59 @@
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [devs-executor, devs-core]
+- shared_components: [devs-core, devs-executor]
 
 ## 1. Initial Test Written
-- [ ] Write a unit test in `devs-executor` (or a helper utility crate) that simulates a large `StageOutput` collection.
-- [ ] Provide enough `stdout`/`stderr` data so that the serialized JSON would exceed 10 MiB.
-- [ ] Call the context file generation function.
-- [ ] Assert that the resulting string/file size is ≤ 10 MiB.
-- [ ] Assert that the `truncated` flag is set to `true` for the affected stages.
-- [ ] Assert that `stdout` and `stderr` were truncated "proportionally" (e.g., by taking a suffix or a specific ratio).
+- [ ] In `devs-core/src/context.rs` (or a new module for context file building), write `test_context_file_under_limit_not_truncated`:
+  - Build a context with 3 stages, each with small stdout/stderr (< 1 KiB).
+  - Call `ContextFileBuilder::build()`.
+  - Assert the output size is well under 10 MiB.
+  - Assert all stages have `truncated: false`.
+- [ ] Write `test_context_file_exceeding_limit_truncated_to_10mib`:
+  - Build a context with 3 stages, each with ~5 MiB of stdout data (total ~15 MiB).
+  - Call `ContextFileBuilder::build()`.
+  - Assert the serialized JSON output is ≤ 10 MiB (10 * 1024 * 1024 bytes).
+  - Assert all 3 stages have `truncated: true`.
+- [ ] Write `test_truncation_is_proportional`:
+  - Build a context with 2 stages: stage A has 8 MiB stdout, stage B has 4 MiB stdout.
+  - After truncation, assert the ratio of truncated lengths is approximately 2:1 (stage A gets ~2x the bytes of stage B).
+  - Assert both stages have `truncated: true`.
+- [ ] Write `test_truncation_emits_warn_log`:
+  - Use `tracing_test` or a log capture mechanism.
+  - Build an over-limit context.
+  - Assert a WARN-level log was emitted containing a message about context file truncation.
+- [ ] Write `test_empty_stages_not_affected_by_truncation`:
+  - Build a context with 1 stage having 12 MiB stdout and 1 stage with empty stdout/stderr.
+  - After truncation, the empty stage should have `truncated: false`.
+- [ ] Add `// Covers: 2_TAS-REQ-502` annotation to all test functions.
 
 ## 2. Task Implementation
-- [ ] Implement a `ContextFileBuilder` or similar utility that takes a list of `StageOutput`s.
-- [ ] Implement logic to calculate the estimated size of the JSON output.
-- [ ] If the size exceeds 10 MiB, implement a proportional truncation strategy for `stdout` and `stderr` fields.
-- [ ] Update the `StageOutput` (or the copy used for context) to set `truncated: true`.
-- [ ] Emit a `tracing::warn!` log when truncation occurs.
-- [ ] Ensure the final serialization stays within the 10 MiB limit.
+- [ ] Create a `ContextFileBuilder` struct in `devs-core/src/context.rs` (or `devs-executor` if context file generation belongs there).
+- [ ] Define constant `const MAX_CONTEXT_FILE_SIZE: usize = 10 * 1024 * 1024;` (10 MiB).
+- [ ] Implement `ContextFileBuilder::build(stages: &[StageOutput]) -> ContextFile`:
+  1. Serialize all stage outputs to JSON to compute the total size.
+  2. If total ≤ `MAX_CONTEXT_FILE_SIZE`, return as-is with all `truncated: false`.
+  3. If total > limit, compute the overhead (metadata/structure bytes excluding stdout/stderr content).
+  4. Compute the available budget = `MAX_CONTEXT_FILE_SIZE - overhead`.
+  5. Distribute budget proportionally across stages based on their original `stdout.len() + stderr.len()`.
+  6. Truncate each stage's `stdout` and `stderr` to their proportional share (truncate from the beginning, keeping the tail — or from the end, keeping the head; document which).
+  7. Set `truncated: true` for each stage whose data was shortened.
+  8. Emit `tracing::warn!("context file truncated: {} stages affected, original size {} bytes", count, original_size)`.
+- [ ] Add a `truncated: bool` field to the per-stage entry in the context file JSON schema (in `ContextFileStageEntry` or equivalent struct).
 
 ## 3. Code Review
-- [ ] Verify the "proportional" truncation logic: it should be fair to all stages if possible, or follow a predictable pattern.
-- [ ] Ensure the `truncated` flag is correctly propagated to the final JSON.
-- [ ] Check for edge cases where even after truncation the headers/metadata exceed the limit (though unlikely for 10 MiB).
+- [ ] Verify proportional truncation math: stages with 0 bytes of output should not receive budget and should not be marked truncated.
+- [ ] Ensure the final serialized output genuinely fits in 10 MiB (account for JSON escaping of truncated content).
+- [ ] Verify the WARN log includes actionable information (original size, number of affected stages).
+- [ ] Confirm `devs-core` has no new runtime dependencies if the builder lives there.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-executor`.
+- [ ] Run `cargo test -p devs-core -- context` (or `-p devs-executor` depending on placement).
 
 ## 5. Update Documentation
-- [ ] Update the TAS or developer docs regarding context file limits.
+- [ ] Add doc comment on `ContextFileBuilder` explaining the 10 MiB limit and proportional truncation strategy.
+- [ ] Document the `truncated` field in the context file JSON schema.
 
 ## 6. Automated Verification
-- [ ] Run `./do test` and verify that `target/traceability.json` shows `2_TAS-REQ-502` as covered.
+- [ ] Run `./do test` and verify that `target/traceability.json` includes `2_TAS-REQ-502` as covered.
+- [ ] Run `./do lint` to confirm no clippy warnings or formatting issues.

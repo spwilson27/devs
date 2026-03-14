@@ -1,36 +1,36 @@
-# Task: Architectural Lint Enforcement (Sub-Epic: 10_Phase 1 Acceptance Criteria)
+# Task: CLI Flag Constant and Permission Boundary Lint Rules (Sub-Epic: 10_Phase 1 Acceptance Criteria)
 
 ## Covered Requirements
 - [AC-ROAD-P1-003], [AC-ROAD-P1-004]
 
 ## Dependencies
-- depends_on: [01_phase_0_dependency_verification.md]
-- shared_components: [./do Entrypoint Script]
+- depends_on: ["01_phase_0_dependency_verification.md"]
+- shared_components: ["devs-adapters", "devs-checkpoint", "./do Entrypoint Script & CI Pipeline"]
 
 ## 1. Initial Test Written
-- [ ] Create a regression test script (e.g. `tests/verify_architectural_lints.sh`).
-- [ ] The script must attempt to run `./do lint` on a codebase with a deliberate violation (e.g. an inline string literal for a CLI flag in an adapter, or an unauthorized `fs::set_permissions()` call).
-- [ ] The test must assert that `./do lint` exits with a non-zero status and reports the violation.
+- [ ] In `tests/lint/adapter_flag_literals.rs`, write test `test_inline_cli_flag_literal_in_adapter_fails_lint`: (1) create a temp file at a path that mimics `crates/devs-adapters/src/claude.rs` containing `.arg("-p")` (an inline flag literal not from `config.rs`), (2) run the lint check targeting this file, (3) assert non-zero exit, (4) assert output identifies the file and the offending literal. Annotate with `// Covers: AC-ROAD-P1-003`.
+- [ ] Write `test_const_cli_flags_in_adapter_passes_lint` confirming current clean adapter source passes the lint.
+- [ ] In `tests/lint/permission_boundary.rs`, write test `test_set_permissions_outside_boundary_fails_lint`: (1) create a temp Rust file outside `devs-checkpoint/src/permissions.rs` containing `fs::set_permissions(`, (2) run the lint check, (3) assert non-zero exit with error identifying the file. Annotate with `// Covers: AC-ROAD-P1-004`.
+- [ ] Write `test_set_permissions_in_permissions_rs_passes_lint` confirming `devs-checkpoint/src/permissions.rs` is allowed.
 
 ## 2. Task Implementation
-- [ ] Extend `./do lint` (or a python helper script called by it) to search for inline string literals in `devs-adapters/src/`.
-- [ ] Implement a rule that CLI flags (e.g. `"--prompt"`) must be defined as `const &str` in `config.rs`.
-- [ ] Extend `./do lint` to search for `fs::set_permissions()` or `std::fs::set_permissions()` calls across the entire workspace.
-- [ ] Whitelist `devs-checkpoint/src/permissions.rs` (or `devs-checkpoint/src/lib.rs` if permissions are defined there) for these calls.
-- [ ] Any other occurrence must cause a lint failure.
+- [ ] Add a lint rule to `./do lint` that scans `crates/devs-adapters/src/**/*.rs` (excluding `config.rs`) for patterns matching `.arg("--` or `.arg("-` (regex: `\.arg\(\s*"--?[a-zA-Z]`). If found, emit file:line and exit non-zero.
+- [ ] Add a lint rule to `./do lint` that scans all `crates/*/src/**/*.rs` for `fs::set_permissions` or `std::fs::set_permissions`. If found in any file other than `crates/devs-checkpoint/src/permissions.rs`, emit file:line and exit non-zero.
+- [ ] Both rules should be implemented as shell `grep` commands or a dedicated Rust binary invoked from `./do lint`.
 
 ## 3. Code Review
-- [ ] Confirm that all existing adapters use `const` flags from their respective `config.rs`.
-- [ ] Verify that the `fs::set_permissions()` rule is correctly scoped to ignore the whitelist.
+- [ ] Verify CLI flag lint regex avoids false positives on string literals in test files, doc comments, or `config.rs` itself.
+- [ ] Verify permission lint whitelists exactly `crates/devs-checkpoint/src/permissions.rs`, not any file named `permissions.rs`.
+- [ ] Verify both rules are part of the `./do lint` pipeline.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `./do lint` on the clean workspace and ensure it passes.
-- [ ] Run the regression script: `bash tests/verify_architectural_lints.sh`.
+- [ ] Run adapter flag literal lint test and confirm pass.
+- [ ] Run permission boundary lint test and confirm pass.
+- [ ] Run `./do lint` on full workspace and confirm exit 0.
 
 ## 5. Update Documentation
-- [ ] Update the project's development standards guide (if one exists) with these architectural rules.
-- [ ] Add comments to `devs-adapters` and `devs-checkpoint` explaining why these rules exist.
+- [ ] Add comments in `./do` explaining each lint rule's purpose.
 
 ## 6. Automated Verification
-- [ ] Run the traceability scanner and confirm `AC-ROAD-P1-003` and `AC-ROAD-P1-004` are mapped to these lint checks.
-- [ ] Confirm that `target/traceability.json` lists these requirements as passing.
+- [ ] Run `./do lint` and confirm exit code 0.
+- [ ] Run `grep -r "AC-ROAD-P1-003\|AC-ROAD-P1-004" tests/` and confirm matches.

@@ -1,40 +1,43 @@
-# Task: PRD Requirement Coverage Enforcement Policy (Sub-Epic: 010_Foundational Technical Requirements (Part 1))
+# Task: PRD Requirement Coverage Enforcement Gate (Sub-Epic: 010_Foundational Technical Requirements (Part 1))
 
 ## Covered Requirements
 - [1_PRD-BR-004], [2_PRD-BR-003]
 
 ## Dependencies
 - depends_on: [docs/plan/tasks/phase_0/007_traceability_and_reporting_schema/01_implement_traceability_scanner.md, docs/plan/tasks/phase_0/007_traceability_and_reporting_schema/02_implement_traceability_reporter.md]
-- shared_components: [Traceability & Verification Infrastructure]
+- shared_components: [Traceability & Coverage Infrastructure (consumer — uses `// Covers: REQ-ID` scanner and `target/traceability.json` output)]
 
 ## 1. Initial Test Written
-- [ ] In `tests/test_coverage_enforcement.py`, create a test that:
-    - Adds a fake requirement ID to a temporary markdown file in `docs/plan/requirements/`.
-    - Runs the verification script.
-    - Asserts that the script fails (exits non-zero) because the new requirement is not covered by any test.
-    - Adds a `// Covers: REQ-ID` to a temporary Rust file.
-    - Runs the verification script again.
-    - Asserts that the script now passes.
+- [ ] **Test: `test_uncovered_requirement_causes_gate_failure`** — Create a temporary directory with a mock `docs/plan/requirements/test.md` containing a requirement `[TEST-REQ-001]` and a Rust source file with NO `// Covers: TEST-REQ-001` annotation. Run the traceability scanner/gate logic against this directory. Assert the gate exits non-zero and the error output names `TEST-REQ-001` as uncovered. Annotate with `// Covers: 1_PRD-BR-004`.
+- [ ] **Test: `test_covered_requirement_passes_gate`** — Same setup but the Rust source file contains `// Covers: TEST-REQ-001`. Run the gate. Assert exit code 0. Annotate with `// Covers: 1_PRD-BR-004`.
+- [ ] **Test: `test_failing_test_for_stage_blocks_completion`** — Simulate the scenario from [2_PRD-BR-003]: a requirement has a `// Covers:` annotation in a test function, but that test function is marked `#[ignore]` or returns `Err`. The gate must report this requirement as "covered but not passing" and exit non-zero. Annotate with `// Covers: 2_PRD-BR-003`.
+- [ ] **Test: `test_traceability_json_lists_uncovered_requirements`** — Run the scanner on a directory with both covered and uncovered requirements. Parse `target/traceability.json`. Assert the `uncovered_requirements` array contains exactly the uncovered IDs. Annotate with `// Covers: 1_PRD-BR-004`.
+- [ ] **Test: `test_multiple_tests_can_cover_same_requirement`** — Two different test files both have `// Covers: TEST-REQ-001`. Gate passes. The traceability report shows the requirement covered by 2 tests. Annotate with `// Covers: 1_PRD-BR-004`.
 
 ## 2. Task Implementation
-- [ ] Update `.tools/verify_requirements.py` to:
-    - Extract all requirement IDs from `docs/plan/requirements/*.md`.
-    - Match these IDs against the output of the traceability scanner (or the `target/traceability.json` report).
-    - Print a detailed report of any requirements that are mentioned in the PRD but have zero covering tests.
-    - Exit with a non-zero status if any PRD requirement is uncovered.
-- [ ] Integrate this script into the `./do test` and `./do presubmit` subcommands.
+- [ ] Extend the traceability scanner (from sub-epic 007) to cross-reference all requirement IDs extracted from `docs/plan/requirements/*.md` against `// Covers: <REQ-ID>` annotations found in `**/*.rs` files.
+- [ ] The scanner must extract requirement IDs matching the pattern `[<PREFIX>-<ID>]` from markdown headers (e.g., `### **[1_PRD-BR-004]**`).
+- [ ] Implement an `uncovered_requirements` field in `target/traceability.json` that lists all requirement IDs with zero covering test annotations.
+- [ ] Integrate the coverage enforcement check into `./do test` so that after `cargo test` completes, the traceability scanner runs and the gate fails if any requirement is uncovered.
+- [ ] For [2_PRD-BR-003] enforcement: after `cargo test` runs, parse the test output (or `--format json` output) to identify which `// Covers:` annotated tests actually passed. Requirements whose only covering tests failed or were ignored must be flagged as "not verified."
+- [ ] Add the enforcement step to `./do presubmit` (it already runs `./do test`, so this is inherited).
 
 ## 3. Code Review
-- [ ] Ensure the requirement ID extraction is robust (handles different markdown header levels and list formats).
-- [ ] Verify that the script provides helpful error messages to the developer, listing the exact requirement IDs that are missing tests.
+- [ ] Verify the requirement ID regex handles all ID formats in the project: `1_PRD-BR-NNN`, `2_PRD-BR-NNN`, `2_TAS-REQ-NNN`, `ROAD-*`, `AC-ROAD-*`, `RISK-*`, etc.
+- [ ] Confirm that the gate produces a human-readable summary listing each uncovered requirement with its description.
+- [ ] Ensure the gate does not false-positive on requirement IDs that appear in non-requirement contexts (e.g., in prose text).
+- [ ] Verify [2_PRD-BR-003] logic correctly distinguishes between "annotation exists but test fails" vs "no annotation at all."
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `python3 -m pytest tests/test_coverage_enforcement.py`.
-- [ ] Run `./do test` and verify that the traceability check is executed as part of the pipeline.
+- [ ] Run `cargo test` (which triggers the traceability gate) and confirm it passes on the current codebase.
+- [ ] Temporarily remove a `// Covers:` annotation from a test, run `./do test`, and confirm it fails with a clear message naming the uncovered requirement.
+- [ ] Restore the annotation and confirm `./do test` passes again.
 
 ## 5. Update Documentation
-- [ ] Update `README.md` or a dedicated quality-standards document to explain that every PRD requirement must have at least one test, and that this is enforced automatically at presubmit.
+- [ ] Add a doc comment in the traceability scanner module explaining the enforcement policy: every requirement in `docs/plan/requirements/` must have at least one passing test with a `// Covers:` annotation.
+- [ ] Document the `uncovered_requirements` field in the `target/traceability.json` schema.
 
 ## 6. Automated Verification
-- [ ] Confirm that `target/traceability.json` correctly reflects all requirements in the codebase.
-- [ ] Verify that the CI pipeline fails if a developer removes a test annotation for a required feature.
+- [ ] Run `./do presubmit` and confirm exit code 0 (which includes the traceability gate).
+- [ ] Verify `target/traceability.json` exists and contains `uncovered_requirements` as an array (may be empty if all requirements are covered; must be present regardless).
+- [ ] Run `grep -c 'Covers:' devs-core/tests/*.rs devs-core/src/**/*.rs` to confirm annotations exist in the codebase.

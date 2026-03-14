@@ -1,35 +1,39 @@
-# Task: Implement Global Checkpoint Restoration Service (Sub-Epic: 02_State Recovery and Lifecycle)
+# Task: Implement Checkpoint Deserialization and Project-Scoped Restoration (Sub-Epic: 02_State Recovery and Lifecycle)
 
 ## Covered Requirements
-- [1_PRD-REQ-031], [2_TAS-REQ-026], [2_TAS-REQ-001]
+- [1_PRD-REQ-031], [2_TAS-REQ-026]
 
 ## Dependencies
 - depends_on: [docs/plan/tasks/phase_3/02_state_recovery_and_lifecycle/01_crash_recovery_logic.md]
-- shared_components: [devs-checkpoint, devs-config, devs-core]
+- shared_components: [devs-checkpoint (consumer — uses restore_checkpoints), devs-config (consumer — uses ProjectEntry/ProjectRegistry), devs-core (consumer — uses apply_crash_recovery)]
 
 ## 1. Initial Test Written
-- [ ] Create an integration test in `devs-server/src/recovery/` that mocks a `ProjectRegistry` and a `CheckpointStore`.
-- [ ] Prepare test data with several mock projects, each having multiple runs in various stages.
-- [ ] Call the recovery service and assert that it returns a collection of `WorkflowRun` objects that have had the recovery rules applied.
-- [ ] Assert that errors loading one project do not stop the entire recovery process and are logged.
+- [ ] Create `crates/devs-server/src/startup/restore.rs` (or appropriate module path) and add unit/integration tests.
+- [ ] Write test `test_restore_single_project_with_checkpoints`: set up a temporary git repo with `.devs/runs/<run-id>/checkpoint.json` files containing serialized `WorkflowRun` data. Create a `ProjectEntry` pointing to this repo. Call the restoration function. Assert it returns the deserialized runs with crash-recovery rules already applied (i.e., any formerly `Running` stages are now `Eligible`).
+- [ ] Write test `test_restore_multiple_projects`: set up two temporary git repos with checkpoints. Call the restoration function with both projects. Assert runs from both projects are returned, keyed by project.
+- [ ] Write test `test_restore_corrupt_checkpoint_skipped`: create a project with one valid and one malformed `checkpoint.json` (invalid JSON). Assert the valid run is restored and the corrupt one is skipped with an error logged (use a test logger or capture `tracing` output).
+- [ ] Write test `test_restore_missing_project_repo_skipped`: configure a `ProjectEntry` with a non-existent repo path. Assert the restoration function does not panic, logs an error, and continues with remaining projects.
+- [ ] Write test `test_restore_empty_project_returns_empty`: project repo exists but has no `.devs/runs/` directory. Assert an empty result set.
+- [ ] Add `// Covers: 1_PRD-REQ-031` and `// Covers: 2_TAS-REQ-026` annotations.
 
 ## 2. Task Implementation
-- [ ] Implement a `RestorationService` (or similar) in `devs-server` that takes a `ProjectRegistry` and `CheckpointStore` as inputs.
-- [ ] Use `devs-config` to get the list of registered projects.
-- [ ] For each project, fetch its `checkpoint_branch` and all `checkpoint.json` files using `devs-checkpoint`.
-- [ ] Apply the state recovery transformation logic implemented in the previous task.
-- [ ] Handle logging of restoration failures per project at the `ERROR` level as required by [2_TAS-REQ-001].
-- [ ] Return the fully restored state as a collection of `WorkflowRun`s ready for scheduling.
+- [ ] Implement `pub async fn restore_all_projects(registry: &ProjectRegistry, checkpoint_store: &dyn CheckpointStore) -> HashMap<ProjectId, Vec<WorkflowRun>>` in `crates/devs-server/src/startup/restore.rs`.
+- [ ] For each project in the registry, call `checkpoint_store.restore_checkpoints(project)` (from the `devs-checkpoint` shared component). This reads all `checkpoint.json` files from the project's configured checkpoint branch under `.devs/runs/`.
+- [ ] For each restored `WorkflowRun`, call `devs_core::recovery::apply_crash_recovery(&mut run)` to apply the state transformation rules from Task 01.
+- [ ] Wrap each project's restoration in a `match` or `try` block so that a failure in one project (corrupt repo, missing branch, I/O error) does not abort restoration of other projects. Log errors at `error!` level with the project name and error details.
+- [ ] Use `spawn_blocking` for any `git2` operations (as required by the Shared State & Concurrency Patterns component).
+- [ ] Return the collected map of project → recovered runs.
 
 ## 3. Code Review
-- [ ] Verify that I/O operations (fetching checkpoints) are done in parallel where possible but respect project boundaries.
-- [ ] Check for proper error handling and logging coverage.
+- [ ] Verify that the function signature uses trait objects (`&dyn CheckpointStore`) to allow test mocking.
+- [ ] Verify error isolation: one project's failure must not affect others.
+- [ ] Confirm that `spawn_blocking` is used for git2 calls (no blocking the async runtime).
 
 ## 4. Run Automated Tests to Verify
-- [ ] `cargo test -p devs-server`
+- [ ] `cargo test -p devs-server -- restore`
 
 ## 5. Update Documentation
-- [ ] Update `devs-server` architecture notes explaining how checkpoints are restored during the boot sequence.
+- [ ] Add doc comments to `restore_all_projects` describing the restoration sequence from [2_TAS-REQ-026] steps 1–3.
 
 ## 6. Automated Verification
-- [ ] Run `./do test` and ensure `1_PRD-REQ-031` and `2_TAS-REQ-026` are covered by tests.
+- [ ] Run `./do test` and verify `target/traceability.json` includes coverage entries for `1_PRD-REQ-031` and `2_TAS-REQ-026`.

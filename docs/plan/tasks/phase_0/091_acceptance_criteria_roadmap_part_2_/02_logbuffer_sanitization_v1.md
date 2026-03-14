@@ -1,42 +1,68 @@
-# Task: LogBuffer Sanitization (Part 1) (Sub-Epic: 091_Acceptance Criteria & Roadmap (Part 2))
+# Task: LogBuffer CRLF and NUL Byte Sanitization (Sub-Epic: 091_Acceptance Criteria & Roadmap (Part 2))
 
 ## Covered Requirements
 - [AC-ASCII-021], [AC-ASCII-022]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [devs-tui]
+- shared_components: [devs-core (Domain Types & Invariants)]
 
 ## 1. Initial Test Written
-- [ ] Create a new unit test file `crates/devs-tui/src/log_tests.rs` (or similar).
-- [ ] Implement a test function `test_log_buffer_push_normalization()`:
-    - Create a `LogBuffer` instance.
-    - Push `"line1\r\n"` and assert that the stored line content is `"line1"` (no `\r`). [AC-ASCII-021]
-- [ ] Implement a test function `test_log_buffer_push_nul_replacement()`:
-    - Create a `LogBuffer` instance.
-    - Push `"ab\0cd"` and assert that the stored line content is `"ab\u{FFFD}cd"`. [AC-ASCII-022]
-- [ ] Add requirement annotations `// Verifies [AC-ASCII-021]` and `// Verifies [AC-ASCII-022]` to these tests.
+- [ ] Create or extend the test module in the crate where `LogBuffer` will live (e.g., `crates/devs-tui/src/log_buffer.rs` or `crates/devs-tui/src/log_buffer/tests.rs`). If the `LogBuffer` struct does not yet exist, create a stub struct with a `push(&mut self, line: &str)` method that stores lines in a `Vec<String>` — just enough to compile the tests.
+- [ ] Write test `test_push_strips_carriage_return_from_crlf`:
+  ```rust
+  // Covers: AC-ASCII-021
+  #[test]
+  fn test_push_strips_carriage_return_from_crlf() {
+      let mut buf = LogBuffer::new(100);
+      buf.push("text\r\n");
+      assert_eq!(buf.lines().last().unwrap().content(), "text");
+  }
+  ```
+- [ ] Write test `test_push_replaces_nul_with_replacement_char`:
+  ```rust
+  // Covers: AC-ASCII-022
+  #[test]
+  fn test_push_replaces_nul_with_replacement_char() {
+      let mut buf = LogBuffer::new(100);
+      buf.push("ab\0cd");
+      assert_eq!(buf.lines().last().unwrap().content(), "ab\u{FFFD}cd");
+  }
+  ```
+- [ ] Write edge-case tests to ensure robustness:
+  - `test_push_strips_lone_cr`: push `"hello\rworld"` — assert stored as `"helloworld"` (strip all `\r`, not just `\r\n` pairs).
+  - `test_push_multiple_nuls`: push `"\0\0\0"` — assert stored as `"\u{FFFD}\u{FFFD}\u{FFFD}"`.
+  - `test_push_combined_cr_and_nul`: push `"a\r\n\0b"` — assert stored as `"a\u{FFFD}b"`.
+  - `test_push_empty_string`: push `""` — assert stored line content is `""`.
+- [ ] Annotate each test with `// Covers: AC-ASCII-021` or `// Covers: AC-ASCII-022` as appropriate.
 
 ## 2. Task Implementation
-- [ ] Define the `LogBuffer` struct in `crates/devs-tui/src/log.rs` (or `state.rs`) if it doesn't already exist.
-- [ ] Implement the `push()` method for `LogBuffer`.
-- [ ] Inside `push()`:
-    - Normalize the incoming string by removing or replacing `\r` (carriage return) characters when they are part of a `\r\n` sequence. For [AC-ASCII-021], simply stripping `\r` before storage is required.
-    - Replace any NUL bytes (`\0`) in the incoming string with the Unicode replacement character `\u{FFFD}`. [AC-ASCII-022]
-- [ ] Ensure that the sanitized string is then stored in the internal line buffer.
+- [ ] Define `LogBuffer` struct (if not already present) with:
+  - `lines: VecDeque<LogLine>` — ring buffer of stored lines.
+  - `capacity: usize` — maximum number of lines before oldest is evicted.
+- [ ] Define `LogLine` struct with at minimum a `content: String` field and a `content(&self) -> &str` accessor.
+- [ ] Implement `LogBuffer::new(capacity: usize) -> Self`.
+- [ ] Implement `LogBuffer::push(&mut self, line: &str)`:
+  1. Strip all `\r` characters from the input: `let sanitized = line.replace('\r', "");` — this handles both `\r\n` (AC-ASCII-021) and lone `\r`.
+  2. Strip trailing `\n` if present (the push boundary is one logical line).
+  3. Replace all NUL bytes: `let sanitized = sanitized.replace('\0', "\u{FFFD}");` — satisfies AC-ASCII-022.
+  4. Wrap in `LogLine` and append to `lines`. If `lines.len() > capacity`, pop front.
+- [ ] Implement `LogBuffer::lines(&self) -> &VecDeque<LogLine>` accessor for test assertions.
+- [ ] Ensure `LogBuffer` does NOT depend on any `devs-proto` types.
 
 ## 3. Code Review
-- [ ] Verify that the sanitization logic is efficient and correctly handles cases where `\r` or `\0` appear at the beginning, middle, or end of a string.
-- [ ] Ensure that the `LogBuffer` follows the ring-buffer logic if already defined (evicting oldest lines when at capacity).
-- [ ] Check that `devs_proto` types are NOT referenced in this module as per `6_UI_UX_ARCHITECTURE-REQ-093`.
+- [ ] Verify sanitization handles `\r` at start, middle, and end of string.
+- [ ] Verify NUL replacement uses exactly U+FFFD (Unicode replacement character), not some other placeholder.
+- [ ] Confirm `LogBuffer` has no dependency on `devs-proto` or wire types (architectural boundary).
+- [ ] Confirm the ring-buffer eviction logic is correct: oldest line is dropped when capacity is exceeded.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-tui` to execute the new unit tests.
-- [ ] Ensure all tests pass.
+- [ ] Run `cargo test -p devs-tui -- log_buffer` (or the appropriate test filter) and confirm all tests pass.
+- [ ] Run `cargo test -p devs-tui` to ensure no regressions in the broader crate.
 
 ## 5. Update Documentation
-- [ ] Update `crates/devs-tui/README.md` (if it exists) to note the `LogBuffer` sanitization behavior.
-- [ ] Update `.agent/MEMORY.md` to record the completion of `LogBuffer` sanitization logic.
+- [ ] Add doc comments to `LogBuffer::push()` explaining the sanitization contract: `\r` is stripped, `\0` is replaced with `\u{FFFD}`.
 
 ## 6. Automated Verification
-- [ ] Run `./tools/verify_requirements.py` to confirm that [AC-ASCII-021] and [AC-ASCII-022] are correctly traced to the unit tests.
+- [ ] Run `cargo test -p devs-tui -- log_buffer 2>&1 | grep -c 'test result: ok'` and confirm output is `1` (all tests in the module passed).
+- [ ] Run `grep -c 'AC-ASCII-021\|AC-ASCII-022' crates/devs-tui/src/log_buffer.rs` (or the actual file path) and confirm count >= 2, proving requirement traceability annotations exist.

@@ -5,35 +5,43 @@
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [./do Entrypoint Script]
+- shared_components: [./do Entrypoint Script & CI Pipeline (consumer)]
 
 ## 1. Initial Test Written
-- [ ] Create a shell script test `tests/test_do_unknown_command.sh` (or integrate into an existing shell test suite) that:
-    - Calls `./do non-existent-command`.
-    - Asserts that the exit code is non-zero.
-    - Asserts that the output to `stderr` matches:
-      ```
-      Unknown command: 'non-existent-command'
-      Valid commands: setup build test lint format coverage presubmit ci
-      ```
+- [ ] Create `tests/do_script/test_unknown_command.sh` (POSIX sh) with the following test cases:
+  - **Test 1 — unknown command stderr output**: Run `./do foobar 2>stderr.txt`; assert `stderr.txt` contains exactly two lines:
+    ```
+    Unknown command: 'foobar'
+    Valid commands: setup build test lint format coverage presubmit ci
+    ```
+  - **Test 2 — non-zero exit code**: Run `./do foobar`; capture `$?` and assert it equals 1.
+  - **Test 3 — nothing on stdout**: Run `./do foobar 1>stdout.txt 2>/dev/null`; assert `stdout.txt` is empty (no output leaked to stdout).
+  - **Test 4 — multi-word unknown command**: Run `./do "some thing" 2>stderr.txt`; assert first line of `stderr.txt` is `Unknown command: 'some thing'`.
+  - **Test 5 — empty subcommand**: Run `./do "" 2>stderr.txt`; assert the unknown-command message is printed (the empty string is not a valid command).
+- [ ] Each test case must print `PASS: <test_name>` on success or `FAIL: <test_name>` and exit non-zero on failure.
+- [ ] The test script itself must exit non-zero if any individual test fails.
 
 ## 2. Task Implementation
-- [ ] Modify the `./do` script's command parsing logic:
-    - Add a catch-all case for subcommands that are not in the valid list (`setup`, `build`, `test`, `lint`, `format`, `coverage`, `presubmit`, `ci`).
-    - Implement the error message and non-zero exit as specified.
-    - Ensure the usage information is printed to `stderr`.
+- [ ] In the `./do` script, locate the case/if-else block that dispatches subcommands (`setup`, `build`, `test`, `lint`, `format`, `coverage`, `presubmit`, `ci`).
+- [ ] Add a catch-all branch (e.g., `*` in a `case` statement or a final `else`) that:
+  1. Prints `Unknown command: '<subcommand>'` to stderr (fd 2).
+  2. Prints `Valid commands: setup build test lint format coverage presubmit ci` to stderr.
+  3. Exits with code 1.
+- [ ] Ensure the message uses single quotes around the command name exactly as specified.
+- [ ] Ensure no other output is produced (no usage banners, no help text beyond the two lines).
 
 ## 3. Code Review
-- [ ] Verify that the script uses POSIX-compliant shell features.
-- [ ] Ensure the error message is exactly as specified in `[2_TAS-REQ-014E]`.
+- [ ] Verify that the `./do` script remains POSIX sh compatible (`#!/bin/sh` shebang, no bashisms such as `[[ ]]`, `$()` nesting beyond POSIX, or `echo -e`).
+- [ ] Verify the error message text matches `[2_TAS-REQ-014E]` character-for-character, including quoting and spacing.
+- [ ] Verify the valid-commands list is in the exact order: `setup build test lint format coverage presubmit ci`.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Execute the test script: `bash tests/test_do_unknown_command.sh`.
-- [ ] Confirm the script fails gracefully with the correct message and exit code.
+- [ ] Run `sh tests/do_script/test_unknown_command.sh` and confirm all 5 tests print `PASS`.
+- [ ] Run `./do nonexistent` manually and visually confirm stderr output matches the specification.
 
 ## 5. Update Documentation
-- [ ] Update any developer-facing documentation (e.g., `README.md`) if it lists valid commands to ensure it is consistent with the `./do` script.
+- [ ] Add a `// Covers: 2_TAS-REQ-014E` comment at the top of the test script file.
 
 ## 6. Automated Verification
-- [ ] Run `./do lint` (if implemented) to ensure no shell script syntax errors were introduced.
-- [ ] Verify the test case is part of the standard `./do test` suite (if applicable).
+- [ ] Run `sh tests/do_script/test_unknown_command.sh && echo "VERIFIED"` — the word `VERIFIED` must appear.
+- [ ] Run `./do lint` (if available) to ensure no regressions in the `./do` script.

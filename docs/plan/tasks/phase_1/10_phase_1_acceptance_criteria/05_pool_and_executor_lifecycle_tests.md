@@ -1,37 +1,36 @@
-# Task: Pool and Executor Lifecycle Tests (Sub-Epic: 10_Phase 1 Acceptance Criteria)
+# Task: Pool Config Validation and Executor Cleanup Verification Tests (Sub-Epic: 10_Phase 1 Acceptance Criteria)
 
 ## Covered Requirements
 - [AC-ROAD-P1-006], [AC-ROAD-P1-008]
 
 ## Dependencies
-- depends_on: [01_phase_0_dependency_verification.md]
-- shared_components: [devs-pool, devs-executor]
+- depends_on: ["01_phase_0_dependency_verification.md"]
+- shared_components: ["devs-pool", "devs-executor", "devs-config"]
 
 ## 1. Initial Test Written
-- [ ] Create a unit test in `devs-pool` that attempts to load a pool configuration where all agents have `tool = "claude"`.
-- [ ] The test must assert that the configuration is rejected at config load with an error naming `"claude"` as the only provider.
-- [ ] Create a unit test in `devs-executor` that exercises a stage execution where the agent process exits with code 1.
-- [ ] The test must assert that the `cleanup()` method is still called and that the working directory is confirmed absent after the call.
+- [ ] In `crates/devs-pool/tests/config_validation.rs` (or `crates/devs-config/tests/pool_validation.rs`), write test `test_single_provider_pool_rejected`: (1) construct a `PoolConfig` with 3 agents all having `tool = "claude"`, (2) call `validate()`, (3) assert `Err`, (4) assert error message contains `"claude"`. Annotate with `// Covers: AC-ROAD-P1-006`.
+- [ ] Write `test_multi_provider_pool_accepted` with agents using `"claude"` and `"gemini"`, assert validation passes.
+- [ ] In `crates/devs-executor/tests/cleanup.rs`, write test `test_cleanup_runs_after_nonzero_exit`: (1) create a `TempDir` as the working directory for a `WorkingEnvironment`, (2) simulate or mock an agent process exiting with code 1, (3) call `cleanup(env)`, (4) assert `!working_dir_path.exists()`. Annotate with `// Covers: AC-ROAD-P1-008`.
+- [ ] Write `test_cleanup_runs_after_zero_exit` confirming cleanup also removes the directory on success.
 
 ## 2. Task Implementation
-- [ ] In `devs-pool` (or the common config loader), implement a provider diversity check.
-- [ ] Ensure that a pool must have agents from more than one provider (e.g., at least one non-fallback or at least two different tools).
-- [ ] In `devs-executor`, wrap the stage execution logic in a `finally`-like block or a drop guard that ensures `cleanup()` is called regardless of the process outcome.
-- [ ] Implement the test for `cleanup()` by creating a temporary directory and ensuring it is deleted even after a process failure.
+- [ ] Add validation to `PoolConfig::validate()`: count distinct `tool` values across agents. If only one distinct value, return `ConfigError` with message: `"pool '<name>' has all agents using tool '<tool>'; at least two different tools required for fallback"`.
+- [ ] In `devs-executor`, ensure `cleanup(env)` is called unconditionally after `run_agent` returns — whether success or error. Use a pattern like: `let result = run_agent(...); cleanup(&env)?; result` or a `Drop`-based guard.
+- [ ] `cleanup` for `tempdir` target: `std::fs::remove_dir_all(path)`. For Docker: `docker rm -f <container>`. For SSH: `ssh <host> rm -rf <path>`.
 
 ## 3. Code Review
-- [ ] Confirm that `devs-executor` cleanup logic is robust and logs failures at `WARN` level.
-- [ ] Verify that the pool provider diversity check produces a clear and actionable error message.
+- [ ] Verify pool validation error message specifically names the duplicated tool string.
+- [ ] Verify executor cleanup test uses real `TempDir` (not mock) to confirm filesystem deletion.
+- [ ] Verify cleanup runs on both success and failure code paths.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-pool`.
-- [ ] Run `cargo test -p devs-executor`.
-- [ ] Confirm that both new tests pass.
+- [ ] Run `cargo test -p devs-pool` and confirm tests pass.
+- [ ] Run `cargo test -p devs-executor --test cleanup` and confirm tests pass.
 
 ## 5. Update Documentation
-- [ ] Document the provider diversity requirement in the `devs.toml` configuration guide.
-- [ ] Update `devs-executor` documentation to reflect the guaranteed cleanup invariant.
+- [ ] Add doc comments on `PoolConfig::validate()` explaining single-provider rejection.
+- [ ] Add doc comments on `cleanup()` explaining unconditional execution guarantee.
 
 ## 6. Automated Verification
-- [ ] Run the traceability scanner and confirm `AC-ROAD-P1-006` and `AC-ROAD-P1-008` are mapped to these tests.
-- [ ] Confirm that `cargo llvm-cov` shows coverage of the cleanup block.
+- [ ] Run `./do test` and verify `target/traceability.json` maps `AC-ROAD-P1-006` and `AC-ROAD-P1-008`.
+- [ ] Run `grep -r "AC-ROAD-P1-006\|AC-ROAD-P1-008" crates/` and confirm matches.

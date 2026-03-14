@@ -1,4 +1,4 @@
-# Task: Presubmit Wall-Clock Timeout (Sub-Epic: 036_Detailed Domain Specifications (Part 1))
+# Task: Presubmit 900-Second Wall-Clock Timeout Enforcement (Sub-Epic: 036_Detailed Domain Specifications (Part 1))
 
 ## Covered Requirements
 - [1_PRD-KPI-BR-005], [1_PRD-KPI-BR-006]
@@ -8,30 +8,45 @@
 - shared_components: ["./do Entrypoint Script"]
 
 ## 1. Initial Test Written
-- [ ] Create a simulation in the `./do` script test suite where `./do presubmit` is run with a mock command that takes longer than 900 seconds (or a shorter mocked timeout for the test).
-- [ ] Verify that the script kills all child processes and exits with code 1.
-- [ ] The test should assert that the output contains a timeout message and the timing record is updated with `timed_out: true` and `completed_at: null`.
-- [ ] Verify that wall-clock time is used, not CPU time, for this measurement.
+- [ ] Create a test script at `tests/do_script/test_presubmit_timeout.sh` with the following test cases:
+- [ ] **Timeout triggers test**: Override the timeout constant to a short value (e.g., 3 seconds) via a test-only mechanism (e.g., `DEVS_PRESUBMIT_TIMEOUT_OVERRIDE=3` env var used ONLY in tests, with a comment explaining this is a test-only escape hatch not violating [1_PRD-KPI-BR-004]). Create a mock step that sleeps for 10 seconds. Run `./do presubmit` and assert:
+  - Exit code is 1.
+  - The timing record appended to `target/presubmit_timings.jsonl` has `"timed_out": true`.
+  - The timing record has `"completed_at": null`.
+  - The timing record has `"exit_code": 1`.
+  - Stderr contains a message indicating timeout (e.g., `"presubmit timed out after 3 seconds"`).
+- [ ] **Child processes killed test**: In the same timeout scenario, verify that the long-running child process is actually killed (not left running). After `./do presubmit` exits, check that no process with the mock command's signature is still running (e.g., via `pgrep` or checking `/proc`).
+- [ ] **Wall-clock measurement test**: Create a step that consumes high CPU time but low wall-clock time (e.g., a short parallel computation). Verify that the timeout is NOT triggered even though CPU time may exceed the threshold. This confirms [1_PRD-KPI-BR-006] — wall clock, not CPU time.
+- [ ] **Normal completion test**: Run `./do presubmit` with a mock that completes in 1 second. Assert exit code is 0, `"timed_out": false`, and `"completed_at"` is a valid ISO-8601 timestamp (not null).
+- [ ] **Timing record schema test**: After any run, parse the last line of `target/presubmit_timings.jsonl` and validate it contains all required fields: `run_id` (UUID v4 format), `started_at` (ISO-8601), `completed_at` (ISO-8601 or null), `elapsed_seconds` (integer), `timed_out` (boolean), `exit_code` (integer), and `step_timings` (object with per-step entries each having `elapsed_seconds` and `exit_code`).
 
 ## 2. Task Implementation
-- [ ] Modify the `./do` script's `presubmit` subcommand.
-- [ ] Capture the start time (wall-clock) at the beginning of the `presubmit` run.
-- [ ] Implement a watchdog or a timeout mechanism for the entire subcommand run.
-- [ ] If the total elapsed time reaches 900 seconds (15 minutes), send a signal to kill all child processes atomically (e.g., using a process group kill).
-- [ ] Write the timing record to `target/presubmit_timings.jsonl` (or similar) with the required fields: `timed_out: true`, `completed_at: null`.
-- [ ] Exit the script with code 1.
+- [ ] In the `./do` script's `presubmit` subcommand, define `PRESUBMIT_TIMEOUT=900` as a constant at the top.
+- [ ] Record `started_at` as an ISO-8601 timestamp and `start_epoch` as seconds-since-epoch (using `date +%s`) at the beginning of the presubmit run.
+- [ ] Generate a `run_id` using `uuidgen` (or fallback: `cat /proc/sys/kernel/random/uuid` on Linux, `python3 -c "import uuid; print(uuid.uuid4())"` as portable fallback).
+- [ ] Run the presubmit in a subshell or with a process group (`set -m` or `setsid`) so that all child processes share a process group ID (PGID).
+- [ ] Implement a background watchdog: start a background process that sleeps for `$PRESUBMIT_TIMEOUT` seconds, then sends `SIGTERM` followed by `SIGKILL` (after a 5-second grace period) to the entire process group (`kill -- -$$` or `kill -TERM -$pgid`).
+- [ ] After each step (setup, format, lint, test, coverage, ci), record per-step timing in shell variables: `step_<name>_elapsed` and `step_<name>_exit`.
+- [ ] On timeout: the watchdog kills the process group, the trap handler catches the signal, sets `timed_out=true`, sets `completed_at=null`, writes the timing record to `target/presubmit_timings.jsonl`, and exits with code 1.
+- [ ] On normal completion: set `completed_at` to current ISO-8601 timestamp, `timed_out=false`, compute `elapsed_seconds` as `$(date +%s) - $start_epoch`, write the timing record, and exit with the appropriate code.
+- [ ] The timing record MUST be valid JSONL. Use `printf` or a heredoc to construct the JSON — do NOT depend on `jq` being installed.
+- [ ] Partial test results from a timed-out run MUST NOT be interpreted as pass: ensure the exit code is 1 regardless of which steps completed successfully before timeout.
 
 ## 3. Code Review
-- [ ] Ensure that the timeout applies to the entire `./do presubmit` run, including all its sub-steps (setup, build, test, lint, coverage).
-- [ ] Verify that the implementation uses wall-clock time [1_PRD-KPI-BR-006].
-- [ ] Check that child processes are killed correctly on all supported platforms (Linux, macOS, Windows).
+- [ ] Verify that the timeout uses wall-clock time (`date +%s` delta), NOT CPU time, confirming [1_PRD-KPI-BR-006].
+- [ ] Verify that child process killing is atomic (process group kill), not just killing the immediate child, confirming [1_PRD-KPI-BR-005].
+- [ ] Verify the timing record JSON schema matches the spec in §4.3.1 exactly (field names, types, nesting).
+- [ ] Verify POSIX sh compatibility for the watchdog and signal handling (no bashisms).
+- [ ] Verify that the `target/` directory is created if it doesn't exist before writing `presubmit_timings.jsonl`.
+- [ ] Verify cross-platform considerations: `setsid` availability on macOS vs Linux (may need `perl -e 'use POSIX; setsid(); exec @ARGV'` fallback), `uuidgen` availability.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the simulation test created in step 1 and ensure it passes.
-- [ ] Run a standard `./do presubmit` on a small task to ensure it completes successfully within the timeout.
+- [ ] Run `bash tests/do_script/test_presubmit_timeout.sh` and verify all test cases pass.
+- [ ] Run `./do presubmit` on the real codebase (if feasible in CI) and verify the timing record is correctly appended to `target/presubmit_timings.jsonl`.
 
 ## 5. Update Documentation
-- [ ] Update `.agent/MEMORY.md` to reflect the implementation of the 15-minute wall-clock timeout for presubmit.
+- [ ] Add `# Covers: 1_PRD-KPI-BR-005` and `# Covers: 1_PRD-KPI-BR-006` comments in the test script and in the `./do` script next to the timeout logic.
 
 ## 6. Automated Verification
-- [ ] Run a command that sleeps for 16 minutes via `./do presubmit` (e.g., by mocking a test step) and verify that it is terminated at the 15-minute mark with exit code 1.
+- [ ] Run the test script in CI: `bash tests/do_script/test_presubmit_timeout.sh && echo PASS || echo FAIL`
+- [ ] After a real `./do presubmit` run, validate the last line of `target/presubmit_timings.jsonl` is valid JSON with all required fields: `python3 -c "import json,sys; d=json.loads(sys.stdin.readline()); assert all(k in d for k in ['run_id','started_at','completed_at','elapsed_seconds','timed_out','exit_code','step_timings'])" < <(tail -1 target/presubmit_timings.jsonl)`

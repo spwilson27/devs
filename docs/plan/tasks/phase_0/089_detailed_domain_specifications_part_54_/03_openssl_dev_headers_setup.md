@@ -1,35 +1,40 @@
-# Task: OpenSSL Development Headers Requirement (Sub-Epic: 089_Detailed Domain Specifications (Part 54))
+# Task: OpenSSL Development Headers in Setup Command (Sub-Epic: 089_Detailed Domain Specifications (Part 54))
 
 ## Covered Requirements
 - [2_TAS-REQ-604]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: [./do Entrypoint Script]
+- depends_on: ["none"]
+- shared_components: ["./do Entrypoint Script & CI Pipeline"]
 
 ## 1. Initial Test Written
-- [ ] Create a check in the `./do setup` command or a dedicated validation script that detects whether OpenSSL development headers (e.g., `libssl-dev` or `openssl`) are installed on the system.
-- [ ] On a fresh system (or simulated CI environment), verify that `./do setup` fails if headers are missing and then succeeds after they are installed.
+- [ ] Create a test script or shell-based test named `test_do_setup_installs_openssl_headers` that:
+  1. Runs `./do setup` in a controlled environment (or inspects the `./do` script source).
+  2. On Linux: asserts the script invokes the platform package manager to install `libssl-dev` (Debian/Ubuntu) or `openssl-devel` (RHEL/Fedora), or equivalent.
+  3. On macOS: asserts the script checks for or installs OpenSSL headers (e.g., via `brew install openssl`).
+  4. If the script is POSIX sh, the test can be a grep-based assertion on the script content confirming the install commands are present for each platform.
+- [ ] Create a CI-level test that runs `./do setup` on a fresh runner and then runs `pkg-config --exists openssl` (or equivalent), asserting exit code 0.
 
 ## 2. Task Implementation
-- [ ] Update the `./do` script's `setup` subcommand logic.
-- [ ] For Linux (e.g., Debian/Ubuntu), add a check and installation command for `libssl-dev`.
-- [ ] For macOS, add a check and installation command for `openssl` via Homebrew.
-- [ ] Ensure the command is idempotent and does not fail if the package is already present.
-- [ ] Verify that `git2` and other crates requiring OpenSSL can compile after running `./do setup` on Linux and macOS.
+- [ ] In the `./do` script's `setup` subcommand, add platform detection (`uname -s`) and conditional installation of OpenSSL development headers:
+  - Linux (Debian/Ubuntu): `sudo apt-get install -y libssl-dev pkg-config`
+  - Linux (RHEL/Fedora): `sudo dnf install -y openssl-devel pkg-config`
+  - macOS: `brew install openssl pkg-config` (with idempotent check)
+- [ ] Ensure the setup command is idempotent — re-running it when headers are already installed must not fail.
+- [ ] Add a comment in the script: `# 2_TAS-REQ-604: OpenSSL dev headers required for native TLS`
 
 ## 3. Code Review
-- [ ] Verify that the OS detection logic in `./do` is robust.
-- [ ] Confirm that the package names used (`libssl-dev`, `openssl`) are correct for the target platforms.
-- [ ] Ensure that on Windows, the requirement for OpenSSL headers is skipped in favor of the system Schannel TLS provider.
+- [ ] Verify the script handles the case where `sudo` is not available (CI containers running as root).
+- [ ] Verify the script does not fail on Windows (where OpenSSL headers are handled differently by the Rust TLS backend or vendored).
+- [ ] Verify idempotency — running `./do setup` twice in a row must succeed.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `./do setup` on a Linux and/or macOS runner.
-- [ ] Verify that `cargo build` succeeds for crates with HTTPS or SSL dependencies (like `reqwest` or `git2` with `https` feature).
+- [ ] Run `./do setup` on the current platform and confirm exit code 0.
+- [ ] Run `pkg-config --exists openssl` (Linux/macOS) and confirm exit code 0.
 
 ## 5. Update Documentation
-- [ ] Document the system requirement for OpenSSL development headers in the project's README or `docs/setup.md`.
-- [ ] Update the documentation of the `./do setup` command.
+- [ ] Add `# Covers: 2_TAS-REQ-604` comment in the `./do` script near the OpenSSL install logic.
 
 ## 6. Automated Verification
-- [ ] Run a shell command that checks for the presence of `openssl/ssl.h` (Linux/macOS only) and verify it exits with 0.
+- [ ] Run `./do presubmit` and confirm the setup phase completes without OpenSSL-related build failures.
+- [ ] Run `grep -n "2_TAS-REQ-604" ./do` and confirm at least one annotation exists.

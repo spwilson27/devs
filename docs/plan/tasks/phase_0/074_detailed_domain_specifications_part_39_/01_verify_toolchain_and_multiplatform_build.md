@@ -1,37 +1,47 @@
-# Task: Verify Toolchain and Multi-Platform Build (Sub-Epic: 074_Detailed Domain Specifications (Part 39))
+# Task: Verify Toolchain Pinning and Multi-Platform Build (Sub-Epic: 074_Detailed Domain Specifications (Part 39))
 
 ## Covered Requirements
 - [2_TAS-REQ-445], [2_TAS-REQ-446]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [./do Entrypoint Script]
+- shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written
-- [ ] Create a shell script `tests/verify_acceptance_build.sh` that:
-  - Asserts `rust-toolchain.toml` exists at the repository root.
-  - Checks if `cat rust-toolchain.toml | grep 'channel = "stable"'` exits 0.
-  - Verifies that `cargo build --workspace --all-features` can be executed.
-  - Note: Multi-platform execution is handled by CI runners (Linux, macOS, Windows) as per REQ-446.
+- [ ] Create an integration test in `tests/toolchain_acceptance.rs` (or a suitable existing test file) with the following test cases:
+  - `test_rust_toolchain_toml_exists`: Assert that `rust-toolchain.toml` exists at the repository root by reading it relative to `env!("CARGO_MANIFEST_DIR")` or the workspace root.
+  - `test_rust_toolchain_pins_stable_channel`: Parse `rust-toolchain.toml` as TOML, assert `toolchain.channel == "stable"`.
+  - `test_rust_toolchain_includes_required_components`: Parse `rust-toolchain.toml`, extract `toolchain.components` array, assert it contains exactly `"rustfmt"`, `"clippy"`, and `"llvm-tools-preview"`.
+  - `test_workspace_build_succeeds`: Use `std::process::Command` to run `cargo build --workspace --all-features` and assert exit code is 0. Mark this test with `#[ignore]` if it is too slow for the default test suite, and ensure `./do test` includes ignored tests or a separate acceptance pass runs it.
+- [ ] Add `// Covers: 2_TAS-REQ-445` annotation to the toolchain config tests and `// Covers: 2_TAS-REQ-446` to the build test.
 
 ## 2. Task Implementation
-- [ ] Implement a manual verification step or a script to confirm the `rust-toolchain.toml` content exactly matches the requirements of [2_TAS-REQ-445]:
-  - `channel = "stable"`
-  - components includes `"rustfmt"`, `"clippy"`, `"llvm-tools-preview"`.
-- [ ] Ensure the `./do build` command (which runs `cargo build --workspace --all-features`) is fully functional.
-- [ ] Trigger the CI pipeline (if available) and confirm that the `presubmit-linux`, `presubmit-macos`, and `presubmit-windows` jobs all successfully execute the workspace build as per [2_TAS-REQ-446].
+- [ ] Ensure `rust-toolchain.toml` exists at the repository root with the following exact content (or equivalent):
+  ```toml
+  [toolchain]
+  channel = "stable"
+  components = ["rustfmt", "clippy", "llvm-tools-preview"]
+  ```
+- [ ] Ensure the Cargo workspace manifest (`Cargo.toml` at root) defines `[workspace]` with `members` listing all crates, and that `cargo build --workspace --all-features` compiles cleanly with zero errors.
+- [ ] Ensure the GitLab CI configuration (`.gitlab-ci.yml`) defines three jobs — `presubmit-linux`, `presubmit-macos`, `presubmit-windows` — each of which runs `./do presubmit` (which includes the workspace build). If CI is not yet configured, ensure the `./do ci` command documents the expectation and the test captures it.
+- [ ] If any compilation warnings or errors are present, fix them so the build exits 0 cleanly.
 
 ## 3. Code Review
-- [ ] Verify that `rust-toolchain.toml` is at the root and not in a subdirectory.
-- [ ] Confirm that `cargo build` is being run with `--workspace` and `--all-features` to ensure exhaustive compilation of all components.
+- [ ] Verify `rust-toolchain.toml` is at the repository root (not in a subdirectory or crate).
+- [ ] Confirm `cargo build` uses both `--workspace` and `--all-features` flags to ensure all crates and feature-gated code are compiled.
+- [ ] Confirm the CI pipeline targets all three platforms (Linux, macOS, Windows) as required by [2_TAS-REQ-446].
+- [ ] Ensure no `#[allow(...)]` or `#[cfg_attr(...)]` suppresses build errors that should be caught.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `sh tests/verify_acceptance_build.sh` on the local machine.
-- [ ] Check CI logs for successful build completion across all three targeted platforms.
+- [ ] Run `cargo test --test toolchain_acceptance` (or the relevant test binary) and confirm all tests pass.
+- [ ] Run `cargo build --workspace --all-features` directly and confirm exit code 0.
+- [ ] Run `cat rust-toolchain.toml | grep 'channel = "stable"'` and confirm it prints the expected line.
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` or a status file to record that Technology Stack Acceptance Criteria for Build and Toolchain (REQ-445, REQ-446) have been verified.
+- [ ] Ensure `rust-toolchain.toml` has a comment at the top explaining its purpose and linking to [2_TAS-REQ-445].
+- [ ] If a project-level status tracking document exists, mark [2_TAS-REQ-445] and [2_TAS-REQ-446] as verified.
 
 ## 6. Automated Verification
-- [ ] Run `cargo build --workspace --all-features` and ensure it exits 0.
-- [ ] Verify `cat rust-toolchain.toml | grep 'channel = "stable"'` returns the expected line.
+- [ ] Run `./do build` and assert exit code 0.
+- [ ] Run `cargo test --test toolchain_acceptance -- --include-ignored` and assert all tests pass with exit code 0.
+- [ ] Verify `target/traceability.json` (if generated by `./do test`) includes entries for `2_TAS-REQ-445` and `2_TAS-REQ-446`.

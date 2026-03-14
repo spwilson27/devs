@@ -1,32 +1,38 @@
-# Task: ServerConfig Reserved Secrets Section (Sub-Epic: 043_Detailed Domain Specifications (Part 8))
+# Task: Reserve [secrets] Config Section in devs.toml Schema (Sub-Epic: 043_Detailed Domain Specifications (Part 8))
 
 ## Covered Requirements
 - [1_PRD-REQ-071]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [devs-config]
+- shared_components: [devs-config (consumer)]
 
 ## 1. Initial Test Written
-- [ ] In `devs-config/src/server_config.rs`, write a unit test that provides a `devs.toml` configuration with a `[secrets]` section containing arbitrary key-value pairs (e.g., `provider = "vault"`, `token = "test"`).
-- [ ] Assert that the TOML parser correctly deserializes the config without error and that the `secrets` section is captured (even if ignored by the rest of the application).
+- [ ] In the `devs-config` crate, write a unit test `test_secrets_section_parsed_and_ignored` that:
+  1. Constructs a TOML string containing a valid `[secrets]` section with arbitrary keys (e.g., `provider = "vault"`, `token = "abc123"`, `region = "us-east-1"`).
+  2. Deserializes it into `ServerConfig` and asserts deserialization succeeds.
+  3. Asserts that the `secrets` field is `Some(...)` and its contents are captured.
+  4. Asserts that no side effects occur (no env vars set, no network calls, no state changes).
+- [ ] Write a second test `test_config_without_secrets_section` that confirms a TOML without `[secrets]` deserializes successfully with `secrets: None`.
+- [ ] Annotate tests with `// Covers: 1_PRD-REQ-071`.
 
 ## 2. Task Implementation
-- [ ] Define a placeholder `SecretsConfig` struct in `devs-config`.
-- [ ] Add an optional `secrets: Option<SecretsConfig>` field to the `ServerConfig` struct.
-- [ ] Annotate the field with `#[serde(default)]` and `#[allow(dead_code)]` to signify that it is reserved for post-MVP use but must be parseable now.
-- [ ] Ensure that even if the `[secrets]` section is provided, it does not trigger any side effects or logic in the MVP codebase.
+- [ ] Define a `SecretsConfig` struct in `devs-config` that uses `#[serde(flatten)]` with `HashMap<String, toml::Value>` to accept arbitrary key-value pairs without constraining the schema.
+- [ ] Add `secrets: Option<SecretsConfig>` to the `ServerConfig` struct with `#[serde(default)]`.
+- [ ] Add a doc comment on the field: `/// Reserved for post-MVP secrets manager integration. Parsed but ignored. See [1_PRD-REQ-071].`
+- [ ] Ensure no code path reads from `secrets` to influence runtime behavior.
 
 ## 3. Code Review
-- [ ] Verify that the `[secrets]` section doesn't interfere with standard configuration loading.
-- [ ] Ensure the field is clearly documented as a "reserved for post-MVP" section.
+- [ ] Verify the `SecretsConfig` struct is flexible enough to accept any future schema without breaking changes.
+- [ ] Confirm the field is clearly marked as reserved and unused.
+- [ ] Verify no runtime logic references `config.secrets`.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the `devs-config` crate tests: `cargo test -p devs-config`.
-- [ ] Run the specific test case for the `[secrets]` section.
+- [ ] Run `cargo test -p devs-config` and confirm all tests pass.
 
 ## 5. Update Documentation
-- [ ] Document the existence and purpose of the reserved `[secrets]` section in the `devs-config` crate's README or module docs.
+- [ ] Add a doc comment on `SecretsConfig` explaining its purpose as a forward-compatible reserved section.
 
 ## 6. Automated Verification
-- [ ] Run `.tools/verify_requirements.py` and ensure [1_PRD-REQ-071] is marked as verified.
+- [ ] Run `cargo test -p devs-config` and confirm exit code 0.
+- [ ] Verify `// Covers: 1_PRD-REQ-071` annotation exists in test code via grep.

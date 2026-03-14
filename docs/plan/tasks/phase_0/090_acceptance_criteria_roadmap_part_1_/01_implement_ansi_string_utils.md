@@ -4,35 +4,44 @@
 - [AC-ASCII-006], [AC-ASCII-007]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_0/008_proto_core_foundation/03_setup_devs_core_foundation.md]
+- depends_on: ["none"]
 - shared_components: [devs-core]
 
 ## 1. Initial Test Written
-- [ ] Create unit tests in `crates/devs-core/src/utils/strings.rs`:
-  - `test_strip_ansi_basic`: Simple color codes like `\x1b[31mRed\x1b[0m` should become `Red`.
-  - `test_strip_ansi_efficient`: [AC-ASCII-006] Test with a very long string containing many complex ANSI sequences (CSI, SGR, etc.) to ensure it doesn't hang or exceed performance budget.
-  - `test_strip_ansi_idempotency`: [AC-ASCII-007] `strip_ansi(strip_ansi(input))` must be equal to `strip_ansi(input)`.
-  - `test_strip_ansi_no_code`: String without ANSI codes remains unchanged.
-  - `test_strip_ansi_partial_code`: Ensure it correctly handles (or safely ignores) partial/malformed codes if they look like sequences.
+- [ ] Create test file `crates/devs-core/src/utils/strings_tests.rs` (or inline `#[cfg(test)] mod tests` in `crates/devs-core/src/utils/strings.rs`).
+- [ ] **[AC-ASCII-006] `test_strip_ansi_pathological_performance`**: Construct the exact input `format!("\x1b[{}m", "1;".repeat(10_000))`. Assert `strip_ansi(&input) == ""`. Wrap the call in `std::time::Instant::now()` and assert elapsed < `Duration::from_millis(10)`. Add `// Covers: AC-ASCII-006` annotation.
+- [ ] **[AC-ASCII-006] `test_strip_ansi_basic_sgr`**: Input `"\x1b[31mRed\x1b[0m"` -> `"Red"`. Add `// Covers: AC-ASCII-006`.
+- [ ] **[AC-ASCII-006] `test_strip_ansi_empty_input`**: Input `""` -> `""`.
+- [ ] **[AC-ASCII-006] `test_strip_ansi_no_codes`**: Input `"plain text"` -> `"plain text"`.
+- [ ] **[AC-ASCII-006] `test_strip_ansi_only_codes`**: Input `"\x1b[1m\x1b[0m"` -> `""`.
+- [ ] **[AC-ASCII-007] `test_strip_ansi_idempotent_parameterized`**: Build a `Vec<&str>` of at least 100 varied inputs spanning: (a) 30+ strings with no ANSI codes, (b) 30+ strings that are ANSI-only (no visible text), (c) 40+ strings mixing ANSI codes with visible text, including nested/overlapping sequences, partial sequences, and multi-byte UTF-8 characters interleaved with ANSI. For each input `s`, assert `strip_ansi(&strip_ansi(s)) == strip_ansi(s)`. Add `// Covers: AC-ASCII-007` annotation.
+- [ ] **[AC-ASCII-007] `test_strip_ansi_idempotent_edge_cases`**: Include inputs with malformed escape sequences (e.g., `"\x1b["`, `"\x1b[999"`, lone `\x1b`), OSC sequences (`"\x1b]0;title\x07"`), and hyperlink sequences. Assert idempotency for each. Add `// Covers: AC-ASCII-007`.
 
 ## 2. Task Implementation
-- [ ] Create `crates/devs-core/src/utils/mod.rs` and `crates/devs-core/src/utils/strings.rs`.
-- [ ] Implement `strip_ansi(input: &str) -> String` using a robust and efficient approach (e.g., `vte` parser or a well-tuned regex).
-  - Use `regex` if performant enough, or a manual byte-by-byte scan for higher performance if required by AC-ASCII-006.
-  - Ensure it covers standard SGR (Select Graphic Rendition) and other common CSI (Control Sequence Introducer) sequences.
+- [ ] Create `crates/devs-core/src/utils/mod.rs` with `pub mod strings;`.
+- [ ] Create `crates/devs-core/src/utils/strings.rs`.
 - [ ] Add `pub mod utils;` to `crates/devs-core/src/lib.rs`.
-- [ ] Ensure that `devs-core`'s `Cargo.toml` includes `regex` or other necessary crates for this implementation.
+- [ ] Add `strip-ansi-escapes` crate (or `regex`) as a dependency in `crates/devs-core/Cargo.toml`. Prefer the `strip-ansi-escapes` crate for correctness; if it doesn't meet the 10ms performance budget for the pathological input, use a compiled `Regex` with `once_cell::sync::Lazy` (pattern: `\x1b\[[0-9;]*[a-zA-Z]|\x1b\][^\x07]*\x07|\x1b[^[\]].?`).
+- [ ] Implement `pub fn strip_ansi(input: &str) -> String`:
+  - If `input` contains no `\x1b` byte, return `input.to_string()` immediately (fast path, avoids allocation overhead for clean strings).
+  - Otherwise, apply the ANSI stripping logic.
+  - Must handle CSI sequences (`\x1b[...letter`), OSC sequences (`\x1b]...BEL`), and lone escape bytes gracefully.
+  - Must complete within 10ms for the pathological input (`"\x1b[" + "1;" * 10_000 + "m"`) per AC-ASCII-006.
 
 ## 3. Code Review
-- [ ] Verify that the regex or parser is compiled/initialized only once (e.g., using `once_cell` or `lazy_static`).
-- [ ] Ensure the implementation is safe (no `unsafe` code as per Phase 0 guidelines).
-- [ ] Check for any memory allocations that could be avoided (e.g., if the string has no ANSI codes, avoid allocating a new String).
+- [ ] Verify regex (if used) is compiled exactly once via `Lazy<Regex>` — no per-call compilation.
+- [ ] Verify no `unsafe` code.
+- [ ] Verify fast-path: if input has no `\x1b`, no regex/parser is invoked and no new allocation occurs beyond the `to_string()`.
+- [ ] Verify the 100-input idempotency test genuinely has 100+ distinct inputs (count them).
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-core --lib utils::strings` and verify all tests pass.
+- [ ] Run `cargo test -p devs-core -- utils::strings` and verify all tests pass.
+- [ ] Specifically confirm the performance test completes in under 10ms (check test output or add `eprintln!` for elapsed time).
 
 ## 5. Update Documentation
-- [ ] Add doc comments to `strip_ansi` explaining its performance characteristics and idempotency as per [AC-ASCII-006] and [AC-ASCII-007].
+- [ ] Add doc comment on `strip_ansi` explaining: (1) strips all ANSI escape sequences, (2) completes in O(n) time, (3) idempotent — `strip_ansi(strip_ansi(s)) == strip_ansi(s)` for all inputs.
 
 ## 6. Automated Verification
-- [ ] Run `grep -r "AC-ASCII-006" crates/devs-core/` and `grep -r "AC-ASCII-007" crates/devs-core/` to verify traceability.
+- [ ] Run `grep -rn "Covers: AC-ASCII-006" crates/devs-core/` — must return at least one match.
+- [ ] Run `grep -rn "Covers: AC-ASCII-007" crates/devs-core/` — must return at least one match.
+- [ ] Run `cargo test -p devs-core -- utils::strings --no-fail-fast 2>&1 | tail -5` and confirm `test result: ok`.

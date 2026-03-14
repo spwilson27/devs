@@ -1,43 +1,54 @@
-# Task: Restore checkpointed runs from git (Sub-Epic: 058_Detailed Domain Specifications (Part 23))
+# Task: Implement Checkpoint Restoration Logic on Server Startup (Sub-Epic: 058_Detailed Domain Specifications (Part 23))
 
 ## Covered Requirements
 - [2_TAS-REQ-206]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: ["devs-server", "devs-checkpoint", "devs-scheduler"]
+- depends_on: ["none"]
+- shared_components: ["devs-checkpoint (Consumer — uses restore_checkpoints API)", "devs-scheduler (Consumer — re-queues restored runs)", "devs-core (Consumer — WorkflowRunState/StageRunState enums)"]
 
 ## 1. Initial Test Written
-- [ ] Create a mock git repository with multiple `checkpoint.json` files representing different states (`Running`, `Waiting`, `Eligible`, `Pending`).
-- [ ] Write an integration test in `devs-server/tests/startup_recovery.rs` (or similar).
-- [ ] The test should verify that:
-    - Stages in `Running` state are reset to `Eligible`.
-    - Stages in `Waiting` or `Eligible` state are re-queued to the scheduler.
-    - `Pending` runs are re-queued for execution.
-    - A failure to read one project's checkpoints does not stop the recovery of other projects.
-    - Errors are logged at the `ERROR` level for failed project restorations.
+- [ ] In `crates/devs-checkpoint/src/restore.rs` (create `#[cfg(test)] mod tests`), write the following tests. Each must include `// Covers: 2_TAS-REQ-206`.
+- [ ] `test_running_stages_reset_to_eligible`: Create a `CheckpointData` with one run containing a stage in `StageRunState::Running`. Call `restore_checkpoints`. Assert the stage state is now `StageRunState::Eligible`.
+- [ ] `test_waiting_and_eligible_stages_requeued`: Create checkpoint data with stages in `Waiting` and `Eligible` states. After restore, assert these stages are present in the returned `Vec<RestoredRun>` with their states preserved (they get re-queued as-is).
+- [ ] `test_pending_runs_requeued`: Create a checkpoint with a run in `WorkflowRunState::Pending`. Assert it appears in the restored list for re-submission to the scheduler.
+- [ ] `test_completed_and_failed_stages_unchanged`: Stages in `Completed` or `Failed` states must NOT be modified. Assert they retain their original state after restore.
+- [ ] `test_one_project_failure_does_not_abort_others`: Set up 3 project checkpoint directories. Make project 2's checkpoint data invalid JSON. Call `restore_all_projects`. Assert projects 1 and 3 are restored successfully. Assert the function returns `Ok` (not `Err`).
+- [ ] `test_project_failure_logged_at_error_level`: Use `tracing_test::TracingSubscriber` (or equivalent) to capture log output. Trigger a project restore failure. Assert a log line at `ERROR` level is emitted containing the project name.
+- [ ] Write an integration test in `crates/devs-checkpoint/tests/git_restore.rs` that creates a real temporary git repo with a checkpoint branch containing `.devs/runs/<run_id>/checkpoint.json` files, then calls `restore_checkpoints` and verifies correct state transitions.
 
 ## 2. Task Implementation
-- [ ] Implement the `CheckpointStore::load_all_runs` (or equivalent) in the `devs-checkpoint` crate using `git2` to read the checkpoint branch.
-- [ ] Implement the `ServerState::restore_checkpoints` method in `devs-server` that orchestrates the recovery sequence.
-- [ ] Implement the logic to scan all registered projects and their respective checkpoint branches.
-- [ ] Implement the crash-recovery state transitions:
-    - `StageStatus::Running` → `StageStatus::Eligible`.
-- [ ] Implement the re-queueing logic into the `SchedulerState` channels.
-- [ ] Ensure that failures are handled per-project with a `match` or `if let Err(...)` and a `tracing::error!` log.
+- [ ] In `crates/devs-checkpoint/src/restore.rs`, implement `restore_checkpoints(project: &ProjectRef) -> Result<Vec<RestoredRun>>`:
+  - Open the project's git repo via `git2::Repository::open`.
+  - Resolve the checkpoint branch (from `project.checkpoint_branch` config).
+  - Walk the tree at `.devs/runs/*/checkpoint.json`, deserializing each into `CheckpointData`.
+  - For each run: iterate stages and apply crash-recovery transitions: `Running → Eligible`. Leave `Waiting`, `Eligible`, `Completed`, `Failed` unchanged.
+  - For each run: if `WorkflowRunState::Pending`, include in output for re-queue.
+  - Return `Vec<RestoredRun>` containing all recovered runs with corrected states.
+- [ ] In `crates/devs-checkpoint/src/restore.rs`, implement `restore_all_projects(projects: &[ProjectRef]) -> Vec<(ProjectRef, Result<Vec<RestoredRun>>)>`:
+  - Iterate all projects. Call `restore_checkpoints` for each.
+  - On `Err`, log at `tracing::error!` with the project name and error, then continue.
+  - Return the full list of results (successes and failures).
+- [ ] All `git2` operations MUST be wrapped in `tokio::task::spawn_blocking` since git2 is synchronous.
+- [ ] Define `RestoredRun` struct: `run_id: RunId`, `workflow_name: String`, `stages: Vec<RestoredStage>`, `run_state: WorkflowRunState`.
+- [ ] Define `CheckpointData` as a deserializable struct matching the `.devs/runs/<id>/checkpoint.json` schema.
 
 ## 3. Code Review
-- [ ] Verify that the implementation follows the exact startup sequence step 8 specified in `2_TAS-REQ-206`.
-- [ ] Ensure that `Running` stages are correctly reset to `Eligible` to avoid being stuck.
-- [ ] Check that re-queueing happens for all non-terminal stages (`Waiting`, `Eligible`) and for `Pending` runs.
-- [ ] Verify that the implementation uses the `CheckpointStore` abstraction and `git2` for repo access.
+- [ ] Verify `Running → Eligible` is the ONLY crash-recovery state transition applied (no other states are modified).
+- [ ] Verify per-project error isolation: one project's failure MUST NOT prevent other projects from restoring.
+- [ ] Verify `tracing::error!` is used (not `eprintln!` or `log::error!`) for failed project restorations.
+- [ ] Verify all `git2` calls are inside `spawn_blocking`.
+- [ ] Verify no `anyhow` dependency in this library crate [2_TAS-REQ-234 cross-reference].
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the integration test created in step 1 and ensure it passes.
-- [ ] Run `cargo test -p devs-server` to ensure no regressions in server startup.
+- [ ] Run `cargo test -p devs-checkpoint -- restore` and confirm all tests pass.
+- [ ] Run the integration test `cargo test -p devs-checkpoint --test git_restore` and confirm it passes.
 
 ## 5. Update Documentation
-- [ ] Update `.agent/MEMORY.md` to reflect the implementation of the checkpoint restoration logic and its conformance to `2_TAS-REQ-206`.
+- [ ] Add doc comments on `restore_checkpoints` and `restore_all_projects` referencing [2_TAS-REQ-206].
+- [ ] Document the crash-recovery state transition table in a module-level doc comment.
 
 ## 6. Automated Verification
-- [ ] Run `./do test` and verify that the tests covering `2_TAS-REQ-206` are present and passing in the traceability report.
+- [ ] Run `./do test` and confirm zero failures.
+- [ ] Run `./do lint` and confirm zero warnings.
+- [ ] Grep for `// Covers: 2_TAS-REQ-206` to confirm traceability annotation is present in test code.

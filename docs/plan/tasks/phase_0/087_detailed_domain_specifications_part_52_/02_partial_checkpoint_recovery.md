@@ -1,45 +1,37 @@
-# Task: Implement Partial Checkpoint Recovery Logic (Sub-Epic: 087_Detailed Domain Specifications (Part 52))
+# Task: Partial Checkpoint Recovery Acceptance Logic (Sub-Epic: 087_Detailed Domain Specifications (Part 52))
 
 ## Covered Requirements
 - [2_TAS-REQ-511]
 
 ## Dependencies
-- depends_on: [none]
+- depends_on: none
 - shared_components: [devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written
-- [ ] Create an integration test in `crates/devs-checkpoint/tests/recovery.rs` (or equivalent) that:
-    - Sets up a mocked checkpoint directory containing two runs (A and B).
-    - Writes a corrupt (invalid JSON) `checkpoint.json` for run A.
-    - Writes a valid `checkpoint.json` for run B.
-    - Calls `CheckpointStore::recover()` or the equivalent server startup recovery function.
-    - Verifies that the recovery function does NOT return an error.
-    - Verifies that run B is recovered successfully and added to the in-memory registry.
-    - Verifies that run A is marked as `Unrecoverable` (via a specific status or in-memory flag).
-    - Verifies that both runs are returned when calling `list_runs` (or its internal equivalent).
+- [ ] In `crates/devs-checkpoint/src/` (or the crate owning checkpoint restore), create a test module `tests::partial_checkpoint_recovery` with:
+  - `test_corrupt_checkpoint_alongside_valid`: set up a project directory with two run checkpoint files under `.devs/checkpoints/`: run A with invalid/corrupt JSON (`checkpoint.json` contains `{invalid`), run B with valid JSON. Call `restore_checkpoints(project)`. Assert: the result contains two entries — run B is fully restored with its original state, run A is present but marked with state `Unrecoverable`.
+  - `test_all_corrupt_checkpoints_still_starts`: set up a project where all checkpoint files are corrupt. Call `restore_checkpoints(project)`. Assert: returns Ok with all runs marked `Unrecoverable`; no panic or startup failure.
+  - `test_no_checkpoints_returns_empty`: set up a project with no `.devs/checkpoints/` directory. Assert `restore_checkpoints` returns `Ok(vec![])`.
+  - `test_unrecoverable_run_visible_in_list`: after restoring with one corrupt and one valid run, call `list_runs`. Assert both runs appear — the corrupt one with state `Unrecoverable` and the valid one with its restored state.
+- [ ] Add `// Covers: 2_TAS-REQ-511` annotation to all test functions.
 
 ## 2. Task Implementation
-- [ ] Implement the `CheckpointStore` recovery logic in `devs-checkpoint`.
-- [ ] Use a loop to iterate through the project's checkpoint directory.
-- [ ] Wrap the `serde_json::from_reader` (or equivalent) call in a result check.
-- [ ] If parsing fails:
-    - Log an `ERROR` message containing the file path and the specific parse error.
-    - Create a stub entry in the in-memory run registry with status `Unrecoverable`.
-    - Continue to the next checkpoint file.
-- [ ] Ensure the server startup process correctly handles this partial failure without aborting.
-- [ ] Ensure that `list_runs` in `devs-grpc` or `devs-core` can correctly report `Unrecoverable` runs.
+- [ ] In the `restore_checkpoints` function, wrap each individual checkpoint deserialization in error handling:
+  - On success: add the restored `WorkflowRun` to the results vector.
+  - On failure (serde error, IO error, schema mismatch): log a `WARN` with the run directory path and error message, create a `WorkflowRun` stub with the run ID extracted from the directory name and state set to `Unrecoverable`, and add it to the results vector.
+- [ ] Add an `Unrecoverable` variant to the `WorkflowRunState` enum in `devs-core` if not already present. This state must be terminal (no transitions out).
+- [ ] Ensure the server startup path calls `restore_checkpoints` and does NOT abort on partial failures — it proceeds with whatever runs could be recovered.
 
 ## 3. Code Review
-- [ ] Ensure that `Unrecoverable` is a distinct variant in the `RunStatus` enum in `devs-core`.
-- [ ] Verify that errors are logged at the `ERROR` level as required.
-- [ ] Check that the in-memory state is consistent even when recovery is partial.
+- [ ] Verify that corrupt checkpoint handling never panics — all deserialization is wrapped in `Result`.
+- [ ] Confirm `Unrecoverable` is a terminal state with no valid transitions in the state machine.
+- [ ] Ensure the warn log includes enough context (project name, run ID, error) for debugging.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Execute `./do test --package devs-checkpoint` and ensure all recovery tests pass.
+- [ ] Run `cargo test -p devs-checkpoint -- partial_checkpoint_recovery` and confirm all tests pass.
 
 ## 5. Update Documentation
-- [ ] Add a section in `devs-checkpoint` documentation explaining the handling of corrupt checkpoint files.
+- [ ] Add doc comments to `restore_checkpoints` explaining partial recovery semantics and the `Unrecoverable` state.
 
 ## 6. Automated Verification
-- [ ] Run `cargo test` and verify that the `recovery_corrupt_file` test passes.
-- [ ] Verify traceability annotations are present: `/// Verifies [2_TAS-REQ-511]`.
+- [ ] Run `cargo test -p devs-checkpoint -- partial_checkpoint_recovery --no-fail-fast 2>&1 | tail -20` and verify exit code 0.

@@ -5,31 +5,56 @@
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [./do Entrypoint Script]
+- shared_components: [./do Entrypoint Script & CI Pipeline (consumer)]
 
 ## 1. Initial Test Written
-- [ ] Create a test script `tests/test_workspace_lints.py` that parses the root `Cargo.toml` using `toml` library and asserts:
-    - The `[workspace.lints.rust]` section exists and contains `missing_docs = "deny"`, `unsafe_code = "deny"`, `unused_must_use = "deny"`, and `dead_code = "warn"`.
-    - The `[workspace.lints.clippy]` section exists and contains `all = { level = "deny", priority = -1 }` and `pedantic = { level = "warn", priority = -1 }`.
-    - `module_name_repetitions = "allow"` and `must_use_candidate = "allow"` are present.
-- [ ] Create a test that iterates through all `Cargo.toml` files in the workspace (found via `glob`) and verifies they contain `[lints] workspace = true`.
+- [ ] Create `tests/workspace_lints_test.rs` (or a Python script `tests/test_workspace_lints.py`) that programmatically parses the root `Cargo.toml` and asserts:
+    - `[workspace.lints.rust]` section exists with exactly these entries:
+        - `missing_docs = "deny"`
+        - `unsafe_code = "deny"`
+        - `unused_must_use = "deny"`
+        - `dead_code = "warn"`
+    - `[workspace.lints.clippy]` section exists with exactly these entries:
+        - `all = { level = "deny", priority = -1 }`
+        - `pedantic = { level = "warn", priority = -1 }`
+        - `module_name_repetitions = "allow"`
+        - `must_use_candidate = "allow"`
+- [ ] Create a second test that discovers all `Cargo.toml` files listed in `[workspace.members]` (by reading root `Cargo.toml`, extracting member paths, and checking each member's `Cargo.toml`) and asserts each contains `[lints] workspace = true` (the TOML key `lints.workspace` must equal `true`).
+- [ ] Create a compilation test: write a small Rust file (e.g., in a test harness crate) that contains `unsafe {}` and a public function without a doc comment, then verify `cargo clippy` / `cargo check` produces the expected deny-level errors. This confirms the lints are actually enforced at compile time, not just present in TOML.
 
 ## 2. Task Implementation
-- [ ] Update the root `Cargo.toml` to include the `[workspace.lints]` table with all the specified lints from [2_TAS-REQ-004A].
-- [ ] Update every existing crate's `Cargo.toml` (e.g., `devs-proto`, `devs-core`, etc.) to include `[lints] workspace = true` and remove any redundant local lint configurations.
-- [ ] Run `cargo clippy` and `cargo fmt` to ensure the new lints are enforced and all current code complies.
+- [ ] Add the following to the root `Cargo.toml` under `[workspace.lints.rust]`:
+    ```toml
+    missing_docs       = "deny"
+    unsafe_code        = "deny"
+    unused_must_use    = "deny"
+    dead_code          = "warn"
+    ```
+- [ ] Add the following to the root `Cargo.toml` under `[workspace.lints.clippy]`:
+    ```toml
+    all                     = { level = "deny", priority = -1 }
+    pedantic                = { level = "warn", priority = -1 }
+    module_name_repetitions = "allow"
+    must_use_candidate      = "allow"
+    ```
+- [ ] In every existing workspace member crate's `Cargo.toml`, add `[lints] workspace = true` and remove any crate-local `#![deny(...)]` or `#![warn(...)]` attributes that are now redundant with the workspace-level configuration.
+- [ ] Fix all existing code that violates the new lint rules: add missing doc comments to all public items, remove any `unsafe` blocks (if any exist), and address any new clippy warnings promoted to errors.
+- [ ] Run `cargo clippy --workspace --all-targets` and `cargo doc --workspace --no-deps` to confirm zero errors/warnings at the new lint levels.
 
 ## 3. Code Review
-- [ ] Verify that `unsafe_code = "deny"` correctly triggers a failure if `unsafe` blocks are added.
-- [ ] Ensure that `missing_docs = "deny"` correctly triggers a failure for any public item without documentation.
-- [ ] Check that `clippy::all` is correctly set to `deny` with `priority = -1` to allow overrides.
+- [ ] Verify that `unsafe_code = "deny"` is at the workspace level and no crate overrides it with a local `allow`.
+- [ ] Verify that `clippy::all` uses `priority = -1` so that specific clippy lint overrides (like `module_name_repetitions = "allow"`) take precedence.
+- [ ] Confirm no crate has a local `[lints]` section that shadows or weakens the workspace lints — only `workspace = true` is permitted.
+- [ ] Ensure `dead_code = "warn"` (not `"deny"`) to allow in-progress development without blocking compilation.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `pytest tests/test_workspace_lints.py`.
-- [ ] Run `./do lint` and ensure it passes.
+- [ ] Run the workspace lints parsing test: `python tests/test_workspace_lints.py` or `cargo test --test workspace_lints_test`.
+- [ ] Run `./do lint` and verify it passes with zero errors.
+- [ ] Run `cargo clippy --workspace --all-targets -- -D warnings` and confirm exit code 0.
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` or the developer guide to reflect the new workspace-wide linting standards.
+- [ ] Add a brief section to the developer guide (or `CLAUDE.md`) noting that all lint policy is centralized in the root `Cargo.toml` `[workspace.lints]` table and must not be overridden locally.
 
 ## 6. Automated Verification
-- [ ] Run `grep -r "\[lints\]" . --include="Cargo.toml"` to confirm all crates are using the workspace lints.
+- [ ] Run `grep -rn "\[lints\]" --include="Cargo.toml" .` and confirm every member crate shows `workspace = true` and no crate defines local lint overrides.
+- [ ] Run `cargo clippy --workspace --all-targets 2>&1 | grep -c "error"` and confirm the count is 0.

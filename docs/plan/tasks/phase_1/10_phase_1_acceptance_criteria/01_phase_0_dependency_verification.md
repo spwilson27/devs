@@ -1,35 +1,34 @@
-# Task: Phase 0 Dependency Verification (Sub-Epic: 10_Phase 1 Acceptance Criteria)
+# Task: Phase 0 Dependency Verification Gate (Sub-Epic: 10_Phase 1 Acceptance Criteria)
 
 ## Covered Requirements
 - [ROAD-P1-DEP-001]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
+- depends_on: ["none"]
+- shared_components: ["Phase Transition Checkpoint (PTC) Model", "devs-proto", "devs-core", "./do Entrypoint Script & CI Pipeline"]
 
 ## 1. Initial Test Written
-- [ ] Create a new integration test or script (e.g. `tests/verify_phase_0.sh`) that checks for the existence of the Phase 0 PTC ADR file: `docs/adr/*-phase-0-complete.md`.
-- [ ] The test must verify that the PTC JSON block is present and contains `"phase_id": "ROAD-001"` and `"gate_conditions"` with all entries set to `"verified": true`.
-- [ ] The test must also run `./do presubmit` to ensure the current state passes the Phase 0 baseline.
+- [ ] Create `tests/phase_gate/phase_0_complete.rs`. Write test `test_phase_0_ptc_exists_and_valid` that: (1) globs `docs/adr/*-phase-0-complete.md`, asserts exactly one file matches, (2) reads the file, extracts the first ````json` fenced code block, (3) parses it with `serde_json`, (4) asserts `phase_id == "phase_0"`, (5) asserts every entry in `gate_conditions[]` has `"verified": true`, (6) asserts `platforms_verified` contains `"linux"`, `"macos"`, `"windows"`. Annotate with `// Covers: ROAD-P1-DEP-001`.
+- [ ] Write test `test_devs_proto_crate_compiles` that runs `cargo check -p devs-proto` via `std::process::Command` and asserts exit code 0. Annotate with `// Covers: ROAD-P1-DEP-001`.
+- [ ] Write test `test_devs_core_crate_compiles` that runs `cargo check -p devs-core` via `std::process::Command` and asserts exit code 0. Annotate with `// Covers: ROAD-P1-DEP-001`.
+- [ ] Write test `test_traceability_has_phase_0_gate` that reads `target/traceability.json`, parses it, and asserts `phase_gates` array has an entry with `phase_id: "phase_0"` and `status: "passed"`. Annotate with `// Covers: ROAD-P1-DEP-001`.
 
 ## 2. Task Implementation
-- [ ] Locate the Phase 0 PTC ADR file in `docs/adr/`.
-- [ ] If missing or incomplete, follow the protocol in `9_PROJECT_ROADMAP.md` to generate and commit it.
-- [ ] Ensure `target/traceability.json` exists and can be parsed by the Phase 1 verification tools.
-- [ ] Verify that `devs-proto` and `devs-core` have achieved their Phase 0 PTC requirements.
+- [ ] Create `tests/phase_gate/phase_0_complete.rs` with the four tests above. Use `glob` crate for file matching. Use `serde_json::Value` for flexible JSON parsing.
+- [ ] For PTC JSON extraction: split file on ````json` and ``````, take content between first pair, parse as JSON.
+- [ ] If `tests/phase_gate/mod.rs` or `tests/phase_gate.rs` doesn't exist, create the appropriate test harness entry point.
 
 ## 3. Code Review
-- [ ] Confirm that no business logic for Phase 1 crates was authored before the Phase 0 PTC was committed.
-- [ ] Verify that the PTC ADR file follows the naming convention `<NNNN>-phase-0-complete.md`.
+- [ ] Verify tests use `std::path::Path` joins, not hardcoded `/` separators, for cross-platform compatibility.
+- [ ] Verify all 4 tests have `// Covers: ROAD-P1-DEP-001` annotations.
+- [ ] Verify tests produce clear failure messages when Phase 0 artifacts are missing.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the Phase 0 verification script: `bash tests/verify_phase_0.sh`.
-- [ ] Run `./do presubmit` and ensure it exits 0.
+- [ ] Run `cargo test --test phase_gate` (or `cargo test phase_0_complete`) and confirm all 4 tests pass.
 
 ## 5. Update Documentation
-- [ ] Ensure the Phase 0 PTC is linked in the project's ADR index (if one exists).
-- [ ] Update any agent memory reflecting that Phase 0 is formally closed.
+- [ ] Ensure `// Covers: ROAD-P1-DEP-001` traceability comments are present on each test function.
 
 ## 6. Automated Verification
-- [ ] Run `./do lint` and ensure it doesn't report any Phase 0 stub violations (though Phase 1 allows stubs, we should ensure Phase 0 deliverables are solid).
-- [ ] Check `target/traceability.json` to confirm all ROAD-001 requirements are marked as passed.
+- [ ] Run `./do test` and confirm `target/traceability.json` includes `ROAD-P1-DEP-001` in its requirement coverage.
+- [ ] Run `grep -r "ROAD-P1-DEP-001" tests/` and confirm at least one match.

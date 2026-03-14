@@ -1,34 +1,36 @@
-# Task: Platform-Specific Coverage Enforcement (Sub-Epic: 037_Detailed Domain Specifications (Part 2))
+# Task: Platform-Specific Code Coverage Enforcement (Sub-Epic: 037_Detailed Domain Specifications (Part 2))
 
 ## Covered Requirements
 - [1_PRD-KPI-BR-009]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
+- depends_on: [01_ci_multi_platform_quality_gates.md]
+- shared_components: [./do Entrypoint Script & CI Pipeline, Traceability & Coverage Infrastructure]
 
 ## 1. Initial Test Written
-- [ ] Create a test in `tests/test_platform_specific_coverage.py` that:
-    - Provides a mock coverage report for each platform (Linux, macOS, Windows).
-    - Verifies that any `#[cfg(target_os = "...")]` block that is not covered on its intended platform causes a quality gate failure for that platform.
-    - Verifies that a unified coverage score correctly handles these conditional paths.
+- [ ] Write a test `test_platform_cfg_code_has_platform_test` that scans all `.rs` source files in the workspace for `#[cfg(target_os = "...")]` blocks, extracts the target OS, and asserts that for each such block there exists at least one test function also gated by the same `#[cfg(target_os = "...")]` attribute. This enforces [1_PRD-KPI-BR-009]: platform-specific code paths MUST be exercised by tests on that platform.
+- [ ] Write a test `test_coverage_report_includes_platform_specific_lines` that, given a mock `target/coverage/report.json`, verifies platform-specific source lines (those inside `#[cfg(target_os)]` blocks) are included in the line coverage count and not excluded or filtered out.
+- [ ] Write a test `test_do_coverage_does_not_exclude_cfg_code` that checks the `./do coverage` invocation does not pass `--exclude` or `--ignore` flags that would skip platform-gated modules.
 
 ## 2. Task Implementation
-- [ ] Update the coverage aggregation logic (potentially in `.tools/verify_coverage.py` or within the `./do coverage` subcommand).
-- [ ] Implement detection of platform-specific code paths (`#[cfg(target_os = ...)]`) and link them to their respective execution platforms.
-- [ ] Ensure the coverage reporter fails if a platform-specific path is never exercised on that platform.
-- [ ] Configure `cargo-llvm-cov` to correctly identify and report on these platform-specific conditional blocks across multi-platform CI runs.
+- [ ] Implement a lint check (invoked by `./do lint`) that scans all `*.rs` files for `#[cfg(target_os = "<platform>")]` annotated items (functions, impls, modules). For each discovered platform-specific item, verify that at least one `#[test]` function with a matching `#[cfg(target_os = "<platform>")]` gate exists in the test files of that crate.
+- [ ] If any platform-specific code block has no corresponding platform-gated test, emit a lint error listing the file, line number, target OS, and the item name.
+- [ ] Ensure `./do coverage` configuration (e.g., `cargo-llvm-cov` or `cargo-tarpaulin` flags) does NOT filter out `cfg`-gated code. Coverage must count platform-specific lines toward the per-crate and aggregate coverage gates (QG-001 through QG-005) on the platform where they compile.
+- [ ] In `./do lint`, integrate this new check so it runs alongside existing lint steps. Exit non-zero if any platform-specific code lacks a platform-gated test.
 
 ## 3. Code Review
-- [ ] Confirm that platform-specific code paths are not just compiled but actually exercised by unit or E2E tests.
-- [ ] Verify that coverage metrics are individually reported per platform to ensure no platform's code is hidden by overall numbers.
+- [ ] Verify the scanner correctly handles nested `cfg` attributes (e.g., `#[cfg(all(target_os = "linux", feature = "pty"))]`).
+- [ ] Verify the scanner does not produce false positives for `#[cfg(test)]` or `#[cfg(debug_assertions)]` — only `target_os` and `target_family` are relevant.
+- [ ] Verify coverage tool configuration matches across all three CI platform jobs.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `python3 -m pytest tests/test_platform_specific_coverage.py`.
-- [ ] Verify that the coverage gate correctly fails if platform-specific code is left uncovered.
+- [ ] Run `cargo test` to execute the new lint/scanner tests.
+- [ ] Run `./do lint` and confirm it passes (or correctly flags any existing platform-specific code without tests).
+- [ ] Run `./do coverage` and confirm platform-specific code is included in the coverage report.
 
 ## 5. Update Documentation
-- [ ] Update documentation to clarify how platform-specific code must be tested on its target platform.
+- [ ] Add a `// Covers: 1_PRD-KPI-BR-009` annotation to each test function implementing this check.
 
 ## 6. Automated Verification
-- [ ] Inspect a sample coverage report from a multi-platform run and confirm the inclusion of target-specific code blocks.
+- [ ] Run `./do presubmit` end-to-end and confirm zero lint failures related to platform-specific coverage.
+- [ ] Introduce a deliberate `#[cfg(target_os = "linux")]` function with no corresponding test and verify `./do lint` catches it and exits non-zero. Then revert the change.

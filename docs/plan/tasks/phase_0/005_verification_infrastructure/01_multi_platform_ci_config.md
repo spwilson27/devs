@@ -1,47 +1,54 @@
-# Task: Multi-Platform GitLab CI Configuration (Sub-Epic: 005_Verification Infrastructure)
+# Task: Multi-Platform GitLab CI Pipeline Configuration (Sub-Epic: 005_Verification Infrastructure)
 
 ## Covered Requirements
 - [1_PRD-REQ-046], [1_PRD-REQ-047]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [./do Entrypoint Script]
+- shared_components: [./do Entrypoint Script & CI Pipeline (consumer — the `./do` script must exist before this task can validate end-to-end)]
 
 ## 1. Initial Test Written
-- [ ] Create a mock GitLab CI runner environment (e.g., a local Docker container for Linux, and manual verification steps for macOS/Windows if available, or simply validating the `.gitlab-ci.yml` schema).
-- [ ] Add a script `tests/verify_ci_config.sh` that:
-    - Uses a YAML linter (e.g., `yamllint`) to verify the syntax of `.gitlab-ci.yml`.
-    - Verifies that all three platform jobs (`presubmit-linux`, `presubmit-macos`, `presubmit-windows`) are defined.
-    - Verifies that each job invokes `./do setup` and `./do presubmit` as required by [2_TAS-REQ-010].
-    - Verifies that artifacts are configured to be saved on failure or success.
+- [ ] Create `tests/ci/validate_gitlab_ci.sh` (POSIX sh) that performs the following structural assertions against `.gitlab-ci.yml`:
+    1. File exists at repository root.
+    2. `yamllint --strict .gitlab-ci.yml` passes (install yamllint in `./do setup` if not present).
+    3. The file defines exactly three jobs whose names contain `linux`, `macos`, and `windows` respectively (grep/yq check). This validates [1_PRD-REQ-047] — "validated on Windows, macOS, and Linux."
+    4. Each of the three jobs invokes `./do presubmit` in its `script` section.
+    5. No job sets `allow_failure: true` — all three must be required for the pipeline to pass ([1_PRD-REQ-046] — presubmit gates all commits).
+    6. Each job defines an `artifacts` section that includes paths for `target/coverage/report.json`, `target/presubmit_timings.jsonl`, and `target/traceability.json`.
+    7. Each job sets a `timeout` value of `25m` or less (must be ≥ 15 minutes to allow `./do presubmit` to complete).
+- [ ] The test script must exit non-zero if any assertion fails, printing the specific assertion that failed.
 
 ## 2. Task Implementation
-- [ ] Create `.gitlab-ci.yml` at the repository root with the authoritative structure defined in [2_TAS-REQ-010].
-- [ ] Define the `presubmit` stage.
-- [ ] Configure global variables: `CARGO_HOME`, `RUST_BACKTRACE`, `RUST_LOG`.
-- [ ] Implement the `.presubmit_template` with:
-    - `timeout: 25m` (to allow buffer for the 15-minute `./do presubmit` timeout).
-    - `script` sequence: `./do setup` followed by `./do presubmit`.
-    - `artifacts` paths: `target/coverage/report.json`, `target/presubmit_timings.jsonl`, `target/traceability.json`.
-    - `cache` configuration for `.cargo-cache/registry` and `target/`.
-- [ ] Define `presubmit-linux` job using `image: rust:1.80-slim-bookworm` and `tags: [linux, docker]`.
-- [ ] Define `presubmit-macos` job with `tags: [macos, shell]`.
-- [ ] Define `presubmit-windows` job with `tags: [windows, shell]`.
-- [ ] Ensure that the pipeline is configured to fail if any of the three platform jobs fail ([1_PRD-REQ-047]).
+- [ ] Create `.gitlab-ci.yml` at the repository root with:
+    - A single `stages: [presubmit]` declaration.
+    - Global `variables` block setting `CARGO_HOME: "${CI_PROJECT_DIR}/.cargo-cache"`, `RUST_BACKTRACE: "1"`, `RUST_LOG: "info"`.
+    - A hidden `.presubmit_template` job (YAML anchor) containing:
+        - `stage: presubmit`
+        - `timeout: 25m` ([2_TAS-REQ-010A])
+        - `script`: `["./do setup", "./do presubmit"]`
+        - `artifacts.paths`: `["target/coverage/report.json", "target/presubmit_timings.jsonl", "target/traceability.json"]` with `when: always` ([2_TAS-REQ-010B])
+        - `cache` with key `${CI_JOB_NAME}` and paths `[".cargo-cache/registry", "target/"]` ([2_TAS-REQ-010C])
+    - `presubmit-linux` job extending `.presubmit_template`, using `image: rust:1.80-slim-bookworm`, `tags: [linux, docker]`.
+    - `presubmit-macos` job extending `.presubmit_template`, `tags: [macos, shell]`.
+    - `presubmit-windows` job extending `.presubmit_template`, `tags: [windows, shell]`, with `before_script` to set `CARGO_HOME` using Windows-compatible path.
+- [ ] Ensure no job uses `allow_failure: true` — pipeline fails if any platform job fails ([1_PRD-REQ-046]).
+- [ ] Add `DEVS_DISCOVERY_FILE` variable per job set to a unique temp path for E2E test isolation ([2_TAS-REQ-010E]).
 
 ## 3. Code Review
-- [ ] Verify that the `.gitlab-ci.yml` exactly matches the architectural requirement [2_TAS-REQ-010].
-- [ ] Ensure that no job is allowed to fail (`allow_failure: true` is prohibited for these core jobs).
-- [ ] Verify that the 15-minute timeout policy is supported by the 25-minute CI job timeout.
+- [ ] Verify `.gitlab-ci.yml` matches the structure defined by [2_TAS-REQ-010] (three parallel jobs, same `./do presubmit` script).
+- [ ] Confirm no `allow_failure` is set on any presubmit job.
+- [ ] Confirm the 25-minute CI timeout provides sufficient margin over the 15-minute (900s) `./do presubmit` hard timeout.
+- [ ] Confirm the Windows job handles `sh`-compatible script invocation (Git Bash or equivalent).
+- [ ] Verify YAML uses consistent 2-space indentation and passes `yamllint --strict`.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `bash tests/verify_ci_config.sh`.
-- [ ] If possible, trigger a pipeline run on a GitLab instance and verify that it correctly spawns jobs for all three platforms.
+- [ ] Run `bash tests/ci/validate_gitlab_ci.sh` and confirm exit code 0.
+- [ ] Run `yamllint --strict .gitlab-ci.yml` independently and confirm exit code 0.
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` to reflect that the CI pipeline is now active and mandatory for all PRs.
-- [ ] Note the requirement for all three platforms to be green for mergeability.
+- [ ] Add a brief section to the project README or CLAUDE.md noting that all commits require a green three-platform CI pipeline.
 
 ## 6. Automated Verification
-- [ ] Verify that `git add .gitlab-ci.yml` is ready for commit.
-- [ ] Verify that the `.gitlab-ci.yml` file contains the string `presubmit-windows` to ensure cross-platform coverage is defined.
+- [ ] Run `bash tests/ci/validate_gitlab_ci.sh && echo "PASS" || echo "FAIL"` — must print "PASS".
+- [ ] Run `grep -c 'allow_failure' .gitlab-ci.yml` — must return 0 (no matches).
+- [ ] Run `grep -c 'presubmit' .gitlab-ci.yml` — must return ≥ 3 (at least the three job definitions).

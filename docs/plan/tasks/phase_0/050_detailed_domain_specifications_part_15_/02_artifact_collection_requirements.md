@@ -1,44 +1,50 @@
-# Task: Implement Auto-Collect Artifact Logic (Sub-Epic: 050_Detailed Domain Specifications (Part 15))
+# Task: Artifact Collection Logic (Sub-Epic: 050_Detailed Domain Specifications (Part 15))
 
 ## Covered Requirements
 - [2_TAS-REQ-122]
 
 ## Dependencies
-- depends_on: [01_executor_preparation_sequence.md]
-- shared_components: [devs-core, devs-executor]
+- depends_on: ["01_executor_preparation_sequence.md"]
+- shared_components: ["devs-executor (Consumer)", "devs-checkpoint (Consumer)"]
 
 ## 1. Initial Test Written
-- [ ] Create unit tests in `crates/devs-executor/src/lib.rs` (or equivalent test module) for the `collect_artifacts()` method of the `StageExecutor` trait.
-- [ ] Write a test for `ArtifactCollection::AutoCollect` that:
-    - Simulates changes in the working directory.
-    - Mocks the `git add -A` command.
-    - Mocks the `git diff --cached --quiet` command to verify changes are detected.
-    - Mocks the `git commit` command to ensure the author and message are correct.
-    - Mocks the `git push` command to verify it targets only the checkpoint branch.
-- [ ] Write a test ensuring that if no changes are present, the commit step is skipped.
+- [ ] Create `crates/devs-executor/tests/artifact_collection.rs` with the following tests:
+- [ ] `test_collect_artifacts_not_called_on_failure`: Simulate a stage failure. Assert `collect_artifacts()` is NOT invoked (unless `auto_collect` is configured).
+- [ ] `test_collect_artifacts_not_called_on_timeout`: Simulate a stage timeout. Assert `collect_artifacts()` is NOT invoked (unless `auto_collect` is configured).
+- [ ] `test_collect_artifacts_not_called_on_cancel`: Simulate a stage cancellation. Assert `collect_artifacts()` is NOT invoked (unless `auto_collect` is configured).
+- [ ] `test_collect_artifacts_called_on_success`: Simulate a successful stage. Assert `collect_artifacts()` IS invoked.
+- [ ] `test_auto_collect_called_on_failure_when_configured`: Set `auto_collect = true`. Simulate a stage failure. Assert `collect_artifacts()` IS invoked.
+- [ ] `test_auto_collect_runs_git_add_all`: Mock git commands. Assert `git -C <working_dir> add -A` is executed.
+- [ ] `test_auto_collect_skips_commit_when_no_changes`: Mock `git diff --cached --quiet` returning exit code 0. Assert no `git commit` is called.
+- [ ] `test_auto_collect_commits_when_changes_present`: Mock `git diff --cached --quiet` returning exit code 1 (changes present). Assert `git commit` is called with message `"devs: auto-collect stage <name> run <run-id>"` and author `devs <devs@localhost>`.
+- [ ] `test_auto_collect_pushes_to_checkpoint_branch_only`: Assert `git push` targets only the configured checkpoint branch. Assert no push to any other branch.
+- [ ] `test_auto_collect_commit_message_format`: Verify the commit message exactly matches `"devs: auto-collect stage <stage_name> run <run_id>"`.
+- [ ] `test_auto_collect_commit_author`: Verify the git author is set to `devs <devs@localhost>`.
 
 ## 2. Task Implementation
-- [ ] Implement the `collect_artifacts()` method logic for `ArtifactCollection::AutoCollect`:
-    - Run `git -C <working_dir> add -A` to stage all changes.
-    - Check for changes using `git -C <working_dir> diff --cached --quiet`.
-    - If changes are present, execute `git commit` with the message: `"devs: auto-collect stage <name> run <run-id>"`.
-    - Set the author to `devs <devs@localhost>`.
-    - Push the changes to the project's checkpoint branch ONLY.
-- [ ] Ensure that `collect_artifacts()` is only called when the stage completes and `AutoCollect` is enabled.
+- [ ] In `crates/devs-executor/src/artifacts.rs`, implement `collect_artifacts(env: &WorkingEnvironment, mode: ArtifactMode, stage_name: &str, run_id: &RunId) -> Result<()>`:
+  1. Match on `ArtifactMode::AutoCollect`:
+     a. Run `git -C <working_dir> add -A`.
+     b. Run `git -C <working_dir> diff --cached --quiet`. If exit code 0 (no changes), return Ok (no changes).
+     c. Run `git -C <working_dir> commit -m "devs: auto-collect stage <name> run <run-id>" --author="devs <devs@localhost>"`.
+     d. Run `git -C <working_dir> push origin <checkpoint_branch>`.
+  2. Match on `ArtifactMode::AgentDriven`: no-op (agent handles its own commits).
+- [ ] In the stage completion handler (caller of `collect_artifacts`), add gating logic:
+  - Only call `collect_artifacts()` on successful completion by default.
+  - If `auto_collect` is configured on the stage, also call on failure/timeout/cancel.
 
 ## 3. Code Review
-- [ ] Verify that the `AutoCollect` logic strictly follows the specification in [2_TAS-REQ-122].
-- [ ] Ensure that it is impossible to push to a branch other than the checkpoint branch.
-- [ ] Check that the git author is correctly set as `devs <devs@localhost>`.
-- [ ] Verify that no commit is made when no changes are detected.
+- [ ] Verify the 4-step git sequence (add, diff, commit, push) matches the requirement exactly.
+- [ ] Verify push targets ONLY the checkpoint branch — no hardcoded branch names.
+- [ ] Verify commit author is `devs <devs@localhost>` — not the system user.
+- [ ] Verify the gating logic correctly distinguishes success vs failure/timeout/cancel cases.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-executor` to ensure `collect_artifacts()` passes its unit tests.
+- [ ] Run `cargo test -p devs-executor --test artifact_collection` and confirm all tests pass.
 
 ## 5. Update Documentation
-- [ ] Document the `collect_artifacts()` method and the `AutoCollect` behavior in the `StageExecutor` documentation.
-- [ ] Update the `devs-executor` module-level documentation to reflect artifact collection logic.
+- [ ] Add doc comments to `collect_artifacts()` referencing `[2_TAS-REQ-122]`.
 
 ## 6. Automated Verification
-- [ ] Run `./do lint` to verify doc comments and formatting.
-- [ ] Run `cargo clippy -p devs-executor` to ensure code quality.
+- [ ] Run `cargo test -p devs-executor --test artifact_collection 2>&1 | tail -1` and verify output shows `test result: ok`.
+- [ ] Run `cargo clippy -p devs-executor -- -D warnings` and verify zero warnings.

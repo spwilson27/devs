@@ -1,35 +1,40 @@
-# Task: CI Multi-Platform Quality Gates (Sub-Epic: 037_Detailed Domain Specifications (Part 2))
+# Task: CI Multi-Platform Presubmit Timeout and All-Green Enforcement (Sub-Epic: 037_Detailed Domain Specifications (Part 2))
 
 ## Covered Requirements
 - [1_PRD-KPI-BR-007], [1_PRD-KPI-BR-008]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
+- shared_components: [./do Entrypoint Script & CI Pipeline]
 
 ## 1. Initial Test Written
-- [ ] Create a simulation of the CI pipeline reporting in `tests/test_ci_quality_gates.py` that:
-    - Verifies that a failing job on any platform (Windows, macOS, or Linux) causes the overall pipeline to be marked as failed.
-    - Verifies that any job exceeding the 15-minute wall-clock cap results in a failure.
-    - Verifies that a successful pipeline requires all three platform jobs to be green.
+- [ ] In `tests/ci/` (or an appropriate test harness location), write a test `test_ci_pipeline_job_matrix_exists` that parses `.gitlab-ci.yml` and asserts exactly three presubmit jobs are defined: `presubmit-linux` (tag `linux`, platform `x86-64`), `presubmit-macos` (tag `macos`, platform `arm64`), and `presubmit-windows` (tag `windows`, platform `x86-64`).
+- [ ] Write a test `test_ci_pipeline_all_jobs_parallel` that parses `.gitlab-ci.yml` and asserts all three presubmit jobs belong to the same pipeline stage (i.e., they run in parallel, not sequentially).
+- [ ] Write a test `test_ci_pipeline_fails_on_any_single_job_failure` that asserts the pipeline-level `allow_failure` is NOT set on any of the three jobs, ensuring a failure on any one platform causes the entire pipeline to fail.
+- [ ] Write a test `test_ci_job_timeout_is_900_seconds` that parses `.gitlab-ci.yml` and asserts each of the three presubmit jobs has a `timeout` value of `15 minutes` (or 900 seconds), enforcing the wall-clock cap per [1_PRD-KPI-BR-007].
+- [ ] Write a test `test_ci_jobs_invoke_do_presubmit` that parses `.gitlab-ci.yml` and asserts each job's `script` section invokes `./do presubmit` (the canonical entrypoint).
 
 ## 2. Task Implementation
-- [ ] Configure `.gitlab-ci.yml` (or equivalent CI configuration file) to execute the presubmit suite on Linux, macOS, and Windows runners.
-- [ ] Ensure each platform's job correctly inherits the 15-minute timeout as defined in the `./do` script and enforced by the CI runner configuration.
-- [ ] Implement a final aggregation step or use native CI features to ensure the "all-green" rule for the pipeline status.
-- [ ] Update `.tools/ci.py` to correctly report status and timing for each platform to the centralized dashboard or logs.
+- [ ] In `.gitlab-ci.yml`, define a pipeline stage `presubmit` containing three parallel jobs:
+  - `presubmit-linux`: `tags: [linux]`, `timeout: 15 minutes`, `script: ["./do presubmit"]`
+  - `presubmit-macos`: `tags: [macos]`, `timeout: 15 minutes`, `script: ["./do presubmit"]`
+  - `presubmit-windows`: `tags: [windows]`, `timeout: 15 minutes`, `script: ["./do presubmit"]`
+- [ ] Ensure no job has `allow_failure: true`. The default GitLab behavior (pipeline fails if any job fails) satisfies [1_PRD-KPI-BR-008].
+- [ ] Ensure the `timeout` on each job is set to `15 minutes` to enforce the wall-clock cap on the CI runner side (complementing `./do presubmit`'s internal 900-second timeout) per [1_PRD-KPI-BR-007].
+- [ ] Add a `cache` key for each job pointing to `target/` with a platform-specific cache key to speed up builds without sharing incompatible artifacts across platforms.
 
 ## 3. Code Review
-- [ ] Verify that the 15-minute cap is applied to the wall-clock time, not just CPU time, on each platform.
-- [ ] Ensure that a failure on one platform doesn't prevent other platforms from running (parallel execution).
+- [ ] Verify that the timeout is applied at the GitLab job level (wall-clock, not CPU time) — GitLab CI `timeout` is wall-clock by definition.
+- [ ] Verify that no `allow_failure`, `when: manual`, or `rules` clause on any job could cause a platform failure to be silently ignored.
+- [ ] Verify that all three jobs execute the identical `./do presubmit` command with no platform-specific flag overrides that could skip checks.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the CI pipeline in a test branch or simulated environment.
-- [ ] Verify that the pipeline correctly fails if a simulated platform failure occurs.
+- [ ] Run the CI config validation tests: `cargo test --test ci` (or the appropriate test target).
+- [ ] Optionally validate the `.gitlab-ci.yml` syntax using `gitlab-ci-lint` or `python -c "import yaml; yaml.safe_load(open('.gitlab-ci.yml'))"`.
 
 ## 5. Update Documentation
-- [ ] Update `docs/plan/specs/1_prd.md` or a dedicated CI guide to explicitly document the all-green requirement across platforms.
+- [ ] Add a comment block at the top of `.gitlab-ci.yml` referencing [1_PRD-KPI-BR-007] and [1_PRD-KPI-BR-008] so future maintainers understand the all-green and timeout requirements.
 
 ## 6. Automated Verification
-- [ ] Verify the existence of the multi-platform configuration in the CI YAML.
-- [ ] Check that the CI jobs have the correct timeout labels or settings.
+- [ ] Run `./do lint` and `./do test` to confirm no regressions.
+- [ ] Parse `.gitlab-ci.yml` programmatically and assert: exactly 3 jobs with correct tags, all have `timeout: 15 minutes`, none have `allow_failure: true`.

@@ -1,35 +1,32 @@
-# Task: Core Crate Dependency Audit and Workspace Validation (Sub-Epic: 014_Foundational Technical Requirements (Part 5))
+# Task: devs-core Forbidden Dependency Enforcement (Sub-Epic: 014_Foundational Technical Requirements (Part 5))
 
 ## Covered Requirements
-- [2_TAS-REQ-001D], [2_TAS-REQ-001E]
+- [2_TAS-REQ-001E]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [devs-core]
+- shared_components: [devs-core (consumer), ./do Entrypoint Script & CI Pipeline (consumer)]
 
 ## 1. Initial Test Written
-- [ ] Create a unit test in `devs-core` (or a workspace-level test) that inspects the `Cargo.toml` of `devs-core` and asserts that `tokio`, `git2`, `reqwest`, and `tonic` are NOT present in the `[dependencies]` section.
-- [ ] Create a workspace-level integration test that verifies all crates listed in the TAS are present in the root `Cargo.toml` `[workspace.members]` list.
-- [ ] Add a test case to the traceability infrastructure that flags any non-dev dependency in `devs-core` that matches the restricted list.
+- [ ] In `devs-core/tests/forbidden_deps.rs`, write a test annotated `// Covers: 2_TAS-REQ-001E` that shells out to `cargo tree -p devs-core --edges normal --prefix none` and asserts the output contains none of `tokio`, `git2`, `reqwest`, or `tonic`. The test must parse each line of output and fail with a descriptive message naming the forbidden crate if found.
+- [ ] Write a second test in the same file that temporarily adds a `[dependencies] tokio = { version = "1", features = ["rt"] }` line to a copy of `devs-core/Cargo.toml` (in a tempdir), runs `cargo tree` against it, and confirms the forbidden dependency IS detected — validating the detection logic itself.
 
 ## 2. Task Implementation
-- [ ] Verify the root `Cargo.toml` contains all 15 crates as defined in [2_TAS-REQ-001D].
-- [ ] Ensure `devs-core/Cargo.toml` does not include `tokio`, `git2`, `reqwest`, or `tonic` in the non-dev dependencies.
-- [ ] Implement a custom lint or a simple script (e.g., `check_core_deps.sh`) that is invoked by `./do lint` to enforce this constraint.
-- [ ] Ensure any shared logic needed by `devs-core` that typically requires `tokio` (like async traits) is handled via `futures` or other lightweight, non-runtime-bound libraries.
+- [ ] Ensure `devs-core/Cargo.toml` has zero `tokio`, `git2`, `reqwest`, or `tonic` entries in `[dependencies]` (dev-dependencies are permitted).
+- [ ] In the `./do` script's `lint` subcommand, add a step that runs `cargo tree -p devs-core --edges normal --prefix none` and pipes the output through `grep -E '^(tokio|git2|reqwest|tonic) '`. If grep matches (exit 0), the lint step must fail with message: `"ERROR: devs-core has forbidden non-dev dependency"`. If grep does not match (exit 1), the step passes.
+- [ ] Where async trait signatures are needed in `devs-core`, use `std::future::Future` return types or the `futures-core` crate (which has no runtime) instead of `tokio`.
 
 ## 3. Code Review
-- [ ] Verify that `devs-core` remains a pure domain logic crate with zero network or filesystem I/O in its non-dev dependencies.
-- [ ] Confirm that the workspace manifest correctly organizes all 15 crates without any circular dependencies or external workspace leaks.
+- [ ] Verify that `devs-core/Cargo.toml` `[dependencies]` section contains no entries for tokio, git2, reqwest, or tonic (transitive inclusion via other crates must also be checked via `cargo tree`).
+- [ ] Confirm the `./do lint` step is positioned early in the lint sequence so violations are caught before compilation-heavy steps.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-core` to ensure internal tests pass.
-- [ ] Run `./do lint` and verify the dependency audit step succeeds.
-- [ ] Manually add `tokio` to `devs-core/Cargo.toml` and verify that `./do lint` fails as expected.
+- [ ] Run `cargo test -p devs-core --test forbidden_deps` and confirm all tests pass.
+- [ ] Run `./do lint` and confirm the forbidden dependency check passes.
 
 ## 5. Update Documentation
-- [ ] Update `devs-core/README.md` to explicitly state the dependency restrictions and the rationale (pure domain logic).
-- [ ] Record the dependency audit mechanism in the project's developer guide.
+- [ ] Add a doc comment to `devs-core/src/lib.rs` stating the forbidden dependency invariant and referencing [2_TAS-REQ-001E].
 
 ## 6. Automated Verification
-- [ ] Run `.tools/verify_requirements.py` to ensure [2_TAS-REQ-001E] and [2_TAS-REQ-001D] are correctly mapped to these tests.
+- [ ] Run `./do lint` end-to-end and confirm exit code 0.
+- [ ] Grep test output for `// Covers: 2_TAS-REQ-001E` to confirm traceability annotation is present.

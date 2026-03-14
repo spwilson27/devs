@@ -1,32 +1,43 @@
-# Task: Integrate Pool Exhaustion with Webhook Dispatcher (Sub-Epic: 09_Pool Events & Monitoring)
+# Task: Integrate Pool Exhaustion Events with Webhook Dispatcher (Sub-Epic: 09_Pool Events & Monitoring)
 
 ## Covered Requirements
 - [2_TAS-REQ-033], [2_TAS-REQ-047]
 
 ## Dependencies
 - depends_on: [01_pool_exhaustion_tracking.md]
-- shared_components: [devs-pool, devs-webhook, devs-core]
+- shared_components: [devs-pool (consumer), devs-webhook (consumer — use existing WebhookDispatcher), devs-core (consumer)]
 
 ## 1. Initial Test Written
-- [ ] Create an integration test that starts a server (or a mock orchestrator) with the `AgentPool` and the `WebhookDispatcher`.
-- [ ] The test should trigger a pool exhaustion event and verify that a `PoolExhausted` event is sent into the `WebhookDispatcher`'s `mpsc` channel ([2_TAS-REQ-002Q]).
-- [ ] The test should verify that the payload follows the schema defined in [2_TAS-REQ-124].
+- [ ] In `crates/devs-webhook/tests/` or an integration test module, write the following tests annotated with `// Covers: 2_TAS-REQ-033` and `// Covers: 2_TAS-REQ-047`:
+- [ ] **`test_pool_exhausted_event_forwarded_to_webhook_dispatcher`**: Create a `WebhookDispatcher` with a mock HTTP target (use `wiremock` or an `mpsc` test receiver). Create an `AgentPool` wired to the dispatcher. Trigger a pool exhaustion episode by marking all agents as rate-limited. Assert that the webhook dispatcher receives exactly one `WebhookEvent::PoolExhausted` with the correct `pool_name`, `timestamp`, and `project_id` fields.
+- [ ] **`test_pool_exhausted_webhook_payload_schema`**: Assert the serialized JSON payload matches the schema from [2_TAS-REQ-046]: fields `event` (= `"pool.exhausted"`), `timestamp` (RFC 3339), `project_id`, `run_id` (null for pool events), `stage_name` (null), `data` (contains `pool_name`), `truncated` (false). Assert total payload size < 64 KiB.
+- [ ] **`test_pool_exhausted_fires_only_for_subscribed_projects`**: Configure two webhook targets — one subscribed to `pool.exhausted`, one subscribed only to `run.completed`. Trigger exhaustion. Assert only the subscribed target receives the event.
+- [ ] **`test_second_episode_fires_second_webhook`**: Trigger exhaustion → recovery → exhaustion. Assert two separate webhook deliveries occur (one per episode).
+- [ ] **`test_pool_exhausted_does_not_block_scheduler`**: Send a `PoolExhaustedEvent` into the dispatcher channel while the dispatcher's HTTP target is slow (simulated 5s delay). Assert the send completes within 10ms (non-blocking bounded channel semantics per [2_TAS-REQ-002Q]).
 
 ## 2. Task Implementation
-- [ ] Update the `ServerState` or the server's main loop to wire the `AgentPool`'s exhaustion events to the `WebhookDispatcher`'s input channel.
-- [ ] Implement the `WebhookEvent` serialization for the `pool.exhausted` event type, including the `pool_name` and the current timestamp ([2_TAS-REQ-124]).
-- [ ] Ensure that the `WebhookDispatcher` only sends notifications for `pool.exhausted` to projects that have subscribed to this event type in their project registry configuration ([2_TAS-REQ-107]).
-- [ ] Implement the logic to prevent multiple firings for the same episode in the dispatcher if necessary (though this should already be handled by the pool's emission logic).
+- [ ] In the server bootstrap or orchestrator wiring code, spawn a `tokio::spawn` task that reads from the `AgentPool`'s `mpsc::UnboundedReceiver<PoolExhaustedEvent>` and converts each event into a `WebhookEvent::PoolExhausted { pool_name, timestamp }`, then calls `WebhookDispatcher::send(event)`.
+- [ ] Implement `From<PoolExhaustedEvent>` for `WebhookEvent` (or a manual conversion) that maps:
+  - `event` → `"pool.exhausted"`
+  - `timestamp` → `PoolExhaustedEvent.timestamp` formatted as RFC 3339
+  - `project_id` → empty string or a server-level sentinel (pool events are not project-scoped)
+  - `data` → `{ "pool_name": "<name>" }`
+  - `truncated` → `false`
+- [ ] In the `WebhookDispatcher`'s delivery logic, filter events against each target's subscribed event types. Only deliver `pool.exhausted` to targets that include it in their subscription list.
+- [ ] Ensure the bounded `mpsc` channel between pool and dispatcher does not block the pool's `report_rate_limit` path — use `try_send` with a logged warning on channel full (rather than blocking).
 
 ## 3. Code Review
-- [ ] Verify that the event payload does not exceed 64 KiB (though it should be small) and that the truncation logic in `devs-webhook` handles it if it did ([2_TAS-REQ-046], [2_TAS-REQ-093]).
-- [ ] Confirm that `DEVS_LISTEN` and other server internal environment variables are NOT included in any payload.
+- [ ] Verify the webhook payload serialization matches the schema in [2_TAS-REQ-046] exactly (field names, types, presence of `truncated`).
+- [ ] Verify the forwarding task handles channel closure gracefully (dispatcher shutdown).
+- [ ] Confirm no sensitive data (API keys, env vars) leaks into webhook payloads.
+- [ ] Ensure all public types and functions have doc comments.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-webhook` and any integration tests in `tests/` that cover webhook delivery.
+- [ ] Run `cargo test -p devs-webhook` and any integration tests covering pool-webhook wiring.
 
 ## 5. Update Documentation
-- [ ] Update the server configuration documentation to specify how to subscribe to `pool.exhausted` webhook events.
+- [ ] Add doc comments to the conversion impl and the forwarding task explaining the event flow: pool → mpsc → forwarding task → WebhookDispatcher → HTTP targets.
 
 ## 6. Automated Verification
-- [ ] Run `./do test --package devs-webhook` and ensure all tests pass with 100% requirement traceability for `2_TAS-REQ-047`.
+- [ ] Run `./do test` and confirm all webhook and pool tests pass.
+- [ ] Verify `// Covers: 2_TAS-REQ-033` and `// Covers: 2_TAS-REQ-047` annotations are present in all new test functions.

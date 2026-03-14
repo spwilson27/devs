@@ -1,0 +1,481 @@
+# Phase 0: Project Foundation & Toolchain
+
+## Objective
+Establish the complete Rust project infrastructure, toolchain, CI/CD pipeline, and foundational crates (`devs-proto` and `devs-core`) that all subsequent phases depend on. This phase delivers a fully functional `./do presubmit` pipeline passing on all three CI platforms (Linux, macOS, Windows) with a stub workspace. Critical risks RISK-005 (presubmit timeout) and RISK-009 (bootstrapping deadlock) are mitigated before any downstream crate work begins. The Phase Transition Checkpoint (PTC) model, crate dependency constraints, and phase state machine are all defined and enforced from this phase forward.
+
+## Requirements Covered
+- [2_TAS-BR-WH-003]: Webhook dispatcher business rule
+- [2_TAS-REQ-001]: Server startup sequence specification
+- [2_TAS-REQ-001A]: Interface layer must not contain business logic
+- [2_TAS-REQ-001B]: Infrastructure layer mutable state constraints
+- [2_TAS-REQ-001C]: MCP and gRPC server shared in-process state
+- [2_TAS-REQ-001D]: Single Cargo.toml workspace manifest
+- [2_TAS-REQ-001E]: devs-core forbidden dependencies (no tokio, git2, reqwest, tonic)
+- [2_TAS-REQ-001F]: devs-proto generated files committed to repo
+- [2_TAS-REQ-001G]: Wire types must not appear in scheduler/executor/pool public APIs
+- [2_TAS-REQ-001H]: Config validation collects all errors in single pass
+- [2_TAS-REQ-001I]: MCP port unavailable releases gRPC port
+- [2_TAS-REQ-001J]: Discovery file atomic write
+- [2_TAS-REQ-001K]: Checkpoint restoration must not fail startup
+- [2_TAS-REQ-001L]: Default config path behavior
+- [2_TAS-REQ-001M]: Explicit --config missing file behavior
+- [2_TAS-REQ-001N]: Discovery file directory creation
+- [2_TAS-REQ-002]: Graceful shutdown sequence
+- [2_TAS-REQ-002A]: Discovery file deletion on exit
+- [2_TAS-REQ-002B]: In-flight gRPC streaming call handling
+- [2_TAS-REQ-002C]: Running state checkpoint on shutdown
+- [2_TAS-REQ-002D]: Double SIGTERM immediate shutdown
+- [2_TAS-REQ-002E]: Discovery file path resolution order
+- [2_TAS-REQ-002F]: Discovery file content format
+- [2_TAS-REQ-002G]: Discovery file gRPC port encoding
+- [2_TAS-REQ-002H]: Stale discovery file handling
+- [2_TAS-REQ-002I]: E2E test isolation via DEVS_DISCOVERY_FILE
+- [2_TAS-REQ-002J]: Client explicit --server flag behavior
+- [2_TAS-REQ-002K]: Single multi-threaded Tokio runtime
+- [2_TAS-REQ-002L]: Blocking git2 operations on spawn_blocking
+- [2_TAS-REQ-002M]: Shared mutable state Arc<RwLock> pattern
+- [2_TAS-REQ-002N]: Pool concurrency semaphore type
+- [2_TAS-REQ-002O]: DAG scheduler state structure
+- [2_TAS-REQ-002P]: Consistent lock acquisition order
+- [2_TAS-REQ-002Q]: Webhook dispatcher dedicated channel
+- [2_TAS-REQ-002R]: gRPC error code mapping
+- [2_TAS-REQ-002S]: gRPC request_id field
+- [2_TAS-REQ-002T]: gRPC streaming cancellation
+- [2_TAS-REQ-002U]: gRPC reflection via tonic-reflection
+- [2_TAS-REQ-003]: Rust stable minimum version 1.80.0
+- [2_TAS-REQ-004]: rust-toolchain.toml pinning
+- [2_TAS-REQ-004A]: Workspace lint table configuration
+- [2_TAS-REQ-004B]: unsafe_code = "deny" workspace-wide
+- [2_TAS-REQ-004C]: Cargo profile definitions (dev, test, release)
+- [2_TAS-REQ-004D]: Cargo resolver = "2"
+- [2_TAS-REQ-004E]: No optional features for business logic
+- [2_TAS-REQ-004F]: CI builds with --all-features
+- [2_TAS-REQ-004G]: unsafe_code deny lint active
+- [2_TAS-REQ-005]: Authoritative crate versions and feature flags
+- [2_TAS-REQ-005A]: anyhow restricted to binary crates
+- [2_TAS-REQ-006]: reqwest rustls-tls feature
+- [2_TAS-REQ-007]: Dev-only dependency declarations
+- [2_TAS-REQ-007A]: ./do lint verifies no dev-dep leaks
+- [2_TAS-REQ-007B]: New dependency approval process
+- [2_TAS-REQ-008]: Proto file directory structure
+- [2_TAS-REQ-008A]: Proto file header block
+- [2_TAS-REQ-008B]: devs-proto build.rs compilation
+- [2_TAS-REQ-008C]: devs-proto src/gen/ mod.rs
+- [2_TAS-REQ-008D]: protoc missing detection
+- [2_TAS-REQ-009]: Proto package name devs.v1
+- [2_TAS-REQ-009A]: Proto field numbering rules
+- [2_TAS-REQ-009B]: ServerService GetInfo RPC
+- [2_TAS-REQ-010]: GitLab CI pipeline three parallel jobs
+- [2_TAS-REQ-010A]: CI job timeout 25 minutes
+- [2_TAS-REQ-010B]: CI artifact requirements
+- [2_TAS-REQ-010C]: Cargo registry and target caching
+- [2_TAS-REQ-010D]: ./do script POSIX sh-compatible
+- [2_TAS-REQ-010E]: DEVS_DISCOVERY_FILE unique temp path per test
+- [2_TAS-REQ-010F]: ./do ci temporary commit mechanism
+- [2_TAS-REQ-012]: ./do lint command sequence
+- [2_TAS-REQ-012A]: rustfmt.toml configuration
+- [2_TAS-REQ-012B]: Lint step ordering
+- [2_TAS-REQ-012C]: Lint error handling
+- [2_TAS-REQ-012D]: Lint output format
+- [9_PROJECT_ROADMAP-REQ-001]: Self-hosting strategic objective (SO-1)
+- [9_PROJECT_ROADMAP-REQ-002]: Quality gates strategic objective (SO-2)
+- [9_PROJECT_ROADMAP-REQ-003]: Security baseline strategic objective (SO-3)
+- [9_PROJECT_ROADMAP-REQ-004]: No business logic before upstream PTC (ROAD-CONS-001)
+- [9_PROJECT_ROADMAP-REQ-005]: Critical risk mitigation before code (ROAD-CONS-002)
+- [9_PROJECT_ROADMAP-REQ-006]: Presubmit 15-minute budget (ROAD-CONS-003)
+- [9_PROJECT_ROADMAP-REQ-007]: BOOTSTRAP-STUB resolution before Phase 5 (ROAD-CONS-004)
+- [9_PROJECT_ROADMAP-REQ-008]: Glass-Box MCP from first commit (ROAD-CONS-005)
+- [9_PROJECT_ROADMAP-REQ-009]: E2E tests must use actual interface boundary (ROAD-CONS-006)
+- [9_PROJECT_ROADMAP-REQ-010]: Phase 0 definition and gate
+- [9_PROJECT_ROADMAP-REQ-011]: Phase 1 definition and gate
+- [9_PROJECT_ROADMAP-REQ-012]: Phase 2 definition and gate
+- [9_PROJECT_ROADMAP-REQ-013]: Phase 3 definition and gate
+- [9_PROJECT_ROADMAP-REQ-014]: Phase 4 definition and gate
+- [9_PROJECT_ROADMAP-REQ-015]: Phase 5 definition and gate
+- [9_PROJECT_ROADMAP-REQ-016]: Parallel work windows respect crate boundaries
+- [9_PROJECT_ROADMAP-REQ-017]: Bootstrap attempt precondition
+- [9_PROJECT_ROADMAP-REQ-018]: PTC committed before Phase N+1 code (ROAD-BR-013)
+- [9_PROJECT_ROADMAP-REQ-019]: Platform verification for PTCs (ROAD-BR-014)
+- [9_PROJECT_ROADMAP-REQ-020]: Bootstrap ADR content requirements (ROAD-BR-015)
+- [9_PROJECT_ROADMAP-REQ-021]: BOOTSTRAP-STUB annotation lifecycle (ROAD-BR-016)
+- [9_PROJECT_ROADMAP-REQ-022]: Phase 5 all coverage gates simultaneous (ROAD-BR-017)
+- [9_PROJECT_ROADMAP-REQ-023]: FB-007 fallback warning emission (ROAD-BR-018)
+- [9_PROJECT_ROADMAP-REQ-024]: PTC platforms_verified CI confirmation (ROAD-BR-019)
+- [9_PROJECT_ROADMAP-REQ-025]: Parallel development crate import boundaries (ROAD-BR-020)
+- [9_PROJECT_ROADMAP-REQ-026]: Flaky CI invalidates gate
+- [9_PROJECT_ROADMAP-REQ-027]: Bootstrap Windows path normalization
+- [9_PROJECT_ROADMAP-REQ-028]: Phase 5 QG-005 failure handling
+- [9_PROJECT_ROADMAP-REQ-029]: BOOTSTRAP-STUB discovered in Phase 5
+- [9_PROJECT_ROADMAP-REQ-030]: Bootstrap coverage gate failure
+- [9_PROJECT_ROADMAP-REQ-031]: Duplicate PTC commit handling
+- [9_PROJECT_ROADMAP-REQ-032]: Traceability phase_gates array (AC-ROAD-001)
+- [9_PROJECT_ROADMAP-REQ-033]: Lint invalid PTC detection (AC-ROAD-002)
+- [9_PROJECT_ROADMAP-REQ-034]: Lint BOOTSTRAP-STUB after Phase 3 (AC-ROAD-003)
+- [9_PROJECT_ROADMAP-REQ-035]: Presubmit fallback warning (AC-ROAD-004)
+- [9_PROJECT_ROADMAP-REQ-036]: Bootstrap ADR field validation (AC-ROAD-005)
+- [9_PROJECT_ROADMAP-REQ-037]: Coverage gate simultaneous pass (AC-ROAD-006)
+- [9_PROJECT_ROADMAP-REQ-038]: PTC JSON schema validation (AC-ROAD-007)
+- [9_PROJECT_ROADMAP-REQ-039]: Crate dependency enforcement (AC-ROAD-008)
+- [9_PROJECT_ROADMAP-REQ-040]: Bootstrap timing constraint (AC-ROAD-009)
+- [9_PROJECT_ROADMAP-REQ-041]: Risk matrix violations (AC-ROAD-010)
+- [9_PROJECT_ROADMAP-REQ-042]: Presubmit step over-budget warning (ROAD-BR-LF-001)
+- [9_PROJECT_ROADMAP-REQ-043]: Hard timeout enforcement mechanism (ROAD-BR-LF-002)
+- [9_PROJECT_ROADMAP-REQ-044]: Incremental timing file writes (ROAD-BR-LF-003)
+- [9_PROJECT_ROADMAP-REQ-045]: Crate dependency graph node (workspace)
+- [9_PROJECT_ROADMAP-REQ-046]: Crate dependency graph node (devs-proto)
+- [9_PROJECT_ROADMAP-REQ-047]: Crate dependency graph node (./do + CI)
+- [9_PROJECT_ROADMAP-REQ-048]: Crate dependency graph node (devs-core)
+- [AC-ROAD-001]: Traceability phase_gates array generation
+- [AC-ROAD-002]: Lint invalid PTC gate_conditions
+- [AC-ROAD-003]: Lint BOOTSTRAP-STUB after Phase 3 PTC
+- [AC-ROAD-004]: Presubmit fallback warning emission
+- [AC-ROAD-005]: Bootstrap ADR field completeness
+- [AC-ROAD-006]: Coverage simultaneous gate pass
+- [AC-ROAD-007]: PTC JSON schema programmatic validation
+- [AC-ROAD-008]: Crate dependency cargo tree enforcement
+- [AC-ROAD-009]: Bootstrap timing within 900s budget
+- [AC-ROAD-010]: Risk matrix violations array
+- [AC-ROAD-CHECK-001]: PTC schema version validation
+- [AC-ROAD-CHECK-002]: PTC phase_id format validation
+- [AC-ROAD-CHECK-003]: PTC completed_at RFC 3339 validation
+- [AC-ROAD-CHECK-004]: PTC gate_conditions all verified
+- [AC-ROAD-CHECK-005]: PTC platforms_verified validation
+- [AC-ROAD-CHECK-007]: PTC bootstrap_stubs_present logic
+- [AC-ROAD-CHECK-008]: PTC file naming convention
+- [AC-ROAD-CHECK-009]: PTC ci_pipeline_url validation
+- [AC-ROAD-CHECK-010]: PTC completed_by validation
+- [AC-ROAD-LF-001]: Presubmit timing entry schema
+- [AC-ROAD-LF-002]: Timing incremental write verification
+- [AC-ROAD-LF-003]: Hard timeout background process
+- [AC-ROAD-LF-004]: Forbidden import cargo tree enforcement
+- [AC-ROAD-LF-005]: BOOTSTRAP-STUB annotation rules
+- [AC-ROAD-LF-006]: PoolExhausted once-per-episode firing
+- [AC-ROAD-LF-007]: Rate-limit absolute timestamp
+- [AC-ROAD-LF-008]: .devs_output.json priority over stdout
+- [AC-ROAD-LF-009]: signal_completion terminal state error
+- [AC-ROAD-LF-010]: Diagnostic read before write rule
+- [AC-ROAD-P0-001]: Phase 0 presubmit Linux
+- [AC-ROAD-P0-002]: Phase 0 presubmit macOS
+- [AC-ROAD-P0-003]: Phase 0 presubmit Windows
+- [AC-ROAD-P0-004]: Presubmit timing budget validation
+- [AC-ROAD-P0-005]: devs-core forbidden dependency check
+- [AC-ROAD-P0-006]: Workspace release build all platforms
+- [AC-ROAD-P0-007]: cargo audit clean
+- [AC-ROAD-P0-008]: gitlab-ci.yml yamllint
+- [AC-ROAD-P1-001]: devs-core 90% unit coverage
+- [AC-ROAD-P1-002]: devs-config 90% unit coverage
+- [AC-ROAD-P1-003]: devs-checkpoint 90% unit coverage
+- [AC-ROAD-P1-004]: devs-adapters 90% unit coverage
+- [AC-ROAD-P1-005]: devs-pool 90% unit coverage
+- [AC-ROAD-P1-006]: devs-executor 90% unit coverage
+- [AC-ROAD-P1-007]: RISK-002 PTY probe test
+- [AC-ROAD-P1-008]: RISK-004 adapter CLI flags test
+- [AC-ROAD-P1-009]: cargo doc zero warnings
+- [AC-ROAD-P2-001]: devs-scheduler 90% unit coverage
+- [AC-ROAD-P2-002]: DAG dispatch latency ≤100ms test
+- [AC-ROAD-P2-003]: Pool fallback scheduling tick test
+- [AC-ROAD-P2-004]: Cycle detection unit test
+- [AC-ROAD-P2-005]: devs-webhook at-least-once delivery test
+- [AC-ROAD-P2-006]: Multi-project scheduling test
+- [AC-ROAD-P2-007]: Fan-out merge handler test
+- [AC-ROAD-P2-008]: Timeout enforcement test
+- [AC-ROAD-P3-001]: devs-server starts and binds ports
+- [AC-ROAD-P3-002]: CLI status command returns JSON
+- [AC-ROAD-P3-003]: MCP list_runs returns HTTP 200
+- [AC-ROAD-P3-004]: TUI renders Dashboard tab
+- [AC-ROAD-P3-005]: MCP bridge stdin/stdout forwarding
+- [AC-ROAD-P3-006]: Bootstrap COND-001 port binding
+- [AC-ROAD-P3-007]: gRPC reflection operational
+- [AC-ROAD-P3-008]: Server discovery file auto-discovery
+- [AC-ROAD-P3-009]: Server graceful shutdown cleanup
+- [AC-ROAD-P4-001]: Bootstrap COND-001 all platforms
+- [AC-ROAD-P4-002]: Bootstrap COND-002 submit presubmit-check
+- [AC-ROAD-P4-003]: Bootstrap COND-003 run completes
+- [AC-ROAD-P4-004]: Standard workflow TOML validation
+- [AC-ROAD-P4-005]: Bootstrap ADR committed
+- [AC-ROAD-P4-006]: Agentic development loop active
+- [AC-ROAD-P5-001]: All QG gates pass simultaneously
+- [AC-ROAD-P5-002]: 100% traceability
+- [AC-ROAD-P5-003]: cargo audit clean all platforms
+- [AC-ROAD-P5-005]: Zero BOOTSTRAP-STUB annotations
+- [AC-ROAD-P5-006]: Risk matrix violations empty
+- [AC-ROAD-P5-007]: Presubmit within 900s all platforms
+- [RISK-005]: Presubmit timeout critical risk
+- [RISK-005-BR-001]: Presubmit timeout business rule 1
+- [RISK-005-BR-002]: Presubmit timeout business rule 2
+- [RISK-005-BR-003]: Presubmit timeout business rule 3
+- [RISK-005-BR-004]: Presubmit timeout business rule 4
+- [RISK-009]: Bootstrapping deadlock critical risk
+- [RISK-009-BR-001]: Bootstrap deadlock business rule 1
+- [RISK-009-BR-002]: Bootstrap deadlock business rule 2
+- [RISK-009-BR-003]: Bootstrap deadlock business rule 3
+- [RISK-009-BR-004]: Bootstrap deadlock business rule 4
+- [RISK-009-BR-005]: Bootstrap deadlock business rule 5
+- [RISK-009-BR-006]: Bootstrap deadlock business rule 6
+- [ROAD-001]: Phase 0 definition
+- [ROAD-002]: Phase 1 definition
+- [ROAD-003]: Phase 2 definition
+- [ROAD-004]: Phase 3 definition
+- [ROAD-005]: Phase 4 definition
+- [ROAD-006]: Phase 5 definition
+- [ROAD-007]: Cargo workspace node
+- [ROAD-008]: ./do script + CI node
+- [ROAD-009]: devs-proto crate node
+- [ROAD-010]: devs-core crate node
+- [ROAD-011]: devs-config crate node
+- [ROAD-012]: devs-checkpoint crate node
+- [ROAD-013]: devs-adapters crate node
+- [ROAD-014]: devs-pool crate node
+- [ROAD-015]: devs-executor crate node
+- [ROAD-016]: devs-scheduler crate node
+- [ROAD-017]: devs-webhook crate node
+- [ROAD-018]: devs-grpc crate node
+- [ROAD-019]: devs-mcp crate node
+- [ROAD-020]: devs-server crate node
+- [ROAD-021]: devs-cli crate node
+- [ROAD-022]: devs-tui crate node
+- [ROAD-023]: devs-mcp-bridge crate node
+- [ROAD-024]: Bootstrap complete milestone
+- [ROAD-025]: MVP release milestone
+- [ROAD-BR-001]: General roadmap business rule 1
+- [ROAD-BR-002]: General roadmap business rule 2
+- [ROAD-BR-003]: General roadmap business rule 3
+- [ROAD-BR-004]: General roadmap business rule 4
+- [ROAD-BR-005]: General roadmap business rule 5
+- [ROAD-BR-006]: General roadmap business rule 6
+- [ROAD-BR-007]: General roadmap business rule 7
+- [ROAD-BR-008]: General roadmap business rule 8
+- [ROAD-BR-009]: General roadmap business rule 9
+- [ROAD-BR-010]: General roadmap business rule 10
+- [ROAD-BR-011]: General roadmap business rule 11
+- [ROAD-BR-012]: General roadmap business rule 12
+- [ROAD-BR-013]: PTC before Phase N+1 code
+- [ROAD-BR-014]: Platform verification for PTCs
+- [ROAD-BR-015]: Bootstrap ADR content requirements
+- [ROAD-BR-016]: BOOTSTRAP-STUB annotation lifecycle
+- [ROAD-BR-017]: All coverage gates simultaneous
+- [ROAD-BR-018]: FB-007 fallback warning
+- [ROAD-BR-019]: PTC CI pipeline confirmation
+- [ROAD-BR-020]: Parallel development crate boundaries
+- [ROAD-BR-101]: Phase detail business rule 101
+- [ROAD-BR-102]: Phase detail business rule 102
+- [ROAD-BR-103]: Phase detail business rule 103
+- [ROAD-BR-104]: Phase detail business rule 104
+- [ROAD-BR-105]: Phase detail business rule 105
+- [ROAD-BR-106]: Phase detail business rule 106
+- [ROAD-BR-107]: Phase detail business rule 107
+- [ROAD-BR-108]: Phase detail business rule 108
+- [ROAD-BR-109]: Phase detail business rule 109
+- [ROAD-BR-110]: Phase detail business rule 110
+- [ROAD-BR-111]: Phase detail business rule 111
+- [ROAD-BR-112]: Phase detail business rule 112
+- [ROAD-BR-201]: Timing artifact business rule 201
+- [ROAD-BR-202]: Timing artifact business rule 202
+- [ROAD-BR-203]: Timing artifact business rule 203
+- [ROAD-BR-204]: Timing artifact business rule 204
+- [ROAD-BR-205]: Timing artifact business rule 205
+- [ROAD-BR-206]: Timing artifact business rule 206
+- [ROAD-BR-207]: Timing artifact business rule 207
+- [ROAD-BR-208]: Timing artifact business rule 208
+- [ROAD-BR-209]: Timing artifact business rule 209
+- [ROAD-BR-210]: Timing artifact business rule 210
+- [ROAD-BR-211]: Timing artifact business rule 211
+- [ROAD-BR-212]: Timing artifact business rule 212
+- [ROAD-BR-301]: Dependency graph business rule 301
+- [ROAD-BR-302]: Dependency graph business rule 302
+- [ROAD-BR-303]: Dependency graph business rule 303
+- [ROAD-BR-304]: Dependency graph business rule 304
+- [ROAD-BR-305]: Dependency graph business rule 305
+- [ROAD-BR-306]: Dependency graph business rule 306
+- [ROAD-BR-307]: Dependency graph business rule 307
+- [ROAD-BR-308]: Dependency graph business rule 308
+- [ROAD-BR-309]: Dependency graph business rule 309
+- [ROAD-BR-311]: Dependency graph business rule 311
+- [ROAD-BR-312]: Dependency graph business rule 312
+- [ROAD-BR-401]: Execution flow business rule 401
+- [ROAD-BR-402]: Execution flow business rule 402
+- [ROAD-BR-403]: Execution flow business rule 403
+- [ROAD-BR-404]: Execution flow business rule 404
+- [ROAD-BR-405]: Execution flow business rule 405
+- [ROAD-BR-407]: Execution flow business rule 407
+- [ROAD-BR-408]: Execution flow business rule 408
+- [ROAD-BR-501]: Phase artifact business rule 501
+- [ROAD-BR-502]: Phase artifact business rule 502
+- [ROAD-BR-503]: Phase artifact business rule 503
+- [ROAD-BR-504]: Phase artifact business rule 504
+- [ROAD-BR-505]: Phase artifact business rule 505
+- [ROAD-BR-506]: Phase artifact business rule 506
+- [ROAD-BR-507]: Phase artifact business rule 507
+- [ROAD-BR-508]: Phase artifact business rule 508
+- [ROAD-BR-509]: Phase artifact business rule 509
+- [ROAD-BR-510]: Phase artifact business rule 510
+- [ROAD-BR-LF-001]: Logical flow over-budget warning rule
+- [ROAD-BR-LF-002]: Hard timeout background process rule
+- [ROAD-BR-LF-003]: Incremental timing write rule
+- [ROAD-BR-LF-004]: Forbidden import enforcement rule
+- [ROAD-BR-LF-005]: BOOTSTRAP-STUB annotation convention
+- [ROAD-BR-LF-006]: PoolExhausted once-per-episode rule
+- [ROAD-BR-LF-007]: Rate-limit absolute timestamp rule
+- [ROAD-BR-LF-008]: .devs_output.json priority rule
+- [ROAD-BR-LF-009]: signal_completion terminal state rule
+- [ROAD-BR-LF-010]: Diagnostic read before write rule
+- [ROAD-BR-LF-011]: list_runs before second submit_run
+- [ROAD-BR-LF-012]: Logical flow business rule 12
+- [ROAD-BR-LF-013]: Logical flow business rule 13
+- [ROAD-BR-LF-014]: Logical flow business rule 14
+- [ROAD-BR-LF-015]: Logical flow business rule 15
+- [ROAD-BR-LF-016]: Logical flow business rule 16
+- [ROAD-BR-LF-017]: Logical flow business rule 17
+- [ROAD-BR-LF-018]: Logical flow business rule 18
+- [ROAD-BR-LF-019]: Logical flow business rule 19
+- [ROAD-BR-LF-020]: Logical flow business rule 20
+- [ROAD-CHECK-001]: Phase checkpoint verification 1
+- [ROAD-CHECK-002]: Phase checkpoint verification 2
+- [ROAD-CHECK-003]: Phase checkpoint verification 3
+- [ROAD-CHECK-004]: Phase checkpoint verification 4
+- [ROAD-CHECK-005]: Phase checkpoint verification 5
+- [ROAD-CHECK-006]: Phase checkpoint verification 6
+- [ROAD-CHECK-BR-001]: Checkpoint business rule 1
+- [ROAD-CHECK-BR-002]: Checkpoint business rule 2
+- [ROAD-CHECK-BR-003]: Checkpoint business rule 3
+- [ROAD-CHECK-BR-004]: Checkpoint business rule 4
+- [ROAD-CHECK-BR-005]: Checkpoint business rule 5
+- [ROAD-CHECK-BR-006]: Checkpoint business rule 6
+- [ROAD-CHECK-BR-007]: Checkpoint business rule 7
+- [ROAD-CHECK-BR-008]: Checkpoint business rule 8
+- [ROAD-CHECK-BR-009]: Checkpoint business rule 9
+- [ROAD-CHECK-BR-010]: Checkpoint business rule 10
+- [ROAD-CHECK-BR-011]: Checkpoint business rule 11
+- [ROAD-CHECK-BR-012]: Checkpoint business rule 12
+- [ROAD-CONS-001]: No business logic before upstream PTC
+- [ROAD-CONS-002]: Critical risk mitigation before code
+- [ROAD-CONS-003]: 15-minute presubmit budget
+- [ROAD-CONS-004]: BOOTSTRAP-STUB resolution before Phase 5
+- [ROAD-CONS-005]: Glass-Box MCP from first commit
+- [ROAD-CONS-006]: E2E tests actual interface boundary
+- [ROAD-CONS-007]: Phase 4 parallel E2E test work
+- [ROAD-CONS-008]: Bootstrap attempt precondition
+- [ROAD-CRIT-001]: Critical path constraint 1
+- [ROAD-CRIT-002]: Critical path constraint 2
+- [ROAD-CRIT-003]: Critical path constraint 3
+- [ROAD-CRIT-004]: Critical path constraint 4
+- [ROAD-CRIT-005]: Critical path constraint 5
+- [ROAD-CRIT-006]: Critical path constraint 6
+- [ROAD-CRIT-007]: Critical path constraint 7
+- [ROAD-CRIT-008]: Critical path constraint 8
+- [ROAD-CRIT-009]: Critical path constraint 9
+- [ROAD-CRIT-010]: Critical path constraint 10
+- [ROAD-CRIT-011]: Critical path constraint 11
+- [ROAD-CRIT-012]: Critical path constraint 12
+- [ROAD-NGOAL-001]: Non-goal: no GUI
+- [ROAD-NGOAL-002]: Non-goal: no REST API
+- [ROAD-NGOAL-003]: Non-goal: no client authentication
+- [ROAD-NGOAL-004]: Non-goal: no external secrets manager
+- [ROAD-P0-DEP-001]: Phase 0 dependency specification
+- [ROAD-RISK-001]: Risk management requirement 1
+- [ROAD-RISK-002]: Risk management requirement 2
+- [ROAD-RISK-003]: Risk management requirement 3
+- [ROAD-SCHEMA-001]: PTC schema field: schema_version
+- [ROAD-SCHEMA-002]: PTC schema field: phase_id
+- [ROAD-SCHEMA-003]: PTC schema field: phase_name
+- [ROAD-SCHEMA-004]: PTC schema field: completed_at
+- [ROAD-SCHEMA-005]: PTC schema field: completed_by
+- [ROAD-SCHEMA-006]: PTC schema field: ci_pipeline_url
+- [ROAD-SCHEMA-007]: PTC schema field: platforms_verified
+- [ROAD-SCHEMA-008]: PTC schema field: gate_conditions
+- [ROAD-SCHEMA-009]: PTC schema field: risk_mitigations_confirmed
+- [ROAD-SCHEMA-010]: PTC schema field: bootstrap_stubs_present
+- [ROAD-SCHEMA-011]: PTC schema field: notes
+- [ROAD-SCHEMA-012]: PTC schema constraint: schema_version always 1
+- [ROAD-SCHEMA-013]: PTC schema constraint: phase_id format
+- [ROAD-SCHEMA-014]: PTC schema constraint: completed_at format
+- [ROAD-SCHEMA-015]: PTC schema constraint: platforms_verified rules
+- [ROAD-SCHEMA-016]: PTC schema constraint: gate_conditions non-empty
+- [ROAD-STATEM-001]: Phase state machine: not re-entrant
+- [ROAD-STATEM-002]: Phase state machine: deficiency fix in current phase
+- [ROAD-STATEM-003]: Phase state machine: Phase0Active → Phase0Gating
+- [ROAD-STATEM-004]: Phase state machine: gating → complete or active
+- [ROAD-STATEM-005]: Phase state machine: complete → next phase active
+- [TECH-AC-011]: Technical acceptance criterion 11
+- [0-9]: Regex pattern reference (source document artifact)
+- [A-Z]: Regex pattern reference (source document artifact)
+- [A-Z0-9-]: Regex pattern reference (source document artifact)
+- [A-Z0-9_]: Regex pattern reference (source document artifact)
+- [A-Z_]: Regex pattern reference (source document artifact)
+- [ROAD-P1-DEP-001]: Phase 1 dependency specification
+- [ROAD-P2-DEP-001]: Phase 2 dependency specification
+- [ROAD-P3-DEP-001]: Phase 3 dependency specification
+- [ROAD-P3-DEP-002]: Phase 3 dependency specification
+- [ROAD-P3-DEP-003]: Phase 3 dependency specification
+- [ROAD-P4-DEP-001]: Phase 4 dependency specification
+- [ROAD-P4-DEP-002]: Phase 4 dependency specification
+- [ROAD-P4-DEP-003]: Phase 4 dependency specification
+- [ROAD-P5-DEP-001]: Phase 5 dependency specification
+- [ROAD-P5-DEP-002]: Phase 5 dependency specification
+- [ROAD-P5-DEP-003]: Phase 5 dependency specification
+
+## Detailed Deliverables & Components
+
+### Cargo Workspace & Toolchain
+- Create root `Cargo.toml` with workspace manifest, `resolver = "2"`, workspace lint table, and Cargo profiles (dev, test, release)
+- Create `rust-toolchain.toml` pinning Rust stable ≥ 1.80.0
+- Configure `unsafe_code = "deny"` workspace-wide
+- Declare authoritative crate versions and feature flags in workspace dependencies
+- Restrict `anyhow` to binary crates only; `reqwest` uses `rustls-tls` exclusively
+- Expected behavior: `cargo build --workspace` compiles with stub crates on all 3 platforms
+
+### devs-proto Crate
+- Create `proto/devs/v1/` directory with all `.proto` files, package name `devs.v1`
+- Implement `build.rs` for protobuf compilation with `protoc` missing detection
+- Commit generated files to `devs-proto/src/gen/` with `mod.rs`
+- Define `ServerService` with `GetInfo` RPC, sequential field numbering
+- Expected behavior: `cargo build -p devs-proto` succeeds; generated types available for downstream crates
+
+### devs-core Crate (Domain Types)
+- Implement core domain types: `BoundedString`, state machines, `TemplateResolver`
+- Enforce no `tokio`, `git2`, `reqwest`, or `tonic` in non-dev dependencies
+- Define server startup sequence specification (9-step), shutdown sequence, and discovery file protocol
+- Define config validation, lock acquisition ordering, and async runtime patterns
+- Expected behavior: `cargo build -p devs-core` with zero forbidden dependencies confirmed by `cargo tree`
+
+### ./do Entrypoint Script
+- POSIX `sh`-compatible script implementing: setup, build, test, lint, format, coverage, presubmit, ci
+- `./do lint` runs cargo fmt --check, clippy, cargo doc, dependency audit, BOOTSTRAP-STUB checks, cargo tree forbidden import checks
+- `./do presubmit` enforces 900-second hard timeout via background timer process, writes `target/presubmit_timings.jsonl` incrementally
+- `./do ci` copies working directory to temporary commit for clean CI verification
+- Expected behavior: `./do presubmit` exits 0 on stub workspace on all 3 platforms
+
+### GitLab CI Pipeline
+- Define `.gitlab-ci.yml` with three parallel jobs: `presubmit-linux`, `presubmit-macos`, `presubmit-windows`
+- 25-minute job timeout; Cargo registry and target caching; CI artifact retention
+- Unique `DEVS_DISCOVERY_FILE` per test for E2E isolation
+- `yamllint --strict .gitlab-ci.yml` passes
+- Expected behavior: All three CI jobs pass with stub workspace
+
+### Phase Transition Checkpoint Model
+- Define `PhaseTransitionCheckpoint` JSON schema in `devs-core` with programmatic validation
+- PTC file naming: `docs/adr/<NNNN>-phase-<N>-complete.md`
+- `./do lint` validates PTCs: no `verified: false`, no duplicate phase PTCs
+- `./do test` generates `target/traceability.json` with `phase_gates` array
+- Expected behavior: Malformed PTCs cause `./do test` and `./do lint` to exit non-zero
+
+### Critical Risk Mitigations (RISK-005, RISK-009)
+- RISK-005: Measure stub workspace compile time; establish `presubmit_timings.jsonl` baseline; determine crate-count ceiling
+- RISK-009: Document bootstrap completion criteria (COND-001, COND-002, COND-003); implement BOOTSTRAP-STUB convention in `./do lint`
+- Annotated tests: `// Covers: RISK-005` and `// Covers: RISK-009` passing on all platforms
+- Expected behavior: Both risk covering tests pass; presubmit budget validated
+
+### Phase State Machine & Constraints
+- Define six-phase state machine (not re-entrant; deficiency fixes in current phase)
+- Enforce crate dependency ordering via `cargo tree` in `./do lint`
+- Define non-goals (no GUI, no REST, no client auth, no external secrets manager)
+- Define all roadmap business rules, critical path constraints, and checkpoint verification rules
+- Expected behavior: Phase transitions follow strict gate conditions; no phase can be re-opened
+
+## Technical Considerations
+- The `./do` script must be POSIX `sh`-compatible for Windows Git Bash compatibility
+- The 900-second hard timeout must use a background process (not `timeout` command) to survive subshells
+- `devs-core` forbidden dependency constraint is the most important architectural invariant — enforced by CI from day one
+- Proto generated files are committed (not gitignored) to avoid requiring `protoc` on every build machine
+- The PTC model is machine-verifiable: all gate conditions are testable assertions, not human judgments
+- Presubmit timing data must be written incrementally so partial data survives hard-timeout kills

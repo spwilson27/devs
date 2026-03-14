@@ -1,42 +1,40 @@
-# Task: Missing Workflow Snapshot Handling (Sub-Epic: 081_Detailed Domain Specifications (Part 46))
+# Task: Missing Workflow Snapshot Handling for Recovered Runs (Sub-Epic: 081_Detailed Domain Specifications (Part 46))
 
 ## Covered Requirements
 - [2_TAS-REQ-484]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: [devs-core, devs-checkpoint]
+- depends_on: ["04_resilient_checkpoint_loading.md"]
+- shared_components: ["devs-checkpoint", "devs-scheduler"]
 
 ## 1. Initial Test Written
-- [ ] In `devs-checkpoint`, create a test suite `snapshot_recovery_tests.rs`.
-- [ ] Write a test for a recovered run that has a valid `checkpoint.json` but is missing its `workflow_snapshot.json`.
-- [ ] Write a test that attempts to execute a stage for this run.
-- [ ] Assert that a stage with template resolution requirements transitions to `Failed` with the error `MissingSnapshot`.
-- [ ] Assert that a stage WITHOUT template resolution requirements is allowed to execute normally.
-- [ ] Write a test for a corrupted `workflow_snapshot.json` and assert it is handled identically to the missing file case.
+- [ ] Create a test module `tests::missing_snapshot_handling` in the checkpoint or scheduler crate.
+- [ ] `test_valid_checkpoint_missing_snapshot_recovers_run` — Write a valid `checkpoint.json` but delete or omit `workflow_snapshot.json`. Call the loader. Assert the run IS recovered (not skipped) and appears in `list_runs` with a normal status (e.g., its checkpointed status).
+- [ ] `test_missing_snapshot_stage_needing_templates_fails` — Recover a run with a missing snapshot. Attempt to dispatch a stage that uses `{{stage.X.output}}` template variables (which requires reading the snapshot for template definitions). Assert the stage transitions to `Failed` with error kind `MissingSnapshot`.
+- [ ] `test_corrupt_snapshot_treated_as_missing` — Write a `workflow_snapshot.json` with malformed JSON. Assert the same behavior as missing: run recovers, but template-dependent stages fail with `MissingSnapshot`.
+- [ ] `test_missing_snapshot_stage_without_templates_succeeds` — Recover a run with a missing snapshot. Dispatch a stage that has a literal prompt (no template variables). Assert the stage proceeds normally (does not fail with `MissingSnapshot`).
+- [ ] `test_missing_snapshot_error_message_informative` — Assert the `MissingSnapshot` error includes the run ID and the expected snapshot path.
 
 ## 2. Task Implementation
-- [ ] In `devs-core/src/recovery.rs` (or similar), implement the logic for `MissingSnapshot` handling.
-- [ ] Implement a `check_snapshot_availability` method:
-    - Verify that `workflow_snapshot.json` exists and is parseable.
-    - Store the snapshot availability state in the run's memory.
-- [ ] Modify the stage execution dispatcher:
-    - Before starting a stage, check if it requires reading the workflow definition (e.g., for template resolution or branch logic).
-    - If it does AND the snapshot is missing/corrupt, transition the stage to `Failed` with `error = "MissingSnapshot"`.
-    - If the stage does NOT require the snapshot (e.g., a simple task with no templates), permit execution to continue.
-- [ ] Ensure that this transition happens immediately at the start of the stage's execution.
+- [ ] In the checkpoint restore path, after successfully parsing `checkpoint.json`, attempt to load `workflow_snapshot.json`:
+  - If missing or corrupt, set a flag on the recovered `WorkflowRun` (e.g., `snapshot_available: bool` or `snapshot: Option<WorkflowDefinition>`).
+  - Do NOT skip the run — it is still valid for recovery.
+- [ ] In the stage dispatch/template resolution path, before resolving templates:
+  - Check if the workflow snapshot is available.
+  - If not available AND the stage's prompt contains template variables (`{{...}}`), transition the stage immediately to `Failed` with error `MissingSnapshot`.
+  - If not available but the stage has no template references, proceed normally.
+- [ ] Define a `StageError::MissingSnapshot { run_id: RunId, expected_path: PathBuf }` variant.
 
 ## 3. Code Review
-- [ ] Verify that stages without template references are NOT blocked by a missing snapshot.
-- [ ] Confirm that `MissingSnapshot` error is correctly propagated to the run's status and logs.
-- [ ] Ensure that the snapshot existence check is efficient and cached if possible.
+- [ ] Verify a missing snapshot does NOT cause the entire run to be skipped — only stages needing templates fail.
+- [ ] Verify corrupt snapshots are treated identically to missing ones.
+- [ ] Verify the `MissingSnapshot` error is specific to template-dependent stages, not applied blanket to all stages.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-checkpoint --test snapshot_recovery_tests`.
-- [ ] Verify all tests pass, ensuring granular failure based on stage requirements.
+- [ ] Run `cargo test missing_snapshot_handling` and confirm all tests pass.
 
 ## 5. Update Documentation
-- [ ] Document the `MissingSnapshot` error and the conditions under which it occurs in the user-facing documentation.
+- [ ] Add doc comments explaining the degraded-recovery behavior: run survives, template-dependent stages fail gracefully.
 
 ## 6. Automated Verification
-- [ ] Run `./do test` and check the traceability report to ensure `2_TAS-REQ-484` is mapped to the passing tests.
+- [ ] Run `cargo test missing_snapshot_handling -- --nocapture` and verify zero failures.

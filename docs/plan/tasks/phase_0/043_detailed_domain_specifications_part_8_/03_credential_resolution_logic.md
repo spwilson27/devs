@@ -1,38 +1,43 @@
-# Task: Single-Point Startup Credential Resolution (Sub-Epic: 043_Detailed Domain Specifications (Part 8))
+# Task: Single-Pass Credential Resolution at Startup (Sub-Epic: 043_Detailed Domain Specifications (Part 8))
 
 ## Covered Requirements
 - [1_PRD-REQ-069], [1_PRD-REQ-070]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: [devs-config]
+- depends_on: [02_server_config_secrets_section.md]
+- shared_components: [devs-config (consumer), Redacted<T> Security Wrapper (consumer)]
 
 ## 1. Initial Test Written
-- [ ] In `devs-config/src/credentials.rs`, write unit tests that simulate various credential loading scenarios:
-    - Case A: Credential provided in the config file.
-    - Case B: Credential provided in an environment variable (e.g., `CLAUDE_API_KEY`).
-    - Case C: Credential provided in BOTH (environment should take precedence or follow a defined order).
-    - Case D: Credential missing in BOTH (assert that an error is returned).
-- [ ] Write a test that ensures the resolution function returns a single, immutable `Credentials` struct that doesn't change after the initial call.
+- [ ] In `devs-config`, create `src/credentials.rs` with the following unit tests:
+  1. `test_credential_from_env_only`: Set env var `CLAUDE_API_KEY=test_key`, provide no config entry. Assert resolution succeeds and returns the key wrapped in `Redacted<String>`. Annotate with `// Covers: 1_PRD-REQ-069`.
+  2. `test_credential_from_config_only`: Provide a config entry `[credentials] claude_api_key = "config_key"` with no env var. Assert resolution succeeds.
+  3. `test_env_overrides_config`: Provide both env var and config entry. Assert the env var value takes precedence.
+  4. `test_missing_required_credential_fails`: Provide neither env var nor config entry for a required credential. Assert the result is an error containing the string `"CLAUDE_API_KEY"` (the missing key name). Annotate with `// Covers: 1_PRD-REQ-070`.
+  5. `test_credentials_are_immutable`: Assert that the returned `ResolvedCredentials` struct is `Clone` but has no mutation methods—resolution happens once and the result is frozen.
+  6. `test_multiple_missing_credentials_lists_all`: When multiple required credentials are missing, assert the error message names every missing key, not just the first.
+- [ ] Ensure tests use `std::env::set_var`/`remove_var` in a thread-safe manner (use `serial_test` crate or isolated process tests).
 
 ## 2. Task Implementation
-- [ ] Implement a `CredentialsResolver` in the `devs-config` crate.
-- [ ] Use `std::env::var` and the parsed `ServerConfig` to resolve required API keys and other secrets.
-- [ ] Implement a `validate` method that checks for a set of "required" credentials for MVP (e.g., those needed by the configured agent pools).
-- [ ] Ensure that if a required credential is missing, a clear and actionable error message is returned (naming the missing key).
-- [ ] Structure the server startup sequence to call this resolver exactly once and fail hard if it returns an error.
+- [ ] Implement `CredentialResolver` with a `resolve(config: &ServerConfig, required_keys: &[CredentialSpec]) -> Result<ResolvedCredentials, CredentialError>` method.
+- [ ] `CredentialSpec` defines: `env_var_name: &str`, `config_path: &str`, `description: &str`.
+- [ ] Resolution order: env var first, then config file value. First match wins.
+- [ ] `ResolvedCredentials` stores values as `HashMap<String, Redacted<String>>` with only immutable accessor methods.
+- [ ] `CredentialError` includes a `missing_keys: Vec<String>` field listing all missing credentials (not just the first).
+- [ ] The `Display` impl for `CredentialError` must print each missing key name but never print any credential value.
+- [ ] This resolver is called exactly once during server startup. It must not be re-invocable or refreshable.
 
 ## 3. Code Review
-- [ ] Verify that no runtime re-fetching logic exists in the implementation.
-- [ ] Ensure the error message clearly identifies whether the key was searched in the config, environment, or both.
-- [ ] Confirm that credentials are never logged or exposed in error messages.
+- [ ] Verify no credential values appear in `Debug`, `Display`, log output, or error messages.
+- [ ] Verify the resolver collects ALL missing credentials before returning an error (no early return on first miss).
+- [ ] Confirm no runtime re-fetching or refresh mechanism exists.
+- [ ] Verify `Redacted<T>` is used for all stored credential values.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the `devs-config` unit tests: `cargo test -p devs-config`.
-- [ ] Execute an integration test that attempts to "start" a mock server with missing credentials and verify it exits with the correct error.
+- [ ] Run `cargo test -p devs-config` and confirm all credential tests pass.
 
 ## 5. Update Documentation
-- [ ] Update the `devs-config` documentation to explain the credential resolution hierarchy and how to provide them securely.
+- [ ] Add doc comments to `CredentialResolver` explaining the resolution hierarchy (env > config) and the single-resolution-at-startup invariant.
 
 ## 6. Automated Verification
-- [ ] Run `.tools/verify_requirements.py` and ensure [1_PRD-REQ-069] and [1_PRD-REQ-070] are marked as verified.
+- [ ] Run `cargo test -p devs-config` and confirm exit code 0.
+- [ ] Verify `// Covers: 1_PRD-REQ-069` and `// Covers: 1_PRD-REQ-070` annotations exist in test code via grep.

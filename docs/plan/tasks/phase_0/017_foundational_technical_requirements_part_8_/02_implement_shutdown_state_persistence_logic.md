@@ -4,35 +4,61 @@
 - [2_TAS-REQ-002C]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_0/017_foundational_technical_requirements_part_8_/01_implement_discovery_file_logic.md]
-- shared_components: [devs-core]
+- depends_on: [none]
+- shared_components: [devs-core (owner — this task adds shutdown checkpoint preparation types and logic), devs-checkpoint (consumer — actual git persistence is delegated to devs-checkpoint in Phase 1, but the domain logic for identifying and preparing state lives here)]
 
 ## 1. Initial Test Written
-- [ ] Create a unit test in `crates/devs-core/src/shutdown.rs` (or equivalent persistence utility):
-  - Setup a mock state containing several runs in `Running`, `Pending`, `Completed`, and `Cancelled` states.
-  - Test a function `identify_runs_to_persist(state: &SchedulerState) -> Vec<RunID>` that correctly returns all runs currently in a `Running` state.
-  - Test that for these runs, their current in-memory state can be correctly prepared for a final checkpoint write.
-- [ ] Test the "mark for restart" logic:
-  - Verify that `Running` stages are marked such that they satisfy the recovery rule (status is recorded in a way that recovery can reset them to `Eligible`).
-  - Note: Recovery itself is handled by [2_TAS-REQ-110], but the persistence must happen *before* exit.
+- [ ] Create `crates/devs-core/src/shutdown.rs` and add `mod shutdown;` to `crates/devs-core/src/lib.rs`.
+- [ ] Write the following unit tests (all should fail initially):
+
+### Identifying Running State Tests
+- [ ] `test_identify_running_workflow_runs`: Create a `Vec<WorkflowRunSnapshot>` containing runs in states `Running`, `Completed`, `Cancelled`, `Pending`, `Failed`. Call `collect_running_state(&runs)`. Assert the result contains exactly the `Running` runs.
+- [ ] `test_identify_running_stage_runs`: Create a `WorkflowRunSnapshot` with stages in states `Running`, `Completed`, `Eligible`, `Pending`. Call `collect_running_stages(&run)`. Assert the result contains exactly the `Running` stages.
+- [ ] `test_empty_state_returns_empty`: Call `collect_running_state(&[])`. Assert the result is an empty vec.
+- [ ] `test_no_running_returns_empty`: Create state with only `Completed` and `Failed` runs. Assert `collect_running_state` returns empty.
+
+### Preparing Checkpoint Data Tests
+- [ ] `test_prepare_shutdown_checkpoint_marks_running_stages_for_recovery`: Create a `WorkflowRunSnapshot` with two `Running` stages and one `Completed` stage. Call `prepare_shutdown_checkpoint(&run)`. Assert:
+  - The returned `ShutdownCheckpoint` contains the full run.
+  - The `Running` stages have their status set to `InterruptedForRecovery` (or equivalent marker that recovery logic in [2_TAS-REQ-110] will map to `Eligible`).
+  - The `Completed` stage retains its `Completed` status unchanged.
+- [ ] `test_prepare_shutdown_checkpoint_preserves_run_metadata`: Assert that run ID, workflow name, inputs, start time, and other metadata are preserved exactly in the `ShutdownCheckpoint`.
+- [ ] `test_prepare_shutdown_checkpoint_sets_checkpoint_reason`: Assert that the `ShutdownCheckpoint` has a `reason` field set to `ShutdownReason::GracefulShutdown`.
+- [ ] `test_multiple_runs_produce_multiple_checkpoints`: Create 3 running runs. Call `prepare_shutdown_checkpoints(&runs)`. Assert 3 `ShutdownCheckpoint` values are returned.
 
 ## 2. Task Implementation
-- [ ] Implement a `ShutdownPersister` utility or method within the `StateMachine` or `persistence.rs` module.
-- [ ] Implement the logic to scan the `SchedulerState` and identify all `WorkflowRun` and `StageRun` instances that are currently `Running`.
-- [ ] Implement a method `prepare_shutdown_checkpoint(run: &WorkflowRun) -> CheckpointData` that prepares the data to be persisted to git.
-- [ ] Ensure that this persistence logic is integrated into the `devs-core` state machine utilities for use during the shutdown sequence.
-- [ ] Note: The actual git writing will be done by `devs-checkpoint`, but the logic to identify and prepare the data for the shutdown checkpoint must exist in `devs-core`.
+- [ ] Define the following types in `crates/devs-core/src/shutdown.rs`:
+  - `ShutdownReason` enum: `GracefulShutdown`, `ImmediateEscalation`
+  - `ShutdownCheckpoint` struct: `{ run: WorkflowRunSnapshot, reason: ShutdownReason, timestamp: DateTime<Utc> }` — represents a single run's state prepared for persistence.
+  - Note: `WorkflowRunSnapshot` and `StageRunSnapshot` are lightweight structs defined here (or in a sibling module) representing the serializable state of a run. They must be pure data types — no tokio, no I/O. If these types already exist in `devs-core` from another task, reuse them.
+- [ ] Implement `pub fn collect_running_state(runs: &[WorkflowRunSnapshot]) -> Vec<&WorkflowRunSnapshot>`:
+  - Filter to runs where `status == RunStatus::Running`.
+- [ ] Implement `pub fn collect_running_stages(run: &WorkflowRunSnapshot) -> Vec<&StageRunSnapshot>`:
+  - Filter to stages where `status == StageStatus::Running`.
+- [ ] Implement `pub fn prepare_shutdown_checkpoint(run: &WorkflowRunSnapshot, reason: ShutdownReason) -> ShutdownCheckpoint`:
+  - Clone the run.
+  - For each stage with status `Running`, set status to `InterruptedForRecovery`.
+  - Set the checkpoint reason and timestamp.
+  - Return the `ShutdownCheckpoint`.
+- [ ] Implement `pub fn prepare_shutdown_checkpoints(runs: &[WorkflowRunSnapshot], reason: ShutdownReason) -> Vec<ShutdownCheckpoint>`:
+  - Filter to running runs via `collect_running_state`, then map each through `prepare_shutdown_checkpoint`.
+- [ ] Add `// Covers: 2_TAS-REQ-002C` comment above `prepare_shutdown_checkpoint` and `prepare_shutdown_checkpoints`.
 
 ## 3. Code Review
-- [ ] Verify that no `Running` runs are missed during the shutdown identification scan.
-- [ ] Ensure that the persisted state will correctly transition to `Eligible` on restart according to the recovery rules.
-- [ ] Confirm that the implementation uses the domain types from `devs-core` and is free from networking/IO logic (the actual write call will be made by a consumer crate).
+- [ ] Verify that ALL `Running` runs and stages are captured — no early returns or short-circuits that could miss entries.
+- [ ] Verify that `InterruptedForRecovery` is a distinct status value that cannot be confused with `Eligible`, `Failed`, or `Cancelled`. Recovery logic (Phase 1) will map it to `Eligible`.
+- [ ] Confirm that `Completed`, `Failed`, `Cancelled` stages are never modified by the shutdown checkpoint logic.
+- [ ] Ensure no I/O or async code — this module must be pure domain logic callable from any context.
+- [ ] Verify that `ShutdownCheckpoint` is `Serialize`-able (derive `serde::Serialize`) so that `devs-checkpoint` can persist it.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-core --lib shutdown` and ensure the state preparation tests pass.
+- [ ] Run `cargo test -p devs-core --lib shutdown` and ensure all tests pass.
+- [ ] Run `cargo clippy -p devs-core -- -D warnings` and ensure no warnings.
 
 ## 5. Update Documentation
-- [ ] Add doc comments to the shutdown persistence utility explaining its role in the graceful shutdown sequence.
+- [ ] Add module-level doc comment to `shutdown.rs` explaining: this module provides the domain logic for identifying and preparing in-flight workflow state during server shutdown, per [2_TAS-REQ-002C]. Actual git persistence is performed by `devs-checkpoint`.
+- [ ] Add doc comments to each public type and function.
 
 ## 6. Automated Verification
-- [ ] Run `grep -r "2_TAS-REQ-002C" crates/devs-core/` to verify traceability of the shutdown persistence requirement.
+- [ ] Run `grep -rn "Covers:.*2_TAS-REQ-002C" crates/devs-core/src/` and verify at least one match.
+- [ ] Run `cargo test -p devs-core --lib shutdown 2>&1 | tail -1` and verify it shows `test result: ok`.

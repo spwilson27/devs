@@ -5,7 +5,7 @@
 **Status:** Normative
 **Date:** 2026-03-13
 
-All `[PERF-NNN]` identifiers are normative. Every target is measurable and must be covered by an automated test annotated `// Covers: PERF-NNN`. This specification derives all targets directly from requirements established in the PRD (`1_prd.md`), TAS (`2_tas.md`), MCP Design (`3_mcp_design.md`), User Features (`4_user_features.md`), and Risks & Mitigation (`8_risks_mitigation.md`). When this document conflicts with those sources, those sources govern.
+All `[PERF-NNN] [8b_PERF_SPEC-REQ-001]` identifiers are normative. Every target is measurable and must be covered by an automated test annotated `// Covers: PERF-NNN`. This specification derives all targets directly from requirements established in the PRD (`1_prd.md`), TAS (`2_tas.md`), MCP Design (`3_mcp_design.md`), User Features (`4_user_features.md`), and Risks & Mitigation (`8_risks_mitigation.md`). When this document conflicts with those sources, those sources govern.
 
 ---
 
@@ -21,61 +21,61 @@ The six principles below are not aspirational; they are design constraints. Ever
 
 All performance targets are derived from functional requirements, not aspirational benchmarks. A fast but incorrect result is always worse than a slower correct one.
 
-**[PERF-GP-001]** No SLO target may be used to justify skipping validation. The 7-step `submit_run` validation pipeline, the 13-step workflow definition validation pipeline, and the `StateMachine::transition()` legality check are all mandatory regardless of their contribution to latency. If any of these checks is found to be on the critical path for a latency regression, the fix is to optimize the check, not remove it.
+**[PERF-GP-001] [8b_PERF_SPEC-REQ-002]** No SLO target may be used to justify skipping validation. The 7-step `submit_run` validation pipeline, the 13-step workflow definition validation pipeline, and the `StateMachine::transition()` legality check are all mandatory regardless of their contribution to latency. If any of these checks is found to be on the critical path for a latency regression, the fix is to optimize the check, not remove it.
 
-**[PERF-GP-002]** Performance tests MUST NOT assert correctness by timing alone. A test that verifies a stage was dispatched within 100 ms MUST also assert that the stage's `status == "running"` and that the checkpoint file reflects the correct state. Timing without state verification is not a performance test — it is a race condition.
+**[PERF-GP-002] [8b_PERF_SPEC-REQ-003]** Performance tests MUST NOT assert correctness by timing alone. A test that verifies a stage was dispatched within 100 ms MUST also assert that the stage's `status == "running"` and that the checkpoint file reflects the correct state. Timing without state verification is not a performance test — it is a race condition.
 
-**[PERF-GP-003]** When `SubmitRun` validation fails (e.g., cycle detected, duplicate run name, unknown pool), the error response MUST still be returned within the p99 latency target for the operation. Rejection is not a license for slow response.
+**[PERF-GP-003] [8b_PERF_SPEC-REQ-004]** When `SubmitRun` validation fails (e.g., cycle detected, duplicate run name, unknown pool), the error response MUST still be returned within the p99 latency target for the operation. Rejection is not a license for slow response.
 
 #### Principle 2: Worst-Case Bounds, Not Average-Case Hopes
 
 Latency targets are expressed as percentile requirements. A p99 that exceeds the target is a regression regardless of p50.
 
-**[PERF-GP-004]** All SLO assertions in test code use the **p99 column** as the CI threshold. A single-shot test that measures one operation applies the p99 target directly (with the 50% CI variance margin defined in [PERF-110]). A load-generating test that measures N operations must assert that the 99th-ranked observation is within the p99 target.
+**[PERF-GP-004] [8b_PERF_SPEC-REQ-005]** All SLO assertions in test code use the **p99 column** as the CI threshold. A single-shot test that measures one operation applies the p99 target directly (with the 50% CI variance margin defined in [PERF-110] [8b_PERF_SPEC-REQ-006]). A load-generating test that measures N operations must assert that the 99th-ranked observation is within the p99 target.
 
-**[PERF-GP-005]** Minimum sample size for any percentile assertion in a performance test: **100 observations**. Asserting p99 from fewer than 100 observations is statistically meaningless and MUST fail the lint check (`./do lint` scans for `p99` assertions paired with `n < 100`).
+**[PERF-GP-005] [8b_PERF_SPEC-REQ-007]** Minimum sample size for any percentile assertion in a performance test: **100 observations**. Asserting p99 from fewer than 100 observations is statistically meaningless and MUST fail the lint check (`./do lint` scans for `p99` assertions paired with `n < 100`).
 
-**[PERF-GP-006]** The p50 column in the SLO table (§2) is informational. Tests MUST assert p99; they MAY assert p50 as a secondary diagnostic. CI does not fail on p50 violations alone. If p50 degrades significantly while p99 stays within bounds, this is a `WARN`-level anomaly that must be investigated but does not block the build.
+**[PERF-GP-006] [8b_PERF_SPEC-REQ-008]** The p50 column in the SLO table (§2) is informational. Tests MUST assert p99; they MAY assert p50 as a secondary diagnostic. CI does not fail on p50 violations alone. If p50 degrades significantly while p99 stays within bounds, this is a `WARN`-level anomaly that must be investigated but does not block the build.
 
 #### Principle 3: Measured at the Boundary
 
 Every target is measured at the public interface it governs: gRPC API, MCP HTTP endpoint, CLI binary, or TUI render loop. Internal function timings are instrumentation, not SLOs.
 
-**[PERF-GP-007]** `tracing` spans MUST NOT be used as performance assertions. `tracing` instrumentation may record internal durations for diagnostic purposes, but the authoritative measurement for each SLO is always the boundary-level `LatencyMeasurement` (§1.3.1), not any internal span.
+**[PERF-GP-007] [8b_PERF_SPEC-REQ-009]** `tracing` spans MUST NOT be used as performance assertions. `tracing` instrumentation may record internal durations for diagnostic purposes, but the authoritative measurement for each SLO is always the boundary-level `LatencyMeasurement` (§1.3.1), not any internal span.
 
-**[PERF-GP-008]** Boundary measurement points are fixed per-operation and defined in [PERF-105] through [PERF-109]. An implementing agent MUST NOT move a measurement point without a corresponding spec amendment. Moving the measurement start earlier (to include more work) or later (to exclude slow setup) both constitute spec violations.
+**[PERF-GP-008] [8b_PERF_SPEC-REQ-010]** Boundary measurement points are fixed per-operation and defined in [PERF-105] [8b_PERF_SPEC-REQ-011] through [PERF-109] [8b_PERF_SPEC-REQ-012]. An implementing agent MUST NOT move a measurement point without a corresponding spec amendment. Moving the measurement start earlier (to include more work) or later (to exclude slow setup) both constitute spec violations.
 
-**[PERF-GP-009]** The CLI binary measurement boundary (main() to process exit, [PERF-108]) is intentionally broader than the server-side gRPC boundary. This difference accounts for gRPC dial time. The CLI SLOs ([PERF-025] through [PERF-027]) are correspondingly wider than the server-side gRPC SLOs ([PERF-006] through [PERF-009]). Tests for CLI commands MUST measure wall-clock time of the binary subprocess, not the gRPC handler time.
+**[PERF-GP-009] [8b_PERF_SPEC-REQ-013]** The CLI binary measurement boundary (main() to process exit, [PERF-108] [8b_PERF_SPEC-REQ-014]) is intentionally broader than the server-side gRPC boundary. This difference accounts for gRPC dial time. The CLI SLOs ([PERF-025] [8b_PERF_SPEC-REQ-015] through [PERF-027] [8b_PERF_SPEC-REQ-016]) are correspondingly wider than the server-side gRPC SLOs ([PERF-006] [8b_PERF_SPEC-REQ-017] through [PERF-009] [8b_PERF_SPEC-REQ-018]). Tests for CLI commands MUST measure wall-clock time of the binary subprocess, not the gRPC handler time.
 
 #### Principle 4: No Polling Below 1 Second
 
 Clients must not poll any API at intervals shorter than 1 second. All hot paths use event-driven streaming (`StreamRunEvents`, `stream_logs follow:true`).
 
-**[PERF-GP-010]** `StreamRunEvents` and `stream_logs follow:true` exist precisely to eliminate the need for polling. Any test or client code that calls `get_run` or `list_runs` in a loop with a sleep interval shorter than 1 000 ms is a correctness violation, not just a performance concern. `./do lint` MUST scan for patterns of the form `sleep(Duration::from_millis(N))` where N < 1 000 inside loops in test files and flag them at `WARN`.
+**[PERF-GP-010] [8b_PERF_SPEC-REQ-019]** `StreamRunEvents` and `stream_logs follow:true` exist precisely to eliminate the need for polling. Any test or client code that calls `get_run` or `list_runs` in a loop with a sleep interval shorter than 1 000 ms is a correctness violation, not just a performance concern. `./do lint` MUST scan for patterns of the form `sleep(Duration::from_millis(N))` where N < 1 000 inside loops in test files and flag them at `WARN`.
 
-**[PERF-GP-011]** The sole permitted exception to [PERF-GP-010] is the cancel-run polling loop in [MCP-061]: `poll get_run every 500ms, max 30s, until status=="cancelled"`. This exception is explicitly permitted and documented. No other sub-1-second polling interval is permitted in any interface client code.
+**[PERF-GP-011] [8b_PERF_SPEC-REQ-020]** The sole permitted exception to [PERF-GP-010] [8b_PERF_SPEC-REQ-019] is the cancel-run polling loop in [MCP-061]: `poll get_run every 500ms, max 30s, until status=="cancelled"`. This exception is explicitly permitted and documented. No other sub-1-second polling interval is permitted in any interface client code.
 
-**[PERF-GP-012]** The TUI is event-driven, not timer-driven. It MUST NOT call any gRPC RPC on a fixed timer tick. The 1-second `Tick` event is used only for elapsed-time formatting updates and log buffer eviction checks. It MUST NOT trigger gRPC calls, MCP calls, or file reads.
+**[PERF-GP-012] [8b_PERF_SPEC-REQ-021]** The TUI is event-driven, not timer-driven. It MUST NOT call any gRPC RPC on a fixed timer tick. The 1-second `Tick` event is used only for elapsed-time formatting updates and log buffer eviction checks. It MUST NOT trigger gRPC calls, MCP calls, or file reads.
 
 #### Principle 5: Resource Budgets Are Hard Limits
 
 Bounded types (`BoundedBytes<1_048_576>`, context file 10 MiB cap, fan-out max 64) are enforced at construction, not at runtime inspection. Exceeding a budget truncates or rejects; it never crashes the server.
 
-**[PERF-GP-013]** Truncation is always from the beginning (oldest content removed), never from the end. This preserves the most recent diagnostic output, which is the most actionable. The rule applies to: stage `stdout`/`stderr` (1 MiB each), `get_stage_output` response, `.devs_context.json` (10 MiB proportional), log buffer (10 000 lines FIFO), and template resolution stubs (10 240 bytes).
+**[PERF-GP-013] [8b_PERF_SPEC-REQ-022]** Truncation is always from the beginning (oldest content removed), never from the end. This preserves the most recent diagnostic output, which is the most actionable. The rule applies to: stage `stdout`/`stderr` (1 MiB each), `get_stage_output` response, `.devs_context.json` (10 MiB proportional), log buffer (10 000 lines FIFO), and template resolution stubs (10 240 bytes).
 
-**[PERF-GP-014]** A resource-budget violation MUST set `truncated: true` in the relevant response field and MUST log `WARN` with `event_type: "resource.truncated"`, `field`, `original_bytes` (if known), and `cap_bytes`. It MUST NOT return an error response. The caller receives a valid (if truncated) result.
+**[PERF-GP-014] [8b_PERF_SPEC-REQ-023]** A resource-budget violation MUST set `truncated: true` in the relevant response field and MUST log `WARN` with `event_type: "resource.truncated"`, `field`, `original_bytes` (if known), and `cap_bytes`. It MUST NOT return an error response. The caller receives a valid (if truncated) result.
 
-**[PERF-GP-015]** Hard limits defined in `devs-core` (e.g., `BoundedBytes<N>`, `BoundedString<N>`) are enforced at `serde::Deserialize` time. A payload that violates a hard limit during deserialization returns an `INVALID_ARGUMENT` gRPC error or HTTP 400 MCP error immediately. The server MUST NOT buffer the oversized payload before rejecting it — rejection occurs as soon as the limit is detected during streaming deserialization.
+**[PERF-GP-015] [8b_PERF_SPEC-REQ-024]** Hard limits defined in `devs-core` (e.g., `BoundedBytes<N>`, `BoundedString<N>`) are enforced at `serde::Deserialize` time. A payload that violates a hard limit during deserialization returns an `INVALID_ARGUMENT` gRPC error or HTTP 400 MCP error immediately. The server MUST NOT buffer the oversized payload before rejecting it — rejection occurs as soon as the limit is detected during streaming deserialization.
 
 #### Principle 6: The Presubmit Wall Clock Is a First-Class Performance Target
 
 The 15-minute `./do presubmit` deadline is an SLO for the development loop itself, not just a CI config value.
 
-**[PERF-GP-016]** The `./do presubmit` 900-second hard timeout is enforced by a background timer subprocess whose PID is written to `target/.presubmit_timer.pid`. On breach: SIGTERM to the active step → 5 s grace → SIGKILL to entire process group → `./do presubmit` exits non-zero with exit code 1. The timer must be killed on successful completion; a leaked timer MUST NOT terminate a subsequent run.
+**[PERF-GP-016] [8b_PERF_SPEC-REQ-025]** The `./do presubmit` 900-second hard timeout is enforced by a background timer subprocess whose PID is written to `target/.presubmit_timer.pid`. On breach: SIGTERM to the active step → 5 s grace → SIGKILL to entire process group → `./do presubmit` exits non-zero with exit code 1. The timer must be killed on successful completion; a leaked timer MUST NOT terminate a subsequent run.
 
-**[PERF-GP-017]** Each step within `./do presubmit` has a soft budget (see §3.7). A step that exceeds its budget by more than 20% emits `WARN: step <name> over budget: <duration>ms > <budget>ms` to stderr and writes `over_budget: true` to the timing record. This does NOT fail the build. It is a signal for the implementing agent to investigate compile-time regressions.
+**[PERF-GP-017] [8b_PERF_SPEC-REQ-026]** Each step within `./do presubmit` has a soft budget (see §3.7). A step that exceeds its budget by more than 20% emits `WARN: step <name> over budget: <duration>ms > <budget>ms` to stderr and writes `over_budget: true` to the timing record. This does NOT fail the build. It is a signal for the implementing agent to investigate compile-time regressions.
 
-**[PERF-GP-018]** The `target/presubmit_timings.jsonl` file is a CI artifact. It MUST be uploaded even when `./do presubmit` fails. GitLab CI config MUST specify `when: always` for this artifact. The absence of `target/presubmit_timings.jsonl` in a CI artifact set that claimed to run `./do presubmit` is a build integrity violation.
+**[PERF-GP-018] [8b_PERF_SPEC-REQ-027]** The `target/presubmit_timings.jsonl` file is a CI artifact. It MUST be uploaded even when `./do presubmit` fails. GitLab CI config MUST specify `when: always` for this artifact. The absence of `target/presubmit_timings.jsonl` in a CI artifact set that claimed to run `./do presubmit` is a build integrity violation.
 
 ---
 
@@ -85,7 +85,7 @@ The five commitments below are the minimum performance conditions for the MVP to
 
 #### PERF-001 — DAG Scheduler Dispatch Latency
 
-**[PERF-001]** The DAG scheduler dispatches newly eligible stages within **100 ms** of their last dependency completing. Measurement begins at the moment `StateMachine::transition()` returns `Ok(())` for the dependency's terminal `Completed` transition and ends at the `execvp` / `CreateProcess` syscall for the spawned agent subprocess.
+**[PERF-001] [8b_PERF_SPEC-REQ-028]** The DAG scheduler dispatches newly eligible stages within **100 ms** of their last dependency completing. Measurement begins at the moment `StateMachine::transition()` returns `Ok(())` for the dependency's terminal `Completed` transition and ends at the `execvp` / `CreateProcess` syscall for the spawned agent subprocess.
 
 This requirement maps directly to `[GOAL-001]` (parallel dispatch within 100 ms) and `[2_PRD-BR-004]` (two stages with no shared deps start within 100 ms of each other). The 100 ms budget is allocated as follows:
 
@@ -100,21 +100,21 @@ This requirement maps directly to `[GOAL-001]` (parallel dispatch within 100 ms)
 | Scheduling overhead + channel latency | ≤ 34 ms |
 | **Total budget** | **100 ms** |
 
-**[PERF-001-BR-001]** The 100 ms budget applies only when a semaphore slot is immediately available. When all `max_concurrent` slots are occupied, the stage is queued on the semaphore; no dispatch latency SLO applies until a slot is released. Once a slot is released, the stage MUST be dispatched within 100 ms of the release (the same 100 ms budget restarts from slot-release time).
+**[PERF-001-BR-001] [8b_PERF_SPEC-REQ-029]** The 100 ms budget applies only when a semaphore slot is immediately available. When all `max_concurrent` slots are occupied, the stage is queued on the semaphore; no dispatch latency SLO applies until a slot is released. Once a slot is released, the stage MUST be dispatched within 100 ms of the release (the same 100 ms budget restarts from slot-release time).
 
-**[PERF-001-BR-002]** The budget assumes the `tempdir` execution environment. For `docker` and `remote` environments, dispatch latency includes container startup or SSH connection time, which is not bounded by this SLO. The Docker/SSH execution sub-budget is defined separately in §3.5.
+**[PERF-001-BR-002] [8b_PERF_SPEC-REQ-030]** The budget assumes the `tempdir` execution environment. For `docker` and `remote` environments, dispatch latency includes container startup or SSH connection time, which is not bounded by this SLO. The Docker/SSH execution sub-budget is defined separately in §3.5.
 
-**[PERF-001-BR-003]** `evaluate_eligibility()` MUST complete in O(V + E) time where V is the number of stages and E is the total number of `depends_on` edges. Quadratic implementations are prohibited. For the maximum workflow size of 256 stages, O(V + E) is bounded at O(256 + 256²) ≈ O(65 000) operations, which completes in sub-millisecond time.
+**[PERF-001-BR-003] [8b_PERF_SPEC-REQ-031]** `evaluate_eligibility()` MUST complete in O(V + E) time where V is the number of stages and E is the total number of `depends_on` edges. Quadratic implementations are prohibited. For the maximum workflow size of 256 stages, O(V + E) is bounded at O(256 + 256²) ≈ O(65 000) operations, which completes in sub-millisecond time.
 
 **Edge cases for PERF-001:**
 
-1. **All 256 stages independent**: A workflow with 256 stages that have no `depends_on` relationships. All 256 must become `Eligible` atomically when the run transitions to `Running`. With `max_concurrent = 256`, all 256 must be dispatched within 200 ms of the run start (see [PERF-051] for the relaxed multi-stage budget).
+1. **All 256 stages independent**: A workflow with 256 stages that have no `depends_on` relationships. All 256 must become `Eligible` atomically when the run transitions to `Running`. With `max_concurrent = 256`, all 256 must be dispatched within 200 ms of the run start (see [PERF-051] [8b_PERF_SPEC-REQ-032] for the relaxed multi-stage budget).
 2. **Diamond dependency at scale**: Stage D depends on 255 other stages. D becomes eligible only when all 255 complete. The eligibility check for D must complete within the 10 ms sub-budget regardless of dependency count.
 3. **Concurrent completions of all D's dependencies**: If 10 dependency stages complete within the same 10 ms window (possible with fan-out), `evaluate_eligibility()` will be invoked multiple times concurrently. The per-run `Mutex` serializes these; only the final invocation (after all 255 are `Completed`) must trigger D's dispatch. Intermediate invocations must return quickly without dispatching D prematurely.
 
 #### PERF-002 — TUI Re-render Latency
 
-**[PERF-002]** The TUI re-renders within **50 ms** of receiving any `RunEvent` from the gRPC `StreamRunEvents` stream. Measurement begins when the `TuiEvent` is dequeued from the `mpsc` channel in the event loop and ends after `terminal.draw()` returns and crossterm has flushed the frame to the terminal buffer.
+**[PERF-002] [8b_PERF_SPEC-REQ-033]** The TUI re-renders within **50 ms** of receiving any `RunEvent` from the gRPC `StreamRunEvents` stream. Measurement begins when the `TuiEvent` is dequeued from the `mpsc` channel in the event loop and ends after `terminal.draw()` returns and crossterm has flushed the frame to the terminal buffer.
 
 This 50 ms budget decomposes as:
 
@@ -125,13 +125,13 @@ This 50 ms budget decomposes as:
 | `terminal.draw()` + crossterm buffer diff + OS write | ≤ 24 ms |
 | **Total budget** | **50 ms** |
 
-**[PERF-002-BR-001]** `render()` itself is bounded at 16 ms ([PERF-004]) and is a sub-budget of the 50 ms commitment. The 50 ms end-to-end budget includes state mutation and OS I/O, which are not part of the 16 ms render budget.
+**[PERF-002-BR-001] [8b_PERF_SPEC-REQ-034]** `render()` itself is bounded at 16 ms ([PERF-004] [8b_PERF_SPEC-REQ-035]) and is a sub-budget of the 50 ms commitment. The 50 ms end-to-end budget includes state mutation and OS I/O, which are not part of the 16 ms render budget.
 
-**[PERF-002-BR-002]** When multiple `TuiEvent` messages are queued (e.g., a burst of 10 `RunDelta` events arrives simultaneously), each event must individually satisfy the 50 ms budget measured from its own dequeue time. There is no coalescing of events to meet the budget — each event triggers a render.
+**[PERF-002-BR-002] [8b_PERF_SPEC-REQ-036]** When multiple `TuiEvent` messages are queued (e.g., a burst of 10 `RunDelta` events arrives simultaneously), each event must individually satisfy the 50 ms budget measured from its own dequeue time. There is no coalescing of events to meet the budget — each event triggers a render.
 
-**[PERF-002-BR-003]** The TUI re-render budget applies to all event types: `RunSnapshot`, `RunDelta`, `LogLine`, `PoolSnapshot`, `PoolDelta`, `Connected`, `StreamError`, `ReconnectAttempt`, and `Tick`. The `Resize` event may trigger a layout recomputation; this recomputation MUST also complete within the 50 ms budget.
+**[PERF-002-BR-003] [8b_PERF_SPEC-REQ-037]** The TUI re-render budget applies to all event types: `RunSnapshot`, `RunDelta`, `LogLine`, `PoolSnapshot`, `PoolDelta`, `Connected`, `StreamError`, `ReconnectAttempt`, and `Tick`. The `Resize` event may trigger a layout recomputation; this recomputation MUST also complete within the 50 ms budget.
 
-**[PERF-002-BR-004]** During `Reconnecting` state, the TUI continues to process keyboard events and render the status bar. The 50 ms budget applies during reconnection. The TUI MUST NOT freeze during reconnect backoff.
+**[PERF-002-BR-004] [8b_PERF_SPEC-REQ-038]** During `Reconnecting` state, the TUI continues to process keyboard events and render the status bar. The 50 ms budget applies during reconnection. The TUI MUST NOT freeze during reconnect backoff.
 
 **Edge cases for PERF-002:**
 
@@ -141,7 +141,7 @@ This 50 ms budget decomposes as:
 
 #### PERF-003 — MCP Observation Tool Response Time
 
-**[PERF-003]** MCP observation tools (`list_runs`, `get_run`, `get_stage_output`, `get_pool_state`, `get_workflow_definition`, `list_checkpoints`, `stream_logs` non-follow) return the first byte of a response within **2 000 ms** at p99 under normal load. Violations are logged at `WARN` with `event_type: "slo.violation"`.
+**[PERF-003] [8b_PERF_SPEC-REQ-039]** MCP observation tools (`list_runs`, `get_run`, `get_stage_output`, `get_pool_state`, `get_workflow_definition`, `list_checkpoints`, `stream_logs` non-follow) return the first byte of a response within **2 000 ms** at p99 under normal load. Violations are logged at `WARN` with `event_type: "slo.violation"`.
 
 The 2 000 ms ceiling is a conservative upper bound; individual tools have tighter targets defined in §2. The 2 000 ms ceiling is the guarantee that applies when load is higher than normal or the server is under write-lock contention. Normal-load targets are:
 
@@ -155,11 +155,11 @@ The 2 000 ms ceiling is a conservative upper bound; individual tools have tighte
 | `list_checkpoints` | 1 000 ms |
 | `stream_logs` (non-follow, TTFB) | 250 ms |
 
-**[PERF-003-BR-001]** Observation tools acquire read locks only (never write locks). Multiple observation tool calls MUST execute fully concurrently — they MUST NOT serialize behind each other. The sole serialization point is the read-lock on `SchedulerState`, which allows unlimited concurrent readers.
+**[PERF-003-BR-001] [8b_PERF_SPEC-REQ-040]** Observation tools acquire read locks only (never write locks). Multiple observation tool calls MUST execute fully concurrently — they MUST NOT serialize behind each other. The sole serialization point is the read-lock on `SchedulerState`, which allows unlimited concurrent readers.
 
-**[PERF-003-BR-002]** `stream_logs` with `follow:false` MUST NOT hold the `SchedulerState` read lock for the duration of response streaming. It acquires the lock to snapshot the buffer, releases it, then streams the snapshot. The lock hold time for `stream_logs` MUST be under 50 ms regardless of buffer size.
+**[PERF-003-BR-002] [8b_PERF_SPEC-REQ-041]** `stream_logs` with `follow:false` MUST NOT hold the `SchedulerState` read lock for the duration of response streaming. It acquires the lock to snapshot the buffer, releases it, then streams the snapshot. The lock hold time for `stream_logs` MUST be under 50 ms regardless of buffer size.
 
-**[PERF-003-BR-003]** The 2 000 ms ceiling includes the write-lock contention time (up to 5 000 ms before `resource_exhausted`). When `resource_exhausted` is returned after 5 000 ms of lock contention, this is not a violation of PERF-003 — it is a violation of PERF-020 (lock acquisition timeout). PERF-003 is only violated when a response is returned (not timed out) after more than 2 000 ms.
+**[PERF-003-BR-003] [8b_PERF_SPEC-REQ-042]** The 2 000 ms ceiling includes the write-lock contention time (up to 5 000 ms before `resource_exhausted`). When `resource_exhausted` is returned after 5 000 ms of lock contention, this is not a violation of PERF-003 — it is a violation of PERF-020 (lock acquisition timeout). PERF-003 is only violated when a response is returned (not timed out) after more than 2 000 ms.
 
 **Edge cases for PERF-003:**
 
@@ -169,21 +169,21 @@ The 2 000 ms ceiling is a conservative upper bound; individual tools have tighte
 
 #### PERF-004 — TUI Render Budget
 
-**[PERF-004]** Every `render()` call in the TUI completes within **16 ms**. No I/O, syscalls, or proportional heap allocation may occur inside `render()`.
+**[PERF-004] [8b_PERF_SPEC-REQ-035]** Every `render()` call in the TUI completes within **16 ms**. No I/O, syscalls, or proportional heap allocation may occur inside `render()`.
 
 The 16 ms hard limit derives from the 60 fps theoretical frame rate. In practice, the TUI renders only on events (not at fixed 60 fps), but the 16 ms budget ensures that even under a burst of events, the render loop never blocks the event loop for a perceptible duration.
 
-**[PERF-004-BR-001]** `render()` is the method passed to `terminal.draw(|frame| { ... })`. The closure body MUST contain only:
+**[PERF-004-BR-001] [8b_PERF_SPEC-REQ-043]** `render()` is the method passed to `terminal.draw(|frame| { ... })`. The closure body MUST contain only:
 - Widget `render()` calls that read from `&AppState` (immutable borrow)
 - Arithmetic and string formatting operations
 - `ratatui` layout computation (all integer arithmetic)
 - No heap allocation proportional to data size (pre-allocated buffers only)
 
-**[PERF-004-BR-002]** `render()` MUST NOT call any of the following: file I/O, network I/O, `Mutex::lock()`, `RwLock::read()`, `RwLock::write()`, `tokio::spawn()`, `std::thread::spawn()`, or any `async` function. These are statically detectable via `cargo clippy` rules.
+**[PERF-004-BR-002] [8b_PERF_SPEC-REQ-044]** `render()` MUST NOT call any of the following: file I/O, network I/O, `Mutex::lock()`, `RwLock::read()`, `RwLock::write()`, `tokio::spawn()`, `std::thread::spawn()`, or any `async` function. These are statically detectable via `cargo clippy` rules.
 
-**[PERF-004-BR-003]** `dag_tiers` computation (Kahn's topological sort), `format_elapsed()` updates, and log buffer eviction are performed in `handle_event()`, NOT in `render()`. `render()` reads pre-computed values from `AppState` only.
+**[PERF-004-BR-003] [8b_PERF_SPEC-REQ-045]** `dag_tiers` computation (Kahn's topological sort), `format_elapsed()` updates, and log buffer eviction are performed in `handle_event()`, NOT in `render()`. `render()` reads pre-computed values from `AppState` only.
 
-**[PERF-004-BR-004]** The 16 ms limit applies at `ColorMode::Color`. `ColorMode::Monochrome` requires fewer style computations and MUST be at least as fast.
+**[PERF-004-BR-004] [8b_PERF_SPEC-REQ-046]** The 16 ms limit applies at `ColorMode::Color`. `ColorMode::Monochrome` requires fewer style computations and MUST be at least as fast.
 
 **Edge cases for PERF-004:**
 
@@ -193,17 +193,17 @@ The 16 ms hard limit derives from the 60 fps theoretical frame rate. In practice
 
 #### PERF-005 — Presubmit Wall Clock
 
-**[PERF-005]** The `./do presubmit` pipeline completes within **900 seconds** (15 minutes) wall-clock on Linux, macOS, and Windows CI runners.
+**[PERF-005] [8b_PERF_SPEC-REQ-047]** The `./do presubmit` pipeline completes within **900 seconds** (15 minutes) wall-clock on Linux, macOS, and Windows CI runners.
 
 The 900-second budget is a hard kill limit. Steps are allocated soft budgets (see §3.7) that together sum to approximately 700 seconds, leaving 200 seconds of margin for environment variance (cold caches, disk I/O contention, network latency for `./do setup`).
 
-**[PERF-005-BR-001]** The 900-second timer begins at the first line of `./do presubmit` (before `./do setup`) and ends when `./do presubmit` exits. The timer is wall-clock (not CPU time) and must account for any sleeping or blocking within steps.
+**[PERF-005-BR-001] [8b_PERF_SPEC-REQ-048]** The 900-second timer begins at the first line of `./do presubmit` (before `./do setup`) and ends when `./do presubmit` exits. The timer is wall-clock (not CPU time) and must account for any sleeping or blocking within steps.
 
-**[PERF-005-BR-002]** When the timer fires: SIGTERM is sent to the currently-executing step → 5 seconds of grace period → SIGKILL to the entire process group. `./do presubmit` then exits with code 1. The `_timeout_kill` timing record is written before exit ([PERF-104]).
+**[PERF-005-BR-002] [8b_PERF_SPEC-REQ-049]** When the timer fires: SIGTERM is sent to the currently-executing step → 5 seconds of grace period → SIGKILL to the entire process group. `./do presubmit` then exits with code 1. The `_timeout_kill` timing record is written before exit ([PERF-104] [8b_PERF_SPEC-REQ-050]).
 
-**[PERF-005-BR-003]** `./do presubmit` MUST run steps sequentially. Parallel execution of steps (e.g., running `lint` and `test` simultaneously) is prohibited, as it would make the timing records ambiguous and could exceed memory budgets on CI runners.
+**[PERF-005-BR-003] [8b_PERF_SPEC-REQ-051]** `./do presubmit` MUST run steps sequentially. Parallel execution of steps (e.g., running `lint` and `test` simultaneously) is prohibited, as it would make the timing records ambiguous and could exceed memory budgets on CI runners.
 
-**[PERF-005-BR-004]** On all three CI platforms (Linux, macOS, Windows), the same 900-second limit applies. Platform-specific compilation overhead (e.g., MSVC linker on Windows being slower) does not justify a platform-specific timeout extension. If Windows consistently approaches the limit, the resolution is to optimize the build (e.g., reduce debug symbols, enable incremental compilation) rather than extend the timeout.
+**[PERF-005-BR-004] [8b_PERF_SPEC-REQ-052]** On all three CI platforms (Linux, macOS, Windows), the same 900-second limit applies. Platform-specific compilation overhead (e.g., MSVC linker on Windows being slower) does not justify a platform-specific timeout extension. If Windows consistently approaches the limit, the resolution is to optimize the build (e.g., reduce debug symbols, enable incremental compilation) rather than extend the timeout.
 
 **Edge cases for PERF-005:**
 
@@ -273,9 +273,9 @@ pub enum MeasurementBoundary {
 | `stage_name` | `Option<String>` | `None` or stage name from `StageDefinition::name` | Must match the stage record in `SchedulerState` |
 | `operation` | `String` | Non-empty, lowercase, underscore-separated | Matches the SLO table `Endpoint / Operation` column |
 
-**[PERF-GP-019]** `LatencyMeasurement` MUST be constructed immediately before the operation begins (not pre-allocated with a stale `started_at`). The `started_at` field is set at `LatencyMeasurement::new()` call time.
+**[PERF-GP-019] [8b_PERF_SPEC-REQ-053]** `LatencyMeasurement` MUST be constructed immediately before the operation begins (not pre-allocated with a stale `started_at`). The `started_at` field is set at `LatencyMeasurement::new()` call time.
 
-**[PERF-GP-020]** `LatencyMeasurement::elapsed_ms` is computed using `std::time::Instant` (monotonic clock). Wall-clock time (`chrono::Utc::now()`) MUST NOT be used for duration computation. The monotonic guarantee prevents false regressions due to NTP adjustments or system clock changes.
+**[PERF-GP-020] [8b_PERF_SPEC-REQ-054]** `LatencyMeasurement::elapsed_ms` is computed using `std::time::Instant` (monotonic clock). Wall-clock time (`chrono::Utc::now()`) MUST NOT be used for duration computation. The monotonic guarantee prevents false regressions due to NTP adjustments or system clock changes.
 
 #### 1.3.2 `SloViolation` (structured log event)
 
@@ -309,15 +309,15 @@ When a measured `elapsed_ms` exceeds an SLO threshold, a structured log event of
 | `percentile` | `string` | Always `"p99"` at MVP | Future: may include `"p50"`, `"p95"` |
 | `run_id` | `string` or absent | UUID v4 if applicable; field omitted if not applicable | NOT `null`; absent means not applicable |
 
-**[PERF-101]** `SloViolation` events MUST be emitted for every boundary measurement that exceeds the p99 threshold in the SLO table (§2). They MUST NOT be emitted for measurements that fall within the p99 target.
+**[PERF-101] [8b_PERF_SPEC-REQ-055]** `SloViolation` events MUST be emitted for every boundary measurement that exceeds the p99 threshold in the SLO table (§2). They MUST NOT be emitted for measurements that fall within the p99 target.
 
-**[PERF-102]** `SloViolation` events MUST NOT be emitted more than once per 10-second window for the same `(operation, boundary)` pair. This rate-limits log noise under sustained degradation while still recording the first violation. After the 10-second window expires, the next violation event is emitted normally.
+**[PERF-102] [8b_PERF_SPEC-REQ-056]** `SloViolation` events MUST NOT be emitted more than once per 10-second window for the same `(operation, boundary)` pair. This rate-limits log noise under sustained degradation while still recording the first violation. After the 10-second window expires, the next violation event is emitted normally.
 
 The rate-limiting window is implemented via a `HashMap<(String, String), std::time::Instant>` stored in a `static LazyLock<Mutex<...>>`. The window resets after 10 seconds from the first violation in that window. This map is bounded at 64 entries (one per unique `(operation, boundary)` pair); exceeding 64 pairs is a configuration invariant violation and panics in debug mode.
 
 **Edge cases for SloViolation:**
 
-1. **Simultaneous violations from concurrent requests**: If 100 concurrent `get_run` calls all exceed p99 at the same time, exactly one `SloViolation` event is emitted. The other 99 are suppressed by [PERF-102]. The first event's `elapsed_ms` reflects the first observed violation, not the worst.
+1. **Simultaneous violations from concurrent requests**: If 100 concurrent `get_run` calls all exceed p99 at the same time, exactly one `SloViolation` event is emitted. The other 99 are suppressed by [PERF-102] [8b_PERF_SPEC-REQ-056]. The first event's `elapsed_ms` reflects the first observed violation, not the worst.
 2. **Violation exactly at threshold**: `elapsed_ms == threshold_ms` is NOT a violation. The condition is strictly `elapsed_ms > threshold_ms`. This prevents spurious violations from floating-point comparison.
 3. **Consecutive violation windows**: If SLO violations persist continuously, exactly one event is emitted every 10 seconds. This produces a quantifiable "violation rate" from the log stream that operators can alert on.
 
@@ -353,11 +353,11 @@ Each line in `target/presubmit_timings.jsonl` conforms to:
 | `exceeded_hard_limit` | `bool` | `duration_ms > hard_limit_ms` | Derived; if true, `over_budget` is also true |
 | `exit_code` | `i32` | Exit code of step subprocess | `-1` for `_timeout_kill`; `0` for success; non-zero for failure |
 
-**[PERF-103]** `./do presubmit` MUST flush each record to `target/presubmit_timings.jsonl` immediately after the step completes (not at the end of the script). This ensures partial timing data is available even when a step times out or crashes.
+**[PERF-103] [8b_PERF_SPEC-REQ-057]** `./do presubmit` MUST flush each record to `target/presubmit_timings.jsonl` immediately after the step completes (not at the end of the script). This ensures partial timing data is available even when a step times out or crashes.
 
-**[PERF-104]** If a step is killed by the 900 s hard timeout, a final record with `"step": "_timeout_kill"`, `duration_ms` equal to 900 000, `exit_code: -1`, and `exceeded_hard_limit: true` MUST be appended as the last line.
+**[PERF-104] [8b_PERF_SPEC-REQ-050]** If a step is killed by the 900 s hard timeout, a final record with `"step": "_timeout_kill"`, `duration_ms` equal to 900 000, `exit_code: -1`, and `exceeded_hard_limit: true` MUST be appended as the last line.
 
-**[PERF-GP-021]** `target/presubmit_timings.jsonl` MUST exist and contain at least one record after any invocation of `./do presubmit` that begins executing steps. If the script is killed before any step completes, the file MAY be empty, which is acceptable. A `./do ci` artifact validation step MUST assert the file exists.
+**[PERF-GP-021] [8b_PERF_SPEC-REQ-058]** `target/presubmit_timings.jsonl` MUST exist and contain at least one record after any invocation of `./do presubmit` that begins executing steps. If the script is killed before any step completes, the file MAY be empty, which is acceptable. A `./do ci` artifact validation step MUST assert the file exists.
 
 **Edge cases for PresubmitTimingRecord:**
 
@@ -397,20 +397,20 @@ Gates QG-001 through QG-005 are defined in §6.3 of the TAS. Performance coverag
 
 A performance regression is any change that causes a previously-passing SLO test to fail. The policy below governs how regressions are detected, reported, and resolved.
 
-**[PERF-REG-001]** Performance SLO tests are part of the standard test suite and run as part of `./do test`. A commit that introduces a performance regression fails `./do presubmit` the same way a test assertion failure or clippy warning does. There is no separate "performance CI" step.
+**[PERF-REG-001] [8b_PERF_SPEC-REQ-059]** Performance SLO tests are part of the standard test suite and run as part of `./do test`. A commit that introduces a performance regression fails `./do presubmit` the same way a test assertion failure or clippy warning does. There is no separate "performance CI" step.
 
-**[PERF-REG-002]** `SloViolation` log events in CI output are informational only — they do NOT fail the build. Only test assertions (`assert!(elapsed_ms < threshold_with_margin)`) fail the build. This distinction prevents flaky failures on slow CI runners while maintaining the measurement infrastructure.
+**[PERF-REG-002] [8b_PERF_SPEC-REQ-060]** `SloViolation` log events in CI output are informational only — they do NOT fail the build. Only test assertions (`assert!(elapsed_ms < threshold_with_margin)`) fail the build. This distinction prevents flaky failures on slow CI runners while maintaining the measurement infrastructure.
 
-**[PERF-REG-003]** When a performance test fails in CI, the implementing agent MUST diagnose the root cause before any code change. The diagnostic sequence is:
+**[PERF-REG-003] [8b_PERF_SPEC-REQ-061]** When a performance test fails in CI, the implementing agent MUST diagnose the root cause before any code change. The diagnostic sequence is:
 1. Read `target/presubmit_timings.jsonl` to identify which step is slow.
 2. Read the test's failure output to identify which operation exceeded the threshold.
 3. Check whether the regression is infrastructure (CI runner variability) or code (genuine slowdown).
 4. Infrastructure regression: increase the CI margin in the test (not the SLO target) and document the change.
 5. Code regression: profile the hot path and fix the root cause.
 
-**[PERF-REG-004]** SLO targets defined in this document are immutable without a spec amendment. An agent MUST NOT change an SLO target in `8b_performance_spec.md` to make a failing test pass. The correct action is to optimize the code until it meets the existing target.
+**[PERF-REG-004] [8b_PERF_SPEC-REQ-062]** SLO targets defined in this document are immutable without a spec amendment. An agent MUST NOT change an SLO target in `8b_performance_spec.md` to make a failing test pass. The correct action is to optimize the code until it meets the existing target.
 
-**[PERF-REG-005]** The CI variance margin applied in test assertions (50% of the p99 target, per [PERF-110]) MUST be documented as a comment adjacent to each assertion:
+**[PERF-REG-005] [8b_PERF_SPEC-REQ-063]** The CI variance margin applied in test assertions (50% of the p99 target, per [PERF-110] [8b_PERF_SPEC-REQ-006]) MUST be documented as a comment adjacent to each assertion:
 ```rust
 // CI margin: 50% over p99 target of 500ms. See PERF-110.
 assert!(elapsed_ms < 750, "get_run p99 regression: {}ms", elapsed_ms);
@@ -427,16 +427,16 @@ Section 1 (goals and principles) is prerequisite to all other sections of this d
 | `devs-core/src/perf.rs` | Defines `LatencyMeasurement` and `MeasurementBoundary`; must be implemented before any boundary measurement is added |
 | `devs-grpc` | Uses `LatencyMeasurement` for all six gRPC services; emits `SloViolation` events |
 | `devs-mcp` | Uses `LatencyMeasurement` for all MCP tool handlers |
-| `devs-scheduler` | Uses `LatencyMeasurement` for dispatch latency ([PERF-001]) |
-| `devs-checkpoint` | Uses `LatencyMeasurement` for checkpoint write timing ([PERF-028]) |
-| `devs-tui` | Uses `LatencyMeasurement` for render loop timing ([PERF-002], [PERF-004]) |
-| `devs-cli` | Uses `LatencyMeasurement` for end-to-end CLI timing ([PERF-025]–[PERF-027]) |
+| `devs-scheduler` | Uses `LatencyMeasurement` for dispatch latency ([PERF-001] [8b_PERF_SPEC-REQ-028]) |
+| `devs-checkpoint` | Uses `LatencyMeasurement` for checkpoint write timing ([PERF-028] [8b_PERF_SPEC-REQ-064]) |
+| `devs-tui` | Uses `LatencyMeasurement` for render loop timing ([PERF-002] [8b_PERF_SPEC-REQ-033], [PERF-004] [8b_PERF_SPEC-REQ-035]) |
+| `devs-cli` | Uses `LatencyMeasurement` for end-to-end CLI timing ([PERF-025] [8b_PERF_SPEC-REQ-015]–[PERF-027] [8b_PERF_SPEC-REQ-016]) |
 | `./do` script | Writes `PresubmitTimingRecord` to `target/presubmit_timings.jsonl` |
 | All performance tests | Import `devs-core::perf` for SLO threshold constants |
 
-**[PERF-DEP-001]** `devs-core/src/perf.rs` MUST be implemented and reviewed before any other crate adds performance instrumentation. This prevents duplicate definitions and ensures all crates share a single source of truth for SLO thresholds.
+**[PERF-DEP-001] [8b_PERF_SPEC-REQ-065]** `devs-core/src/perf.rs` MUST be implemented and reviewed before any other crate adds performance instrumentation. This prevents duplicate definitions and ensures all crates share a single source of truth for SLO thresholds.
 
-**[PERF-DEP-002]** SLO thresholds MUST be defined as `pub const u64` values in `devs-core/src/perf.rs`, not as inline numeric literals in test files. Test files MUST import these constants. Example:
+**[PERF-DEP-002] [8b_PERF_SPEC-REQ-066]** SLO thresholds MUST be defined as `pub const u64` values in `devs-core/src/perf.rs`, not as inline numeric literals in test files. Test files MUST import these constants. Example:
 ```rust
 // In devs-core/src/perf.rs
 pub const SLO_GET_RUN_P99_MS: u64 = 50;
@@ -453,22 +453,22 @@ assert!(elapsed_ms < SLO_GET_RUN_P99_MS * 3 / 2, "get_run p99 regression");
 
 The following criteria verify that the goals, principles, and measurement infrastructure defined in this section are correctly implemented. Each criterion must have a corresponding test annotated `// Covers: <ID>`.
 
-- **[AC-PERF-001]** `devs-core/src/perf.rs` exports `LatencyMeasurement`, `MeasurementBoundary`, and `pub const SLO_*_P99_MS: u64` for every operation in the §2 SLO table. `cargo doc --no-deps` must emit zero warnings for these items.
-- **[AC-PERF-002]** `devs-core/src/perf.rs` has `unsafe_code = "deny"` and no `unsafe` blocks. `cargo tree -p devs-core --edges normal` must not list `tokio`, `git2`, `reqwest`, or `tonic` (matches `[ARCH-AC-009]`).
-- **[AC-PERF-003]** A unit test in `devs-core` verifies that `MeasurementBoundary` has exactly the 7 variants defined in §1.3.1. Adding a variant without updating the test causes a compile error (exhaustive match).
-- **[AC-PERF-004]** A unit test verifies that `SloViolation` rate-limiting emits exactly one log event when 100 consecutive measurements exceed the threshold within a 10-second window, and exactly two events when the same 100 measurements span two consecutive 10-second windows.
-- **[AC-PERF-005]** `target/presubmit_timings.jsonl` exists after `./do presubmit` completes (success or failure). Each line is valid JSON conforming to the `PresubmitTimingRecord` schema. An integration test invokes `./do presubmit` in a temp directory and asserts this.
-- **[AC-PERF-006]** `target/presubmit_timings.jsonl` contains exactly one record per step that executed. Steps that were not reached (e.g., because an earlier step failed) have no record. The `_timeout_kill` record is present only when the 900 s timer fires.
-- **[AC-PERF-007]** A lint check (`./do lint`) verifies that no `.rs` file outside `devs-core/src/perf.rs` contains inline numeric literals used as SLO thresholds (i.e., `assert!(elapsed_ms < 500)` without importing a `SLO_*` constant). The check scans for `elapsed_ms <` patterns adjacent to numeric literals.
-- **[AC-PERF-008]** A lint check (`./do lint`) verifies that no test file contains `sleep(Duration::from_millis(N))` where `N < 1000` inside a loop. This enforces [PERF-GP-010].
-- **[AC-PERF-009]** A unit test verifies that `LatencyMeasurement::elapsed_ms` uses `std::time::Instant` (monotonic), not `chrono::Utc::now()`. This is verified by inspecting that `started_at` is of type `std::time::Instant` at compile time.
-- **[AC-PERF-010]** A unit test verifies that `render()` in `devs-tui` is `&self` (not `&mut self`) and that the `AppState` borrow passed to `render()` is immutable (`&AppState`), enforcing [PERF-004-BR-001].
-- **[AC-PERF-011]** Two independently-rooted stages in a workflow are both dispatched within 100 ms of the run transitioning to `Running` (verified via `GetRun` polling and stage `started_at` timestamps). This is the primary acceptance criterion for [PERF-001] / [GOAL-001].
-- **[AC-PERF-012]** The TUI re-renders within 50 ms of receiving a synthetic `RunDelta` event injected into the event channel. Measured in a `TestBackend` test with a 200×50 frame at `ColorMode::Monochrome`.
-- **[AC-PERF-013]** A `TestBackend` test renders a 256-stage DAG and asserts that `handle_event()` plus `render()` complete within 50 ms total. This exercises the O(V+E) DAG tier computation at maximum scale.
-- **[AC-PERF-014]** `./do presubmit` exits non-zero when the 900-second timer fires (simulated by setting a 5-second override timeout in a test invocation). The `_timeout_kill` record is present in `target/presubmit_timings.jsonl`.
-- **[AC-PERF-015]** `SloViolation` events are not emitted for operations that complete within their p99 threshold. A unit test that records 1 000 measurements all at `threshold_ms - 1` asserts that the violation map remains empty.
-- **[AC-PERF-016]** `devs-core/src/perf.rs` contains `pub const` SLO threshold values for each of PERF-001 through PERF-033 that have numeric p99 targets. A compile-time test (`static_assertions::const_assert!`) verifies each constant is non-zero.
+- **[AC-PERF-001] [8b_PERF_SPEC-REQ-067]** `devs-core/src/perf.rs` exports `LatencyMeasurement`, `MeasurementBoundary`, and `pub const SLO_*_P99_MS: u64` for every operation in the §2 SLO table. `cargo doc --no-deps` must emit zero warnings for these items.
+- **[AC-PERF-002] [8b_PERF_SPEC-REQ-068]** `devs-core/src/perf.rs` has `unsafe_code = "deny"` and no `unsafe` blocks. `cargo tree -p devs-core --edges normal` must not list `tokio`, `git2`, `reqwest`, or `tonic` (matches `[ARCH-AC-009]`).
+- **[AC-PERF-003] [8b_PERF_SPEC-REQ-069]** A unit test in `devs-core` verifies that `MeasurementBoundary` has exactly the 7 variants defined in §1.3.1. Adding a variant without updating the test causes a compile error (exhaustive match).
+- **[AC-PERF-004] [8b_PERF_SPEC-REQ-070]** A unit test verifies that `SloViolation` rate-limiting emits exactly one log event when 100 consecutive measurements exceed the threshold within a 10-second window, and exactly two events when the same 100 measurements span two consecutive 10-second windows.
+- **[AC-PERF-005] [8b_PERF_SPEC-REQ-071]** `target/presubmit_timings.jsonl` exists after `./do presubmit` completes (success or failure). Each line is valid JSON conforming to the `PresubmitTimingRecord` schema. An integration test invokes `./do presubmit` in a temp directory and asserts this.
+- **[AC-PERF-006] [8b_PERF_SPEC-REQ-072]** `target/presubmit_timings.jsonl` contains exactly one record per step that executed. Steps that were not reached (e.g., because an earlier step failed) have no record. The `_timeout_kill` record is present only when the 900 s timer fires.
+- **[AC-PERF-007] [8b_PERF_SPEC-REQ-073]** A lint check (`./do lint`) verifies that no `.rs` file outside `devs-core/src/perf.rs` contains inline numeric literals used as SLO thresholds (i.e., `assert!(elapsed_ms < 500)` without importing a `SLO_*` constant). The check scans for `elapsed_ms <` patterns adjacent to numeric literals.
+- **[AC-PERF-008] [8b_PERF_SPEC-REQ-074]** A lint check (`./do lint`) verifies that no test file contains `sleep(Duration::from_millis(N))` where `N < 1000` inside a loop. This enforces [PERF-GP-010] [8b_PERF_SPEC-REQ-019].
+- **[AC-PERF-009] [8b_PERF_SPEC-REQ-075]** A unit test verifies that `LatencyMeasurement::elapsed_ms` uses `std::time::Instant` (monotonic), not `chrono::Utc::now()`. This is verified by inspecting that `started_at` is of type `std::time::Instant` at compile time.
+- **[AC-PERF-010] [8b_PERF_SPEC-REQ-076]** A unit test verifies that `render()` in `devs-tui` is `&self` (not `&mut self`) and that the `AppState` borrow passed to `render()` is immutable (`&AppState`), enforcing [PERF-004-BR-001] [8b_PERF_SPEC-REQ-043].
+- **[AC-PERF-011] [8b_PERF_SPEC-REQ-077]** Two independently-rooted stages in a workflow are both dispatched within 100 ms of the run transitioning to `Running` (verified via `GetRun` polling and stage `started_at` timestamps). This is the primary acceptance criterion for [PERF-001] [8b_PERF_SPEC-REQ-028] / [GOAL-001].
+- **[AC-PERF-012] [8b_PERF_SPEC-REQ-078]** The TUI re-renders within 50 ms of receiving a synthetic `RunDelta` event injected into the event channel. Measured in a `TestBackend` test with a 200×50 frame at `ColorMode::Monochrome`.
+- **[AC-PERF-013] [8b_PERF_SPEC-REQ-079]** A `TestBackend` test renders a 256-stage DAG and asserts that `handle_event()` plus `render()` complete within 50 ms total. This exercises the O(V+E) DAG tier computation at maximum scale.
+- **[AC-PERF-014] [8b_PERF_SPEC-REQ-080]** `./do presubmit` exits non-zero when the 900-second timer fires (simulated by setting a 5-second override timeout in a test invocation). The `_timeout_kill` record is present in `target/presubmit_timings.jsonl`.
+- **[AC-PERF-015] [8b_PERF_SPEC-REQ-081]** `SloViolation` events are not emitted for operations that complete within their p99 threshold. A unit test that records 1 000 measurements all at `threshold_ms - 1` asserts that the violation map remains empty.
+- **[AC-PERF-016] [8b_PERF_SPEC-REQ-082]** `devs-core/src/perf.rs` contains `pub const` SLO threshold values for each of PERF-001 through PERF-033 that have numeric p99 targets. A compile-time test (`static_assertions::const_assert!`) verifies each constant is non-zero.
 
 ---
 
@@ -478,46 +478,46 @@ The table below captures every measurable performance target in this specificati
 
 The SLO table is the authoritative source of truth for CI assertion thresholds. Every row with a p99 value has a corresponding `pub const SLO_*_P99_MS: u64` constant in `devs-core/src/perf.rs` (see §2.3). Test code MUST reference these constants — no inline numeric literals are permitted in SLO assertions.
 
-**[PERF-SLO-BR-001]** Every SLO entry in the table below MUST have a corresponding integration test that collects ≥ 100 observations ([PERF-GP-005]) before computing percentiles. Tests that run fewer than 100 samples MUST fail with a descriptive error, not produce a false-positive pass.
+**[PERF-SLO-BR-001] [8b_PERF_SPEC-REQ-083]** Every SLO entry in the table below MUST have a corresponding integration test that collects ≥ 100 observations ([PERF-GP-005] [8b_PERF_SPEC-REQ-007]) before computing percentiles. Tests that run fewer than 100 samples MUST fail with a descriptive error, not produce a false-positive pass.
 
-**[PERF-SLO-BR-002]** For operations with both a latency SLO and a throughput SLO, the throughput target MUST be sustained while simultaneously meeting the latency target. Throughput under degraded latency (e.g., with all capacity used by slow requests) is not an acceptable test configuration.
+**[PERF-SLO-BR-002] [8b_PERF_SPEC-REQ-084]** For operations with both a latency SLO and a throughput SLO, the throughput target MUST be sustained while simultaneously meeting the latency target. Throughput under degraded latency (e.g., with all capacity used by slow requests) is not an acceptable test configuration.
 
-**[PERF-SLO-BR-003]** Any operation whose p99 latency exceeds its SLO target for three or more consecutive measurement windows MUST emit a `SloViolation` structured log event with `severity = "critical"`. The rate-limiter defined in [PERF-102] applies per (operation, boundary) pair.
+**[PERF-SLO-BR-003] [8b_PERF_SPEC-REQ-085]** Any operation whose p99 latency exceeds its SLO target for three or more consecutive measurement windows MUST emit a `SloViolation` structured log event with `severity = "critical"`. The rate-limiter defined in [PERF-102] [8b_PERF_SPEC-REQ-056] applies per (operation, boundary) pair.
 
-**[PERF-SLO-BR-004]** SLO thresholds are stable across minor releases. A SLO regression (any p99 increase > 10%) MUST be treated as a breaking change and requires an explicit PERF-ID amendment with rationale documented in this specification.
+**[PERF-SLO-BR-004] [8b_PERF_SPEC-REQ-086]** SLO thresholds are stable across minor releases. A SLO regression (any p99 increase > 10%) MUST be treated as a breaking change and requires an explicit PERF-ID amendment with rationale documented in this specification.
 
-**[PERF-SLO-BR-005]** Hard limits (operations where the p99 column equals the hard maximum, such as [PERF-023] TUI render at 16 ms) MUST be enforced in production code via a `debug_assert!` or equivalent runtime guard. Exceeding a hard limit in production is a bug, not a monitoring alert.
+**[PERF-SLO-BR-005] [8b_PERF_SPEC-REQ-087]** Hard limits (operations where the p99 column equals the hard maximum, such as [PERF-023] [8b_PERF_SPEC-REQ-088] TUI render at 16 ms) MUST be enforced in production code via a `debug_assert!` or equivalent runtime guard. Exceeding a hard limit in production is a bug, not a monitoring alert.
 
 | ID | Endpoint / Operation | p50 | p95 | p99 | Throughput | Notes |
 |----|----------------------|-----|-----|-----|------------|-------|
-| **[PERF-006]** | `SubmitRun` gRPC RPC | < 50 ms | < 200 ms | < 500 ms | ≥ 10 req/s burst | Includes 7-step validation + checkpoint write |
-| **[PERF-007]** | `GetRun` gRPC RPC | < 5 ms | < 20 ms | < 50 ms | ≥ 100 req/s | Read-only; in-memory `RwLock` |
-| **[PERF-008]** | `ListRuns` gRPC RPC | < 10 ms | < 50 ms | < 100 ms | ≥ 50 req/s | Default limit 100; no `stage_runs` |
-| **[PERF-009]** | `CancelRun` gRPC RPC | < 50 ms | < 200 ms | < 500 ms | ≥ 5 req/s | Atomic checkpoint; cascades to all stages |
-| **[PERF-010]** | `StreamRunEvents` first event | < 50 ms | < 100 ms | < 200 ms | ≥ 20 concurrent streams | First message is run snapshot |
-| **[PERF-011]** | `StreamLogs` non-follow, TTFB | < 20 ms | < 100 ms | < 250 ms | ≥ 20 concurrent streams | Returns buffered lines then closes |
-| **[PERF-012]** | `StreamLogs` follow:true, live chunk latency | < 100 ms | < 300 ms | < 500 ms | ≥ 20 concurrent streams | From stdout write to client receipt |
-| **[PERF-013]** | `WatchPoolState` first event | < 50 ms | < 100 ms | < 200 ms | ≥ 10 concurrent streams | Initial snapshot message |
-| **[PERF-014]** | MCP `list_runs` response time | < 20 ms | < 100 ms | < 500 ms | ≥ 30 req/s | Read lock only; parallel-safe |
-| **[PERF-015]** | MCP `get_run` response time | < 10 ms | < 50 ms | < 200 ms | ≥ 50 req/s | Read lock only |
-| **[PERF-016]** | MCP `get_stage_output` response time | < 20 ms | < 100 ms | < 500 ms | ≥ 20 req/s | Up to 2 MiB payload (1 MiB stdout + 1 MiB stderr) |
-| **[PERF-017]** | MCP `submit_run` response time | < 100 ms | < 500 ms | < 1 000 ms | ≥ 5 req/s | Includes validation + checkpoint write |
-| **[PERF-018]** | MCP `cancel_run` response time | < 100 ms | < 500 ms | < 1 000 ms | ≥ 5 req/s | Write lock; atomic cascade |
-| **[PERF-019]** | MCP `write_workflow_definition` response time | < 200 ms | < 1 000 ms | < 2 000 ms | ≥ 2 req/s | 13-step validation + disk write |
-| **[PERF-020]** | MCP lock acquisition (write-contended) | < 500 ms | < 2 000 ms | < 5 000 ms | — | Timeout at 5 s → `resource_exhausted` |
-| **[PERF-021]** | DAG scheduler dispatch latency | < 20 ms | < 50 ms | < 100 ms | — | From dep-complete event to stage spawn |
-| **[PERF-022]** | Stage cancel signal delivery | < 1 000 ms | < 3 000 ms | < 5 000 ms | — | stdin `devs:cancel\n` to process |
-| **[PERF-023]** | TUI render latency | < 5 ms | < 10 ms | < 16 ms | ≥ 60 fps theoretical | Hard limit: no render may exceed 16 ms |
-| **[PERF-024]** | TUI event→render pipeline | < 20 ms | < 40 ms | < 50 ms | — | From `RunEvent` receipt to screen update |
-| **[PERF-025]** | CLI `devs status <run>` | < 50 ms | < 200 ms | < 500 ms | — | One `GetRun` gRPC call |
-| **[PERF-026]** | CLI `devs list` | < 100 ms | < 300 ms | < 700 ms | — | One `ListRuns` gRPC call |
-| **[PERF-027]** | CLI `devs submit` | < 200 ms | < 700 ms | < 1 500 ms | — | One `SubmitRun` gRPC call |
-| **[PERF-028]** | Checkpoint write (atomic) | < 50 ms | < 200 ms | < 500 ms | — | serialize + write-tmp + fsync + rename |
-| **[PERF-029]** | Webhook delivery attempt (TTFB to target) | < 500 ms | < 3 000 ms | < 10 000 ms | ≥ 8 concurrent deliveries | Hard 10 s timeout per attempt |
-| **[PERF-030]** | Server startup (all ports bound + discovery file written) | < 2 000 ms | < 5 000 ms | < 10 000 ms | — | Excludes checkpoint restore duration |
-| **[PERF-031]** | Server startup with checkpoint restore (≤50 runs) | < 5 000 ms | < 15 000 ms | < 30 000 ms | — | git2 operations via spawn_blocking |
-| **[PERF-032]** | `./do presubmit` wall clock | — | — | < 900 000 ms | — | Hard timeout; process killed on breach |
-| **[PERF-033]** | Retention sweep duration (≤500 runs) | < 5 000 ms | < 30 000 ms | < 60 000 ms | — | At startup + every 24 h |
+| **[PERF-006] [8b_PERF_SPEC-REQ-017]** | `SubmitRun` gRPC RPC | < 50 ms | < 200 ms | < 500 ms | ≥ 10 req/s burst | Includes 7-step validation + checkpoint write |
+| **[PERF-007] [8b_PERF_SPEC-REQ-089]** | `GetRun` gRPC RPC | < 5 ms | < 20 ms | < 50 ms | ≥ 100 req/s | Read-only; in-memory `RwLock` |
+| **[PERF-008] [8b_PERF_SPEC-REQ-090]** | `ListRuns` gRPC RPC | < 10 ms | < 50 ms | < 100 ms | ≥ 50 req/s | Default limit 100; no `stage_runs` |
+| **[PERF-009] [8b_PERF_SPEC-REQ-018]** | `CancelRun` gRPC RPC | < 50 ms | < 200 ms | < 500 ms | ≥ 5 req/s | Atomic checkpoint; cascades to all stages |
+| **[PERF-010] [8b_PERF_SPEC-REQ-091]** | `StreamRunEvents` first event | < 50 ms | < 100 ms | < 200 ms | ≥ 20 concurrent streams | First message is run snapshot |
+| **[PERF-011] [8b_PERF_SPEC-REQ-092]** | `StreamLogs` non-follow, TTFB | < 20 ms | < 100 ms | < 250 ms | ≥ 20 concurrent streams | Returns buffered lines then closes |
+| **[PERF-012] [8b_PERF_SPEC-REQ-093]** | `StreamLogs` follow:true, live chunk latency | < 100 ms | < 300 ms | < 500 ms | ≥ 20 concurrent streams | From stdout write to client receipt |
+| **[PERF-013] [8b_PERF_SPEC-REQ-094]** | `WatchPoolState` first event | < 50 ms | < 100 ms | < 200 ms | ≥ 10 concurrent streams | Initial snapshot message |
+| **[PERF-014] [8b_PERF_SPEC-REQ-095]** | MCP `list_runs` response time | < 20 ms | < 100 ms | < 500 ms | ≥ 30 req/s | Read lock only; parallel-safe |
+| **[PERF-015] [8b_PERF_SPEC-REQ-096]** | MCP `get_run` response time | < 10 ms | < 50 ms | < 200 ms | ≥ 50 req/s | Read lock only |
+| **[PERF-016] [8b_PERF_SPEC-REQ-097]** | MCP `get_stage_output` response time | < 20 ms | < 100 ms | < 500 ms | ≥ 20 req/s | Up to 2 MiB payload (1 MiB stdout + 1 MiB stderr) |
+| **[PERF-017] [8b_PERF_SPEC-REQ-098]** | MCP `submit_run` response time | < 100 ms | < 500 ms | < 1 000 ms | ≥ 5 req/s | Includes validation + checkpoint write |
+| **[PERF-018] [8b_PERF_SPEC-REQ-099]** | MCP `cancel_run` response time | < 100 ms | < 500 ms | < 1 000 ms | ≥ 5 req/s | Write lock; atomic cascade |
+| **[PERF-019] [8b_PERF_SPEC-REQ-100]** | MCP `write_workflow_definition` response time | < 200 ms | < 1 000 ms | < 2 000 ms | ≥ 2 req/s | 13-step validation + disk write |
+| **[PERF-020] [8b_PERF_SPEC-REQ-101]** | MCP lock acquisition (write-contended) | < 500 ms | < 2 000 ms | < 5 000 ms | — | Timeout at 5 s → `resource_exhausted` |
+| **[PERF-021] [8b_PERF_SPEC-REQ-102]** | DAG scheduler dispatch latency | < 20 ms | < 50 ms | < 100 ms | — | From dep-complete event to stage spawn |
+| **[PERF-022] [8b_PERF_SPEC-REQ-103]** | Stage cancel signal delivery | < 1 000 ms | < 3 000 ms | < 5 000 ms | — | stdin `devs:cancel\n` to process |
+| **[PERF-023] [8b_PERF_SPEC-REQ-088]** | TUI render latency | < 5 ms | < 10 ms | < 16 ms | ≥ 60 fps theoretical | Hard limit: no render may exceed 16 ms |
+| **[PERF-024] [8b_PERF_SPEC-REQ-104]** | TUI event→render pipeline | < 20 ms | < 40 ms | < 50 ms | — | From `RunEvent` receipt to screen update |
+| **[PERF-025] [8b_PERF_SPEC-REQ-015]** | CLI `devs status <run>` | < 50 ms | < 200 ms | < 500 ms | — | One `GetRun` gRPC call |
+| **[PERF-026] [8b_PERF_SPEC-REQ-105]** | CLI `devs list` | < 100 ms | < 300 ms | < 700 ms | — | One `ListRuns` gRPC call |
+| **[PERF-027] [8b_PERF_SPEC-REQ-016]** | CLI `devs submit` | < 200 ms | < 700 ms | < 1 500 ms | — | One `SubmitRun` gRPC call |
+| **[PERF-028] [8b_PERF_SPEC-REQ-064]** | Checkpoint write (atomic) | < 50 ms | < 200 ms | < 500 ms | — | serialize + write-tmp + fsync + rename |
+| **[PERF-029] [8b_PERF_SPEC-REQ-106]** | Webhook delivery attempt (TTFB to target) | < 500 ms | < 3 000 ms | < 10 000 ms | ≥ 8 concurrent deliveries | Hard 10 s timeout per attempt |
+| **[PERF-030] [8b_PERF_SPEC-REQ-107]** | Server startup (all ports bound + discovery file written) | < 2 000 ms | < 5 000 ms | < 10 000 ms | — | Excludes checkpoint restore duration |
+| **[PERF-031] [8b_PERF_SPEC-REQ-108]** | Server startup with checkpoint restore (≤50 runs) | < 5 000 ms | < 15 000 ms | < 30 000 ms | — | git2 operations via spawn_blocking |
+| **[PERF-032] [8b_PERF_SPEC-REQ-109]** | `./do presubmit` wall clock | — | — | < 900 000 ms | — | Hard timeout; process killed on breach |
+| **[PERF-033] [8b_PERF_SPEC-REQ-110]** | Retention sweep duration (≤500 runs) | < 5 000 ms | < 30 000 ms | < 60 000 ms | — | At startup + every 24 h |
 
 ### 2.1 Measurement Methodology
 
@@ -525,89 +525,89 @@ Every SLO in the table above is measured at a specific boundary defined by the `
 
 The choice of measurement boundary is critical to fair comparison across implementations. gRPC and MCP boundaries exclude network transport setup; CLI boundaries include it. This means a CLI p99 of 500 ms for `devs status` and a gRPC p99 of 50 ms for `GetRun` are both correct and non-contradictory: the difference reflects TCP dial time plus process startup overhead. No SLO row may be validated using a boundary type other than the one specified in its `MeasurementBoundary` variant.
 
-**[PERF-105]** For gRPC RPCs, measurement begins when the first byte of the request is received by the tonic handler and ends when the last byte of the response is written to the transport. Dial time and TLS handshake are excluded. The `MeasurementBoundary::GrpcHandler` variant is used.
+**[PERF-105] [8b_PERF_SPEC-REQ-011]** For gRPC RPCs, measurement begins when the first byte of the request is received by the tonic handler and ends when the last byte of the response is written to the transport. Dial time and TLS handshake are excluded. The `MeasurementBoundary::GrpcHandler` variant is used.
 
-**[PERF-106]** For MCP HTTP tools, measurement begins when `hyper` delivers the fully-parsed request body to the handler function and ends when `hyper` acknowledges the last byte of the response body has been written. Connection setup is excluded. The `MeasurementBoundary::McpHandler` variant is used.
+**[PERF-106] [8b_PERF_SPEC-REQ-111]** For MCP HTTP tools, measurement begins when `hyper` delivers the fully-parsed request body to the handler function and ends when `hyper` acknowledges the last byte of the response body has been written. Connection setup is excluded. The `MeasurementBoundary::McpHandler` variant is used.
 
-**[PERF-107]** For the DAG scheduler dispatch latency ([PERF-021]), measurement begins at the moment `StateMachine::transition()` returns `Ok(())` for the dependency's terminal transition, and ends at the `execvp`/`CreateProcess` syscall for the spawned agent subprocess. The `MeasurementBoundary::Scheduler` variant is used.
+**[PERF-107] [8b_PERF_SPEC-REQ-112]** For the DAG scheduler dispatch latency ([PERF-021] [8b_PERF_SPEC-REQ-102]), measurement begins at the moment `StateMachine::transition()` returns `Ok(())` for the dependency's terminal transition, and ends at the `execvp`/`CreateProcess` syscall for the spawned agent subprocess. The `MeasurementBoundary::Scheduler` variant is used.
 
-**[PERF-108]** For CLI commands, measurement begins at `fn main()` entry and ends at the Rust process exit. This includes gRPC dial time and is therefore a superset of the server-side gRPC latency. The `MeasurementBoundary::CliBinary` variant is used.
+**[PERF-108] [8b_PERF_SPEC-REQ-014]** For CLI commands, measurement begins at `fn main()` entry and ends at the Rust process exit. This includes gRPC dial time and is therefore a superset of the server-side gRPC latency. The `MeasurementBoundary::CliBinary` variant is used.
 
-**[PERF-109]** For TUI render latency, measurement begins at `App::handle_event()` entry and ends after `terminal.draw()` returns, which includes crossterm I/O flush. The `MeasurementBoundary::TuiRender` variant is used.
+**[PERF-109] [8b_PERF_SPEC-REQ-012]** For TUI render latency, measurement begins at `App::handle_event()` entry and ends after `terminal.draw()` returns, which includes crossterm I/O flush. The `MeasurementBoundary::TuiRender` variant is used.
 
-**[PERF-110]** All SLO thresholds use the **p99 column** as the CI assertion threshold. In test code, the p99 threshold is applied with a **50% margin** (`CI_MARGIN_NUMERATOR = 3`, `CI_MARGIN_DENOMINATOR = 2`) to account for CI runner variance (e.g., a p99 target of 500 ms becomes `assert!(elapsed_ms < 750)` in CI). This margin does not apply to the hard limits defined in §3.7, which are absolute.
+**[PERF-110] [8b_PERF_SPEC-REQ-006]** All SLO thresholds use the **p99 column** as the CI assertion threshold. In test code, the p99 threshold is applied with a **50% margin** (`CI_MARGIN_NUMERATOR = 3`, `CI_MARGIN_DENOMINATOR = 2`) to account for CI runner variance (e.g., a p99 target of 500 ms becomes `assert!(elapsed_ms < 750)` in CI). This margin does not apply to the hard limits defined in §3.7, which are absolute.
 
 #### 2.1.1 Throughput Measurement Protocol
 
 Throughput targets (the "Throughput" column) are measured separately from latency targets and require a sustained load test, not a single-request benchmark. The following rules govern throughput measurement:
 
-**[PERF-116]** A throughput measurement is valid only when all of the following hold simultaneously: (a) the server has been running for ≥ 5 seconds (past startup transient), (b) at least the specified number of concurrent clients are actively sending requests, (c) no request in the measurement window has exceeded its p99 latency target (the latency SLO must hold while throughput is measured).
+**[PERF-116] [8b_PERF_SPEC-REQ-113]** A throughput measurement is valid only when all of the following hold simultaneously: (a) the server has been running for ≥ 5 seconds (past startup transient), (b) at least the specified number of concurrent clients are actively sending requests, (c) no request in the measurement window has exceeded its p99 latency target (the latency SLO must hold while throughput is measured).
 
-**[PERF-117]** For streaming operations (PERF-010 through PERF-013), the throughput target is expressed as concurrent active streams, not requests per second. A concurrent stream is counted from the moment the first event is delivered to the moment the stream is closed or the client disconnects.
+**[PERF-117] [8b_PERF_SPEC-REQ-114]** For streaming operations (PERF-010 through PERF-013), the throughput target is expressed as concurrent active streams, not requests per second. A concurrent stream is counted from the moment the first event is delivered to the moment the stream is closed or the client disconnects.
 
-**[PERF-118]** Throughput for MCP tools (PERF-014 through PERF-019) is measured as complete request-response cycles per second at the HTTP layer. Partial requests, connection resets, and timeout-aborted requests are excluded from the numerator but not from the denominator (elapsed time).
+**[PERF-118] [8b_PERF_SPEC-REQ-115]** Throughput for MCP tools (PERF-014 through PERF-019) is measured as complete request-response cycles per second at the HTTP layer. Partial requests, connection resets, and timeout-aborted requests are excluded from the numerator but not from the denominator (elapsed time).
 
-**[PERF-119]** The measurement window for throughput assertions MUST be ≥ 10 seconds. Bursts shorter than 10 seconds do not constitute a valid throughput measurement even if instantaneous throughput appears compliant.
+**[PERF-119] [8b_PERF_SPEC-REQ-116]** The measurement window for throughput assertions MUST be ≥ 10 seconds. Bursts shorter than 10 seconds do not constitute a valid throughput measurement even if instantaneous throughput appears compliant.
 
-**[PERF-120]** When a throughput target specifies "burst" (e.g., PERF-006 "≥ 10 req/s burst"), the target applies to the peak 1-second window within the 10-second measurement window. Non-burst throughput targets apply to the mean over the entire 10-second window.
+**[PERF-120] [8b_PERF_SPEC-REQ-117]** When a throughput target specifies "burst" (e.g., PERF-006 "≥ 10 req/s burst"), the target applies to the peak 1-second window within the 10-second measurement window. Non-burst throughput targets apply to the mean over the entire 10-second window.
 
 #### 2.1.2 Percentile Computation
 
 The percentile computation used for SLO assertions is a deterministic, sort-based algorithm applied to the raw `LatencyMeasurement` sample set. No approximation algorithms (e.g., HdrHistogram, t-digest) are used in CI assertions.
 
-**[PERF-121]** Given a sorted slice of `N` duration samples `d[0..N]` (ascending), the p99 value is `d[ceil(0.99 * N) - 1]` using integer ceiling arithmetic. For `N = 100` (the minimum sample count), this is `d[98]` (0-indexed), i.e., the 99th value in a sorted list of 100.
+**[PERF-121] [8b_PERF_SPEC-REQ-118]** Given a sorted slice of `N` duration samples `d[0..N]` (ascending), the p99 value is `d[ceil(0.99 * N) - 1]` using integer ceiling arithmetic. For `N = 100` (the minimum sample count), this is `d[98]` (0-indexed), i.e., the 99th value in a sorted list of 100.
 
-**[PERF-122]** Samples MUST be collected in the order they complete (not in the order they start). Parallel requests may complete out of submission order; this is expected and correct. The sort applied during percentile computation normalizes ordering.
+**[PERF-122] [8b_PERF_SPEC-REQ-119]** Samples MUST be collected in the order they complete (not in the order they start). Parallel requests may complete out of submission order; this is expected and correct. The sort applied during percentile computation normalizes ordering.
 
-**[PERF-123]** Outlier exclusion is prohibited in SLO test assertions. All `N` samples collected during a test run MUST be included in the percentile computation. Discarding outliers would defeat the purpose of the p99 threshold and is considered a test integrity violation.
+**[PERF-123] [8b_PERF_SPEC-REQ-120]** Outlier exclusion is prohibited in SLO test assertions. All `N` samples collected during a test run MUST be included in the percentile computation. Discarding outliers would defeat the purpose of the p99 threshold and is considered a test integrity violation.
 
 ### 2.2 SLO Edge Cases
 
 The following edge cases define expected behavior at SLO boundaries and must each have a corresponding integration test. Each test is tagged with the PERF-ID it validates. Edge cases cover three categories: (1) error-path latency (the SLO applies even when the request fails), (2) resource-exhaustion behavior (the SLO for unaffected callers must hold), and (3) boundary conditions at buffer/capacity limits.
 
-**[PERF-111]** When `SubmitRun` validation fails (e.g., duplicate run name, invalid workflow definition reference, or missing required field), the error response MUST still be returned within the p99 latency target for `SubmitRun` (500 ms). Rejection is not a license for slow response. The server MUST not perform partial work (e.g., partial checkpoint write) before returning the validation error.
+**[PERF-111] [8b_PERF_SPEC-REQ-121]** When `SubmitRun` validation fails (e.g., duplicate run name, invalid workflow definition reference, or missing required field), the error response MUST still be returned within the p99 latency target for `SubmitRun` (500 ms). Rejection is not a license for slow response. The server MUST not perform partial work (e.g., partial checkpoint write) before returning the validation error.
 
-**[PERF-112]** When the gRPC event buffer for a `StreamRunEvents` client reaches 256 messages (full), the server MUST drop the oldest message, log `WARN` with the run ID and drop count, and continue serving — it MUST NOT block the engine's state mutation path. The drop MUST complete in constant time O(1). Clients that fall behind by more than 256 events are responsible for reconnecting and fetching a fresh snapshot.
+**[PERF-112] [8b_PERF_SPEC-REQ-122]** When the gRPC event buffer for a `StreamRunEvents` client reaches 256 messages (full), the server MUST drop the oldest message, log `WARN` with the run ID and drop count, and continue serving — it MUST NOT block the engine's state mutation path. The drop MUST complete in constant time O(1). Clients that fall behind by more than 256 events are responsible for reconnecting and fetching a fresh snapshot.
 
-**[PERF-113]** When a checkpoint write fails with `ENOSPC` (disk full), the server MUST continue processing other requests without degradation beyond the write-failure recovery path. The `SubmitRun` SLO still applies to concurrent callers that are not affected by the disk-full condition. The failed `SubmitRun` itself MAY exceed its SLO (the error path is exempt), but the exemption is scoped to that specific request, not to all concurrent requests.
+**[PERF-113] [8b_PERF_SPEC-REQ-123]** When a checkpoint write fails with `ENOSPC` (disk full), the server MUST continue processing other requests without degradation beyond the write-failure recovery path. The `SubmitRun` SLO still applies to concurrent callers that are not affected by the disk-full condition. The failed `SubmitRun` itself MAY exceed its SLO (the error path is exempt), but the exemption is scoped to that specific request, not to all concurrent requests.
 
-**[PERF-114]** When all agents in a pool are rate-limited (pool exhausted), `submit_run` and `SubmitRun` must still respond within their respective SLOs. Pool exhaustion does not block submission; it only affects dispatch timing. The run enters `Pending` state and the response is returned promptly. A test for this edge case MUST verify that submission latency while the pool is at capacity (all slots occupied) is within the p99 SLO.
+**[PERF-114] [8b_PERF_SPEC-REQ-124]** When all agents in a pool are rate-limited (pool exhausted), `submit_run` and `SubmitRun` must still respond within their respective SLOs. Pool exhaustion does not block submission; it only affects dispatch timing. The run enters `Pending` state and the response is returned promptly. A test for this edge case MUST verify that submission latency while the pool is at capacity (all slots occupied) is within the p99 SLO.
 
-**[PERF-115]** When `stream_logs follow:true` is called for a stage with exactly 10 000 buffered lines (full buffer), all 10 000 lines plus a final `{"done":false}` chunk must be delivered before live chunks begin. The p99 latency for delivering all 10 000 buffered lines is defined in [PERF-046]. This edge case validates that back-pressure from a full log buffer does not cause the stream to stall indefinitely.
+**[PERF-115] [8b_PERF_SPEC-REQ-125]** When `stream_logs follow:true` is called for a stage with exactly 10 000 buffered lines (full buffer), all 10 000 lines plus a final `{"done":false}` chunk must be delivered before live chunks begin. The p99 latency for delivering all 10 000 buffered lines is defined in [PERF-046] [8b_PERF_SPEC-REQ-126]. This edge case validates that back-pressure from a full log buffer does not cause the stream to stall indefinitely.
 
-**[PERF-116-EC]** When `GetRun` is called with a run ID that does not exist, the server MUST return a `not_found` gRPC status within the `GetRun` p99 SLO (50 ms). Unknown-ID lookup must not trigger a full scan of the run registry; it must be an O(1) hash-map lookup.
+**[PERF-116-EC] [8b_PERF_SPEC-REQ-127]** When `GetRun` is called with a run ID that does not exist, the server MUST return a `not_found` gRPC status within the `GetRun` p99 SLO (50 ms). Unknown-ID lookup must not trigger a full scan of the run registry; it must be an O(1) hash-map lookup.
 
-**[PERF-117-EC]** When `WatchPoolState` is called and the pool has not had any state change for ≥ 60 seconds, the server MUST send a keepalive message (empty delta) within 60 ± 5 seconds. The first-event SLO ([PERF-013]) applies only to the initial snapshot, not to keepalive messages.
+**[PERF-117-EC] [8b_PERF_SPEC-REQ-128]** When `WatchPoolState` is called and the pool has not had any state change for ≥ 60 seconds, the server MUST send a keepalive message (empty delta) within 60 ± 5 seconds. The first-event SLO ([PERF-013] [8b_PERF_SPEC-REQ-094]) applies only to the initial snapshot, not to keepalive messages.
 
-**[PERF-118-EC]** When the MCP lock acquisition timeout (5 000 ms, [PERF-020]) is reached, the server MUST return a JSON-RPC error with code `-32003` (`resource_exhausted`) within 100 ms of the timeout expiry. The timeout enforcement must use a tokio `timeout()` future, not a spin-wait or polling loop.
+**[PERF-118-EC] [8b_PERF_SPEC-REQ-129]** When the MCP lock acquisition timeout (5 000 ms, [PERF-020] [8b_PERF_SPEC-REQ-101]) is reached, the server MUST return a JSON-RPC error with code `-32003` (`resource_exhausted`) within 100 ms of the timeout expiry. The timeout enforcement must use a tokio `timeout()` future, not a spin-wait or polling loop.
 
-**[PERF-119-EC]** When `./do presubmit` exceeds its 900-second wall-clock limit ([PERF-032]), the `do` script MUST send `SIGTERM` to the presubmit process group and then `SIGKILL` after a 5-second grace period. The total time from limit breach to process termination MUST be ≤ 6 000 ms.
+**[PERF-119-EC] [8b_PERF_SPEC-REQ-130]** When `./do presubmit` exceeds its 900-second wall-clock limit ([PERF-032] [8b_PERF_SPEC-REQ-109]), the `do` script MUST send `SIGTERM` to the presubmit process group and then `SIGKILL` after a 5-second grace period. The total time from limit breach to process termination MUST be ≤ 6 000 ms.
 
-**[PERF-120-EC]** When the retention sweep ([PERF-033]) processes exactly 500 runs and all 500 are eligible for deletion, the sweep MUST complete within 60 000 ms (p99). If the sweep exceeds 60 000 ms, it MUST emit a `SloViolation` event with `operation = "retention_sweep"` and abort cleanly, leaving the run registry in a consistent state.
+**[PERF-120-EC] [8b_PERF_SPEC-REQ-131]** When the retention sweep ([PERF-033] [8b_PERF_SPEC-REQ-110]) processes exactly 500 runs and all 500 are eligible for deletion, the sweep MUST complete within 60 000 ms (p99). If the sweep exceeds 60 000 ms, it MUST emit a `SloViolation` event with `operation = "retention_sweep"` and abort cleanly, leaving the run registry in a consistent state.
 
-**[PERF-121-EC]** When a webhook delivery ([PERF-029]) receives a TCP connection reset from the target before any data is sent, the delivery attempt MUST be counted as failed, a retry MUST be scheduled according to the retry policy, and the TTFB measurement MUST record the time to connection reset (not zero). The next retry MUST begin within 1 000 ms of the connection reset.
+**[PERF-121-EC] [8b_PERF_SPEC-REQ-132]** When a webhook delivery ([PERF-029] [8b_PERF_SPEC-REQ-106]) receives a TCP connection reset from the target before any data is sent, the delivery attempt MUST be counted as failed, a retry MUST be scheduled according to the retry policy, and the TTFB measurement MUST record the time to connection reset (not zero). The next retry MUST begin within 1 000 ms of the connection reset.
 
-**[PERF-122-EC]** When `CancelRun` is called on a run that is already in a terminal state (`Completed`, `Failed`, `Cancelled`), the server MUST return an `already_exists` or `failed_precondition` status within the p99 SLO (500 ms). The checkpoint write for a no-op cancel MUST be skipped; writing a checkpoint for an already-terminal run is a correctness violation.
+**[PERF-122-EC] [8b_PERF_SPEC-REQ-133]** When `CancelRun` is called on a run that is already in a terminal state (`Completed`, `Failed`, `Cancelled`), the server MUST return an `already_exists` or `failed_precondition` status within the p99 SLO (500 ms). The checkpoint write for a no-op cancel MUST be skipped; writing a checkpoint for an already-terminal run is a correctness violation.
 
-**[PERF-123-EC]** When the TUI render function (`terminal.draw()`) is called and the terminal width or height is zero (e.g., the user's terminal is minimized to a zero-size window), the render MUST complete without panicking and MUST still respect the 16 ms hard limit. A zero-size render is a no-op that writes nothing to the terminal but still counts as a completed render frame.
+**[PERF-123-EC] [8b_PERF_SPEC-REQ-134]** When the TUI render function (`terminal.draw()`) is called and the terminal width or height is zero (e.g., the user's terminal is minimized to a zero-size window), the render MUST complete without panicking and MUST still respect the 16 ms hard limit. A zero-size render is a no-op that writes nothing to the terminal but still counts as a completed render frame.
 
-**[PERF-124]** When `StreamLogs` (non-follow) is called for a stage that is currently in `Running` state, the server MUST return all lines buffered up to the moment of the call and then close the stream. It MUST NOT wait for the stage to complete. The TTFB SLO ([PERF-011]: 250 ms p99) applies from the moment the handler is entered to the moment the first log line is written to the transport.
+**[PERF-124] [8b_PERF_SPEC-REQ-135]** When `StreamLogs` (non-follow) is called for a stage that is currently in `Running` state, the server MUST return all lines buffered up to the moment of the call and then close the stream. It MUST NOT wait for the stage to complete. The TTFB SLO ([PERF-011] [8b_PERF_SPEC-REQ-092]: 250 ms p99) applies from the moment the handler is entered to the moment the first log line is written to the transport.
 
-**[PERF-125]** When `ListRuns` is called with `status_filter = [Pending, Running]` and there are 1 000 total runs of which 2 are Pending and 3 are Running, the response MUST contain exactly 5 runs and MUST be returned within the `ListRuns` p99 SLO ([PERF-008]: 100 ms). The filter operation MUST NOT require a full sort of all 1 000 runs; the response is unordered unless the caller specifies an ordering field.
+**[PERF-125] [8b_PERF_SPEC-REQ-136]** When `ListRuns` is called with `status_filter = [Pending, Running]` and there are 1 000 total runs of which 2 are Pending and 3 are Running, the response MUST contain exactly 5 runs and MUST be returned within the `ListRuns` p99 SLO ([PERF-008] [8b_PERF_SPEC-REQ-090]: 100 ms). The filter operation MUST NOT require a full sort of all 1 000 runs; the response is unordered unless the caller specifies an ordering field.
 
-**[PERF-126]** When the server is restarting (between `SIGTERM` receipt and graceful shutdown completion), new gRPC connections MUST be rejected with `UNAVAILABLE` within 50 ms. In-flight requests that began before the shutdown signal MAY complete normally up to their individual SLO timeout. The shutdown sequence MUST NOT block on in-flight requests for longer than the maximum p99 of any in-flight operation type.
+**[PERF-126] [8b_PERF_SPEC-REQ-137]** When the server is restarting (between `SIGTERM` receipt and graceful shutdown completion), new gRPC connections MUST be rejected with `UNAVAILABLE` within 50 ms. In-flight requests that began before the shutdown signal MAY complete normally up to their individual SLO timeout. The shutdown sequence MUST NOT block on in-flight requests for longer than the maximum p99 of any in-flight operation type.
 
-**[PERF-127]** When `write_workflow_definition` ([PERF-019]) is called with a payload that is syntactically valid YAML but semantically invalid (e.g., a DAG with a cycle), all 13 validation steps MUST complete and the error MUST be returned within the p99 SLO (2 000 ms). Semantic validation (cycle detection in the DAG) is bounded by O(V + E) where V is the number of stages and E is the number of dependency edges; for a workflow with ≤ 50 stages this is well within the SLO.
+**[PERF-127] [8b_PERF_SPEC-REQ-138]** When `write_workflow_definition` ([PERF-019] [8b_PERF_SPEC-REQ-100]) is called with a payload that is syntactically valid YAML but semantically invalid (e.g., a DAG with a cycle), all 13 validation steps MUST complete and the error MUST be returned within the p99 SLO (2 000 ms). Semantic validation (cycle detection in the DAG) is bounded by O(V + E) where V is the number of stages and E is the number of dependency edges; for a workflow with ≤ 50 stages this is well within the SLO.
 
-**[PERF-128]** When `checkpoint write` ([PERF-028]) is called concurrently by two goroutines (or tasks) for different runs, the two writes MUST be serialized at the filesystem layer (each write is atomic: serialize → write-tmp → fsync → rename). The combined latency for both writes completing is bounded by 2 × p99 = 1 000 ms, not by the single-write p99, because they cannot overlap at the rename step for the same file path.
+**[PERF-128] [8b_PERF_SPEC-REQ-139]** When `checkpoint write` ([PERF-028] [8b_PERF_SPEC-REQ-064]) is called concurrently by two goroutines (or tasks) for different runs, the two writes MUST be serialized at the filesystem layer (each write is atomic: serialize → write-tmp → fsync → rename). The combined latency for both writes completing is bounded by 2 × p99 = 1 000 ms, not by the single-write p99, because they cannot overlap at the rename step for the same file path.
 
-**[PERF-129]** When `DAG scheduler dispatch` ([PERF-021]) is triggered for a stage that depends on two parallel stages, and both dependency stages complete within 10 ms of each other, only one dispatch MUST be issued. The idempotency guard on the dispatcher MUST resolve the double-completion in ≤ 5 ms (well within the 100 ms p99), and the total end-to-end latency from the second completion to the dependent stage spawn MUST still be within p99.
+**[PERF-129] [8b_PERF_SPEC-REQ-140]** When `DAG scheduler dispatch` ([PERF-021] [8b_PERF_SPEC-REQ-102]) is triggered for a stage that depends on two parallel stages, and both dependency stages complete within 10 ms of each other, only one dispatch MUST be issued. The idempotency guard on the dispatcher MUST resolve the double-completion in ≤ 5 ms (well within the 100 ms p99), and the total end-to-end latency from the second completion to the dependent stage spawn MUST still be within p99.
 
-**[PERF-130]** When `server startup with checkpoint restore` ([PERF-031]) processes a checkpoint file that contains 50 runs each with 10 stages (500 stage records total), the deserialization MUST complete within 30 000 ms p99. The restoration MUST use `tokio::task::spawn_blocking` for all synchronous deserialization work to prevent blocking the async runtime. A test MUST assert that the main async task is not blocked for more than 50 ms during restoration.
+**[PERF-130] [8b_PERF_SPEC-REQ-141]** When `server startup with checkpoint restore` ([PERF-031] [8b_PERF_SPEC-REQ-108]) processes a checkpoint file that contains 50 runs each with 10 stages (500 stage records total), the deserialization MUST complete within 30 000 ms p99. The restoration MUST use `tokio::task::spawn_blocking` for all synchronous deserialization work to prevent blocking the async runtime. A test MUST assert that the main async task is not blocked for more than 50 ms during restoration.
 
-**[PERF-131]** When a `SloViolation` event would be emitted for an `(operation, boundary)` pair, but a `SloViolation` for the same pair was already emitted within the previous 10-second window, the new emission MUST be suppressed ([PERF-102]). The suppression counter MUST be incremented and included in the next non-suppressed emission as `suppressed_count`. Tests for this edge case MUST verify that the rate-limiter correctly gates emissions and that the `suppressed_count` field is accurate.
+**[PERF-131] [8b_PERF_SPEC-REQ-142]** When a `SloViolation` event would be emitted for an `(operation, boundary)` pair, but a `SloViolation` for the same pair was already emitted within the previous 10-second window, the new emission MUST be suppressed ([PERF-102] [8b_PERF_SPEC-REQ-056]). The suppression counter MUST be incremented and included in the next non-suppressed emission as `suppressed_count`. Tests for this edge case MUST verify that the rate-limiter correctly gates emissions and that the `suppressed_count` field is accurate.
 
-**[PERF-132]** When `MCP lock acquisition` times out ([PERF-020]), and the write-lock holder is an `inject_stage_input` call that is blocked on an `await` point inside a slow async operation, the timeout MUST be enforced by the `tokio::time::timeout` wrapper and MUST cancel the lock-acquisition future, not the lock-holder future. The lock holder MUST continue to completion unaffected; the timeout caller receives `resource_exhausted` immediately.
+**[PERF-132] [8b_PERF_SPEC-REQ-143]** When `MCP lock acquisition` times out ([PERF-020] [8b_PERF_SPEC-REQ-101]), and the write-lock holder is an `inject_stage_input` call that is blocked on an `await` point inside a slow async operation, the timeout MUST be enforced by the `tokio::time::timeout` wrapper and MUST cancel the lock-acquisition future, not the lock-holder future. The lock holder MUST continue to completion unaffected; the timeout caller receives `resource_exhausted` immediately.
 
 ### 2.3 SLO Constant Definitions
 
@@ -711,15 +711,15 @@ pub const SLO_SERVER_STARTUP_RESTORE_P99_MS: u64   = 30_000;
 pub const SLO_PRESUBMIT_WALL_CLOCK_P99_MS: u64     = 900_000;
 ```
 
-**[PERF-133]** The `ci_threshold` const function MUST be used in every test assertion that compares an observed p99 against an SLO target. Direct multiplication by `3/2` inline in test code is prohibited; it makes the margin policy implicit and unauditable.
+**[PERF-133] [8b_PERF_SPEC-REQ-144]** The `ci_threshold` const function MUST be used in every test assertion that compares an observed p99 against an SLO target. Direct multiplication by `3/2` inline in test code is prohibited; it makes the margin policy implicit and unauditable.
 
-**[PERF-134]** When a new PERF ID is added to the SLO table in this document, a corresponding constant MUST be added to `devs-core/src/perf.rs` in the same commit. The CI gate MUST fail if the constant is missing. This is enforced by a compile-time count assertion in `devs-core/src/perf.rs` that counts exported `SLO_*_P99_MS` constants and compares against the expected count.
+**[PERF-134] [8b_PERF_SPEC-REQ-145]** When a new PERF ID is added to the SLO table in this document, a corresponding constant MUST be added to `devs-core/src/perf.rs` in the same commit. The CI gate MUST fail if the constant is missing. This is enforced by a compile-time count assertion in `devs-core/src/perf.rs` that counts exported `SLO_*_P99_MS` constants and compares against the expected count.
 
-**[PERF-135]** The `SLO_PRESUBMIT_WALL_CLOCK_P99_MS` constant MUST NOT use the `ci_threshold` function (i.e., no CI margin is applied). The presubmit hard timeout is enforced by the `do` script's `timeout` command, which does not know about CI margins. Applying a 50% margin would allow a 22.5-minute presubmit, which is unacceptable.
+**[PERF-135] [8b_PERF_SPEC-REQ-146]** The `SLO_PRESUBMIT_WALL_CLOCK_P99_MS` constant MUST NOT use the `ci_threshold` function (i.e., no CI margin is applied). The presubmit hard timeout is enforced by the `do` script's `timeout` command, which does not know about CI margins. Applying a 50% margin would allow a 22.5-minute presubmit, which is unacceptable.
 
 ### 2.4 SLO Monitoring State Machine
 
-The SLO monitoring subsystem transitions through a defined set of states for each `(operation, boundary)` pair. These states govern when `SloViolation` events are emitted and when the rate-limiter suppresses duplicate emissions. The following state machine is authoritative for the monitoring behavior defined in [PERF-102] and [PERF-SLO-BR-003].
+The SLO monitoring subsystem transitions through a defined set of states for each `(operation, boundary)` pair. These states govern when `SloViolation` events are emitted and when the rate-limiter suppresses duplicate emissions. The following state machine is authoritative for the monitoring behavior defined in [PERF-102] [8b_PERF_SPEC-REQ-056] and [PERF-SLO-BR-003] [8b_PERF_SPEC-REQ-085].
 
 ```mermaid
 stateDiagram-v2
@@ -770,11 +770,11 @@ The states and transitions are defined as follows:
 | `Emitting` | `rate_limiter.allow()` returns true | Immediately transitions to `Compliant` or `Violated` | Write `SloViolation` structured log |
 | `Suppressed` | `rate_limiter.deny()` returns true | Rate-limiter 10-second window expires | Increment `suppressed_count` |
 
-**[PERF-136]** The `Collecting → Compliant` and `Collecting → Violated` transitions both require exactly `MIN_OBSERVATIONS = 100` samples. A pair with 99 samples MUST remain in `Collecting` and MUST NOT emit a `SloViolation` or produce a pass assertion. This prevents false positives from small samples with fortuitously low variance.
+**[PERF-136] [8b_PERF_SPEC-REQ-147]** The `Collecting → Compliant` and `Collecting → Violated` transitions both require exactly `MIN_OBSERVATIONS = 100` samples. A pair with 99 samples MUST remain in `Collecting` and MUST NOT emit a `SloViolation` or produce a pass assertion. This prevents false positives from small samples with fortuitously low variance.
 
-**[PERF-137]** The `Violated → Emitting → Violated` cycle (consecutive violations) MUST increment `consecutive_violation_count` on each `Violated` entry. When `consecutive_violation_count ≥ 3` (as required by [PERF-SLO-BR-003]), the emitted `SloViolation` MUST carry `severity = "critical"`. For `consecutive_violation_count < 3`, severity is `"warning"`.
+**[PERF-137] [8b_PERF_SPEC-REQ-148]** The `Violated → Emitting → Violated` cycle (consecutive violations) MUST increment `consecutive_violation_count` on each `Violated` entry. When `consecutive_violation_count ≥ 3` (as required by [PERF-SLO-BR-003] [8b_PERF_SPEC-REQ-085]), the emitted `SloViolation` MUST carry `severity = "critical"`. For `consecutive_violation_count < 3`, severity is `"warning"`.
 
-**[PERF-138]** The rate-limiter state (last emission timestamp per `(operation, boundary)` pair) MUST be stored in a `HashMap<(String, MeasurementBoundary), Instant>` protected by the same `Arc<RwLock<SchedulerState>>` that guards the run registry. It MUST NOT use a separate lock, to prevent priority inversion between SLO monitoring and the scheduler's hot path.
+**[PERF-138] [8b_PERF_SPEC-REQ-149]** The rate-limiter state (last emission timestamp per `(operation, boundary)` pair) MUST be stored in a `HashMap<(String, MeasurementBoundary), Instant>` protected by the same `Arc<RwLock<SchedulerState>>` that guards the run registry. It MUST NOT use a separate lock, to prevent priority inversion between SLO monitoring and the scheduler's hot path.
 
 ### 2.5 Per-Group Business Rules
 
@@ -784,71 +784,71 @@ The 28 SLO rows are organized into six functional groups. Each group has specifi
 
 These operations hold only a read lock on `Arc<RwLock<SchedulerState>>`. Their SLOs are the tightest in the gRPC group because no write contention is expected during normal operation.
 
-**[PERF-GRP-001]** `GetRun` and `ListRuns` MUST hold the `RwLock` read guard for no longer than the time required to clone the response data. The guard MUST be released before any serialization (protobuf encoding) occurs. Holding the read guard during serialization would block all writers for the serialization duration, which violates the scheduler's throughput guarantee.
+**[PERF-GRP-001] [8b_PERF_SPEC-REQ-150]** `GetRun` and `ListRuns` MUST hold the `RwLock` read guard for no longer than the time required to clone the response data. The guard MUST be released before any serialization (protobuf encoding) occurs. Holding the read guard during serialization would block all writers for the serialization duration, which violates the scheduler's throughput guarantee.
 
-**[PERF-GRP-002]** `WatchPoolState` MUST send the initial snapshot using the current pool state captured under a read lock, then release the lock before entering the long-poll loop. Subsequent events are delivered via a `tokio::sync::watch` channel that does not require holding the scheduler lock.
+**[PERF-GRP-002] [8b_PERF_SPEC-REQ-151]** `WatchPoolState` MUST send the initial snapshot using the current pool state captured under a read lock, then release the lock before entering the long-poll loop. Subsequent events are delivered via a `tokio::sync::watch` channel that does not require holding the scheduler lock.
 
-**[PERF-GRP-003]** When `ListRuns` is called with `limit = 0`, the server MUST return a `invalid_argument` gRPC status within the `ListRuns` p99 SLO (100 ms). The server MUST NOT interpret `limit = 0` as "return all runs" — that behavior would bypass the throughput guarantees of the endpoint.
+**[PERF-GRP-003] [8b_PERF_SPEC-REQ-152]** When `ListRuns` is called with `limit = 0`, the server MUST return a `invalid_argument` gRPC status within the `ListRuns` p99 SLO (100 ms). The server MUST NOT interpret `limit = 0` as "return all runs" — that behavior would bypass the throughput guarantees of the endpoint.
 
 #### Group B: gRPC Write Operations (PERF-006, PERF-009)
 
 These operations require a write lock and include a checkpoint write. They have the highest gRPC latency budgets.
 
-**[PERF-GRP-004]** `SubmitRun` MUST complete all 7 validation steps before acquiring the write lock. Validation errors MUST be returned without ever acquiring the write lock. This ensures that invalid submissions do not contribute to write-lock contention and that the write lock hold time is bounded by checkpoint write latency, not by validation latency.
+**[PERF-GRP-004] [8b_PERF_SPEC-REQ-153]** `SubmitRun` MUST complete all 7 validation steps before acquiring the write lock. Validation errors MUST be returned without ever acquiring the write lock. This ensures that invalid submissions do not contribute to write-lock contention and that the write lock hold time is bounded by checkpoint write latency, not by validation latency.
 
-**[PERF-GRP-005]** `CancelRun` cascades a cancel signal to all stages in the run. The cascade MUST be implemented as a fan-out of `tokio::sync::oneshot` sends, each of which is O(1). The total cascade time for a run with N stages is O(N) oneshot sends, bounded by the stage count limit (≤ 50 stages per run). At 50 stages, the cascade completes well within the 500 ms p99.
+**[PERF-GRP-005] [8b_PERF_SPEC-REQ-154]** `CancelRun` cascades a cancel signal to all stages in the run. The cascade MUST be implemented as a fan-out of `tokio::sync::oneshot` sends, each of which is O(1). The total cascade time for a run with N stages is O(N) oneshot sends, bounded by the stage count limit (≤ 50 stages per run). At 50 stages, the cascade completes well within the 500 ms p99.
 
-**[PERF-GRP-006]** When `SubmitRun` or `CancelRun` checkpoint write fails, the server MUST roll back the in-memory state change (undo the run insertion or cancel state update) before returning the error. A partial state change (in-memory updated, checkpoint not written) is a consistency violation that survives server restart incorrectly.
+**[PERF-GRP-006] [8b_PERF_SPEC-REQ-155]** When `SubmitRun` or `CancelRun` checkpoint write fails, the server MUST roll back the in-memory state change (undo the run insertion or cancel state update) before returning the error. A partial state change (in-memory updated, checkpoint not written) is a consistency violation that survives server restart incorrectly.
 
 #### Group C: Streaming Operations (PERF-010, PERF-011, PERF-012)
 
 These operations establish long-lived gRPC streams and must not hold resources indefinitely on client disconnect.
 
-**[PERF-GRP-007]** `StreamRunEvents` and `StreamLogs` MUST register a cleanup handler via `tokio_stream::StreamExt::on_drop` or equivalent that removes the client's slot from the server-side stream registry when the client disconnects. Leaked stream slots degrade the available concurrency for the throughput targets (≥ 20 concurrent streams).
+**[PERF-GRP-007] [8b_PERF_SPEC-REQ-156]** `StreamRunEvents` and `StreamLogs` MUST register a cleanup handler via `tokio_stream::StreamExt::on_drop` or equivalent that removes the client's slot from the server-side stream registry when the client disconnects. Leaked stream slots degrade the available concurrency for the throughput targets (≥ 20 concurrent streams).
 
-**[PERF-GRP-008]** For `StreamLogs follow:true`, the server MUST use a `tokio::sync::broadcast` channel (not polling) to deliver live log chunks to the client. Polling on a timer would introduce up to one poll-interval of latency on every log line, violating the 500 ms p99 chunk latency target for high-frequency log output.
+**[PERF-GRP-008] [8b_PERF_SPEC-REQ-157]** For `StreamLogs follow:true`, the server MUST use a `tokio::sync::broadcast` channel (not polling) to deliver live log chunks to the client. Polling on a timer would introduce up to one poll-interval of latency on every log line, violating the 500 ms p99 chunk latency target for high-frequency log output.
 
-**[PERF-GRP-009]** The `StreamRunEvents` first-event SLO ([PERF-010]: 200 ms) is measured from handler entry to the first `RunEvent` written to the transport. The initial snapshot message MUST be constructed and sent before subscribing to the live event channel. Constructing it after subscribing risks a race where a live event is dropped before the snapshot is sent.
+**[PERF-GRP-009] [8b_PERF_SPEC-REQ-158]** The `StreamRunEvents` first-event SLO ([PERF-010] [8b_PERF_SPEC-REQ-091]: 200 ms) is measured from handler entry to the first `RunEvent` written to the transport. The initial snapshot message MUST be constructed and sent before subscribing to the live event channel. Constructing it after subscribing risks a race where a live event is dropped before the snapshot is sent.
 
 #### Group D: MCP Tool Operations (PERF-014 through PERF-020)
 
 MCP tools are HTTP/JSON-RPC endpoints. They share the same underlying gRPC client pool as external callers and must coordinate lock acquisition carefully.
 
-**[PERF-GRP-010]** MCP read tools (`list_runs`, `get_run`, `get_stage_output`) MUST acquire only a read lock on `SchedulerState`. They MUST NOT escalate to a write lock even in error paths. Write lock escalation from a read-lock holder would deadlock in the presence of another read-lock holder.
+**[PERF-GRP-010] [8b_PERF_SPEC-REQ-159]** MCP read tools (`list_runs`, `get_run`, `get_stage_output`) MUST acquire only a read lock on `SchedulerState`. They MUST NOT escalate to a write lock even in error paths. Write lock escalation from a read-lock holder would deadlock in the presence of another read-lock holder.
 
-**[PERF-GRP-011]** MCP write tools (`submit_run`, `cancel_run`, `write_workflow_definition`) MUST implement the lock acquisition timeout ([PERF-020]) using `tokio::time::timeout(Duration::from_millis(5_000), lock.write())`. The timeout MUST be applied before attempting the lock, not after a failed attempt. Spinning on a failed lock acquisition is prohibited.
+**[PERF-GRP-011] [8b_PERF_SPEC-REQ-160]** MCP write tools (`submit_run`, `cancel_run`, `write_workflow_definition`) MUST implement the lock acquisition timeout ([PERF-020] [8b_PERF_SPEC-REQ-101]) using `tokio::time::timeout(Duration::from_millis(5_000), lock.write())`. The timeout MUST be applied before attempting the lock, not after a failed attempt. Spinning on a failed lock acquisition is prohibited.
 
-**[PERF-GRP-012]** `write_workflow_definition` performs 13 validation steps before writing to disk. Steps 1–10 (schema validation, cycle detection, stage name uniqueness) MUST occur before the write lock is acquired. Steps 11–13 (filesystem write, discovery file update, checkpoint) occur while the write lock is held. This split minimizes write lock hold time to the I/O-bound steps only.
+**[PERF-GRP-012] [8b_PERF_SPEC-REQ-161]** `write_workflow_definition` performs 13 validation steps before writing to disk. Steps 1–10 (schema validation, cycle detection, stage name uniqueness) MUST occur before the write lock is acquired. Steps 11–13 (filesystem write, discovery file update, checkpoint) occur while the write lock is held. This split minimizes write lock hold time to the I/O-bound steps only.
 
-**[PERF-GRP-013]** The MCP `get_stage_output` tool returns up to 2 MiB of data (1 MiB stdout + 1 MiB stderr). The truncation to 1 MiB per stream MUST occur before the JSON serialization step, not after. Serializing 10 MiB of output and then truncating the JSON string would waste CPU time and violate the 500 ms p99.
+**[PERF-GRP-013] [8b_PERF_SPEC-REQ-162]** The MCP `get_stage_output` tool returns up to 2 MiB of data (1 MiB stdout + 1 MiB stderr). The truncation to 1 MiB per stream MUST occur before the JSON serialization step, not after. Serializing 10 MiB of output and then truncating the JSON string would waste CPU time and violate the 500 ms p99.
 
 #### Group E: Infrastructure Operations (PERF-021 through PERF-033)
 
 These operations are internal to the server or CLI and are not directly invoked by the MCP or gRPC interfaces.
 
-**[PERF-GRP-014]** The DAG scheduler ([PERF-021]) MUST use a `tokio::task::spawn` (not `spawn_blocking`) for the dispatch logic. All dispatch work (dependency graph traversal, stage state update, subprocess spawn) is async-compatible. Using `spawn_blocking` would allocate a thread-pool thread unnecessarily and introduce scheduling latency.
+**[PERF-GRP-014] [8b_PERF_SPEC-REQ-163]** The DAG scheduler ([PERF-021] [8b_PERF_SPEC-REQ-102]) MUST use a `tokio::task::spawn` (not `spawn_blocking`) for the dispatch logic. All dispatch work (dependency graph traversal, stage state update, subprocess spawn) is async-compatible. Using `spawn_blocking` would allocate a thread-pool thread unnecessarily and introduce scheduling latency.
 
-**[PERF-GRP-015]** Checkpoint writes ([PERF-028]) MUST use `tokio::task::spawn_blocking` for the fsync step, because `fsync` is a synchronous blocking syscall. Calling `fsync` directly from an async task would block the tokio worker thread for the duration of the syscall, potentially stalling all other tasks on that thread.
+**[PERF-GRP-015] [8b_PERF_SPEC-REQ-164]** Checkpoint writes ([PERF-028] [8b_PERF_SPEC-REQ-064]) MUST use `tokio::task::spawn_blocking` for the fsync step, because `fsync` is a synchronous blocking syscall. Calling `fsync` directly from an async task would block the tokio worker thread for the duration of the syscall, potentially stalling all other tasks on that thread.
 
-**[PERF-GRP-016]** The TUI render function ([PERF-023]) MUST be called only from the TUI's dedicated event loop thread, which runs independently of the tokio async runtime. Rendering from within an async task is prohibited because `terminal.draw()` performs synchronous crossterm I/O that would block the runtime.
+**[PERF-GRP-016] [8b_PERF_SPEC-REQ-165]** The TUI render function ([PERF-023] [8b_PERF_SPEC-REQ-088]) MUST be called only from the TUI's dedicated event loop thread, which runs independently of the tokio async runtime. Rendering from within an async task is prohibited because `terminal.draw()` performs synchronous crossterm I/O that would block the runtime.
 
-**[PERF-GRP-017]** The retention sweep ([PERF-033]) MUST run in a background tokio task scheduled with `tokio::time::interval(Duration::from_secs(86_400))`. The sweep MUST acquire the write lock only for the final deletion step, not for the scanning step. Holding the write lock for the full 60 000 ms sweep duration would block all gRPC and MCP operations for up to one minute.
+**[PERF-GRP-017] [8b_PERF_SPEC-REQ-166]** The retention sweep ([PERF-033] [8b_PERF_SPEC-REQ-110]) MUST run in a background tokio task scheduled with `tokio::time::interval(Duration::from_secs(86_400))`. The sweep MUST acquire the write lock only for the final deletion step, not for the scanning step. Holding the write lock for the full 60 000 ms sweep duration would block all gRPC and MCP operations for up to one minute.
 
-**[PERF-GRP-018]** Server startup ([PERF-030], [PERF-031]) MUST write the discovery file as the last step before returning from `main`'s startup sequence. Any process that reads the discovery file and finds the gRPC address MUST be able to immediately connect and receive responses within the normal gRPC SLOs. Writing the discovery file before all services are bound is a race condition that causes spurious connection failures.
+**[PERF-GRP-018] [8b_PERF_SPEC-REQ-167]** Server startup ([PERF-030] [8b_PERF_SPEC-REQ-107], [PERF-031] [8b_PERF_SPEC-REQ-108]) MUST write the discovery file as the last step before returning from `main`'s startup sequence. Any process that reads the discovery file and finds the gRPC address MUST be able to immediately connect and receive responses within the normal gRPC SLOs. Writing the discovery file before all services are bound is a race condition that causes spurious connection failures.
 
 #### Group F: CLI Operations (PERF-025, PERF-026, PERF-027)
 
 CLI commands are ephemeral processes that dial the gRPC server, perform one operation, and exit.
 
-**[PERF-GRP-019]** CLI commands MUST read the gRPC address from the discovery file at startup. They MUST NOT cache the address between invocations. Each CLI invocation is a fresh process and must re-read the discovery file.
+**[PERF-GRP-019] [8b_PERF_SPEC-REQ-168]** CLI commands MUST read the gRPC address from the discovery file at startup. They MUST NOT cache the address between invocations. Each CLI invocation is a fresh process and must re-read the discovery file.
 
-**[PERF-GRP-020]** The gRPC dial in CLI commands MUST use `Channel::connect()` with a connection timeout of 2 000 ms. If the server is not reachable within 2 000 ms, the CLI MUST print a human-readable error to stderr and exit with code 1. The CLI MUST NOT retry the connection; transient unavailability is surfaced to the user immediately.
+**[PERF-GRP-020] [8b_PERF_SPEC-REQ-169]** The gRPC dial in CLI commands MUST use `Channel::connect()` with a connection timeout of 2 000 ms. If the server is not reachable within 2 000 ms, the CLI MUST print a human-readable error to stderr and exit with code 1. The CLI MUST NOT retry the connection; transient unavailability is surfaced to the user immediately.
 
-**[PERF-GRP-021]** CLI p99 latency targets include gRPC dial time. In test environments where the server is running on `localhost`, dial time is typically < 5 ms and does not materially affect the SLO. Tests MUST NOT mock the gRPC channel for SLO assertions; they MUST use a real in-process or localhost server to ensure dial time is included in the measurement.
+**[PERF-GRP-021] [8b_PERF_SPEC-REQ-170]** CLI p99 latency targets include gRPC dial time. In test environments where the server is running on `localhost`, dial time is typically < 5 ms and does not materially affect the SLO. Tests MUST NOT mock the gRPC channel for SLO assertions; they MUST use a real in-process or localhost server to ensure dial time is included in the measurement.
 
-**[PERF-GRP-022]** `devs submit` ([PERF-027]) MUST NOT block waiting for the submitted run to complete. It submits the run, prints the run ID, and exits. The 1 500 ms p99 covers submission latency only. Callers that wish to wait for completion MUST use `devs status` in a polling loop or subscribe to `StreamRunEvents` via a separate process.
+**[PERF-GRP-022] [8b_PERF_SPEC-REQ-171]** `devs submit` ([PERF-027] [8b_PERF_SPEC-REQ-016]) MUST NOT block waiting for the submitted run to complete. It submits the run, prints the run ID, and exits. The 1 500 ms p99 covers submission latency only. Callers that wish to wait for completion MUST use `devs status` in a polling loop or subscribe to `StreamRunEvents` via a separate process.
 
-**[PERF-GRP-023]** When a CLI command receives a gRPC status of `UNAVAILABLE` (server restarting or not yet started), it MUST exit with code 2 (distinct from code 1 for other errors). This allows callers to distinguish "server not running" from "request failed" in scripts.
+**[PERF-GRP-023] [8b_PERF_SPEC-REQ-172]** When a CLI command receives a gRPC status of `UNAVAILABLE` (server restarting or not yet started), it MUST exit with code 2 (distinct from code 1 for other errors). This allows callers to distinguish "server not running" from "request failed" in scripts.
 
 ### 2.6 Dependencies
 
@@ -868,53 +868,53 @@ The SLO table and its monitoring subsystem depend on the following components. C
 | Discovery file (`.devs/discovery.json`) | PERF-025, PERF-026, PERF-027, PERF-030 | gRPC address lookup for CLI and post-startup readiness | File not present → CLI fails immediately with exit code 2 |
 | `SloViolation` rate-limiter state | PERF-102, PERF-136, PERF-137, PERF-138 | Tracks last emission time per (operation, boundary) pair | Stale rate-limiter clock (e.g., system time jump) may suppress or flood violations |
 
-**[PERF-DEP-003]** Any change to the `tokio` runtime mode (e.g., switching from single-threaded to multi-threaded) MUST be preceded by a full re-run of all SLO integration tests. The single-threaded runtime's cooperative scheduling model means that blocking tasks affect all tasks on the same thread; the multi-threaded model distributes this differently and may change p99 distributions.
+**[PERF-DEP-003] [8b_PERF_SPEC-REQ-173]** Any change to the `tokio` runtime mode (e.g., switching from single-threaded to multi-threaded) MUST be preceded by a full re-run of all SLO integration tests. The single-threaded runtime's cooperative scheduling model means that blocking tasks affect all tasks on the same thread; the multi-threaded model distributes this differently and may change p99 distributions.
 
-**[PERF-DEP-004]** Any change to the `Arc<RwLock<SchedulerState>>` locking strategy (e.g., splitting into finer-grained locks, replacing with a lock-free structure) MUST include a proof-of-no-regression: the p99 latency for all write operations ([PERF-006], [PERF-009], [PERF-017], [PERF-018], [PERF-019], [PERF-028]) MUST be re-measured with ≥ 100 samples each under a concurrent read load of ≥ 50 simultaneous read-lock holders.
+**[PERF-DEP-004] [8b_PERF_SPEC-REQ-174]** Any change to the `Arc<RwLock<SchedulerState>>` locking strategy (e.g., splitting into finer-grained locks, replacing with a lock-free structure) MUST include a proof-of-no-regression: the p99 latency for all write operations ([PERF-006] [8b_PERF_SPEC-REQ-017], [PERF-009] [8b_PERF_SPEC-REQ-018], [PERF-017] [8b_PERF_SPEC-REQ-098], [PERF-018] [8b_PERF_SPEC-REQ-099], [PERF-019] [8b_PERF_SPEC-REQ-100], [PERF-028] [8b_PERF_SPEC-REQ-064]) MUST be re-measured with ≥ 100 samples each under a concurrent read load of ≥ 50 simultaneous read-lock holders.
 
 ### 2.7 Acceptance Criteria
 
 The following acceptance criteria are testable requirements for the SLO table and its monitoring infrastructure. Each criterion MUST have a corresponding integration test identified by the AC ID.
 
-**[AC-PERF-SLO-001]** For every PERF ID in the SLO table (PERF-006 through PERF-033), there exists a constant `SLO_*_P99_MS` in `devs-core/src/perf.rs` whose value matches the p99 column in the table. A compile-time test that counts these constants and compares against the expected count (28) MUST pass.
+**[AC-PERF-SLO-001] [8b_PERF_SPEC-REQ-175]** For every PERF ID in the SLO table (PERF-006 through PERF-033), there exists a constant `SLO_*_P99_MS` in `devs-core/src/perf.rs` whose value matches the p99 column in the table. A compile-time test that counts these constants and compares against the expected count (28) MUST pass.
 
-**[AC-PERF-SLO-002]** For every SLO constant, a CI test exists that collects ≥ 100 samples of the corresponding operation, computes the p99, and asserts `p99 ≤ ci_threshold(SLO_*_P99_MS, is_hard_limit)`. Tests that collect fewer than 100 samples MUST fail with `"insufficient sample count: N < 100"`.
+**[AC-PERF-SLO-002] [8b_PERF_SPEC-REQ-176]** For every SLO constant, a CI test exists that collects ≥ 100 samples of the corresponding operation, computes the p99, and asserts `p99 ≤ ci_threshold(SLO_*_P99_MS, is_hard_limit)`. Tests that collect fewer than 100 samples MUST fail with `"insufficient sample count: N < 100"`.
 
-**[AC-PERF-SLO-003]** `GetRun` gRPC: 100 sequential calls to `GetRun` against a server with 50 cached runs each complete in ≤ 75 ms (CI threshold for 50 ms p99). No single call may exceed 75 ms. The measurement uses `MeasurementBoundary::GrpcHandler`.
+**[AC-PERF-SLO-003] [8b_PERF_SPEC-REQ-177]** `GetRun` gRPC: 100 sequential calls to `GetRun` against a server with 50 cached runs each complete in ≤ 75 ms (CI threshold for 50 ms p99). No single call may exceed 75 ms. The measurement uses `MeasurementBoundary::GrpcHandler`.
 
-**[AC-PERF-SLO-004]** `ListRuns` gRPC: 100 sequential calls to `ListRuns` (limit=100, no filter) against a server with 100 runs complete in ≤ 150 ms each (CI threshold for 100 ms p99). The measurement boundary is `GrpcHandler`.
+**[AC-PERF-SLO-004] [8b_PERF_SPEC-REQ-178]** `ListRuns` gRPC: 100 sequential calls to `ListRuns` (limit=100, no filter) against a server with 100 runs complete in ≤ 150 ms each (CI threshold for 100 ms p99). The measurement boundary is `GrpcHandler`.
 
-**[AC-PERF-SLO-005]** `SubmitRun` gRPC: 100 sequential valid `SubmitRun` calls (each submitting a distinct run name) complete within 750 ms each (CI threshold for 500 ms p99), including checkpoint write to a tmpfs. A 101st call with a duplicate name MUST also complete within 750 ms and return `already_exists`.
+**[AC-PERF-SLO-005] [8b_PERF_SPEC-REQ-179]** `SubmitRun` gRPC: 100 sequential valid `SubmitRun` calls (each submitting a distinct run name) complete within 750 ms each (CI threshold for 500 ms p99), including checkpoint write to a tmpfs. A 101st call with a duplicate name MUST also complete within 750 ms and return `already_exists`.
 
-**[AC-PERF-SLO-006]** `CancelRun` gRPC: 100 sequential `CancelRun` calls on runs in `Running` state (with 10 active stages each) complete within 750 ms each. Each call's cascade to 10 stages via oneshot sends completes before the response is returned.
+**[AC-PERF-SLO-006] [8b_PERF_SPEC-REQ-180]** `CancelRun` gRPC: 100 sequential `CancelRun` calls on runs in `Running` state (with 10 active stages each) complete within 750 ms each. Each call's cascade to 10 stages via oneshot sends completes before the response is returned.
 
-**[AC-PERF-SLO-007]** `StreamRunEvents` TTFE: 20 concurrent clients subscribe to `StreamRunEvents` for the same run. Each client receives its first event (run snapshot) within 300 ms of subscription. The server delivers 20 concurrent initial snapshots without serialization.
+**[AC-PERF-SLO-007] [8b_PERF_SPEC-REQ-181]** `StreamRunEvents` TTFE: 20 concurrent clients subscribe to `StreamRunEvents` for the same run. Each client receives its first event (run snapshot) within 300 ms of subscription. The server delivers 20 concurrent initial snapshots without serialization.
 
-**[AC-PERF-SLO-008]** `StreamLogs` non-follow TTFB: 20 concurrent clients call `StreamLogs` (follow=false) for a stage with 1 000 buffered log lines. Each client receives the first log line within 375 ms of subscription. All 1 000 lines are delivered and the stream is closed.
+**[AC-PERF-SLO-008] [8b_PERF_SPEC-REQ-182]** `StreamLogs` non-follow TTFB: 20 concurrent clients call `StreamLogs` (follow=false) for a stage with 1 000 buffered log lines. Each client receives the first log line within 375 ms of subscription. All 1 000 lines are delivered and the stream is closed.
 
-**[AC-PERF-SLO-009]** `StreamLogs` follow chunk latency: A stage is actively writing log lines at 100 lines/second. 20 concurrent `StreamLogs follow=true` clients each receive every new log chunk within 750 ms of the line being written to the stage's stdout. Measurement is from stdout write timestamp (recorded by the stage harness) to gRPC transport write timestamp (recorded by the handler).
+**[AC-PERF-SLO-009] [8b_PERF_SPEC-REQ-183]** `StreamLogs` follow chunk latency: A stage is actively writing log lines at 100 lines/second. 20 concurrent `StreamLogs follow=true` clients each receive every new log chunk within 750 ms of the line being written to the stage's stdout. Measurement is from stdout write timestamp (recorded by the stage harness) to gRPC transport write timestamp (recorded by the handler).
 
-**[AC-PERF-SLO-010]** DAG scheduler dispatch: A workflow with a 10-stage linear DAG runs to completion. For each of the 9 inter-stage dispatch events, the time from the predecessor stage's terminal state transition to the successor stage's `execvp` call is ≤ 150 ms. The measurement uses `MeasurementBoundary::Scheduler`. 100 such workflow runs provide ≥ 900 dispatch observations.
+**[AC-PERF-SLO-010] [8b_PERF_SPEC-REQ-184]** DAG scheduler dispatch: A workflow with a 10-stage linear DAG runs to completion. For each of the 9 inter-stage dispatch events, the time from the predecessor stage's terminal state transition to the successor stage's `execvp` call is ≤ 150 ms. The measurement uses `MeasurementBoundary::Scheduler`. 100 such workflow runs provide ≥ 900 dispatch observations.
 
-**[AC-PERF-SLO-011]** TUI render hard limit: 1 000 consecutive render frames are produced by the TUI event loop under simulated load (100 runs, 10 stages each, all in Running state with active log streams). Every single frame completes within 16 ms. Any frame exceeding 16 ms MUST cause the test to fail immediately, not after collecting all samples. The hard limit is non-statistical.
+**[AC-PERF-SLO-011] [8b_PERF_SPEC-REQ-185]** TUI render hard limit: 1 000 consecutive render frames are produced by the TUI event loop under simulated load (100 runs, 10 stages each, all in Running state with active log streams). Every single frame completes within 16 ms. Any frame exceeding 16 ms MUST cause the test to fail immediately, not after collecting all samples. The hard limit is non-statistical.
 
-**[AC-PERF-SLO-012]** Checkpoint write atomic protocol: 100 sequential checkpoint writes to a tmpfs filesystem each complete within 750 ms (CI threshold for 500 ms p99). Each write MUST follow the serialize → write-tmp → fsync → rename sequence. A fault injection test MUST verify that a simulated crash between write-tmp and rename leaves the previous checkpoint intact and readable.
+**[AC-PERF-SLO-012] [8b_PERF_SPEC-REQ-186]** Checkpoint write atomic protocol: 100 sequential checkpoint writes to a tmpfs filesystem each complete within 750 ms (CI threshold for 500 ms p99). Each write MUST follow the serialize → write-tmp → fsync → rename sequence. A fault injection test MUST verify that a simulated crash between write-tmp and rename leaves the previous checkpoint intact and readable.
 
-**[AC-PERF-SLO-013]** MCP `write_workflow_definition`: 100 sequential calls with valid workflow definitions (10 stages, linear DAG) each complete within 3 000 ms (CI threshold for 2 000 ms p99). A call with a cyclic DAG MUST also complete within 3 000 ms and return a JSON-RPC error with a human-readable message identifying the cycle.
+**[AC-PERF-SLO-013] [8b_PERF_SPEC-REQ-187]** MCP `write_workflow_definition`: 100 sequential calls with valid workflow definitions (10 stages, linear DAG) each complete within 3 000 ms (CI threshold for 2 000 ms p99). A call with a cyclic DAG MUST also complete within 3 000 ms and return a JSON-RPC error with a human-readable message identifying the cycle.
 
-**[AC-PERF-SLO-014]** MCP lock acquisition timeout: When 5 concurrent callers each hold a write lock for 2 000 ms, a 6th caller's lock acquisition MUST time out at 5 000 ms and return `resource_exhausted` within 5 100 ms (5 000 ms timeout + 100 ms response overhead). The 6th caller MUST NOT receive a response before 4 900 ms (it must wait near the full timeout, not return early).
+**[AC-PERF-SLO-014] [8b_PERF_SPEC-REQ-188]** MCP lock acquisition timeout: When 5 concurrent callers each hold a write lock for 2 000 ms, a 6th caller's lock acquisition MUST time out at 5 000 ms and return `resource_exhausted` within 5 100 ms (5 000 ms timeout + 100 ms response overhead). The 6th caller MUST NOT receive a response before 4 900 ms (it must wait near the full timeout, not return early).
 
-**[AC-PERF-SLO-015]** Server startup (cold): 10 consecutive server starts (each on a different port, clean state) each produce a discovery file with the gRPC address within 15 000 ms (CI threshold for 10 000 ms p99). A gRPC `GetRun` call immediately after the discovery file appears MUST succeed within the `GetRun` p99 SLO.
+**[AC-PERF-SLO-015] [8b_PERF_SPEC-REQ-189]** Server startup (cold): 10 consecutive server starts (each on a different port, clean state) each produce a discovery file with the gRPC address within 15 000 ms (CI threshold for 10 000 ms p99). A gRPC `GetRun` call immediately after the discovery file appears MUST succeed within the `GetRun` p99 SLO.
 
-**[AC-PERF-SLO-016]** Server startup with restore: 10 consecutive server starts, each restoring a checkpoint with 50 runs and 500 stage records, each complete within 45 000 ms (CI threshold for 30 000 ms p99). The tokio main thread MUST NOT be blocked for > 50 ms at any point during restore (verified by a sampling watchdog task that records the longest async task gap).
+**[AC-PERF-SLO-016] [8b_PERF_SPEC-REQ-190]** Server startup with restore: 10 consecutive server starts, each restoring a checkpoint with 50 runs and 500 stage records, each complete within 45 000 ms (CI threshold for 30 000 ms p99). The tokio main thread MUST NOT be blocked for > 50 ms at any point during restore (verified by a sampling watchdog task that records the longest async task gap).
 
-**[AC-PERF-SLO-017]** `SloViolation` rate-limiter: When an operation emits `SloViolation` at time T, a second emission for the same `(operation, boundary)` pair at T + 5 s MUST be suppressed. An emission at T + 11 s MUST NOT be suppressed. The emitted event at T + 11 s MUST carry `suppressed_count = 1`.
+**[AC-PERF-SLO-017] [8b_PERF_SPEC-REQ-191]** `SloViolation` rate-limiter: When an operation emits `SloViolation` at time T, a second emission for the same `(operation, boundary)` pair at T + 5 s MUST be suppressed. An emission at T + 11 s MUST NOT be suppressed. The emitted event at T + 11 s MUST carry `suppressed_count = 1`.
 
-**[AC-PERF-SLO-018]** Consecutive violation severity escalation: When the p99 for an operation exceeds its SLO for 3 consecutive measurement windows, the third `SloViolation` event MUST carry `severity = "critical"`. The first and second events MUST carry `severity = "warning"`. A window is defined as ≥ 100 new samples since the last window boundary.
+**[AC-PERF-SLO-018] [8b_PERF_SPEC-REQ-192]** Consecutive violation severity escalation: When the p99 for an operation exceeds its SLO for 3 consecutive measurement windows, the third `SloViolation` event MUST carry `severity = "critical"`. The first and second events MUST carry `severity = "warning"`. A window is defined as ≥ 100 new samples since the last window boundary.
 
-**[AC-PERF-SLO-019]** `./do presubmit` hard timeout: A `do presubmit` invocation that is programmatically stalled (e.g., a test that sleeps indefinitely) MUST be terminated by the `do` script's timeout enforcement within 900 005 ms (900 000 ms limit + 5 000 ms SIGKILL grace). The exit code MUST be non-zero and the script MUST print `"presubmit timeout: killed after 900s"` to stderr.
+**[AC-PERF-SLO-019] [8b_PERF_SPEC-REQ-193]** `./do presubmit` hard timeout: A `do presubmit` invocation that is programmatically stalled (e.g., a test that sleeps indefinitely) MUST be terminated by the `do` script's timeout enforcement within 900 005 ms (900 000 ms limit + 5 000 ms SIGKILL grace). The exit code MUST be non-zero and the script MUST print `"presubmit timeout: killed after 900s"` to stderr.
 
-**[AC-PERF-SLO-020]** Constant coverage: A `cargo test` invocation on `devs-core` MUST include a test named `slo_constants_complete` that fails if the count of `pub const SLO_*_P99_MS: u64` symbols exported from `devs_core::perf` does not equal 28 (one per SLO table row). Adding a new row to the table without adding the corresponding constant, or vice versa, MUST cause this test to fail.
+**[AC-PERF-SLO-020] [8b_PERF_SPEC-REQ-194]** Constant coverage: A `cargo test` invocation on `devs-core` MUST include a test named `slo_constants_complete` that fails if the count of `pub const SLO_*_P99_MS: u64` symbols exported from `devs_core::perf` does not equal 28 (one per SLO table row). Adding a new row to the table without adding the corresponding constant, or vice versa, MUST cause this test to fail.
 
 ---
 
@@ -924,9 +924,9 @@ The following acceptance criteria are testable requirements for the SLO table an
 
 Path: human/agent → `devs submit` CLI or MCP `submit_run` → `RunService.SubmitRun` gRPC → scheduler queues run → response returned.
 
-**[PERF-034]** End-to-end from CLI invocation to printed `run_id` (text mode): **p99 < 1 500 ms** on local loopback. This includes gRPC dial, 7-step validation, `checkpoint.json` write, and slug generation.
+**[PERF-034] [8b_PERF_SPEC-REQ-195]** End-to-end from CLI invocation to printed `run_id` (text mode): **p99 < 1 500 ms** on local loopback. This includes gRPC dial, 7-step validation, `checkpoint.json` write, and slug generation.
 
-**[PERF-035]** Duplicate run name rejection (fast path via per-project mutex) must complete within **p99 < 100 ms** — it must not require a full checkpoint scan.
+**[PERF-035] [8b_PERF_SPEC-REQ-196]** Duplicate run name rejection (fast path via per-project mutex) must complete within **p99 < 100 ms** — it must not require a full checkpoint scan.
 
 #### Data Models
 
@@ -949,9 +949,9 @@ message SubmitRunResponse {
 }
 ```
 
-**[PERF-139]** `run_name`, when omitted, MUST be auto-generated as `<workflow_name>-<run_id[0..8]>` (e.g., `build-test-a3f2b1c4`). Auto-generation MUST NOT perform I/O and MUST complete in **< 1 ms**. The generated slug MUST satisfy `/^[a-z][a-z0-9_-]{0,127}$/`.
+**[PERF-139] [8b_PERF_SPEC-REQ-197]** `run_name`, when omitted, MUST be auto-generated as `<workflow_name>-<run_id[0..8]>` (e.g., `build-test-a3f2b1c4`). Auto-generation MUST NOT perform I/O and MUST complete in **< 1 ms**. The generated slug MUST satisfy `/^[a-z][a-z0-9_-]{0,127}$/`.
 
-**[PERF-140]** `SubmitRun` executes a **13-step normative validation pipeline** in strict order before acquiring any lock or writing to disk. Steps 1–9 are stateless and lock-free; steps 10–13 require the per-project name mutex:
+**[PERF-140] [8b_PERF_SPEC-REQ-198]** `SubmitRun` executes a **13-step normative validation pipeline** in strict order before acquiring any lock or writing to disk. Steps 1–9 are stateless and lock-free; steps 10–13 require the per-project name mutex:
 
 | Step | Check | Error if failed |
 |------|-------|-----------------|
@@ -985,16 +985,16 @@ RunService.SubmitRun
     NOT_FOUND          – workflow_name absent from WorkflowRegistry (step 4)
     ALREADY_EXISTS     – run_name collision in RunRegistry (step 11)
     FAILED_PRECONDITION – server is shutting down (step 12)
-    RESOURCE_EXHAUSTED – per-project name mutex held > 5 s ([PERF-020])
+    RESOURCE_EXHAUSTED – per-project name mutex held > 5 s ([PERF-020] [8b_PERF_SPEC-REQ-101])
 ```
 
 #### Business Rules
 
-**[PERF-141]** The 13-step validation pipeline MUST execute synchronously within the gRPC request handler. No step MAY be deferred to a background task. The total pipeline execution time MUST be included in the [PERF-034] end-to-end budget. The pipeline MUST NOT start if the `x-devs-client-version` header is absent or mismatched; the version check is a pre-pipeline interceptor.
+**[PERF-141] [8b_PERF_SPEC-REQ-199]** The 13-step validation pipeline MUST execute synchronously within the gRPC request handler. No step MAY be deferred to a background task. The total pipeline execution time MUST be included in the [PERF-034] [8b_PERF_SPEC-REQ-195] end-to-end budget. The pipeline MUST NOT start if the `x-devs-client-version` header is absent or mismatched; the version check is a pre-pipeline interceptor.
 
-**[PERF-142]** `run_name` uniqueness MUST be enforced against the in-memory `RunRegistry` (never by scanning `checkpoint.json` files on disk). The per-project name mutex (step 10) MUST be held continuously from step 10 through completion of the `checkpoint.json` atomic write ([PERF-028]). It MUST be released before the gRPC response is sent. This guarantees no concurrent `SubmitRun` can observe the same name as available.
+**[PERF-142] [8b_PERF_SPEC-REQ-200]** `run_name` uniqueness MUST be enforced against the in-memory `RunRegistry` (never by scanning `checkpoint.json` files on disk). The per-project name mutex (step 10) MUST be held continuously from step 10 through completion of the `checkpoint.json` atomic write ([PERF-028] [8b_PERF_SPEC-REQ-064]). It MUST be released before the gRPC response is sent. This guarantees no concurrent `SubmitRun` can observe the same name as available.
 
-**[PERF-143]** `inputs` keys absent from the workflow's declared parameter schema MUST be rejected with `INVALID_ARGUMENT "unknown input parameter: <key>"` (step 8). Parameters declared with an enum type MUST be validated against the declared enum values at step 8. No runtime coercion is performed; mismatched types are rejected.
+**[PERF-143] [8b_PERF_SPEC-REQ-201]** `inputs` keys absent from the workflow's declared parameter schema MUST be rejected with `INVALID_ARGUMENT "unknown input parameter: <key>"` (step 8). Parameters declared with an enum type MUST be validated against the declared enum values at step 8. No runtime coercion is performed; mismatched types are rejected.
 
 #### Submission State Machine
 
@@ -1024,7 +1024,7 @@ stateDiagram-v2
 | Component | Version / contract | Role |
 |-----------|--------------------|------|
 | `devs-core` `RunRegistry` | internal | In-memory run-name uniqueness; per-project `tokio::sync::Mutex` |
-| `devs-checkpoint` `CheckpointStore` | internal | Atomic `checkpoint.json` write ([PERF-028]) |
+| `devs-checkpoint` `CheckpointStore` | internal | Atomic `checkpoint.json` write ([PERF-028] [8b_PERF_SPEC-REQ-064]) |
 | `devs-scheduler` `WorkflowRegistry` | internal | Workflow lookup by `workflow_name` (step 4; read lock) |
 | `tonic` | `0.11` | gRPC transport; metadata interceptor for version header |
 | `uuid` | `1.x` | UUID v4 generation for `run_id` |
@@ -1034,7 +1034,7 @@ stateDiagram-v2
 
 1. **Large input payload**: A `submit_run` call with 64 workflow inputs each containing a 1 KiB string value must still complete within the p99 target. Total payload ≤ 64 KiB; validation is O(N) in the number of inputs.
 2. **Rapid sequential submissions**: 10 sequential `submit_run` calls to the same workflow with distinct run names must each complete within the p99 target. There must be no lock starvation between sequential calls.
-3. **Submission during active checkpoint write**: If a checkpoint write is in progress (e.g., for another run), a `submit_run` call MUST NOT be blocked beyond the 5 s lock acquisition timeout ([PERF-020]). `submit_run` acquires `SchedulerState` write lock; if contended, it waits up to 5 s.
+3. **Submission during active checkpoint write**: If a checkpoint write is in progress (e.g., for another run), a `submit_run` call MUST NOT be blocked beyond the 5 s lock acquisition timeout ([PERF-020] [8b_PERF_SPEC-REQ-101]). `submit_run` acquires `SchedulerState` write lock; if contended, it waits up to 5 s.
 4. **Zero-stage workflow rejection**: A workflow with no stages is rejected at validation (step 13 of the 13-step pipeline). The rejection response MUST be returned within p99 < 100 ms.
 5. **Submission during server shutdown**: `submit_run` called after SIGTERM is received returns `FAILED_PRECONDITION "server is shutting down"` within p99 < 100 ms. It never hangs.
 
@@ -1048,11 +1048,11 @@ stateDiagram-v2
 
 Path: dependency completes → `stage_complete_tx` mpsc message → DAG scheduler evaluates eligibility → pool selects agent → executor prepares environment → agent subprocess spawned.
 
-**[PERF-036]** For the common `tempdir` execution environment with no repo clone, the interval from last dependency's checkpoint write to agent subprocess `execvp` must be **p99 < 200 ms**.
+**[PERF-036] [8b_PERF_SPEC-REQ-202]** For the common `tempdir` execution environment with no repo clone, the interval from last dependency's checkpoint write to agent subprocess `execvp` must be **p99 < 200 ms**.
 
-**[PERF-037]** Pool capability resolution (filter + semaphore acquire when a slot is immediately available): **p99 < 10 ms**.
+**[PERF-037] [8b_PERF_SPEC-REQ-203]** Pool capability resolution (filter + semaphore acquire when a slot is immediately available): **p99 < 10 ms**.
 
-**[PERF-038]** For workflows with two independently-rooted stages (no `depends_on`), both stages must be dispatched within **100 ms of the run transitioning to `Running`** (captured by [GOAL-001] / [2_PRD-BR-004]).
+**[PERF-038] [8b_PERF_SPEC-REQ-204]** For workflows with two independently-rooted stages (no `depends_on`), both stages must be dispatched within **100 ms of the run transitioning to `Running`** (captured by [GOAL-001] / [2_PRD-BR-004]).
 
 The following Mermaid diagram shows the timing measurement points in the dispatch flow:
 
@@ -1128,13 +1128,13 @@ PoolManager::acquire_slot(pool_name, capabilities) -> Result<OwnedSemaphorePermi
 
 #### Business Rules
 
-**[PERF-144]** A stage MUST be dispatched if and only if every stage in its `depends_on` list is in the `Completed` state. A stage with an empty `depends_on` list becomes eligible immediately when the run transitions to `Running`. A stage MUST NOT be dispatched if any predecessor is in a non-terminal state, regardless of elapsed time.
+**[PERF-144] [8b_PERF_SPEC-REQ-205]** A stage MUST be dispatched if and only if every stage in its `depends_on` list is in the `Completed` state. A stage with an empty `depends_on` list becomes eligible immediately when the run transitions to `Running`. A stage MUST NOT be dispatched if any predecessor is in a non-terminal state, regardless of elapsed time.
 
-**[PERF-145]** Stage dispatch MUST be suppressed if the parent run is in any of the following states: `Cancelled`, `Failed`, `Paused`. If `evaluate_eligibility()` returns candidates but the run is in one of these states, all candidates are discarded without acquiring semaphore permits. The suppression check MUST occur under the same read lock as the eligibility evaluation to prevent a race between eligibility detection and run cancellation.
+**[PERF-145] [8b_PERF_SPEC-REQ-206]** Stage dispatch MUST be suppressed if the parent run is in any of the following states: `Cancelled`, `Failed`, `Paused`. If `evaluate_eligibility()` returns candidates but the run is in one of these states, all candidates are discarded without acquiring semaphore permits. The suppression check MUST occur under the same read lock as the eligibility evaluation to prevent a race between eligibility detection and run cancellation.
 
-**[PERF-146]** The `stage_complete_tx` channel MUST be drained in its entirety before the DAG scheduler task yields control. Multiple `StageCompleteEvent` entries for the same `run_id` in a single drain cycle MAY be coalesced into one `evaluate_eligibility()` call, provided the coalesced call reflects the state after all events have been applied to `SchedulerState`.
+**[PERF-146] [8b_PERF_SPEC-REQ-207]** The `stage_complete_tx` channel MUST be drained in its entirety before the DAG scheduler task yields control. Multiple `StageCompleteEvent` entries for the same `run_id` in a single drain cycle MAY be coalesced into one `evaluate_eligibility()` call, provided the coalesced call reflects the state after all events have been applied to `SchedulerState`.
 
-**[PERF-147]** `compute_dag_tiers()` MUST detect cycles in the `depends_on` graph using a depth-first search and return `DagError::CycleDetected` at workflow registration time. A workflow with a cyclic dependency graph MUST NOT be registered. The dispatch path does not re-check for cycles; the absence of cycles is a registration-time invariant upheld by `WorkflowRegistry`.
+**[PERF-147] [8b_PERF_SPEC-REQ-208]** `compute_dag_tiers()` MUST detect cycles in the `depends_on` graph using a depth-first search and return `DagError::CycleDetected` at workflow registration time. A workflow with a cyclic dependency graph MUST NOT be registered. The dispatch path does not re-check for cycles; the absence of cycles is a registration-time invariant upheld by `WorkflowRegistry`.
 
 #### Dependencies for §3.2
 
@@ -1155,7 +1155,7 @@ PoolManager::acquire_slot(pool_name, capabilities) -> Result<OwnedSemaphorePermi
 2. **Dispatch when pool is at `max_concurrent`**: If all pool slots are occupied when a stage becomes eligible, the stage transitions to `Waiting` on the semaphore. No dispatch latency SLO applies until a slot becomes available. When a slot is released, the waiting stage MUST be dispatched within p99 < 100 ms of the release.
 3. **Agent binary not found**: If the agent CLI binary (e.g., `claude`) is not found in `PATH`, the stage transitions to `Failed` with `failure_reason: "binary_not_found"`. This failure MUST be detected within p99 < 50 ms of spawn attempt; no retry occurs.
 4. **Context file write failure before spawn**: If `.devs_context.json` write fails (e.g., `ENOSPC`), the stage transitions to `Failed` without spawning the agent. The failure MUST be recorded in `checkpoint.json` within p99 < 100 ms.
-5. **256-stage workflow dispatch**: A workflow with 256 independent stages and a pool with `max_concurrent = 256` must dispatch all 256 stages within 1 000 ms of the run starting ([PERF-051]).
+5. **256-stage workflow dispatch**: A workflow with 256 independent stages and a pool with `max_concurrent = 256` must dispatch all 256 stages within 1 000 ms of the run starting ([PERF-051] [8b_PERF_SPEC-REQ-032]).
 
 **Acceptance criteria for §3.2:**
 - Two independent root stages dispatched within 100 ms of run start (p99, measured via `GetRun` polling at 10 ms intervals).
@@ -1167,9 +1167,9 @@ PoolManager::acquire_slot(pool_name, capabilities) -> Result<OwnedSemaphorePermi
 
 Path: agent writes to stdout → executor captures → `LogService.StreamLogs` gRPC stream → TUI `LogPane` buffer → screen.
 
-**[PERF-039]** Live log chunk end-to-end latency (agent stdout write → TUI display): **p95 < 500 ms**, **p99 < 1 000 ms**. This includes capture, gRPC streaming, and one TUI render cycle.
+**[PERF-039] [8b_PERF_SPEC-REQ-209]** Live log chunk end-to-end latency (agent stdout write → TUI display): **p95 < 500 ms**, **p99 < 1 000 ms**. This includes capture, gRPC streaming, and one TUI render cycle.
 
-**[PERF-040]** `stream_logs follow:false` (historical fetch): TTFB **p99 < 250 ms**; complete response for 10 000 lines **p99 < 2 000 ms**.
+**[PERF-040] [8b_PERF_SPEC-REQ-210]** `stream_logs follow:false` (historical fetch): TTFB **p99 < 250 ms**; complete response for 10 000 lines **p99 < 2 000 ms**.
 
 #### Data Models
 
@@ -1217,13 +1217,13 @@ LogService.StreamLogs
 
 #### Business Rules
 
-**[PERF-148]** `sequence` values in `LogChunk` MUST be strictly monotonically increasing, starting from `from_sequence`, with no gaps and no repeats within a single stream. When a log line is split across multiple chunks (32 KiB boundary), each fragment receives a distinct, consecutive sequence number. A subscriber that observes a sequence gap MUST treat this as a protocol error and reconnect.
+**[PERF-148] [8b_PERF_SPEC-REQ-211]** `sequence` values in `LogChunk` MUST be strictly monotonically increasing, starting from `from_sequence`, with no gaps and no repeats within a single stream. When a log line is split across multiple chunks (32 KiB boundary), each fragment receives a distinct, consecutive sequence number. A subscriber that observes a sequence gap MUST treat this as a protocol error and reconnect.
 
-**[PERF-149]** `content` in each `LogChunk` MUST be valid UTF-8. Chunk boundaries MUST fall on UTF-8 character boundaries (never mid–multi-byte sequence). If a single UTF-8 character would by itself exceed 32 KiB (structurally impossible for valid UTF-8, but handled defensively), the character is replaced with U+FFFD and `truncated` is set to `true`.
+**[PERF-149] [8b_PERF_SPEC-REQ-212]** `content` in each `LogChunk` MUST be valid UTF-8. Chunk boundaries MUST fall on UTF-8 character boundaries (never mid–multi-byte sequence). If a single UTF-8 character would by itself exceed 32 KiB (structurally impossible for valid UTF-8, but handled defensively), the character is replaced with U+FFFD and `truncated` is set to `true`.
 
-**[PERF-150]** The server MUST support at least **20 simultaneous `StreamLogs` subscribers** for the same stage, each receiving an independent copy via a `tokio::sync::broadcast::Receiver`. The broadcast sender MUST NOT block on a slow receiver. A receiver that lags more than the broadcast channel capacity receives `RecvError::Lagged` and MUST reconnect (receiving a fresh stream from `from_sequence=0`).
+**[PERF-150] [8b_PERF_SPEC-REQ-213]** The server MUST support at least **20 simultaneous `StreamLogs` subscribers** for the same stage, each receiving an independent copy via a `tokio::sync::broadcast::Receiver`. The broadcast sender MUST NOT block on a slow receiver. A receiver that lags more than the broadcast channel capacity receives `RecvError::Lagged` and MUST reconnect (receiving a fresh stream from `from_sequence=0`).
 
-**[PERF-151]** For `follow:true` streams, new `LogChunk` messages MUST be emitted within **p99 < 1 000 ms** of the corresponding bytes being written to the agent's stdout/stderr pipe (end-to-end: capture → buffer → broadcast → gRPC transport write). This per-chunk delivery target is consistent with the end-to-end TUI display target in [PERF-039].
+**[PERF-151] [8b_PERF_SPEC-REQ-214]** For `follow:true` streams, new `LogChunk` messages MUST be emitted within **p99 < 1 000 ms** of the corresponding bytes being written to the agent's stdout/stderr pipe (end-to-end: capture → buffer → broadcast → gRPC transport write). This per-chunk delivery target is consistent with the end-to-end TUI display target in [PERF-039] [8b_PERF_SPEC-REQ-209].
 
 #### Log Streaming State Machine
 
@@ -1273,9 +1273,9 @@ stateDiagram-v2
 
 Path: `devs cancel <run>` or MCP `cancel_run` → `CancelRun` gRPC → send `devs:cancel\n` to all running agents → await exit or force-kill.
 
-**[PERF-041]** The server acknowledges the cancel (returns the gRPC/MCP response with all `StageRun` records set to `Cancelled`) within **p99 < 500 ms**, independent of how long agent termination takes.
+**[PERF-041] [8b_PERF_SPEC-REQ-215]** The server acknowledges the cancel (returns the gRPC/MCP response with all `StageRun` records set to `Cancelled`) within **p99 < 500 ms**, independent of how long agent termination takes.
 
-**[PERF-042]** Agent graceful shutdown after `devs:cancel\n`: orchestrated agents must exit within **10 000 ms** (10 s); the server falls back to SIGTERM after 5 000 ms and SIGKILL after a further 5 000 ms.
+**[PERF-042] [8b_PERF_SPEC-REQ-216]** Agent graceful shutdown after `devs:cancel\n`: orchestrated agents must exit within **10 000 ms** (10 s); the server falls back to SIGTERM after 5 000 ms and SIGKILL after a further 5 000 ms.
 
 The following Mermaid diagram shows the cancellation state machine and timing checkpoints:
 
@@ -1341,17 +1341,17 @@ RunService.CancelRun
 
 #### Business Rules
 
-**[PERF-152]** `CancelRun` MUST atomically transition all non-terminal `StageRun` records to `Cancelled` and persist a single `checkpoint.json` write ([PERF-028]) before the gRPC response is sent. The response is issued only after `fsync` of the updated checkpoint confirms durability. A server crash between the in-memory update and response delivery recovers the `Cancelled` state from checkpoint; the client does not receive the response and MUST retry.
+**[PERF-152] [8b_PERF_SPEC-REQ-217]** `CancelRun` MUST atomically transition all non-terminal `StageRun` records to `Cancelled` and persist a single `checkpoint.json` write ([PERF-028] [8b_PERF_SPEC-REQ-064]) before the gRPC response is sent. The response is issued only after `fsync` of the updated checkpoint confirms durability. A server crash between the in-memory update and response delivery recovers the `Cancelled` state from checkpoint; the client does not receive the response and MUST retry.
 
-**[PERF-153]** After sending `CancelRunResponse`, the server MUST asynchronously deliver `devs:cancel\n` to the stdin of all `Running` stage agents. This signal delivery MUST run in a separate `tokio::spawn` task per agent and MUST NOT block the gRPC response path. The [PERF-041] p99 target (500 ms) covers only the checkpoint write and response delivery, not agent termination or signal delivery.
+**[PERF-153] [8b_PERF_SPEC-REQ-218]** After sending `CancelRunResponse`, the server MUST asynchronously deliver `devs:cancel\n` to the stdin of all `Running` stage agents. This signal delivery MUST run in a separate `tokio::spawn` task per agent and MUST NOT block the gRPC response path. The [PERF-041] [8b_PERF_SPEC-REQ-215] p99 target (500 ms) covers only the checkpoint write and response delivery, not agent termination or signal delivery.
 
-**[PERF-154]** The SIGTERM/SIGKILL escalation sequence MUST be: (1) `devs:cancel\n` written to agent stdin at t+0; (2) SIGTERM at t+5 s if the agent has not yet exited; (3) SIGKILL at t+10 s if the agent has still not exited. The `exit_code` for an agent terminated by SIGKILL MUST be recorded as `-9` in the stage's terminal record. Each escalation MUST run in its own `tokio::spawn` task and MUST NOT block any other run's cancellation or dispatch path.
+**[PERF-154] [8b_PERF_SPEC-REQ-219]** The SIGTERM/SIGKILL escalation sequence MUST be: (1) `devs:cancel\n` written to agent stdin at t+0; (2) SIGTERM at t+5 s if the agent has not yet exited; (3) SIGKILL at t+10 s if the agent has still not exited. The `exit_code` for an agent terminated by SIGKILL MUST be recorded as `-9` in the stage's terminal record. Each escalation MUST run in its own `tokio::spawn` task and MUST NOT block any other run's cancellation or dispatch path.
 
 #### Dependencies for §3.4
 
 | Component | Version / contract | Role |
 |-----------|--------------------|------|
-| `devs-checkpoint` `CheckpointStore` | internal | Atomic write of all-Cancelled stage records ([PERF-028]) |
+| `devs-checkpoint` `CheckpointStore` | internal | Atomic write of all-Cancelled stage records ([PERF-028] [8b_PERF_SPEC-REQ-064]) |
 | `devs-executor` process handles | internal | Agent stdin writer; SIGTERM/SIGKILL escalation |
 | `devs-core` `StateMachine::transition` | internal | `Running/Eligible/Paused → Cancelled` bulk transition |
 | `tokio::time::sleep` | tokio `1.x` | 5 s and 10 s grace periods in the escalation task |
@@ -1360,7 +1360,7 @@ RunService.CancelRun
 **Edge cases for §3.4:**
 
 1. **Cancel a Paused run**: `cancel_run` on a `Paused` run MUST succeed and transition to `Cancelled`. Running stage agents must receive `devs:cancel\n`. Paused agents (which have already received `devs:pause\n`) must also receive `devs:cancel\n`.
-2. **Cancel during checkpoint write**: If a checkpoint write is in progress when `cancel_run` is received, the cancel operation waits for the write lock. This must complete within the 5 s lock acquisition timeout ([PERF-020]). Cancel response latency includes lock wait time.
+2. **Cancel during checkpoint write**: If a checkpoint write is in progress when `cancel_run` is received, the cancel operation waits for the write lock. This must complete within the 5 s lock acquisition timeout ([PERF-020] [8b_PERF_SPEC-REQ-101]). Cancel response latency includes lock wait time.
 3. **Cancel with no running stages**: If a run has no `Running` stages (all are `Waiting`, `Eligible`, or `Paused`), `cancel_run` transitions all to `Cancelled` atomically without sending any `devs:cancel\n` signals. The p99 target of 500 ms applies.
 4. **Agent ignores `devs:cancel\n`**: An agent that does not exit after `devs:cancel\n` receives SIGTERM at t+5s and SIGKILL at t+10s. The `exit_code` is recorded as `-9`. This is not an error condition from the server's perspective; the `CancelRun` RPC response has already been sent (at t+0s + checkpoint write time).
 5. **Concurrent `cancel_run` calls**: Two simultaneous `cancel_run` calls for the same run MUST result in exactly one successful cancellation and one `ALREADY_EXISTS` or `FAILED_PRECONDITION` response. The successful response is returned within p99 < 500 ms; the rejected response is returned within p99 < 100 ms.
@@ -1375,9 +1375,9 @@ RunService.CancelRun
 
 Path: server state change → gRPC `StreamRunEvents` → tokio mpsc channel → `App::handle_event()` → `AppState` mutation → `App::render()` → crossterm frame.
 
-**[PERF-043]** Total pipeline from server-side checkpoint commit to visible TUI frame update: **p95 < 100 ms**, **p99 < 200 ms**.
+**[PERF-043] [8b_PERF_SPEC-REQ-220]** Total pipeline from server-side checkpoint commit to visible TUI frame update: **p95 < 100 ms**, **p99 < 200 ms**.
 
-**[PERF-044]** TUI reconnect attempt: first retry begins within **1 000 ms** of stream error detection (exponential backoff: 1→2→4→8→16→30 s cap).
+**[PERF-044] [8b_PERF_SPEC-REQ-221]** TUI reconnect attempt: first retry begins within **1 000 ms** of stream error detection (exponential backoff: 1→2→4→8→16→30 s cap).
 
 The following Mermaid diagram shows the reconnection state machine and budget accounting:
 
@@ -1428,7 +1428,7 @@ message StreamRunEventsRequest {
 }
 ```
 
-The per-client broadcast channel has capacity **256 messages** ([PERF-054]). When capacity is exceeded, the oldest message is dropped; the client's stream is NOT terminated. On reconnect, the client always receives a fresh `Snapshot` as the first message, re-establishing full state before any `Delta` events.
+The per-client broadcast channel has capacity **256 messages** ([PERF-054] [8b_PERF_SPEC-REQ-222]). When capacity is exceeded, the oldest message is dropped; the client's stream is NOT terminated. On reconnect, the client always receives a fresh `Snapshot` as the first message, re-establishing full state before any `Delta` events.
 
 #### API Contract
 
@@ -1445,19 +1445,19 @@ RunService.StreamRunEvents
       client MUST reconnect to re-synchronise (next Snapshot re-establishes full state)
     – No gRPC error status returned during normal operation; RST_STREAM on server crash
   Client obligation:
-    – On any stream error or RST_STREAM: reconnect with exponential backoff ([PERF-044])
+    – On any stream error or RST_STREAM: reconnect with exponential backoff ([PERF-044] [8b_PERF_SPEC-REQ-221])
     – After reconnect: first message is always Snapshot; no state merging required
 ```
 
 #### Business Rules
 
-**[PERF-155]** The first message on every `StreamRunEvents` connection — including all reconnections — MUST be `RunEvent::Snapshot` containing the complete current state of all runs and stages for the subscribed project(s). No `RunEvent::Delta` MAY be delivered before the initial `Snapshot`. The snapshot MUST be constructed under a read lock; the lock MUST be released before the snapshot is serialised onto the wire.
+**[PERF-155] [8b_PERF_SPEC-REQ-223]** The first message on every `StreamRunEvents` connection — including all reconnections — MUST be `RunEvent::Snapshot` containing the complete current state of all runs and stages for the subscribed project(s). No `RunEvent::Delta` MAY be delivered before the initial `Snapshot`. The snapshot MUST be constructed under a read lock; the lock MUST be released before the snapshot is serialised onto the wire.
 
-**[PERF-156]** `AppState` mutations MUST occur only inside `App::handle_event()`, never inside `App::render()`. `render()` is a pure read of `AppState`: it MUST NOT acquire any lock, perform any I/O, or mutate any field. Violations cause `tui.render_slow` structured log events ([PERF-094]) and break the invariant that render latency is bounded only by `AppState` complexity.
+**[PERF-156] [8b_PERF_SPEC-REQ-224]** `AppState` mutations MUST occur only inside `App::handle_event()`, never inside `App::render()`. `render()` is a pure read of `AppState`: it MUST NOT acquire any lock, perform any I/O, or mutate any field. Violations cause `tui.render_slow` structured log events ([PERF-094] [8b_PERF_SPEC-REQ-225]) and break the invariant that render latency is bounded only by `AppState` complexity.
 
-**[PERF-157]** Keyboard events and network (gRPC stream) events MUST share the same `tokio::select!` loop in `App::run()`. The loop MUST process exactly one event per iteration before calling `render()`. Multiple `TerminalResize` events received in the same iteration MUST be coalesced: only the last resize dimensions are applied before `render()`.
+**[PERF-157] [8b_PERF_SPEC-REQ-226]** Keyboard events and network (gRPC stream) events MUST share the same `tokio::select!` loop in `App::run()`. The loop MUST process exactly one event per iteration before calling `render()`. Multiple `TerminalResize` events received in the same iteration MUST be coalesced: only the last resize dimensions are applied before `render()`.
 
-**[PERF-158]** The TUI reconnection backoff MUST be implemented with `tokio::time::sleep` (not `std::thread::sleep`) to keep the event loop non-blocking during backoff intervals. The TUI MUST remain responsive to keyboard events (`KeyEvent::Char('q')` for graceful exit, `KeyEvent::Char('h')` for help) during all reconnection backoff delays.
+**[PERF-158] [8b_PERF_SPEC-REQ-227]** The TUI reconnection backoff MUST be implemented with `tokio::time::sleep` (not `std::thread::sleep`) to keep the event loop non-blocking during backoff intervals. The TUI MUST remain responsive to keyboard events (`KeyEvent::Char('q')` for graceful exit, `KeyEvent::Char('h')` for help) during all reconnection backoff delays.
 
 #### Dependencies for §3.5
 
@@ -1490,9 +1490,9 @@ RunService.StreamRunEvents
 
 Path: AI agent `POST /mcp/v1/call` → MCP HTTP handler → `Arc<RwLock<ServerState>>` read lock → serialise response → HTTP 200.
 
-**[PERF-045]** Under concurrent load of **64 simultaneous observation requests**, p99 response time for `get_run` must remain **< 500 ms**. Observation tools hold read locks only and are fully parallel; they must not serialize behind write-lock holders beyond the 5 s lock acquisition timeout.
+**[PERF-045] [8b_PERF_SPEC-REQ-228]** Under concurrent load of **64 simultaneous observation requests**, p99 response time for `get_run` must remain **< 500 ms**. Observation tools hold read locks only and are fully parallel; they must not serialize behind write-lock holders beyond the 5 s lock acquisition timeout.
 
-**[PERF-046]** `stream_logs follow:true` first chunk delivery after connection: **p99 < 1 000 ms**. For stages with existing buffered lines, all buffered lines delivered before new live chunks; total buffered delivery for 10 000 lines: **p99 < 5 000 ms**.
+**[PERF-046] [8b_PERF_SPEC-REQ-126]** `stream_logs follow:true` first chunk delivery after connection: **p99 < 1 000 ms**. For stages with existing buffered lines, all buffered lines delivered before new live chunks; total buffered delivery for 10 000 lines: **p99 < 5 000 ms**.
 
 #### Data Models
 
@@ -1560,7 +1560,7 @@ All MCP tool calls use the JSON-RPC 2.0 envelope over HTTP POST `/mcp/v1/call`:
 ```
 HTTP POST /mcp/v1/call
   Content-Type: application/json
-  Body: MCP Request Envelope (≤ 1 048 576 bytes; [PERF-076])
+  Body: MCP Request Envelope (≤ 1 048 576 bytes; [PERF-076] [8b_PERF_SPEC-REQ-229])
 
   Normal response:    HTTP 200  Content-Type: application/json  (all tool calls)
   Streaming response: HTTP 200  Content-Type: text/event-stream  (stream_logs only)
@@ -1579,13 +1579,13 @@ HTTP POST /mcp/v1/call
 
 #### Business Rules
 
-**[PERF-159]** All MCP tool errors — `NOT_FOUND`, `FAILED_PRECONDITION`, validation failures, and lock timeouts — MUST be returned as **HTTP 200** with `"isError": true` in the MCP result envelope. The pre-handler HTTP status codes (413, 503, 405, 415) are the only exceptions; they are returned before the MCP layer is invoked and do not carry a JSON-RPC body.
+**[PERF-159] [8b_PERF_SPEC-REQ-230]** All MCP tool errors — `NOT_FOUND`, `FAILED_PRECONDITION`, validation failures, and lock timeouts — MUST be returned as **HTTP 200** with `"isError": true` in the MCP result envelope. The pre-handler HTTP status codes (413, 503, 405, 415) are the only exceptions; they are returned before the MCP layer is invoked and do not carry a JSON-RPC body.
 
-**[PERF-160]** Observation tools (`get_run`, `list_runs`, `get_stage_output`, `get_pool_state`) MUST acquire only a read lock on `Arc<RwLock<ServerState>>`. They MUST NOT acquire a write lock for any reason, including telemetry recording or state refresh side-effects. This permits up to 64 concurrent observation calls to execute in parallel even while a control tool holds the write lock.
+**[PERF-160] [8b_PERF_SPEC-REQ-231]** Observation tools (`get_run`, `list_runs`, `get_stage_output`, `get_pool_state`) MUST acquire only a read lock on `Arc<RwLock<ServerState>>`. They MUST NOT acquire a write lock for any reason, including telemetry recording or state refresh side-effects. This permits up to 64 concurrent observation calls to execute in parallel even while a control tool holds the write lock.
 
-**[PERF-161]** The connection limit of 64 simultaneous connections MUST be enforced at the **TCP connection acceptor level** (before the HTTP request body is read), not inside the request handler via an application-level semaphore. When 64 connections are active, the 65th is answered with HTTP 503 immediately. This prevents the server from consuming per-connection threads for rejected connections.
+**[PERF-161] [8b_PERF_SPEC-REQ-232]** The connection limit of 64 simultaneous connections MUST be enforced at the **TCP connection acceptor level** (before the HTTP request body is read), not inside the request handler via an application-level semaphore. When 64 connections are active, the 65th is answered with HTTP 503 immediately. This prevents the server from consuming per-connection threads for rejected connections.
 
-**[PERF-162]** `inject_stage_input` MUST check the precondition (target stage in `Waiting` state) using a read lock and MUST complete this check within **p99 < 100 ms**. Only after the precondition passes does the handler upgrade to a write lock to mutate stage state. A failed precondition check returns `failed_precondition:` error under the read lock with no write lock acquired.
+**[PERF-162] [8b_PERF_SPEC-REQ-233]** `inject_stage_input` MUST check the precondition (target stage in `Waiting` state) using a read lock and MUST complete this check within **p99 < 100 ms**. Only after the precondition passes does the handler upgrade to a write lock to mutate stage state. A failed precondition check returns `failed_precondition:` error under the read lock with no write lock acquired.
 
 #### MCP Connection and Lock Lifecycle
 
@@ -1641,7 +1641,7 @@ stateDiagram-v2
 
 ### 3.7 Presubmit Development Loop
 
-**[PERF-047]** Individual step budget targets (Linux CI, from `target/presubmit_timings.jsonl`):
+**[PERF-047] [8b_PERF_SPEC-REQ-234]** Individual step budget targets (Linux CI, from `target/presubmit_timings.jsonl`):
 
 | Step | Target | Hard Limit |
 |------|--------|------------|
@@ -1684,7 +1684,7 @@ stateDiagram-v2
 
 #### Data Model
 
-The `PresubmitTimingRecord` schema is defined normatively in §8.4 ([PERF-100]). Each step emits exactly one record immediately upon completion. The special `_timeout_kill` record (`"step": "_timeout_kill"`) is appended by the background timer subprocess when the 900 s wall-clock limit fires ([PERF-104]).
+The `PresubmitTimingRecord` schema is defined normatively in §8.4 ([PERF-100] [8b_PERF_SPEC-REQ-235]). Each step emits exactly one record immediately upon completion. The special `_timeout_kill` record (`"step": "_timeout_kill"`) is appended by the background timer subprocess when the 900 s wall-clock limit fires ([PERF-104] [8b_PERF_SPEC-REQ-050]).
 
 The `./do presubmit` script interface:
 
@@ -1720,11 +1720,11 @@ When invoked via `./do presubmit`, each sub-command writes a `PresubmitTimingRec
 
 #### Business Rules
 
-**[PERF-163]** The six presubmit steps MUST execute in fixed order: `setup → format → lint → test → coverage → ci`. No step MAY be skipped except `ci` (when `--skip-ci` is passed). No step MAY be parallelised with another. The fixed order ensures cheap validation (format) precedes expensive validation (lint, test), minimising developer feedback time when early steps fail.
+**[PERF-163] [8b_PERF_SPEC-REQ-236]** The six presubmit steps MUST execute in fixed order: `setup → format → lint → test → coverage → ci`. No step MAY be skipped except `ci` (when `--skip-ci` is passed). No step MAY be parallelised with another. The fixed order ensures cheap validation (format) precedes expensive validation (lint, test), minimising developer feedback time when early steps fail.
 
-**[PERF-164]** The 900 s background timer MUST be implemented as a separate OS-level subprocess (not a shell `sleep` in the same process group) so that it survives `SIGINT`/`SIGTERM` sent to the presubmit process itself. The timer PID MUST be written to `target/.presubmit_timer.pid` before the first step begins. On normal presubmit exit (success or step failure), the timer subprocess MUST be killed before the presubmit script exits.
+**[PERF-164] [8b_PERF_SPEC-REQ-237]** The 900 s background timer MUST be implemented as a separate OS-level subprocess (not a shell `sleep` in the same process group) so that it survives `SIGINT`/`SIGTERM` sent to the presubmit process itself. The timer PID MUST be written to `target/.presubmit_timer.pid` before the first step begins. On normal presubmit exit (success or step failure), the timer subprocess MUST be killed before the presubmit script exits.
 
-**[PERF-165]** `./do setup` MUST check for and kill any stale timer process from a previous run: if `target/.presubmit_timer.pid` exists and the PID refers to a running process, that process MUST be killed before `setup` continues. This prevents a stale timer from killing an unrelated process that reuses the old PID after an unclean previous run.
+**[PERF-165] [8b_PERF_SPEC-REQ-238]** `./do setup` MUST check for and kill any stale timer process from a previous run: if `target/.presubmit_timer.pid` exists and the PID refers to a running process, that process MUST be killed before `setup` continues. This prevents a stale timer from killing an unrelated process that reuses the old PID after an unclean previous run.
 
 #### Dependencies for §3.7
 
@@ -1841,11 +1841,11 @@ When invoked via `./do presubmit`, each sub-command writes a `PresubmitTimingRec
 
 ### 4.1 Agent Pool Concurrency
 
-**[PERF-048]** The pool semaphore must sustain **`max_concurrent` simultaneous active agents** across all projects without deadlock, starvation (except as governed by strict-priority scheduling), or semaphore permit leak. A pool configured with `max_concurrent = 64` must be able to maintain 64 concurrently running agents.
+**[PERF-048] [8b_PERF_SPEC-REQ-239]** The pool semaphore must sustain **`max_concurrent` simultaneous active agents** across all projects without deadlock, starvation (except as governed by strict-priority scheduling), or semaphore permit leak. A pool configured with `max_concurrent = 64` must be able to maintain 64 concurrently running agents.
 
-**[PERF-049]** A fan-out stage with `count = 64` and a pool with `max_concurrent = 4` must result in exactly 4 dispatched sub-agents and 60 queued sub-agents (`active_count == 4`, `queued_count == 60`) as verified by `get_pool_state`.
+**[PERF-049] [8b_PERF_SPEC-REQ-240]** A fan-out stage with `count = 64` and a pool with `max_concurrent = 4` must result in exactly 4 dispatched sub-agents and 60 queued sub-agents (`active_count == 4`, `queued_count == 60`) as verified by `get_pool_state`.
 
-**[PERF-050]** Pool agent selection algorithm (capability filter + semaphore acquire, slot immediately available): completes in **O(N)** time where N is the number of agents in the pool. For a pool of 1 024 agents, selection must complete within **p99 < 5 ms**.
+**[PERF-050] [8b_PERF_SPEC-REQ-241]** Pool agent selection algorithm (capability filter + semaphore acquire, slot immediately available): completes in **O(N)** time where N is the number of agents in the pool. For a pool of 1 024 agents, selection must complete within **p99 < 5 ms**.
 
 **Semaphore permit lifecycle** (full path including capability and rate-limit checks):
 
@@ -1921,9 +1921,9 @@ stateDiagram-v2
 
 ### 4.2 Parallel Stage Dispatch
 
-**[PERF-051]** A workflow with 100 parallel eligible stages and a pool with `max_concurrent = 100` must complete dispatch of all 100 stages within **1 000 ms** of the run starting.
+**[PERF-051] [8b_PERF_SPEC-REQ-032]** A workflow with 100 parallel eligible stages and a pool with `max_concurrent = 100` must complete dispatch of all 100 stages within **1 000 ms** of the run starting.
 
-**[PERF-052]** The DAG scheduler must handle workflows with up to **256 stages** without degradation in dispatch latency beyond the p99 targets defined in §3.2.
+**[PERF-052] [8b_PERF_SPEC-REQ-242]** The DAG scheduler must handle workflows with up to **256 stages** without degradation in dispatch latency beyond the p99 targets defined in §3.2.
 
 **DAG eligibility evaluation algorithm** (non-normative Rust illustration):
 
@@ -2002,9 +2002,9 @@ sequenceDiagram
 
 ### 4.3 gRPC Server Throughput
 
-**[PERF-053]** The gRPC server sustains at least **50 concurrent client connections** (TUI + CLI + gRPC-based agents) without degrading unary RPC latency beyond 2× the p50 targets in the SLO table.
+**[PERF-053] [8b_PERF_SPEC-REQ-243]** The gRPC server sustains at least **50 concurrent client connections** (TUI + CLI + gRPC-based agents) without degrading unary RPC latency beyond 2× the p50 targets in the SLO table.
 
-**[PERF-054]** `StreamRunEvents` per-client event buffer holds 256 messages. Under a burst of 256 state-change events, no event must be dropped for a connected client within the first 256 events. After buffer saturation, oldest messages are dropped with a `WARN` log.
+**[PERF-054] [8b_PERF_SPEC-REQ-222]** `StreamRunEvents` per-client event buffer holds 256 messages. Under a burst of 256 state-change events, no event must be dropped for a connected client within the first 256 events. After buffer saturation, oldest messages are dropped with a `WARN` log.
 
 **Per-client `StreamRunEvents` buffer model**:
 
@@ -2069,9 +2069,9 @@ sequenceDiagram
 
 ### 4.4 MCP HTTP Throughput
 
-**[PERF-055]** The MCP HTTP server handles at least **64 simultaneous connections** without returning HTTP 503. The 65th concurrent connection must receive HTTP 503 rather than hanging indefinitely.
+**[PERF-055] [8b_PERF_SPEC-REQ-244]** The MCP HTTP server handles at least **64 simultaneous connections** without returning HTTP 503. The 65th concurrent connection must receive HTTP 503 rather than hanging indefinitely.
 
-**[PERF-056]** Control tool throughput (serialized via write locks): at least **5 `submit_run` calls per second** sustained for 10 seconds without server-side error (duplicate names produce `ALREADY_EXISTS`, which is not a server error).
+**[PERF-056] [8b_PERF_SPEC-REQ-245]** Control tool throughput (serialized via write locks): at least **5 `submit_run` calls per second** sustained for 10 seconds without server-side error (duplicate names produce `ALREADY_EXISTS`, which is not a server error).
 
 **Connection limit model** — `Arc<AtomicU32>` counter governs admission:
 
@@ -2160,9 +2160,9 @@ sequenceDiagram
 
 ### 4.5 Webhook Dispatcher
 
-**[PERF-057]** The webhook dispatcher channel buffer holds at least **1 024 events** without blocking the engine. Events beyond buffer capacity are dropped with a `WARN` log (fire-and-forget).
+**[PERF-057] [8b_PERF_SPEC-REQ-246]** The webhook dispatcher channel buffer holds at least **1 024 events** without blocking the engine. Events beyond buffer capacity are dropped with a `WARN` log (fire-and-forget).
 
-**[PERF-058]** Concurrent webhook delivery to multiple targets: at least **8 simultaneous outbound HTTP deliveries** without blocking the scheduler thread.
+**[PERF-058] [8b_PERF_SPEC-REQ-247]** Concurrent webhook delivery to multiple targets: at least **8 simultaneous outbound HTTP deliveries** without blocking the scheduler thread.
 
 **Webhook delivery data model** — per delivery attempt record:
 
@@ -2251,7 +2251,7 @@ sequenceDiagram
 
 ### 4.6 Multi-Project Scheduling
 
-**[PERF-059]** With **10 concurrently active projects** each submitting runs, the weighted fair queue scheduler must dispatch the highest-priority eligible stage across all projects within **p99 < 100 ms** of its eligibility condition being met.
+**[PERF-059] [8b_PERF_SPEC-REQ-248]** With **10 concurrently active projects** each submitting runs, the weighted fair queue scheduler must dispatch the highest-priority eligible stage across all projects within **p99 < 100 ms** of its eligibility condition being met.
 
 **Scheduling policy data model** — per-project scheduling configuration:
 
@@ -2463,15 +2463,15 @@ Emitted on a structured log event `"server.resource_budget_snapshot"` at startup
 
 CPU budgets govern the computational overhead of the `devs` infrastructure itself, independent of the agent workloads it orchestrates. Agent subprocess CPU is excluded from all measurements because it is workload-dependent and not attributable to `devs`.
 
-**[PERF-060]** Idle server (no active runs): CPU utilisation **< 1%** on a single core averaged over a 30-second window. The server MUST NOT spin-poll; all waiting MUST be event-driven via Tokio's async runtime. Any `loop { }` without an `await` point is a correctness violation.
+**[PERF-060] [8b_PERF_SPEC-REQ-249]** Idle server (no active runs): CPU utilisation **< 1%** on a single core averaged over a 30-second window. The server MUST NOT spin-poll; all waiting MUST be event-driven via Tokio's async runtime. Any `loop { }` without an `await` point is a correctness violation.
 
-**[PERF-061]** Server under peak load (10 concurrent active runs, each with 4 active stages): CPU utilisation attributable to `devs-server` process (excluding agent subprocess CPU) **< 25%** of a single core averaged over a 10-second window. Agent subprocess CPU is excluded because it is workload-dependent.
+**[PERF-061] [8b_PERF_SPEC-REQ-250]** Server under peak load (10 concurrent active runs, each with 4 active stages): CPU utilisation attributable to `devs-server` process (excluding agent subprocess CPU) **< 25%** of a single core averaged over a 10-second window. Agent subprocess CPU is excluded because it is workload-dependent.
 
-**[PERF-062]** TUI render loop: CPU consumption of the `devs-tui` process **< 5%** of a single core when the display is static (no incoming events). Render is event-driven; idle frames MUST NOT be generated.
+**[PERF-062] [8b_PERF_SPEC-REQ-251]** TUI render loop: CPU consumption of the `devs-tui` process **< 5%** of a single core when the display is static (no incoming events). Render is event-driven; idle frames MUST NOT be generated.
 
-**[PERF-063]** `./do lint` (clippy + dep audit) CPU: no artificial parallelism constraints imposed; Cargo's default job count is acceptable. The target is wall-clock time (§3.7), not core utilisation.
+**[PERF-063] [8b_PERF_SPEC-REQ-252]** `./do lint` (clippy + dep audit) CPU: no artificial parallelism constraints imposed; Cargo's default job count is acceptable. The target is wall-clock time (§3.7), not core utilisation.
 
-**[PERF-120]** Server CPU measurement exclusions: the following activities are explicitly excluded from PERF-060 and PERF-061 measurements:
+**[PERF-120] [8b_PERF_SPEC-REQ-117]** Server CPU measurement exclusions: the following activities are explicitly excluded from PERF-060 and PERF-061 measurements:
 - Initial checkpoint restore at startup (unbounded `git2` operations in `spawn_blocking`)
 - `./do presubmit` subprocess invocations
 - Agent subprocess trees (any child of the agent PID)
@@ -2510,17 +2510,17 @@ CPU budgets govern the computational overhead of the `devs` infrastructure itsel
 
 Memory budgets define the maximum resident set size contributions from each major subsystem. All limits are worst-case bounds for well-formed inputs within structural limits (max 256 stages, max 64 fan-out, max 20 projects). The server MUST NOT crash due to allocation failure; it MUST log an error and continue with degraded behaviour (e.g., skipping a checkpoint write on `ENOMEM`).
 
-**[PERF-064]** Server baseline RSS (no active runs, ≤ 10 projects registered): **< 64 MiB**.
+**[PERF-064] [8b_PERF_SPEC-REQ-253]** Server baseline RSS (no active runs, ≤ 10 projects registered): **< 64 MiB**.
 
-**[PERF-065]** Server memory growth per active run: **< 8 MiB** per run for `WorkflowRun` + `StageRun` metadata (excluding `StageOutput` content and log buffers). A server with 20 active runs therefore adds < 160 MiB of metadata.
+**[PERF-065] [8b_PERF_SPEC-REQ-254]** Server memory growth per active run: **< 8 MiB** per run for `WorkflowRun` + `StageRun` metadata (excluding `StageOutput` content and log buffers). A server with 20 active runs therefore adds < 160 MiB of metadata.
 
-**[PERF-066]** In-memory log buffer per active stage: at most **10 000 lines × 256 bytes average = ~2.5 MiB**. A server with 10 active runs each with 4 active stages (40 stage log buffers) MUST NOT exceed **~100 MiB** for log buffer data alone.
+**[PERF-066] [8b_PERF_SPEC-REQ-255]** In-memory log buffer per active stage: at most **10 000 lines × 256 bytes average = ~2.5 MiB**. A server with 10 active runs each with 4 active stages (40 stage log buffers) MUST NOT exceed **~100 MiB** for log buffer data alone.
 
-**[PERF-067]** TUI process RSS: **< 64 MiB** under normal operation (single-run view, 10 000 buffered log lines for one stage).
+**[PERF-067] [8b_PERF_SPEC-REQ-256]** TUI process RSS: **< 64 MiB** under normal operation (single-run view, 10 000 buffered log lines for one stage).
 
-**[PERF-068]** Stage output `BoundedBytes<1_048_576>` cap: each of stdout and stderr consumes at most **1 MiB** stored; together the `StageOutput.stdout` + `StageOutput.stderr` heap allocation is at most **2 MiB** per `StageRun`. This is enforced at the type boundary.
+**[PERF-068] [8b_PERF_SPEC-REQ-257]** Stage output `BoundedBytes<1_048_576>` cap: each of stdout and stderr consumes at most **1 MiB** stored; together the `StageOutput.stdout` + `StageOutput.stderr` heap allocation is at most **2 MiB** per `StageRun`. This is enforced at the type boundary.
 
-**[PERF-069]** Context file `.devs_context.json` in-memory representation before agent spawn: **≤ 10 MiB** (enforced by proportional truncation algorithm in §5.5 before serialization to disk).
+**[PERF-069] [8b_PERF_SPEC-REQ-258]** Context file `.devs_context.json` in-memory representation before agent spawn: **≤ 10 MiB** (enforced by proportional truncation algorithm in §5.5 before serialization to disk).
 
 **Memory budget summary table**:
 
@@ -2568,15 +2568,15 @@ Memory budgets define the maximum resident set size contributions from each majo
 
 The checkpoint store is git-backed and grows monotonically until the retention sweep runs. All size caps are enforced by bounded types at write time (PERF-071, PERF-072, PERF-073) and by the sweep algorithm at sweep time (PERF-070). The sweep is two-phase: age-based deletion first, then size-based deletion. Active runs are never deleted.
 
-**[PERF-070]** Default retention policy: `max_age_days = 30`, `max_size_mb = 500`. The retention sweep MUST keep the total `.devs/` directory size **≤ `max_size_mb` MiB** on the checkpoint branch at the end of each sweep. The sweep runs at server startup and every `sweep_interval_hours` (default 24) thereafter.
+**[PERF-070] [8b_PERF_SPEC-REQ-259]** Default retention policy: `max_age_days = 30`, `max_size_mb = 500`. The retention sweep MUST keep the total `.devs/` directory size **≤ `max_size_mb` MiB** on the checkpoint branch at the end of each sweep. The sweep runs at server startup and every `sweep_interval_hours` (default 24) thereafter.
 
-**[PERF-071]** Checkpoint file per run (`checkpoint.json`): MUST be **< 1 MiB** for a 256-stage workflow. Stage `stdout`/`stderr` content MUST be stored in `.devs/logs/`, not embedded in `checkpoint.json`. The `StageRun.output` field in `checkpoint.json` contains only the `log_path` reference and the `truncated` flag, not the raw content.
+**[PERF-071] [8b_PERF_SPEC-REQ-260]** Checkpoint file per run (`checkpoint.json`): MUST be **< 1 MiB** for a 256-stage workflow. Stage `stdout`/`stderr` content MUST be stored in `.devs/logs/`, not embedded in `checkpoint.json`. The `StageRun.output` field in `checkpoint.json` contains only the `log_path` reference and the `truncated` flag, not the raw content.
 
-**[PERF-072]** Single stage log files: `stdout.log` + `stderr.log` together **≤ 2 MiB** (1 MiB each, governed by `BoundedBytes<1_048_576>`). Agent output exceeding 1 MiB per stream is truncated from the beginning; the most recent 1 MiB is retained.
+**[PERF-072] [8b_PERF_SPEC-REQ-261]** Single stage log files: `stdout.log` + `stderr.log` together **≤ 2 MiB** (1 MiB each, governed by `BoundedBytes<1_048_576>`). Agent output exceeding 1 MiB per stream is truncated from the beginning; the most recent 1 MiB is retained.
 
-**[PERF-073]** Workflow snapshot file `workflow_snapshot.json`: **< 512 KiB** for a workflow with 256 stages and all fields populated. The 13-step validation pipeline (§5.0 of TAS) rejects inputs that, combined, would produce a snapshot exceeding this bound.
+**[PERF-073] [8b_PERF_SPEC-REQ-262]** Workflow snapshot file `workflow_snapshot.json`: **< 512 KiB** for a workflow with 256 stages and all fields populated. The 13-step validation pipeline (§5.0 of TAS) rejects inputs that, combined, would produce a snapshot exceeding this bound.
 
-**[PERF-121]** Retention sweep wall-clock time: a sweep over **500 completed runs** with a total history of 500 MiB MUST complete within **60 seconds** (p99). If a sweep exceeds 120 seconds, a `WARN` event is emitted with `event_type: "checkpoint.sweep_slow"`.
+**[PERF-121] [8b_PERF_SPEC-REQ-118]** Retention sweep wall-clock time: a sweep over **500 completed runs** with a total history of 500 MiB MUST complete within **60 seconds** (p99). If a sweep exceeds 120 seconds, a `WARN` event is emitted with `event_type: "checkpoint.sweep_slow"`.
 
 **`RetentionPolicy` schema** (in `devs.toml` under `[retention]`):
 
@@ -2686,9 +2686,9 @@ stateDiagram-v2
 
 Network budgets define the maximum payload sizes for all three transport protocols: gRPC (tonic), MCP HTTP (hyper), and outbound webhooks (reqwest). All limits are enforced at the transport layer before any handler logic executes, preventing unbounded memory allocation from crafted large payloads.
 
-**[PERF-074]** gRPC frame size limit: **16 MiB** (`max_frame_size` in tonic `Server::builder()` config). Any message exceeding 16 MiB is rejected with gRPC status `RESOURCE_EXHAUSTED` before deserialization. This is a tonic configuration value, not a runtime check.
+**[PERF-074] [8b_PERF_SPEC-REQ-263]** gRPC frame size limit: **16 MiB** (`max_frame_size` in tonic `Server::builder()` config). Any message exceeding 16 MiB is rejected with gRPC status `RESOURCE_EXHAUSTED` before deserialization. This is a tonic configuration value, not a runtime check.
 
-**[PERF-075]** Per-RPC payload limits enforced by tonic interceptors:
+**[PERF-075] [8b_PERF_SPEC-REQ-264]** Per-RPC payload limits enforced by tonic interceptors:
 
 | RPC | Request limit | Response limit | Enforcement |
 |---|---|---|---|
@@ -2698,15 +2698,15 @@ Network budgets define the maximum payload sizes for all three transport protoco
 | `GetStageOutput` | 1 MiB | 4 MiB | `tonic` message size interceptor |
 | All other RPCs | 1 MiB | 4 MiB | `tonic` message size interceptor |
 
-**[PERF-076]** MCP HTTP request body: **≤ 1 MiB**. The hyper server reads at most 1 MiB + 1 byte from the request body. If the body exceeds 1 MiB, the server responds with HTTP 413 before invoking any tool handler. The tool handler MUST NOT be invoked for over-limit requests.
+**[PERF-076] [8b_PERF_SPEC-REQ-229]** MCP HTTP request body: **≤ 1 MiB**. The hyper server reads at most 1 MiB + 1 byte from the request body. If the body exceeds 1 MiB, the server responds with HTTP 413 before invoking any tool handler. The tool handler MUST NOT be invoked for over-limit requests.
 
-**[PERF-077]** Webhook payload: **≤ 64 KiB** per delivery attempt. The `data` field within the envelope is truncated proportionally if the total serialized payload would exceed 64 KiB. The envelope metadata fields (`event`, `timestamp`, `delivery_id`, `project_id`, `run_id`, `stage_name`, `truncated`) are always present and never truncated.
+**[PERF-077] [8b_PERF_SPEC-REQ-265]** Webhook payload: **≤ 64 KiB** per delivery attempt. The `data` field within the envelope is truncated proportionally if the total serialized payload would exceed 64 KiB. The envelope metadata fields (`event`, `timestamp`, `delivery_id`, `project_id`, `run_id`, `stage_name`, `truncated`) are always present and never truncated.
 
-**[PERF-078]** `stream_logs follow:true` individual chunk size: **≤ 32 KiB** per chunk. A single log line whose content exceeds 32 KiB MUST be split at the nearest preceding UTF-8 character boundary. The chunk sequence number increments for each emitted chunk, including split chunks from a single log line.
+**[PERF-078] [8b_PERF_SPEC-REQ-266]** `stream_logs follow:true` individual chunk size: **≤ 32 KiB** per chunk. A single log line whose content exceeds 32 KiB MUST be split at the nearest preceding UTF-8 character boundary. The chunk sequence number increments for each emitted chunk, including split chunks from a single log line.
 
-**[PERF-122]** MCP HTTP concurrent connection limit: **≤ 64** simultaneous open connections. A 65th connection attempt receives HTTP 503 with body `{"result":null,"error":"resource_exhausted: max concurrent MCP connections (64) reached"}`. The 503 response is sent before any authentication or handler logic.
+**[PERF-122] [8b_PERF_SPEC-REQ-119]** MCP HTTP concurrent connection limit: **≤ 64** simultaneous open connections. A 65th connection attempt receives HTTP 503 with body `{"result":null,"error":"resource_exhausted: max concurrent MCP connections (64) reached"}`. The 503 response is sent before any authentication or handler logic.
 
-**[PERF-123]** `stream_logs follow:true` maximum lifetime: **30 minutes**. After 30 minutes, the server sends the terminal chunk `{"done":true,"truncated":false,"total_lines":<N>}` and closes the HTTP connection, regardless of stage state. Clients that need log data beyond 30 minutes MUST re-issue the request with `from_sequence: <last_received + 1>`.
+**[PERF-123] [8b_PERF_SPEC-REQ-120]** `stream_logs follow:true` maximum lifetime: **30 minutes**. After 30 minutes, the server sends the terminal chunk `{"done":true,"truncated":false,"total_lines":<N>}` and closes the HTTP connection, regardless of stage state. Clients that need log data beyond 30 minutes MUST re-issue the request with `from_sequence: <last_received + 1>`.
 
 **Network limit constant definitions** (in `devs-core/src/constants.rs`):
 
@@ -2776,11 +2776,11 @@ pub const STREAM_LOGS_MAX_FOLLOW_DURATION_SECS: u64 = 30 * 60;
 
 Resource budgets are enforced by three complementary mechanisms: (1) type-system enforcement at construction time (`BoundedBytes<N>`, `BoundedString<N>`), (2) pre-write enforcement in the executor before agent spawn (context file proportional truncation), and (3) transport-layer enforcement in the gRPC and MCP HTTP servers before handler invocation. No runtime polling or periodic memory sweeps are used to enforce these limits.
 
-**[PERF-116]** `BoundedBytes<N>` MUST be defined in `devs-core/src/types.rs` and MUST NOT be constructible with more than `N` bytes. Its `From<Vec<u8>>` implementation truncates to the **last** `N` bytes and sets `truncated = true` and `original_len = Some(input.len())`. Its `serde::Deserialize` implementation rejects JSON strings whose UTF-8 byte length exceeds `N` with `serde::de::Error::custom("byte length exceeds cap")`.
+**[PERF-116] [8b_PERF_SPEC-REQ-113]** `BoundedBytes<N>` MUST be defined in `devs-core/src/types.rs` and MUST NOT be constructible with more than `N` bytes. Its `From<Vec<u8>>` implementation truncates to the **last** `N` bytes and sets `truncated = true` and `original_len = Some(input.len())`. Its `serde::Deserialize` implementation rejects JSON strings whose UTF-8 byte length exceeds `N` with `serde::de::Error::custom("byte length exceeds cap")`.
 
-**[PERF-117]** `BoundedString<N>` MUST reject construction (return `ValidationError::StringTooLong`) with byte length > `N`. Unlike `BoundedBytes`, it does not truncate, because truncated identifiers produce program errors (e.g., a truncated workflow name that no longer matches any registered workflow). Both types implement `fmt::Debug` to show the byte length and `truncated` flag.
+**[PERF-117] [8b_PERF_SPEC-REQ-114]** `BoundedString<N>` MUST reject construction (return `ValidationError::StringTooLong`) with byte length > `N`. Unlike `BoundedBytes`, it does not truncate, because truncated identifiers produce program errors (e.g., a truncated workflow name that no longer matches any registered workflow). Both types implement `fmt::Debug` to show the byte length and `truncated` flag.
 
-**[PERF-118]** The context file size cap (10 MiB) is enforced in `devs-executor` before the file is written to disk. If the serialized `.devs_context.json` exceeds 10 MiB, the `stdout` and `stderr` fields of included stages are proportionally truncated using the following algorithm:
+**[PERF-118] [8b_PERF_SPEC-REQ-115]** The context file size cap (10 MiB) is enforced in `devs-executor` before the file is written to disk. If the serialized `.devs_context.json` exceeds 10 MiB, the `stdout` and `stderr` fields of included stages are proportionally truncated using the following algorithm:
 
 ```rust
 /// Proportionally truncates stage stdout/stderr to fit within `max_bytes`.
@@ -2827,11 +2827,11 @@ fn truncate_context_proportionally(
 }
 ```
 
-**[PERF-119]** `truncate_utf8_from_start` MUST find the first valid UTF-8 character boundary at or after the byte offset `skip` and truncate there, never in the middle of a multi-byte sequence. It MUST scan forward from `skip` until `bytes[pos]` satisfies `(b & 0xC0) != 0x80` (i.e., is not a UTF-8 continuation byte), then truncate at `pos`.
+**[PERF-119] [8b_PERF_SPEC-REQ-116]** `truncate_utf8_from_start` MUST find the first valid UTF-8 character boundary at or after the byte offset `skip` and truncate there, never in the middle of a multi-byte sequence. It MUST scan forward from `skip` until `bytes[pos]` satisfies `(b & 0xC0) != 0x80` (i.e., is not a UTF-8 continuation byte), then truncate at `pos`.
 
-**[PERF-124]** All constant budget values that appear in enforcement logic (payload caps, buffer sizes, concurrency limits) MUST be imported from `devs-core/src/constants.rs`. The `./do lint` script MUST include a check that verifies no file outside `devs-core/src/constants.rs` contains hardcoded values matching the patterns in the network limit table (§5.4). Violations fail the lint step.
+**[PERF-124] [8b_PERF_SPEC-REQ-135]** All constant budget values that appear in enforcement logic (payload caps, buffer sizes, concurrency limits) MUST be imported from `devs-core/src/constants.rs`. The `./do lint` script MUST include a check that verifies no file outside `devs-core/src/constants.rs` contains hardcoded values matching the patterns in the network limit table (§5.4). Violations fail the lint step.
 
-**[PERF-125]** `BoundedBytes<N>` and `BoundedString<N>` MUST implement `serde::Serialize` such that they serialize as their inner data (plain JSON string or base64 string), not as a struct. Deserializing an already-at-cap value MUST succeed without triggering a `StringTooLong` error.
+**[PERF-125] [8b_PERF_SPEC-REQ-136]** `BoundedBytes<N>` and `BoundedString<N>` MUST implement `serde::Serialize` such that they serialize as their inner data (plain JSON string or base64 string), not as a struct. Deserializing an already-at-cap value MUST succeed without triggering a `StringTooLong` error.
 
 **`BoundedBytes<N>` full trait implementation contract**:
 
@@ -3073,7 +3073,7 @@ Emitted as structured log event `"server.slo_compliance_report"` at `INFO` level
 
 ### 6.1 Expected Operating Range (MVP)
 
-**[PERF-079]** The MVP deployment model is a single-user or small-team server running on a developer workstation or lightweight CI runner. The expected steady-state load profile is:
+**[PERF-079] [8b_PERF_SPEC-REQ-267]** The MVP deployment model is a single-user or small-team server running on a developer workstation or lightweight CI runner. The expected steady-state load profile is:
 
 | Metric | Typical | Peak (burst) |
 |--------|---------|--------------|
@@ -3085,11 +3085,11 @@ Emitted as structured log event `"server.slo_compliance_report"` at `INFO` level
 | Workflow submissions per hour | 5–20 | 100 |
 | Log lines per second (all stages) | 10–100 | 1 000 |
 
-**[PERF-080]** All SLOs in §2 must be met at the **peak** values in the table above. The server must not require any configuration changes, tuning, or restarts to handle peak load.
+**[PERF-080] [8b_PERF_SPEC-REQ-268]** All SLOs in §2 must be met at the **peak** values in the table above. The server must not require any configuration changes, tuning, or restarts to handle peak load.
 
-**[PERF-126]** At peak load, all seven peak metrics MUST be simultaneously satisfiable. The combined scenario — 10 active runs, 64 active stages, 20 projects, 10 gRPC connections, 64 MCP connections, 100 submissions/hour, 1 000 log lines/second — MUST be achievable on the reference hardware ([PERF-081]) without any single SLO target being violated due to resource contention between subsystems.
+**[PERF-126] [8b_PERF_SPEC-REQ-137]** At peak load, all seven peak metrics MUST be simultaneously satisfiable. The combined scenario — 10 active runs, 64 active stages, 20 projects, 10 gRPC connections, 64 MCP connections, 100 submissions/hour, 1 000 log lines/second — MUST be achievable on the reference hardware ([PERF-081] [8b_PERF_SPEC-REQ-269]) without any single SLO target being violated due to resource contention between subsystems.
 
-**[PERF-127]** When any metric moves from `Nominal` to `Elevated` or `Peak` (as classified by `LoadProfile.classification`), no operational intervention is required. The server MUST handle the load increase dynamically without restart, reconfiguration, or manual tuning.
+**[PERF-127] [8b_PERF_SPEC-REQ-138]** When any metric moves from `Nominal` to `Elevated` or `Peak` (as classified by `LoadProfile.classification`), no operational intervention is required. The server MUST handle the load increase dynamically without restart, reconfiguration, or manual tuning.
 
 **Operating range state machine** — load tier transitions:
 
@@ -3144,19 +3144,19 @@ which allows agents to detect server restarts between consecutive calls.
 
 #### Business Rules for §6.1
 
-**[PERF-BR-610]** All SLOs in §2 MUST remain compliant when all peak-load metrics in the PERF-079 table are simultaneously at their peak values. SLO p99 targets at peak are not relaxed from their nominal values; the 1.5× CI margin (§2.3) applies only in automated CI test environments, not in production peak scenarios.
+**[PERF-BR-610] [8b_PERF_SPEC-REQ-270]** All SLOs in §2 MUST remain compliant when all peak-load metrics in the PERF-079 table are simultaneously at their peak values. SLO p99 targets at peak are not relaxed from their nominal values; the 1.5× CI margin (§2.3) applies only in automated CI test environments, not in production peak scenarios.
 
-**[PERF-BR-611]** `LoadClassification` MUST be derived as `max(per-metric classification)`. If `active_stage_count` is `Peak` while all other metrics are `Nominal`, the overall classification is `Peak`. A `Nominal` classification requires every metric to be within its typical range simultaneously.
+**[PERF-BR-611] [8b_PERF_SPEC-REQ-271]** `LoadClassification` MUST be derived as `max(per-metric classification)`. If `active_stage_count` is `Peak` while all other metrics are `Nominal`, the overall classification is `Peak`. A `Nominal` classification requires every metric to be within its typical range simultaneously.
 
-**[PERF-BR-612]** `LoadProfile` snapshot construction MUST NOT consume measurable CPU or I/O during peak load. All counters MUST be maintained as `AtomicU32` in-memory fields, updated at each relevant state transition. The snapshot MUST be assembled by reading those atomics under a single `SchedulerState` read lock; no disk reads or gRPC calls are performed. Construction and serialisation MUST complete within p99 < 1 ms.
+**[PERF-BR-612] [8b_PERF_SPEC-REQ-272]** `LoadProfile` snapshot construction MUST NOT consume measurable CPU or I/O during peak load. All counters MUST be maintained as `AtomicU32` in-memory fields, updated at each relevant state transition. The snapshot MUST be assembled by reading those atomics under a single `SchedulerState` read lock; no disk reads or gRPC calls are performed. Construction and serialisation MUST complete within p99 < 1 ms.
 
-**[PERF-BR-613]** At peak load (64 active stages), the `stage_complete_tx` channel (buffer 256) MUST have sufficient headroom to accept completions from all 64 stages simultaneously. Since `256 > 64`, the channel MUST NOT apply backpressure to agent exit handlers during a worst-case simultaneous-completion event at peak stage count.
+**[PERF-BR-613] [8b_PERF_SPEC-REQ-273]** At peak load (64 active stages), the `stage_complete_tx` channel (buffer 256) MUST have sufficient headroom to accept completions from all 64 stages simultaneously. Since `256 > 64`, the channel MUST NOT apply backpressure to agent exit handlers during a worst-case simultaneous-completion event at peak stage count.
 
-**[PERF-BR-614]** Webhook dispatch at peak (100 submissions/hour ≈ 0.028 submissions/second) MUST NOT cause `webhook_tx` channel overflow. With a 1 024-event buffer and ≤ 100 events/hour, overflow indicates either a webhook target outage (causing delivery tasks to back up) or misconfigured webhook fan-out. A `webhook.channel_overflow` WARN event MUST be emitted with the `dropped_count` and current `channel_size` on any overflow.
+**[PERF-BR-614] [8b_PERF_SPEC-REQ-274]** Webhook dispatch at peak (100 submissions/hour ≈ 0.028 submissions/second) MUST NOT cause `webhook_tx` channel overflow. With a 1 024-event buffer and ≤ 100 events/hour, overflow indicates either a webhook target outage (causing delivery tasks to back up) or misconfigured webhook fan-out. A `webhook.channel_overflow` WARN event MUST be emitted with the `dropped_count` and current `channel_size` on any overflow.
 
-**[PERF-BR-615]** Log line throughput at 1 000 lines/second MUST NOT cause server-side log buffer overflow for individual stages unless a single stage exceeds ~15 lines/second for more than ~650 seconds (10 000 lines ÷ 15 lines/s). At peak (64 stages × ≈15.6 lines/s/stage), each stage's `LogBuffer` evicts its oldest lines once it reaches 10 000 entries. Eviction MUST NOT cause stage failure, affect dispatch latency, or write any error to the structured log at `ERROR` level; it is expected behaviour documented in §5.2.
+**[PERF-BR-615] [8b_PERF_SPEC-REQ-275]** Log line throughput at 1 000 lines/second MUST NOT cause server-side log buffer overflow for individual stages unless a single stage exceeds ~15 lines/second for more than ~650 seconds (10 000 lines ÷ 15 lines/s). At peak (64 stages × ≈15.6 lines/s/stage), each stage's `LogBuffer` evicts its oldest lines once it reaches 10 000 entries. Eviction MUST NOT cause stage failure, affect dispatch latency, or write any error to the structured log at `ERROR` level; it is expected behaviour documented in §5.2.
 
-**[PERF-BR-616]** `LoadClassification` MUST use hysteresis at the `Peak → Elevated` boundary: a metric that crosses from `Peak` back toward `Elevated` MUST NOT transition the classification unless it drops below 90% of the peak threshold. This prevents oscillation events when a metric hovers at the boundary (e.g., `active_stage_count` toggling between 63 and 64).
+**[PERF-BR-616] [8b_PERF_SPEC-REQ-276]** `LoadClassification` MUST use hysteresis at the `Peak → Elevated` boundary: a metric that crosses from `Peak` back toward `Elevated` MUST NOT transition the classification unless it drops below 90% of the peak threshold. This prevents oscillation events when a metric hovers at the boundary (e.g., `active_stage_count` toggling between 63 and 64).
 
 #### Edge Cases for §6.1
 
@@ -3286,25 +3286,25 @@ Error message format for validation-layer rejections (MUST be followed):
 
 #### Business Rules for §6.2
 
-**[PERF-BR-620]** Every hard limit in the §6.2 table MUST be defined as a named `pub const` in `devs-core/src/constants.rs`. No validation code, runtime check, or type definition MUST use an inline integer literal for a structural limit. The `./do lint` custom grep check MUST detect and reject files outside `devs-core/src/constants.rs` that contain numeric literals matching the limit values.
+**[PERF-BR-620] [8b_PERF_SPEC-REQ-277]** Every hard limit in the §6.2 table MUST be defined as a named `pub const` in `devs-core/src/constants.rs`. No validation code, runtime check, or type definition MUST use an inline integer literal for a structural limit. The `./do lint` custom grep check MUST detect and reject files outside `devs-core/src/constants.rs` that contain numeric literals matching the limit values.
 
-**[PERF-BR-621]** Validation-layer limits (stages per workflow, fan-out count, workflow inputs, stage env vars, webhook targets, registered projects) MUST be checked BEFORE any write lock is acquired. A request that violates a validation limit returns its error under a read lock (or no lock); this prevents a crafted oversized request from serialising behind write-lock holders or blocking legitimate write operations.
+**[PERF-BR-621] [8b_PERF_SPEC-REQ-278]** Validation-layer limits (stages per workflow, fan-out count, workflow inputs, stage env vars, webhook targets, registered projects) MUST be checked BEFORE any write lock is acquired. A request that violates a validation limit returns its error under a read lock (or no lock); this prevents a crafted oversized request from serialising behind write-lock holders or blocking legitimate write operations.
 
-**[PERF-BR-622]** Type-system limits (`BoundedBytes<N>`, `BoundedString<N>`) MUST be enforced purely at the Rust type level. No `unsafe` block in `devs-core/src/types.rs` MUST construct a `BoundedBytes<N>` with more than `N` bytes. All `unsafe` blocks MUST carry a safety comment explicitly excluding bound violations.
+**[PERF-BR-622] [8b_PERF_SPEC-REQ-279]** Type-system limits (`BoundedBytes<N>`, `BoundedString<N>`) MUST be enforced purely at the Rust type level. No `unsafe` block in `devs-core/src/types.rs` MUST construct a `BoundedBytes<N>` with more than `N` bytes. All `unsafe` blocks MUST carry a safety comment explicitly excluding bound violations.
 
-**[PERF-BR-623]** The MCP connection limit (64) MUST be enforced at the TCP connection acceptor level using the `Arc<AtomicU32>` counter with `SeqCst` ordering (PERF-BR-440). The constant used MUST be `MCP_MAX_CONCURRENT_CONNECTIONS` imported from `devs-core/src/constants.rs`, not an inline literal.
+**[PERF-BR-623] [8b_PERF_SPEC-REQ-280]** The MCP connection limit (64) MUST be enforced at the TCP connection acceptor level using the `Arc<AtomicU32>` counter with `SeqCst` ordering (PERF-BR-440). The constant used MUST be `MCP_MAX_CONCURRENT_CONNECTIONS` imported from `devs-core/src/constants.rs`, not an inline literal.
 
-**[PERF-BR-624]** `LogBuffer` eviction MUST be silent with respect to the running stage. Eviction MUST NOT write anything to the stage's stdin, MUST NOT affect the stage's `StageRun` status, and MUST NOT produce an `ERROR`-level structured log event. Only the MCP `stream_logs` response acknowledges eviction via `truncated: true` on `LogChunk`.
+**[PERF-BR-624] [8b_PERF_SPEC-REQ-281]** `LogBuffer` eviction MUST be silent with respect to the running stage. Eviction MUST NOT write anything to the stage's stdin, MUST NOT affect the stage's `StageRun` status, and MUST NOT produce an `ERROR`-level structured log event. Only the MCP `stream_logs` response acknowledges eviction via `truncated: true` on `LogChunk`.
 
-**[PERF-BR-625]** All validation-error messages for structural limit violations MUST include the dimension name, the attempted value, and the limit value in a machine-parseable format. Required format: `"<dimension> exceeds <limit>: <detail with actual value>"`. Example: `INVALID_ARGUMENT "workflow exceeds 256 stage limit: submitted 300 stages"`. This format enables automated alerting to detect when callers are approaching limits.
+**[PERF-BR-625] [8b_PERF_SPEC-REQ-282]** All validation-error messages for structural limit violations MUST include the dimension name, the attempted value, and the limit value in a machine-parseable format. Required format: `"<dimension> exceeds <limit>: <detail with actual value>"`. Example: `INVALID_ARGUMENT "workflow exceeds 256 stage limit: submitted 300 stages"`. This format enables automated alerting to detect when callers are approaching limits.
 
-**[PERF-BR-626]** `RetryConfig.max_attempts` (limit: 20) MUST be enforced at config parse time with a `WARN` log and clamping rather than a startup error. Operators copying configs with higher values must still be able to run the server. All other structural limits that appear in §6.2 as hard limits (pool `max_concurrent`, project limit, webhook target limit) ARE startup errors; the server MUST NOT start with a config that violates them.
+**[PERF-BR-626] [8b_PERF_SPEC-REQ-283]** `RetryConfig.max_attempts` (limit: 20) MUST be enforced at config parse time with a `WARN` log and clamping rather than a startup error. Operators copying configs with higher values must still be able to run the server. All other structural limits that appear in §6.2 as hard limits (pool `max_concurrent`, project limit, webhook target limit) ARE startup errors; the server MUST NOT start with a config that violates them.
 
-**[PERF-BR-627]** A `broadcast::RecvError::Lagged(N)` MUST be logged at `WARN` level with event type `"server.event_subscriber_lagged"` including the subscriber's `client_id` and `lag_count: N`. The server MUST NOT terminate the stream upon lag; the subscriber decides independently whether to reconnect.
+**[PERF-BR-627] [8b_PERF_SPEC-REQ-284]** A `broadcast::RecvError::Lagged(N)` MUST be logged at `WARN` level with event type `"server.event_subscriber_lagged"` including the subscriber's `client_id` and `lag_count: N`. The server MUST NOT terminate the stream upon lag; the subscriber decides independently whether to reconnect.
 
-**[PERF-BR-628]** The gRPC broadcast channel capacity (256 messages, `RUN_EVENT_BROADCAST_CAPACITY`) is a known-tight constant for 256-stage workflows. A 256-stage workflow completing simultaneously generates approximately 256 + run-level events (≈258–260 total). The 256 capacity MUST include a `// WARNING: tight for max-size workflows; see §6.3` comment in `devs-core/src/constants.rs`.
+**[PERF-BR-628] [8b_PERF_SPEC-REQ-285]** The gRPC broadcast channel capacity (256 messages, `RUN_EVENT_BROADCAST_CAPACITY`) is a known-tight constant for 256-stage workflows. A 256-stage workflow completing simultaneously generates approximately 256 + run-level events (≈258–260 total). The 256 capacity MUST include a `// WARNING: tight for max-size workflows; see §6.3` comment in `devs-core/src/constants.rs`.
 
-**[PERF-BR-629]** The fan-out stage limit (64) and the MCP connection limit (64) are coincidentally equal but MUST be enforced by separate named constants (`FAN_OUT_MAX_COUNT` and `MCP_MAX_CONCURRENT_CONNECTIONS`). Changing one MUST NOT silently change the other. A single constant shared between both uses is a correctness violation.
+**[PERF-BR-629] [8b_PERF_SPEC-REQ-286]** The fan-out stage limit (64) and the MCP connection limit (64) are coincidentally equal but MUST be enforced by separate named constants (`FAN_OUT_MAX_COUNT` and `MCP_MAX_CONCURRENT_CONNECTIONS`). Changing one MUST NOT silently change the other. A single constant shared between both uses is a correctness violation.
 
 #### Edge Cases for §6.2
 
@@ -3349,13 +3349,13 @@ No horizontal scaling or sharding is planned for MVP. All performance targets ar
 - **Post-MVP multi-machine**: Remote SSH and Docker execution environments already distribute agent subprocess load off the server machine. The server itself remains a single process.
 - **Post-MVP TLS**: `rustls` interceptor path is pre-allocated; enabling TLS adds < 1 ms to connection establishment and < 0.5 ms per gRPC call.
 
-**[PERF-081]** No performance target in this document requires more than 1 CPU core, 512 MiB RAM, or 1 Gbps LAN bandwidth on the server host machine to be met at peak MVP load.
+**[PERF-081] [8b_PERF_SPEC-REQ-269]** No performance target in this document requires more than 1 CPU core, 512 MiB RAM, or 1 Gbps LAN bandwidth on the server host machine to be met at peak MVP load.
 
-**[PERF-128]** The single-process, single-runtime architecture MUST NOT require code changes to scale pool `max_concurrent` from 1 to 1 024. Pool capacity is governed entirely by the `max_concurrent` field in `devs.toml`; the `Semaphore` is created with the configured permit count at startup. No pool-specific threading, executor tuning, or runtime configuration changes are required.
+**[PERF-128] [8b_PERF_SPEC-REQ-139]** The single-process, single-runtime architecture MUST NOT require code changes to scale pool `max_concurrent` from 1 to 1 024. Pool capacity is governed entirely by the `max_concurrent` field in `devs.toml`; the `Semaphore` is created with the configured permit count at startup. No pool-specific threading, executor tuning, or runtime configuration changes are required.
 
-**[PERF-129]** Post-MVP TLS (via `rustls`) MUST be addable as a zero-breaking-change, opt-in configuration field (`[server.tls]` in `devs.toml`). All gRPC and MCP HTTP connections MUST work with or without TLS. TLS handshake overhead (< 1 ms per connection) MUST be additive to SLO targets and measured separately; it MUST NOT be included in the SLO measurement windows defined in §2.2.
+**[PERF-129] [8b_PERF_SPEC-REQ-140]** Post-MVP TLS (via `rustls`) MUST be addable as a zero-breaking-change, opt-in configuration field (`[server.tls]` in `devs.toml`). All gRPC and MCP HTTP connections MUST work with or without TLS. TLS handshake overhead (< 1 ms per connection) MUST be additive to SLO targets and measured separately; it MUST NOT be included in the SLO measurement windows defined in §2.2.
 
-**[PERF-130]** The structured log format (§8.1) MUST be machine-parseable by external log aggregators (Loki, Datadog, CloudWatch) without any server code changes. All §8.1 performance fields MUST be top-level keys in the JSON output when `RUST_LOG_FORMAT=json` is set. Future observability backend integrations MUST be addable by configuring external log collectors only.
+**[PERF-130] [8b_PERF_SPEC-REQ-141]** The structured log format (§8.1) MUST be machine-parseable by external log aggregators (Loki, Datadog, CloudWatch) without any server code changes. All §8.1 performance fields MUST be top-level keys in the JSON output when `RUST_LOG_FORMAT=json` is set. Future observability backend integrations MUST be addable by configuring external log collectors only.
 
 **Post-MVP capacity growth model** — projecting load versus limits:
 
@@ -3385,17 +3385,17 @@ stateDiagram-v2
 
 #### Business Rules for §6.3
 
-**[PERF-BR-630]** The post-MVP TLS addition MUST be implementation-ready at MVP launch: all TCP acceptors MUST use `tokio::net::TcpListener` (not `std::net::TcpListener`), so that wrapping with `tokio_rustls::TlsAcceptor` requires only adding a configuration layer, not restructuring the acceptor code.
+**[PERF-BR-630] [8b_PERF_SPEC-REQ-287]** The post-MVP TLS addition MUST be implementation-ready at MVP launch: all TCP acceptors MUST use `tokio::net::TcpListener` (not `std::net::TcpListener`), so that wrapping with `tokio_rustls::TlsAcceptor` requires only adding a configuration layer, not restructuring the acceptor code.
 
-**[PERF-BR-631]** All constants that are at or near the MVP peak value and require a rebuild to increase (`MCP_MAX_CONCURRENT_CONNECTIONS = 64`, `MAX_PROJECT_COUNT = 20`, `MAX_WEBHOOK_TARGETS_PER_PROJECT = 16`, `RUN_EVENT_BROADCAST_CAPACITY = 256`) MUST each have a `// Growth path: increase this constant and rebuild` comment in `devs-core/src/constants.rs`. Constants that are config-only (`pool.max_concurrent`) MUST have a `// Growth path: increase max_concurrent in devs.toml (no rebuild required)` comment.
+**[PERF-BR-631] [8b_PERF_SPEC-REQ-288]** All constants that are at or near the MVP peak value and require a rebuild to increase (`MCP_MAX_CONCURRENT_CONNECTIONS = 64`, `MAX_PROJECT_COUNT = 20`, `MAX_WEBHOOK_TARGETS_PER_PROJECT = 16`, `RUN_EVENT_BROADCAST_CAPACITY = 256`) MUST each have a `// Growth path: increase this constant and rebuild` comment in `devs-core/src/constants.rs`. Constants that are config-only (`pool.max_concurrent`) MUST have a `// Growth path: increase max_concurrent in devs.toml (no rebuild required)` comment.
 
-**[PERF-BR-632]** The `StructuralLimitApproach` WARN event MUST include a `growth_path` field describing what the operator must do. For config-only limits: `"increase max_concurrent in devs.toml"`. For rebuild-required limits: `"increase CONSTANT_NAME in devs-core/src/constants.rs and rebuild"`. This field enables automated tooling to generate actionable runbook entries.
+**[PERF-BR-632] [8b_PERF_SPEC-REQ-289]** The `StructuralLimitApproach` WARN event MUST include a `growth_path` field describing what the operator must do. For config-only limits: `"increase max_concurrent in devs.toml"`. For rebuild-required limits: `"increase CONSTANT_NAME in devs-core/src/constants.rs and rebuild"`. This field enables automated tooling to generate actionable runbook entries.
 
-**[PERF-BR-633]** The broadcast channel capacity (`RUN_EVENT_BROADCAST_CAPACITY = 256`) is a known-tight constant for max-size workflows. The constant MUST include the comment: `// WARNING: 256-stage workflows can generate ~260 simultaneous events; this capacity may be insufficient for large parallel completions. See §6.3.` This documents the known risk without requiring a fix at MVP.
+**[PERF-BR-633] [8b_PERF_SPEC-REQ-290]** The broadcast channel capacity (`RUN_EVENT_BROADCAST_CAPACITY = 256`) is a known-tight constant for max-size workflows. The constant MUST include the comment: `// WARNING: 256-stage workflows can generate ~260 simultaneous events; this capacity may be insufficient for large parallel completions. See §6.3.` This documents the known risk without requiring a fix at MVP.
 
-**[PERF-BR-634]** Log throughput at 1 000 lines/second at peak MUST be sustainable within the server's async I/O budget. The log capture path (`tokio::io::AsyncBufReadExt::lines()` on the agent stdout pipe → `broadcast::Sender<LogLine>`) MUST complete each line capture as a single non-blocking `send()`. If the broadcast channel for a stage has no receivers (e.g., no MCP `stream_logs` follower), `send()` returns `SendError::NoReceivers` which MUST be ignored (not logged at `WARN` or `ERROR`).
+**[PERF-BR-634] [8b_PERF_SPEC-REQ-291]** Log throughput at 1 000 lines/second at peak MUST be sustainable within the server's async I/O budget. The log capture path (`tokio::io::AsyncBufReadExt::lines()` on the agent stdout pipe → `broadcast::Sender<LogLine>`) MUST complete each line capture as a single non-blocking `send()`. If the broadcast channel for a stage has no receivers (e.g., no MCP `stream_logs` follower), `send()` returns `SendError::NoReceivers` which MUST be ignored (not logged at `WARN` or `ERROR`).
 
-**[PERF-BR-635]** The external log aggregator compatibility MUST be verified by including a CI check that pipes `./do test` JSON log output through `jq .` and asserts exit code 0. All §8.1 structured log fields MUST appear as top-level JSON keys in the output, not nested under a `fields` wrapper. This is configured by using `tracing_subscriber::fmt().json().flatten_event(true)`.
+**[PERF-BR-635] [8b_PERF_SPEC-REQ-292]** The external log aggregator compatibility MUST be verified by including a CI check that pipes `./do test` JSON log output through `jq .` and asserts exit code 0. All §8.1 structured log fields MUST appear as top-level JSON keys in the output, not nested under a `fields` wrapper. This is configured by using `tracing_subscriber::fmt().json().flatten_event(true)`.
 
 #### Edge Cases for §6.3
 
@@ -3498,11 +3498,11 @@ Four complementary test types together verify all performance targets defined in
 | Presubmit timing | `./do presubmit` + `presubmit_timings.jsonl` | Root | Per commit | Hard 900 s wall-clock timeout |
 | Manual profiling | `flamegraph`, `tokio-console` | N/A | As needed | No CI gate |
 
-**[PERF-082]** `criterion` benchmarks are placed in `crates/*/benches/` and measure only algorithmic performance (template resolution, DAG tier computation, ANSI stripping). They MUST NOT start a server, open network connections, or perform file I/O beyond in-memory operations.
+**[PERF-082] [8b_PERF_SPEC-REQ-293]** `criterion` benchmarks are placed in `crates/*/benches/` and measure only algorithmic performance (template resolution, DAG tier computation, ANSI stripping). They MUST NOT start a server, open network connections, or perform file I/O beyond in-memory operations.
 
-**[PERF-083]** E2E latency assertions instrument `std::time::Instant::now()` immediately before issuing the operation under test and record the elapsed duration on completion. Assertions use the p99 targets from §2 with a **50% safety margin** applied uniformly in CI test code (to account for CI runner variance). A raw p99 target of `T ms` becomes a test assertion of `T × 1.5 ms`. For example, a raw target of `< 100 ms` is asserted as `< 150 ms` in the test.
+**[PERF-083] [8b_PERF_SPEC-REQ-294]** E2E latency assertions instrument `std::time::Instant::now()` immediately before issuing the operation under test and record the elapsed duration on completion. Assertions use the p99 targets from §2 with a **50% safety margin** applied uniformly in CI test code (to account for CI runner variance). A raw p99 target of `T ms` becomes a test assertion of `T × 1.5 ms`. For example, a raw target of `< 100 ms` is asserted as `< 150 ms` in the test.
 
-**[PERF-166]** The 50% CI margin defined in **[PERF-083]** applies to all E2E latency assertions in `tests/`. Unit benchmarks (`criterion`) use their own statistical confidence intervals and do not apply this margin. Load tests (concurrency assertions on `active_count`, `queued_count`) do not apply a timing margin — they poll until satisfied or timeout.
+**[PERF-166] [8b_PERF_SPEC-REQ-295]** The 50% CI margin defined in **[PERF-083] [8b_PERF_SPEC-REQ-294]** applies to all E2E latency assertions in `tests/`. Unit benchmarks (`criterion`) use their own statistical confidence intervals and do not apply this margin. Load tests (concurrency assertions on `active_count`, `queued_count`) do not apply a timing margin — they poll until satisfied or timeout.
 
 #### 7.1.1 Test Classification Data Model
 
@@ -3524,7 +3524,7 @@ fn test_dag_dispatch_latency() { /* ... */ }
 | `p99-target-ms` | integer | For e2e-latency | Raw p99 target from §2; used for documentation only |
 | `ci-assertion-ms` | integer | For e2e-latency | Actual value used in the assertion (`p99-target-ms × 1.5`, rounded up) |
 
-**[PERF-167]** `./do lint` scans all `tests/**/*.rs` and `crates/*/benches/**/*.rs` files for tests annotated with `// Covers: PERF-NNN` and validates: (a) the referenced PERF-NNN exists in this document, (b) `ci-assertion-ms == ceil(p99-target-ms × 1.5)` when both fields are present. Mismatches cause `./do lint` to exit non-zero.
+**[PERF-167] [8b_PERF_SPEC-REQ-296]** `./do lint` scans all `tests/**/*.rs` and `crates/*/benches/**/*.rs` files for tests annotated with `// Covers: PERF-NNN` and validates: (a) the referenced PERF-NNN exists in this document, (b) `ci-assertion-ms == ceil(p99-target-ms × 1.5)` when both fields are present. Mismatches cause `./do lint` to exit non-zero.
 
 ---
 
@@ -3568,11 +3568,11 @@ impl Drop for ServerHandle {
 }
 ```
 
-**[PERF-168]** Every performance test MUST call `start_server(TestServerConfig { temp_dir: tempfile::TempDir::new()?, .. })`. `DEVS_DISCOVERY_FILE` is set to a path within `temp_dir` unique per test process. Direct construction of `Command::new("devs-server")` without `devs_test_helper::start_server` is prohibited; `./do lint` exits non-zero if detected.
+**[PERF-168] [8b_PERF_SPEC-REQ-297]** Every performance test MUST call `start_server(TestServerConfig { temp_dir: tempfile::TempDir::new()?, .. })`. `DEVS_DISCOVERY_FILE` is set to a path within `temp_dir` unique per test process. Direct construction of `Command::new("devs-server")` without `devs_test_helper::start_server` is prohibited; `./do lint` exits non-zero if detected.
 
-**[PERF-169]** E2E performance tests run with `test-threads = 1` (set in `.cargo/config.toml`). This prevents server port conflicts and ensures deterministic timing measurements. Criterion benchmarks are not affected by this setting.
+**[PERF-169] [8b_PERF_SPEC-REQ-298]** E2E performance tests run with `test-threads = 1` (set in `.cargo/config.toml`). This prevents server port conflicts and ensures deterministic timing measurements. Criterion benchmarks are not affected by this setting.
 
-**[PERF-186]** All E2E test processes that exercise `devs-server` subprocesses MUST set `LLVM_PROFILE_FILE=/tmp/devs-coverage-%p.profraw` in the environment before spawning. The `%p` suffix ensures per-process profile files that `cargo llvm-cov` can merge. Tests that omit this variable produce zero E2E coverage attribution.
+**[PERF-186] [8b_PERF_SPEC-REQ-299]** All E2E test processes that exercise `devs-server` subprocesses MUST set `LLVM_PROFILE_FILE=/tmp/devs-coverage-%p.profraw` in the environment before spawning. The `%p` suffix ensures per-process profile files that `cargo llvm-cov` can merge. Tests that omit this variable produce zero E2E coverage attribution.
 
 #### 7.2.2 Mock Agent Adapter
 
@@ -3595,9 +3595,9 @@ pub struct MockAgentAdapter {
 }
 ```
 
-**[PERF-170]** `MockAgentAdapter` implements the `AgentAdapter` trait. It is registered under the tool name `"mock"` in performance test pool configurations. A pool configured with `tool = "mock"` MUST NOT be used in production server configurations; `devs-server` startup rejects `tool = "mock"` unless `DEVS_TEST_MODE=1` environment variable is set.
+**[PERF-170] [8b_PERF_SPEC-REQ-300]** `MockAgentAdapter` implements the `AgentAdapter` trait. It is registered under the tool name `"mock"` in performance test pool configurations. A pool configured with `tool = "mock"` MUST NOT be used in production server configurations; `devs-server` startup rejects `tool = "mock"` unless `DEVS_TEST_MODE=1` environment variable is set.
 
-**[PERF-171]** When `MockAgentAdapter.run_duration_ms > 0`, the mock sleeps for the specified duration using `tokio::time::sleep` before signaling completion. This simulates realistic agent run times in load tests without spawning subprocesses.
+**[PERF-171] [8b_PERF_SPEC-REQ-301]** When `MockAgentAdapter.run_duration_ms > 0`, the mock sleeps for the specified duration using `tokio::time::sleep` before signaling completion. This simulates realistic agent run times in load tests without spawning subprocesses.
 
 #### 7.2.3 Performance Test Helper Module Structure
 
@@ -3636,7 +3636,7 @@ impl LatencyRecorder {
 pub fn assert_within_ms(recorder: &LatencyRecorder, limit_ms: u64, label: &str);
 ```
 
-**[PERF-172]** All E2E latency assertions MUST use `LatencyRecorder` from `devs_test_helper::timing` to collect at least **3 samples** before asserting. Single-sample timing assertions are prohibited in E2E tests (but permitted in criterion benchmarks where statistical machinery handles this). A single-sample assertion causes `./do lint` to exit non-zero when the lint scanner detects direct `Instant::elapsed()` comparisons in test functions annotated with `perf-test-type: e2e-latency`.
+**[PERF-172] [8b_PERF_SPEC-REQ-302]** All E2E latency assertions MUST use `LatencyRecorder` from `devs_test_helper::timing` to collect at least **3 samples** before asserting. Single-sample timing assertions are prohibited in E2E tests (but permitted in criterion benchmarks where statistical machinery handles this). A single-sample assertion causes `./do lint` to exit non-zero when the lint scanner detects direct `Instant::elapsed()` comparisons in test functions annotated with `perf-test-type: e2e-latency`.
 
 ---
 
@@ -3665,7 +3665,7 @@ Benchmark names follow the format `<crate-short-name>/<module>/<operation>[/<var
 | `checkpoint/serialize_256_stages` | `devs-checkpoint` | `checkpoint.json` serialization |
 | `pool/capability_filter_1024` | `devs-pool` | Capability filter over 1 024-agent pool |
 
-**[PERF-173]** Each benchmark MUST define a `BenchmarkId` that includes the input size as a parameter for benchmarks that scale with input. Example: `criterion::BenchmarkId::new("compute_tiers", stage_count)`. This enables `criterion`'s built-in regression comparison to track regressions per input size independently.
+**[PERF-173] [8b_PERF_SPEC-REQ-303]** Each benchmark MUST define a `BenchmarkId` that includes the input size as a parameter for benchmarks that scale with input. Example: `criterion::BenchmarkId::new("compute_tiers", stage_count)`. This enables `criterion`'s built-in regression comparison to track regressions per input size independently.
 
 #### 7.3.2 Required Benchmarks by Crate
 
@@ -3679,7 +3679,7 @@ Benchmark names follow the format `<crate-short-name>/<module>/<operation>[/<var
 | `devs-checkpoint` | `benches/serialize.rs` | `serialize_256_stages`, `deserialize_256_stages` | < 100 000 000 |
 | `devs-pool` | `benches/capability.rs` | `capability_filter_1024`, `semaphore_acquire_release` | < 10 000 |
 
-**[PERF-174]** Criterion benchmark configuration applied uniformly across all benchmarks:
+**[PERF-174] [8b_PERF_SPEC-REQ-304]** Criterion benchmark configuration applied uniformly across all benchmarks:
 - `measurement_time`: 10 seconds
 - `warm_up_time`: 3 seconds
 - `sample_size`: 100 samples
@@ -3690,15 +3690,15 @@ These values MUST be set in a shared `criterion_config()` function exported from
 
 #### 7.3.3 Baseline Management
 
-**[PERF-175]** `criterion` baselines are stored in `target/criterion/<benchmark-name>/base/`. This directory is committed as a CI artifact with `expire_in: 7 days` in `.gitlab-ci.yml`. The artifact is restored at the start of each CI run to enable regression comparison.
+**[PERF-175] [8b_PERF_SPEC-REQ-305]** `criterion` baselines are stored in `target/criterion/<benchmark-name>/base/`. This directory is committed as a CI artifact with `expire_in: 7 days` in `.gitlab-ci.yml`. The artifact is restored at the start of each CI run to enable regression comparison.
 
-**[PERF-093]** `criterion` baselines are updated only by running `./do coverage --update-baselines`. This sub-command MUST NOT be invoked automatically in CI; it is a manual developer action performed on a clean, low-load machine. After updating, the new baselines must be committed in a dedicated "perf: update criterion baselines" commit.
+**[PERF-093] [8b_PERF_SPEC-REQ-306]** `criterion` baselines are updated only by running `./do coverage --update-baselines`. This sub-command MUST NOT be invoked automatically in CI; it is a manual developer action performed on a clean, low-load machine. After updating, the new baselines must be committed in a dedicated "perf: update criterion baselines" commit.
 
-**[PERF-120]** The regression threshold is 10% degradation (`delta_pct >= 10.0`). Improvements (negative `delta_pct`) are never regressions. Statistical noise within ±5% is expected on CI runners; the 10% threshold provides a 5-point margin above noise.
+**[PERF-120] [8b_PERF_SPEC-REQ-117]** The regression threshold is 10% degradation (`delta_pct >= 10.0`). Improvements (negative `delta_pct`) are never regressions. Statistical noise within ±5% is expected on CI runners; the 10% threshold provides a 5-point margin above noise.
 
-**[PERF-121]** When `criterion` detects a statistically insignificant result (the confidence interval crosses zero), that benchmark is reported as `inconclusive` and does NOT trigger CI failure regardless of the point estimate.
+**[PERF-121] [8b_PERF_SPEC-REQ-118]** When `criterion` detects a statistically insignificant result (the confidence interval crosses zero), that benchmark is reported as `inconclusive` and does NOT trigger CI failure regardless of the point estimate.
 
-**[PERF-122]** `criterion` baselines are updated by running `./do coverage --update-baselines` (a dedicated sub-command of `./do`, not part of normal `./do presubmit`). This sub-command MUST NOT be run automatically in CI; it is a manual developer action.
+**[PERF-122] [8b_PERF_SPEC-REQ-119]** `criterion` baselines are updated by running `./do coverage --update-baselines` (a dedicated sub-command of `./do`, not part of normal `./do presubmit`). This sub-command MUST NOT be run automatically in CI; it is a manual developer action.
 
 #### 7.3.4 Benchmark Edge Cases
 
@@ -3718,7 +3718,7 @@ E2E latency tests exercise the full path from test code through binary clients (
 
 #### 7.4.1 CI Margin Methodology
 
-The CI environment introduces timing variance from JIT compilation, OS scheduling, and virtualization. The 50% margin defined in **[PERF-083]** is applied as follows:
+The CI environment introduces timing variance from JIT compilation, OS scheduling, and virtualization. The 50% margin defined in **[PERF-083] [8b_PERF_SPEC-REQ-294]** is applied as follows:
 
 ```
 For each SLO with raw p99 target T:
@@ -3732,7 +3732,7 @@ Examples:
   MCP get_run×64:  T=500ms  → ci_assertion=500ms  (burst assertion; no margin)
 ```
 
-**[PERF-176]** The burst-load assertion in **[PERF-087]** (64 concurrent `get_run` calls completing within 500 ms) does NOT apply the 50% CI margin, because this is a maximum-time assertion across all 64 tasks rather than a per-operation p99. If 64 concurrent requests cannot complete within 500 ms on CI, the server is failing its concurrency target, not experiencing timing variance.
+**[PERF-176] [8b_PERF_SPEC-REQ-307]** The burst-load assertion in **[PERF-087] [8b_PERF_SPEC-REQ-308]** (64 concurrent `get_run` calls completing within 500 ms) does NOT apply the 50% CI margin, because this is a maximum-time assertion across all 64 tasks rather than a per-operation p99. If 64 concurrent requests cannot complete within 500 ms on CI, the server is failing its concurrency target, not experiencing timing variance.
 
 #### 7.4.2 Test Isolation Requirements
 
@@ -3745,7 +3745,7 @@ Every E2E performance test instance:
 5. Tears down the server via `ServerHandle::drop()` which blocks until the process exits.
 6. Never shares `ServerHandle` across test functions.
 
-**[PERF-177]** E2E performance tests MUST NOT share a server instance between test functions. A single `start_server()` call per test function is required. The overhead of server startup is excluded from all latency measurements: timing begins only after the `ServerHandle` is returned by `start_server()`.
+**[PERF-177] [8b_PERF_SPEC-REQ-309]** E2E performance tests MUST NOT share a server instance between test functions. A single `start_server()` call per test function is required. The overhead of server startup is excluded from all latency measurements: timing begins only after the `ServerHandle` is returned by `start_server()`.
 
 #### 7.4.3 E2E Test File Organization
 
@@ -3766,11 +3766,11 @@ All performance test files are prefixed with `perf_` to distinguish them from fu
 
 ### 7.5 DAG Scheduler Dispatch Latency Test
 
-This test verifies that the DAG scheduler dispatches eligible stages within the 100 ms p99 target defined in **[PERF-021]**, applied with the CI margin of 150 ms.
+This test verifies that the DAG scheduler dispatches eligible stages within the 100 ms p99 target defined in **[PERF-021] [8b_PERF_SPEC-REQ-102]**, applied with the CI margin of 150 ms.
 
 #### 7.5.1 Test Specification
 
-**[PERF-084]** A dedicated E2E test (`tests/perf_scheduler.rs::test_dag_dispatch_latency`) submits a two-stage workflow where stage B depends on stage A. The test procedure is:
+**[PERF-084] [8b_PERF_SPEC-REQ-310]** A dedicated E2E test (`tests/perf_scheduler.rs::test_dag_dispatch_latency`) submits a two-stage workflow where stage B depends on stage A. The test procedure is:
 
 1. Start server with `MockAgentAdapter` pool, `max_concurrent = 2`.
 2. Register a workflow with two stages: `stage-a` (no dependencies), `stage-b` (depends on `stage-a`).
@@ -3781,7 +3781,7 @@ This test verifies that the DAG scheduler dispatches eligible stages within the 
 7. Record `t_b_running = Instant::now()`.
 8. Assert `t_b_running - t_a_complete < 150 ms`.
 
-**[PERF-084]** repeats steps 3–8 five times (five independent runs) and records each latency sample. All five samples must satisfy the 150 ms assertion.
+**[PERF-084] [8b_PERF_SPEC-REQ-310]** repeats steps 3–8 five times (five independent runs) and records each latency sample. All five samples must satisfy the 150 ms assertion.
 
 This test MUST be annotated: `// Covers: PERF-021, PERF-038`.
 
@@ -3801,11 +3801,11 @@ The test collects 5 `DispatchLatencySample` records and asserts `max(dispatch_la
 
 #### 7.5.3 Business Rules
 
-**[PERF-178]** The dispatch latency measurement begins at the moment `stage-a` is observed as `Completed` via `GetRun`, not at the moment the server internally processes the completion event. This includes gRPC round-trip latency in the measurement, which is acceptable and expected.
+**[PERF-178] [8b_PERF_SPEC-REQ-311]** The dispatch latency measurement begins at the moment `stage-a` is observed as `Completed` via `GetRun`, not at the moment the server internally processes the completion event. This includes gRPC round-trip latency in the measurement, which is acceptable and expected.
 
-**[PERF-179]** The polling interval of 10 ms introduces at most 10 ms of measurement error. This is acceptable: the CI assertion is 150 ms (CI margin) versus the raw 100 ms target, providing 50 ms of headroom beyond the maximum polling error.
+**[PERF-179] [8b_PERF_SPEC-REQ-312]** The polling interval of 10 ms introduces at most 10 ms of measurement error. This is acceptable: the CI assertion is 150 ms (CI margin) versus the raw 100 ms target, providing 50 ms of headroom beyond the maximum polling error.
 
-**[PERF-180]** If `stage-b` does not reach `Running` within 1 000 ms of `stage-a` completing, the test fails with a descriptive panic message including the last observed status of `stage-b` and the elapsed time.
+**[PERF-180] [8b_PERF_SPEC-REQ-313]** If `stage-b` does not reach `Running` within 1 000 ms of `stage-a` completing, the test fails with a descriptive panic message including the last observed status of `stage-b` and the elapsed time.
 
 #### 7.5.4 Edge Cases
 
@@ -3837,7 +3837,7 @@ This test verifies that `devs-server` handles simultaneous multi-project load wh
 
 #### 7.6.1 Test Specification
 
-**[PERF-085]** A dedicated E2E test (`tests/perf_load.rs::test_concurrent_load`) submits 10 independent single-stage workflows simultaneously:
+**[PERF-085] [8b_PERF_SPEC-REQ-314]** A dedicated E2E test (`tests/perf_load.rs::test_concurrent_load`) submits 10 independent single-stage workflows simultaneously:
 
 1. Start server with `MockAgentAdapter` pool, `max_concurrent = 10`, `run_duration_ms = 500`.
 2. Pre-register 10 projects (each will submit one run).
@@ -3852,7 +3852,7 @@ This test MUST be annotated: `// Covers: PERF-048, PERF-051`.
 
 #### 7.6.2 Pool Exhaustion Sub-Test
 
-**[PERF-085]** also includes a pool exhaustion variant:
+**[PERF-085] [8b_PERF_SPEC-REQ-314]** also includes a pool exhaustion variant:
 
 1. Start server with `MockAgentAdapter` pool, `max_concurrent = 4`, `run_duration_ms = 2000`.
 2. Submit 10 single-stage runs simultaneously.
@@ -3865,9 +3865,9 @@ This sub-test verifies that the semaphore correctly queues excess requests rathe
 
 #### 7.6.3 Business Rules
 
-**[PERF-181]** The `WatchPoolState` gRPC stream must be established before the 10 `SubmitRun` calls begin, to avoid missing the `active_count == 10` event. The stream consumer runs in a separate `tokio::spawn` task that feeds into an `mpsc::channel`.
+**[PERF-181] [8b_PERF_SPEC-REQ-315]** The `WatchPoolState` gRPC stream must be established before the 10 `SubmitRun` calls begin, to avoid missing the `active_count == 10` event. The stream consumer runs in a separate `tokio::spawn` task that feeds into an `mpsc::channel`.
 
-**[PERF-182]** The load test uses a dedicated pool named `"perf-test-pool"` in the test server config. This pool is separate from any default pool and has no fallback agents, ensuring that all 10 stages compete for the same `max_concurrent` slots.
+**[PERF-182] [8b_PERF_SPEC-REQ-316]** The load test uses a dedicated pool named `"perf-test-pool"` in the test server config. This pool is separate from any default pool and has no fallback agents, ensuring that all 10 stages compete for the same `max_concurrent` slots.
 
 #### 7.6.4 Edge Cases
 
@@ -3886,7 +3886,7 @@ This test verifies that the TUI render cycle meets its 16 ms budget under realis
 
 #### 7.7.1 Test Specification
 
-**[PERF-086]** A TUI unit test in `crates/devs-tui/tests/perf_render.rs::test_render_cycle_budget` uses `ratatui::backend::TestBackend` (200×50) to measure render performance:
+**[PERF-086] [8b_PERF_SPEC-REQ-317]** A TUI unit test in `crates/devs-tui/tests/perf_render.rs::test_render_cycle_budget` uses `ratatui::backend::TestBackend` (200×50) to measure render performance:
 
 1. Initialize `App` with `AppState::test_default()` and `ColorMode::Monochrome`.
 2. Pre-populate `AppState` with 10 `RunSummary` records, each with 20 `StageRunDisplay` items, to simulate a realistic dashboard state.
@@ -3912,15 +3912,15 @@ pub fn perf_test_app_state() -> AppState {
 }
 ```
 
-**[PERF-183]** `perf_test_app_state()` is defined in `crates/devs-tui/src/test_fixtures.rs` behind `#[cfg(test)]`. It MUST produce identical output on every call (no random UUIDs, no `Instant::now()` calls). All `elapsed_ms` values use fixed constants.
+**[PERF-183] [8b_PERF_SPEC-REQ-318]** `perf_test_app_state()` is defined in `crates/devs-tui/src/test_fixtures.rs` behind `#[cfg(test)]`. It MUST produce identical output on every call (no random UUIDs, no `Instant::now()` calls). All `elapsed_ms` values use fixed constants.
 
 #### 7.7.3 Business Rules
 
-**[PERF-184]** The render performance test measures the `handle_event() + render()` combined cycle because in production both steps execute on every event before returning to the event loop. Measuring only `render()` would undercount real-world timing.
+**[PERF-184] [8b_PERF_SPEC-REQ-319]** The render performance test measures the `handle_event() + render()` combined cycle because in production both steps execute on every event before returning to the event loop. Measuring only `render()` would undercount real-world timing.
 
-**[PERF-185]** The 100-event test uses only `RunDelta` events (incremental updates), not `RunSnapshot` events. `RunSnapshot` triggers a full state replacement and `dag_tiers` recomputation; this is tested separately in a functional test. The render performance budget of 16 ms applies to the steady-state delta-processing path.
+**[PERF-185] [8b_PERF_SPEC-REQ-320]** The 100-event test uses only `RunDelta` events (incremental updates), not `RunSnapshot` events. `RunSnapshot` triggers a full state replacement and `dag_tiers` recomputation; this is tested separately in a functional test. The render performance budget of 16 ms applies to the steady-state delta-processing path.
 
-**[PERF-186]** A TUI render cycle that exceeds 16 ms emits a `tui.render_slow` WARN structured log event. The render performance test also asserts that no `tui.render_slow` events are emitted during the 100-event injection (verified by capturing log output via `tracing_subscriber::fmt::TestWriter`).
+**[PERF-186] [8b_PERF_SPEC-REQ-299]** A TUI render cycle that exceeds 16 ms emits a `tui.render_slow` WARN structured log event. The render performance test also asserts that no `tui.render_slow` events are emitted during the 100-event injection (verified by capturing log output via `tracing_subscriber::fmt::TestWriter`).
 
 #### 7.7.4 Edge Cases
 
@@ -3940,7 +3940,7 @@ This test verifies that the MCP server handles at least 64 concurrent read-only 
 
 #### 7.8.1 Test Specification
 
-**[PERF-087]** An MCP E2E test in `tests/perf_mcp_concurrency.rs::test_concurrent_observation` issues 64 simultaneous HTTP requests:
+**[PERF-087] [8b_PERF_SPEC-REQ-308]** An MCP E2E test in `tests/perf_mcp_concurrency.rs::test_concurrent_observation` issues 64 simultaneous HTTP requests:
 
 1. Start server; submit 1 completed run (so `get_run` has data to return).
 2. Record `t_start = Instant::now()`.
@@ -3950,14 +3950,14 @@ This test verifies that the MCP server handles at least 64 concurrent read-only 
    c. Asserts `"error": null` in response body.
    d. Records individual completion time.
 4. `tokio::join_all()` on all 64 tasks.
-5. Assert `t_elapsed = t_start.elapsed() < 500 ms` (no CI margin — see **[PERF-176]**).
+5. Assert `t_elapsed = t_start.elapsed() < 500 ms` (no CI margin — see **[PERF-176] [8b_PERF_SPEC-REQ-307]**).
 6. Assert all 64 responses contain valid `run_id` and `status` fields.
 
 This test MUST be annotated: `// Covers: PERF-045, PERF-055`.
 
 #### 7.8.2 65th Connection Rejection Test
 
-**[PERF-087]** includes a companion test `test_mcp_connection_limit_rejection`:
+**[PERF-087] [8b_PERF_SPEC-REQ-308]** includes a companion test `test_mcp_connection_limit_rejection`:
 
 1. Establish 64 concurrent long-running `stream_logs follow:true` connections (each on a run that is `Pending`, so the connection holds open).
 2. Issue a 65th connection with a `get_run` request.
@@ -3970,9 +3970,9 @@ This sub-test is annotated: `// Covers: PERF-055, PERF-074`.
 
 #### 7.8.3 Business Rules
 
-**[PERF-187]** All 64 concurrent tasks use independent `reqwest::Client` instances (not shared). Using a shared client would serialize connection establishment via the client's connection pool, hiding concurrency defects.
+**[PERF-187] [8b_PERF_SPEC-REQ-321]** All 64 concurrent tasks use independent `reqwest::Client` instances (not shared). Using a shared client would serialize connection establishment via the client's connection pool, hiding concurrency defects.
 
-**[PERF-188]** The MCP concurrency test verifies `get_run`, `list_runs`, and `get_pool_state` in separate test functions (three tests total). Each uses the same 64-task pattern but targets a different observation tool. All three must complete within 500 ms.
+**[PERF-188] [8b_PERF_SPEC-REQ-322]** The MCP concurrency test verifies `get_run`, `list_runs`, and `get_pool_state` in separate test functions (three tests total). Each uses the same 64-task pattern but targets a different observation tool. All three must complete within 500 ms.
 
 #### 7.8.4 Edge Cases
 
@@ -3992,7 +3992,7 @@ This test verifies that the log streaming pipeline handles high-throughput agent
 
 #### 7.9.1 Test Specification
 
-**[PERF-088]** A dedicated E2E test in `tests/perf_log_buffer.rs::test_log_throughput` submits a stage that produces 10 000 log lines:
+**[PERF-088] [8b_PERF_SPEC-REQ-323]** A dedicated E2E test in `tests/perf_log_buffer.rs::test_log_throughput` submits a stage that produces 10 000 log lines:
 
 1. Start server; register a workflow with one stage using `MockAgentAdapter` configured with `log_line_count = 10_000`.
 2. Submit a run; establish a `stream_logs follow:true` MCP connection.
@@ -4020,11 +4020,11 @@ This sub-test is annotated: `// Covers: PERF-066`.
 
 #### 7.9.3 Business Rules
 
-**[PERF-189]** Log chunks from `stream_logs` are delivered in sequence-number order with no gaps. The test consumer verifies this by maintaining a `last_sequence: u64` counter and asserting `chunk.sequence == last_sequence + 1` for every non-terminal chunk.
+**[PERF-189] [8b_PERF_SPEC-REQ-324]** Log chunks from `stream_logs` are delivered in sequence-number order with no gaps. The test consumer verifies this by maintaining a `last_sequence: u64` counter and asserting `chunk.sequence == last_sequence + 1` for every non-terminal chunk.
 
-**[PERF-190]** The `MockAgentAdapter` generates log lines at a configurable rate (`log_lines_per_second: Option<u32>`). When `None` (default), lines are emitted as fast as the mock can produce them. The log throughput test uses `log_lines_per_second = None` to measure maximum throughput.
+**[PERF-190] [8b_PERF_SPEC-REQ-325]** The `MockAgentAdapter` generates log lines at a configurable rate (`log_lines_per_second: Option<u32>`). When `None` (default), lines are emitted as fast as the mock can produce them. The log throughput test uses `log_lines_per_second = None` to measure maximum throughput.
 
-**[PERF-191]** The 10 000 ms deadline for log stream delivery applies to the full stream from first chunk to `done:true`. It does not require all 10 000 lines to arrive uniformly distributed in time; bursts are acceptable as long as the total time is within budget.
+**[PERF-191] [8b_PERF_SPEC-REQ-326]** The 10 000 ms deadline for log stream delivery applies to the full stream from first chunk to `done:true`. It does not require all 10 000 lines to arrive uniformly distributed in time; bursts are acceptable as long as the total time is within budget.
 
 #### 7.9.4 Edge Cases
 
@@ -4044,15 +4044,15 @@ This test verifies that the `./do presubmit` script correctly enforces the 15-mi
 
 #### 7.10.1 Test Specification
 
-**[PERF-089]** The presubmit timing gate operates at two levels:
+**[PERF-089] [8b_PERF_SPEC-REQ-327]** The presubmit timing gate operates at two levels:
 
 **Level 1 (runtime enforcement):** A background timer subprocess is started at the beginning of `./do presubmit`. Its PID is written to `target/.presubmit_timer.pid`. When the 900-second wall-clock budget expires, the timer sends SIGTERM to the main presubmit process, waits 5 seconds, then sends SIGKILL. The timer is killed by the main process on successful completion.
 
-**Level 2 (post-run audit):** A CI lint step (run as part of `./do lint`) reads `target/presubmit_timings.jsonl` and verifies compliance. This is the step described in **[PERF-089]**.
+**Level 2 (post-run audit):** A CI lint step (run as part of `./do lint`) reads `target/presubmit_timings.jsonl` and verifies compliance. This is the step described in **[PERF-089] [8b_PERF_SPEC-REQ-327]**.
 
-**[PERF-089]** The CI lint step for `presubmit_timings.jsonl`:
+**[PERF-089] [8b_PERF_SPEC-REQ-327]** The CI lint step for `presubmit_timings.jsonl`:
 - Reads `target/presubmit_timings.jsonl` line by line.
-- Validates each line is valid JSON conforming to the schema in **[PERF-100]**.
+- Validates each line is valid JSON conforming to the schema in **[PERF-100] [8b_PERF_SPEC-REQ-235]**.
 - Asserts `overall_duration_ms < 900_000` (computed as `sum(duration_ms)` across all steps).
 - Asserts no step has `exceeded_hard_limit == true`.
 - Emits exactly one `WARN: step <name> over budget by <N>ms` to stderr per `over_budget: true` entry.
@@ -4072,11 +4072,11 @@ This test verifies that the `./do presubmit` script correctly enforces the 15-mi
 
 Total budget: 820 000 ms (820 s) of step time, leaving 80 s of slack before the 900 s wall-clock timeout.
 
-**[PERF-192]** The hard limit for each step (`hard_limit_ms`) is defined as a named constant in `./do` and validated at the top of the script. Steps share no state that could cause one step's overrun to inflate another step's recorded time.
+**[PERF-192] [8b_PERF_SPEC-REQ-328]** The hard limit for each step (`hard_limit_ms`) is defined as a named constant in `./do` and validated at the top of the script. Steps share no state that could cause one step's overrun to inflate another step's recorded time.
 
 #### 7.10.3 Timing Record Schema
 
-**[PERF-100]** The timing file emitted by `./do presubmit` must conform to the following per-line schema:
+**[PERF-100] [8b_PERF_SPEC-REQ-235]** The timing file emitted by `./do presubmit` must conform to the following per-line schema:
 
 ```json
 {
@@ -4108,7 +4108,7 @@ When the 900 s timer fires and kills the presubmit process, a final record is ap
 }
 ```
 
-**[PERF-193]** When the timer fires and `_timeout_kill` is the last record, `./do lint` verifies this and exits non-zero with `"presubmit exceeded 900s wall-clock budget"`. This is separate from the `exceeded_hard_limit` check on individual steps.
+**[PERF-193] [8b_PERF_SPEC-REQ-329]** When the timer fires and `_timeout_kill` is the last record, `./do lint` verifies this and exits non-zero with `"presubmit exceeded 900s wall-clock budget"`. This is separate from the `exceeded_hard_limit` check on individual steps.
 
 #### 7.10.4 Edge Cases
 
@@ -4128,7 +4128,7 @@ This test verifies that the atomic checkpoint write protocol meets its 500 ms p9
 
 #### 7.11.1 Test Specification
 
-**[PERF-090]** A unit test in `crates/devs-checkpoint/tests/perf_write.rs::test_atomic_write_latency` measures end-to-end write latency:
+**[PERF-090] [8b_PERF_SPEC-REQ-330]** A unit test in `crates/devs-checkpoint/tests/perf_write.rs::test_atomic_write_latency` measures end-to-end write latency:
 
 1. Create a `CheckpointStore` backed by a `tempfile::TempDir`.
 2. Build a realistic `WorkflowRun` with 256 `StageRun` records, each with 512-byte stdout, 256-byte stderr, and all optional fields populated.
@@ -4160,13 +4160,13 @@ impl CheckpointWriteFixture {
 }
 ```
 
-The realistic fixture for **[PERF-090]** uses `stage_count = 256`, `stdout_bytes_per_stage = 512`, `stderr_bytes_per_stage = 256`, `include_structured_output = true`, `mock_git_push = true`. The total `checkpoint.json` size is approximately 300–400 KiB.
+The realistic fixture for **[PERF-090] [8b_PERF_SPEC-REQ-330]** uses `stage_count = 256`, `stdout_bytes_per_stage = 512`, `stderr_bytes_per_stage = 256`, `include_structured_output = true`, `mock_git_push = true`. The total `checkpoint.json` size is approximately 300–400 KiB.
 
 #### 7.11.3 Business Rules
 
-**[PERF-194]** The git2 push step is mocked in the unit test (using a no-op push implementation). Measuring the full `serialize → write .tmp → fsync → rename → git-add → git-commit → git-push` pipeline in a unit test would introduce network dependency. The checkpoint write latency target of 500 ms applies to the `serialize → fsync → rename` portion only; git push latency is tracked separately as `checkpoint.push_latency_ms` in the structured log.
+**[PERF-194] [8b_PERF_SPEC-REQ-331]** The git2 push step is mocked in the unit test (using a no-op push implementation). Measuring the full `serialize → write .tmp → fsync → rename → git-add → git-commit → git-push` pipeline in a unit test would introduce network dependency. The checkpoint write latency target of 500 ms applies to the `serialize → fsync → rename` portion only; git push latency is tracked separately as `checkpoint.push_latency_ms` in the structured log.
 
-**[PERF-195]** A separate integration test (`tests/perf_checkpoint.rs::test_checkpoint_with_git`) measures the full end-to-end checkpoint write including `git2` commit (but not push, which uses a no-op remote). This integration test uses a CI assertion of 1 000 ms (more lenient than the unit test, to account for `git2` overhead).
+**[PERF-195] [8b_PERF_SPEC-REQ-332]** A separate integration test (`tests/perf_checkpoint.rs::test_checkpoint_with_git`) measures the full end-to-end checkpoint write including `git2` commit (but not push, which uses a no-op remote). This integration test uses a CI assertion of 1 000 ms (more lenient than the unit test, to account for `git2` overhead).
 
 #### 7.11.4 Edge Cases
 
@@ -4194,9 +4194,9 @@ A performance failure is any CI run in which any of the following conditions hol
 5. Any load/concurrency assertion fails (e.g., `active_count ≠ expected`).
 6. Any TUI render cycle exceeds 16 ms in the 100-event render performance test.
 
-**[PERF-091]** All six failure conditions are treated identically: they block merge to `main` and must be resolved before any further commits.
+**[PERF-091] [8b_PERF_SPEC-REQ-333]** All six failure conditions are treated identically: they block merge to `main` and must be resolved before any further commits.
 
-**[PERF-092]** Performance test failures block merge to `main` on the same basis as functional test failures. There is no distinction between "performance CI" and "functional CI" — all tests run in `./do test` and `./do coverage`.
+**[PERF-092] [8b_PERF_SPEC-REQ-334]** Performance test failures block merge to `main` on the same basis as functional test failures. There is no distinction between "performance CI" and "functional CI" — all tests run in `./do test` and `./do coverage`.
 
 #### 7.12.2 Performance Regression Lifecycle State Diagram
 
@@ -4225,9 +4225,9 @@ stateDiagram-v2
     end note
 ```
 
-**[PERF-196]** A performance regression that cannot be fixed within the current sprint requires an Architecture Decision Record (ADR) in `docs/adr/NNNN-perf-regression-<name>.md` documenting the regression, root cause, and acceptance rationale. The ADR is committed alongside a suppression comment in the relevant test. Suppressed regressions are tracked in `target/traceability.json` under a `performance_suppressions` array.
+**[PERF-196] [8b_PERF_SPEC-REQ-335]** A performance regression that cannot be fixed within the current sprint requires an Architecture Decision Record (ADR) in `docs/adr/NNNN-perf-regression-<name>.md` documenting the regression, root cause, and acceptance rationale. The ADR is committed alongside a suppression comment in the relevant test. Suppressed regressions are tracked in `target/traceability.json` under a `performance_suppressions` array.
 
-**[PERF-197]** At most **3 concurrent performance suppressions** are permitted. A fourth attempted suppression causes `./do lint` to exit non-zero with `"maximum performance suppressions (3) reached; resolve existing regressions before adding new suppressions"`.
+**[PERF-197] [8b_PERF_SPEC-REQ-336]** At most **3 concurrent performance suppressions** are permitted. A fourth attempted suppression causes `./do lint` to exit non-zero with `"maximum performance suppressions (3) reached; resolve existing regressions before adding new suppressions"`.
 
 #### 7.12.3 Regression Suppression Syntax
 
@@ -4242,7 +4242,7 @@ When a performance regression is accepted via ADR, the covering test is annotate
 fn test_dag_dispatch_latency() { /* assertion relaxed */ }
 ```
 
-**[PERF-198]** `./do lint` checks that:
+**[PERF-198] [8b_PERF_SPEC-REQ-337]** `./do lint` checks that:
 - Each `perf-suppress` annotation references a real PERF-NNN ID.
 - The referenced ADR file (`suppress-reason` field) exists in `docs/adr/`.
 - The `suppress-expires` date has not passed (expired suppressions cause `./do lint` to exit non-zero with `"performance suppression for PERF-NNN expired on <date>"`).
@@ -4326,11 +4326,11 @@ struct RegressionEvent {
 
 Regression events are appended to `target/criterion/regressions.jsonl` (one JSON object per line). This file is committed as a CI artifact (`expire_in: 7 days`) alongside `target/criterion/` baselines.
 
-**[PERF-120]** The regression threshold is 10% degradation (`delta_pct >= 10.0`). Improvements (negative `delta_pct`) are never regressions. Statistical noise within ±5% is expected on CI runners; the 10% threshold provides a 5-point margin.
+**[PERF-120] [8b_PERF_SPEC-REQ-117]** The regression threshold is 10% degradation (`delta_pct >= 10.0`). Improvements (negative `delta_pct`) are never regressions. Statistical noise within ±5% is expected on CI runners; the 10% threshold provides a 5-point margin.
 
-**[PERF-121]** When `criterion` detects a statistically insignificant result (the confidence interval crosses zero, i.e., `ci_lower <= baseline_ns <= ci_upper`), that benchmark is reported as `inconclusive` and does NOT trigger CI failure regardless of the point estimate.
+**[PERF-121] [8b_PERF_SPEC-REQ-118]** When `criterion` detects a statistically insignificant result (the confidence interval crosses zero, i.e., `ci_lower <= baseline_ns <= ci_upper`), that benchmark is reported as `inconclusive` and does NOT trigger CI failure regardless of the point estimate.
 
-**[PERF-199]** `target/criterion/regressions.jsonl` is checked by `./do lint`. If the file is non-empty and contains any entries with `delta_pct >= 10.0`, lint fails with a summary of all regressions. This prevents "commit through regression" workflows.
+**[PERF-199] [8b_PERF_SPEC-REQ-338]** `target/criterion/regressions.jsonl` is checked by `./do lint`. If the file is non-empty and contains any entries with `delta_pct >= 10.0`, lint fails with a summary of all regressions. This prevents "commit through regression" workflows.
 
 #### 7.13.3 Algorithm Edge Cases
 
@@ -4351,83 +4351,83 @@ The following acceptance criteria consolidate the verifiable assertions from §7
 
 #### Test Infrastructure (§7.2)
 
-- **[AC-PERF-7-001]** `devs_test_helper::start_server()` returns a `ServerHandle` with a valid `grpc_addr` within 10 000 ms on all three CI platforms (Linux, macOS, Windows).
-- **[AC-PERF-7-002]** `ServerHandle::drop()` sends SIGTERM, waits up to 10 s, then sends SIGKILL; discovery file is absent after `drop()` returns.
-- **[AC-PERF-7-003]** Two simultaneous `start_server()` calls use different ephemeral ports and do not conflict.
-- **[AC-PERF-7-004]** `MockAgentAdapter` with `run_duration_ms = 500` produces a `StageRun` with `exit_code = 0` and `status = Completed`; elapsed time is ≥ 500 ms.
-- **[AC-PERF-7-005]** `MockAgentAdapter` with `log_line_count = 100` produces exactly 100 log lines observable via `stream_logs`.
-- **[AC-PERF-7-006]** `devs_test_helper::timing::LatencyRecorder` correctly computes p50, p99, min, and max from a known set of samples.
+- **[AC-PERF-7-001] [8b_PERF_SPEC-REQ-339]** `devs_test_helper::start_server()` returns a `ServerHandle` with a valid `grpc_addr` within 10 000 ms on all three CI platforms (Linux, macOS, Windows).
+- **[AC-PERF-7-002] [8b_PERF_SPEC-REQ-340]** `ServerHandle::drop()` sends SIGTERM, waits up to 10 s, then sends SIGKILL; discovery file is absent after `drop()` returns.
+- **[AC-PERF-7-003] [8b_PERF_SPEC-REQ-341]** Two simultaneous `start_server()` calls use different ephemeral ports and do not conflict.
+- **[AC-PERF-7-004] [8b_PERF_SPEC-REQ-342]** `MockAgentAdapter` with `run_duration_ms = 500` produces a `StageRun` with `exit_code = 0` and `status = Completed`; elapsed time is ≥ 500 ms.
+- **[AC-PERF-7-005] [8b_PERF_SPEC-REQ-343]** `MockAgentAdapter` with `log_line_count = 100` produces exactly 100 log lines observable via `stream_logs`.
+- **[AC-PERF-7-006] [8b_PERF_SPEC-REQ-344]** `devs_test_helper::timing::LatencyRecorder` correctly computes p50, p99, min, and max from a known set of samples.
 
 #### Benchmark Suite (§7.3)
 
-- **[AC-PERF-7-007]** All benchmark files in `crates/*/benches/` compile without errors; `cargo bench --no-run` exits 0.
-- **[AC-PERF-7-008]** No benchmark file imports `tokio::net`, `tonic`, `git2`, or `reqwest` (verified by `./do lint`).
-- **[AC-PERF-7-009]** Every benchmark uses `criterion_config()` from `devs_test_helper::bench_config`; inline `Criterion::default()` configurations are absent.
-- **[AC-PERF-7-010]** `target/criterion/` contains at least one baseline file after running `./do coverage --update-baselines` on a clean repository.
-- **[AC-PERF-7-011]** Regression detection: modifying `TemplateResolver` to add a 1 ms `std::thread::sleep` (simulated regression) causes `./do test` to emit a regression event and exit non-zero.
+- **[AC-PERF-7-007] [8b_PERF_SPEC-REQ-345]** All benchmark files in `crates/*/benches/` compile without errors; `cargo bench --no-run` exits 0.
+- **[AC-PERF-7-008] [8b_PERF_SPEC-REQ-346]** No benchmark file imports `tokio::net`, `tonic`, `git2`, or `reqwest` (verified by `./do lint`).
+- **[AC-PERF-7-009] [8b_PERF_SPEC-REQ-347]** Every benchmark uses `criterion_config()` from `devs_test_helper::bench_config`; inline `Criterion::default()` configurations are absent.
+- **[AC-PERF-7-010] [8b_PERF_SPEC-REQ-348]** `target/criterion/` contains at least one baseline file after running `./do coverage --update-baselines` on a clean repository.
+- **[AC-PERF-7-011] [8b_PERF_SPEC-REQ-349]** Regression detection: modifying `TemplateResolver` to add a 1 ms `std::thread::sleep` (simulated regression) causes `./do test` to emit a regression event and exit non-zero.
 
 #### DAG Scheduler Test (§7.5)
 
-- **[AC-PERF-7-012]** `test_dag_dispatch_latency` submits 5 independent runs and collects 5 latency samples; all samples satisfy `dispatch_latency_ms < 150`.
-- **[AC-PERF-7-013]** `test_parallel_dispatch_latency` confirms both root stages are `Running` within 150 ms of submit.
-- **[AC-PERF-7-014]** `test_cancelled_dep_cascade_latency` confirms downstream stages reach `Cancelled` within 150 ms of the upstream dep failing.
+- **[AC-PERF-7-012] [8b_PERF_SPEC-REQ-350]** `test_dag_dispatch_latency` submits 5 independent runs and collects 5 latency samples; all samples satisfy `dispatch_latency_ms < 150`.
+- **[AC-PERF-7-013] [8b_PERF_SPEC-REQ-351]** `test_parallel_dispatch_latency` confirms both root stages are `Running` within 150 ms of submit.
+- **[AC-PERF-7-014] [8b_PERF_SPEC-REQ-352]** `test_cancelled_dep_cascade_latency` confirms downstream stages reach `Cancelled` within 150 ms of the upstream dep failing.
 
 #### Concurrent Load Test (§7.6)
 
-- **[AC-PERF-7-015]** With `max_concurrent = 10`: all 10 stages reach `Running` within 5 000 ms; all 10 runs complete.
-- **[AC-PERF-7-016]** With `max_concurrent = 4` and 10 simultaneous submissions: `active_count == 4` and `queued_count == 6` are observed within 2 000 ms.
-- **[AC-PERF-7-017]** After all runs complete in the pool exhaustion variant: `active_count == 0` and `queued_count == 0`.
+- **[AC-PERF-7-015] [8b_PERF_SPEC-REQ-353]** With `max_concurrent = 10`: all 10 stages reach `Running` within 5 000 ms; all 10 runs complete.
+- **[AC-PERF-7-016] [8b_PERF_SPEC-REQ-354]** With `max_concurrent = 4` and 10 simultaneous submissions: `active_count == 4` and `queued_count == 6` are observed within 2 000 ms.
+- **[AC-PERF-7-017] [8b_PERF_SPEC-REQ-355]** After all runs complete in the pool exhaustion variant: `active_count == 0` and `queued_count == 0`.
 
 #### TUI Render Test (§7.7)
 
-- **[AC-PERF-7-018]** All 100 sequential `handle_event + render` cycles complete within 16 ms each.
-- **[AC-PERF-7-019]** No `tui.render_slow` WARN events are emitted during the 100-event injection.
-- **[AC-PERF-7-020]** The `insta` snapshot for the 100th event matches the committed snapshot file.
+- **[AC-PERF-7-018] [8b_PERF_SPEC-REQ-356]** All 100 sequential `handle_event + render` cycles complete within 16 ms each.
+- **[AC-PERF-7-019] [8b_PERF_SPEC-REQ-357]** No `tui.render_slow` WARN events are emitted during the 100-event injection.
+- **[AC-PERF-7-020] [8b_PERF_SPEC-REQ-358]** The `insta` snapshot for the 100th event matches the committed snapshot file.
 
 #### MCP Concurrency Test (§7.8)
 
-- **[AC-PERF-7-021]** 64 concurrent `get_run` requests all complete within 500 ms total elapsed time.
-- **[AC-PERF-7-022]** 65th concurrent connection receives HTTP 503 with `"resource_exhausted:"` error prefix within 100 ms.
-- **[AC-PERF-7-023]** After releasing the 64 long-running connections, the next `get_run` request succeeds within 500 ms.
+- **[AC-PERF-7-021] [8b_PERF_SPEC-REQ-359]** 64 concurrent `get_run` requests all complete within 500 ms total elapsed time.
+- **[AC-PERF-7-022] [8b_PERF_SPEC-REQ-360]** 65th concurrent connection receives HTTP 503 with `"resource_exhausted:"` error prefix within 100 ms.
+- **[AC-PERF-7-023] [8b_PERF_SPEC-REQ-361]** After releasing the 64 long-running connections, the next `get_run` request succeeds within 500 ms.
 
 #### Log Buffer Throughput Test (§7.9)
 
-- **[AC-PERF-7-024]** `stream_logs` delivers all 10 000 lines from a completed stage within 10 000 ms.
-- **[AC-PERF-7-025]** Sequence numbers in delivered chunks form a complete, gap-free sequence from 1 to 10 000.
-- **[AC-PERF-7-026]** `LogBuffer` with 15 000 pushes at capacity 10 000: `lines.len() == 10 000`, `total_received == 15 000`, `truncated == true`.
+- **[AC-PERF-7-024] [8b_PERF_SPEC-REQ-362]** `stream_logs` delivers all 10 000 lines from a completed stage within 10 000 ms.
+- **[AC-PERF-7-025] [8b_PERF_SPEC-REQ-363]** Sequence numbers in delivered chunks form a complete, gap-free sequence from 1 to 10 000.
+- **[AC-PERF-7-026] [8b_PERF_SPEC-REQ-364]** `LogBuffer` with 15 000 pushes at capacity 10 000: `lines.len() == 10 000`, `total_received == 15 000`, `truncated == true`.
 
 #### Presubmit Timing Test (§7.10)
 
-- **[AC-PERF-7-027]** `./do presubmit` on Linux CI completes within 900 s.
-- **[AC-PERF-7-028]** `target/presubmit_timings.jsonl` contains one valid JSON record per step after a successful `./do presubmit` run.
-- **[AC-PERF-7-029]** Each timing record contains all required fields: `step`, `started_at`, `completed_at`, `duration_ms`, `budget_ms`, `hard_limit_ms`, `over_budget`, `exceeded_hard_limit`, `exit_code`.
-- **[AC-PERF-7-030]** When the 900 s timer fires, `_timeout_kill` is the last record; `./do lint` reads this and exits non-zero.
+- **[AC-PERF-7-027] [8b_PERF_SPEC-REQ-365]** `./do presubmit` on Linux CI completes within 900 s.
+- **[AC-PERF-7-028] [8b_PERF_SPEC-REQ-366]** `target/presubmit_timings.jsonl` contains one valid JSON record per step after a successful `./do presubmit` run.
+- **[AC-PERF-7-029] [8b_PERF_SPEC-REQ-367]** Each timing record contains all required fields: `step`, `started_at`, `completed_at`, `duration_ms`, `budget_ms`, `hard_limit_ms`, `over_budget`, `exceeded_hard_limit`, `exit_code`.
+- **[AC-PERF-7-030] [8b_PERF_SPEC-REQ-368]** When the 900 s timer fires, `_timeout_kill` is the last record; `./do lint` reads this and exits non-zero.
 
 #### Checkpoint Write Latency Test (§7.11)
 
-- **[AC-PERF-7-031]** Atomic write for a 256-stage `checkpoint.json` completes within 500 ms on the unit test filesystem.
-- **[AC-PERF-7-032]** Disk-full simulation causes `Err(CheckpointError::DiskFull)` and deletion of the `.tmp` file; server does not crash.
-- **[AC-PERF-7-033]** Concurrent write calls for the same run are serialized; the second call does not overwrite the first call's data.
+- **[AC-PERF-7-031] [8b_PERF_SPEC-REQ-369]** Atomic write for a 256-stage `checkpoint.json` completes within 500 ms on the unit test filesystem.
+- **[AC-PERF-7-032] [8b_PERF_SPEC-REQ-370]** Disk-full simulation causes `Err(CheckpointError::DiskFull)` and deletion of the `.tmp` file; server does not crash.
+- **[AC-PERF-7-033] [8b_PERF_SPEC-REQ-371]** Concurrent write calls for the same run are serialized; the second call does not overwrite the first call's data.
 
 #### Regression Detection (§7.13)
 
-- **[AC-PERF-7-034]** A benchmark with `delta_pct = 10.0` produces exactly one `RegressionEvent` in `target/criterion/regressions.jsonl`.
-- **[AC-PERF-7-035]** A benchmark with `delta_pct = 9.99` produces zero `RegressionEvent` records and one `WARN` log line.
-- **[AC-PERF-7-036]** A benchmark with `delta_pct = -5.0` (improvement) produces zero `RegressionEvent` records and one `info` log line.
-- **[AC-PERF-7-037]** `./do lint` exits non-zero when `target/criterion/regressions.jsonl` contains any entry with `delta_pct >= 10.0`.
-- **[AC-PERF-7-038]** A `perf-suppress` annotation with an expired `suppress-expires` date causes `./do lint` to exit non-zero.
+- **[AC-PERF-7-034] [8b_PERF_SPEC-REQ-372]** A benchmark with `delta_pct = 10.0` produces exactly one `RegressionEvent` in `target/criterion/regressions.jsonl`.
+- **[AC-PERF-7-035] [8b_PERF_SPEC-REQ-373]** A benchmark with `delta_pct = 9.99` produces zero `RegressionEvent` records and one `WARN` log line.
+- **[AC-PERF-7-036] [8b_PERF_SPEC-REQ-374]** A benchmark with `delta_pct = -5.0` (improvement) produces zero `RegressionEvent` records and one `info` log line.
+- **[AC-PERF-7-037] [8b_PERF_SPEC-REQ-375]** `./do lint` exits non-zero when `target/criterion/regressions.jsonl` contains any entry with `delta_pct >= 10.0`.
+- **[AC-PERF-7-038] [8b_PERF_SPEC-REQ-376]** A `perf-suppress` annotation with an expired `suppress-expires` date causes `./do lint` to exit non-zero.
 
 ---
 
 ## 8. Alerting & Observability Requirements
 
-This section defines the complete contract for performance-related observability in `devs`: structured log event schemas, MCP observability tool behavior, monitoring condition definitions, file schemas for timing and benchmark data, alert episode state machines, and acceptance criteria. All requirements in this section are normative; every `[PERF-NNN]` tag must be covered by an automated test annotated `// Covers: PERF-NNN`.
+This section defines the complete contract for performance-related observability in `devs`: structured log event schemas, MCP observability tool behavior, monitoring condition definitions, file schemas for timing and benchmark data, alert episode state machines, and acceptance criteria. All requirements in this section are normative; every `[PERF-NNN] [8b_PERF_SPEC-REQ-001]` tag must be covered by an automated test annotated `// Covers: PERF-NNN`.
 
 The `devs` server does not contain an embedded alerting engine. It emits structured log events and webhooks; operators connect their own log aggregators (Loki, Datadog, CloudWatch, or similar) to detect conditions. The `state.changed` webhook provides native integration with external monitoring systems without requiring a log aggregation layer.
 
 ### 8.1 Structured Log Events for Performance
 
-**[PERF-094]** The following performance-related events must be emitted as structured `tracing` events at the specified levels:
+**[PERF-094] [8b_PERF_SPEC-REQ-225]** The following performance-related events must be emitted as structured `tracing` events at the specified levels:
 
 | Event type | Level | Trigger | Required fields |
 |-----------|-------|---------|-----------------|
@@ -4447,11 +4447,11 @@ The `devs` server does not contain an embedded alerting engine. It emits structu
 | `slo.violation` | WARN | Any boundary > p99 threshold | `operation`, `boundary`, `elapsed_ms`, `threshold_ms`, `percentile` |
 | `webhook.channel_overflow` | WARN | Dispatcher channel at 1 024 capacity | `dropped_count`, `channel_size` |
 
-**[PERF-095]** All latency fields in structured logs use monotonic clock milliseconds as `u64`. Wall-clock timestamps use `chrono::Utc::now()` for the `timestamp` field; elapsed durations use `std::time::Instant`.
+**[PERF-095] [8b_PERF_SPEC-REQ-377]** All latency fields in structured logs use monotonic clock milliseconds as `u64`. Wall-clock timestamps use `chrono::Utc::now()` for the `timestamp` field; elapsed durations use `std::time::Instant`.
 
-**[PERF-123]** Every structured log event for performance MUST include a `span` context with `run_id` and `stage_name` when the measurement is scoped to a run or stage. Log events at the server level (e.g., `retention.sweep_duration`) MUST have a `span` field present in the JSON output with both `run_id` and `stage_name` set to `null`. The `span` object itself MUST NOT be omitted.
+**[PERF-123] [8b_PERF_SPEC-REQ-120]** Every structured log event for performance MUST include a `span` context with `run_id` and `stage_name` when the measurement is scoped to a run or stage. Log events at the server level (e.g., `retention.sweep_duration`) MUST have a `span` field present in the JSON output with both `run_id` and `stage_name` set to `null`. The `span` object itself MUST NOT be omitted.
 
-**[PERF-200]** Each performance log event MUST conform to the following JSON envelope when `DEVS_LOG_FORMAT=json` (controlled by the `tracing-subscriber` JSON formatter). Fields not listed for a specific event type MUST be omitted from `fields`; no empty or `null` extra fields are permitted within `fields`.
+**[PERF-200] [8b_PERF_SPEC-REQ-378]** Each performance log event MUST conform to the following JSON envelope when `DEVS_LOG_FORMAT=json` (controlled by the `tracing-subscriber` JSON formatter). Fields not listed for a specific event type MUST be omitted from `fields`; no empty or `null` extra fields are permitted within `fields`.
 
 ```json
 {
@@ -4497,16 +4497,16 @@ Representative schema for a server-level event (no run/stage scope):
 }
 ```
 
-**[PERF-201]** Business rules for structured log event emission:
+**[PERF-201] [8b_PERF_SPEC-REQ-379]** Business rules for structured log event emission:
 
 - A `scheduler.dispatch_slow` event MUST be emitted on the same `tokio` task that performs the dispatch, within 1 ms of the latency being measured. It MUST NOT be dispatched via a background channel that could introduce additional delay.
 - A `mcp.lock_timeout` event MUST be emitted by the **caller** that times out, not by the lock holder. The lock holder continues unaffected; only the waiting caller receives the error and emits the event.
 - A `tui.render_slow` event MUST be emitted by the render task immediately after `terminal.draw()` returns. It MUST NOT be emitted from within `render()` itself (which would add I/O inside the render cycle).
-- A `slo.violation` event MUST be rate-limited to at most one emission per `(operation, boundary)` pair per 10-second window ([PERF-131]). The `suppressed_count` field MUST reflect the number of additional violations that occurred during the suppression window.
+- A `slo.violation` event MUST be rate-limited to at most one emission per `(operation, boundary)` pair per 10-second window ([PERF-131] [8b_PERF_SPEC-REQ-142]). The `suppressed_count` field MUST reflect the number of additional violations that occurred during the suppression window.
 - All `event_type` string values are lowercase with dots as separators (e.g., `"scheduler.dispatch_slow"`, not `"SchedulerDispatchSlow"`). The value is a compile-time string constant; runtime construction of `event_type` values is prohibited.
 - The `message` field MUST be a human-readable summary for log readers. The structured fields (e.g., `latency_ms`, `tool_name`) are the machine-readable payload and MUST NOT be duplicated in `message`.
 
-**[PERF-202]** The `level` field in performance log events MUST NOT be overridden by the calling code. The log level for each event type is fixed in the [PERF-094] table and enforced by using the corresponding `tracing::warn!()`, `tracing::error!()`, `tracing::debug!()`, or `tracing::info!()` macro directly. Using `tracing::event!()` with a runtime-determined level for these events is prohibited.
+**[PERF-202] [8b_PERF_SPEC-REQ-380]** The `level` field in performance log events MUST NOT be overridden by the calling code. The log level for each event type is fixed in the [PERF-094] [8b_PERF_SPEC-REQ-225] table and enforced by using the corresponding `tracing::warn!()`, `tracing::error!()`, `tracing::debug!()`, or `tracing::info!()` macro directly. Using `tracing::event!()` with a runtime-determined level for these events is prohibited.
 
 #### 8.1 Edge Cases
 
@@ -4522,7 +4522,7 @@ Representative schema for a server-level event (no run/stage scope):
 
 ### 8.2 MCP Observability Tools
 
-**[PERF-096]** The MCP `get_pool_state` tool exposes the following performance-relevant fields that AI agents and operators can use for real-time performance monitoring:
+**[PERF-096] [8b_PERF_SPEC-REQ-381]** The MCP `get_pool_state` tool exposes the following performance-relevant fields that AI agents and operators can use for real-time performance monitoring:
 
 - `active_count`: currently running agents
 - `queued_count`: stages waiting for a pool slot
@@ -4532,11 +4532,11 @@ Representative schema for a server-level event (no run/stage scope):
 
 Agents monitoring performance must use `WatchPoolState` streaming (gRPC) or periodic `get_pool_state` calls (MCP) with no faster than 1 s polling frequency.
 
-**[PERF-097]** The `get_run` MCP tool returns `elapsed_ms` for each `StageRun` (monotonic clock from `started_at`). For completed stages, `elapsed_ms` is the fixed completion-to-start delta. For running stages, `elapsed_ms` is updated on every `Tick` event (1 s interval) in the TUI; in MCP responses it is computed at call time.
+**[PERF-097] [8b_PERF_SPEC-REQ-382]** The `get_run` MCP tool returns `elapsed_ms` for each `StageRun` (monotonic clock from `started_at`). For completed stages, `elapsed_ms` is the fixed completion-to-start delta. For running stages, `elapsed_ms` is updated on every `Tick` event (1 s interval) in the TUI; in MCP responses it is computed at call time.
 
-**[PERF-124]** The `get_pool_state` MCP tool response schema includes a top-level `server_uptime_ms` field (monotonic clock from server start). This allows agents to detect server restarts (a decrease in `server_uptime_ms` between calls indicates a restart has occurred).
+**[PERF-124] [8b_PERF_SPEC-REQ-135]** The `get_pool_state` MCP tool response schema includes a top-level `server_uptime_ms` field (monotonic clock from server start). This allows agents to detect server restarts (a decrease in `server_uptime_ms` between calls indicates a restart has occurred).
 
-**[PERF-203]** The complete set of performance-relevant fields exposed by `get_pool_state` is defined by the following response schema. All fields listed below MUST be present in every response; unpopulated optional fields MUST use JSON `null`, never omitted.
+**[PERF-203] [8b_PERF_SPEC-REQ-383]** The complete set of performance-relevant fields exposed by `get_pool_state` is defined by the following response schema. All fields listed below MUST be present in every response; unpopulated optional fields MUST use JSON `null`, never omitted.
 
 Top-level pool fields:
 
@@ -4562,7 +4562,7 @@ Per-agent fields within `agents`:
 | `pty_active` | `bool` | Whether PTY is actually available on this platform for this adapter |
 | `rate_limited_until` | `string \| null` | RFC 3339 expiry timestamp; `null` if agent is not currently rate-limited |
 
-**[PERF-204]** The `elapsed_ms` field on `StageRun` objects returned by `get_run` MUST be computed as follows, based on stage status at call time:
+**[PERF-204] [8b_PERF_SPEC-REQ-384]** The `elapsed_ms` field on `StageRun` objects returned by `get_run` MUST be computed as follows, based on stage status at call time:
 
 | Stage status | `elapsed_ms` value |
 |---|---|
@@ -4572,7 +4572,7 @@ Per-agent fields within `agents`:
 | `Completed`, `Failed`, `TimedOut`, `Cancelled` | `completed_at_monotonic - started_at_monotonic` (fixed at state transition; immutable thereafter) |
 | Recovered after server restart (was `Running` at crash) | `null` — the pre-crash `started_at` monotonic reference is lost; MUST NOT fabricate a value |
 
-**[PERF-205]** The `queued_count` field in `get_pool_state` reflects the number of pending `acquire_owned()` futures on the `Arc<tokio::sync::Semaphore>` at the moment the handler holds the `PoolState` read lock. The value is a consistent point-in-time snapshot. Callers MUST NOT treat `queued_count` as a precise real-time counter; it SHOULD be used for trend detection (e.g., `queued_count > 0` indicates backpressure; the exact value may lag by up to one scheduler tick under high concurrency).
+**[PERF-205] [8b_PERF_SPEC-REQ-385]** The `queued_count` field in `get_pool_state` reflects the number of pending `acquire_owned()` futures on the `Arc<tokio::sync::Semaphore>` at the moment the handler holds the `PoolState` read lock. The value is a consistent point-in-time snapshot. Callers MUST NOT treat `queued_count` as a precise real-time counter; it SHOULD be used for trend detection (e.g., `queued_count > 0` indicates backpressure; the exact value may lag by up to one scheduler tick under high concurrency).
 
 #### 8.2 Edge Cases
 
@@ -4588,7 +4588,7 @@ Per-agent fields within `agents`:
 
 ### 8.3 Performance-Driven Monitoring Conditions
 
-**[PERF-098]** The following conditions, when observed in the structured log stream, require operator attention. Thresholds are expressed as sliding-window counts for repeated occurrences; single-occurrence conditions apply to any individual event.
+**[PERF-098] [8b_PERF_SPEC-REQ-386]** The following conditions, when observed in the structured log stream, require operator attention. Thresholds are expressed as sliding-window counts for repeated occurrences; single-occurrence conditions apply to any individual event.
 
 | Condition | Threshold | Severity | Recommended action |
 |-----------|-----------|----------|--------------------|
@@ -4601,11 +4601,11 @@ Per-agent fields within `agents`:
 | SLO violation rate > 1% of requests | Over 5-minute window | HIGH | Investigate server load; check OS-level resource pressure |
 | Webhook channel overflow | Any occurrence | MEDIUM | Investigate webhook target latency; check `max_retries` config |
 
-**[PERF-099]** The `state.changed` outbound webhook (when configured) provides native integration with external monitoring systems. Performance conditions that surface as state changes (e.g., stage `TimedOut` events indicating repeated timeouts) are automatically delivered.
+**[PERF-099] [8b_PERF_SPEC-REQ-387]** The `state.changed` outbound webhook (when configured) provides native integration with external monitoring systems. Performance conditions that surface as state changes (e.g., stage `TimedOut` events indicating repeated timeouts) are automatically delivered.
 
-**[PERF-206]** The repeated-occurrence thresholds in [PERF-098] (e.g., "≥ 3 occurrences in 60 s window") MUST be evaluated by the operator's external log monitoring tooling, not by the `devs` server itself. The `devs` server emits individual structured log events; it does not internally track occurrence counts or fire aggregate alerts. The server's responsibility is accurate and timely event emission; the operator's responsibility is aggregation and alerting.
+**[PERF-206] [8b_PERF_SPEC-REQ-388]** The repeated-occurrence thresholds in [PERF-098] [8b_PERF_SPEC-REQ-386] (e.g., "≥ 3 occurrences in 60 s window") MUST be evaluated by the operator's external log monitoring tooling, not by the `devs` server itself. The `devs` server emits individual structured log events; it does not internally track occurrence counts or fire aggregate alerts. The server's responsibility is accurate and timely event emission; the operator's responsibility is aggregation and alerting.
 
-**[PERF-207]** The recommended sliding-window algorithm for operator log aggregation systems evaluating the "≥ 3 in 60 s" threshold is:
+**[PERF-207] [8b_PERF_SPEC-REQ-389]** The recommended sliding-window algorithm for operator log aggregation systems evaluating the "≥ 3 in 60 s" threshold is:
 
 ```
 window_start = now - 60s
@@ -4618,7 +4618,7 @@ if count >= 3 { alert() }
 
 This is equivalent to a Prometheus `increase(counter[60s]) >= 3` query or a Datadog `events().rollup("count", 60).last(1) >= 3` monitor. The `devs` structured log JSON is designed for compatibility with all major log aggregation platforms when `DEVS_LOG_FORMAT=json`.
 
-**[PERF-208]** The `state.changed` webhook event payload for performance-relevant state transitions MUST include the following fields in addition to the standard webhook envelope (defined in §4.14 of the TAS). These fields enable monitoring systems to correlate webhook events with structured log events.
+**[PERF-208] [8b_PERF_SPEC-REQ-390]** The `state.changed` webhook event payload for performance-relevant state transitions MUST include the following fields in addition to the standard webhook envelope (defined in §4.14 of the TAS). These fields enable monitoring systems to correlate webhook events with structured log events.
 
 | Field | Type | Present when |
 |---|---|---|
@@ -4640,7 +4640,7 @@ This is equivalent to a Prometheus `increase(counter[60s]) >= 3` query or a Data
 
 ### 8.4 `target/presubmit_timings.jsonl` Schema
 
-**[PERF-100]** The timing file emitted by `./do presubmit` must conform to the following per-line schema:
+**[PERF-100] [8b_PERF_SPEC-REQ-235]** The timing file emitted by `./do presubmit` must conform to the following per-line schema:
 
 ```json
 {
@@ -4658,7 +4658,7 @@ This is equivalent to a Prometheus `increase(counter[60s]) >= 3` query or a Data
 
 `./do test` generates `target/traceability.json`; any `PERF-NNN` requirement referenced by a test annotation must exist in this document, and any requirement in this document with a stated test obligation must have ≥ 1 covering test. Stale annotations (referencing non-existent IDs) cause `./do test` to exit non-zero.
 
-**[PERF-209]** Business rules for `target/presubmit_timings.jsonl`:
+**[PERF-209] [8b_PERF_SPEC-REQ-391]** Business rules for `target/presubmit_timings.jsonl`:
 
 - The file MUST be created (or truncated to empty) at the start of `./do presubmit`, before the first step executes. If the file exists from a previous run, it MUST be overwritten, not appended to.
 - Each JSON record MUST be written and `fsync`-flushed to disk immediately after its step completes. The file MUST NOT be written in a single batch at the end of `./do presubmit`; if the process is killed mid-run, all completed step records must already be on disk.
@@ -4675,7 +4675,7 @@ This is equivalent to a Prometheus `increase(counter[60s]) >= 3` query or a Data
 | `coverage` | 300 000 | 600 000 |
 | `ci` | 900 000 | 1 800 000 |
 
-**[PERF-210]** The `_timeout_kill` record has a fixed schema with `null` for fields that could not be computed because the process was killed before completion:
+**[PERF-210] [8b_PERF_SPEC-REQ-392]** The `_timeout_kill` record has a fixed schema with `null` for fields that could not be computed because the process was killed before completion:
 
 ```json
 {
@@ -4705,7 +4705,7 @@ This is equivalent to a Prometheus `increase(counter[60s]) >= 3` query or a Data
 
 ### 8.5 `target/criterion/` Baseline Schema
 
-**[PERF-125]** `criterion` stores baselines in `target/criterion/<benchmark-name>/base/`. The CI regression check reads `estimates.json` from this directory. The relevant fields are:
+**[PERF-125] [8b_PERF_SPEC-REQ-136]** `criterion` stores baselines in `target/criterion/<benchmark-name>/base/`. The CI regression check reads `estimates.json` from this directory. The relevant fields are:
 
 ```json
 {
@@ -4723,13 +4723,13 @@ This is equivalent to a Prometheus `increase(counter[60s]) >= 3` query or a Data
 
 The regression algorithm uses `point_estimate` in nanoseconds. A baseline file that is missing or corrupted causes the benchmark comparison to be skipped (not failed); a `WARN` is emitted.
 
-**[PERF-211]** Business rules for criterion baseline management:
+**[PERF-211] [8b_PERF_SPEC-REQ-393]** Business rules for criterion baseline management:
 
 - Baselines MUST be committed to the repository in `target/criterion/` as part of the same commit that introduces a new benchmark. A benchmark without a committed baseline causes `./do lint` to emit a `WARN` but MUST NOT cause lint to fail (baselines may legitimately be absent on the very first run for a new benchmark).
-- When a benchmark is intentionally changed to be slower (e.g., a security fix that adds a hash computation), the baseline MUST be updated in the same commit with a comment in the benchmark file explaining the intentional regression. A `perf-suppress` annotation ([PERF-120]) MUST also be applied if the `delta_pct` exceeds 10% against the old baseline.
+- When a benchmark is intentionally changed to be slower (e.g., a security fix that adds a hash computation), the baseline MUST be updated in the same commit with a comment in the benchmark file explaining the intentional regression. A `perf-suppress` annotation ([PERF-120] [8b_PERF_SPEC-REQ-117]) MUST also be applied if the `delta_pct` exceeds 10% against the old baseline.
 - The `target/criterion/regressions.jsonl` file produced by CI MUST be uploaded as a CI artifact; it MUST NOT be committed to the repository.
 
-**[PERF-212]** The `target/criterion/regressions.jsonl` schema (one JSON object per line):
+**[PERF-212] [8b_PERF_SPEC-REQ-394]** The `target/criterion/regressions.jsonl` schema (one JSON object per line):
 
 ```json
 {
@@ -4794,7 +4794,7 @@ stateDiagram-v2
     end note
 ```
 
-**[PERF-213]** The `pool.exhausted` episode is tracked per-pool via an `exhausted_since: Option<Instant>` field in `PoolState`. State transition rules:
+**[PERF-213] [8b_PERF_SPEC-REQ-395]** The `pool.exhausted` episode is tracked per-pool via an `exhausted_since: Option<Instant>` field in `PoolState`. State transition rules:
 
 | Transition | Trigger condition | Server action |
 |---|---|---|
@@ -4803,7 +4803,7 @@ stateDiagram-v2
 | `Exhausted → Exhausted` | Additional stages enqueue while pool remains fully exhausted | No action; `exhausted_since` remains unchanged; no webhook |
 | `Nominal → Nominal` | Stage dispatched successfully (pool has available capacity) | No action |
 
-**[PERF-214]** The `pool.exhausted` webhook payload MUST include the following fields in the `data` object. `project_id`, `run_id`, and `stage_name` are `null` at the top level because pool exhaustion is a cross-project condition.
+**[PERF-214] [8b_PERF_SPEC-REQ-396]** The `pool.exhausted` webhook payload MUST include the following fields in the `data` object. `project_id`, `run_id`, and `stage_name` are `null` at the top level because pool exhaustion is a cross-project condition.
 
 ```json
 {
@@ -4828,7 +4828,7 @@ stateDiagram-v2
 
 `rate_limited_agents` is an array of `tool` name strings for agents currently under rate-limit cooldown. `available_agents` is always `[]` at the moment of firing (the pool is exhausted by definition). `exhausted_since` is the RFC 3339 wall-clock timestamp of when the episode began.
 
-**[PERF-215]** The SLO violation rate-limiter (which prevents `slo.violation` log event flooding per [PERF-131]) uses the following per-`(operation, boundary)` pair state stored within `Arc<RwLock<SchedulerState>>` ([PERF-138]):
+**[PERF-215] [8b_PERF_SPEC-REQ-397]** The SLO violation rate-limiter (which prevents `slo.violation` log event flooding per [PERF-131] [8b_PERF_SPEC-REQ-142]) uses the following per-`(operation, boundary)` pair state stored within `Arc<RwLock<SchedulerState>>` ([PERF-138] [8b_PERF_SPEC-REQ-149]):
 
 ```rust
 /// Stored in SchedulerState; protects the rate-limiter under the same lock
@@ -4883,7 +4883,7 @@ struct PerfLogSpan {
 }
 ```
 
-The `fields` object MUST always contain `event_type: &'static str` (from the [PERF-094] table) and `message: String`. All additional fields are event-type-specific per the [PERF-094] required fields column.
+The `fields` object MUST always contain `event_type: &'static str` (from the [PERF-094] [8b_PERF_SPEC-REQ-225] table) and `message: String`. All additional fields are event-type-specific per the [PERF-094] [8b_PERF_SPEC-REQ-225] required fields column.
 
 #### 8.7.2 `PerformanceObservation` (in-memory, not persisted to disk)
 
@@ -4932,7 +4932,7 @@ enum PresubmitStep {
 
 #### 8.7.4 `BenchmarkRegressionRecord` (persisted to `target/criterion/regressions.jsonl`)
 
-Full schema defined in [PERF-212]. Additional constraints:
+Full schema defined in [PERF-212] [8b_PERF_SPEC-REQ-394]. Additional constraints:
 
 - `delta_pct` is computed as `(measured_ns - baseline_ns) / baseline_ns * 100.0` using `f64` arithmetic, rounded to one decimal place using round-half-up.
 - `suppression_id` format: `"perf-suppress-<benchmark_name>-<YYYYMMDD>"` (the date the suppression was added).
@@ -4942,20 +4942,20 @@ Full schema defined in [PERF-212]. Additional constraints:
 
 ### 8.8 Edge Cases and Error Handling (Cross-Cutting)
 
-**[PERF-216]** When the `tracing` subscriber is not initialized (e.g., in unit tests that construct engine components directly without calling `tracing_subscriber::fmt::init()`), performance log event macros complete silently with no effect. The `tracing` crate handles this transparently. No guard or `if tracing::enabled!(Level::WARN)` conditional check around `tracing::warn!()` calls is required or permitted for the events in [PERF-094]; such guards would shadow real log omissions in production.
+**[PERF-216] [8b_PERF_SPEC-REQ-398]** When the `tracing` subscriber is not initialized (e.g., in unit tests that construct engine components directly without calling `tracing_subscriber::fmt::init()`), performance log event macros complete silently with no effect. The `tracing` crate handles this transparently. No guard or `if tracing::enabled!(Level::WARN)` conditional check around `tracing::warn!()` calls is required or permitted for the events in [PERF-094] [8b_PERF_SPEC-REQ-225]; such guards would shadow real log omissions in production.
 
-**[PERF-217]** When `DEVS_LOG_FORMAT` is set to an unrecognized value (any value other than `"json"` or `"text"`), the server MUST:
+**[PERF-217] [8b_PERF_SPEC-REQ-399]** When `DEVS_LOG_FORMAT` is set to an unrecognized value (any value other than `"json"` or `"text"`), the server MUST:
 1. Fall back to `"text"` format for all structured log output.
 2. Emit a single `WARN` log at startup with `event_type: "server.config_warn"` and `message: "unknown DEVS_LOG_FORMAT value '<value>'; defaulting to text"`.
 3. Continue startup normally; the server MUST NOT refuse to start due to an unknown log format value.
 
-**[PERF-218]** When `RUST_LOG` suppresses performance log events (e.g., `RUST_LOG=error` suppresses `WARN` and `DEBUG` events), the affected events are silently dropped by the `tracing` subscriber. This is expected and correct behavior. The SLO measurement ring buffers ([§8.7.2]) still receive samples regardless of log level because sample insertion happens before the `tracing` macro invocation. Operators relying on `WARN`-level events for monitoring MUST set `RUST_LOG` to at least `warn` or use `RUST_LOG=devs=warn`.
+**[PERF-218] [8b_PERF_SPEC-REQ-400]** When `RUST_LOG` suppresses performance log events (e.g., `RUST_LOG=error` suppresses `WARN` and `DEBUG` events), the affected events are silently dropped by the `tracing` subscriber. This is expected and correct behavior. The SLO measurement ring buffers ([§8.7.2]) still receive samples regardless of log level because sample insertion happens before the `tracing` macro invocation. Operators relying on `WARN`-level events for monitoring MUST set `RUST_LOG` to at least `warn` or use `RUST_LOG=devs=warn`.
 
-**[PERF-219]** When `get_pool_state` is called while a `cancel_run` control operation holds the `PoolState` write lock, the `get_pool_state` read-lock acquisition blocks until the write lock is released. This blocking is bounded by the 5 s lock timeout ([PERF-020]); if the wait exceeds 5 s, `get_pool_state` returns `resource_exhausted: lock acquisition timed out after 5s`. This is the correct behavior; it prevents observability queries from deadlocking behind indefinitely-held write locks.
+**[PERF-219] [8b_PERF_SPEC-REQ-401]** When `get_pool_state` is called while a `cancel_run` control operation holds the `PoolState` write lock, the `get_pool_state` read-lock acquisition blocks until the write lock is released. This blocking is bounded by the 5 s lock timeout ([PERF-020] [8b_PERF_SPEC-REQ-101]); if the wait exceeds 5 s, `get_pool_state` returns `resource_exhausted: lock acquisition timed out after 5s`. This is the correct behavior; it prevents observability queries from deadlocking behind indefinitely-held write locks.
 
-**[PERF-220]** When `target/presubmit_timings.jsonl` contains a record with `exceeded_hard_limit: true` for any step other than `_timeout_kill` **and** subsequent records exist in the file, this indicates a logic error in the `./do` script (the hard limit was breached but presubmit did not abort). `./do lint` MUST detect this condition (hard limit exceeded for non-final step but not the last record) and emit a `WARN:` message identifying the offending step. Lint MUST NOT fail on this condition because the build may still have succeeded, but the violation MUST be surfaced for investigation.
+**[PERF-220] [8b_PERF_SPEC-REQ-402]** When `target/presubmit_timings.jsonl` contains a record with `exceeded_hard_limit: true` for any step other than `_timeout_kill` **and** subsequent records exist in the file, this indicates a logic error in the `./do` script (the hard limit was breached but presubmit did not abort). `./do lint` MUST detect this condition (hard limit exceeded for non-final step but not the last record) and emit a `WARN:` message identifying the offending step. Lint MUST NOT fail on this condition because the build may still have succeeded, but the violation MUST be surfaced for investigation.
 
-**[PERF-221]** When `target/criterion/regressions.jsonl` is absent (no benchmarks were run), `./do lint` MUST emit a `WARN: benchmark regression file not found; skipping regression check` and exit 0. Benchmark execution is optional in local development; it is mandatory only in CI (enforced by the `.gitlab-ci.yml` `presubmit-linux` job configuration). The lint check does not enforce that benchmarks were run; the CI job configuration enforces it.
+**[PERF-221] [8b_PERF_SPEC-REQ-403]** When `target/criterion/regressions.jsonl` is absent (no benchmarks were run), `./do lint` MUST emit a `WARN: benchmark regression file not found; skipping regression check` and exit 0. Benchmark execution is optional in local development; it is mandatory only in CI (enforced by the `.gitlab-ci.yml` `presubmit-linux` job configuration). The lint check does not enforce that benchmarks were run; the CI job configuration enforces it.
 
 ---
 
@@ -4965,36 +4965,36 @@ The following acceptance criteria are testable assertions that an implementing a
 
 #### Structured Log Events (§8.1)
 
-- **[AC-PERF-038]** A stage dispatch taking > 100 ms emits exactly one `scheduler.dispatch_slow` WARN event with `fields.latency_ms >= 100` and `fields.event_type == "scheduler.dispatch_slow"`. No duplicate events are emitted for the same dispatch.
-- **[AC-PERF-039]** A `scheduler.dispatch_slow` event for a stage in an active run includes a `span` field with `run_id` equal to the run's UUID string and `stage_name` equal to the dispatched stage name. Both fields are non-null for run-scoped events.
-- **[AC-PERF-040]** A `retention.sweep_duration` INFO event has a `span` field present in the JSON output with both `run_id: null` and `stage_name: null`. The `span` object MUST NOT be absent from the JSON output.
-- **[AC-PERF-041]** When `DEVS_LOG_FORMAT=json`, a `scheduler.dispatch_slow` event is parseable as valid JSON with a top-level `fields` key containing `event_type` equal to the string `"scheduler.dispatch_slow"`. The `level` key at the top level equals `"WARN"`.
-- **[AC-PERF-042]** When two `slo.violation` events would be emitted for the same `(operation, boundary)` pair within a 10-second window, the second emission is suppressed. When the window expires and a third violation occurs, it is emitted with `fields.suppressed_count == 1` (the one suppressed intermediate violation).
+- **[AC-PERF-038] [8b_PERF_SPEC-REQ-404]** A stage dispatch taking > 100 ms emits exactly one `scheduler.dispatch_slow` WARN event with `fields.latency_ms >= 100` and `fields.event_type == "scheduler.dispatch_slow"`. No duplicate events are emitted for the same dispatch.
+- **[AC-PERF-039] [8b_PERF_SPEC-REQ-405]** A `scheduler.dispatch_slow` event for a stage in an active run includes a `span` field with `run_id` equal to the run's UUID string and `stage_name` equal to the dispatched stage name. Both fields are non-null for run-scoped events.
+- **[AC-PERF-040] [8b_PERF_SPEC-REQ-406]** A `retention.sweep_duration` INFO event has a `span` field present in the JSON output with both `run_id: null` and `stage_name: null`. The `span` object MUST NOT be absent from the JSON output.
+- **[AC-PERF-041] [8b_PERF_SPEC-REQ-407]** When `DEVS_LOG_FORMAT=json`, a `scheduler.dispatch_slow` event is parseable as valid JSON with a top-level `fields` key containing `event_type` equal to the string `"scheduler.dispatch_slow"`. The `level` key at the top level equals `"WARN"`.
+- **[AC-PERF-042] [8b_PERF_SPEC-REQ-408]** When two `slo.violation` events would be emitted for the same `(operation, boundary)` pair within a 10-second window, the second emission is suppressed. When the window expires and a third violation occurs, it is emitted with `fields.suppressed_count == 1` (the one suppressed intermediate violation).
 
 #### MCP Observability (§8.2)
 
-- **[AC-PERF-043]** `get_pool_state` response includes `utilization_pct` equal to `active_count / max_concurrent * 100.0` rounded to one decimal place. For `active_count == 3`, `max_concurrent == 4`: `utilization_pct == 75.0`.
-- **[AC-PERF-044]** `get_pool_state` response includes `server_uptime_ms` as a non-negative integer. Two consecutive calls to `get_pool_state` on a running server return `server_uptime_ms` values where the second is ≥ the first (monotonically non-decreasing within a single process lifetime).
-- **[AC-PERF-045]** `get_run` response for a `Running` stage returns `elapsed_ms > 0`. Two consecutive calls separated by 100 ms return `elapsed_ms` values where the second is ≥ the first (monotonically non-decreasing while the stage remains `Running`).
-- **[AC-PERF-046]** `get_run` response for a `Paused` stage returns a frozen `elapsed_ms`. After waiting 500 ms in the `Paused` state, a second `get_run` call returns the same `elapsed_ms` value as the first call (within ±1 ms to allow for clock rounding).
-- **[AC-PERF-047]** When a rate-limited agent's `rate_limited_until` timestamp has passed, a `get_pool_state` call returns `null` for that agent's `rate_limited_until` field. The pool selector must have cleared the rate-limit lazily on the prior pool selection after cooldown expiry.
+- **[AC-PERF-043] [8b_PERF_SPEC-REQ-409]** `get_pool_state` response includes `utilization_pct` equal to `active_count / max_concurrent * 100.0` rounded to one decimal place. For `active_count == 3`, `max_concurrent == 4`: `utilization_pct == 75.0`.
+- **[AC-PERF-044] [8b_PERF_SPEC-REQ-410]** `get_pool_state` response includes `server_uptime_ms` as a non-negative integer. Two consecutive calls to `get_pool_state` on a running server return `server_uptime_ms` values where the second is ≥ the first (monotonically non-decreasing within a single process lifetime).
+- **[AC-PERF-045] [8b_PERF_SPEC-REQ-411]** `get_run` response for a `Running` stage returns `elapsed_ms > 0`. Two consecutive calls separated by 100 ms return `elapsed_ms` values where the second is ≥ the first (monotonically non-decreasing while the stage remains `Running`).
+- **[AC-PERF-046] [8b_PERF_SPEC-REQ-412]** `get_run` response for a `Paused` stage returns a frozen `elapsed_ms`. After waiting 500 ms in the `Paused` state, a second `get_run` call returns the same `elapsed_ms` value as the first call (within ±1 ms to allow for clock rounding).
+- **[AC-PERF-047] [8b_PERF_SPEC-REQ-413]** When a rate-limited agent's `rate_limited_until` timestamp has passed, a `get_pool_state` call returns `null` for that agent's `rate_limited_until` field. The pool selector must have cleared the rate-limit lazily on the prior pool selection after cooldown expiry.
 
 #### Alert Episode (§8.6)
 
-- **[AC-PERF-048]** When all agents in a pool become simultaneously unavailable (all permits at `max_concurrent`), exactly one `pool.exhausted` webhook fires during the episode. A second dispatch attempt while the pool is still exhausted does NOT fire a second webhook; only one `pool.exhausted` delivery reaches the webhook dispatcher channel.
-- **[AC-PERF-049]** The `pool.exhausted` webhook payload includes `data.pool_name` (matching the configured pool name), `data.rate_limited_agents` (array of tool strings; `[]` if no agents are rate-limited), `data.available_agents` (always `[]` at firing time), and `data.exhausted_since` (an RFC 3339 timestamp).
-- **[AC-PERF-050]** After a `pool.exhausted` episode ends (one permit released, no immediate re-acquisition), a subsequent full-exhaustion condition fires a new `pool.exhausted` webhook. The total webhook delivery count across two separate episodes is exactly 2.
+- **[AC-PERF-048] [8b_PERF_SPEC-REQ-414]** When all agents in a pool become simultaneously unavailable (all permits at `max_concurrent`), exactly one `pool.exhausted` webhook fires during the episode. A second dispatch attempt while the pool is still exhausted does NOT fire a second webhook; only one `pool.exhausted` delivery reaches the webhook dispatcher channel.
+- **[AC-PERF-049] [8b_PERF_SPEC-REQ-415]** The `pool.exhausted` webhook payload includes `data.pool_name` (matching the configured pool name), `data.rate_limited_agents` (array of tool strings; `[]` if no agents are rate-limited), `data.available_agents` (always `[]` at firing time), and `data.exhausted_since` (an RFC 3339 timestamp).
+- **[AC-PERF-050] [8b_PERF_SPEC-REQ-416]** After a `pool.exhausted` episode ends (one permit released, no immediate re-acquisition), a subsequent full-exhaustion condition fires a new `pool.exhausted` webhook. The total webhook delivery count across two separate episodes is exactly 2.
 
 #### Presubmit Timings (§8.4)
 
-- **[AC-PERF-051]** After a successful `./do presubmit` run (all 6 steps complete with exit code 0), `target/presubmit_timings.jsonl` contains exactly 6 newline-delimited JSON records, one per step, in the order: `setup`, `format`, `lint`, `test`, `coverage`, `ci`. No `_timeout_kill` record is present.
-- **[AC-PERF-052]** A step that exits non-zero produces a record with `over_budget: false`, `exceeded_hard_limit: false` (the failure was fast, within budget), and `exit_code` equal to the non-zero exit code. No records for subsequent steps appear in the file.
-- **[AC-PERF-053]** The `budget_ms` value in each record exactly matches the constant in [PERF-209] for that step. A record where `budget_ms` does not match (e.g., `budget_ms: 999` for `"lint"` instead of `120000`) causes `./do lint` to exit non-zero with a message naming the step and the mismatch.
+- **[AC-PERF-051] [8b_PERF_SPEC-REQ-417]** After a successful `./do presubmit` run (all 6 steps complete with exit code 0), `target/presubmit_timings.jsonl` contains exactly 6 newline-delimited JSON records, one per step, in the order: `setup`, `format`, `lint`, `test`, `coverage`, `ci`. No `_timeout_kill` record is present.
+- **[AC-PERF-052] [8b_PERF_SPEC-REQ-418]** A step that exits non-zero produces a record with `over_budget: false`, `exceeded_hard_limit: false` (the failure was fast, within budget), and `exit_code` equal to the non-zero exit code. No records for subsequent steps appear in the file.
+- **[AC-PERF-053] [8b_PERF_SPEC-REQ-419]** The `budget_ms` value in each record exactly matches the constant in [PERF-209] [8b_PERF_SPEC-REQ-391] for that step. A record where `budget_ms` does not match (e.g., `budget_ms: 999` for `"lint"` instead of `120000`) causes `./do lint` to exit non-zero with a message naming the step and the mismatch.
 
 #### Criterion Baselines (§8.5)
 
-- **[AC-PERF-054]** When a benchmark's `delta_pct >= 10.0` and `suppressed == false`, `./do lint` exits non-zero and includes in its error output: the benchmark name, the crate, `baseline_ns`, `measured_ns`, and `delta_pct`. The error message format is: `"benchmark regression: <benchmark_name> in <crate>: +<delta_pct>% (baseline: <baseline_ns>ns, measured: <measured_ns>ns)"`.
-- **[AC-PERF-055]** When a benchmark's baseline `estimates.json` is absent, `./do lint` emits exactly one `WARN:` line containing the benchmark name and the text `"no baseline found"`, and exits 0. The absent baseline does NOT cause a lint failure.
+- **[AC-PERF-054] [8b_PERF_SPEC-REQ-420]** When a benchmark's `delta_pct >= 10.0` and `suppressed == false`, `./do lint` exits non-zero and includes in its error output: the benchmark name, the crate, `baseline_ns`, `measured_ns`, and `delta_pct`. The error message format is: `"benchmark regression: <benchmark_name> in <crate>: +<delta_pct>% (baseline: <baseline_ns>ns, measured: <measured_ns>ns)"`.
+- **[AC-PERF-055] [8b_PERF_SPEC-REQ-421]** When a benchmark's baseline `estimates.json` is absent, `./do lint` emits exactly one `WARN:` line containing the benchmark name and the text `"no baseline found"`, and exits 0. The absent baseline does NOT cause a lint failure.
 
 ---
 
@@ -5007,15 +5007,15 @@ This section maps which components this performance specification depends on and
 | Component | Dependency type | Reason |
 |-----------|----------------|--------|
 | `devs-core` `StateMachine` | Hard | Dispatch latency measured from `transition()` completion |
-| `devs-scheduler` | Hard | [PERF-001], [PERF-021]: dispatch latency is a scheduler property |
-| `devs-checkpoint` `CheckpointStore` | Hard | [PERF-028]: atomic write protocol timing |
-| `devs-pool` `Semaphore` | Hard | [PERF-048]-[PERF-050]: concurrency targets |
-| `devs-grpc` tonic services | Hard | [PERF-006]-[PERF-013]: gRPC SLOs |
-| `devs-mcp` HTTP server | Hard | [PERF-014]-[PERF-020]: MCP SLOs |
-| `devs-tui` `App::render()` | Hard | [PERF-004], [PERF-023]: render budget |
-| `devs-cli` binary | Hard | [PERF-025]-[PERF-027]: CLI e2e latency |
-| `devs-webhook` dispatcher | Hard | [PERF-029], [PERF-057]-[PERF-058] |
-| `./do` presubmit script | Hard | [PERF-005], [PERF-047] |
+| `devs-scheduler` | Hard | [PERF-001] [8b_PERF_SPEC-REQ-028], [PERF-021] [8b_PERF_SPEC-REQ-102]: dispatch latency is a scheduler property |
+| `devs-checkpoint` `CheckpointStore` | Hard | [PERF-028] [8b_PERF_SPEC-REQ-064]: atomic write protocol timing |
+| `devs-pool` `Semaphore` | Hard | [PERF-048] [8b_PERF_SPEC-REQ-239]-[PERF-050] [8b_PERF_SPEC-REQ-241]: concurrency targets |
+| `devs-grpc` tonic services | Hard | [PERF-006] [8b_PERF_SPEC-REQ-017]-[PERF-013] [8b_PERF_SPEC-REQ-094]: gRPC SLOs |
+| `devs-mcp` HTTP server | Hard | [PERF-014] [8b_PERF_SPEC-REQ-095]-[PERF-020] [8b_PERF_SPEC-REQ-101]: MCP SLOs |
+| `devs-tui` `App::render()` | Hard | [PERF-004] [8b_PERF_SPEC-REQ-035], [PERF-023] [8b_PERF_SPEC-REQ-088]: render budget |
+| `devs-cli` binary | Hard | [PERF-025] [8b_PERF_SPEC-REQ-015]-[PERF-027] [8b_PERF_SPEC-REQ-016]: CLI e2e latency |
+| `devs-webhook` dispatcher | Hard | [PERF-029] [8b_PERF_SPEC-REQ-106], [PERF-057] [8b_PERF_SPEC-REQ-246]-[PERF-058] [8b_PERF_SPEC-REQ-247] |
+| `./do` presubmit script | Hard | [PERF-005] [8b_PERF_SPEC-REQ-047], [PERF-047] [8b_PERF_SPEC-REQ-234] |
 | `cargo-llvm-cov` | Soft | Coverage timing contributes to presubmit budget |
 | `criterion` crate | Soft | Unit benchmark infrastructure |
 
@@ -5051,75 +5051,75 @@ The following acceptance criteria are testable assertions that an implementing a
 
 ### 10.1 Scheduler Dispatch
 
-- **[AC-PERF-001]** Two independent root stages are both in `Running` state within 100 ms of run start (verified via `GetRun` polling at 10 ms intervals; measured with `std::time::Instant`).
-- **[AC-PERF-002]** Stage B (depending on stage A) transitions to `Running` within 200 ms of stage A reaching `Completed` (2× CI margin on 100 ms p99 target).
-- **[AC-PERF-003]** Pool capability filter for a 1 024-agent pool completes within 5 ms (unit benchmark, `criterion`).
-- **[AC-PERF-004]** Failed agent spawn (binary not found) is reflected in `GetRun` with `status: "failed"` within 50 ms of spawn attempt.
+- **[AC-PERF-001] [8b_PERF_SPEC-REQ-067]** Two independent root stages are both in `Running` state within 100 ms of run start (verified via `GetRun` polling at 10 ms intervals; measured with `std::time::Instant`).
+- **[AC-PERF-002] [8b_PERF_SPEC-REQ-068]** Stage B (depending on stage A) transitions to `Running` within 200 ms of stage A reaching `Completed` (2× CI margin on 100 ms p99 target).
+- **[AC-PERF-003] [8b_PERF_SPEC-REQ-069]** Pool capability filter for a 1 024-agent pool completes within 5 ms (unit benchmark, `criterion`).
+- **[AC-PERF-004] [8b_PERF_SPEC-REQ-070]** Failed agent spawn (binary not found) is reflected in `GetRun` with `status: "failed"` within 50 ms of spawn attempt.
 
 ### 10.2 gRPC API
 
-- **[AC-PERF-005]** `GetRun` RPC completes within 75 ms (p99 with CI margin) for any existing run with ≤ 256 stages.
-- **[AC-PERF-006]** `ListRuns` RPC with 100 runs completes within 150 ms (p99 with CI margin).
-- **[AC-PERF-007]** `SubmitRun` RPC with valid inputs completes within 750 ms (p99 with CI margin).
-- **[AC-PERF-008]** `CancelRun` RPC returns `Cancelled` status for all stages within 750 ms (p99 with CI margin).
-- **[AC-PERF-009]** `StreamRunEvents` delivers first snapshot message within 300 ms of connection (p99 with CI margin).
-- **[AC-PERF-010]** Version-mismatch gRPC request receives `FAILED_PRECONDITION` within 10 ms.
+- **[AC-PERF-005] [8b_PERF_SPEC-REQ-071]** `GetRun` RPC completes within 75 ms (p99 with CI margin) for any existing run with ≤ 256 stages.
+- **[AC-PERF-006] [8b_PERF_SPEC-REQ-072]** `ListRuns` RPC with 100 runs completes within 150 ms (p99 with CI margin).
+- **[AC-PERF-007] [8b_PERF_SPEC-REQ-073]** `SubmitRun` RPC with valid inputs completes within 750 ms (p99 with CI margin).
+- **[AC-PERF-008] [8b_PERF_SPEC-REQ-074]** `CancelRun` RPC returns `Cancelled` status for all stages within 750 ms (p99 with CI margin).
+- **[AC-PERF-009] [8b_PERF_SPEC-REQ-075]** `StreamRunEvents` delivers first snapshot message within 300 ms of connection (p99 with CI margin).
+- **[AC-PERF-010] [8b_PERF_SPEC-REQ-076]** Version-mismatch gRPC request receives `FAILED_PRECONDITION` within 10 ms.
 
 ### 10.3 MCP HTTP
 
-- **[AC-PERF-011]** 64 concurrent `get_run` calls all complete within 500 ms (maximum completion time < 500 ms; no CI margin applied since this is already a burst-load assertion).
-- **[AC-PERF-012]** 65th concurrent connection receives HTTP 503 immediately (within 100 ms).
-- **[AC-PERF-013]** Request body of 1 048 577 bytes receives HTTP 413 (measured before handler executes; no `run_id` is assigned).
-- **[AC-PERF-014]** Write lock timeout after 5 s returns `resource_exhausted:` error in HTTP 200 response body.
-- **[AC-PERF-015]** `stream_logs follow:true` on a Pending stage holds HTTP connection open; delivers `done:true` within 750 ms of run cancellation (p99 with CI margin).
+- **[AC-PERF-011] [8b_PERF_SPEC-REQ-077]** 64 concurrent `get_run` calls all complete within 500 ms (maximum completion time < 500 ms; no CI margin applied since this is already a burst-load assertion).
+- **[AC-PERF-012] [8b_PERF_SPEC-REQ-078]** 65th concurrent connection receives HTTP 503 immediately (within 100 ms).
+- **[AC-PERF-013] [8b_PERF_SPEC-REQ-079]** Request body of 1 048 577 bytes receives HTTP 413 (measured before handler executes; no `run_id` is assigned).
+- **[AC-PERF-014] [8b_PERF_SPEC-REQ-080]** Write lock timeout after 5 s returns `resource_exhausted:` error in HTTP 200 response body.
+- **[AC-PERF-015] [8b_PERF_SPEC-REQ-081]** `stream_logs follow:true` on a Pending stage holds HTTP connection open; delivers `done:true` within 750 ms of run cancellation (p99 with CI margin).
 
 ### 10.4 TUI
 
-- **[AC-PERF-016]** 100 sequential `handle_event + render` cycles each complete within 16 ms (`TestBackend` 200×50).
-- **[AC-PERF-017]** First reconnect attempt begins within 1 000 ms of simulated stream error (`TuiEvent::StreamError` injected).
-- **[AC-PERF-018]** Below-minimum terminal size (79×24): only warning rendered; no other widgets present in snapshot.
-- **[AC-PERF-019]** `handle_event` with 256 rapid `RunDelta` events processes all within 5 000 ms total (batch throughput test).
+- **[AC-PERF-016] [8b_PERF_SPEC-REQ-082]** 100 sequential `handle_event + render` cycles each complete within 16 ms (`TestBackend` 200×50).
+- **[AC-PERF-017] [8b_PERF_SPEC-REQ-422]** First reconnect attempt begins within 1 000 ms of simulated stream error (`TuiEvent::StreamError` injected).
+- **[AC-PERF-018] [8b_PERF_SPEC-REQ-423]** Below-minimum terminal size (79×24): only warning rendered; no other widgets present in snapshot.
+- **[AC-PERF-019] [8b_PERF_SPEC-REQ-424]** `handle_event` with 256 rapid `RunDelta` events processes all within 5 000 ms total (batch throughput test).
 
 ### 10.5 CLI
 
-- **[AC-PERF-020]** `devs status <run>` exits within 750 ms on loopback (end-to-end, p99 with CI margin).
-- **[AC-PERF-021]** `devs list` with 100 runs exits within 1 050 ms on loopback (p99 with CI margin).
-- **[AC-PERF-022]** `devs submit` with valid inputs exits within 2 250 ms on loopback (p99 with CI margin).
+- **[AC-PERF-020] [8b_PERF_SPEC-REQ-425]** `devs status <run>` exits within 750 ms on loopback (end-to-end, p99 with CI margin).
+- **[AC-PERF-021] [8b_PERF_SPEC-REQ-426]** `devs list` with 100 runs exits within 1 050 ms on loopback (p99 with CI margin).
+- **[AC-PERF-022] [8b_PERF_SPEC-REQ-427]** `devs submit` with valid inputs exits within 2 250 ms on loopback (p99 with CI margin).
 
 ### 10.6 Checkpoint
 
-- **[AC-PERF-023]** Atomic write protocol for a 256-stage `checkpoint.json` completes within 500 ms on a test filesystem.
-- **[AC-PERF-024]** Orphaned `.tmp` checkpoint file is deleted within 500 ms of server startup (before checkpoint loading begins).
-- **[AC-PERF-025]** `checkpoint.json` for a 256-stage run contains no inline base64 stdout/stderr; all stage output references log paths only.
+- **[AC-PERF-023] [8b_PERF_SPEC-REQ-428]** Atomic write protocol for a 256-stage `checkpoint.json` completes within 500 ms on a test filesystem.
+- **[AC-PERF-024] [8b_PERF_SPEC-REQ-429]** Orphaned `.tmp` checkpoint file is deleted within 500 ms of server startup (before checkpoint loading begins).
+- **[AC-PERF-025] [8b_PERF_SPEC-REQ-430]** `checkpoint.json` for a 256-stage run contains no inline base64 stdout/stderr; all stage output references log paths only.
 
 ### 10.7 Resource Budgets
 
-- **[AC-PERF-026]** Server baseline RSS < 64 MiB (measured 10 s after startup, 0 active runs, 10 projects registered).
-- **[AC-PERF-027]** Fan-out `count=64`, `max_concurrent=4`: `get_pool_state` shows `active_count==4` and `queued_count==60` within 500 ms of dispatch start.
-- **[AC-PERF-028]** `BoundedBytes<1_048_576>` construction with 1 048 577 bytes: bytes are truncated to last 1 048 576; `truncated == true`; no panic.
-- **[AC-PERF-029]** Context file for a run with 10 × 1 MiB-stdout completed stages: total `.devs_context.json` ≤ 10 MiB; `truncated == true` on at least one stage.
+- **[AC-PERF-026] [8b_PERF_SPEC-REQ-431]** Server baseline RSS < 64 MiB (measured 10 s after startup, 0 active runs, 10 projects registered).
+- **[AC-PERF-027] [8b_PERF_SPEC-REQ-432]** Fan-out `count=64`, `max_concurrent=4`: `get_pool_state` shows `active_count==4` and `queued_count==60` within 500 ms of dispatch start.
+- **[AC-PERF-028] [8b_PERF_SPEC-REQ-433]** `BoundedBytes<1_048_576>` construction with 1 048 577 bytes: bytes are truncated to last 1 048 576; `truncated == true`; no panic.
+- **[AC-PERF-029] [8b_PERF_SPEC-REQ-434]** Context file for a run with 10 × 1 MiB-stdout completed stages: total `.devs_context.json` ≤ 10 MiB; `truncated == true` on at least one stage.
 
 ### 10.8 Presubmit Timing
 
-- **[AC-PERF-030]** `./do presubmit` on Linux CI completes within 900 s (measured by CI runner wall clock).
-- **[AC-PERF-031]** `target/presubmit_timings.jsonl` is present after `./do presubmit`; each of the 6 steps has a well-formed JSON record with all required fields.
-- **[AC-PERF-032]** `over_budget: true` entry in `presubmit_timings.jsonl` results in exactly one `WARN:` line on stderr.
-- **[AC-PERF-033]** When the 900 s timer fires, a `_timeout_kill` record is the last line of `target/presubmit_timings.jsonl`.
+- **[AC-PERF-030] [8b_PERF_SPEC-REQ-435]** `./do presubmit` on Linux CI completes within 900 s (measured by CI runner wall clock).
+- **[AC-PERF-031] [8b_PERF_SPEC-REQ-436]** `target/presubmit_timings.jsonl` is present after `./do presubmit`; each of the 6 steps has a well-formed JSON record with all required fields.
+- **[AC-PERF-032] [8b_PERF_SPEC-REQ-437]** `over_budget: true` entry in `presubmit_timings.jsonl` results in exactly one `WARN:` line on stderr.
+- **[AC-PERF-033] [8b_PERF_SPEC-REQ-438]** When the 900 s timer fires, a `_timeout_kill` record is the last line of `target/presubmit_timings.jsonl`.
 
 ### 10.9 Structured Log Events
 
-- **[AC-PERF-034]** A stage dispatch that takes > 100 ms emits exactly one `scheduler.dispatch_slow` WARN event with `latency_ms` field present.
-- **[AC-PERF-035]** An MCP write lock held for > 5 s results in exactly one `mcp.lock_timeout` ERROR event for the waiting caller.
-- **[AC-PERF-036]** A TUI render cycle taking > 16 ms emits exactly one `tui.render_slow` WARN event with `duration_ms` and `tab_name` fields.
-- **[AC-PERF-037]** A webhook dispatcher channel overflow emits a `webhook.channel_overflow` WARN event with `dropped_count ≥ 1`.
+- **[AC-PERF-034] [8b_PERF_SPEC-REQ-439]** A stage dispatch that takes > 100 ms emits exactly one `scheduler.dispatch_slow` WARN event with `latency_ms` field present.
+- **[AC-PERF-035] [8b_PERF_SPEC-REQ-440]** An MCP write lock held for > 5 s results in exactly one `mcp.lock_timeout` ERROR event for the waiting caller.
+- **[AC-PERF-036] [8b_PERF_SPEC-REQ-441]** A TUI render cycle taking > 16 ms emits exactly one `tui.render_slow` WARN event with `duration_ms` and `tab_name` fields.
+- **[AC-PERF-037] [8b_PERF_SPEC-REQ-442]** A webhook dispatcher channel overflow emits a `webhook.channel_overflow` WARN event with `dropped_count ≥ 1`.
 
 ---
 
 ## Appendix A: Requirements Traceability Index
 
-This appendix is the authoritative cross-reference between every normative `[PERF-NNN]` identifier in this specification and its upstream source requirement(s), the test or tests that cover it, and the acceptance criterion that verifies it. It exists to satisfy **[TECH-AC-011]**, **[MCP-DBG-BR-016]**, and **[RISK-BR-002]**: every requirement ID that appears in any source document must be traceable to a covering test, and every test annotation must reference a real requirement ID.
+This appendix is the authoritative cross-reference between every normative `[PERF-NNN] [8b_PERF_SPEC-REQ-001]` identifier in this specification and its upstream source requirement(s), the test or tests that cover it, and the acceptance criterion that verifies it. It exists to satisfy **[TECH-AC-011]**, **[MCP-DBG-BR-016]**, and **[RISK-BR-002]**: every requirement ID that appears in any source document must be traceable to a covering test, and every test annotation must reference a real requirement ID.
 
-This appendix is **machine-authoritative**. `./do test` scans `docs/plan/specs/8b_performance_spec.md` for `[PERF-NNN]` IDs using the pattern `\[PERF-[0-9]+\]` and `\[PERF-GP-[0-9]+\]`, then cross-references them against `// Covers: PERF-NNN` annotations in all `*.rs` test files. If any PERF ID appears in this document with no covering test annotation, `./do test` exits non-zero and `target/traceability.json` reports `covered: false` for that ID. If any `// Covers: PERF-NNN` annotation references an ID that does not appear in this document, `./do test` reports a `stale_annotation` violation.
+This appendix is **machine-authoritative**. `./do test` scans `docs/plan/specs/8b_performance_spec.md` for `[PERF-NNN] [8b_PERF_SPEC-REQ-001]` IDs using the pattern `\[PERF-[0-9]+\]` and `\[PERF-GP-[0-9]+\]`, then cross-references them against `// Covers: PERF-NNN` annotations in all `*.rs` test files. If any PERF ID appears in this document with no covering test annotation, `./do test` exits non-zero and `target/traceability.json` reports `covered: false` for that ID. If any `// Covers: PERF-NNN` annotation references an ID that does not appear in this document, `./do test` reports a `stale_annotation` violation.
 
 ---
 
@@ -5129,7 +5129,7 @@ The traceability system for this specification uses the same `target/traceabilit
 
 #### A.1.1 `TraceabilityRecord` Schema (PERF namespace)
 
-Each `[PERF-NNN]` identifier in this document generates exactly one record in the `requirements` array of `target/traceability.json`.
+Each `[PERF-NNN] [8b_PERF_SPEC-REQ-001]` identifier in this document generates exactly one record in the `requirements` array of `target/traceability.json`.
 
 ```json
 {
@@ -5160,7 +5160,7 @@ Each `[PERF-NNN]` identifier in this document generates exactly one record in th
 | `id` | `string` | `^PERF-[0-9]+$` or `^PERF-GP-[0-9]+$` | Normative identifier as it appears in the spec |
 | `namespace` | `string` | `"perf"` | Fixed namespace distinguishing PERF IDs from FEAT/SEC/RISK IDs |
 | `source_document` | `string` | Must be a valid file path | Relative path from workspace root |
-| `source_line` | `u32` | `≥ 1` | Line number where `[PERF-NNN]` first appears |
+| `source_line` | `u32` | `≥ 1` | Line number where `[PERF-NNN] [8b_PERF_SPEC-REQ-001]` first appears |
 | `upstream_ids` | `string[]` | `≥ 1` element | All source requirement IDs from upstream specs; must all resolve |
 | `section` | `string` | Non-empty | `§` prefix + section number from this document |
 | `slo_category` | `string` | `"latency" \| "throughput" \| "resource" \| "presubmit" \| "observability" \| "principle"` | Category for grouping in reports |
@@ -5171,11 +5171,11 @@ Each `[PERF-NNN]` identifier in this document generates exactly one record in th
 
 **Business rules for this model:**
 
-- **[PERF-TRACE-BR-001]** A PERF ID with `test_type = "design_invariant"` is exempt from the `covered: false` gate. Design invariants (like [PERF-081], which asserts no REST API endpoint) are verified by the absence of certain code patterns, not by a test assertion. The scanner marks them `covered: true` automatically after confirming the pattern is absent.
-- **[PERF-TRACE-BR-002]** A PERF ID with `test_type = "benchmark"` requires a Criterion benchmark file in `benches/` named `perf_NNN_*.rs` or annotated with `// Covers: PERF-NNN`. Benchmarks that are not in the `benches/` directory do not satisfy this requirement.
-- **[PERF-TRACE-BR-003]** All `upstream_ids` must resolve to known requirement IDs in the referenced upstream documents. An upstream ID that cannot be found in its source document is a `stale_upstream_id` violation and causes `./do test` to exit non-zero.
-- **[PERF-TRACE-BR-004]** `PERF-GP-NNN` guiding principles are scanned for coverage the same way as `PERF-NNN` operational targets. Principles are covered by the tests that enforce their constraints (e.g., PERF-GP-005 is covered by the lint test that checks for `p99` assertions with `n < 100`).
-- **[PERF-TRACE-BR-005]** When a single test covers multiple PERF IDs (e.g., a load test that simultaneously validates dispatch latency and pool semaphore behavior), the test appears in the `covering_tests` array of all IDs it covers. This is valid and encouraged; there is no limit on how many IDs one test can cover.
+- **[PERF-TRACE-BR-001] [8b_PERF_SPEC-REQ-443]** A PERF ID with `test_type = "design_invariant"` is exempt from the `covered: false` gate. Design invariants (like [PERF-081] [8b_PERF_SPEC-REQ-269], which asserts no REST API endpoint) are verified by the absence of certain code patterns, not by a test assertion. The scanner marks them `covered: true` automatically after confirming the pattern is absent.
+- **[PERF-TRACE-BR-002] [8b_PERF_SPEC-REQ-444]** A PERF ID with `test_type = "benchmark"` requires a Criterion benchmark file in `benches/` named `perf_NNN_*.rs` or annotated with `// Covers: PERF-NNN`. Benchmarks that are not in the `benches/` directory do not satisfy this requirement.
+- **[PERF-TRACE-BR-003] [8b_PERF_SPEC-REQ-445]** All `upstream_ids` must resolve to known requirement IDs in the referenced upstream documents. An upstream ID that cannot be found in its source document is a `stale_upstream_id` violation and causes `./do test` to exit non-zero.
+- **[PERF-TRACE-BR-004] [8b_PERF_SPEC-REQ-446]** `PERF-GP-NNN` guiding principles are scanned for coverage the same way as `PERF-NNN` operational targets. Principles are covered by the tests that enforce their constraints (e.g., PERF-GP-005 is covered by the lint test that checks for `p99` assertions with `n < 100`).
+- **[PERF-TRACE-BR-005] [8b_PERF_SPEC-REQ-447]** When a single test covers multiple PERF IDs (e.g., a load test that simultaneously validates dispatch latency and pool semaphore behavior), the test appears in the `covering_tests` array of all IDs it covers. This is valid and encouraged; there is no limit on how many IDs one test can cover.
 
 #### A.1.2 `TraceabilityReport` Schema Extensions
 
@@ -5209,8 +5209,8 @@ The top-level `target/traceability.json` is extended with a `perf_summary` field
 
 **Business rules:**
 
-- **[PERF-TRACE-BR-006]** `overall_passed` in `target/traceability.json` is `false` if any PERF ID (excluding `design_invariant` entries) has `covered: false`. The existing traceability rules from `[MCP-DBG-BR-015]` apply to the combined PERF + FEAT + SEC namespace.
-- **[PERF-TRACE-BR-007]** `perf_summary.uncovered > 0` causes `./do test` to print the list of uncovered IDs to stderr before exiting non-zero. The format is: `UNCOVERED PERF IDs: PERF-042, PERF-117 (2 total)`.
+- **[PERF-TRACE-BR-006] [8b_PERF_SPEC-REQ-448]** `overall_passed` in `target/traceability.json` is `false` if any PERF ID (excluding `design_invariant` entries) has `covered: false`. The existing traceability rules from `[MCP-DBG-BR-015]` apply to the combined PERF + FEAT + SEC namespace.
+- **[PERF-TRACE-BR-007] [8b_PERF_SPEC-REQ-449]** `perf_summary.uncovered > 0` causes `./do test` to print the list of uncovered IDs to stderr before exiting non-zero. The format is: `UNCOVERED PERF IDs: PERF-042, PERF-117 (2 total)`.
 
 ---
 
@@ -5236,17 +5236,17 @@ Every `upstream_id` listed in the traceability table must map to a known, non-de
 
 **Business rules:**
 
-- **[PERF-TRACE-BR-008]** The scanner resolves upstream IDs by searching for the exact string `[GOAL-001]` (including brackets) in the referenced source document. A match anywhere in the document (heading, table, body text, code block) counts as resolved. An ID found only in a comment or in a `<!-- ... -->` HTML block does NOT count as resolved — it must appear in normative content.
-- **[PERF-TRACE-BR-009]** Upstream IDs of the form `§N` (section references within this document) are resolved by verifying that the referenced section heading exists. Section references are informational and do not appear in `upstream_ids`; they are listed in the `notes` field of the traceability record only.
-- **[PERF-TRACE-BR-010]** An upstream ID that references a source document that has been superseded or renamed is a `stale_upstream_id`. The `stale_upstream_ids` array in `perf_summary` lists all such IDs with their last-known location.
+- **[PERF-TRACE-BR-008] [8b_PERF_SPEC-REQ-450]** The scanner resolves upstream IDs by searching for the exact string `[GOAL-001]` (including brackets) in the referenced source document. A match anywhere in the document (heading, table, body text, code block) counts as resolved. An ID found only in a comment or in a `<!-- ... -->` HTML block does NOT count as resolved — it must appear in normative content.
+- **[PERF-TRACE-BR-009] [8b_PERF_SPEC-REQ-451]** Upstream IDs of the form `§N` (section references within this document) are resolved by verifying that the referenced section heading exists. Section references are informational and do not appear in `upstream_ids`; they are listed in the `notes` field of the traceability record only.
+- **[PERF-TRACE-BR-010] [8b_PERF_SPEC-REQ-452]** An upstream ID that references a source document that has been superseded or renamed is a `stale_upstream_id`. The `stale_upstream_ids` array in `perf_summary` lists all such IDs with their last-known location.
 
 ---
 
 ### A.3 Normative Traceability Table
 
-The following table maps every normative `[PERF-NNN]` identifier in this specification to its upstream source requirements, the test or tests that cover it, and the acceptance criteria that verify it at the boundary level. All rows are mandatory — a row with no entry in the `Covering test(s)` column means the ID is uncovered and `./do test` will fail.
+The following table maps every normative `[PERF-NNN] [8b_PERF_SPEC-REQ-001]` identifier in this specification to its upstream source requirements, the test or tests that cover it, and the acceptance criteria that verify it at the boundary level. All rows are mandatory — a row with no entry in the `Covering test(s)` column means the ID is uncovered and `./do test` will fail.
 
-IDs marked **\*** are design invariants (`test_type = "design_invariant"`) verified by the absence of code patterns rather than positive test assertions. They are exempt from the `covered: false` gate per [PERF-TRACE-BR-001].
+IDs marked **\*** are design invariants (`test_type = "design_invariant"`) verified by the absence of code patterns rather than positive test assertions. They are exempt from the `covered: false` gate per [PERF-TRACE-BR-001] [8b_PERF_SPEC-REQ-443].
 
 #### A.3.1 Guiding Principles (PERF-GP-001 – PERF-GP-021)
 
@@ -5521,7 +5521,7 @@ fn scan_perf_traceability(
     upstream_docs: &HashMap<&str, &Path>,  // prefix → doc path
 ) -> PerfTraceabilityReport {
 
-    // Pass 1: collect all [PERF-NNN] and [PERF-GP-NNN] IDs from spec
+    // Pass 1: collect all [PERF-NNN] [8b_PERF_SPEC-REQ-001] and [PERF-GP-NNN] [8b_PERF_SPEC-REQ-453] IDs from spec
     let spec_ids: BTreeMap<String, SpecEntry> = extract_ids_from_spec(spec_path);
     // Pattern: \[PERF-[0-9]+\] or \[PERF-GP-[0-9]+\]
     // Records: id, line_number, is_design_invariant, upstream_ids_from_table
@@ -5577,13 +5577,13 @@ fn scan_perf_traceability(
 
 **Edge cases for the scanner:**
 
-1. **Duplicate PERF IDs in the spec**: If `[PERF-042]` appears on two different lines with different contexts (e.g., a definition and a cross-reference), the scanner records the first occurrence as authoritative and logs a `WARN`. It does not create two records; duplicates produce one record with `source_line` pointing to the first appearance.
+1. **Duplicate PERF IDs in the spec**: If `[PERF-042] [8b_PERF_SPEC-REQ-216]` appears on two different lines with different contexts (e.g., a definition and a cross-reference), the scanner records the first occurrence as authoritative and logs a `WARN`. It does not create two records; duplicates produce one record with `source_line` pointing to the first appearance.
 
 2. **Multiple IDs on one annotation line**: `// Covers: PERF-001, PERF-038` is valid per [RISK-013/MIT-013] convention. The scanner splits on `, ` (comma-space) and records each ID independently. A comma without a space (e.g., `PERF-001,PERF-038`) is not recognized as a multi-ID annotation — only the first ID is captured.
 
 3. **PERF-GP-NNN vs PERF-NNN**: Both patterns are scanned. `PERF-GP-021` and `PERF-021` are distinct IDs. An annotation `// Covers: PERF-GP-001` covers the guiding principle, not any operational target.
 
-4. **Design invariant false positives**: For `[PERF-081]` (no REST API), the scanner runs `cargo tree --workspace` and checks for `axum`, `actix-web`, and `warp` in production (non-dev) deps. If absent, `covered: true` is set automatically without requiring a `// Covers: PERF-081` annotation in test code. If any of these crates appear, `covered: false` is set and `./do lint` exits non-zero.
+4. **Design invariant false positives**: For `[PERF-081] [8b_PERF_SPEC-REQ-269]` (no REST API), the scanner runs `cargo tree --workspace` and checks for `axum`, `actix-web`, and `warp` in production (non-dev) deps. If absent, `covered: true` is set automatically without requiring a `// Covers: PERF-081` annotation in test code. If any of these crates appear, `covered: false` is set and `./do lint` exits non-zero.
 
 5. **Benchmark-type IDs without `// Covers:`**: For `test_type = "benchmark"` entries, the scanner additionally scans `benches/` for `.rs` files containing the pattern `// Covers: PERF-NNN`. A benchmark file that does not have this annotation does not satisfy coverage for the corresponding PERF ID.
 
@@ -5629,9 +5629,9 @@ stateDiagram-v2
 
 **Business rules for the state machine:**
 
-- **[PERF-TRACE-BR-011]** A PERF ID MUST NOT be added to the spec without simultaneously adding at least one `// Covers: PERF-NNN` annotation in a test file. This is the "two-together" rule from [RISK-013/MIT-013], applied to PERF IDs. An agent that adds a new PERF ID must add the covering test in the same commit or the commit will fail `./do test`.
-- **[PERF-TRACE-BR-012]** A PERF ID MUST NOT be removed from the spec while any `// Covers: PERF-NNN` annotation referencing it still exists. The agent must remove both the spec definition and all annotations in the same commit.
-- **[PERF-TRACE-BR-013]** Transitions from `Covered` to `Uncovered` caused by a test deletion MUST result in `./do test` exiting non-zero within the same `./do presubmit` run in which the test was deleted. There is no grace period.
+- **[PERF-TRACE-BR-011] [8b_PERF_SPEC-REQ-454]** A PERF ID MUST NOT be added to the spec without simultaneously adding at least one `// Covers: PERF-NNN` annotation in a test file. This is the "two-together" rule from [RISK-013/MIT-013], applied to PERF IDs. An agent that adds a new PERF ID must add the covering test in the same commit or the commit will fail `./do test`.
+- **[PERF-TRACE-BR-012] [8b_PERF_SPEC-REQ-455]** A PERF ID MUST NOT be removed from the spec while any `// Covers: PERF-NNN` annotation referencing it still exists. The agent must remove both the spec definition and all annotations in the same commit.
+- **[PERF-TRACE-BR-013] [8b_PERF_SPEC-REQ-456]** Transitions from `Covered` to `Uncovered` caused by a test deletion MUST result in `./do test` exiting non-zero within the same `./do presubmit` run in which the test was deleted. There is no grace period.
 
 ---
 
@@ -5661,13 +5661,13 @@ This appendix is depended upon by:
 
 The following acceptance criteria apply to the traceability appendix itself. Each criterion can be verified by an automated test annotated with `// Covers: PERF-TRACE-AC-NNN`.
 
-- **[PERF-TRACE-AC-001]** `./do test` generates `target/traceability.json` with a `perf_summary` field containing `total_perf_ids ≥ 165` after a clean workspace build.
-- **[PERF-TRACE-AC-002]** `target/traceability.json` has `perf_summary.uncovered == 0` when all tests pass.
-- **[PERF-TRACE-AC-003]** `target/traceability.json` has `perf_summary.stale_upstream_ids` as an empty array when all upstream source documents are present and unmodified.
-- **[PERF-TRACE-AC-004]** Adding a `// Covers: PERF-99999` annotation (referencing a non-existent PERF ID) causes `./do test` to exit non-zero with `stale_annotations` containing `"PERF-99999"`.
-- **[PERF-TRACE-AC-005]** Removing the `// Covers: PERF-001` annotation from `tests/e2e/scheduler_dispatch_latency.rs` without adding it elsewhere causes `./do test` to exit non-zero with `PERF-001` in the uncovered list.
-- **[PERF-TRACE-AC-006]** A test file containing `// Covers: PERF-001, PERF-038` causes both `PERF-001` and `PERF-038` to appear in `covered_tests` with `covered: true`.
-- **[PERF-TRACE-AC-007]** `./do lint` runs the absence-of-pattern scan for `axum::`, `actix_web::`, `warp::` in production `cargo tree` output and exits non-zero if any is found.
-- **[PERF-TRACE-AC-008]** `perf_summary.by_category` contains exactly the six categories: `latency`, `throughput`, `resource`, `presubmit`, `observability`, `principle` — no more, no fewer.
-- **[PERF-TRACE-AC-009]** `./do test` exits non-zero if `perf_summary.uncovered > 0`, even if all other `cargo test` assertions pass.
-- **[PERF-TRACE-AC-010]** `./do test` prints the list of uncovered PERF IDs to stderr in the format `UNCOVERED PERF IDs: <ID1>, <ID2> (N total)` before exiting non-zero.
+- **[PERF-TRACE-AC-001] [8b_PERF_SPEC-REQ-457]** `./do test` generates `target/traceability.json` with a `perf_summary` field containing `total_perf_ids ≥ 165` after a clean workspace build.
+- **[PERF-TRACE-AC-002] [8b_PERF_SPEC-REQ-458]** `target/traceability.json` has `perf_summary.uncovered == 0` when all tests pass.
+- **[PERF-TRACE-AC-003] [8b_PERF_SPEC-REQ-459]** `target/traceability.json` has `perf_summary.stale_upstream_ids` as an empty array when all upstream source documents are present and unmodified.
+- **[PERF-TRACE-AC-004] [8b_PERF_SPEC-REQ-460]** Adding a `// Covers: PERF-99999` annotation (referencing a non-existent PERF ID) causes `./do test` to exit non-zero with `stale_annotations` containing `"PERF-99999"`.
+- **[PERF-TRACE-AC-005] [8b_PERF_SPEC-REQ-461]** Removing the `// Covers: PERF-001` annotation from `tests/e2e/scheduler_dispatch_latency.rs` without adding it elsewhere causes `./do test` to exit non-zero with `PERF-001` in the uncovered list.
+- **[PERF-TRACE-AC-006] [8b_PERF_SPEC-REQ-462]** A test file containing `// Covers: PERF-001, PERF-038` causes both `PERF-001` and `PERF-038` to appear in `covered_tests` with `covered: true`.
+- **[PERF-TRACE-AC-007] [8b_PERF_SPEC-REQ-463]** `./do lint` runs the absence-of-pattern scan for `axum::`, `actix_web::`, `warp::` in production `cargo tree` output and exits non-zero if any is found.
+- **[PERF-TRACE-AC-008] [8b_PERF_SPEC-REQ-464]** `perf_summary.by_category` contains exactly the six categories: `latency`, `throughput`, `resource`, `presubmit`, `observability`, `principle` — no more, no fewer.
+- **[PERF-TRACE-AC-009] [8b_PERF_SPEC-REQ-465]** `./do test` exits non-zero if `perf_summary.uncovered > 0`, even if all other `cargo test` assertions pass.
+- **[PERF-TRACE-AC-010] [8b_PERF_SPEC-REQ-466]** `./do test` prints the list of uncovered PERF IDs to stderr in the format `UNCOVERED PERF IDs: <ID1>, <ID2> (N total)` before exiting non-zero.

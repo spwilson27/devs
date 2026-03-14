@@ -1,40 +1,49 @@
-# Task: E2E Interface Coverage Quality Gates (QG-002–QG-005) (Sub-Epic: 039_Detailed Domain Specifications (Part 4))
+# Task: E2E Interface Coverage Quality Gates (QG-002 through QG-005) (Sub-Epic: 039_Detailed Domain Specifications (Part 4))
 
 ## Covered Requirements
 - [1_PRD-REQ-051]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: ["./do Entrypoint Script"]
+- depends_on: ["02_unit_test_coverage_quality_gate.md"]
+- shared_components: ["./do Entrypoint Script & CI Pipeline" (consume), "Traceability & Coverage Infrastructure" (consume)]
 
 ## 1. Initial Test Written
-- [ ] Extend `tests/test_coverage_gates.py` to:
-    - Generate a synthetic `report.json` where QG-002 (E2E aggregate) is 79.9% and verify it fails [1_PRD-REQ-051].
-    - Generate a synthetic `report.json` where one of the interface gates (QG-003 CLI, QG-004 TUI, or QG-005 MCP) is 49.9% and verify it fails [1_PRD-REQ-051].
-    - Verify that the report contains exactly 5 gate entries (QG-001 through QG-005) [4_USER_FEATURES-AC-3-DO-005].
-    - Verify that QG-003 coverage only includes lines exercised via binary subprocess (e.g., using `assert_cmd`) [6_UI_UX_ARCHITECTURE-REQ-411].
+- [ ] Create `tests/coverage/test_qg002_005_e2e_gates.sh` that:
+    - Generates a synthetic `target/coverage/report.json` with all 5 gates (QG-001 through QG-005). Set QG-002 `actual_pct: 79.9` (below 80% threshold). Run the gate checker and assert it exits non-zero with `QG-002 FAILED: 79.9% < 80.0%`.
+    - Generates a report where QG-002 passes (80.1%) but QG-003 (CLI) has `actual_pct: 49.9` (below 50%). Assert the checker exits non-zero with `QG-003 FAILED`.
+    - Generates a report where QG-004 (TUI) is 49.9%. Assert failure.
+    - Generates a report where QG-005 (MCP) is 49.9%. Assert failure.
+    - Generates a report where all 5 gates pass (QG-001: 91%, QG-002: 81%, QG-003: 51%, QG-004: 51%, QG-005: 51%). Assert the checker exits zero.
+    - Asserts the report contains exactly 5 gate entries.
+- [ ] Create a Rust test `tests/coverage/e2e_test_categorization_test.rs` that verifies:
+    - A test file in `tests/cli/` is categorized as CLI E2E (QG-003).
+    - A test file in `tests/tui/` using `TestBackend` is categorized as TUI E2E (QG-004).
+    - A test file in `tests/mcp/` is categorized as MCP E2E (QG-005).
+    - A test in `src/lib.rs` `#[cfg(test)]` module is categorized as unit only (QG-001), NOT E2E.
 
 ## 2. Task Implementation
-- [ ] Implement the logic in `./do coverage` to measure E2E coverage separately for:
-    - **Aggregate E2E** (QG-002, 80%): All tests that are NOT unit tests [1_PRD-REQ-051].
-    - **CLI E2E** (QG-003, 50%): Tests that invoke the binary as a subprocess [6_UI_UX_ARCHITECTURE-REQ-411].
-    - **TUI E2E** (QG-004, 50%): Tests that use `TestBackend` and the full render cycle [6_UI_UX_ARCHITECTURE-REQ-412].
-    - **MCP E2E** (QG-005, 50%): Tests that use the bridge/server POST interface [6_UI_UX_ARCHITECTURE-REQ-413].
-- [ ] Implement the threshold checks for each of these 4 gates.
-- [ ] Ensure the coverage report contains the `actual_pct`, `threshold_pct`, and `passed` status for all 4 gates.
-- [ ] Ensure the overall command exits non-zero if ANY of these gates fail.
+- [ ] Extend `./do coverage` to run E2E tests separately from unit tests using `cargo llvm-cov` with appropriate test binary filtering:
+    - **QG-002 (E2E aggregate, 80%)**: Run all test binaries in `tests/` directory (integration tests). Measure combined line coverage.
+    - **QG-003 (CLI E2E, 50%)**: Run only test binaries matching `tests/cli/**` or tests tagged with `#[cfg(feature = "e2e_cli")]`. These must invoke the `devs` binary as a subprocess (e.g., via `assert_cmd`).
+    - **QG-004 (TUI E2E, 50%)**: Run only test binaries matching `tests/tui/**` or tagged `#[cfg(feature = "e2e_tui")]`. These must use `ratatui::backend::TestBackend` with full render cycle.
+    - **QG-005 (MCP E2E, 50%)**: Run only test binaries matching `tests/mcp/**` or tagged `#[cfg(feature = "e2e_mcp")]`. These must connect via the MCP bridge/server interface.
+- [ ] Write each gate's result as a separate entry in `target/coverage/report.json` alongside QG-001.
+- [ ] Ensure the gate checker (from task 02) already handles all 5 gates generically — no special-casing needed.
+- [ ] Hardcode thresholds: QG-002 = 80.0%, QG-003 = 50.0%, QG-004 = 50.0%, QG-005 = 50.0%.
+- [ ] Ensure `overall_passed` in the report is `false` if ANY of the 5 gates fails.
 
 ## 3. Code Review
-- [ ] Verify that E2E coverage is measured independently from unit coverage [3_MCP_DESIGN-REQ-DBG-BR-014].
-- [ ] Ensure that "calling internal Rust functions directly" does NOT satisfy interface gates QG-003, QG-004, or QG-005 [RISK-006-BR-002].
-- [ ] Ensure that E2E tests are correctly tagged (e.g., using `#[cfg(feature = "e2e")]` or by directory).
+- [ ] Verify E2E coverage is measured completely independently from unit coverage — no double-counting of lines.
+- [ ] Verify that calling internal Rust functions directly (not through CLI/TUI/MCP) does NOT count toward QG-003, QG-004, or QG-005.
+- [ ] Verify each interface gate measures only tests that go through that specific interface.
+- [ ] Verify thresholds are hardcoded literals.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the extended `tests/test_coverage_gates.py`.
-- [ ] Run a minimal E2E test for each interface and verify the coverage is attributed correctly.
+- [ ] Run `sh tests/coverage/test_qg002_005_e2e_gates.sh` — all boundary assertions must pass.
+- [ ] Run `./do coverage` and verify `target/coverage/report.json` contains exactly 5 gate entries.
 
 ## 5. Update Documentation
-- [ ] Update `.agent/MEMORY.md` to document the 5-gate coverage enforcement structure.
+- [ ] Document the E2E test directory conventions (`tests/cli/`, `tests/tui/`, `tests/mcp/`) and how each interface's coverage is measured.
 
 ## 6. Automated Verification
-- [ ] Run `./do coverage` and verify the `target/coverage/report.json` contains all 5 gates with correct statuses.
+- [ ] Run `./do coverage` and verify: `python3 -c "import json; d=json.load(open('target/coverage/report.json')); assert len(d['gates'])==5; assert all(g['passed'] for g in d['gates']); print('All 5 gates passed')"`.

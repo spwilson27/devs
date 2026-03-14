@@ -1,36 +1,38 @@
-# Task: Implement Crash-Recovery State Transformation Logic (Sub-Epic: 02_State Recovery and Lifecycle)
+# Task: Implement Crash-Recovery State Transformation Rules (Sub-Epic: 02_State Recovery and Lifecycle)
 
 ## Covered Requirements
-- [1_PRD-REQ-031], [2_TAS-REQ-026], [2_TAS-REQ-110]
+- [1_PRD-REQ-031], [2_TAS-REQ-026]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [devs-core]
+- shared_components: [devs-core (consumer — uses WorkflowRunState/StageRunState enums and state machine transitions)]
 
 ## 1. Initial Test Written
-- [ ] Create a unit test in `devs-core/src/recovery.rs` (or within `workflow_run.rs`) that defines a `WorkflowRun` with various `StageRun` statuses (`Running`, `Eligible`, `Waiting`, `Pending`, `Completed`).
-- [ ] Assert that after applying the recovery transformation function, the statuses are updated according to [2_TAS-REQ-110]:
-    - `Running` stage -> `Eligible`
-    - `Eligible` stage -> `Eligible`
-    - `Waiting` stage -> `Waiting` (will be re-evaluated by scheduler)
-    - `Pending` run -> `Pending`
-    - `Running` run with all terminal stages -> `Completed` or `Failed` (based on stage outcomes)
+- [ ] In `crates/devs-core/src/recovery.rs`, create a new module `recovery` (add `pub mod recovery;` to `lib.rs`).
+- [ ] Write unit test `test_running_stages_reset_to_eligible`: construct a `WorkflowRun` containing three `StageRun` entries — one `Running`, one `Completed`, one `Waiting`. Call `apply_crash_recovery(&mut run)`. Assert the `Running` stage is now `Eligible`, `Completed` remains `Completed`, `Waiting` remains `Waiting`.
+- [ ] Write unit test `test_eligible_stages_remain_eligible`: construct a run with an `Eligible` stage. After recovery, assert it stays `Eligible`.
+- [ ] Write unit test `test_pending_run_stays_pending`: construct a `WorkflowRun` with state `Pending` and no stages started. After recovery, assert run state is still `Pending`.
+- [ ] Write unit test `test_running_run_with_all_stages_terminal_resolves`: construct a run in `Running` state where all stages are `Completed` or `Failed` (simulating a crash between stage completion and run finalization). After recovery, assert run state resolves to `Completed` (all success) or `Failed` (any failure).
+- [ ] Write unit test `test_recovery_is_idempotent`: apply `apply_crash_recovery` twice to the same run. Assert the second call produces no state changes.
+- [ ] Add `// Covers: 1_PRD-REQ-031` and `// Covers: 2_TAS-REQ-026` annotations to each test.
 
 ## 2. Task Implementation
-- [ ] Implement a `recover()` method or a standalone transformation function in `devs-core` that accepts a `WorkflowRun` and returns the recovered version.
-- [ ] Ensure all `Running` stages are reset to `Eligible` to allow the scheduler to re-dispatch them.
-- [ ] Ensure `WorkflowRun` status is updated if it was `Running` but its terminal state can now be determined.
-- [ ] Handle timestamp resets if necessary (e.g. `started_at` for a recovered `Eligible` stage might need careful handling or just be left as is until it runs again).
+- [ ] Implement `pub fn apply_crash_recovery(run: &mut WorkflowRun)` in `crates/devs-core/src/recovery.rs`.
+- [ ] The function iterates all stages in the run: any stage in `Running` state is transitioned to `Eligible` using the existing `StageRunState` state machine (or directly if no transition method exists for this recovery path — document the rationale).
+- [ ] After stage recovery, if the `WorkflowRun` itself is in `Running` state, check whether all stages have reached a terminal state (`Completed` or `Failed`). If so, resolve the run to `Completed` (if all stages succeeded) or `Failed` (if any stage failed). This handles the edge case where a crash occurred after the last stage finished but before the run was finalized.
+- [ ] The function MUST be pure — no I/O, no logging, no side effects. It operates solely on the in-memory `WorkflowRun` struct.
+- [ ] Ensure `Eligible` stages are not re-queued here; that is the scheduler's responsibility after recovery.
 
 ## 3. Code Review
-- [ ] Verify that the logic strictly follows [2_TAS-REQ-110].
-- [ ] Ensure the implementation is pure and has no side effects (no I/O).
+- [ ] Verify the function handles all `StageRunState` variants exhaustively (use a `match` with no wildcard arm).
+- [ ] Verify `WorkflowRunState` resolution logic matches the project description: zero exit code = success, non-zero = failure.
+- [ ] Confirm no `unwrap()` or `panic!()` calls — all paths return gracefully.
 
 ## 4. Run Automated Tests to Verify
-- [ ] `cargo test -p devs-core`
+- [ ] `cargo test -p devs-core -- recovery`
 
 ## 5. Update Documentation
-- [ ] Update `devs-core` internal documentation regarding the recovery state machine.
+- [ ] Add doc comments to `apply_crash_recovery` explaining the three guarantees from [1_PRD-REQ-031]: crash survival, inspectability, reproducibility.
 
 ## 6. Automated Verification
-- [ ] Run `./do test` to ensure traceability for `1_PRD-REQ-031` and `2_TAS-REQ-026` is maintained.
+- [ ] Run `./do test` and verify `target/traceability.json` includes coverage entries for `1_PRD-REQ-031` and `2_TAS-REQ-026`.

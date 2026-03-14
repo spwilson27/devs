@@ -1,4 +1,4 @@
-# Task: Coverage Crash Handling (Sub-Epic: 036_Detailed Domain Specifications (Part 1))
+# Task: Unit Test Suite Crash Reported as Unmeasured (Sub-Epic: 036_Detailed Domain Specifications (Part 1))
 
 ## Covered Requirements
 - [1_PRD-KPI-BR-002]
@@ -8,28 +8,36 @@
 - shared_components: ["./do Entrypoint Script"]
 
 ## 1. Initial Test Written
-- [ ] Create a simulation in the `./do` script test suite (or a standalone test script) where the `cargo test` command (unit tests) crashes (e.g., returns a specific non-zero exit code or SIGSEGV) during `./do coverage`.
-- [ ] Verify that the script FIRST checks if the test suite completed successfully before evaluating coverage gates.
-- [ ] The test should assert that `./do coverage` exits with a non-zero status and prints "instrumentation failure: unit test suite crashed before completion" (or similar) to stderr.
-- [ ] The test should verify that no `0.0%` coverage is reported in this case, but rather it is marked as "unmeasured".
+- [ ] Create a test script at `tests/do_script/test_coverage_crash.sh` that exercises the crash-detection path of `./do coverage`.
+- [ ] The test MUST create a wrapper script (e.g., `mock_cargo`) that, when invoked as `cargo test`, exits with signal 139 (SIGSEGV) or exit code 101 (Rust panic/abort) to simulate a unit test suite crash.
+- [ ] The test MUST set `PATH` so the mock `cargo` is found before the real one, scoped to the test only.
+- [ ] Assert that `./do coverage` exits with a non-zero exit code (specifically exit code 1).
+- [ ] Assert that stderr output contains the string `instrumentation failure` (case-insensitive match acceptable).
+- [ ] Assert that stderr output does NOT contain `0.0%` for the KPI-001 gate — the gate must be reported as `unmeasured`, not as zero.
+- [ ] Assert that `target/coverage/report.json` (if written) contains `"actual_pct": null` or is absent for the KPI-001 gate, NOT `"actual_pct": 0.0`.
+- [ ] Write a second test case where `cargo test` exits with code 1 (normal test failure, not crash) and verify that `./do coverage` still proceeds to evaluate coverage gates normally (i.e., crash detection does NOT trigger on ordinary test failures).
 
 ## 2. Task Implementation
-- [ ] Modify the `./do` script's `coverage` subcommand.
-- [ ] Implement logic to capture the exit status of the unit test suite run.
-- [ ] If the exit status indicates a crash or unrecoverable error (other than just test failures), set a flag for "instrumentation failure".
-- [ ] Ensure that if the flag is set, the script skips gate evaluation and reports the failure as unmeasured.
-- [ ] Ensure the script exits non-zero.
+- [ ] In the `./do` script's `coverage` subcommand, capture the exit code of the unit test suite run into a variable (e.g., `unit_exit`).
+- [ ] Define crash exit codes: exit codes >= 101 (Rust abort), or any signal-killed exit (128+signal). Normal test failure is exit code 1 from `cargo test`.
+- [ ] If `unit_exit` indicates a crash (not a normal test failure), set an `INSTRUMENTATION_FAILURE` flag.
+- [ ] When `INSTRUMENTATION_FAILURE` is set: skip all coverage gate evaluation, print to stderr: `"ERROR: instrumentation failure: unit test suite crashed before completion (exit code $unit_exit). KPI-001 is unmeasured."`, and exit with code 1.
+- [ ] When `INSTRUMENTATION_FAILURE` is NOT set (even if tests failed), proceed with normal coverage measurement and gate evaluation.
+- [ ] Ensure that the E2E test suite is still run even if unit tests fail (but not if they crash), so that E2E gates can still be evaluated independently.
 
 ## 3. Code Review
-- [ ] Verify that the implementation distinguishes between "test failures" (which should still allow coverage measurement) and "test crashes/instrumentation failures".
-- [ ] Ensure the error message matches the requirement [1_PRD-KPI-BR-002].
+- [ ] Verify that the crash detection logic correctly distinguishes between exit code 1 (test failures) and exit codes indicating crashes (101, 128+N).
+- [ ] Verify that the error message exactly matches the requirement text in [1_PRD-KPI-BR-002]: KPI-001 is reported as "unmeasured", not "0%".
+- [ ] Verify that no coverage report file is written with `0.0` for a crashed suite — it must be `null` or omitted.
+- [ ] Verify POSIX sh compatibility of the crash detection logic (no bashisms).
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the simulation test created in step 1 and ensure it passes.
-- [ ] Run a normal `./do coverage` and ensure it still works for passing/failing tests without crashes.
+- [ ] Run `bash tests/do_script/test_coverage_crash.sh` and verify all assertions pass.
+- [ ] Run `./do coverage` on the real codebase (with passing tests) and verify it still works end-to-end without false crash detection.
 
 ## 5. Update Documentation
-- [ ] Update `.agent/MEMORY.md` to reflect the implementation of coverage crash handling in the toolchain.
+- [ ] Add a `# Covers: 1_PRD-KPI-BR-002` comment in the test script next to each relevant assertion.
 
 ## 6. Automated Verification
-- [ ] Run `./do coverage` with a deliberate crash (e.g., via a mock `cargo` that returns 139 for SIGSEGV) and verify the output contains the instrumentation failure message.
+- [ ] Run the test script in CI and confirm exit code 0: `bash tests/do_script/test_coverage_crash.sh && echo PASS || echo FAIL`
+- [ ] Run `./do lint` to verify no script issues are introduced.

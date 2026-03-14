@@ -1,35 +1,36 @@
-# Task: Proto Artifact Persistence and Regenerative Build (Sub-Epic: 014_Foundational Technical Requirements (Part 5))
+# Task: Proto Generated File Commitment and Rerun-If-Changed (Sub-Epic: 014_Foundational Technical Requirements (Part 5))
 
 ## Covered Requirements
 - [2_TAS-REQ-001F]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [devs-proto]
+- shared_components: [devs-proto (consumer)]
 
 ## 1. Initial Test Written
-- [ ] Create an integration test that checks for the existence of `devs-proto/src/gen/*.rs` files.
-- [ ] Implement a test that verifies `devs-proto` can be built successfully even when the `PROTOC` environment variable is unset (simulating a system without `protoc`).
-- [ ] Add a check to ensure that `build.rs` includes `cargo:rerun-if-changed` for all `.proto` source files.
+- [ ] In `devs-proto/tests/gen_committed.rs`, write a test annotated `// Covers: 2_TAS-REQ-001F` that asserts the directory `devs-proto/src/gen/` exists and contains at least one `.rs` file. Use `std::fs::read_dir` to enumerate entries.
+- [ ] Write a test that reads `devs-proto/build.rs` source as a string and asserts it contains `cargo:rerun-if-changed` directives pointing to each `.proto` file in `proto/devs/v1/`. This ensures the regeneration trigger is correctly wired.
+- [ ] Write a test that verifies `devs-proto/src/gen/` is NOT listed in any `.gitignore` file at the repo root or in `devs-proto/`. Read each `.gitignore` and assert no line matches `src/gen` or `*.rs` patterns that would exclude the generated files.
 
 ## 2. Task Implementation
-- [ ] Configure `devs-proto/build.rs` to generate Rust types using `tonic-build` into the `src/gen/` directory instead of the standard `OUT_DIR`.
-- [ ] Use `include!` or a manual module declaration in `devs-proto/src/lib.rs` to expose the generated code from `src/gen/`.
-- [ ] Update `build.rs` logic to skip generation and log a warning if `protoc` is missing but the `src/gen/*.rs` files are already present.
-- [ ] Ensure that `src/gen/` is NOT ignored by `.gitignore` so that generated artifacts are committed.
-- [ ] Implement a CI check that ensures `src/gen/` artifacts are up-to-date with the `.proto` sources (fail if `git diff` shows changes after a build).
+- [ ] In `devs-proto/build.rs`, configure `tonic-build` (or `prost-build`) to output generated `.rs` files to `src/gen/` rather than `OUT_DIR`. Use `std::env::var("CARGO_MANIFEST_DIR")` to construct the path.
+- [ ] Add `cargo:rerun-if-changed=proto/devs/v1/<file>.proto` for every `.proto` file, plus `cargo:rerun-if-changed=build.rs` for itself.
+- [ ] Create `devs-proto/src/gen/mod.rs` that re-exports all generated modules. Include this via `pub mod gen;` in `devs-proto/src/lib.rs`.
+- [ ] If `protoc` is not available at build time AND `src/gen/` already contains generated files, `build.rs` should print a `cargo:warning` and skip regeneration rather than failing the build. If `src/gen/` is empty and `protoc` is missing, `build.rs` must fail with a clear error message.
+- [ ] Ensure `src/gen/` files are committed to git (run `git add devs-proto/src/gen/`).
 
 ## 3. Code Review
-- [ ] Verify that the generated code is correctly formatted and follows workspace standards.
-- [ ] Confirm that `devs-proto` can be easily consumed by downstream crates like `devs-grpc` and `devs-tui` without additional configuration.
+- [ ] Verify generated files in `src/gen/` compile without warnings under the workspace lint settings.
+- [ ] Confirm that downstream crates can `use devs_proto::gen::*` to access generated types.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo build -p devs-proto` and confirm files are generated in `src/gen/`.
-- [ ] Unset `PROTOC` and run `cargo build -p devs-proto` to verify the fallback build path.
-- [ ] Verify that `src/gen/` files are tracked by git.
+- [ ] Run `cargo build -p devs-proto` and confirm `src/gen/` files are present and up-to-date.
+- [ ] Run `cargo test -p devs-proto --test gen_committed` and confirm all tests pass.
+- [ ] Run `git status devs-proto/src/gen/` and confirm no uncommitted changes after a fresh build.
 
 ## 5. Update Documentation
-- [ ] Update `devs-proto/README.md` to document the artifact persistence strategy and instructions for manual regeneration.
+- [ ] Add a doc comment in `devs-proto/src/lib.rs` explaining that generated files are committed per [2_TAS-REQ-001F] and regenerated when `.proto` sources change.
 
 ## 6. Automated Verification
-- [ ] Run `.tools/verify_requirements.py` to ensure [2_TAS-REQ-001F] is mapped to these tests.
+- [ ] Run `cargo build -p devs-proto && cargo test -p devs-proto` end-to-end and confirm exit code 0.
+- [ ] Grep test source for `// Covers: 2_TAS-REQ-001F` to confirm traceability annotation.

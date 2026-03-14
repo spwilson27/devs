@@ -1,43 +1,48 @@
 # Task: Implement Retention Sweep Algorithm (Sub-Epic: 07_Logging & Retention)
 
 ## Covered Requirements
-- [1_PRD-REQ-032], [2_TAS-REQ-111]
+- [1_PRD-REQ-032], [2_TAS-REQ-086]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_2/07_logging_retention/01_checkpoint_delete_run.md]
+- depends_on: [docs/plan/tasks/phase_2/07_logging_retention/01_retention_policy_config_and_delete_primitive.md]
 - shared_components: [devs-checkpoint, devs-core]
 
 ## 1. Initial Test Written
-- [ ] Create a unit test for `RetentionSweep::execute` in `devs-checkpoint` or a related engine module.
-- [ ] The test should simulate a set of runs with different completion timestamps and directory sizes.
-- [ ] Verify that:
-    - [ ] Runs older than `max_age_days` are correctly identified and passed to `delete_run`.
-    - [ ] If `max_size_mb` is exceeded, the oldest runs (by `completed_at` descending) are identified for deletion until the total size is within the limit.
-    - [ ] Active (non-terminal) runs are **EXCLUDED** from the sweep regardless of age or size [2_TAS-REQ-111].
-    - [ ] Runs with status `Running` or `Paused` are never deleted [2_TAS-REQ-086].
+- [ ] In `crates/devs-checkpoint/src/retention.rs` (new file), write tests annotated with `// Covers: 1_PRD-REQ-032` and `// Covers: 2_TAS-REQ-086`:
+    - [ ] `test_sweep_deletes_runs_older_than_max_age` — create 3 completed runs: one 10 days old, one 5 days old, one 1 day old. Set `max_age_days = 7`. Assert only the 10-day-old run is deleted.
+    - [ ] `test_sweep_deletes_oldest_when_max_size_exceeded` — create 3 completed runs of known sizes totaling 600MB. Set `max_size_mb = 400`. Assert the oldest run(s) are deleted until total is ≤400MB.
+    - [ ] `test_sweep_applies_both_age_and_size` — set both limits. Verify age filter runs first, then size filter on remaining runs.
+    - [ ] `test_sweep_skips_running_runs` [2_TAS-REQ-086] — create runs with status `Running`. Set `max_age_days = 0` (delete everything). Assert `Running` runs are NOT deleted.
+    - [ ] `test_sweep_skips_paused_runs` [2_TAS-REQ-086] — same as above but with `Paused` status.
+    - [ ] `test_sweep_no_policy_no_deletions` — with `RetentionPolicy::default()` (both limits `None`), assert no runs are deleted regardless of age or size.
+    - [ ] `test_sweep_empty_repo_no_error` — sweep on a project with no `.devs/runs/` directory returns `Ok(())`.
+    - [ ] `test_sweep_corrupt_checkpoint_skipped` — a run directory with unreadable `checkpoint.json` is skipped (logged as error), other runs still processed.
 
 ## 2. Task Implementation
-- [ ] Implement the `RetentionPolicy` struct in `devs-core` and the sweep logic in `devs-checkpoint`.
-- [ ] Sweep Algorithm implementation:
-    1. Scan `.devs/runs/` to find all run directories.
-    2. Load each run's `checkpoint.json` to extract `status`, `completed_at`, and `size`.
-    3. Identify terminal-state runs (`Completed`, `Failed`, `Cancelled`).
-    4. Apply `max_age_days`: Mark runs for deletion if `completed_at < (now - max_age)`.
-    5. Apply `max_size_mb`: Sort remaining terminal runs by `completed_at` descending.
-    6. Compute cumulative size and mark runs for deletion once the limit is exceeded.
-    7. Call `delete_run` for all marked runs.
-- [ ] Ensure the size computation includes both the `.devs/runs/<run-id>` and `.devs/logs/<run-id>` directories.
+- [ ] Create `crates/devs-checkpoint/src/retention.rs`:
+    - [ ] Implement `pub async fn execute_retention_sweep(store: &CheckpointStore, project: &ProjectRef, policy: &RetentionPolicy) -> Result<SweepResult>`.
+    - [ ] `SweepResult` struct: `deleted_count: usize`, `freed_bytes: u64`, `errors: Vec<(RunId, String)>`.
+    - [ ] Algorithm:
+        1. Call `store.list_runs(project)` to get all runs with their metadata (status, `completed_at`, directory size).
+        2. Filter to only terminal-state runs (`Completed`, `Failed`, `Cancelled`). Runs with status `Running` or `Paused` are unconditionally excluded per [2_TAS-REQ-086].
+        3. If `policy.has_age_limit()`: mark runs where `completed_at < Utc::now() - max_age` for deletion.
+        4. If `policy.has_size_limit()`: compute total size of remaining (non-marked) terminal runs. Sort by `completed_at` ascending (oldest first). Mark oldest runs for deletion until total ≤ `max_size_bytes`.
+        5. For each marked run, call `store.delete_run(run_id)`. Collect errors per-run; do not abort on single failure.
+    - [ ] Implement `list_runs_with_metadata` on `CheckpointStore` if not already present — scans `.devs/runs/`, reads each `checkpoint.json`, computes directory sizes for `.devs/runs/<id>` + `.devs/logs/<id>`.
+    - [ ] Size computation uses `spawn_blocking` with recursive directory walk.
 
 ## 3. Code Review
-- [ ] Verify that non-terminal runs are never marked for deletion.
-- [ ] Ensure that the sorting order for size-based deletion is correct (oldest deleted first).
-- [ ] Check for proper error handling if a `checkpoint.json` is unreadable or corrupt.
+- [ ] Verify that `Running` and `Paused` runs are unconditionally excluded from sweep — the filter MUST be applied before any age or size checks.
+- [ ] Verify oldest-first deletion order for size-based eviction.
+- [ ] Verify per-run error isolation — a failed deletion does not abort the sweep.
+- [ ] Verify doc comments reference [1_PRD-REQ-032] and [2_TAS-REQ-086].
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-checkpoint` and specifically target the sweep tests.
+- [ ] Run `cargo test -p devs-checkpoint -- retention`.
+- [ ] Verify all 8 test cases pass.
 
 ## 5. Update Documentation
-- [ ] Document the retention policy configuration in the server's documentation or agent memory.
+- [ ] Add `// Covers: 1_PRD-REQ-032` and `// Covers: 2_TAS-REQ-086` traceability annotations to all test functions as appropriate.
 
 ## 6. Automated Verification
-- [ ] Run `./do test` and verify coverage for `1_PRD-REQ-032` and `2_TAS-REQ-111`.
+- [ ] Run `./do test` and verify `target/traceability.json` maps [1_PRD-REQ-032] and [2_TAS-REQ-086] to the new tests.

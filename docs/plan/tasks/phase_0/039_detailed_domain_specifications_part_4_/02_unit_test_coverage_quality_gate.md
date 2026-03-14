@@ -5,31 +5,43 @@
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: ["./do Entrypoint Script"]
+- shared_components: ["./do Entrypoint Script & CI Pipeline" (consume), "Traceability & Coverage Infrastructure" (consume)]
 
 ## 1. Initial Test Written
-- [ ] Create a simulation in `tests/test_coverage_gates.py` that:
-    - Generates a synthetic `target/coverage/report.json` where QG-001 (unit coverage) is 89.9%.
-    - Runs the coverage gate logic and ensures it reports "QG-001 FAILED: 89.9% < 90.0%" and exits non-zero.
-    - Verifies that any unit tests that call internal Rust functions directly *only* contribute to QG-001, not the E2E gates [9_PROJECT_ROADMAP-REQ-309].
+- [ ] Create `tests/coverage/test_qg001_unit_gate.sh` that:
+    - Generates a synthetic `target/coverage/report.json` with `{ "gates": [{ "id": "QG-001", "name": "Unit Test Line Coverage", "threshold_pct": 90.0, "actual_pct": 89.9, "passed": false }] }`.
+    - Runs the coverage gate checker script (`.tools/check_coverage_gates.sh` or equivalent) against this file.
+    - Asserts the checker exits non-zero and stderr contains `QG-001 FAILED: 89.9% < 90.0%`.
+    - Generates a second report with `actual_pct: 90.0` and asserts the checker exits zero for QG-001.
+    - Generates a report with `actual_pct: 0.0` and asserts the checker exits non-zero (zero-result protection).
+- [ ] Create a Rust unit test `tests/coverage_gate_schema_test.rs` that deserializes a sample `report.json` into the gate struct and asserts all fields (`id`, `threshold_pct`, `actual_pct`, `passed`, `delta`) are present and correctly typed.
 
 ## 2. Task Implementation
-- [ ] In `./do coverage`, configure `cargo llvm-cov` to specifically measure coverage from unit tests (e.g., tests within `src/` files) [1_PRD-REQ-050].
-- [ ] Implement the threshold check specifically for QG-001 at 90.0%.
-- [ ] Ensure the coverage gate reporter identifies uncovered lines and lists them in the output as per [3_MCP_DESIGN-REQ-EC-OBS-DBG-005].
-- [ ] Ensure that failure of QG-001 causes the overall `coverage` stage to fail with `overall_passed: false` in `target/coverage/report.json` [4_USER_FEATURES-AC-3-DO-004].
+- [ ] Implement (or extend) a coverage gate checker script at `.tools/check_coverage_gates.sh` that:
+    - Reads `target/coverage/report.json`.
+    - For each gate entry, compares `actual_pct` against `threshold_pct`.
+    - Sets `passed: true/false` and computes `delta = actual_pct - threshold_pct`.
+    - Prints a summary line per gate: `QG-001 PASSED: 92.3% >= 90.0% (+2.3)` or `QG-001 FAILED: 89.9% < 90.0% (-0.1)`.
+    - Exits non-zero if any gate has `passed: false`.
+    - Exits non-zero if any gate has `actual_pct == 0.0` (zero-result protection per project spec).
+- [ ] In `./do coverage`, configure `cargo llvm-cov` to run unit tests only (tests in `src/` modules, not E2E tests). Use `--lib --bins` flags or test binary filtering to isolate unit tests from integration/E2E tests.
+- [ ] Have `./do coverage` write the QG-001 entry to `target/coverage/report.json` with the measured percentage.
+- [ ] Ensure `./do coverage` invokes the gate checker after generating the report, and propagates the exit code.
+- [ ] Hardcode the 90.0% threshold — it must not be configurable via env var or config file.
 
 ## 3. Code Review
-- [ ] Verify that unit test coverage is accurately isolated from E2E test coverage.
-- [ ] Ensure the 90.0% threshold is hardcoded and cannot be bypassed.
-- [ ] Verify that the `report.json` schema matches the PRD requirements (id, threshold, actual, passed, delta).
+- [ ] Verify that unit test coverage measurement excludes E2E tests (tests in `tests/` directory or marked with `#[cfg(feature = "e2e")]`).
+- [ ] Verify the 90.0% threshold is a literal constant, not read from any external source.
+- [ ] Verify the `report.json` schema includes all required fields: `id`, `name`, `threshold_pct`, `actual_pct`, `passed`, `delta`.
+- [ ] Verify zero-result protection: a `0.0%` actual always fails regardless of threshold.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the simulation test script `tests/test_coverage_gates.py`.
-- [ ] Run `./do coverage` on a codebase with a known coverage percentage and verify the reported value is correct.
+- [ ] Run `sh tests/coverage/test_qg001_unit_gate.sh` — all assertions must pass.
+- [ ] Run `./do coverage` on the workspace and verify `target/coverage/report.json` contains a QG-001 entry with `passed: true` (assuming sufficient test coverage exists).
 
 ## 5. Update Documentation
-- [ ] Update `.agent/MEMORY.md` to document the 90% unit test coverage gate enforcement.
+- [ ] Document the QG-001 gate in the developer guide: threshold, how it's measured, and how to debug failures.
 
 ## 6. Automated Verification
-- [ ] Run `./do coverage` after intentionally removing unit tests for a significant chunk of logic and verify the gate fails.
+- [ ] Run `./do coverage` and parse `target/coverage/report.json` to confirm QG-001 exists with `threshold_pct: 90.0` and `passed: true`.
+- [ ] Run `cat target/coverage/report.json | python3 -c "import json,sys; d=json.load(sys.stdin); g=[x for x in d['gates'] if x['id']=='QG-001'][0]; assert g['threshold_pct']==90.0; assert g['passed']==True; print('QG-001 verified')"`.

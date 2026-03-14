@@ -5,29 +5,38 @@
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [devs-core, devs-proto, devs-scheduler, devs-executor, devs-pool]
+- shared_components: [devs-core (consumer), devs-proto (consumer), devs-scheduler (consumer), devs-executor (consumer), devs-pool (consumer)]
 
 ## 1. Initial Test Written
-- [ ] Write a unit test in `devs-scheduler`, `devs-executor`, and `devs-pool` that attempts to compile a function returning a `devs-proto` type in its public API. The test should technically be a "negative" test or a static check.
-- [ ] Create a script `.tools/check_proto_leak.sh` that uses `cargo tree` or `grep` to ensure `devs-proto` is only a direct dependency of crates that MUST have it (like `devs-grpc` and `devs-mcp`).
+- [ ] Create a lint script `tools/check_proto_boundary.sh` that uses `grep -rn 'use devs_proto' crates/devs-scheduler/src/ crates/devs-executor/src/ crates/devs-pool/src/` to find any imports of `devs_proto` types in public API positions. The script must exit non-zero if any matches are found.
+- [ ] Write a compile-time test in `crates/devs-scheduler/tests/type_boundary.rs` that asserts all public functions in `devs-scheduler` accept and return only `devs-core` types. Create a test function `test_submit_run_uses_core_types()` that calls `submit_run` and verifies the return type is `devs_core::run::RunId`, not a proto type.
+- [ ] Write an equivalent compile-time test in `crates/devs-executor/tests/type_boundary.rs` verifying `prepare_environment` and `run_agent` use `devs_core` types exclusively.
+- [ ] Write an equivalent compile-time test in `crates/devs-pool/tests/type_boundary.rs` verifying `acquire_agent` and `get_pool_state` use `devs_core` types exclusively.
+- [ ] Add a `./do lint` step that runs `cargo tree -p devs-scheduler --edges normal`, `cargo tree -p devs-executor --edges normal`, and `cargo tree -p devs-pool --edges normal`, piping each through `grep devs-proto` and asserting zero matches (i.e., `devs-proto` is not a normal dependency of these crates).
 
 ## 2. Task Implementation
-- [ ] Audit the public API (`pub` and `pub(crate)` items) of `devs-scheduler`, `devs-executor`, and `devs-pool`.
-- [ ] Replace any `devs-proto` message types (e.g., `devs_proto::v1::WorkflowRun`) with corresponding domain types from `devs-core` (e.g., `devs_core::run::WorkflowRun`).
-- [ ] Implement `From` or `Into` traits in `devs-grpc` to convert between `devs-core` domain types and `devs-proto` wire types.
-- [ ] Update `Cargo.toml` of `devs-scheduler`, `devs-executor`, and `devs-pool` to remove `devs-proto` from `[dependencies]` if it's no longer needed for types.
+- [ ] Audit every `pub fn`, `pub struct`, `pub enum`, and `pub trait` in `crates/devs-scheduler/src/lib.rs` and its modules. Replace any `devs_proto::v1::*` types with their `devs_core` equivalents (e.g., `devs_proto::v1::WorkflowRun` -> `devs_core::run::WorkflowRun`).
+- [ ] Repeat audit for `crates/devs-executor/src/lib.rs` and `crates/devs-pool/src/lib.rs`.
+- [ ] Implement `From<devs_core::run::WorkflowRun> for devs_proto::v1::WorkflowRun` and its inverse in `crates/devs-grpc/src/conversions.rs` (the gRPC boundary crate owns these conversions).
+- [ ] Implement equivalent conversion traits for `StageRun`, `PoolState`, and any other types that cross the boundary.
+- [ ] Remove `devs-proto` from `[dependencies]` in `crates/devs-scheduler/Cargo.toml`, `crates/devs-executor/Cargo.toml`, and `crates/devs-pool/Cargo.toml`. It may remain in `[dev-dependencies]` if needed for conversion tests.
+- [ ] Ensure `devs-proto` remains a dependency only of `devs-grpc`, `devs-mcp`, and `devs-cli` (the interface boundary crates).
 
 ## 3. Code Review
-- [ ] Verify that `devs-scheduler`, `devs-executor`, and `devs-pool` do not import any types from `devs_proto`.
-- [ ] Ensure that the engine logic is entirely agnostic of the Protobuf/gRPC representation.
+- [ ] Verify no `use devs_proto` statement exists in any `.rs` file under `crates/devs-scheduler/src/`, `crates/devs-executor/src/`, or `crates/devs-pool/src/`.
+- [ ] Confirm all conversion traits are implemented in the interface crates (`devs-grpc`, `devs-mcp`), not in the engine crates.
+- [ ] Verify the engine logic is fully agnostic of Protobuf serialization concerns.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo check --workspace` to ensure no compilation errors.
-- [ ] Run `./do test` and ensure all tests pass.
+- [ ] Run `cargo check --workspace` to confirm no compilation errors after refactoring.
+- [ ] Run `./do test` to confirm all existing tests still pass.
+- [ ] Run the `tools/check_proto_boundary.sh` script and confirm it exits 0.
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` or architectural docs to explicitly state that engine crates must not depend on `devs-proto`.
+- [ ] Add a `// Covers: 2_TAS-REQ-415` comment to each boundary test and to the lint script.
 
 ## 6. Automated Verification
-- [ ] Run `cargo tree -p devs-scheduler --edges normal | grep devs-proto` and verify it returns no matches.
-- [ ] Repeat for `devs-executor` and `devs-pool`.
+- [ ] Run `cargo tree -p devs-scheduler --edges normal | grep devs-proto` and verify zero output.
+- [ ] Run `cargo tree -p devs-executor --edges normal | grep devs-proto` and verify zero output.
+- [ ] Run `cargo tree -p devs-pool --edges normal | grep devs-proto` and verify zero output.
+- [ ] Run `./do lint` and verify it passes (which now includes the proto boundary check).

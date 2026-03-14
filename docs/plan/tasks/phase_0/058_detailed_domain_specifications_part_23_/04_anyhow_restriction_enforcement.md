@@ -1,38 +1,45 @@
-# Task: Anyhow Crate Restriction Policy Enforcement (Sub-Epic: 058_Detailed Domain Specifications (Part 23))
+# Task: Enforce anyhow Restriction to Binary Crates Only (Sub-Epic: 058_Detailed Domain Specifications (Part 23))
 
 ## Covered Requirements
 - [2_TAS-REQ-234]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: ["./do Entrypoint Script"]
+- depends_on: ["none"]
+- shared_components: ["./do Entrypoint Script (Consumer — lint integration)"]
 
 ## 1. Initial Test Written
-- [ ] Create a mock library crate in a temporary directory with `anyhow` as a dependency.
-- [ ] Verify that the restriction enforcement script (to be implemented) correctly identifies this violation and exits non-zero.
-- [ ] Create a mock binary crate with `anyhow` and verify that it is permitted.
+- [ ] All tests must include `// Covers: 2_TAS-REQ-234`.
+- [ ] Write a shell-based test script `scripts/test_anyhow_lint.sh` (or integration test) with these cases:
+- [ ] `test_library_crate_with_anyhow_dependency_fails`: Create a temp directory with a `Cargo.toml` containing `[lib]` and `[dependencies] anyhow = "1.0"`. Run the enforcement check against it. Assert exit code is non-zero and stderr contains the crate name.
+- [ ] `test_binary_crate_with_anyhow_dependency_passes`: Create a temp directory with `Cargo.toml` containing `[[bin]] name = "foo"` and `[dependencies] anyhow = "1.0"`. Run the enforcement check. Assert exit code is zero.
+- [ ] `test_library_crate_with_anyhow_in_dev_deps_passes`: Create a temp `Cargo.toml` with `[lib]` and `[dev-dependencies] anyhow = "1.0"` (but NOT in `[dependencies]`). Assert the check passes — `[dev-dependencies]` is allowed.
+- [ ] `test_library_crate_with_anyhow_in_build_deps_fails`: Create a temp `Cargo.toml` with `[lib]` and `[build-dependencies] anyhow = "1.0"`. Assert the check fails.
+- [ ] `test_workspace_member_classification`: For the actual workspace, assert that crates `devs-core`, `devs-pool`, `devs-checkpoint`, `devs-adapters`, `devs-executor`, `devs-scheduler`, `devs-webhook`, `devs-config`, `devs-proto` are classified as library crates, and `devs-server`, `devs-tui`, `devs-cli`, `devs-mcp-bridge` are classified as binary crates.
 
 ## 2. Task Implementation
-- [ ] Implement a shell script `scripts/enforce_anyhow_restriction.sh` (or a Python script).
-- [ ] The script should:
-    - Iterate through all `Cargo.toml` files in the workspace.
-    - Identify if the crate is a library or a binary by checking for the `[lib]` or `[[bin]]` section, or the presence of `src/main.rs`.
-    - If it's a library crate, scan its `[dependencies]` and `[build-dependencies]` for `anyhow`.
-    - If found, print a descriptive error and exit non-zero.
-- [ ] Integrate this script into the `./do lint` subcommand.
-- [ ] Update the lint step in the CI pipeline to include this check.
+- [ ] Create `scripts/enforce_anyhow_restriction.sh` (POSIX sh compatible):
+  - For each `Cargo.toml` in the workspace (found via `cargo metadata --no-deps --format-version 1 | jq` or by globbing `crates/*/Cargo.toml`):
+    - Determine if crate is a library: check for `[lib]` section OR absence of `[[bin]]` section with presence of `src/lib.rs`.
+    - If library crate: parse `[dependencies]` and `[build-dependencies]` sections. Check if `anyhow` appears as a key.
+    - If found: print `ERROR: Library crate '<crate_name>' has 'anyhow' in [dependencies]. Per [2_TAS-REQ-234], anyhow MUST NOT appear in library crate dependencies. Use thiserror for typed errors instead.` and set a failure flag.
+  - Exit non-zero if any violations found.
+- [ ] Integrate into `./do lint` by adding a call to `scripts/enforce_anyhow_restriction.sh` in the lint function.
+- [ ] The binary crates allowed to use `anyhow` are exactly: `devs-server`, `devs-tui`, `devs-cli`, `devs-mcp-bridge`.
 
 ## 3. Code Review
-- [ ] Verify that the script correctly distinguishes between library and binary crates.
-- [ ] Ensure that `anyhow` is still permitted in `[dev-dependencies]` of library crates for testing purposes, if required. (Wait, requirement `2_TAS-REQ-234` says "MUST NOT appear in library crates' `[dependencies]`").
-- [ ] Check that the error message is clear and points to the specific crate violating the policy.
+- [ ] Verify the library vs binary classification logic handles edge cases: a crate with both `[lib]` and `[[bin]]` is treated as having a library component (anyhow banned in its `[dependencies]`).
+- [ ] Verify `[dev-dependencies]` is NOT checked — anyhow in dev-deps is acceptable per [2_TAS-REQ-234] which only restricts `[dependencies]`.
+- [ ] Verify the script is POSIX sh compatible (no bashisms) per the `./do` script standards.
+- [ ] Verify error messages include the crate name and the requirement ID.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the mock test cases created in step 1 and ensure they pass.
-- [ ] Run `./do lint` on the current repository and ensure it passes (since no violations should exist yet).
+- [ ] Run `scripts/test_anyhow_lint.sh` (or equivalent) and confirm all test cases pass.
+- [ ] Run `./do lint` on the workspace and confirm the anyhow check passes (no violations in current codebase).
 
 ## 5. Update Documentation
-- [ ] Update `.agent/MEMORY.md` to reflect the implementation of the `anyhow` restriction enforcement policy.
+- [ ] Add a comment at the top of `scripts/enforce_anyhow_restriction.sh`: `# Enforces [2_TAS-REQ-234]: anyhow restricted to binary crates only.`
 
 ## 6. Automated Verification
-- [ ] Run `./do lint` and verify that the `anyhow` restriction check is executed and reported in the output.
+- [ ] Run `./do lint` and confirm the anyhow restriction check appears in output and passes.
+- [ ] Run `./do test` and confirm zero failures.
+- [ ] Grep for `// Covers: 2_TAS-REQ-234` to confirm traceability annotation in test code.

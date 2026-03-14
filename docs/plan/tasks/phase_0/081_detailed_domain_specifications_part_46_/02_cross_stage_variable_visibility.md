@@ -1,42 +1,36 @@
-# Task: Cross-Stage Variable Visibility Validation (Sub-Epic: 081_Detailed Domain Specifications (Part 46))
+# Task: Cross-Stage Template Variable Visibility Enforcement (Sub-Epic: 081_Detailed Domain Specifications (Part 46))
 
 ## Covered Requirements
 - [2_TAS-REQ-481]
 
 ## Dependencies
-- depends_on: [none]
-- shared_components: [devs-core]
+- depends_on: ["none"]
+- shared_components: ["devs-core"]
 
 ## 1. Initial Test Written
-- [ ] In `devs-core`, create a test suite `template_visibility_tests.rs`.
-- [ ] Write a test that defines a workflow with three stages: `A`, `B`, and `C`.
-- [ ] Set `B` to depend on `A`.
-- [ ] Set `C` to NOT depend on `B`.
-- [ ] In `C`'s prompt, add a template variable reference `{{stage.B.output}}`.
-- [ ] Write a test that attempts to resolve templates for `C` at execution start.
-- [ ] Assert that the resolution fails with a specific `VisibilityError` because `B` is not in `C`'s transitive `depends_on` closure.
-- [ ] Write a test with a valid reference (where `B` is a dependency) and assert it succeeds.
+- [ ] In the `TemplateResolver` module (or a new `tests::variable_visibility` module in `devs-core`), write the following tests:
+- [ ] `test_variable_ref_to_direct_dependency_resolves` — Stage B depends on Stage A. A template `{{stage.A.output}}` in Stage B resolves successfully.
+- [ ] `test_variable_ref_to_transitive_dependency_resolves` — Stage C depends on B, B depends on A. A template `{{stage.A.output}}` in Stage C resolves successfully (transitive closure).
+- [ ] `test_variable_ref_outside_depends_on_closure_fails` — Stage B does NOT depend on Stage A. A template `{{stage.A.output}}` in Stage B causes the stage to transition to `Failed` with an appropriate error message (e.g., `InvalidVariableReference`).
+- [ ] `test_variable_ref_failure_at_execution_not_validation` — Ensure the failure happens when the stage begins execution (i.e., after submission succeeds), NOT during workflow validation at submit time. Submit a workflow containing the invalid reference and assert submission succeeds. Then when the stage is dispatched, assert it transitions to `Failed`.
+- [ ] `test_self_reference_fails` — A template `{{stage.X.output}}` used in Stage X itself fails with `InvalidVariableReference`.
 
 ## 2. Task Implementation
-- [ ] In `devs-core/src/template.rs`, implement `TemplateResolver`.
-- [ ] Ensure the resolver has access to the workflow's dependency graph (transitive closure).
-- [ ] Implement visibility check logic:
-    - Before resolving `{{stage.NAME.FIELD}}`, verify that `NAME` is in the transitive `depends_on` closure of the current stage.
-    - If not, return `Err(VisibilityError)`.
-- [ ] Ensure this check is performed at execution start (when templates are resolved), NOT at workflow submission time (per [2_TAS-REQ-481]).
-- [ ] Integrate this check into the existing template resolution engine.
+- [ ] Implement a function `compute_transitive_depends_on(stage_name: &str, dag: &WorkflowDag) -> HashSet<String>` that returns the full set of ancestor stages reachable via `depends_on` edges.
+- [ ] In the template resolution path (called at stage execution start, NOT at submission), before resolving `{{stage.<name>.<field>}}`, check that `<name>` is in the transitive `depends_on` closure of the current stage.
+- [ ] If the check fails, transition the stage to `Failed` with error kind `InvalidVariableReference` and a message like `"Stage 'X' references '{{stage.Y.output}}' but 'Y' is not in its dependency closure"`.
+- [ ] Do NOT add this check to the workflow validation path at submit time — the requirement explicitly states failure at execution start.
 
 ## 3. Code Review
-- [ ] Verify that the dependency check correctly handles transitive dependencies (e.g., if C depends on B and B depends on A, C can reference A).
-- [ ] Confirm that invalid references lead to a `Failed` stage transition.
-- [ ] Ensure the error message specifically identifies the out-of-scope stage.
+- [ ] Confirm the transitive closure computation handles diamond dependencies correctly (A→B, A→C, B→D, C→D — D can reference A, B, and C).
+- [ ] Confirm the check fires at execution start, not at validation/submission.
+- [ ] Confirm self-references are caught.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-core --test template_visibility_tests`.
-- [ ] Verify all tests pass, covering both valid and invalid visibility scenarios.
+- [ ] Run `cargo test variable_visibility` and confirm all tests pass.
 
 ## 5. Update Documentation
-- [ ] Add documentation to `TemplateResolver` explaining the transitive dependency requirement for cross-stage variables.
+- [ ] Add doc comments on `compute_transitive_depends_on` and the visibility check explaining the design rationale (execution-time failure vs validation-time).
 
 ## 6. Automated Verification
-- [ ] Run `./do test` and check the traceability report to ensure `2_TAS-REQ-481` is mapped to the passing tests.
+- [ ] Run `cargo test variable_visibility -- --nocapture` and verify zero failures.

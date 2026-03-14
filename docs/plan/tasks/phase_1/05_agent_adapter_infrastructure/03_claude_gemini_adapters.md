@@ -1,43 +1,61 @@
 # Task: Implement Claude and Gemini Adapters (Sub-Epic: 05_Agent Adapter Infrastructure)
 
 ## Covered Requirements
-- [1_PRD-REQ-013], [2_TAS-REQ-035] (Partial), [1_PRD-REQ-014] (Partial)
+- [1_PRD-REQ-013], [2_TAS-REQ-035]
 
 ## Dependencies
 - depends_on: [02_pty_and_prompt_modes.md]
-- shared_components: [devs-core, devs-adapters]
+- shared_components: [devs-adapters (extend)]
 
 ## 1. Initial Test Written
-- [ ] In `devs-adapters`, create tests for the `ClaudeAdapter` and `GeminiAdapter` structs.
-- [ ] Test that `ClaudeAdapter.build_command` uses `--print` flag for the prompt.
-- [ ] Test that `GeminiAdapter.build_command` uses `--prompt` flag for the prompt.
-- [ ] Test that `ClaudeAdapter.detect_rate_limit` correctly identifies "rate limit", "429", and "overloaded" in stderr when the exit code is 1.
-- [ ] Test that `GeminiAdapter.detect_rate_limit` correctly identifies "quota", "429", and "resource_exhausted" in stderr when the exit code is 1.
-- [ ] Verify that the tests fail.
+- [ ] Create `crates/devs-adapters/src/adapters/mod.rs` and `crates/devs-adapters/src/adapters/claude.rs`, `crates/devs-adapters/src/adapters/gemini.rs`.
+- [ ] Write `test_claude_tool_returns_claude` asserting `ClaudeAdapter.tool() == ToolKind::Claude`.
+- [ ] Write `test_claude_build_command_uses_print_flag` asserting the first two args from `build_command` are `["--print", <prompt>]` when given a prompt string.
+- [ ] Write `test_claude_build_command_program_is_claude` asserting `AdapterCommand.program == "claude"`.
+- [ ] Write `test_claude_pty_default_false` asserting `AdapterCommand.use_pty == false` when `AgentInvocation.use_pty` is not overridden.
+- [ ] Write `test_claude_detect_rate_limit_exit_1_rate_limit` with exit code 1 and stderr `"Error: rate limit exceeded"` asserting `Some(RateLimitInfo)`.
+- [ ] Write `test_claude_detect_rate_limit_exit_1_429` with exit code 1 and stderr `"HTTP 429 Too Many Requests"` asserting `Some(RateLimitInfo)`.
+- [ ] Write `test_claude_detect_rate_limit_exit_1_overloaded` with exit code 1 and stderr `"API overloaded"` asserting `Some(RateLimitInfo)`.
+- [ ] Write `test_claude_detect_rate_limit_exit_0_ignored` with exit code 0 and stderr `"rate limit"` asserting `None` (success exit overrides stderr pattern).
+- [ ] Write `test_claude_detect_rate_limit_exit_1_unrelated_stderr` with exit code 1 and stderr `"file not found"` asserting `None`.
+- [ ] Write `test_gemini_tool_returns_gemini` asserting `GeminiAdapter.tool() == ToolKind::Gemini`.
+- [ ] Write `test_gemini_build_command_uses_prompt_flag` asserting args contain `["--prompt", <prompt>]`.
+- [ ] Write `test_gemini_build_command_program_is_gemini` asserting `AdapterCommand.program == "gemini"`.
+- [ ] Write `test_gemini_pty_default_false` asserting `use_pty == false`.
+- [ ] Write `test_gemini_detect_rate_limit_quota` with exit code 1 and stderr `"Quota exceeded"` asserting `Some(RateLimitInfo)`.
+- [ ] Write `test_gemini_detect_rate_limit_429` with exit code 1 and stderr `"429"` asserting `Some(RateLimitInfo)`.
+- [ ] Write `test_gemini_detect_rate_limit_resource_exhausted` with exit code 1 and stderr `"RESOURCE_EXHAUSTED"` asserting `Some(RateLimitInfo)`.
+- [ ] Confirm all tests fail.
 
 ## 2. Task Implementation
-- [ ] Implement `ClaudeAdapter` and `GeminiAdapter` structs in `devs-adapters/src/adapters/`.
-- [ ] Register these adapters in a central registry or factory in the crate.
-- [ ] Implement the `AgentAdapter` trait for `ClaudeAdapter` using the default values:
-    - `prompt_mode`: Flag (`--print`)
-    - `pty`: `false`
-    - Rate limit triggers: exit code 1 AND stderr matches `"rate limit"`, `"429"`, `"overloaded"` (case-insensitive).
-- [ ] Implement the `AgentAdapter` trait for `GeminiAdapter` using the default values:
-    - `prompt_mode`: Flag (`--prompt`)
-    - `pty`: `false`
-    - Rate limit triggers: exit code 1 AND stderr matches `"quota"`, `"429"`, `"resource_exhausted"`.
-- [ ] Ensure `detect_rate_limit` uses case-insensitive regex matching as required.
+- [ ] Implement `ClaudeAdapter` struct (unit struct or with config) in `adapters/claude.rs`:
+  - `tool()` returns `ToolKind::Claude`.
+  - `build_command()` uses `PromptMode::Flag { flag: "--print".into() }`, program `"claude"`, `use_pty: false` (default).
+  - `detect_rate_limit()`: return `Some(RateLimitInfo)` if `exit_code != 0` AND stderr contains (case-insensitive) any of: `"rate limit"`, `"429"`, `"overloaded"`.
+- [ ] Implement `GeminiAdapter` struct in `adapters/gemini.rs`:
+  - `tool()` returns `ToolKind::Gemini`.
+  - `build_command()` uses `PromptMode::Flag { flag: "--prompt".into() }`, program `"gemini"`, `use_pty: false`.
+  - `detect_rate_limit()`: return `Some(RateLimitInfo)` if `exit_code != 0` AND stderr contains (case-insensitive) any of: `"quota"`, `"429"`, `"resource_exhausted"`.
+- [ ] Extract a shared `match_rate_limit_patterns(exit_code: i32, stderr: &str, patterns: &[&str], tool: ToolKind) -> Option<RateLimitInfo>` helper to avoid duplication.
+- [ ] Register both adapters in `adapters/mod.rs` with public re-exports.
+- [ ] Implement `AdapterRegistry` in `crates/devs-adapters/src/registry.rs`: a `HashMap<ToolKind, Box<dyn AgentAdapter>>` with `fn get(&self, tool: ToolKind) -> Option<&dyn AgentAdapter>` and `fn register(&mut self, adapter: Box<dyn AgentAdapter>)`. This satisfies the extensibility requirement [1_PRD-REQ-014].
 
 ## 3. Code Review
-- [ ] Verify that the adapter defaults match the table in [2_TAS-REQ-035].
-- [ ] Check for proper error handling in `build_command`.
-- [ ] Ensure that the implementation remains extensible as required by [1_PRD-REQ-014].
+- [ ] Verify Claude adapter defaults match [2_TAS-REQ-035] table: prompt_mode=Flag(`--print`), pty=false.
+- [ ] Verify Gemini adapter defaults match [2_TAS-REQ-035] table: prompt_mode=Flag(`--prompt`), pty=false.
+- [ ] Verify rate-limit pattern matching is case-insensitive (use `stderr.to_lowercase().contains()`).
+- [ ] Verify `AdapterRegistry` allows adding new adapters without modifying existing code (open/closed principle).
+- [ ] Verify no hardcoded paths or platform-specific assumptions in adapter implementations.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run `cargo test -p devs-adapters` and ensure all tests for Claude and Gemini adapters pass.
+- [ ] Run `cargo test -p devs-adapters` and confirm all Claude and Gemini tests pass.
+- [ ] Run `cargo clippy -p devs-adapters -- -D warnings`.
 
 ## 5. Update Documentation
-- [ ] Update `devs-adapters` documentation to include the new adapters.
+- [ ] Add `// Covers: 1_PRD-REQ-013` to adapter instantiation tests.
+- [ ] Add `// Covers: 2_TAS-REQ-035` to tests that verify default flag/pty/rate-limit values.
+- [ ] Add doc comments to `ClaudeAdapter`, `GeminiAdapter`, `AdapterRegistry`.
 
 ## 6. Automated Verification
-- [ ] Run `./do lint` and `./do test` to ensure compliance and traceability for [1_PRD-REQ-013] and [2_TAS-REQ-035].
+- [ ] Run `./do lint` and confirm it passes.
+- [ ] Run `./do test` and confirm `target/traceability.json` includes entries for `1_PRD-REQ-013` and `2_TAS-REQ-035`.

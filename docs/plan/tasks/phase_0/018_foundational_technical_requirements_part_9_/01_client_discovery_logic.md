@@ -1,44 +1,54 @@
-# Task: Client Discovery Logic and Error Handling (Sub-Epic: 018_Foundational Technical Requirements (Part 9))
+# Task: Client Server Address Resolution with Stale Detection and Explicit Override (Sub-Epic: 018_Foundational Technical Requirements (Part 9))
 
 ## Covered Requirements
 - [2_TAS-REQ-002H], [2_TAS-REQ-002J]
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [none]
+- shared_components: [Server Discovery Protocol (consumer — uses discovery file format defined in devs-core)]
 
 ## 1. Initial Test Written
-- [ ] Create a unit test (e.g. in `devs-core` or a temporary module) that mocks the environment to test address resolution.
-- [ ] Mock the presence of `DEVS_DISCOVERY_FILE` and verify the resolved path.
-- [ ] Mock the absence of the file and verify the error condition.
-- [ ] Mock the presence of the `--server` flag (as a `Option<String>`) and verify it takes precedence.
-- [ ] Mock a malformed discovery file and verify the error condition.
-- [ ] Assert that the error condition returns an exit code `3` and the specific error message: `"Server at <addr> is not reachable. Is it running?"` or `"Discovery file at <path> is malformed: <detail>"` as per TAS §1.5.
+- [ ] In `crates/devs-core/src/discovery.rs` (or a new `crates/devs-core/src/discovery/client.rs` module), write the following unit tests **before any implementation**:
+- [ ] **`test_explicit_server_flag_skips_discovery_file`**: Call `resolve_server_addr(Some("127.0.0.1:9090"), ...)`. Assert it returns `Ok("127.0.0.1:9090")` without reading any file. Set `DEVS_DISCOVERY_FILE` to a non-existent path to prove the file is never accessed (if it were, it would error). Annotate with `// Covers: 2_TAS-REQ-002J`.
+- [ ] **`test_explicit_server_flag_with_invalid_format_returns_error`**: Call `resolve_server_addr(Some("not-a-valid-addr"), ...)`. Assert it returns an error (not exit code 3 — format errors on explicit flags are a different category).
+- [ ] **`test_discovery_file_valid_content_returns_address`**: Write `"127.0.0.1:5050\n"` to a temp file. Set `DEVS_DISCOVERY_FILE` to that path. Call `resolve_server_addr(None, ...)`. Assert it returns `Ok("127.0.0.1:5050")` (whitespace stripped).
+- [ ] **`test_discovery_file_missing_returns_exit_code_3`**: Set `DEVS_DISCOVERY_FILE` to a non-existent path. Call `resolve_server_addr(None, ...)`. Assert the error variant maps to exit code `3`. Assert the error's `Display` impl contains `"not reachable"` or the appropriate discovery-missing message.
+- [ ] **`test_stale_server_address_returns_exit_code_3`**: Write a valid `host:port` to a temp discovery file. Call `resolve_server_addr(None, ...)` with a health-check callback that always returns `Err(ConnectionRefused)`. Assert the error maps to exit code `3` and the error message is exactly: `"Server at <addr> is not reachable. Is it running?"` where `<addr>` is the address from the file. Annotate with `// Covers: 2_TAS-REQ-002H`.
+- [ ] **`test_discovery_file_malformed_returns_exit_code_3`**: Write `"garbage content with no colon"` to a temp file. Set `DEVS_DISCOVERY_FILE`. Call `resolve_server_addr(None, ...)`. Assert exit code `3` and message contains the file path and a description of the parse failure.
+- [ ] **`test_default_discovery_path_used_when_env_unset`**: Unset `DEVS_DISCOVERY_FILE`. Assert that the resolved default path equals `$HOME/.config/devs/server.addr` (use `dirs::config_dir()` or equivalent to compute expected path). This can be a unit test of the path resolution function alone.
 
 ## 2. Task Implementation
-- [ ] Implement a `resolve_server_addr` function that takes an optional explicit address (from CLI flag).
-- [ ] Implement logic to find the discovery file:
-    1. Check `DEVS_DISCOVERY_FILE` environment variable.
-    2. Check a default path: `~/.config/devs/server.addr` (using `home` crate to resolve `~`).
-- [ ] Read the discovery file, strip whitespace, and validate the `<host>:<port>` format.
-- [ ] Ensure that if the `--server` flag is provided, it is used unconditionally and the discovery file is NOT read.
-- [ ] Implement a `DiscoveryError` type that maps to exit code `3` and includes the human-readable error messages required.
-- [ ] Use `thiserror` for error definitions.
+- [ ] Create or extend `crates/devs-core/src/discovery.rs` with a public `resolve_server_addr` function:
+  ```rust
+  pub fn resolve_server_addr(
+      explicit: Option<&str>,
+      health_check: impl Fn(&str) -> Result<(), DiscoveryError>,
+  ) -> Result<String, DiscoveryError>
+  ```
+- [ ] Implement the precedence chain:
+  1. If `explicit` is `Some`, validate format (`host:port` where port is a valid u16), return it. Do NOT read any file. Do NOT perform a health check (the caller will connect and get a normal connection error). [2_TAS-REQ-002J]
+  2. Determine discovery file path: check `DEVS_DISCOVERY_FILE` env var; if unset, use `~/.config/devs/server.addr` (resolve `~` via `dirs::config_dir()` or `home::home_dir()`).
+  3. Read the file. If missing or unreadable, return `DiscoveryError::FileNotFound { path }` (exit code 3).
+  4. Parse content: strip leading/trailing whitespace, validate `host:port` format. If malformed, return `DiscoveryError::Malformed { path, detail }` (exit code 3).
+  5. Call `health_check(&addr)`. If it fails, return `DiscoveryError::Stale { addr }` with message `"Server at {addr} is not reachable. Is it running?"` (exit code 3). [2_TAS-REQ-002H]
+- [ ] Define `DiscoveryError` enum with variants: `FileNotFound`, `Malformed`, `Stale`, `InvalidExplicit`. Derive `thiserror::Error`. Implement a `pub fn exit_code(&self) -> i32` method returning `3` for `FileNotFound`, `Malformed`, `Stale`; and `1` for `InvalidExplicit`.
+- [ ] Ensure `Display` impls produce the exact messages specified in the requirements.
 
 ## 3. Code Review
-- [ ] Verify that the `--server` flag precedence is absolute [2_TAS-REQ-002J].
-- [ ] Verify that exit code `3` is used for all discovery-related failures [2_TAS-REQ-002H].
-- [ ] Ensure the error messages match the TAS exactly.
-- [ ] Verify that whitespace is stripped from the discovery file content [2_TAS-REQ-002F].
+- [ ] Verify `--server` flag precedence is absolute: when `explicit` is `Some`, no file I/O or env var reads occur [2_TAS-REQ-002J].
+- [ ] Verify exit code `3` is returned for all stale/missing/malformed discovery scenarios [2_TAS-REQ-002H].
+- [ ] Verify error message for stale server matches: `"Server at <addr> is not reachable. Is it running?"` exactly.
+- [ ] Verify the health_check callback pattern allows async callers to pass in a gRPC health check without the discovery module depending on tonic.
+- [ ] Verify no `unwrap()` or `expect()` on file reads — all I/O errors are mapped to `DiscoveryError`.
 
 ## 4. Run Automated Tests to Verify
-- [ ] Run the unit tests: `cargo test` in the relevant crate.
-- [ ] Verify that all mocks (flag, env, file) behave as expected.
+- [ ] Run `cargo test -p devs-core -- discovery` and confirm all tests pass.
+- [ ] Run `cargo test -p devs-core` to confirm no regressions.
 
 ## 5. Update Documentation
-- [ ] Update internal developer documentation regarding the server discovery protocol.
-- [ ] Record the implementation of these requirements in the agent's memory.
+- [ ] Add doc comments to `resolve_server_addr` explaining the precedence chain and exit code contract.
+- [ ] Add doc comments to each `DiscoveryError` variant with the exact error message it produces.
 
 ## 6. Automated Verification
-- [ ] Run `./do test` to ensure 100% traceability for [2_TAS-REQ-002H] and [2_TAS-REQ-002J].
-- [ ] Verify `target/traceability.json` reflects the coverage.
+- [ ] Run `./do test` and confirm the `// Covers: 2_TAS-REQ-002H` and `// Covers: 2_TAS-REQ-002J` annotations appear in `target/traceability.json`.
+- [ ] Run `./do lint` and confirm no warnings or errors.
