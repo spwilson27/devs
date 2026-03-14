@@ -1267,7 +1267,7 @@ group_imports    = "StdExternalCrate"
 
 ### **[2_TAS-REQ-034]** AgentAdapter trait
 - **Type:** Technical
-- **Description:** The `AgentAdapter` trait MUST provide: `tool()`, `build_command()`, and `detect_rate_limit()`.
+- **Description:** The `AgentAdapter` trait MUST provide three methods: `tool()` returns the CLI identifier for the agent, `build_command()` constructs the subprocess command to launch the agent, and `detect_rate_limit()` inspects agent output to determine whether the upstream API is rate-limiting requests.
 - **Source:** TAS (Technical Architecture Specification) (docs/plan/specs/2_tas.md)
 - **Dependencies:** None
 
@@ -1309,14 +1309,14 @@ group_imports    = "StdExternalCrate"
 
 ### **[2_TAS-REQ-040]** StageExecutor trait
 - **Type:** Technical
-- **Description:** The `StageExecutor` trait MUST provide: `prepare()`, `collect_artifacts()`, and `cleanup()`.
+- **Description:** The `StageExecutor` trait MUST provide three methods: `prepare()` sets up the execution environment before a stage runs, `collect_artifacts()` gathers output files and results after execution completes, and `cleanup()` tears down temporary resources and restores the environment to a clean state.
 - **Source:** TAS (Technical Architecture Specification) (docs/plan/specs/2_tas.md)
 - **Dependencies:** None
 
 
 ### **[2_TAS-REQ-041]** Executor clone paths
 - **Type:** Technical
-- **Description:** Defines clone paths for `LocalTempDirExecutor`, `DockerExecutor`, and `RemoteSshExecutor`.
+- **Description:** Defines the filesystem clone paths where each executor type places the working copy of the repository: `LocalTempDirExecutor` uses a temporary directory on the local host, `DockerExecutor` mounts into a container path, and `RemoteSshExecutor` copies to a remote host directory over SSH.
 - **Source:** TAS (Technical Architecture Specification) (docs/plan/specs/2_tas.md)
 - **Dependencies:** None
 
@@ -3001,7 +3001,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[2_TAS-REQ-440]** Clippy Lint Enforcement
 - **Type:** Technical
-- **Description:** `clippy -D warnings` failure is a blocking lint error.
+- **Description:** A `clippy -D warnings` failure MUST be treated as a blocking lint error in the CI pipeline, preventing the build from proceeding until all Clippy warnings are resolved.
 - **Source:** TAS (Technical Architecture Specification) (docs/plan/specs/2_tas.md)
 - **Dependencies:** None
 
@@ -4903,7 +4903,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-004]** All MCP tool responses MUST include an "error": null
 - **Type:** Functional
-- **Description:** All MCP tool responses MUST include an `"error": null
+- **Description:** All MCP tool responses MUST include an `"error": null` field on success to provide a consistent response envelope for clients.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -5302,7 +5302,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-061]** HTTP status codes used by the MCP server:
 - **Type:** Functional
-- **Description:** HTTP status codes used by the MCP server:
+- **Description:** HTTP status codes used by the MCP server, defining the mapping of MCP error conditions to HTTP status codes for consistent client-side error handling across all tool endpoints.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -5526,126 +5526,126 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-AC-1.01]** Requirement 3_MCP_DESIGN-REQ-AC-1.01
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.02]** Requirement 3_MCP_DESIGN-REQ-AC-1.02
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.03]** Requirement 3_MCP_DESIGN-REQ-AC-1.03
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.04]** Requirement 3_MCP_DESIGN-REQ-AC-1.04
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.05]** Requirement 3_MCP_DESIGN-REQ-AC-1.05
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.06]** Requirement 3_MCP_DESIGN-REQ-AC-1.06
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.07]** Requirement 3_MCP_DESIGN-REQ-AC-1.07
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.08]** Requirement 3_MCP_DESIGN-REQ-AC-1.08
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.09]** Requirement 3_MCP_DESIGN-REQ-AC-1.09
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.10]** Requirement 3_MCP_DESIGN-REQ-AC-1.10
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.11]** Requirement 3_MCP_DESIGN-REQ-AC-1.11
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.12]** Requirement 3_MCP_DESIGN-REQ-AC-1.12
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.13]** Requirement 3_MCP_DESIGN-REQ-AC-1.13
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.14]** Requirement 3_MCP_DESIGN-REQ-AC-1.14
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.15]** Requirement 3_MCP_DESIGN-REQ-AC-1.15
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.16]** Requirement 3_MCP_DESIGN-REQ-AC-1.16
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.17]** Requirement 3_MCP_DESIGN-REQ-AC-1.17
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-1.18]** Requirement 3_MCP_DESIGN-REQ-AC-1.18
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -5659,168 +5659,168 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-AC-2.01]** Requirement 3_MCP_DESIGN-REQ-AC-2.01
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.02]** Requirement 3_MCP_DESIGN-REQ-AC-2.02
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.03]** Requirement 3_MCP_DESIGN-REQ-AC-2.03
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.04]** Requirement 3_MCP_DESIGN-REQ-AC-2.04
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.05]** Requirement 3_MCP_DESIGN-REQ-AC-2.05
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.06]** Requirement 3_MCP_DESIGN-REQ-AC-2.06
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.07]** Requirement 3_MCP_DESIGN-REQ-AC-2.07
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.08]** Requirement 3_MCP_DESIGN-REQ-AC-2.08
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.09]** Requirement 3_MCP_DESIGN-REQ-AC-2.09
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.10]** Requirement 3_MCP_DESIGN-REQ-AC-2.10
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.11]** Requirement 3_MCP_DESIGN-REQ-AC-2.11
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.12]** Requirement 3_MCP_DESIGN-REQ-AC-2.12
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.13]** Requirement 3_MCP_DESIGN-REQ-AC-2.13
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.14]** Requirement 3_MCP_DESIGN-REQ-AC-2.14
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.15]** Requirement 3_MCP_DESIGN-REQ-AC-2.15
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.16]** Requirement 3_MCP_DESIGN-REQ-AC-2.16
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.17]** Requirement 3_MCP_DESIGN-REQ-AC-2.17
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.18]** Requirement 3_MCP_DESIGN-REQ-AC-2.18
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.19]** Requirement 3_MCP_DESIGN-REQ-AC-2.19
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.20]** Requirement 3_MCP_DESIGN-REQ-AC-2.20
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.21]** Requirement 3_MCP_DESIGN-REQ-AC-2.21
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.22]** Requirement 3_MCP_DESIGN-REQ-AC-2.22
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.23]** Requirement 3_MCP_DESIGN-REQ-AC-2.23
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-2.24]** Requirement 3_MCP_DESIGN-REQ-AC-2.24
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -5834,133 +5834,133 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-AC-3.01]** Requirement 3_MCP_DESIGN-REQ-AC-3.01
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.02]** Requirement 3_MCP_DESIGN-REQ-AC-3.02
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.03]** Requirement 3_MCP_DESIGN-REQ-AC-3.03
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.04]** Requirement 3_MCP_DESIGN-REQ-AC-3.04
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.05]** Requirement 3_MCP_DESIGN-REQ-AC-3.05
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.06]** Requirement 3_MCP_DESIGN-REQ-AC-3.06
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.07]** Requirement 3_MCP_DESIGN-REQ-AC-3.07
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.08]** Requirement 3_MCP_DESIGN-REQ-AC-3.08
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.09]** Requirement 3_MCP_DESIGN-REQ-AC-3.09
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.10]** Requirement 3_MCP_DESIGN-REQ-AC-3.10
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.11]** Requirement 3_MCP_DESIGN-REQ-AC-3.11
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.12]** Requirement 3_MCP_DESIGN-REQ-AC-3.12
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.13]** Requirement 3_MCP_DESIGN-REQ-AC-3.13
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.14]** Requirement 3_MCP_DESIGN-REQ-AC-3.14
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.15]** Requirement 3_MCP_DESIGN-REQ-AC-3.15
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.16]** Requirement 3_MCP_DESIGN-REQ-AC-3.16
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.17]** Requirement 3_MCP_DESIGN-REQ-AC-3.17
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.18]** Requirement 3_MCP_DESIGN-REQ-AC-3.18
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-3.19]** Requirement 3_MCP_DESIGN-REQ-AC-3.19
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -5974,112 +5974,112 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-AC-4.01]** Requirement 3_MCP_DESIGN-REQ-AC-4.01
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.02]** Requirement 3_MCP_DESIGN-REQ-AC-4.02
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.03]** Requirement 3_MCP_DESIGN-REQ-AC-4.03
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.04]** Requirement 3_MCP_DESIGN-REQ-AC-4.04
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.05]** Requirement 3_MCP_DESIGN-REQ-AC-4.05
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.06]** Requirement 3_MCP_DESIGN-REQ-AC-4.06
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.07]** Requirement 3_MCP_DESIGN-REQ-AC-4.07
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.08]** Requirement 3_MCP_DESIGN-REQ-AC-4.08
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.09]** Requirement 3_MCP_DESIGN-REQ-AC-4.09
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.10]** Requirement 3_MCP_DESIGN-REQ-AC-4.10
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.11]** Requirement 3_MCP_DESIGN-REQ-AC-4.11
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.12]** Requirement 3_MCP_DESIGN-REQ-AC-4.12
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.13]** Requirement 3_MCP_DESIGN-REQ-AC-4.13
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.14]** Requirement 3_MCP_DESIGN-REQ-AC-4.14
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.15]** Requirement 3_MCP_DESIGN-REQ-AC-4.15
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-4.16]** Requirement 3_MCP_DESIGN-REQ-AC-4.16
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6093,63 +6093,63 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-AC-5.01]** Requirement 3_MCP_DESIGN-REQ-AC-5.01
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.02]** Requirement 3_MCP_DESIGN-REQ-AC-5.02
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.03]** Requirement 3_MCP_DESIGN-REQ-AC-5.03
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.04]** Requirement 3_MCP_DESIGN-REQ-AC-5.04
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.05]** Requirement 3_MCP_DESIGN-REQ-AC-5.05
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.06]** Requirement 3_MCP_DESIGN-REQ-AC-5.06
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.07]** Requirement 3_MCP_DESIGN-REQ-AC-5.07
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.08]** Requirement 3_MCP_DESIGN-REQ-AC-5.08
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.09]** Requirement 3_MCP_DESIGN-REQ-AC-5.09
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6163,28 +6163,28 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-AC-5.11]** Requirement 3_MCP_DESIGN-REQ-AC-5.11
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.12]** Requirement 3_MCP_DESIGN-REQ-AC-5.12
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.13]** Requirement 3_MCP_DESIGN-REQ-AC-5.13
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-AC-5.14]** Requirement 3_MCP_DESIGN-REQ-AC-5.14
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6513,35 +6513,35 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-DBG-BR-001]** Requirement 3_MCP_DESIGN-REQ-DBG-BR-001
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-DBG-BR-002]** Requirement 3_MCP_DESIGN-REQ-DBG-BR-002
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-DBG-BR-003]** Requirement 3_MCP_DESIGN-REQ-DBG-BR-003
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-DBG-BR-004]** Requirement 3_MCP_DESIGN-REQ-DBG-BR-004
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-DBG-BR-005]** Requirement 3_MCP_DESIGN-REQ-DBG-BR-005
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6639,14 +6639,14 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-EC-AGENT-001]** | signal_completion
 - **Type:** Technical
-- **Description:** Agent calls `signal_completion(success: true)` then process exits with non-zero
+- **Description:** When an agent calls `signal_completion(success: true)` but the process subsequently exits with a non-zero exit code, the MCP server MUST treat the exit code as authoritative and mark the stage as failed.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-AGENT-002]** | report_progress
 - **Type:** Technical
-- **Description:** `percent_complete` is outside [0, 100]
+- **Description:** When `percent_complete` is outside the valid range of [0, 100], the MCP server MUST return a validation error rejecting the report_progress call.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6660,21 +6660,21 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-EC-AGENT-004]** | signal_completion
 - **Type:** Technical
-- **Description:** `output` field is a JSON array, not an object
+- **Description:** When the `output` field in a signal_completion call is a JSON array instead of an object, the MCP server MUST return a validation error rejecting the malformed output.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-CTL-001]** | cancel_run
 - **Type:** Technical
-- **Description:** Run is already `Completed`
+- **Description:** When cancel_run is called on a run that is already in `Completed` status, the MCP server MUST return a failed_precondition error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-CTL-002]** | pause_stage
 - **Type:** Technical
-- **Description:** Stage is in `Waiting` status (dependencies not yet met)
+- **Description:** When pause_stage is called on a stage that is in `Waiting` status with dependencies not yet met, the MCP server MUST return a failed_precondition error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6688,7 +6688,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-EC-CTL-004]** | resume_run
 - **Type:** Technical
-- **Description:** Run is `Running` (not paused)
+- **Description:** When resume_run is called on a run that is already in `Running` status and not paused, the MCP server MUST return a failed_precondition error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6702,7 +6702,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-EC-CTL-006]** | submit_run
 - **Type:** Technical
-- **Description:** `project_id` references a project in `removing` status
+- **Description:** When submit_run is called with a `project_id` that references a project currently in `removing` status, the MCP server MUST return a failed_precondition error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6807,7 +6807,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-EC-FS-005]** | list_directory on a path that does not exist
 - **Type:** Technical
-- **Description:** Returns `{"error": "not_found: directory not found: <path>"}`.
+- **Description:** When list_directory is called on a path that does not exist, the MCP server MUST return a not_found error with the missing directory path in the message.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -6947,42 +6947,42 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-EC-OBS-001]** | list_runs
 - **Type:** Technical
-- **Description:** `status` filter omitted
+- **Description:** When list_runs is called without a status filter, the MCP server MUST return all runs regardless of their current status.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-OBS-002]** | get_run
 - **Type:** Technical
-- **Description:** `run_id` references a run deleted by the retention sweep
+- **Description:** When get_run is called with a `run_id` that references a run deleted by the retention sweep, the MCP server MUST return a not_found error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-OBS-003]** | get_stage_output
 - **Type:** Technical
-- **Description:** Stage has been retried; `attempt` not specified
+- **Description:** When get_stage_output is called for a retried stage without specifying the `attempt` parameter, the MCP server MUST return the output from the latest attempt.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-OBS-004]** | stream_logs
 - **Type:** Technical
-- **Description:** Client disconnects mid-stream (`follow: true`)
+- **Description:** When a client disconnects mid-stream during a `follow: true` stream_logs call, the MCP server MUST detect the disconnection and clean up associated resources.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-OBS-005]** | get_pool_state
 - **Type:** Technical
-- **Description:** Pool has never dispatched a stage
+- **Description:** When get_pool_state is called for a pool that has never dispatched a stage, the MCP server MUST return the pool configuration with an empty dispatch history.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-OBS-006]** | list_checkpoints
 - **Type:** Technical
-- **Description:** Run has no checkpoint commits yet (`Pending` status)
+- **Description:** When list_checkpoints is called for a run in `Pending` status with no checkpoint commits yet, the MCP server MUST return an empty checkpoint list.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -7213,35 +7213,35 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-EC-TEST-001]** | inject_stage_input
 - **Type:** Technical
-- **Description:** Stage is `Running`
+- **Description:** When inject_stage_input is called on a stage that is currently in `Running` status, the MCP server MUST return a failed_precondition error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-TEST-002]** | inject_stage_input
 - **Type:** Technical
-- **Description:** `synthetic_output` is missing `exit_code` field
+- **Description:** When inject_stage_input is called with a `synthetic_output` that is missing the required `exit_code` field, the MCP server MUST return a validation error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-TEST-003]** | assert_stage_output
 - **Type:** Technical
-- **Description:** Stage has not yet completed
+- **Description:** When assert_stage_output is called on a stage that has not yet completed and is still running, the MCP server MUST return a failed_precondition error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-TEST-004]** | assert_stage_output
 - **Type:** Technical
-- **Description:** `op: "json_path_eq"` references a path not present in `structured`
+- **Description:** When assert_stage_output uses `op: "json_path_eq"` referencing a path not present in the `structured` output, the MCP server MUST return an assertion failure with path details.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-EC-TEST-005]** | inject_stage_input
 - **Type:** Technical
-- **Description:** Stage is already `Completed`
+- **Description:** When inject_stage_input is called on a stage that is already in `Completed` status, the MCP server MUST return a failed_precondition error.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -7290,21 +7290,21 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-NEW-007]** Requirement 3_MCP_DESIGN-REQ-NEW-007
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-NEW-008]** Requirement 3_MCP_DESIGN-REQ-NEW-008
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-NEW-009]** Requirement 3_MCP_DESIGN-REQ-NEW-009
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -7339,7 +7339,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-NEW-014]** [3_MCP_DESIGN-REQ-NEW-015] Each stage in the presubmit-check workflow uses completion = "structured_output"
 - **Type:** Functional
-- **Description:** **[3_MCP_DESIGN-REQ-NEW-015]** Each stage in the `presubmit-check` workflow uses `completion = "structured_output"`. The orchestrated agent MUST write `.devs_output.json` in the following format before exiting:
+- **Description:** Each stage in the presubmit-check workflow uses completion equals structured_output, requiring the agent to write a .devs_output.json file with success status before exiting.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -7444,7 +7444,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-NEW-029]** [3_MCP_DESIGN-REQ-NEW-035] [3_MCP_DESIGN-REQ-NEW-036]
 - **Type:** Functional
-- **Description:** **[3_MCP_DESIGN-REQ-NEW-035]** **[3_MCP_DESIGN-REQ-NEW-036]**
+- **Description:** This requirement consolidates references to MCP design requirements NEW-035 and NEW-036 for cross-reference traceability within the MCP specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -7465,7 +7465,7 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-NEW-032]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** The task_state.json schema_version field MUST be set to 1 and readers MUST reject files with other values to ensure forward-compatible schema evolution across agent sessions.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -7486,140 +7486,140 @@ pub trait CheckpointStore: Send + Sync {
 
 ### **[3_MCP_DESIGN-REQ-NEW-035]** [3_MCP_DESIGN-REQ-NEW-036]
 - **Type:** Functional
-- **Description:** **[3_MCP_DESIGN-REQ-NEW-036]**
+- **Description:** The devs_context.json schema MUST include a schema_version field set to 1, and agents MUST reject context files with unrecognized schema versions to prevent misinterpretation of stage output data.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
-### **[3_MCP_DESIGN-REQ-NEW-036]** 
+### **[3_MCP_DESIGN-REQ-NEW-036]**
 - **Type:** Functional
-- **Description:** 
+- **Description:** The traceability.json schema MUST include a schema_version field set to 1, and agents MUST reject traceability files with unrecognized schema versions to ensure correct parsing of coverage data.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-NNN]** Requirement 3_MCP_DESIGN-REQ-NNN
 - **Type:** Functional
-- **Description:** Requirement description from source
+- **Description:** This requirement is defined in the source document as part of the acceptance criteria for the MCP design specification.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-OBS-001]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** Before submitting a run, an observing agent SHOULD call list_runs filtered by status running to detect any already-active run for the same workflow and avoid duplicate submissions.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-OBS-002]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** An observing agent MUST call cancel_run for any run it submitted that is no longer needed before submitting a replacement, as abandoned runs hold semaphore permits indefinitely.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-OBS-003]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** When monitoring an active run, the observing agent MUST use stream_logs with follow true rather than polling get_stage_output in a loop to avoid excessive server load.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-OBS-004]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** After a run completes with status failed, the observing agent MUST call get_stage_output for the failed stage and read the full stderr and structured fields before writing any source file.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-OBS-005]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** An observing agent that modifies a workflow definition via write_workflow_definition MUST immediately call get_workflow_definition to verify the updated definition was accepted without validation errors.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-OBS-006]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** An observing agent MUST check the top-level error field before consuming result in every MCP response, since when error is non-null the result field is null.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-OBS-007]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** Only an observing or controlling agent may call write_workflow_definition, inject_stage_input, and assert_stage_output; orchestrated stage agents MUST NOT call these tools.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-OBS-008]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** An observing agent MUST connect to both the Glass-Box MCP server for state interactions and the Filesystem MCP server for file access, and MUST NOT mix these two communication channels.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-ORK-001]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** The orchestrated agent MUST read DEVS_MCP_ADDR from its environment to find the MCP server address, as this variable is always injected by devs before spawning any agent subprocess.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-ORK-002]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** The orchestrated agent MAY call report_progress at any point during execution to update the TUI, but MUST NOT call observation or control tools which are reserved for the observing role.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-ORK-003]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** If the stage completion field is mcp_tool_call, the agent MUST call signal_completion before exiting; otherwise devs falls back to treating the exit code as the completion signal.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-ORK-004]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** The agent MUST treat any devs:cancel token received on stdin as an immediate graceful-shutdown signal and MUST exit within 10 seconds of receiving this token.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-ORK-005]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** The agent MAY call report_rate_limit when its upstream AI API is throttling it, which triggers immediate pool fallback and process termination by devs after the call returns.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-ORK-006]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** When completion is structured_output, the agent MUST write a .devs_output.json file containing at minimum a success boolean field to its working directory before exiting.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-ORK-007]** 
 - **Type:** Functional
-- **Description:** 
+- **Description:** The agent MUST NOT strip, modify, or pass DEVS_MCP_ADDR, DEVS_LISTEN, DEVS_MCP_PORT, or DEVS_DISCOVERY_FILE to child processes, as devs controls these variables.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-SRV-001]** | devs Glass-Box MCP
 - **Type:** Functional
-- **Description:** HTTP/JSON-RPC on `:7891` (or via `devs-mcp-bridge` stdio)
+- **Description:** The Glass-Box MCP server exposes workflow orchestration state via HTTP/JSON-RPC on port 7891, or alternatively through the devs-mcp-bridge stdio transport for agents that require stdio-based MCP communication.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[3_MCP_DESIGN-REQ-SRV-002]** | Filesystem MCP server
 - **Type:** Functional
-- **Description:** stdio (standard `mcp-filesystem` or equivalent)
+- **Description:** The Filesystem MCP server provides file read and write access via stdio transport using the standard mcp-filesystem implementation or an equivalent, enabling agents to interact with project files.
 - **Source:** MCP and AI Development Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
@@ -8398,7 +8398,7 @@ marked `Unrecoverable`; its runs are not resumed.
 
 ### **[4_USER_FEATURES-FEAT-006]** A developer authors a new workflow in TOML format
 - **Type:** Functional
-- **Description:** A developer authors a new workflow in TOML format.
+- **Description:** A developer authors a new workflow definition using the declarative TOML format, defining stages, prompts, dependencies, and completion signals.
 - **Source:** User Features (docs/plan/specs/4_user_features.md)
 - **Dependencies:** None
 
@@ -8458,7 +8458,7 @@ effect only for new submissions. Active runs continue using their immutable `def
 
 ### **[4_USER_FEATURES-FEAT-007]** A developer submits a workflow run via the CLI
 - **Type:** Functional
-- **Description:** A developer submits a workflow run via the CLI.
+- **Description:** A developer submits a workflow run via the CLI using the devs submit command with optional name and input parameters.
 - **Source:** User Features (docs/plan/specs/4_user_features.md)
 - **Dependencies:** None
 
@@ -8696,7 +8696,7 @@ state, not the individual stage's state (if a stage name was specified).
 
 ### **[4_USER_FEATURES-FEAT-011]** A developer cancels a running workflow
 - **Type:** Functional
-- **Description:** A developer cancels a running workflow.
+- **Description:** A developer cancels a running workflow using the devs cancel command or TUI cancel action.
 - **Source:** User Features (docs/plan/specs/4_user_features.md)
 - **Dependencies:** None
 
@@ -8996,7 +8996,7 @@ even when all `cargo test` tests pass individually. Traceability failures are te
 
 ### **[4_USER_FEATURES-FEAT-015]** An observing/controlling AI agent implements a requirement using TDD
 - **Type:** UX
-- **Description:** An observing/controlling AI agent implements a requirement using TDD.
+- **Description:** An observing and controlling AI agent implements a requirement using test-driven development through the MCP Glass-Box interface.
 - **Source:** User Features (docs/plan/specs/4_user_features.md)
 - **Dependencies:** None
 
@@ -9338,7 +9338,7 @@ behavioral coverage.
 
 ### **[4_USER_FEATURES-TUI-BR-002]** Pixel-based screenshot comparison is prohibited in tests
 - **Type:** UX
-- **Description:** Pixel-based screenshot comparison is prohibited in tests.
+- **Description:** Pixel-based screenshot comparison is explicitly prohibited in TUI tests; all visual verification uses text-based terminal buffer snapshot assertions instead.
 - **[4_USER_FEATURES-TUI-BR-003]** TUI MUST NOT use `println!` or `eprintln!` for any output; all rendering goes through Ratatui's render pipeline.
 - **[4_USER_FEATURES-TUI-BR-004]** The TUI MUST re-render in ≤50 ms after any `StreamRunEvents` message is received, measurable in tests by asserting the terminal buffer state after event injection.
 - **[4_USER_FEATURES-TUI-BR-005]** Stage status abbreviations MUST exactly match the table in §3.2.2. No alternative spellings or truncations.
@@ -9541,7 +9541,7 @@ behavioral coverage.
 
 ### **[4_USER_FEATURES-MCP-BR-T004]** MCP server MUST handle ≥64 concurrent connections without error
 - **Type:** Technical
-- **Description:** MCP server MUST handle ≥64 concurrent connections without error.
+- **Description:** The MCP server MUST handle ≥64 concurrent connections without error.
 - **[4_USER_FEATURES-MCP-BR-T005]** Observation tool responses MUST be received within 2 seconds under normal load. Exceeding 2 seconds is logged at `WARN`.
 - **[4_USER_FEATURES-MCP-BR-T006]** `stream_logs` sequence numbers start at 1 and have no gaps. If `from_sequence: N` is provided, only chunks with `sequence ≥ N` are returned.
 - **[4_USER_FEATURES-MCP-BR-T007]** The MCP stdio bridge (`devs-mcp-bridge`) forwards exactly one request per stdin line and writes exactly one response per stdout line. No buffering of multiple requests before responding.
@@ -10867,7 +10867,7 @@ This is a warning, not a fatal error. The server starts normally.
 
 ### **[4_USER_FEATURES-FEAT-101]** Webhook delivery failures follow this handling policy:
 - **Type:** Functional
-- **Description:** Webhook delivery failures follow this handling policy:
+- **Description:** Webhook delivery failures follow a defined handling policy including retry with exponential backoff and eventual dead-letter logging.
 - **Source:** User Features (docs/plan/specs/4_user_features.md)
 - **Dependencies:** None
 
@@ -10958,7 +10958,7 @@ This is a warning, not a fatal error. The server starts normally.
 
 ### **[4_USER_FEATURES-FEAT-109]** The `devs-mcp-bridge` stdio proxy follows this error protocol:
 - **Type:** Technical
-- **Description:** The `devs-mcp-bridge` stdio proxy follows this error protocol:
+- **Description:** The devs-mcp-bridge stdio proxy follows a defined error protocol for reporting failures to AI agent clients via JSON responses.
 - **Source:** User Features (docs/plan/specs/4_user_features.md)
 - **Dependencies:** None
 
@@ -12302,7 +12302,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-017]** ) | MEDIUM — not enforced cryptographically at MVP | ([SEC-017])
 - **Type:** Security
-- **Description:** ) | MEDIUM — not enforced cryptographically at MVP |
+- **Description:** Two agent sub-roles exist with different intended MCP tool sets. Role is determined by execution context, specifically whether DEVS_MCP_ADDR is set in the agent's environment by devs-executor.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12316,14 +12316,14 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-019]** ); `devs. ([SEC-019])
 - **Type:** Security
-- **Description:** ); `devs.toml` outside workspace root | LOW — workspace boundary blocks access |
+- **Description:** The Filesystem MCP server enforces path-based access control independently of the devs Glass-Box MCP. All filesystem operations are subject to this policy before any OS-level filesystem call is made.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 
 ### **[5_SECURITY_DESIGN-REQ-020]** ) | LOW — enforced at multiple layers | ([SEC-020])
 - **Type:** Security
-- **Description:** ) | LOW — enforced at multiple layers |
+- **Description:** Path canonicalization must occur before access control evaluation. Path traversal attempts including paths with .. components, null bytes, or symlinks that escape the workspace root must be rejected.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12358,7 +12358,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-025]** Credentials MUST NEVER appear in: ([SEC-025])
 - **Type:** Security
-- **Description:** Credentials MUST NEVER appear in:
+- **Description:** Credentials MUST NEVER appear in log output, checkpoint data, gRPC responses, MCP tool responses, or any user-visible interface.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12400,21 +12400,21 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-031]** ). ([SEC-031])
 - **Type:** Security
-- **Description:** ).
+- **Description:** TLS is optional but strongly recommended for gRPC communication over non-loopback interfaces. When TLS is configured, the implementation MUST use rustls exclusively with a minimum TLS version of 1.2.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 
 ### **[5_SECURITY_DESIGN-REQ-032]** Cipher suite restrictions (rustls enforced defaults, no configuration override allowed): ([SEC-032])
 - **Type:** Security
-- **Description:** Cipher suite restrictions (rustls enforced defaults, no configuration override allowed):
+- **Description:** Cipher suite restrictions are enforced when rustls is used. Only secure cipher suites are permitted, and configuration override to use weaker ciphers is not allowed.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 
 ### **[5_SECURITY_DESIGN-REQ-033]** ) | ([SEC-033])
 - **Type:** Security
-- **Description:** ) |
+- **Description:** OpenSSL is explicitly prohibited for TLS implementation. The rustls library must be used exclusively for all TLS operations in the gRPC server.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12449,7 +12449,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-038]** SSH remote execution (via `ssh2` crate) MUST: ([SEC-038])
 - **Type:** Security
-- **Description:** SSH remote execution (via `ssh2` crate) MUST:
+- **Description:** SSH remote execution via the ssh2 crate MUST validate host keys, enforce connection timeouts, and restrict allowed authentication methods.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12463,7 +12463,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-040]** (template sanitization) and **[SEC-042]** (output size limits). ([SEC-040])
 - **Type:** Security
-- **Description:** (template sanitization) and **[SEC-042]** (output size limits).
+- **Description:** Template variable sanitization (SEC-040) and agent output size limits (SEC-042) together prevent injection attacks and memory exhaustion in workflow stage output processing.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12477,14 +12477,14 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-042]** (output size limits). ([SEC-042])
 - **Type:** Security
-- **Description:** (output size limits).
+- **Description:** Agent output size limits MUST be enforced to prevent memory exhaustion from unbounded agent stdout or stderr output.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 
 ### **[5_SECURITY_DESIGN-REQ-043]** ); 10KiB truncation (**[SEC-042]**) | MEDIUM — inherent to AI chaining; human review recommended | ([SEC-043])
 - **Type:** Security
-- **Description:** ); 10KiB truncation (**[SEC-042]**) | MEDIUM — inherent to AI chaining; human review recommended |
+- **Description:** Agent output passed to downstream stage templates is truncated to 10KiB per SEC-042 output size limits, rated MEDIUM risk because AI chaining is inherently unpredictable and human review of outputs is recommended.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12512,7 +12512,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-047]** , **[SEC-020]**) | LOW — enforced at multiple layers | ([SEC-047])
 - **Type:** Security
-- **Description:** , **[SEC-020]**) | LOW — enforced at multiple layers |
+- **Description:** Workspace boundary enforcement via path canonicalization per SEC-020 is rated LOW risk because it is enforced at multiple layers including filesystem MCP and executor sandbox validation.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12561,7 +12561,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-054]** ). ([SEC-054])
 - **Type:** Security
-- **Description:** ).
+- **Description:** Webhook HMAC-SHA256 signing must use the hmac and sha2 crates from RustCrypto. The HMAC key must be at minimum 32 bytes (256 bits) to provide adequate entropy.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12638,7 +12638,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-066]** ) | LOW — file mode `0600`; git history provides evidence | ([SEC-066])
 - **Type:** Security
-- **Description:** ) | LOW — file mode `0600`; git history provides evidence |
+- **Description:** Workflow definition snapshots are written before the first stage transition and must not be modified after the run starts. The file must not be overwritten if it already exists, ensuring immutability.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12680,7 +12680,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-072]** ) | LOW — hard limit enforced at type level | ([SEC-072])
 - **Type:** Security
-- **Description:** ) | LOW — hard limit enforced at type level |
+- **Description:** Stage output buffers for stdout and stderr are capped at 1 MiB each. Output beyond this limit is truncated from the beginning, preserving the most recent content to prevent memory exhaustion.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12694,7 +12694,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-074]** ); max 256 stages per workflow | LOW — validation-time rejection | ([SEC-074])
 - **Type:** Security
-- **Description:** ); max 256 stages per workflow | LOW — validation-time rejection |
+- **Description:** Fan-out parallelism is capped at 64 sub-agents per stage. Workflows with more than 256 stages are rejected at validation. These limits prevent resource exhaustion via combinatorial fan-out.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12708,7 +12708,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-076]** ) | LOW — isolated async task | ([SEC-076])
 - **Type:** Security
-- **Description:** ) | LOW — isolated async task |
+- **Description:** Webhook delivery must enforce a connection timeout of 10 seconds per attempt. Delivery runs in a dedicated tokio::spawn task via a channel to prevent blocking the scheduler.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12778,7 +12778,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-086]** ) | LOW — structured audit trail persisted | ([SEC-086])
 - **Type:** Security
-- **Description:** ) | LOW — structured audit trail persisted |
+- **Description:** Audit events must include timestamp, event_type, run_id, project_id, and actor fields. These structured logs form the audit trail for security-relevant operations.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12799,7 +12799,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-089]** ) | HIGH — operator must rotate exposed keys | ([SEC-089])
 - **Type:** Security
-- **Description:** ) | HIGH — operator must rotate exposed keys |
+- **Description:** Stage stdout and stderr must not be included in tracing log output at any level. Stage output is written to dedicated log files, and log events must reference the file path, never the content.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12827,7 +12827,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-093]** ); MUST NOT appear in `tracing` logs (**[SEC-089]**) | HIGH — operator must rotate exposed keys | ([SEC-093])
 - **Type:** Security
-- **Description:** ); MUST NOT appear in `tracing` logs (**[SEC-089]**) | HIGH — operator must rotate exposed keys |
+- **Description:** Configuration file permissions MUST be restricted to owner-only access (mode 0o600) and credentials MUST NOT appear in tracing logs as defined by SEC-089, rated HIGH risk requiring operator key rotation if violated.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -12876,7 +12876,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-100]** ). ([SEC-100])
 - **Type:** Security
-- **Description:** ).
+- **Description:** All credential and secret values passed to tracing instrumentation MUST be wrapped in the Redacted type. This type renders as "[REDACTED]" in all log formatters to prevent accidental secret disclosure.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -13366,7 +13366,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-257]** `format!("{:?}", Redacted::new("secret"))` produces `"[REDACTED]"`. ([AC-SEC-3-026])
 - **Type:** Security
-- **Description:** `format!("{:?}", Redacted::new("secret"))` produces `"[REDACTED]"`.
+- **Description:** The Redacted wrapper type MUST ensure that format debug display of Redacted::new("secret") produces the string "[REDACTED]" instead of the actual secret value.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -13499,7 +13499,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-276]** A webhook URL `http://[::1]/hook` (IPv6 loopback) is blocked. ([AC-SEC-3-045])
 - **Type:** Security
-- **Description:** A webhook URL `http://[::1]/hook` (IPv6 loopback) is blocked.
+- **Description:** A webhook URL using IPv6 loopback address http://[::1]/hook MUST be blocked by the SSRF protection filter to prevent internal network access.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -14059,7 +14059,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-356]** /// [SEC-017-BR-001]: DEVS_MCP_ADDR MUST be injected into every stage. ([SEC-017-BR-001])
 - **Type:** Security
-- **Description:** /// [SEC-017-BR-001]: DEVS_MCP_ADDR MUST be injected into every stage.
+- **Description:** The DEVS_MCP_ADDR environment variable MUST be injected into every spawned stage process so agents can connect to the MCP server.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -14073,14 +14073,14 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-358]** /// [SEC-017-BR-003]: DEVS_LISTEN, DEVS_MCP_PORT, DEVS_DISCOVERY_FILE MUST be stripped. ([SEC-017-BR-003])
 - **Type:** Security
-- **Description:** /// [SEC-017-BR-003]: DEVS_LISTEN, DEVS_MCP_PORT, DEVS_DISCOVERY_FILE MUST be stripped.
+- **Description:** Server configuration environment variables DEVS_LISTEN, DEVS_MCP_PORT, and DEVS_DISCOVERY_FILE MUST be stripped from spawned stage process environments to prevent configuration conflicts.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 
 ### **[5_SECURITY_DESIGN-REQ-359]** /// [SEC-017-BR-004]: Stage env MUST NOT reintroduce stripped variables. ([SEC-017-BR-004])
 - **Type:** Security
-- **Description:** /// [SEC-017-BR-004]: Stage env MUST NOT reintroduce stripped variables.
+- **Description:** Per-stage environment variable configuration MUST NOT be allowed to reintroduce any variables that were stripped by the security environment filter.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -14108,14 +14108,14 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-363]** /// [SEC-020-BR-001]: uses std::fs::canonicalize(); no manual string manipulation. ([SEC-020-BR-001])
 - **Type:** Security
-- **Description:** /// [SEC-020-BR-001]: uses std::fs::canonicalize(); no manual string manipulation.
+- **Description:** Path validation MUST use std::fs::canonicalize() for resolving symlinks and relative paths, and MUST NOT use manual string manipulation for path resolution.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 
 ### **[5_SECURITY_DESIGN-REQ-364]** /// [SEC-020-BR-002]: uses Path::starts_with(); no string prefix matching. ([SEC-020-BR-002])
 - **Type:** Security
-- **Description:** /// [SEC-020-BR-002]: uses Path::starts_with(); no string prefix matching.
+- **Description:** Directory containment checks MUST use Path::starts_with() for verifying paths are within allowed directories, and MUST NOT use string prefix matching.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -14164,7 +14164,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-371]** /// [SEC-021-BR-004]: Constant-time comparison is mandatory. ([SEC-021-BR-004])
 - **Type:** Security
-- **Description:** /// [SEC-021-BR-004]: Constant-time comparison is mandatory.
+- **Description:** Constant-time comparison MUST be used for all security-sensitive string comparisons including webhook signatures and authentication tokens to prevent timing attacks.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -14360,7 +14360,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[5_SECURITY_DESIGN-REQ-399]** Working directory paths are: ([SEC-DAT-014])
 - **Type:** Security
-- **Description:** Working directory paths are:
+- **Description:** Working directory paths are validated and sandboxed to ensure agents cannot access files outside their designated project workspace directories.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
@@ -14841,140 +14841,140 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-030]** -  `cargo tree -p devs-tui --edges normal` output does not contain any of: `devs-scheduler`, `devs-pool`, `devs-executor`, `devs-adapters`, `devs-checkpoint`, `devs-webhook`, `devs-grpc`, `devs-mcp`. (lint gate)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-030]** `cargo tree -p devs-tui --edges normal` output does not contain any of: `devs-scheduler`, `devs-pool`, `devs-executor`, `devs-adapters`, `devs-checkpoint`, `devs-webhook`, `devs-grpc`, `devs-mcp`. (lint gate)
+- **Description:** The devs-tui crate dependency tree MUST NOT contain any server-side crates including devs-scheduler, devs-pool, devs-executor, devs-adapters, devs-checkpoint, devs-webhook, devs-grpc, or devs-mcp to enforce client-server separation.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-031]** -  `cargo tree -p devs-mcp-bridge --edges normal` output does not contain `tonic` or `devs-proto`. (lint gate)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-031]** `cargo tree -p devs-mcp-bridge --edges normal` output does not contain `tonic` or `devs-proto`. (lint gate)
+- **Description:** The devs-mcp-bridge crate dependency tree MUST NOT contain tonic or devs-proto crates to maintain protocol isolation between the MCP bridge and gRPC layers.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-032]** -  `cargo tree -p devs-core --edges normal` output does not contain `tokio`, `git2`, `reqwest`, or `tonic`. (lint gate)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-032]** `cargo tree -p devs-core --edges normal` output does not contain `tokio`, `git2`, `reqwest`, or `tonic`. (lint gate)
+- **Description:** The devs-core crate dependency tree MUST NOT contain tokio, git2, reqwest, or tonic to keep domain types free of runtime and I/O dependencies.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-033]** -  CLI with a stale/absent discovery file and no `--server` flag exits with code 3 and prints a message beginning with `"server_unreachable:"`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-033]** CLI with a stale/absent discovery file and no `--server` flag exits with code 3 and prints a message beginning with `"server_unreachable:"`. (CLI E2E)
+- **Description:** The CLI with a stale or absent discovery file and no --server flag MUST exit with code 3 and print a message beginning with "server_unreachable:" to indicate connection failure.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-034]** -  CLI `--format json` with a discovery error prints `{"error":"server_unreachable:...","code":3}` to stdout and nothing to stderr. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-034]** CLI `--format json` with a discovery error prints `{"error":"server_unreachable:...","code":3}` to stdout and nothing to stderr. (CLI E2E)
+- **Description:** The CLI in --format json mode with a discovery error MUST print a JSON error object to stdout with code 3 and emit nothing to stderr for machine-readable output.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-035]** -  `devs-mcp-bridge` exits with code 1 and writes `{"result":null,"error":"server_unreachable:...","fatal":true}` to stdout when no server is reachable. (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-035]** `devs-mcp-bridge` exits with code 1 and writes `{"result":null,"error":"server_unreachable:...","fatal":true}` to stdout when no server is reachable. (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST exit with code 1 and write a fatal JSON error object to stdout when no server is reachable at startup.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-036]** -  `devs-mcp-bridge` does NOT exit when it receives an invalid-JSON line on stdin; it writes an error response and continues reading. (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-036]** `devs-mcp-bridge` does NOT exit when it receives an invalid-JSON line on stdin; it writes an error response and continues reading. (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST NOT exit on invalid JSON input; it writes an error response and continues reading subsequent stdin lines to maintain session stability.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-037]** -  All gRPC requests from the CLI carry `x-devs-client-version` metadata; server-side test asserts the header is present. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-037]** All gRPC requests from the CLI carry `x-devs-client-version` metadata; server-side test asserts the header is present. (CLI E2E)
+- **Description:** All gRPC requests from the CLI MUST carry x-devs-client-version metadata so the server can perform version compatibility checking on each request.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-038]** -  Server returning `FAILED_PRECONDITION` for version mismatch causes CLI to exit code 1 with a message containing `"failed_precondition"`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-038]** Server returning `FAILED_PRECONDITION` for version mismatch causes CLI to exit code 1 with a message containing `"failed_precondition"`. (CLI E2E)
+- **Description:** A server returning FAILED_PRECONDITION for version mismatch MUST cause the CLI to exit with code 1 and a message containing "failed_precondition".
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-039]** -  TUI exits code 1 with message `"Disconnected from server. Exiting."` after 30 seconds of failed reconnect + 5-second grace. (TUI E2E, TestBackend)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-039]** TUI exits code 1 with message `"Disconnected from server. Exiting."` after 30 seconds of failed reconnect + 5-second grace. (TUI E2E, TestBackend)
+- **Description:** The TUI MUST exit with code 1 and message "Disconnected from server. Exiting." after 30 seconds of failed reconnection attempts plus a 5-second grace period.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-040]** -  TUI `StatusBar` displays `"RECONNECTING"` when the gRPC stream is interrupted. (TUI E2E, TestBackend snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-040]** TUI `StatusBar` displays `"RECONNECTING"` when the gRPC stream is interrupted. (TUI E2E, TestBackend snapshot)
+- **Description:** The TUI StatusBar MUST display "RECONNECTING" text when the gRPC stream connection is interrupted and reconnection is in progress.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-041]** -  TUI renders `"Terminal too small: 80x24 minimum required (current: WxH)"` when terminal is resized below 80×24. (TUI E2E, TestBackend)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-041]** TUI renders `"Terminal too small: 80x24 minimum required (current: WxH)"` when terminal is resized below 80×24. (TUI E2E, TestBackend)
+- **Description:** The TUI MUST render a "Terminal too small" message with minimum dimensions when the terminal is resized below 80 columns by 24 rows.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-042]** -  `NO_COLOR` environment variable suppresses all ANSI codes from CLI text output. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-042]** `NO_COLOR` environment variable suppresses all ANSI codes from CLI text output. (CLI E2E)
+- **Description:** The NO_COLOR environment variable MUST suppress all ANSI escape codes from CLI text output for accessibility and piping compliance.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-043]** -  TUI restores terminal state on SIGTERM; post-exit terminal is not left in raw mode. (TUI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-043]** TUI restores terminal state on SIGTERM; post-exit terminal is not left in raw mode. (TUI E2E)
+- **Description:** The TUI MUST restore terminal state on SIGTERM signal to prevent leaving the terminal in raw mode after process exit.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-044]** -  Discovery file `DEVS_DISCOVERY_FILE` is respected by all three binaries; each uses the override path instead of `~/.config/devs/server.addr`. (CLI E2E, MCP E2E, TUI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-044]** Discovery file `DEVS_DISCOVERY_FILE` is respected by all three binaries; each uses the override path instead of `~/.config/devs/server.addr`. (CLI E2E, MCP E2E, TUI E2E)
+- **Description:** The DEVS_DISCOVERY_FILE environment variable MUST be respected by all three client binaries as an override for server address discovery file location.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-045]** -  `devs-mcp-bridge` calls `ServerService.GetInfo` at startup and uses the returned `mcp_port`; hardcoded port 7891 is not used when `GetInfo` returns a different value. (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-045]** `devs-mcp-bridge` calls `ServerService.GetInfo` at startup and uses the returned `mcp_port`; hardcoded port 7891 is not used when `GetInfo` returns a different value. (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST call ServerService.GetInfo at startup and use the returned mcp_port instead of any hardcoded default port value.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-046]** -  On Windows, paths supplied as CLI arguments with backslashes are normalized to forward slashes in the gRPC request body. (unit test in `connection.rs`)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-046]** On Windows, paths supplied as CLI arguments with backslashes are normalized to forward slashes in the gRPC request body. (unit test in `connection.rs`)
+- **Description:** On Windows, CLI path arguments with backslashes MUST be normalized to forward slashes in the gRPC request body for cross-platform path consistency.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-047]** -  `Redacted<T>` values from the server appear as `"[REDACTED]"` in `--format json` CLI output and are never decoded by the client. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-047]** `Redacted<T>` values from the server appear as `"[REDACTED]"` in `--format json` CLI output and are never decoded by the client. (CLI E2E)
+- **Description:** Redacted values from the server MUST appear as "[REDACTED]" in --format json CLI output and never be decoded or exposed by the client.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-048]** -  TUI `LogPane` strips ANSI escape sequences from agent log lines before rendering; a log line containing `\x1b[31mERROR\x1b[0m` is displayed as `ERROR` in the snapshot. (TUI E2E, TestBackend snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-048]** TUI `LogPane` strips ANSI escape sequences from agent log lines before rendering; a log line containing `\x1b[31mERROR\x1b[0m` is displayed as `ERROR` in the snapshot. (TUI E2E, TestBackend snapshot)
+- **Description:** The TUI LogPane MUST strip ANSI escape sequences from agent log lines before rendering so raw escape codes are not displayed to the user.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-049]** -  All user-visible strings in CLI output are defined in `strings.rs`; no string literal matching user-visible patterns appears outside `strings.rs` in `devs-cli/src/`. (lint gate via regex scan)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-049]** All user-visible strings in CLI output are defined in `strings.rs`; no string literal matching user-visible patterns appears outside `strings.rs` in `devs-cli/src/`. (lint gate via regex scan)
+- **Description:** All user-visible strings in CLI output MUST be defined in strings.rs with no string literals matching user-visible patterns elsewhere in the devs-cli source.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -15331,210 +15331,210 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-100]** -  `render_utils::format_elapsed(None)` returns `"--:--"` (exactly 5 characters). (unit test in `render_utils.rs`)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-100]** `render_utils::format_elapsed(None)` returns `"--:--"` (exactly 5 characters). (unit test in `render_utils.rs`)
+- **Description:** The format_elapsed function with None input MUST return the placeholder string "--:--" as exactly 5 characters for consistent column alignment in the dashboard.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-101]** -  `render_utils::format_elapsed(Some(4_205_000))` returns `"70:05"`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-101]** `render_utils::format_elapsed(Some(4_205_000))` returns `"70:05"`. (unit test)
+- **Description:** The format_elapsed function with 4,205,000 milliseconds input MUST return "70:05" showing minutes and seconds without hour rollover for large durations.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-102]** -  `render_utils::format_elapsed(Some(0))` returns `"0:00"`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-102]** `render_utils::format_elapsed(Some(0))` returns `"0:00"`. (unit test)
+- **Description:** The format_elapsed function with zero milliseconds input MUST return "0:00" as the minimum elapsed time display value in the TUI.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-103]** -  `render_utils::truncate_with_tilde("twenty-one-char-stagename", 20)` returns a 20-character string ending with `~`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-103]** `render_utils::truncate_with_tilde("twenty-one-char-stagename", 20)` returns a 20-character string ending with `~`. (unit test)
+- **Description:** The truncate_with_tilde function MUST truncate strings exceeding the maximum width and append a tilde character as the truncation indicator.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-104]** -  `render_utils::truncate_with_tilde("short", 20)` returns `"short"` unchanged (no padding, no tilde). (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-104]** `render_utils::truncate_with_tilde("short", 20)` returns `"short"` unchanged (no padding, no tilde). (unit test)
+- **Description:** The truncate_with_tilde function MUST return short strings unchanged without padding or appending a tilde when they are within the width limit.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-105]** -  `render_utils::stage_status_label(s)` returns exactly 4 characters for every variant of `StageStatus`. (unit test with exhaustive match)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-105]** `render_utils::stage_status_label(s)` returns exactly 4 characters for every variant of `StageStatus`. (unit test with exhaustive match)
+- **Description:** The stage_status_label function MUST return exactly 4 characters for every StageStatus variant to ensure consistent column width in the DAG view.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-106]** -  `render_utils::strip_ansi("\x1b[31mRED\x1b[0m")` returns `"RED"`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-106]** `render_utils::strip_ansi("\x1b[31mRED\x1b[0m")` returns `"RED"`. (unit test)
+- **Description:** The strip_ansi function MUST remove ANSI escape sequences from strings, converting colored terminal output to plain text for rendering in the TUI.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-107]** -  `render_utils::strip_ansi("no ansi here")` returns `"no ansi here"` unchanged. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-107]** `render_utils::strip_ansi("no ansi here")` returns `"no ansi here"` unchanged. (unit test)
+- **Description:** The strip_ansi function MUST return plain text strings unchanged when no ANSI escape sequences are present in the input string.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-108]** -  `LogBuffer::new(10_000)` evicts the oldest entry when a 10,001st entry is inserted; `total_received` becomes 10,001 and `lines.len()` remains 10,000. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-108]** `LogBuffer::new(10_000)` evicts the oldest entry when a 10,001st entry is inserted; `total_received` becomes 10,001 and `lines.len()` remains 10,000. (unit test)
+- **Description:** LogBuffer MUST evict the oldest entry when capacity is exceeded, maintaining a fixed maximum size while accurately tracking the total received count.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-109]** -  `DagView` renders stage boxes with the exact format `[ <name-20-chars> | <STAT> | <M:SS> ]` (38 characters per box). (TUI E2E, `TestBackend` snapshot at 200×50)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-109]** `DagView` renders stage boxes with the exact format `[ <name-20-chars> | <STAT> | <M:SS> ]` (38 characters per box). (TUI E2E, `TestBackend` snapshot at 200×50)
+- **Description:** DagView MUST render stage boxes with the exact format including 20-character name, 4-character status, and M:SS elapsed time fields.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-110]** -  A stage name of exactly 20 characters renders without truncation in `DagView`. A stage name of 21 characters renders as 19 original chars + `~`. (TUI E2E, `TestBackend` snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-110]** A stage name of exactly 20 characters renders without truncation in `DagView`. A stage name of 21 characters renders as 19 original chars + `~`. (TUI E2E, `TestBackend` snapshot)
+- **Description:** DagView MUST render stage names of exactly 20 characters without truncation and truncate 21-character names to 19 characters plus a tilde indicator.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-111]** -  `DagView` renders `──►` arrows between stage boxes in adjacent tiers for a workflow with `depends_on` edges. (TUI E2E, `TestBackend` snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-111]** `DagView` renders `──►` arrows between stage boxes in adjacent tiers for a workflow with `depends_on` edges. (TUI E2E, `TestBackend` snapshot)
+- **Description:** DagView MUST render directional arrows between stage boxes in adjacent tiers to visualize depends_on dependency edges in the workflow.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-112]** -  `HelpOverlay` is shown when `?` is pressed and the overlay is dismissed when any subsequent key is pressed; the underlying tab content is restored. (TUI E2E, `TestBackend` snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-112]** `HelpOverlay` is shown when `?` is pressed and the overlay is dismissed when any subsequent key is pressed; the underlying tab content is restored. (TUI E2E, `TestBackend` snapshot)
+- **Description:** HelpOverlay MUST appear when the question mark key is pressed and dismiss on any subsequent keypress, restoring the underlying tab content.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-113]** -  `StatusBar` renders `RECONNECTING` when `ConnectionStatus::Reconnecting` is set in `AppState`. (TUI E2E, `TestBackend` snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-113]** `StatusBar` renders `RECONNECTING` when `ConnectionStatus::Reconnecting` is set in `AppState`. (TUI E2E, `TestBackend` snapshot)
+- **Description:** The StatusBar widget MUST render "RECONNECTING" text when ConnectionStatus::Reconnecting is the current state in the AppState model.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-114]** -  `dag_tiers` for a linear A→B→C workflow computes to `[["A"], ["B"], ["C"]]`. (unit test in `convert.rs`)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-114]** `dag_tiers` for a linear A→B→C workflow computes to `[["A"], ["B"], ["C"]]`. (unit test in `convert.rs`)
+- **Description:** The dag_tiers function for a linear A to B to C workflow MUST compute tier assignment as three sequential tiers with one stage each.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-115]** -  `dag_tiers` for a diamond A→{B,C}→D computes to `[["A"], ["B", "C"], ["D"]]` (inner vecs sorted alphabetically). (unit test in `convert.rs`)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-115]** `dag_tiers` for a diamond A→{B,C}→D computes to `[["A"], ["B", "C"], ["D"]]` (inner vecs sorted alphabetically). (unit test in `convert.rs`)
+- **Description:** The dag_tiers function for a diamond A to B,C to D workflow MUST compute B and C in the same tier, sorted alphabetically within each tier.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-116]** -  `devs submit --input key=a=b` sends `key` → `"a=b"` to the server (splits on first `=` only). (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-116]** `devs submit --input key=a=b` sends `key` → `"a=b"` to the server (splits on first `=` only). (CLI E2E)
+- **Description:** The CLI submit command with --input key=a=b MUST split on the first equals sign only, sending key as name and "a=b" as the value.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-117]** -  `devs list --format json` returns a JSON object with a `"runs"` array field and a `"total"` integer field. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-117]** `devs list --format json` returns a JSON object with a `"runs"` array field and a `"total"` integer field. (CLI E2E)
+- **Description:** The CLI list command with --format json MUST return a JSON object containing a "runs" array field and a "total" integer count field.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-118]** -  `devs status <unknown-id> --format json` exits code 2 and prints a JSON object with `"error"` beginning `"not_found:"`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-118]** `devs status <unknown-id> --format json` exits code 2 and prints a JSON object with `"error"` beginning `"not_found:"`. (CLI E2E)
+- **Description:** The CLI status command with an unknown ID in --format json mode MUST exit code 2 with a JSON error object beginning "not_found:" to indicate missing resources.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-119]** -  `devs logs --follow` exits code 0 when the watched run reaches `Completed` and exits code 1 when it reaches `Failed`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-119]** `devs logs --follow` exits code 0 when the watched run reaches `Completed` and exits code 1 when it reaches `Failed`. (CLI E2E)
+- **Description:** The CLI logs --follow command MUST exit code 0 when the watched run completes successfully and exit code 1 when the run fails.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-120]** -  `devs cancel` on an already-cancelled run exits code 1 with a message beginning `"failed_precondition:"`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-120]** `devs cancel` on an already-cancelled run exits code 1 with a message beginning `"failed_precondition:"`. (CLI E2E)
+- **Description:** The CLI cancel command on an already-cancelled run MUST exit code 1 with an error message beginning "failed_precondition:" to indicate invalid state transition.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-121]** -  `devs list --limit 0` exits code 4 with a message beginning `"invalid_argument:"`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-121]** `devs list --limit 0` exits code 4 with a message beginning `"invalid_argument:"`. (CLI E2E)
+- **Description:** The CLI list command with --limit 0 MUST exit code 4 with an error message beginning "invalid_argument:" to reject invalid pagination parameters.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-122]** -  `devs-mcp-bridge` writes each `stream_logs follow:true` response chunk to stdout as a separate line immediately upon receipt, before the complete stream ends. Verified by timing: first line arrives before the stream is complete. (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-122]** `devs-mcp-bridge` writes each `stream_logs follow:true` response chunk to stdout as a separate line immediately upon receipt, before the complete stream ends. Verified by timing: first line arrives before the stream is complete. (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST write each streaming log chunk to stdout immediately upon receipt without buffering the entire response before output.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-123]** -  `devs-mcp-bridge` responds with a JSON-RPC error and continues when it receives a non-object JSON line `[1,2,3]` on stdin; subsequent valid requests are still processed correctly. (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-123]** `devs-mcp-bridge` responds with a JSON-RPC error and continues when it receives a non-object JSON line `[1,2,3]` on stdin; subsequent valid requests are still processed correctly. (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST respond with a JSON-RPC error for non-object JSON input and continue processing subsequent valid requests without interruption.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-124]** -  `devs-mcp-bridge` preserves the `"id"` field value from the request in every response (string, integer, and null variants). (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-124]** `devs-mcp-bridge` preserves the `"id"` field value from the request in every response (string, integer, and null variants). (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST preserve the JSON-RPC id field value from each request in its corresponding response for all id types including string, integer, and null.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-125]** -  `TUI::LogPane` renders `"RED"` (not `"\x1b[31mRED\x1b[0m"`) for a log line containing ANSI color codes. (TUI E2E, `TestBackend` snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-125]** `TUI::LogPane` renders `"RED"` (not `"\x1b[31mRED\x1b[0m"`) for a log line containing ANSI color codes. (TUI E2E, `TestBackend` snapshot)
+- **Description:** The TUI LogPane MUST render plain text "RED" instead of raw ANSI escape sequences for log lines containing terminal color codes.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-126]** -  All structs in `crates/devs-tui/src/widgets/` implement `ratatui::widgets::Widget`. Verified via compile-time assertion: `fn assert_widget<W: Widget>() {}` called for each widget type in a test. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-126]** All structs in `crates/devs-tui/src/widgets/` implement `ratatui::widgets::Widget`. Verified via compile-time assertion: `fn assert_widget<W: Widget>() {}` called for each widget type in a test. (unit test)
+- **Description:** All widget structs in the devs-tui widgets directory MUST implement the ratatui Widget trait, verified by compile-time assertion in a unit test.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-127]** -  `devs project add <path>` with a path that is not a git repository exits code 4 with a message beginning `"invalid_argument:"`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-127]** `devs project add <path>` with a path that is not a git repository exits code 4 with a message beginning `"invalid_argument:"`. (CLI E2E)
+- **Description:** The CLI project add command with a non-git-repository path MUST exit code 4 with an "invalid_argument:" error message rejecting the invalid path.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-128]** -  `AppState::log_buffers` does not grow unboundedly: entries for non-selected runs older than 30 minutes are evicted; after processing 1,000 synthetic `RunEvent` messages for distinct runs, total `log_buffers` entries ≤ 100. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-128]** `AppState::log_buffers` does not grow unboundedly: entries for non-selected runs older than 30 minutes are evicted; after processing 1,000 synthetic `RunEvent` messages for distinct runs, total `log_buffers` entries ≤ 100. (unit test)
+- **Description:** AppState log_buffers MUST evict entries for non-selected runs older than 30 minutes to prevent unbounded memory growth over time during long sessions.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-129]** -  `convert.rs` maps every variant of proto `StageStatus` enum to a `StageRunDisplay.status_label` without panicking. Verified by an exhaustive unit test iterating all proto enum values. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-129]** `convert.rs` maps every variant of proto `StageStatus` enum to a `StageRunDisplay.status_label` without panicking. Verified by an exhaustive unit test iterating all proto enum values. (unit test)
+- **Description:** The convert.rs module MUST map every proto StageStatus enum variant to a StageRunDisplay status_label without panicking on any input value.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -15569,7 +15569,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-134]** The event loop cycle is:
 - **Type:** Technical
-- **Description:** The event loop cycle is:
+- **Description:** The TUI event loop cycle defines the sequence of polling for terminal events, processing gRPC stream messages, and triggering re-renders each frame.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -15590,7 +15590,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-137]** `ConnectionStatus` has three variants:
 - **Type:** Technical
-- **Description:** `ConnectionStatus` has three variants:
+- **Description:** The ConnectionStatus enum has three variants: Connected, Reconnecting with attempt count and backoff timing, and Disconnected for terminal failure states.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -15681,7 +15681,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-150]** Run upsert logic for `RunDelta` events:
 - **Type:** Technical
-- **Description:** Run upsert logic for `RunDelta` events:
+- **Description:** Run upsert logic for RunDelta events defines how incoming run state changes are merged into the existing AppState run list.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -15835,7 +15835,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-172]** On HTTP connection error during a request, the bridge:
 - **Type:** Technical
-- **Description:** On HTTP connection error during a request, the bridge:
+- **Description:** On HTTP connection error during a request, the MCP bridge follows a defined reconnect and error reporting protocol before returning a failure response.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -15891,210 +15891,210 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-180]** -  `AppState::default()` produces a value where `active_tab = Dashboard`, `runs = []`, `selected_run_id = None`, `connection_status = Reconnecting { attempt: 0, ... }`, `help_visible = false`. (unit test in `state.rs`)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-180]** `AppState::default()` produces a value where `active_tab = Dashboard`, `runs = []`, `selected_run_id = None`, `connection_status = Reconnecting { attempt: 0, ... }`, `help_visible = false`. (unit test in `state.rs`)
+- **Description:** AppState::default() MUST initialize with active_tab set to Dashboard, empty runs list, no selected run, Reconnecting connection status, and help overlay hidden.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-181]** -  `App::handle_event(RunSnapshot([run_A, run_B], details))` replaces `AppState::runs` with exactly `[run_A, run_B]` sorted by `created_at` descending; no other run entries remain. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-181]** `App::handle_event(RunSnapshot([run_A, run_B], details))` replaces `AppState::runs` with exactly `[run_A, run_B]` sorted by `created_at` descending; no other run entries remain. (unit test)
+- **Description:** Processing a RunSnapshot event MUST replace the entire runs list with the snapshot contents, sorted by created_at descending, removing any stale entries.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-182]** -  `App::handle_event(RunSnapshot([run_A], details))` when `AppState::selected_run_id = Some(run_B_id)` (not in snapshot) clears `selected_run_id` to `None`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-182]** `App::handle_event(RunSnapshot([run_A], details))` when `AppState::selected_run_id = Some(run_B_id)` (not in snapshot) clears `selected_run_id` to `None`. (unit test)
+- **Description:** Processing a RunSnapshot that does not contain the currently selected run MUST clear selected_run_id to None to prevent stale selection references.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-183]** -  `App::handle_event(RunDelta(run_A_updated, detail))` when `run_A` already exists in `AppState::runs` replaces the entry in-place and re-sorts; the resulting `runs` list has the same length as before. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-183]** `App::handle_event(RunDelta(run_A_updated, detail))` when `run_A` already exists in `AppState::runs` replaces the entry in-place and re-sorts; the resulting `runs` list has the same length as before. (unit test)
+- **Description:** Processing a RunDelta for an existing run MUST replace the entry in-place and re-sort the list, maintaining the same list length without duplicates.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-184]** -  `App::handle_event(RunDelta(run_new, detail))` when `run_new.run_id` is not in `AppState::runs` inserts the run and re-sorts; `runs.len()` increases by 1. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-184]** `App::handle_event(RunDelta(run_new, detail))` when `run_new.run_id` is not in `AppState::runs` inserts the run and re-sorts; `runs.len()` increases by 1. (unit test)
+- **Description:** Processing a RunDelta for a new run_id not already in the runs list MUST insert the run entry and re-sort, increasing list length by one.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-185]** -  After `App::handle_event(RunDelta(run, detail))` with a 3-stage workflow `A → B → C`, `AppState::run_details[run_id].dag_tiers` equals `[["A"], ["B"], ["C"]]`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-185]** After `App::handle_event(RunDelta(run, detail))` with a 3-stage workflow `A → B → C`, `AppState::run_details[run_id].dag_tiers` equals `[["A"], ["B"], ["C"]]`. (unit test)
+- **Description:** After processing a RunDelta with a 3-stage linear A→B→C workflow, the computed dag_tiers MUST equal three sequential single-stage tiers.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-186]** -  `App::handle_event(LogLine { run_id, stage_name, line })` for a `(run_id, stage_name)` with no existing buffer creates a new `LogBuffer`, appends the line, and sets `total_received = 1`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-186]** `App::handle_event(LogLine { run_id, stage_name, line })` for a `(run_id, stage_name)` with no existing buffer creates a new `LogBuffer`, appends the line, and sets `total_received = 1`. (unit test)
+- **Description:** Processing a LogLine event for a run and stage with no existing buffer MUST create a new LogBuffer, append the line, and set total_received to 1.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-187]** -  `LogBuffer` at capacity (10,000 entries) after one more `append()` has `lines.len() == 10_000` and `total_received == 10_001`; the front entry is the second-oldest original entry. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-187]** `LogBuffer` at capacity (10,000 entries) after one more `append()` has `lines.len() == 10_000` and `total_received == 10_001`; the front entry is the second-oldest original entry. (unit test)
+- **Description:** LogBuffer at maximum capacity of 10,000 entries MUST evict the oldest entry on append, keeping lines count at 10,000 while incrementing total_received.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-188]** -  Auto-scroll: after appending a `LogLine` when scroll offset is at tail position, `log_scroll_offset` is incremented by 1. After appending when scroll offset is below tail, `log_scroll_offset` is unchanged. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-188]** Auto-scroll: after appending a `LogLine` when scroll offset is at tail position, `log_scroll_offset` is incremented by 1. After appending when scroll offset is below tail, `log_scroll_offset` is unchanged. (unit test)
+- **Description:** Auto-scroll behavior MUST increment log_scroll_offset when at tail position after appending, and leave offset unchanged when scrolled above tail position.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-189]** -  Idle eviction: a terminal-run buffer with `last_appended_at > 30 minutes ago` AND `(run_id, stage_name) != (selected_run_id, selected_stage_name)` is removed from `log_buffers` on `Tick`. (unit test, using `Instant::now() - Duration::from_secs(1801)` mock)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-189]** Idle eviction: a terminal-run buffer with `last_appended_at > 30 minutes ago` AND `(run_id, stage_name) != (selected_run_id, selected_stage_name)` is removed from `log_buffers` on `Tick`. (unit test, using `Instant::now() - Duration::from_secs(1801)` mock)
+- **Description:** Idle eviction MUST remove terminal-run log buffers older than 30 minutes that are not currently selected, freeing memory from completed run logs.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-190]** -  Non-terminal-run buffer is NOT evicted regardless of `last_appended_at` age. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-190]** Non-terminal-run buffer is NOT evicted regardless of `last_appended_at` age. (unit test)
+- **Description:** Non-terminal-run log buffers MUST NOT be evicted regardless of age, since active runs may still produce log output requiring display.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-191]** -  `App::handle_event(Connected { server_addr })` transitions `connection_status` to `Connected` and resets `reconnect_elapsed_ms` to `0`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-191]** `App::handle_event(Connected { server_addr })` transitions `connection_status` to `Connected` and resets `reconnect_elapsed_ms` to `0`. (unit test)
+- **Description:** Processing a Connected event MUST transition connection_status to Connected state and reset reconnect_elapsed_ms counter to zero.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-192]** -  `App::handle_event(StreamError { reason })` transitions `connection_status` from `Connected` to `Reconnecting { attempt: 1, ... }`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-192]** `App::handle_event(StreamError { reason })` transitions `connection_status` from `Connected` to `Reconnecting { attempt: 1, ... }`. (unit test)
+- **Description:** Processing a StreamError event MUST transition connection_status from Connected to Reconnecting with attempt count incremented to track reconnection progress.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-193]** -  `App::handle_event(ReconnectBudgetExceeded)` transitions `connection_status` to `Disconnected`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-193]** `App::handle_event(ReconnectBudgetExceeded)` transitions `connection_status` to `Disconnected`. (unit test)
+- **Description:** Processing a ReconnectBudgetExceeded event MUST transition connection_status to Disconnected state, indicating terminal connection failure.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-194]** -  When `connection_status = Reconnecting`, the `StatusBar` widget renders `"RECONNECTING"` in a `TestBackend` snapshot at 200×50. (TUI E2E, `TestBackend` snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-194]** When `connection_status = Reconnecting`, the `StatusBar` widget renders `"RECONNECTING"` in a `TestBackend` snapshot at 200×50. (TUI E2E, `TestBackend` snapshot)
+- **Description:** When connection_status is Reconnecting, the StatusBar widget MUST render "RECONNECTING" text visible in a TestBackend snapshot at 200x50.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-195]** -  `App::handle_event(Resize(60, 20))` sets `terminal_size = (60, 20)` and the next render shows `"Terminal too small: 80x24 minimum required (current: 60x20)"`. (TUI E2E, `TestBackend` snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-195]** `App::handle_event(Resize(60, 20))` sets `terminal_size = (60, 20)` and the next render shows `"Terminal too small: 80x24 minimum required (current: 60x20)"`. (TUI E2E, `TestBackend` snapshot)
+- **Description:** Processing a Resize event to 60x20 MUST update terminal_size and trigger rendering of the "Terminal too small" message with current dimensions.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-196]** -  `App::handle_event(Key(Tab))` cycles `active_tab` through `Dashboard → Logs → Debug → Pools → Dashboard`. (unit test, 5 key events)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-196]** `App::handle_event(Key(Tab))` cycles `active_tab` through `Dashboard → Logs → Debug → Pools → Dashboard`. (unit test, 5 key events)
+- **Description:** Pressing Tab key MUST cycle active_tab through Dashboard, Logs, Debug, Pools, and back to Dashboard in a circular navigation sequence.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-197]** -  `App::handle_event(Key('3'))` sets `active_tab = Debug` regardless of current tab. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-197]** `App::handle_event(Key('3'))` sets `active_tab = Debug` regardless of current tab. (unit test)
+- **Description:** Pressing the number 3 key MUST set active_tab directly to Debug tab regardless of which tab is currently active for quick navigation.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-198]** -  `App::handle_event(Key('?'))` toggles `help_visible` from `false` to `true`; a second `Key('?')` toggles it back to `false`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-198]** `App::handle_event(Key('?'))` toggles `help_visible` from `false` to `true`; a second `Key('?')` toggles it back to `false`. (unit test)
+- **Description:** Pressing the question mark key MUST toggle help_visible between false and true states, showing and hiding the help overlay on alternating presses.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-199]** -  `selected_stage_name` is cleared to `None` when `active_tab` changes from `Logs` to `Dashboard`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-199]** `selected_stage_name` is cleared to `None` when `active_tab` changes from `Logs` to `Dashboard`. (unit test)
+- **Description:** selected_stage_name MUST be cleared to None when active_tab changes from Logs to Dashboard to prevent stale stage selection across tab switches.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-200]** -  `dag_scroll_offset` is reset to `0` when `selected_run_id` changes via a `Key(↓)` event in the Dashboard run list. (unit test with AppState containing ≥2 runs)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-200]** `dag_scroll_offset` is reset to `0` when `selected_run_id` changes via a `Key(↓)` event in the Dashboard run list. (unit test with AppState containing ≥2 runs)
+- **Description:** dag_scroll_offset MUST reset to 0 when selected_run_id changes via arrow key navigation in the Dashboard run list to show the new DAG from the start.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-201]** -  `render()` on `App` does not mutate `AppState`; calling `app.render(frame)` twice in succession produces identical frames and leaves `AppState` unchanged. (unit test: render twice, assert state equality before and after)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-201]** `render()` on `App` does not mutate `AppState`; calling `app.render(frame)` twice in succession produces identical frames and leaves `AppState` unchanged. (unit test: render twice, assert state equality before and after)
+- **Description:** The render function on App MUST be pure and side-effect-free, producing identical frames on successive calls without mutating AppState.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-202]** -  CLI `devs status <uuid>` where uuid matches a `run_id` resolves via UUID path (not slug path); a mock gRPC server verifying the request uses `run_id` field, not `slug` field. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-202]** CLI `devs status <uuid>` where uuid matches a `run_id` resolves via UUID path (not slug path); a mock gRPC server verifying the request uses `run_id` field, not `slug` field. (CLI E2E)
+- **Description:** CLI status with a UUID argument MUST resolve via the GetRun UUID path directly without calling ListRuns for efficient direct lookup.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-203]** -  CLI `devs status <non-uuid-string>` resolves via slug path; mock gRPC server verifies the request uses `slug` field. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-203]** CLI `devs status <non-uuid-string>` resolves via slug path; mock gRPC server verifies the request uses `slug` field. (CLI E2E)
+- **Description:** CLI status with a non-UUID string argument MUST resolve via the ListRuns slug filter path without calling GetRun first for slug-based lookup.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-204]** -  `devs logs --follow` exits code 0 when `{"done": true}` is received and the run status is `Completed`; exits code 1 when run status is `Failed`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-204]** `devs logs --follow` exits code 0 when `{"done": true}` is received and the run status is `Completed`; exits code 1 when run status is `Failed`. (CLI E2E)
+- **Description:** CLI logs --follow MUST exit code 0 on run completion and code 1 on run failure, using the done marker and run status to determine exit code.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-205]** -  `devs-mcp-bridge` processes a second request after a streaming `stream_logs follow:true` response has completed (the streaming response wrote its `{"done":true}` chunk). (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-205]** `devs-mcp-bridge` processes a second request after a streaming `stream_logs follow:true` response has completed (the streaming response wrote its `{"done":true}` chunk). (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST accept and process subsequent requests after a streaming stream_logs follow:true response has completed its chunked output.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-206]** -  `devs-mcp-bridge` writes each `stream_logs` chunk to stdout and flushes immediately; a test consuming bridge stdout observes the first chunk before the stream terminates. (MCP E2E, timing assertion)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-206]** `devs-mcp-bridge` writes each `stream_logs` chunk to stdout and flushes immediately; a test consuming bridge stdout observes the first chunk before the stream terminates. (MCP E2E, timing assertion)
+- **Description:** The devs-mcp-bridge MUST write and flush each stream_logs chunk to stdout immediately, verified by observing the first chunk before stream termination.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-207]** -  `devs-mcp-bridge` processes exactly one reconnect attempt on HTTP connection failure; if the reconnect also fails, it writes `fatal:true` to stdout and exits 1. (MCP E2E with simulated connection drop)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-207]** `devs-mcp-bridge` processes exactly one reconnect attempt on HTTP connection failure; if the reconnect also fails, it writes `fatal:true` to stdout and exits 1. (MCP E2E with simulated connection drop)
+- **Description:** The devs-mcp-bridge MUST attempt exactly one reconnect on HTTP connection failure and exit with fatal:true if the reconnect also fails.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-208]** -  Concurrent `RunSnapshot` and `PoolSnapshot` events processed sequentially leave `AppState` consistent: both `runs` and `pool_state` are updated and `selected_run_id`/`selected_pool_name` validity is re-checked after each mutation. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-208]** Concurrent `RunSnapshot` and `PoolSnapshot` events processed sequentially leave `AppState` consistent: both `runs` and `pool_state` are updated and `selected_run_id`/`selected_pool_name` validity is re-checked after each mutation. (unit test)
+- **Description:** Concurrent RunSnapshot and PoolSnapshot events processed sequentially MUST leave AppState consistent with both updates applied and selection validity rechecked.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-209]** -  `LogBuffer` scroll offset for a non-selected stage is unaffected by `LogLine` events for a different stage. Inserting 100 lines into stage A's buffer does not change `log_scroll_offset` for stage B. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-209]** `LogBuffer` scroll offset for a non-selected stage is unaffected by `LogLine` events for a different stage. Inserting 100 lines into stage A's buffer does not change `log_scroll_offset` for stage B. (unit test)
+- **Description:** LogBuffer scroll offset for a non-selected stage MUST remain unaffected by LogLine events targeting a different stage to prevent cross-stage interference.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -16108,7 +16108,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-211]** Tab navigation keybindings (normative):
 - **Type:** Technical
-- **Description:** Tab navigation keybindings (normative):
+- **Description:** Tab navigation keybindings are normative and define the exact key mappings for switching between Dashboard, Logs, Debug, and Pools tabs.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -16458,196 +16458,196 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-261]** -  Pressing keys `1`, `2`, `3`, `4` switches `NavigationState.active_tab` to `Dashboard`, `Logs`, `Debug`, `Pools` respectively regardless of current tab. (TUI E2E / unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-261]** Pressing keys `1`, `2`, `3`, `4` switches `NavigationState.active_tab` to `Dashboard`, `Logs`, `Debug`, `Pools` respectively regardless of current tab. (TUI E2E / unit)
+- **Description:** Pressing number keys 1 through 4 MUST switch active_tab to Dashboard, Logs, Debug, or Pools respectively regardless of the current active tab.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-262]** -  Pressing `Tab` from `Pools` tab sets `active_tab` to `Dashboard`. (TUI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-262]** Pressing `Tab` from `Pools` tab sets `active_tab` to `Dashboard`. (TUI unit)
+- **Description:** Pressing Tab from the Pools tab MUST wrap around and set active_tab to Dashboard as the first tab in the circular navigation sequence.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-263]** -  Pressing `c` while `active_tab == Logs` issues no gRPC call and produces no error output. (TUI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-263]** Pressing `c` while `active_tab == Logs` issues no gRPC call and produces no error output. (TUI unit)
+- **Description:** Pressing c while active_tab is Logs MUST be a no-op that issues no gRPC call and produces no error output since cancel is tab-specific.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-264]** -  `help_visible == true` blocks all key events except `?`, `Esc`, `q`, and `Ctrl+C` from reaching the tab handler. (TUI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-264]** `help_visible == true` blocks all key events except `?`, `Esc`, `q`, and `Ctrl+C` from reaching the tab handler. (TUI unit)
+- **Description:** When help_visible is true, all key events except question mark, Escape, q, and Ctrl+C MUST be blocked from reaching the underlying tab handler.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-265]** -  `selected_stage_index` resets to `None` when `selected_run_index` changes value. (TUI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-265]** `selected_stage_index` resets to `None` when `selected_run_index` changes value. (TUI unit)
+- **Description:** selected_stage_index MUST reset to None when selected_run_index changes to prevent stale stage selection when switching between different workflow runs.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-266]** -  `log_scroll_offset` resets to `0` when `selected_stage_index` changes value. (TUI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-266]** `log_scroll_offset` resets to `0` when `selected_stage_index` changes value. (TUI unit)
+- **Description:** log_scroll_offset MUST reset to 0 when selected_stage_index changes to start log viewing from the beginning of the newly selected stage logs.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-267]** -  Terminal smaller than 80×24 renders exactly `"Terminal too small: 80x24 minimum required (current: WxH)"` and nothing else. (TUI E2E snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-267]** Terminal smaller than 80×24 renders exactly `"Terminal too small: 80x24 minimum required (current: WxH)"` and nothing else. (TUI E2E snapshot)
+- **Description:** Terminal smaller than 80x24 MUST render exactly the "Terminal too small" message with current dimensions and no other content on screen.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-268]** -  `devs status <uuid>` issues `GetRun(run_id=uuid)` and never calls `ListRuns`. (CLI unit / E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-268]** `devs status <uuid>` issues `GetRun(run_id=uuid)` and never calls `ListRuns`. (CLI unit / E2E)
+- **Description:** CLI devs status with a UUID argument MUST issue GetRun with run_id and MUST NOT call ListRuns for direct and efficient lookup.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-269]** -  `devs status <slug>` issues `ListRuns(slug_filter=slug)` and never calls `GetRun` first. (CLI unit / E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-269]** `devs status <slug>` issues `ListRuns(slug_filter=slug)` and never calls `GetRun` first. (CLI unit / E2E)
+- **Description:** CLI devs status with a slug argument MUST issue ListRuns with slug_filter and MUST NOT call GetRun first for slug-based resolution.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-270]** -  `devs status` on a non-existent UUID exits with code 2 and output `"not_found: run <uuid> does not exist"`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-270]** `devs status` on a non-existent UUID exits with code 2 and output `"not_found: run <uuid> does not exist"`. (CLI E2E)
+- **Description:** CLI devs status on a non-existent UUID MUST exit with code 2 and output "not_found: run <uuid> does not exist" as the error message.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-271]** -  `devs status` on an ambiguous slug (matching 2 runs) exits with code 2 and output `"not_found: slug '<slug>' matches 2 runs; use run_id to disambiguate"`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-271]** `devs status` on an ambiguous slug (matching 2 runs) exits with code 2 and output `"not_found: slug '<slug>' matches 2 runs; use run_id to disambiguate"`. (CLI E2E)
+- **Description:** CLI devs status on an ambiguous slug matching multiple runs MUST exit code 2 with a message instructing the user to disambiguate using run_id.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-272]** -  `devs submit --input expr=a=b` passes key `expr`, value `"a=b"` to the server (splits on first `=` only). (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-272]** `devs submit --input expr=a=b` passes key `expr`, value `"a=b"` to the server (splits on first `=` only). (CLI E2E)
+- **Description:** CLI submit with --input expr=a=b MUST split on the first equals sign only, passing key "expr" with value "a=b" to the server correctly.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-273]** -  `devs submit` with CWD matching 2 projects exits with code 4. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-273]** `devs submit` with CWD matching 2 projects exits with code 4. (CLI E2E)
+- **Description:** CLI devs submit with current working directory matching two registered projects MUST exit code 4 due to ambiguous project resolution.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-274]** -  `--format json` routes all output (errors and success) to stdout as JSON; nothing written to stderr. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-274]** `--format json` routes all output (errors and success) to stdout as JSON; nothing written to stderr. (CLI E2E)
+- **Description:** CLI --format json mode MUST route all output including errors and success responses to stdout as JSON with nothing written to stderr.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-275]** -  `devs logs --follow` exits with code 0 when run reaches `Completed`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-275]** `devs logs --follow` exits with code 0 when run reaches `Completed`. (CLI E2E)
+- **Description:** CLI devs logs --follow MUST exit with code 0 when the monitored workflow run reaches the Completed terminal status.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-276]** -  `devs logs --follow` exits with code 1 when run reaches `Failed`. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-276]** `devs logs --follow` exits with code 1 when run reaches `Failed`. (CLI E2E)
+- **Description:** CLI devs logs --follow MUST exit with code 1 when the monitored workflow run reaches the Failed terminal status.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-277]** -  `devs logs --follow` exits with code 3 when server connection drops mid-stream. (CLI E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-277]** `devs logs --follow` exits with code 3 when server connection drops mid-stream. (CLI E2E)
+- **Description:** CLI devs logs --follow MUST exit with code 3 when the server connection drops mid-stream indicating a connectivity failure.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-278]** -  `devs security-check` does NOT open a gRPC channel; `cargo tree -p devs-cli` shows it calls config parsing directly. (unit test of security_check module)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-278]** `devs security-check` does NOT open a gRPC channel; `cargo tree -p devs-cli` shows it calls config parsing directly. (unit test of security_check module)
+- **Description:** CLI devs security-check MUST NOT open a gRPC channel and instead calls config parsing directly for offline security validation.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-279]** -  `devs-mcp-bridge` writes a fatal error and exits 1 when the MCP HTTP server is unreachable after startup. (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-279]** `devs-mcp-bridge` writes a fatal error and exits 1 when the MCP HTTP server is unreachable after startup. (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST write a fatal error and exit with code 1 when the MCP HTTP server is unreachable after initial startup.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-280]** -  `devs-mcp-bridge` writes an error line to stdout and continues reading stdin when given an invalid JSON line (does NOT exit). (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-280]** `devs-mcp-bridge` writes an error line to stdout and continues reading stdin when given an invalid JSON line (does NOT exit). (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST write an error line to stdout and continue reading stdin when given invalid JSON input without exiting the process.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-281]** -  `devs-mcp-bridge` forwards streaming chunks immediately (does not buffer entire response before writing). (MCP E2E: observe stdout interleaved with server sends)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-281]** `devs-mcp-bridge` forwards streaming chunks immediately (does not buffer entire response before writing). (MCP E2E: observe stdout interleaved with server sends)
+- **Description:** The devs-mcp-bridge MUST forward streaming response chunks immediately to stdout without buffering the entire response before writing any output.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-282]** -  `devs-mcp-bridge` exits with code 0 on stdin EOF. (MCP E2E)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-282]** `devs-mcp-bridge` exits with code 0 on stdin EOF. (MCP E2E)
+- **Description:** The devs-mcp-bridge MUST exit with code 0 on stdin EOF indicating a clean shutdown when the parent process closes the input stream.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-283]** -  TUI reconnect sequence follows the 1→2→4→8→16→30s backoff; after >30s total it exits with code 1. (TUI E2E with mock server that drops connections)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-283]** TUI reconnect sequence follows the 1→2→4→8→16→30s backoff; after >30s total it exits with code 1. (TUI E2E with mock server that drops connections)
+- **Description:** TUI reconnect sequence MUST follow exponential backoff schedule 1, 2, 4, 8, 16, 30 seconds and exit code 1 after exceeding 30 seconds total.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-284]** -  TUI StatusBar shows `"RECONNECTING: attempt <N> in <Xs>..."` during reconnect intervals. (TUI E2E snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-284]** TUI StatusBar shows `"RECONNECTING: attempt <N> in <Xs>..."` during reconnect intervals. (TUI E2E snapshot)
+- **Description:** TUI StatusBar MUST show "RECONNECTING: attempt N in Xs..." during reconnect intervals to inform the user of reconnection progress and timing.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-285]** -  `devs pause --stage <name>` routes to `StageService.PauseStage`; `devs pause` (no `--stage`) routes to `RunService.PauseRun`. (CLI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-285]** `devs pause --stage <name>` routes to `StageService.PauseStage`; `devs pause` (no `--stage`) routes to `RunService.PauseRun`. (CLI unit)
+- **Description:** CLI devs pause with --stage flag MUST route to StageService.PauseStage while pause without --stage MUST route to RunService.PauseRun.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-286]** -  `NavigationState.selected_run_index` is clamped to `new_len - 1` when the run list shrinks below the current selection. (TUI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-286]** `NavigationState.selected_run_index` is clamped to `new_len - 1` when the run list shrinks below the current selection. (TUI unit)
+- **Description:** NavigationState.selected_run_index MUST be clamped to the last valid index when the run list shrinks below the current selection position.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-287]** -  `↑` at top of a list does not wrap around; selection remains at index 0. (TUI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-287]** `↑` at top of a list does not wrap around; selection remains at index 0. (TUI unit)
+- **Description:** Pressing up arrow at the top of a list MUST NOT wrap around; the selection MUST remain at index 0 as the boundary behavior.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-288]** -  `↓` at bottom of a list does not wrap around; selection remains at last index. (TUI unit)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-288]** `↓` at bottom of a list does not wrap around; selection remains at last index. (TUI unit)
+- **Description:** Pressing down arrow at the bottom of a list MUST NOT wrap around; the selection MUST remain at the last index as boundary behavior.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -16766,28 +16766,28 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-305]** Within `DashboardTab`, the layout is a horizontal split:
 - **Type:** Technical
-- **Description:** Within `DashboardTab`, the layout is a horizontal split:
+- **Description:** Within DashboardTab, the layout is a horizontal split with a run list pane on the left and a run detail pane on the right side.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-306]** The `LogsTab` layout is a vertical split:
 - **Type:** Technical
-- **Description:** The `LogsTab` layout is a vertical split:
+- **Description:** The LogsTab layout is a vertical split with a stage selector pane on the left and the log output pane on the right side.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-307]** The `DebugTab` layout is three vertical sections:
 - **Type:** Technical
-- **Description:** The `DebugTab` layout is three vertical sections:
+- **Description:** The DebugTab layout is three vertical sections containing agent selector, live output view, and working directory diff view for debugging.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-308]** The `PoolsTab` layout is a single vertically-scrollable list:
 - **Type:** Technical
-- **Description:** The `PoolsTab` layout is a single vertically-scrollable list:
+- **Description:** The PoolsTab layout is a single vertically-scrollable list showing all configured agent pools with their utilization and agent status.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -16801,7 +16801,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-310]** Stage box fixed width: `41` columns, computed as:
 - **Type:** Technical
-- **Description:** Stage box fixed width: `41` columns, computed as:
+- **Description:** Stage box fixed width is 41 columns, computed from bracket delimiters, name field, status field, elapsed time field, and separator characters.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -16850,21 +16850,21 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-317]** Naming convention for string constants:
 - **Type:** Technical
-- **Description:** Naming convention for string constants:
+- **Description:** Naming convention for string constants requires SCREAMING_SNAKE_CASE prefixed by category such as STATUS_, ERR_, FMT_, or LABEL_ for organization.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-318]** Required string constants for `devs-tui/src/strings.rs`:
 - **Type:** Technical
-- **Description:** Required string constants for `devs-tui/src/strings.rs`:
+- **Description:** Required string constants for devs-tui/src/strings.rs include all status labels, error prefixes, format templates, and UI text used by the TUI.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-319]** Required string constants for `devs-cli/src/strings.rs`:
 - **Type:** Technical
-- **Description:** Required string constants for `devs-cli/src/strings.rs`:
+- **Description:** Required string constants for devs-cli/src/strings.rs include all error prefixes, format templates, and user-visible text used by the CLI client.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -16906,7 +16906,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-325]** Snapshot file naming convention:
 - **Type:** Technical
-- **Description:** Snapshot file naming convention:
+- **Description:** Snapshot file naming convention requires test snapshots to follow a consistent naming pattern based on the test function name and scenario description.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -16976,14 +16976,14 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-335]** `~` expansion rules:
 - **Type:** Technical
-- **Description:** `~` expansion rules:
+- **Description:** Tilde expansion rules define how the ~ character in path arguments is resolved to the user home directory across different platforms.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-336]** Windows-specific behavior:
 - **Type:** Technical
-- **Description:** Windows-specific behavior:
+- **Description:** Windows-specific behavior defines platform-specific adaptations including path separator normalization and line ending handling for cross-platform compatibility.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -17018,7 +17018,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-341]** Prohibited `./do` patterns:
 - **Type:** Technical
-- **Description:** Prohibited `./do` patterns:
+- **Description:** Prohibited ./do patterns define shell script anti-patterns that MUST NOT appear in the entrypoint script to ensure POSIX portability and correctness.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -17032,210 +17032,210 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-343]** -  When `NO_COLOR` is set to any non-empty string, `Theme::from_env()` returns `ColorMode::Monochrome`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-343]** When `NO_COLOR` is set to any non-empty string, `Theme::from_env()` returns `ColorMode::Monochrome`. (unit test)
+- **Description:** When NO_COLOR is set to any non-empty string, Theme::from_env() MUST return ColorMode::Monochrome to disable terminal colors.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-344]** -  When `NO_COLOR` is not set or is empty, `Theme::from_env()` returns `ColorMode::Color`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-344]** When `NO_COLOR` is not set or is empty, `Theme::from_env()` returns `ColorMode::Color`. (unit test)
+- **Description:** When NO_COLOR is not set or is empty, Theme::from_env() MUST return ColorMode::Color to enable terminal color output.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-345]** -  `Theme::stage_status_style(StageStatus::Running)` in `Monochrome` mode returns `Style::default()` (no color). (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-345]** `Theme::stage_status_style(StageStatus::Running)` in `Monochrome` mode returns `Style::default()` (no color). (unit test)
+- **Description:** Theme stage_status_style for Running status in Monochrome mode MUST return Style::default() with no color attributes applied.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-346]** -  `Theme::stage_status_style(StageStatus::Running)` in `Color` mode returns a style with `fg = Color::Yellow`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-346]** `Theme::stage_status_style(StageStatus::Running)` in `Color` mode returns a style with `fg = Color::Yellow`. (unit test)
+- **Description:** Theme stage_status_style for Running status in Color mode MUST return a style with foreground color set to Yellow.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-347]** -  Every `STATUS_*` constant in `devs-tui/src/strings.rs` has exactly 4 bytes. (compile-time assert)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-347]** Every `STATUS_*` constant in `devs-tui/src/strings.rs` has exactly 4 bytes. (compile-time assert)
+- **Description:** Every STATUS_* constant in devs-tui strings.rs MUST have exactly 4 bytes length, enforced by compile-time assertion for consistent column width.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-348]** -  No file in `crates/devs-tui/src/` (except `strings.rs`) contains a string literal matching `"(not_found|invalid_argument|failed_precondition):"`; test scans source. (lint test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-348]** No file in `crates/devs-tui/src/` (except `strings.rs`) contains a string literal matching `"(not_found|invalid_argument|failed_precondition):"`; test scans source. (lint test)
+- **Description:** No file in devs-tui/src/ except strings.rs MUST contain string literals matching error prefix patterns to enforce string centralization.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-349]** -  No file in `crates/devs-cli/src/` (except `strings.rs`) contains a string literal matching the error prefix pattern. (lint test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-349]** No file in `crates/devs-cli/src/` (except `strings.rs`) contains a string literal matching the error prefix pattern. (lint test)
+- **Description:** No file in devs-cli/src/ except strings.rs MUST contain string literals matching error prefix patterns to enforce string centralization.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-350]** -  Rendering `DashboardTab` with a stage name of 21 characters produces a stage box with the name truncated to 19 chars + `~`. (TUI unit test with snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-350]** Rendering `DashboardTab` with a stage name of 21 characters produces a stage box with the name truncated to 19 chars + `~`. (TUI unit test with snapshot)
+- **Description:** Rendering DashboardTab with a 21-character stage name MUST produce a stage box with the name truncated to 19 characters plus tilde indicator.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-351]** -  Rendering `DashboardTab` with a stage name of 20 characters produces a stage box with the name rendered without truncation. (TUI unit test with snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-351]** Rendering `DashboardTab` with a stage name of 20 characters produces a stage box with the name rendered without truncation. (TUI unit test with snapshot)
+- **Description:** Rendering DashboardTab with a 20-character stage name MUST produce a stage box with the name rendered in full without any truncation applied.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-352]** -  Stage box total width is exactly 41 columns for any stage name ≤ 20 chars and elapsed time ≤ 99 minutes. (TUI unit test, measured via `buffer_to_string`)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-352]** Stage box total width is exactly 41 columns for any stage name ≤ 20 chars and elapsed time ≤ 99 minutes. (TUI unit test, measured via `buffer_to_string`)
+- **Description:** Stage box total width MUST be exactly 41 columns for any stage name up to 20 characters and elapsed time up to 99 minutes.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-353]** -  When terminal is 79×50, the TUI renders the "Terminal too small" message and nothing else. (TUI unit test with `TestBackend::new(79, 50)` + snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-353]** When terminal is 79×50, the TUI renders the "Terminal too small" message and nothing else. (TUI unit test with `TestBackend::new(79, 50)` + snapshot)
+- **Description:** When terminal width is 79 columns, the TUI MUST render the "Terminal too small" message instead of normal content since minimum is 80.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-354]** -  When terminal is 80×24, the TUI renders normal content (no "too small" message). (TUI unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-354]** When terminal is 80×24, the TUI renders normal content (no "too small" message). (TUI unit test)
+- **Description:** When terminal dimensions are exactly 80x24, the TUI MUST render normal tab content without displaying the "too small" warning message.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-355]** -  When terminal is 80×23, the TUI renders the "too small" message. (TUI unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-355]** When terminal is 80×23, the TUI renders the "too small" message. (TUI unit test)
+- **Description:** When terminal height is 23 rows, the TUI MUST render the "too small" message since the minimum required height is 24 rows.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-356]** -  The "too small" message matches `FMT_TERMINAL_TOO_SMALL` with current terminal dimensions substituted. (TUI unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-356]** The "too small" message matches `FMT_TERMINAL_TOO_SMALL` with current terminal dimensions substituted. (TUI unit test)
+- **Description:** The "too small" message MUST match the FMT_TERMINAL_TOO_SMALL format string with the current terminal width and height dimensions substituted.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-357]** -  `RunList` pane minimum width is 24 columns; when terminal is exactly 80 columns wide, `RunList` gets `max(24, floor(80 * 0.30)) = 24` columns. (TUI unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-357]** `RunList` pane minimum width is 24 columns; when terminal is exactly 80 columns wide, `RunList` gets `max(24, floor(80 * 0.30)) = 24` columns. (TUI unit test)
+- **Description:** RunList pane minimum width is 24 columns, and at 80 columns terminal width it gets max(24, floor(80*0.30)) equals 24 columns.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-358]** -  All 11 required snapshots listed in §5.4.2 exist in `crates/devs-tui/tests/snapshots/`. (filesystem check in `./do test`)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-358]** All 11 required snapshots listed in §5.4.2 exist in `crates/devs-tui/tests/snapshots/`. (filesystem check in `./do test`)
+- **Description:** All 11 required TUI snapshots listed in the specification MUST exist in the crates/devs-tui/tests/snapshots/ directory for test verification.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-359]** -  No snapshot file contains `\r\n` line endings. (`./do test` checks and fails with WARN if present)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-359]** No snapshot file contains `\r\n` line endings. (`./do test` checks and fails with WARN if present)
+- **Description:** No snapshot file MUST contain Windows-style CRLF line endings to ensure consistent cross-platform snapshot comparison during testing.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-360]** -  Running `./do test` with a diverged snapshot exits non-zero. (CI enforced; `INSTA_UPDATE` is not `always` in CI)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-360]** Running `./do test` with a diverged snapshot exits non-zero. (CI enforced; `INSTA_UPDATE` is not `always` in CI)
+- **Description:** Running the test suite with a diverged snapshot MUST exit non-zero in CI where INSTA_UPDATE is not set to always.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-361]** -  `normalize_path_display("C:\\Users\\dev\\project")` returns `"C:/Users/dev/project"`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-361]** `normalize_path_display("C:\\Users\\dev\\project")` returns `"C:/Users/dev/project"`. (unit test)
+- **Description:** normalize_path_display MUST convert Windows backslash path separators to forward slashes for consistent cross-platform path display.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-362]** -  `normalize_path_display("C:\\Users\\dev\\\\project")` returns `"C:/Users/dev/project"` (double slash collapsed). (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-362]** `normalize_path_display("C:\\Users\\dev\\\\project")` returns `"C:/Users/dev/project"` (double slash collapsed). (unit test)
+- **Description:** normalize_path_display MUST collapse double backslash sequences into single forward slashes when normalizing Windows-style paths for display.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-363]** -  `normalize_path_display("//server/share")` preserves the leading `//`. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-363]** `normalize_path_display("//server/share")` preserves the leading `//`. (unit test)
+- **Description:** normalize_path_display MUST preserve leading double forward slashes in UNC network paths like //server/share without collapsing them.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-364]** -  CLI JSON-mode output always uses `\n` line endings on all platforms. (CLI E2E test, platform: Windows)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-364]** CLI JSON-mode output always uses `\n` line endings on all platforms. (CLI E2E test, platform: Windows)
+- **Description:** CLI JSON-mode output MUST always use Unix-style newline line endings on all platforms including Windows for consistent machine parsing.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-365]** -  `./do` script contains no bash-specific syntax; verified by running it under `dash` or `sh --posix` in CI Linux job. (CI lint step)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-365]** `./do` script contains no bash-specific syntax; verified by running it under `dash` or `sh --posix` in CI Linux job. (CI lint step)
+- **Description:** The ./do script MUST contain no bash-specific syntax and pass verification under dash or sh --posix for POSIX shell compatibility.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-366]** -  `./do presubmit` exits with identical code on Linux, macOS, and Windows CI jobs for a clean repository. (GitLab CI matrix)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-366]** `./do presubmit` exits with identical code on Linux, macOS, and Windows CI jobs for a clean repository. (GitLab CI matrix)
+- **Description:** The ./do presubmit command MUST exit with identical status codes on Linux, macOS, and Windows CI jobs for cross-platform consistency.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-367]** -  `buffer_to_string()` returns a string where every line is padded to exactly 200 chars with trailing spaces, and the total line count is exactly 50. (unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-367]** `buffer_to_string()` returns a string where every line is padded to exactly 200 chars with trailing spaces, and the total line count is exactly 50. (unit test)
+- **Description:** buffer_to_string() MUST return a string with every line padded to exactly 200 characters and a total line count of exactly 50 rows.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-368]** -  `AppState::test_default()` is not reachable in `--release` builds; verified by `cargo build --release` completing without error after `#[cfg(test)]` gate. (CI build check)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-368]** `AppState::test_default()` is not reachable in `--release` builds; verified by `cargo build --release` completing without error after `#[cfg(test)]` gate. (CI build check)
+- **Description:** AppState::test_default() MUST be gated behind #[cfg(test)] and not reachable in --release builds to prevent test-only code in production.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-369]** -  In `Monochrome` mode, selected rows use `Modifier::REVERSED` and the cursor `>` character in column 0; no color is applied. (TUI unit test with snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-369]** In `Monochrome` mode, selected rows use `Modifier::REVERSED` and the cursor `>` character in column 0; no color is applied. (TUI unit test with snapshot)
+- **Description:** In Monochrome mode, selected rows MUST use Modifier::REVERSED and a cursor ">" character with no color applied for accessibility.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-370]** -  The active tab label has `Modifier::BOLD` in both `Color` and `Monochrome` modes. (TUI unit test)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-370]** The active tab label has `Modifier::BOLD` in both `Color` and `Monochrome` modes. (TUI unit test)
+- **Description:** The active tab label MUST have Modifier::BOLD applied in both Color and Monochrome modes to indicate the currently selected tab.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-371]** -  Log lines containing ANSI escape sequences (e.g. `\x1b[32m`) are rendered as literal text in `LogView`, not interpreted as colors. (TUI unit test with snapshot)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-371]** Log lines containing ANSI escape sequences (e.g. `\x1b[32m`) are rendered as literal text in `LogView`, not interpreted as colors. (TUI unit test with snapshot)
+- **Description:** Log lines containing ANSI escape sequences MUST be rendered as stripped plain text in LogView, not interpreted as terminal colors.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-372]** -  Elapsed time `0:05` is displayed as ` 0:05` (leading space for 5-char field). Elapsed time `10:00` is displayed as `10:00`. Elapsed time `100:00` causes the stage box to expand by 1 column. (TUI unit tests)
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-372]** Elapsed time `0:05` is displayed as ` 0:05` (leading space for 5-char field). Elapsed time `10:00` is displayed as `10:00`. Elapsed time `100:00` causes the stage box to expand by 1 column. (TUI unit tests)
+- **Description:** Elapsed time display MUST use leading space padding for the 5-character field, and times exceeding 99 minutes expand the stage box by one column.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -17263,7 +17263,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-376]** Tier depth is computed using longest-path-from-root algorithm:
 - **Type:** Technical
-- **Description:** Tier depth is computed using longest-path-from-root algorithm:
+- **Description:** Tier depth computation uses the longest-path-from-root algorithm to determine the correct column placement of each stage in the DAG visualization.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -17291,7 +17291,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-380]** The reconnect backoff schedule for `ConnectionStatus::Reconnecting` is:
 - **Type:** Technical
-- **Description:** The reconnect backoff schedule for `ConnectionStatus::Reconnecting` is:
+- **Description:** The reconnect backoff schedule for ConnectionStatus::Reconnecting follows exponential intervals: 1s, 2s, 4s, 8s, 16s, then capped at 30s.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -17368,21 +17368,21 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-391]** -  This check runs at the start of every render call, before any layout computation.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-391]** This check runs at the start of every render call, before any layout computation.
+- **Description:** The terminal size check runs at the start of every render call before any layout computation to prevent rendering into insufficient space.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-392]** -  Scroll offset MUST NOT exceed `max(0, total_width - available_columns)`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-392]** Scroll offset MUST NOT exceed `max(0, total_width - available_columns)`.
+- **Description:** DAG horizontal scroll offset MUST NOT exceed max(0, total_width - available_columns) to prevent scrolling past the rightmost DAG content.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-393]** -  The on-disk log file is never affected by TUI buffer eviction.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-393]** The on-disk log file is never affected by TUI buffer eviction.
+- **Description:** The on-disk log file persistence is never affected by TUI buffer eviction, ensuring complete log history is preserved regardless of display state.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -17396,7 +17396,7 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-395]** When transitioning `Reconnecting → Connected`, the TUI MUST:
 - **Type:** Technical
-- **Description:** When transitioning `Reconnecting → Connected`, the TUI MUST:
+- **Description:** When transitioning from Reconnecting to Connected state, the TUI MUST request a full state snapshot and reset all reconnection tracking counters.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -17529,420 +17529,420 @@ invalid_argument: validation failed: [{"field":"...","message":"..."},...]
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-414]** -  `cargo tree -p devs-tui --edges normal` contains no references to `devs-scheduler`, `devs-pool`, `devs-executor`, or `devs-adapters`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-414]** `cargo tree -p devs-tui --edges normal` contains no references to `devs-scheduler`, `devs-pool`, `devs-executor`, or `devs-adapters`.
+- **Description:** The devs-tui crate dependency tree MUST NOT contain references to server-side crates devs-scheduler, devs-pool, devs-executor, or devs-adapters.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-415]** -  `cargo tree -p devs-cli --edges normal` contains no references to `devs-scheduler`, `devs-pool`, `devs-executor`, or `devs-adapters`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-415]** `cargo tree -p devs-cli --edges normal` contains no references to `devs-scheduler`, `devs-pool`, `devs-executor`, or `devs-adapters`.
+- **Description:** The devs-cli crate dependency tree MUST NOT contain references to server-side crates devs-scheduler, devs-pool, devs-executor, or devs-adapters.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-416]** -  `cargo tree -p devs-mcp-bridge --edges normal` contains no references to `devs-grpc`, `devs-mcp`, `devs-scheduler`, `devs-pool`, `devs-executor`, or `devs-adapters`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-416]** `cargo tree -p devs-mcp-bridge --edges normal` contains no references to `devs-grpc`, `devs-mcp`, `devs-scheduler`, `devs-pool`, `devs-executor`, or `devs-adapters`.
+- **Description:** The devs-mcp-bridge crate dependency tree MUST NOT contain references to devs-grpc, devs-mcp, or any server-side orchestration crates.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-417]** -  When `AppState::terminal_size` is `(79, 24)`, the rendered output is exactly `"Terminal too small: 80x24 minimum required (current: 79x24)"` and no other content.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-417]** When `AppState::terminal_size` is `(79, 24)`, the rendered output is exactly `"Terminal too small: 80x24 minimum required (current: 79x24)"` and no other content.
+- **Description:** When terminal size is 79x24, the rendered output MUST be exactly the "Terminal too small" message showing 80x24 minimum and current 79x24 dimensions.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-418]** -  When `AppState::terminal_size` is `(80, 23)`, the rendered output contains `"current: 80x23"`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-418]** When `AppState::terminal_size` is `(80, 23)`, the rendered output contains `"current: 80x23"`.
+- **Description:** When terminal size is 80x23, the rendered output MUST contain "current: 80x23" in the too-small message since height is below the 24-row minimum.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-419]** -  Stage name `"a-very-long-stage-name-exceeding-twenty"` renders as `"a-very-long-stage-name~"` in `DagView`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-419]** Stage name `"a-very-long-stage-name-exceeding-twenty"` renders as `"a-very-long-stage-name~"` in `DagView`.
+- **Description:** A stage name exceeding 20 characters MUST be truncated with a tilde character appended to indicate the name was shortened for display in DagView.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-420]** -  A stage with `StageStatus::Running` renders with the label `"RUN "` (4 chars, trailing space) in `DagView`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-420]** A stage with `StageStatus::Running` renders with the label `"RUN "` (4 chars, trailing space) in `DagView`.
+- **Description:** A stage with StageStatus::Running MUST render with the 4-character label "RUN " including a trailing space for consistent column width in DagView.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-421]** -  All 9 `StageStatus` variants render as the corresponding 4-char label from the normative table in §2.1.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-421]** All 9 `StageStatus` variants render as the corresponding 4-char label from the normative table in §2.1.
+- **Description:** All 9 StageStatus variants MUST render as their corresponding 4-character labels from the normative status label table defined in the specification.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-422]** -  `DagView` uses only ASCII characters in the range U+0020–U+007E for structural elements (arrows, borders, box characters).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-422]** `DagView` uses only ASCII characters in the range U+0020–U+007E for structural elements (arrows, borders, box characters).
+- **Description:** DagView structural elements including arrows, borders, and box characters MUST use only ASCII characters in the range U+0020 through U+007E.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-423]** -  When `NO_COLOR` environment variable is set to any non-empty value, no ANSI escape sequences (`\x1b[`) appear in the rendered output.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-423]** When `NO_COLOR` environment variable is set to any non-empty value, no ANSI escape sequences (`\x1b[`) appear in the rendered output.
+- **Description:** When NO_COLOR environment variable is set to any non-empty value, no ANSI escape sequences MUST appear anywhere in the rendered terminal output.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-424]** -  The `HelpOverlay` renders when `?` is pressed and is dismissed by any subsequent keypress.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-424]** The `HelpOverlay` renders when `?` is pressed and is dismissed by any subsequent keypress.
+- **Description:** The HelpOverlay MUST render when the question mark key is pressed and MUST be dismissed by any subsequent keypress returning to normal view.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-425]** -  `StatusBar` shows exactly `"CONNECTED"` when `ConnectionStatus::Connected`, `"RECONNECTING"` when `ConnectionStatus::Reconnecting`, and `"DISCONNECTED"` when `ConnectionStatus::Disconnected`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-425]** `StatusBar` shows exactly `"CONNECTED"` when `ConnectionStatus::Connected`, `"RECONNECTING"` when `ConnectionStatus::Reconnecting`, and `"DISCONNECTED"` when `ConnectionStatus::Disconnected`.
+- **Description:** StatusBar MUST show exactly "CONNECTED", "RECONNECTING", or "DISCONNECTED" text matching the corresponding ConnectionStatus enum variant state.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-426]** -  When `AppState::runs` is empty, `RunList` renders the empty-state message.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-426]** When `AppState::runs` is empty, `RunList` renders the empty-state message.
+- **Description:** When AppState::runs is empty, the RunList widget MUST render a placeholder empty-state message instead of an empty list to guide the user.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-427]** -  `LogBuffer::push` on a full buffer (10,000 entries) evicts the entry with the lowest sequence number and increments `total_received`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-427]** `LogBuffer::push` on a full buffer (10,000 entries) evicts the entry with the lowest sequence number and increments `total_received`.
+- **Description:** LogBuffer::push on a full 10,000-entry buffer MUST evict the entry with the lowest sequence number and increment the total_received counter.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-428]** -  `LogPane` renders the truncation message `"[Log truncated"` when `LogBuffer::truncated == true`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-428]** `LogPane` renders the truncation message `"[Log truncated"` when `LogBuffer::truncated == true`.
+- **Description:** LogPane MUST render a "[Log truncated" message at the top of the log view when LogBuffer::truncated is true to indicate lost older entries.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-429]** -  DAG stage boxes render with the format `[ name | STAT | M:SS ]`, and the elapsed column renders `"--:--"` when `started_at` is `None`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-429]** DAG stage boxes render with the format `[ name | STAT | M:SS ]`, and the elapsed column renders `"--:--"` when `started_at` is `None`.
+- **Description:** DAG stage boxes MUST render with the format "[ name | STAT | M:SS ]" and display "--:--" for the elapsed column when started_at is None.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-430]** -  Two stages at the same tier depth are rendered in the same column of the DAG.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-430]** Two stages at the same tier depth are rendered in the same column of the DAG.
+- **Description:** Two stages computed at the same tier depth MUST be rendered in the same vertical column of the DAG visualization to show parallel execution.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-431]** -  When `DagLayout::total_width > available_columns`, a scroll indicator `"< scroll >"` is visible in the DAG pane.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-431]** When `DagLayout::total_width > available_columns`, a scroll indicator `"< scroll >"` is visible in the DAG pane.
+- **Description:** When DagLayout total_width exceeds available_columns, a scroll indicator "< scroll >" MUST be visible in the DAG pane to indicate scrollable content.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-432]** -  TUI re-renders within 50ms of receiving a `RunEvent` from the gRPC stream (tested with a mock event injected into the channel).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-432]** TUI re-renders within 50ms of receiving a `RunEvent` from the gRPC stream (tested with a mock event injected into the channel).
+- **Description:** TUI MUST re-render within 50 milliseconds of receiving a RunEvent from the gRPC stream to ensure responsive real-time status updates for users.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-433]** -  All TUI snapshot tests pass with `cargo insta test` on a clean checkout with no pending snapshot updates.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-433]** All TUI snapshot tests pass with `cargo insta test` on a clean checkout with no pending snapshot updates.
+- **Description:** All TUI snapshot tests MUST pass with cargo insta test on a clean checkout with no pending snapshot updates requiring manual review.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-434]** -  After `StreamDisconnected`, `ConnectionStatus` transitions to `Reconnecting`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-434]** After `StreamDisconnected`, `ConnectionStatus` transitions to `Reconnecting`.
+- **Description:** After a StreamDisconnected event, ConnectionStatus MUST transition to Reconnecting state to initiate the automatic reconnection backoff sequence.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-435]** -  After 35 seconds of cumulative reconnect time without success, the TUI exits with code 1.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-435]** After 35 seconds of cumulative reconnect time without success, the TUI exits with code 1.
+- **Description:** After 35 seconds of cumulative reconnect time without successful reconnection, the TUI MUST exit with code 1 indicating terminal connection failure.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-436]** -  On successful reconnect, `ConnectionStatus` transitions to `Connected` and the `"[Reconnecting]"` banner disappears.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-436]** On successful reconnect, `ConnectionStatus` transitions to `Connected` and the `"[Reconnecting]"` banner disappears.
+- **Description:** On successful reconnect, ConnectionStatus MUST transition to Connected and the "[Reconnecting]" status banner MUST disappear from the StatusBar display.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-437]** -  Reconnect backoff follows the schedule 1s→2s→4s→8s→16s→30s(cap), verifiable from `ConnectionStatus::Reconnecting::next_retry_at` values.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-437]** Reconnect backoff follows the schedule 1s→2s→4s→8s→16s→30s(cap), verifiable from `ConnectionStatus::Reconnecting::next_retry_at` values.
+- **Description:** Reconnect backoff MUST follow the exponential schedule 1s, 2s, 4s, 8s, 16s, 30s cap, verifiable from ConnectionStatus Reconnecting next_retry_at values.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-438]** -  Pressing `q` exits the TUI with code 0 regardless of connection status.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-438]** Pressing `q` exits the TUI with code 0 regardless of connection status.
+- **Description:** Pressing the q key MUST exit the TUI with code 0 regardless of the current connection status, providing a clean user-initiated shutdown path.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-439]** -  `devs status <unknown-id>` exits with code 2.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-439]** `devs status <unknown-id>` exits with code 2.
+- **Description:** CLI devs status with an unknown identifier MUST exit with code 2 indicating the requested workflow run was not found in the server.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-440]** -  `devs submit` with server not running exits with code 3.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-440]** `devs submit` with server not running exits with code 3.
+- **Description:** CLI devs submit when the server is not running MUST exit with code 3 indicating the server is unreachable and cannot accept submissions.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-441]** -  `devs submit` with missing required input exits with code 4.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-441]** `devs submit` with missing required input exits with code 4.
+- **Description:** CLI devs submit with a missing required input parameter MUST exit with code 4 indicating an invalid argument was provided to the command.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-442]** -  `devs submit` with duplicate run name exits with code 4.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-442]** `devs submit` with duplicate run name exits with code 4.
+- **Description:** CLI devs submit with a duplicate run name MUST exit with code 4 indicating the name conflicts with an existing workflow run entry.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-443]** -  `devs cancel` on a completed run exits with code 4.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-443]** `devs cancel` on a completed run exits with code 4.
+- **Description:** CLI devs cancel on a completed workflow run MUST exit with code 4 indicating the operation failed due to invalid run state precondition.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-444]** -  A successful `devs submit` exits with code 0.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-444]** A successful `devs submit` exits with code 0.
+- **Description:** A successful CLI devs submit command MUST exit with code 0 indicating the workflow run was accepted and queued by the server.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-445]** -  `devs logs --follow` exits code 0 when the monitored run completes.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-445]** `devs logs --follow` exits code 0 when the monitored run completes.
+- **Description:** CLI devs logs --follow MUST exit with code 0 when the monitored workflow run reaches the Completed terminal status successfully.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-446]** -  `devs logs --follow` exits code 1 when the monitored run fails.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-446]** `devs logs --follow` exits code 1 when the monitored run fails.
+- **Description:** CLI devs logs --follow MUST exit with code 1 when the monitored workflow run reaches the Failed terminal status indicating failure.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-447]** -  `devs list --format json` produces valid JSON parseable as `{"runs": [...], "total": n}`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-447]** `devs list --format json` produces valid JSON parseable as `{"runs": [...], "total": n}`.
+- **Description:** CLI devs list with --format json MUST produce valid JSON output parseable as an object containing a "runs" array and "total" integer.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-448]** -  `devs status --format json` produces valid JSON parseable as `RunStatusOutput`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-448]** `devs status --format json` produces valid JSON parseable as `RunStatusOutput`.
+- **Description:** CLI devs status with --format json MUST produce valid JSON output parseable as a RunStatusOutput object containing run and stage details.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-449]** -  `devs submit --format json` on failure produces `{"error": "<prefix>: <detail>", "code": n}` to stdout (not stderr).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-449]** `devs submit --format json` on failure produces `{"error": "<prefix>: <detail>", "code": n}` to stdout (not stderr).
+- **Description:** CLI devs submit with --format json on failure MUST produce a JSON error object with error and code fields to stdout, not stderr.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-450]** -  In `--format json` mode, stderr is empty for all commands (errors go to stdout as JSON).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-450]** In `--format json` mode, stderr is empty for all commands (errors go to stdout as JSON).
+- **Description:** In --format json mode, stderr MUST be empty for all CLI commands with all output including errors routed exclusively to stdout as JSON.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-451]** -  Error messages in all modes begin with one of the 10 machine-stable prefixes from §5.1.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-451]** Error messages in all modes begin with one of the 10 machine-stable prefixes from §5.1.
+- **Description:** Error messages in all CLI output modes MUST begin with one of the 10 machine-stable prefixes defined in the specification for programmatic parsing.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-452]** -  `devs submit --input expr=a=b` sets input key `expr` to value `"a=b"` (splits on first `=` only).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-452]** `devs submit --input expr=a=b` sets input key `expr` to value `"a=b"` (splits on first `=` only).
+- **Description:** CLI devs submit with --input expr=a=b MUST split on the first equals sign only, setting input key "expr" to value "a=b" correctly.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-453]** -  `devs submit --input badvalue` (no `=`) exits with code 4.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-453]** `devs submit --input badvalue` (no `=`) exits with code 4.
+- **Description:** CLI devs submit with --input badvalue containing no equals sign MUST exit with code 4 rejecting the malformed input parameter syntax.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-454]** -  Server discovery uses `--server` flag before `DEVS_SERVER` env before discovery file.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-454]** Server discovery uses `--server` flag before `DEVS_SERVER` env before discovery file.
+- **Description:** Server discovery MUST follow precedence order: --server flag first, then DEVS_SERVER environment variable, then discovery file as last resort.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-455]** -  `devs security-check` exits 0 with default config when all 7 checks pass.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-455]** `devs security-check` exits 0 with default config when all 7 checks pass.
+- **Description:** CLI devs security-check MUST exit with code 0 when using default configuration and all 7 security validation checks pass successfully.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-456]** -  `devs security-check` exits 1 when any check produces a warning.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-456]** `devs security-check` exits 1 when any check produces a warning.
+- **Description:** CLI devs security-check MUST exit with code 1 when any of the security validation checks produces a warning requiring user attention.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-457]** -  `devs security-check` operates without a running server (does NOT connect to gRPC).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-457]** `devs security-check` operates without a running server (does NOT connect to gRPC).
+- **Description:** CLI devs security-check MUST operate without a running server by performing offline config file analysis without connecting to gRPC.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-458]** -  `devs project add --weight 0` exits with code 4 and error `invalid_argument: weight must be at least 1`.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-458]** `devs project add --weight 0` exits with code 4 and error `invalid_argument: weight must be at least 1`.
+- **Description:** CLI devs project add with --weight 0 MUST exit code 4 with error "invalid_argument: weight must be at least 1" rejecting zero weight.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-459]** -  `devs-mcp-bridge` forwards a valid `list_runs` JSON-RPC request and returns a valid JSON response on stdout.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-459]** `devs-mcp-bridge` forwards a valid `list_runs` JSON-RPC request and returns a valid JSON response on stdout.
+- **Description:** The devs-mcp-bridge MUST forward a valid list_runs JSON-RPC request to the MCP server and return the valid JSON response on stdout.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-460]** -  Sending non-JSON to bridge stdin returns `{"result":null,"error":"invalid_argument: request is not valid JSON"}` and the bridge continues processing subsequent lines.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-460]** Sending non-JSON to bridge stdin returns `{"result":null,"error":"invalid_argument: request is not valid JSON"}` and the bridge continues processing subsequent lines.
+- **Description:** Sending non-JSON text to the bridge stdin MUST return an invalid_argument error response and the bridge MUST continue processing subsequent lines.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-461]** -  When discovery file is absent, bridge exits with code 1 and `"fatal":true` in output.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-461]** When discovery file is absent, bridge exits with code 1 and `"fatal":true` in output.
+- **Description:** When the discovery file is absent at startup, the bridge MUST exit with code 1 and include "fatal":true in the JSON error output.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-462]** -  Bridge does NOT create any TCP listener (verified by checking open file descriptors after startup).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-462]** Bridge does NOT create any TCP listener (verified by checking open file descriptors after startup).
+- **Description:** The bridge MUST NOT create any TCP listener socket, operating purely as a stdin/stdout proxy verified by checking open file descriptors after startup.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-463]** -  `stream_logs follow:true` chunked response is forwarded line-by-line (first chunk appears on stdout before stream ends).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-463]** `stream_logs follow:true` chunked response is forwarded line-by-line (first chunk appears on stdout before stream ends).
+- **Description:** Streaming stream_logs follow:true responses MUST be forwarded line-by-line with each chunk appearing on stdout before the stream terminates.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-464]** -  `devs list` produces identical exit codes on Linux, macOS, and Windows Git Bash CI runners.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-464]** `devs list` produces identical exit codes on Linux, macOS, and Windows Git Bash CI runners.
+- **Description:** CLI devs list MUST produce identical exit codes on Linux, macOS, and Windows Git Bash CI runners ensuring cross-platform behavioral consistency.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-465]** -  `./do` script passes `sh -n` (POSIX `sh` syntax check) with no errors.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-465]** `./do` script passes `sh -n` (POSIX `sh` syntax check) with no errors.
+- **Description:** The ./do script MUST pass sh -n POSIX shell syntax validation with no errors to ensure compatibility across different shell implementations.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-466]** -  All file paths in CLI output use forward-slash notation on all platforms.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-466]** All file paths in CLI output use forward-slash notation on all platforms.
+- **Description:** All file paths displayed in CLI output MUST use forward-slash notation on all platforms including Windows for consistent cross-platform display.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-467]** -  No string literal for a user-visible message appears outside of `strings.rs` in `devs-tui` or `devs-cli` (enforced by a `grep` in `./do lint`).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-467]** No string literal for a user-visible message appears outside of `strings.rs` in `devs-tui` or `devs-cli` (enforced by a `grep` in `./do lint`).
+- **Description:** No string literal for a user-visible message MUST appear outside of strings.rs in devs-tui or devs-cli, enforced by grep in ./do lint.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-468]** -  `cargo test -p devs-tui` completes without any snapshot mismatches (no `.new` snapshot files remain after the run).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-468]** `cargo test -p devs-tui` completes without any snapshot mismatches (no `.new` snapshot files remain after the run).
+- **Description:** Running cargo test for devs-tui MUST complete without any snapshot mismatches and no .new snapshot files remaining after the test run.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-469]** -  TUI test binary does not make any real network connections (verified by `mockall`-based gRPC mocking).
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-469]** TUI test binary does not make any real network connections (verified by `mockall`-based gRPC mocking).
+- **Description:** TUI test binary MUST NOT make any real network connections, using mockall-based gRPC mocking to ensure tests are hermetic and reproducible.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-470]** -  Pressing `c` in `DashboardTab` renders a confirmation prompt before issuing `CancelRun` gRPC call.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-470]** Pressing `c` in `DashboardTab` renders a confirmation prompt before issuing `CancelRun` gRPC call.
+- **Description:** Pressing c in DashboardTab MUST render a confirmation prompt dialog before issuing the CancelRun gRPC call to prevent accidental cancellations.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-471]** -  Pressing `Esc` during the confirmation prompt cancels the action and returns to normal view without issuing any gRPC call.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-471]** Pressing `Esc` during the confirmation prompt cancels the action and returns to normal view without issuing any gRPC call.
+- **Description:** Pressing Escape during the cancel confirmation prompt MUST cancel the action and return to normal view without issuing any gRPC call.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-472]** -  `./do test` generates `target/traceability.json` with `overall_passed: true` when all AC-UI-NNN criteria have at least one covering test.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-472]** `./do test` generates `target/traceability.json` with `overall_passed: true` when all AC-UI-NNN criteria have at least one covering test.
+- **Description:** The ./do test command MUST generate target/traceability.json with overall_passed true when all acceptance criteria have at least one covering test.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
 
 ### **[6_UI_UX_ARCHITECTURE-REQ-473]** -  `./do coverage` produces a QG-003 gate with `actual_pct ≥ 50.0` computed exclusively from CLI E2E tests invoked via binary subprocess.
 - **Type:** Technical
-- **Description:** - **[6_UI_UX_ARCHITECTURE-REQ-473]** `./do coverage` produces a QG-003 gate with `actual_pct ≥ 50.0` computed exclusively from CLI E2E tests invoked via binary subprocess.
+- **Description:** The ./do coverage command MUST produce a QG-003 quality gate with actual_pct at least 50.0 computed exclusively from CLI E2E subprocess tests.
 - **Source:** UI/UX Architecture (docs/plan/specs/6_ui_ux_architecture.md)
 - **Dependencies:** None
 
@@ -25512,7 +25512,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-001]** Risk Assessment Matrix Framework
 - **Type:** Technical
-- **Description:** 1. Risk Assessment Matrix
+- **Description:** The risk assessment matrix framework defines the methodology for evaluating and categorizing project risks by impact and probability.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -25644,7 +25644,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-023]** Risk Record JSON Schema
 - **Type:** Technical
-- **Description:** 1.1 Risk Record Data Model
+- **Description:** The risk record JSON schema defines the structured data model for capturing and tracking individual risk entries.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -25656,7 +25656,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-025]** Risk Record Field Constraints
 - **Type:** Technical
-- **Description:** Field Constraints:
+- **Description:** Risk record field constraints define validation rules including required fields, allowed value ranges, and enumerated type restrictions.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -25692,7 +25692,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-031]** Risk Lifecycle State Machine
 - **Type:** Technical
-- **Description:** 1.2 Risk Lifecycle State Machine
+- **Description:** The risk lifecycle state machine defines valid transitions between risk states including identified, mitigated, accepted, and closed.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -25710,7 +25710,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-034]** Risk Category Definitions
 - **Type:** Technical
-- **Description:** 1.3 Risk Category Definitions
+- **Description:** Risk category definitions enumerate the classification taxonomy for organizing risks into domains such as technical, operational, and security.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -25734,25 +25734,25 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-038]** Severity Scoring Methodology
 - **Type:** Technical
-- **Description:** 1.4 Severity Scoring Methodology
+- **Description:** The severity scoring methodology defines how impact and probability axes are combined to compute overall risk severity scores.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[8_RISKS-REQ-039]** Impact Axis Definitions
 - **Type:** Technical
-- **Description:** Impact Axis Definitions:
+- **Description:** Impact axis definitions specify the scale and criteria for rating the potential consequence severity of each identified risk.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[8_RISKS-REQ-040]** Probability Axis Definitions
 - **Type:** Technical
-- **Description:** Probability Axis Definitions:
+- **Description:** Probability axis definitions specify the scale and criteria for rating the likelihood of each identified risk occurring.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[8_RISKS-REQ-041]** Score-to-Action Mapping
 - **Type:** Functional
-- **Description:** Score-to-Action Mapping:
+- **Description:** The score-to-action mapping defines which response actions are required based on the computed risk severity score thresholds.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -25794,7 +25794,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-048]** Active Monitoring Requirements Table
 - **Type:** Technical
-- **Description:** 1.5 Active Monitoring Requirements
+- **Description:** Active monitoring requirements define the metrics, alerts, and health checks needed to detect risks as they materialize during operation.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -25902,7 +25902,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-066]** Risk Interdependency Matrix
 - **Type:** Technical
-- **Description:** 1.6 Risk Interdependency Matrix
+- **Description:** The risk interdependency matrix documents relationships between risks where one risk materializing can trigger or amplify other risks.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -25962,7 +25962,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-076]** Risk Interdependency Graph
 - **Type:** Technical
-- **Description:** Interdependency Graph:
+- **Description:** The interdependency graph provides a visual representation of causal and correlation relationships between identified project risks.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -26934,19 +26934,19 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[8_RISKS-REQ-238]** Bootstrap Phase Milestone Definition
 - **Type:** Operational
-- **Description:** Bootstrap Phase Definition:
+- **Description:** The bootstrap phase milestone definition specifies the criteria and deliverables required to complete the self-hosting bootstrap phase.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[8_RISKS-REQ-239]** Bootstrap Milestone JSON Schema
 - **Type:** Technical
-- **Description:** Bootstrap Milestone Data Model:
+- **Description:** The bootstrap milestone JSON schema defines the structured format for tracking progress toward bootstrap phase completion milestones.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[8_RISKS-REQ-240]** Bootstrap Phase State Machine
 - **Type:** Technical
-- **Description:** Bootstrap Phase State Machine:
+- **Description:** The bootstrap phase state machine defines the valid state transitions for tracking bootstrap milestone completion and phase advancement.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
@@ -27714,205 +27714,214 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ## Referenced Requirements
 
-## Referenced Requirements
-
-
 ### **[SEC-043]** Referenced Requirement SEC-043
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-043 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[3_PRD-BR-016]** Referenced Requirement 3_PRD-BR-016
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 3_PRD-BR-016 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[2_TAS-REQ-002]** Referenced Requirement 2_TAS-REQ-002
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 2_TAS-REQ-002 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-009]** Referenced Requirement SEC-009
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-009 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-001]** Referenced Requirement SEC-001
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-001 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[A-Z]** Referenced Requirement A-Z
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement A-Z defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[2_TAS-BR-021]** Referenced Requirement 2_TAS-BR-021
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 2_TAS-BR-021 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[A-Z0-9-]** Referenced Requirement A-Z0-9-
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement A-Z0-9- defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[3_PRD-BR-024]** Referenced Requirement 3_PRD-BR-024
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 3_PRD-BR-024 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-033]** Referenced Requirement SEC-033
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-033 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-040]** Referenced Requirement SEC-040
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-040 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[2_TAS-BR-013]** Referenced Requirement 2_TAS-BR-013
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 2_TAS-BR-013 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-006]** Referenced Requirement SEC-006
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-006 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[MCP-DBG-BR-015]** Referenced Requirement MCP-DBG-BR-015
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement MCP-DBG-BR-015 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[2_TAS-BR-019]** Referenced Requirement 2_TAS-BR-019
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 2_TAS-BR-019 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[3_PRD-BR-023]** Referenced Requirement 3_PRD-BR-023
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 3_PRD-BR-023 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[MCP-DBG-BR-016]** Referenced Requirement MCP-DBG-BR-016
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement MCP-DBG-BR-016 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-036]** Referenced Requirement SEC-036
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-036 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
+- **Dependencies:** None
+
+### **[SEC-020]** Referenced Requirement SEC-020
+- **Type:** Technical
+- **Description:** Path canonicalization MUST occur before access control evaluation; path traversal attempts including symlink escapes MUST be rejected with a permission_denied error before any OS filesystem call is attempted. This prevents attackers from bypassing access controls using `..` sequences, null bytes, or symlinks that resolve outside the allowed workspace boundary. All path components must be resolved to their absolute canonical form before any permission checks are evaluated.
+- **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 ### **[3_PRD-BR-043]** Referenced Requirement 3_PRD-BR-043
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 3_PRD-BR-043 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-020-BR-002]** Referenced Requirement SEC-020-BR-002
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-020-BR-002 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-037]** Referenced Requirement SEC-037
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
-- **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
+- **Description:** Webhook URL length MUST NOT exceed 2048 characters; URLs with non-http/https schemes MUST be rejected at configuration validation time before any delivery attempt to prevent SSRF attacks. This blocks dangerous schemes like `file://`, `ftp://`, and `gopher://` that could be exploited to access internal resources. URL validation must occur during webhook configuration registration and again before each delivery attempt.
+- **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 ### **[1_PRD-BR-001]** Referenced Requirement 1_PRD-BR-001
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 1_PRD-BR-001 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[2_TAS-REQ-112]** Referenced Requirement 2_TAS-REQ-112
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 2_TAS-REQ-112 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[FEAT-BR-001]** Referenced Requirement FEAT-BR-001
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement FEAT-BR-001 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[2_TAS-BR-022]** Referenced Requirement 2_TAS-BR-022
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 2_TAS-BR-022 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[AC-RISK-NNN-NN]** Referenced Requirement AC-RISK-NNN-NN
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement AC-RISK-NNN-NN defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[3_PRD-BR-021]** Referenced Requirement 3_PRD-BR-021
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 3_PRD-BR-021 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[2_TAS-REQ-109]** Referenced Requirement 2_TAS-REQ-109
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 2_TAS-REQ-109 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[UI-DES-002]** Referenced Requirement UI-DES-002
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement UI-DES-002 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[MCP-057]** Referenced Requirement MCP-057
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement MCP-057 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[UI-ROUTE-023]** Referenced Requirement UI-ROUTE-023
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement UI-ROUTE-023 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[0-9]** Referenced Requirement 0-9
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement 0-9 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
 - **Dependencies:** None
 
 ### **[SEC-066]** Referenced Requirement SEC-066
 - **Type:** Technical
-- **Description:** Referenced requirement from another document or internal reference.
+- **Description:** This is a cross-reference to requirement SEC-066 defined in another requirements document or internal specification for traceability purposes.
 - **Source:** Risks and Mitigation (docs/plan/specs/8_risks_mitigation.md)
+- **Dependencies:** None
+
+### **[SEC-093]** Referenced Requirement SEC-093
+- **Type:** Technical
+- **Description:** Log files MUST be created with mode 0600 (owner read/write only) and parent directories with mode 0700 (owner only) on Unix systems to prevent unauthorized access to stage output files containing sensitive data. This ensures that no local user other than the server process owner can read stage logs that may contain credentials or other sensitive information. File permissions must be set atomically at creation time before any log content is written.
+- **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 ---
@@ -28229,133 +28238,133 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-045]** P0A["[ROAD-007]  Cargo Workspace\n+ rust-toolchain.toml"] --
 - **Type:** Technical
-- **Description:** P0A["[ROAD-007]  Cargo Workspace\n+ rust-toolchain.toml"] --> P0B
+- **Description:** Roadmap dependency: Cargo Workspace setup (ROAD-007) must complete before the build script and GitLab CI configuration (ROAD-008) can begin, establishing the foundational build order.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-046]** P0A --> P0C["[ROAD-009]  devs-proto\n(protobuf)"]
 - **Type:** Technical
-- **Description:** P0A --> P0C["[ROAD-009]  devs-proto\n(protobuf)"]
+- **Description:** Roadmap dependency: Cargo Workspace setup (ROAD-007) must complete before devs-proto protobuf definitions (ROAD-009) can begin, as proto requires the workspace structure.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-047]** P0B["[ROAD-008]  ./do script\n+ GitLab CI"] --> P0D
 - **Type:** Technical
-- **Description:** P0B["[ROAD-008]  ./do script\n+ GitLab CI"] --> P0D
+- **Description:** Roadmap dependency: build script and GitLab CI (ROAD-008) must complete before devs-core (ROAD-010) can begin, ensuring CI infrastructure is ready for core development.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-048]** P0C --> P0D["[ROAD-010]  devs-core\n(domain types, StateMach
 - **Type:** Technical
-- **Description:** P0C --> P0D["[ROAD-010]  devs-core\n(domain types, StateMachine,\nTemplateResolver)"]
+- **Description:** Roadmap dependency: devs-proto protobuf definitions (ROAD-009) must complete before devs-core domain types and state machine (ROAD-010) can begin, as core depends on proto types.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-049]** P0D --> P1A["[ROAD-011]  devs-config"]
 - **Type:** Technical
-- **Description:** P0D --> P1A["[ROAD-011]  devs-config"]
+- **Description:** Roadmap dependency: devs-core (ROAD-010) must complete before devs-config (ROAD-011) can begin, as configuration loading depends on core domain types.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-050]** P0D --> P1B["[ROAD-012]  devs-checkpoint\n(git2 checkpoint)"]
 - **Type:** Technical
-- **Description:** P0D --> P1B["[ROAD-012]  devs-checkpoint\n(git2 checkpoint)"]
+- **Description:** Roadmap dependency: devs-core (ROAD-010) must complete before devs-checkpoint git2 checkpointing (ROAD-012) can begin, as checkpointing serializes core domain types.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-051]** P0D --> P1C["[ROAD-013]  devs-adapters\n(5 agent CLIs)"]
 - **Type:** Technical
-- **Description:** P0D --> P1C["[ROAD-013]  devs-adapters\n(5 agent CLIs)"]
+- **Description:** Roadmap dependency: devs-core (ROAD-010) must complete before devs-adapters agent CLI integrations (ROAD-013) can begin, as adapters implement core agent traits.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-052]** P1C --> P1D["[ROAD-014]  devs-pool\n(semaphore, fallback)"]
 - **Type:** Technical
-- **Description:** P1C --> P1D["[ROAD-014]  devs-pool\n(semaphore, fallback)"]
+- **Description:** Roadmap dependency: devs-adapters (ROAD-013) must complete before devs-pool semaphore and fallback logic (ROAD-014) can begin, as the pool manages adapter instances.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-053]** P1D --> P1E["[ROAD-015]  devs-executor\n(tempdir/docker/ssh)"]
 - **Type:** Technical
-- **Description:** P1D --> P1E["[ROAD-015]  devs-executor\n(tempdir/docker/ssh)"]
+- **Description:** Roadmap dependency: devs-pool (ROAD-014) must complete before devs-executor sandbox environments (ROAD-015) can begin, as the executor acquires agents from the pool.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-054]** P1E --> P2A["[ROAD-016]  devs-scheduler\n(DAG engine, fan-ou
 - **Type:** Technical
-- **Description:** P1E --> P2A["[ROAD-016]  devs-scheduler\n(DAG engine, fan-out,\nretry, timeout)"]
+- **Description:** Roadmap dependency: devs-executor (ROAD-015) must complete before devs-scheduler DAG engine (ROAD-016) can begin, as the scheduler dispatches work through the executor.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-055]** P2A --> P2B["[ROAD-017]  devs-webhook"]
 - **Type:** Technical
-- **Description:** P2A --> P2B["[ROAD-017]  devs-webhook"]
+- **Description:** Roadmap dependency: devs-scheduler (ROAD-016) must complete before devs-webhook (ROAD-017) can begin, as webhooks are triggered by scheduler state transitions.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-056]** P2A --> P3A["[ROAD-018]  devs-grpc\n(6 tonic services)"]
 - **Type:** Technical
-- **Description:** P2A --> P3A["[ROAD-018]  devs-grpc\n(6 tonic services)"]
+- **Description:** Roadmap dependency: devs-scheduler (ROAD-016) must complete before devs-grpc tonic services (ROAD-018) can begin, as gRPC exposes scheduler operations to clients.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-057]** P2A --> P3B["[ROAD-019]  devs-mcp\n(Glass-Box tools)"]
 - **Type:** Technical
-- **Description:** P2A --> P3B["[ROAD-019]  devs-mcp\n(Glass-Box tools)"]
+- **Description:** Roadmap dependency: devs-scheduler (ROAD-016) must complete before devs-mcp Glass-Box tools (ROAD-019) can begin, as MCP tools interact with the scheduler.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-058]** P3A --> P3C["[ROAD-020]  devs-server\n(startup/shutdown)"]
 - **Type:** Technical
-- **Description:** P3A --> P3C["[ROAD-020]  devs-server\n(startup/shutdown)"]
+- **Description:** Roadmap dependency: devs-grpc (ROAD-018) must complete before devs-server startup and shutdown orchestration (ROAD-020) can begin, as the server hosts gRPC services.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-059]** P3C --> P3D["[ROAD-021]  devs-cli"]
 - **Type:** Technical
-- **Description:** P3C --> P3D["[ROAD-021]  devs-cli"]
+- **Description:** Roadmap dependency: devs-server (ROAD-020) must complete before devs-cli (ROAD-021) can begin, as the CLI client connects to the running server.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-060]** P3C --> P3E["[ROAD-022]  devs-tui"]
 - **Type:** Technical
-- **Description:** P3C --> P3E["[ROAD-022]  devs-tui"]
+- **Description:** Roadmap dependency: devs-server (ROAD-020) must complete before devs-tui (ROAD-022) can begin, as the TUI client connects to the running server.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-061]** P3B --> P3F["[ROAD-023]  devs-mcp-bridge"]
 - **Type:** Technical
-- **Description:** P3B --> P3F["[ROAD-023]  devs-mcp-bridge"]
+- **Description:** Roadmap dependency: devs-mcp Glass-Box tools (ROAD-019) must complete before devs-mcp-bridge (ROAD-023) can begin, as the bridge proxies MCP protocol over stdio.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-062]** P3C --> P4A["[ROAD-024]  Bootstrap\nComplete"]
 - **Type:** Technical
-- **Description:** P3C --> P4A["[ROAD-024]  Bootstrap\nComplete"]
+- **Description:** Roadmap dependency: devs-server (ROAD-020) must complete before the Bootstrap Complete milestone (ROAD-024) can be reached, marking self-hosting readiness.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-063]** P4A --> P5A["[ROAD-025]  MVP Release"]
 - **Type:** Technical
-- **Description:** P4A --> P5A["[ROAD-025]  MVP Release"]
+- **Description:** Roadmap dependency: Bootstrap Complete milestone (ROAD-024) must be achieved before the MVP Release milestone (ROAD-025) can begin, gating public release on self-hosting validation.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -28411,7 +28420,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-071]** `agents` | `AgentPoolState[]` | Per-agent status
 - **Type:** Technical
-- **Description:** `agents` | `AgentPoolState[]` | Per-agent status
+- **Description:** The agents field contains an array of AgentPoolState objects representing the current status and availability of each agent in the pool.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -28425,14 +28434,14 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-073]** `capabilities` | `string[]` | Declared capability tags
 - **Type:** Technical
-- **Description:** `capabilities` | `string[]` | Declared capability tags
+- **Description:** The capabilities field contains an array of string tags declaring the functional capabilities of each agent such as code-gen, review, or long-context.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-074]** `fallback` | `boolean` | Is a fallback agent
 - **Type:** Technical
-- **Description:** `fallback` | `boolean` | Is a fallback agent
+- **Description:** The fallback boolean field indicates whether this agent serves as a fallback option when higher-priority agents are unavailable or rate-limited.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -28474,35 +28483,35 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-080]** `.devs_output.json` exists, `"success": true` (boolean) | `C
 - **Type:** Technical
-- **Description:** `.devs_output.json` exists, `"success": true` (boolean) | `Completed`
+- **Description:** When the structured output file .devs_output.json exists and contains a boolean "success": true field, the stage completion status MUST be set to Completed.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-081]** `.devs_output.json` exists, `"success": false` (boolean) | `
 - **Type:** Technical
-- **Description:** `.devs_output.json` exists, `"success": false` (boolean) | `Failed`
+- **Description:** When the structured output file .devs_output.json exists and contains a boolean "success": false field, the stage completion status MUST be set to Failed.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-082]** `.devs_output.json` exists, `"success": "true"` (string) | `
 - **Type:** Technical
-- **Description:** `.devs_output.json` exists, `"success": "true"` (string) | `Failed` — string `"true"` is NOT accepted
+- **Description:** When the structured output file .devs_output.json exists but the "success" field contains the string "true" instead of a boolean, the stage MUST be marked Failed because only boolean true is accepted.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-083]** `.devs_output.json` exists, `"success"` field absent | `Failed`
 - **Type:** Technical
-- **Description:** `.devs_output.json` exists, `"success"` field absent | `Failed`
+- **Description:** When the structured output file .devs_output.json exists but the required "success" field is absent from the JSON object, the stage completion status MUST be set to Failed.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-084]** `.devs_output.json` exists, invalid JSON | `Failed`
 - **Type:** Technical
-- **Description:** `.devs_output.json` exists, invalid JSON | `Failed`
+- **Description:** When the structured output file .devs_output.json exists but contains invalid JSON that cannot be parsed, the stage completion status MUST be set to Failed.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -28894,35 +28903,35 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-140]** [ROAD-001]   Phase 0 — Project Foundation & Toolchain
 - **Type:** Technical
-- **Description:** [ROAD-001]   Phase 0 — Project Foundation & Toolchain
+- **Description:** Phase 0 covers project foundation and toolchain setup including Cargo workspace initialization, CI pipeline configuration, and core crate scaffolding.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-141]** [ROAD-007]   Cargo Workspace Skeleton
 - **Type:** Technical
-- **Description:** [ROAD-007]   Cargo Workspace Skeleton
+- **Description:** The Cargo workspace skeleton establishes the multi-crate Rust workspace structure with shared dependencies, feature flags, and rust-toolchain.toml configuration.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-142]** [ROAD-008]   `./do` Entrypoint Script & CI Pipeline
 - **Type:** Technical
-- **Description:** [ROAD-008]   `./do` Entrypoint Script & CI Pipeline
+- **Description:** The ./do entrypoint script and CI pipeline provides a POSIX-compatible build automation layer with presubmit checks, linting, and GitLab CI job definitions.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-143]** [ROAD-009]   `devs-proto` Crate
 - **Type:** Technical
-- **Description:** [ROAD-009]   `devs-proto` Crate
+- **Description:** The devs-proto crate contains Protocol Buffer definitions for all six gRPC service interfaces and generates Rust types via prost and tonic-build.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-144]** [ROAD-010]   `devs-core` Crate
 - **Type:** Technical
-- **Description:** [ROAD-010]   `devs-core` Crate
+- **Description:** The devs-core crate provides domain types, state machine definitions, and template resolution logic shared across all other crates in the workspace.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -29118,49 +29127,49 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-172]** [ROAD-P0-DEP-001]   No prior phases. This is the root phase.
 - **Type:** Technical
-- **Description:** [ROAD-P0-DEP-001]   No prior phases. This is the root phase.
+- **Description:** Phase 0 has no prior phase dependencies and serves as the root phase from which all subsequent phases derive their foundational infrastructure.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-173]** [ROAD-002]   Phase 1 — Core Domain & Infrastructure
 - **Type:** Technical
-- **Description:** [ROAD-002]   Phase 1 — Core Domain & Infrastructure
+- **Description:** Phase 1 covers core domain and infrastructure crates including configuration loading, git-based checkpointing, agent adapters, pool management, and execution environments.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-174]** [ROAD-011]   `devs-config` Crate
 - **Type:** Technical
-- **Description:** [ROAD-011]   `devs-config` Crate
+- **Description:** The devs-config crate handles TOML workflow definition parsing, validation, and configuration management for server and agent settings.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-175]** [ROAD-012]   `devs-checkpoint` Crate
 - **Type:** Technical
-- **Description:** [ROAD-012]   `devs-checkpoint` Crate
+- **Description:** The devs-checkpoint crate implements git2-based checkpointing for persisting and restoring workflow run state across server restarts.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-176]** [ROAD-013]   `devs-adapters` Crate
 - **Type:** Technical
-- **Description:** [ROAD-013]   `devs-adapters` Crate
+- **Description:** The devs-adapters crate provides integration adapters for five supported AI agent CLI tools with unified process spawning and output parsing.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-177]** [ROAD-014]   `devs-pool` Crate
 - **Type:** Technical
-- **Description:** [ROAD-014]   `devs-pool` Crate
+- **Description:** The devs-pool crate implements agent pool management with semaphore-based concurrency control, capability matching, and fallback agent selection logic.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-178]** [ROAD-015]   `devs-executor` Crate
 - **Type:** Technical
-- **Description:** [ROAD-015]   `devs-executor` Crate
+- **Description:** The devs-executor crate manages stage execution environments including temporary directory sandboxing, Docker container isolation, and SSH remote execution.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -29370,21 +29379,21 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-208]** [ROAD-003]   Phase 2 — Workflow Engine
 - **Type:** Technical
-- **Description:** [ROAD-003]   Phase 2 — Workflow Engine
+- **Description:** Phase 2 covers the workflow engine including the DAG-based scheduler with fan-out, retry, and timeout logic, plus webhook notification delivery.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-209]** [ROAD-016]   `devs-scheduler` / `devs-scheduler` Crates
 - **Type:** Technical
-- **Description:** [ROAD-016]   `devs-scheduler` / `devs-scheduler` Crates
+- **Description:** The devs-scheduler crate implements the DAG-based workflow scheduling engine with stage fan-out, dependency resolution, retry backoff, and timeout enforcement.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-210]** [ROAD-017]   `devs-webhook` Crate
 - **Type:** Technical
-- **Description:** [ROAD-017]   `devs-webhook` Crate
+- **Description:** The devs-webhook crate handles outbound webhook notification delivery with SSRF protection, exponential backoff retry, and dead-letter logging for failures.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -29587,49 +29596,49 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-239]** [ROAD-004]   Phase 3 — Server & Client Interfaces
 - **Type:** Technical
-- **Description:** [ROAD-004]   Phase 3 — Server & Client Interfaces
+- **Description:** Phase 3 covers server and client interfaces including gRPC services, MCP Glass-Box tools, the server binary, CLI, TUI, and MCP bridge binaries.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-240]** [ROAD-018]   `devs-grpc` Crate
 - **Type:** Technical
-- **Description:** [ROAD-018]   `devs-grpc` Crate
+- **Description:** The devs-grpc crate implements six tonic-based gRPC service handlers for workflow definition, run management, stage control, logging, pool status, and project operations.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-241]** [ROAD-019]   `devs-mcp` Crate
 - **Type:** Technical
-- **Description:** [ROAD-019]   `devs-mcp` Crate
+- **Description:** The devs-mcp crate implements the MCP Glass-Box server providing tools for AI agents to observe and control workflow execution within their stages.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-242]** [ROAD-020]   `devs-server` Binary
 - **Type:** Technical
-- **Description:** [ROAD-020]   `devs-server` Binary
+- **Description:** The devs-server binary orchestrates startup and graceful shutdown of gRPC and MCP listeners, configuration loading, and background scheduler task management.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-243]** [ROAD-021]   `devs-cli` Binary (`devs-client-util` shared li
 - **Type:** Technical
-- **Description:** [ROAD-021]   `devs-cli` Binary (`devs-client-util` shared library)
+- **Description:** The devs-cli binary and devs-client-util shared library provide command-line workflow submission, status querying, cancellation, and log streaming via gRPC client calls.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-244]** [ROAD-022]   `devs-tui` Binary
 - **Type:** Technical
-- **Description:** [ROAD-022]   `devs-tui` Binary
+- **Description:** The devs-tui binary provides a terminal user interface built with Ratatui for real-time workflow monitoring, stage inspection, and interactive run control.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-245]** [ROAD-023]   `devs-mcp-bridge` Binary
 - **Type:** Technical
-- **Description:** [ROAD-023]   `devs-mcp-bridge` Binary
+- **Description:** The devs-mcp-bridge binary provides a stdio-based MCP proxy that translates between AI agent MCP protocol messages and the devs server gRPC interface.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -29867,14 +29876,14 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-279]** [ROAD-005]   Phase 4 — Self-Hosting & Agentic Development
 - **Type:** Technical
-- **Description:** [ROAD-005]   Phase 4 — Self-Hosting & Agentic Development
+- **Description:** Phase 4 covers self-hosting and agentic development where the devs system is used to develop itself, validating the bootstrap workflow end-to-end.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-280]** [ROAD-024]   Bootstrap Validation
 - **Type:** Technical
-- **Description:** [ROAD-024]   Bootstrap Validation
+- **Description:** Bootstrap validation confirms that the devs orchestrator can successfully manage its own development workflow, proving self-hosting capability across all crates.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -30042,14 +30051,14 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-304]** [ROAD-006]   Phase 5 — Quality Hardening & MVP Release
 - **Type:** Technical
-- **Description:** [ROAD-006]   Phase 5 — Quality Hardening & MVP Release
+- **Description:** Phase 5 covers quality hardening and MVP release preparation including comprehensive end-to-end testing, performance validation, and release packaging.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-305]** [ROAD-025]   E2E Test Suite Completion
 - **Type:** Technical
-- **Description:** [ROAD-025]   E2E Test Suite Completion
+- **Description:** End-to-end test suite completion ensures full integration coverage across all workflow scenarios, agent types, and failure modes before the MVP release.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -30238,126 +30247,126 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-332]** ROAD007["[ROAD-007] \nWorkspace + CI\n1w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD007["[ROAD-007] \nWorkspace + CI\n1w"]:::critical
+- **Description:** Roadmap dependency graph node representing Workspace + CI with an estimated duration of 1 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-333]** ROAD009["[ROAD-009] \ndevs-proto\n2w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD009["[ROAD-009] \ndevs-proto\n2w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-proto with an estimated duration of 2 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-334]** ROAD010["[ROAD-010] \ndevs-core\n3w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD010["[ROAD-010] \ndevs-core\n3w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-core with an estimated duration of 3 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-335]** ROAD011["[ROAD-011] \ndevs-config\n2w"]:::float
 - **Type:** Technical
-- **Description:** ROAD011["[ROAD-011] \ndevs-config\n2w"]:::float
+- **Description:** Roadmap dependency graph node representing devs-config with an estimated duration of 2 weeks, on the float path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-336]** ROAD012["[ROAD-012] \ndevs-checkpoint\n2w"]:::float
 - **Type:** Technical
-- **Description:** ROAD012["[ROAD-012] \ndevs-checkpoint\n2w"]:::float
+- **Description:** Roadmap dependency graph node representing devs-checkpoint with an estimated duration of 2 weeks, on the float path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-337]** ROAD013["[ROAD-013] \ndevs-adapters\n3w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD013["[ROAD-013] \ndevs-adapters\n3w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-adapters with an estimated duration of 3 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-338]** ROAD014["[ROAD-014] \ndevs-pool\n2w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD014["[ROAD-014] \ndevs-pool\n2w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-pool with an estimated duration of 2 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-339]** ROAD015["[ROAD-015] \ndevs-executor\n3w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD015["[ROAD-015] \ndevs-executor\n3w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-executor with an estimated duration of 3 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-340]** ROAD016["[ROAD-016] \ndevs-scheduler\n4w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD016["[ROAD-016] \ndevs-scheduler\n4w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-scheduler with an estimated duration of 4 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-341]** ROAD017["[ROAD-017] \ndevs-webhook\n2w"]:::float
 - **Type:** Technical
-- **Description:** ROAD017["[ROAD-017] \ndevs-webhook\n2w"]:::float
+- **Description:** Roadmap dependency graph node representing devs-webhook with an estimated duration of 2 weeks, on the float path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-342]** ROAD018["[ROAD-018] \ndevs-grpc\n3w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD018["[ROAD-018] \ndevs-grpc\n3w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-grpc with an estimated duration of 3 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-343]** ROAD019["[ROAD-019] \ndevs-mcp\n3w"]:::float
 - **Type:** Technical
-- **Description:** ROAD019["[ROAD-019] \ndevs-mcp\n3w"]:::float
+- **Description:** Roadmap dependency graph node representing devs-mcp with an estimated duration of 3 weeks, on the float path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-344]** ROAD020["[ROAD-020] \ndevs-server\n2w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD020["[ROAD-020] \ndevs-server\n2w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-server with an estimated duration of 2 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-345]** ROAD021["[ROAD-021] \ndevs-cli\n3w"]:::float
 - **Type:** Technical
-- **Description:** ROAD021["[ROAD-021] \ndevs-cli\n3w"]:::float
+- **Description:** Roadmap dependency graph node representing devs-cli with an estimated duration of 3 weeks, on the float path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-346]** ROAD022["[ROAD-022] \ndevs-tui\n4w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD022["[ROAD-022] \ndevs-tui\n4w"]:::critical
+- **Description:** Roadmap dependency graph node representing devs-tui with an estimated duration of 4 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-347]** ROAD023["[ROAD-023] \ndevs-mcp-bridge\n1w"]:::float
 - **Type:** Technical
-- **Description:** ROAD023["[ROAD-023] \ndevs-mcp-bridge\n1w"]:::float
+- **Description:** Roadmap dependency graph node representing devs-mcp-bridge with an estimated duration of 1 weeks, on the float path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-348]** ROAD024["[ROAD-024] \nBootstrap\n2w"]:::critical
 - **Type:** Technical
-- **Description:** ROAD024["[ROAD-024] \nBootstrap\n2w"]:::critical
+- **Description:** Roadmap dependency graph node representing Bootstrap with an estimated duration of 2 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
 
 ### **[9_PROJECT_ROADMAP-REQ-349]** ROAD025["[ROAD-025] \nMVP E2E + Gates\n6w"]:::critical
 - **Type:** Quality
-- **Description:** ROAD025["[ROAD-025] \nMVP E2E + Gates\n6w"]:::critical
+- **Description:** Roadmap dependency graph node representing MVP E2E + Gates with an estimated duration of 6 weeks, on the critical path.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -30679,7 +30688,7 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[9_PROJECT_ROADMAP-REQ-395]** `phase_id` | string | `p0`–`p5` | Lowercase phase identifier
 - **Type:** Technical
-- **Description:** `phase_id` | string | `p0`–`p5` | Lowercase phase identifier
+- **Description:** The phase_id field is a lowercase string identifier ranging from p0 through p5 that uniquely identifies each roadmap phase in the project timeline.
 - **Source:** Project Roadmap (docs/plan/specs/9_project_roadmap.md)
 - **Dependencies:** None
 
@@ -31172,49 +31181,49 @@ The following upstream requirement IDs are referenced in the Performance Specifi
 
 ### **[2_TAS-BR-015]** Referenced Placeholder Tag 2_TAS-BR-015
 - **Type:** Technical
-- **Description:** Referenced placeholder tag appearing in source document for traceability.
+- **Description:** This is a traceability marker representing a placeholder tag that appears in the source document for tracking and cross-referencing requirements.
 - **Source:** TAS (Technical Architecture Specification) (docs/plan/specs/2_tas.md)
 - **Dependencies:** None
 
 
 ### **[AC-SEC-N-NNN]** Referenced Placeholder Tag AC-SEC-N-NNN
 - **Type:** Technical
-- **Description:** Referenced placeholder tag appearing in source document for traceability.
+- **Description:** This is a traceability marker representing a placeholder tag that appears in the source document for tracking and cross-referencing requirements.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 
 
 ### **[MCP-075]** Referenced Placeholder Tag MCP-075
 - **Type:** Technical
-- **Description:** Referenced placeholder tag appearing in source document for traceability.
+- **Description:** This is a traceability marker representing a placeholder tag that appears in the source document for tracking and cross-referencing requirements.
 - **Source:** MCP Interface Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[MCP-BR-040]** Referenced Placeholder Tag MCP-BR-040
 - **Type:** Technical
-- **Description:** Referenced placeholder tag appearing in source document for traceability.
+- **Description:** This is a traceability marker representing a placeholder tag that appears in the source document for tracking and cross-referencing requirements.
 - **Source:** MCP Interface Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[MCP-BR-043]** Referenced Placeholder Tag MCP-BR-043
 - **Type:** Technical
-- **Description:** Referenced placeholder tag appearing in source document for traceability.
+- **Description:** This is a traceability marker representing a placeholder tag that appears in the source document for tracking and cross-referencing requirements.
 - **Source:** MCP Interface Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[MCP-DBG-BR-005]** Referenced Placeholder Tag MCP-DBG-BR-005
 - **Type:** Technical
-- **Description:** Referenced placeholder tag appearing in source document for traceability.
+- **Description:** This is a traceability marker representing a placeholder tag that appears in the source document for tracking and cross-referencing requirements.
 - **Source:** MCP Interface Design (docs/plan/specs/3_mcp_design.md)
 - **Dependencies:** None
 
 
 ### **[SEC-NNN]** Referenced Placeholder Tag SEC-NNN
 - **Type:** Technical
-- **Description:** Referenced placeholder tag appearing in source document for traceability.
+- **Description:** This is a traceability marker representing a placeholder tag that appears in the source document for tracking and cross-referencing requirements.
 - **Source:** Security Design (docs/plan/specs/5_security_design.md)
 - **Dependencies:** None
 

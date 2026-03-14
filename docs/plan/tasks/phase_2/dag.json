@@ -1,0 +1,170 @@
+{
+  "01_dag_scheduling_engine/01_dag_data_structure_and_cycle_detection.md": [
+    "01_dag_scheduling_engine/05_phase_1_completion_gate.md"
+  ],
+  "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md": [
+    "01_dag_scheduling_engine/01_dag_data_structure_and_cycle_detection.md"
+  ],
+  "01_dag_scheduling_engine/03_rust_builder_api.md": [
+    "01_dag_scheduling_engine/01_dag_data_structure_and_cycle_detection.md"
+  ],
+  "01_dag_scheduling_engine/04_declarative_workflow_parser.md": [
+    "01_dag_scheduling_engine/01_dag_data_structure_and_cycle_detection.md",
+    "01_dag_scheduling_engine/03_rust_builder_api.md"
+  ],
+  "01_dag_scheduling_engine/05_phase_1_completion_gate.md": [],
+  "01_dag_scheduling_engine/06_stage_completion_signal_processing.md": [
+    "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md"
+  ],
+  "01_dag_scheduling_engine/07_checkpoint_corruption_and_disk_resilience.md": [
+    "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md"
+  ],
+  "01_dag_scheduling_engine/08_pool_state_model_and_exhaustion_rules.md": [
+    "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md"
+  ],
+  "01_dag_scheduling_engine/09_build_artifact_deliverables_validation.md": [
+    "01_dag_scheduling_engine/05_phase_1_completion_gate.md",
+    "01_dag_scheduling_engine/04_declarative_workflow_parser.md"
+  ],
+  "01_dag_scheduling_engine/10_dag_dispatch_latency_goal_verification.md": [
+    "01_dag_scheduling_engine/02_parallel_stage_dispatch_engine.md"
+  ],
+  "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md": [
+    "01_dag_scheduling_engine/07_checkpoint_corruption_and_disk_resilience.md"
+  ],
+  "02_stage_execution_completion/01_exit_code_completion.md": [],
+  "02_stage_execution_completion/02_structured_output_completion.md": [
+    "02_stage_execution_completion/01_exit_code_completion.md"
+  ],
+  "02_stage_execution_completion/02_structured_output_handler.md": [
+    "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md"
+  ],
+  "02_stage_execution_completion/03_mcp_tool_call_completion_handler.md": [
+    "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md",
+    "02_stage_execution_completion/02_structured_output_handler.md"
+  ],
+  "02_stage_execution_completion/03_mcp_tool_completion.md": [
+    "02_stage_execution_completion/01_exit_code_completion.md"
+  ],
+  "02_stage_execution_completion/04_rate_limit_detection_and_requeue.md": [
+    "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md",
+    "02_stage_execution_completion/02_structured_output_handler.md"
+  ],
+  "02_stage_execution_completion/05_completion_dispatch_integration.md": [
+    "02_stage_execution_completion/01_completion_signal_types_and_exit_code_handler.md",
+    "02_stage_execution_completion/02_structured_output_handler.md",
+    "02_stage_execution_completion/03_mcp_tool_call_completion_handler.md",
+    "02_stage_execution_completion/04_rate_limit_detection_and_requeue.md"
+  ],
+  "03_data_flow_stage_communication/01_template_variable_resolution.md": [],
+  "03_data_flow_stage_communication/02_context_file_generation.md": [
+    "03_data_flow_stage_communication/01_template_variable_resolution.md"
+  ],
+  "03_data_flow_stage_communication/03_shared_directory_convention.md": [
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ],
+  "04_fan-out_implementation/01_fan_out_config_validation.md": [],
+  "04_fan-out_implementation/02_fan_out_scheduler_integration.md": [
+    "04_fan-out_implementation/01_fan_out_config_validation.md"
+  ],
+  "04_fan-out_implementation/03_fan_out_authoring.md": [
+    "04_fan-out_implementation/02_fan_out_scheduler_integration.md",
+    "04_fan-out_implementation/01_fan_out_config_validation.md"
+  ],
+  "04_fan-out_implementation/04_fan_out_merging_failure.md": [
+    "04_fan-out_implementation/02_fan_out_scheduler_integration.md",
+    "04_fan-out_implementation/03_fan_out_authoring.md",
+    "04_fan-out_implementation/01_fan_out_config_validation.md"
+  ],
+  "05_error_handling_timeouts/01_per_stage_retry_with_backoff.md": [
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ],
+  "05_error_handling_timeouts/01_stage_timeout_enforcement.md": [
+    "02_stage_execution_completion/01_exit_code_completion.md",
+    "02_stage_execution_completion/02_structured_output_completion.md"
+  ],
+  "05_error_handling_timeouts/02_per_stage_timeout_enforcement.md": [
+    "05_error_handling_timeouts/01_per_stage_retry_with_backoff.md",
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ],
+  "05_error_handling_timeouts/02_workflow_timeout_enforcement.md": [
+    "05_error_handling_timeouts/01_stage_timeout_enforcement.md",
+    "02_stage_execution_completion/01_exit_code_completion.md"
+  ],
+  "05_error_handling_timeouts/03_automatic_stage_retry.md": [
+    "02_stage_execution_completion/01_exit_code_completion.md"
+  ],
+  "05_error_handling_timeouts/03_workflow_level_timeout.md": [
+    "05_error_handling_timeouts/02_per_stage_timeout_enforcement.md",
+    "03_data_flow_stage_communication/02_context_file_generation.md",
+    "05_error_handling_timeouts/01_per_stage_retry_with_backoff.md"
+  ],
+  "06_multi-project_resource_management/01_global_dispatcher_strict_priority.md": [],
+  "06_multi-project_resource_management/02_weighted_fair_queuing.md": [
+    "06_multi-project_resource_management/01_global_dispatcher_strict_priority.md"
+  ],
+  "06_multi-project_resource_management/03_scheduling_integration_validation.md": [
+    "06_multi-project_resource_management/02_weighted_fair_queuing.md"
+  ],
+  "07_logging_retention/01_retention_policy_config_and_delete_primitive.md": [
+    "02_stage_execution_completion/01_exit_code_completion.md"
+  ],
+  "07_logging_retention/02_retention_sweep_logic.md": [
+    "07_logging_retention/01_retention_policy_config_and_delete_primitive.md",
+    "02_stage_execution_completion/01_exit_code_completion.md",
+    "07_logging_retention/01_retention_policy_config_and_delete_primitive.md"
+  ],
+  "07_logging_retention/03_retention_background_task.md": [
+    "07_logging_retention/02_retention_sweep_logic.md",
+    "07_logging_retention/01_retention_policy_config_and_delete_primitive.md"
+  ],
+  "08_webhook_notification_infrastructure/01_event_types_and_payload.md": [],
+  "08_webhook_notification_infrastructure/02_dispatcher_bounded_channel.md": [
+    "08_webhook_notification_infrastructure/01_event_types_and_payload.md"
+  ],
+  "08_webhook_notification_infrastructure/03_retry_strategy.md": [
+    "08_webhook_notification_infrastructure/02_dispatcher_bounded_channel.md",
+    "08_webhook_notification_infrastructure/01_event_types_and_payload.md"
+  ],
+  "08_webhook_notification_infrastructure/04_per_project_event_routing.md": [
+    "08_webhook_notification_infrastructure/03_retry_strategy.md",
+    "08_webhook_notification_infrastructure/01_event_types_and_payload.md"
+  ],
+  "09_pool_events_monitoring/01_pool_exhaustion_tracking.md": [],
+  "09_pool_events_monitoring/02_pool_exhaustion_webhook_integration.md": [
+    "09_pool_events_monitoring/01_pool_exhaustion_tracking.md",
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ],
+  "10_phase_2_acceptance_verification/01_dag_dispatch_latency_verification.md": [
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ],
+  "10_phase_2_acceptance_verification/02_cancel_run_atomic_checkpoint.md": [
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ],
+  "10_phase_2_acceptance_verification/03_cycle_detection_validation.md": [
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ],
+  "10_phase_2_acceptance_verification/04_workflow_snapshot_immutability.md": [
+    "03_data_flow_stage_communication/02_context_file_generation.md",
+    "10_phase_2_acceptance_verification/02_cancel_run_atomic_checkpoint.md"
+  ],
+  "10_phase_2_acceptance_verification/05_pool_exhausted_webhook_deduplication.md": [
+    "09_pool_events_monitoring/02_pool_exhaustion_webhook_integration.md"
+  ],
+  "10_phase_2_acceptance_verification/06_ssrf_protection_validation.md": [
+    "10_phase_2_acceptance_verification/05_pool_exhausted_webhook_deduplication.md"
+  ],
+  "10_phase_2_acceptance_verification/07_weighted_fair_queuing_ratio.md": [
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ],
+  "10_phase_2_acceptance_verification/08_phase_2_coverage_quality_gate.md": [
+    "10_phase_2_acceptance_verification/01_dag_dispatch_latency_verification.md",
+    "10_phase_2_acceptance_verification/02_cancel_run_atomic_checkpoint.md",
+    "10_phase_2_acceptance_verification/03_cycle_detection_validation.md",
+    "10_phase_2_acceptance_verification/04_workflow_snapshot_immutability.md",
+    "10_phase_2_acceptance_verification/05_pool_exhausted_webhook_deduplication.md",
+    "10_phase_2_acceptance_verification/06_ssrf_protection_validation.md",
+    "10_phase_2_acceptance_verification/07_weighted_fair_queuing_ratio.md",
+    "03_data_flow_stage_communication/02_context_file_generation.md"
+  ]
+}

@@ -1,0 +1,818 @@
+{
+  "001_workspace_toolchain_setup/01_initialize_toolchain_and_root_manifest.md": [],
+  "001_workspace_toolchain_setup/01_rust_toolchain_pinning.md": [],
+  "001_workspace_toolchain_setup/02_cargo_workspace_manifest.md": [
+    "001_workspace_toolchain_setup/01_rust_toolchain_pinning.md"
+  ],
+  "001_workspace_toolchain_setup/02_scaffold_workspace_crates.md": [
+    "001_workspace_toolchain_setup/01_initialize_toolchain_and_root_manifest.md"
+  ],
+  "001_workspace_toolchain_setup/03_configure_workspace_dependencies.md": [
+    "001_workspace_toolchain_setup/02_scaffold_workspace_crates.md"
+  ],
+  "001_workspace_toolchain_setup/03_workspace_build_validation.md": [
+    "001_workspace_toolchain_setup/02_cargo_workspace_manifest.md"
+  ],
+  "001_workspace_toolchain_setup/07_ptc_json_schema_and_checkpoint_validation.md": [
+    "001_workspace_toolchain_setup/03_workspace_build_validation.md"
+  ],
+  "001_workspace_toolchain_setup/08_phase_state_machine_and_transition_rules.md": [
+    "001_workspace_toolchain_setup/07_ptc_json_schema_and_checkpoint_validation.md"
+  ],
+  "001_workspace_toolchain_setup/09_roadmap_phase_definitions_and_dependency_graph.md": [
+    "001_workspace_toolchain_setup/03_workspace_build_validation.md"
+  ],
+  "001_workspace_toolchain_setup/10_presubmit_timing_timeout_and_lint_rules.md": [
+    "001_workspace_toolchain_setup/03_workspace_build_validation.md"
+  ],
+  "001_workspace_toolchain_setup/11_roadmap_constraints_risks_and_general_business_rules.md": [
+    "001_workspace_toolchain_setup/07_ptc_json_schema_and_checkpoint_validation.md",
+    "001_workspace_toolchain_setup/08_phase_state_machine_and_transition_rules.md"
+  ],
+  "001_workspace_toolchain_setup/12_phase_detail_and_artifact_business_rules.md": [
+    "001_workspace_toolchain_setup/09_roadmap_phase_definitions_and_dependency_graph.md",
+    "001_workspace_toolchain_setup/10_presubmit_timing_timeout_and_lint_rules.md"
+  ],
+  "001_workspace_toolchain_setup/13_acceptance_criteria_traceability_and_phase3.md": [
+    "001_workspace_toolchain_setup/07_ptc_json_schema_and_checkpoint_validation.md",
+    "001_workspace_toolchain_setup/09_roadmap_phase_definitions_and_dependency_graph.md",
+    "001_workspace_toolchain_setup/10_presubmit_timing_timeout_and_lint_rules.md"
+  ],
+  "002_workspace_toolchain_extensions/01_enforce_reqwest_tls_backend.md": [],
+  "002_workspace_toolchain_extensions/02_configure_workspace_dev_dependencies.md": [],
+  "003_developer_entrypoint_script/01_scaffold_do_script.md": [],
+  "003_developer_entrypoint_script/02_implement_setup_command.md": [
+    "003_developer_entrypoint_script/01_scaffold_do_script.md"
+  ],
+  "003_developer_entrypoint_script/03_implement_lint_command.md": [
+    "003_developer_entrypoint_script/01_scaffold_do_script.md"
+  ],
+  "003_developer_entrypoint_script/04_implement_coverage_command.md": [
+    "003_developer_entrypoint_script/01_scaffold_do_script.md",
+    "003_developer_entrypoint_script/02_implement_setup_command.md"
+  ],
+  "003_developer_entrypoint_script/05_implement_presubmit_and_ci.md": [
+    "003_developer_entrypoint_script/01_scaffold_do_script.md",
+    "003_developer_entrypoint_script/02_implement_setup_command.md",
+    "003_developer_entrypoint_script/03_implement_lint_command.md",
+    "003_developer_entrypoint_script/04_implement_coverage_command.md"
+  ],
+  "004_developer_script_behaviors/01_implement_subcommand_contract_details.md": [],
+  "004_developer_script_behaviors/02_robust_unknown_subcommand_handling.md": [
+    "004_developer_script_behaviors/01_implement_subcommand_contract_details.md"
+  ],
+  "004_developer_script_behaviors/03_robust_presubmit_timeout_enforcement.md": [
+    "004_developer_script_behaviors/01_implement_subcommand_contract_details.md"
+  ],
+  "005_verification_infrastructure/01_multi_platform_ci_config.md": [],
+  "005_verification_infrastructure/02_workspace_lint_policy_enforcement.md": [],
+  "006_quality_gate_enforcement/01_gitlab_ci_pipeline_configuration.md": [],
+  "006_quality_gate_enforcement/02_linting_and_documentation_gate.md": [],
+  "006_quality_gate_enforcement/03_coverage_measurement_and_zero_result_protection.md": [],
+  "007_traceability_and_reporting_schema/01_implement_traceability_scanner.md": [],
+  "007_traceability_and_reporting_schema/02_implement_traceability_reporter.md": [
+    "007_traceability_and_reporting_schema/01_implement_traceability_scanner.md"
+  ],
+  "007_traceability_and_reporting_schema/03_implement_coverage_gate_reporter.md": [],
+  "008_proto_core_foundation/01_define_proto_files.md": [],
+  "008_proto_core_foundation/02_devs_proto_crate_build_system.md": [
+    "008_proto_core_foundation/01_define_proto_files.md"
+  ],
+  "008_proto_core_foundation/03_devs_core_domain_types.md": [],
+  "008_proto_core_foundation/04_canonical_devs_file_layout.md": [
+    "008_proto_core_foundation/03_devs_core_domain_types.md"
+  ],
+  "009_core_domain_types/01_implement_bounded_string_and_env_key.md": [],
+  "009_core_domain_types/02_implement_uuid_and_id_types.md": [
+    "009_core_domain_types/01_implement_bounded_string_and_env_key.md"
+  ],
+  "009_core_domain_types/03_define_core_proto_messages_and_services.md": [],
+  "010_foundational_technical_requirements_part_1_/01_mcp_serialization_policy_tests.md": [],
+  "010_foundational_technical_requirements_part_1_/02_tui_snapshot_testing_harness.md": [],
+  "010_foundational_technical_requirements_part_1_/03_prd_requirement_coverage_enforcement.md": [
+    "007_traceability_and_reporting_schema/01_implement_traceability_scanner.md",
+    "007_traceability_and_reporting_schema/02_implement_traceability_reporter.md"
+  ],
+  "011_foundational_technical_requirements_part_2_/01_cross_platform_consistency_verification.md": [],
+  "011_foundational_technical_requirements_part_2_/02_mcp_response_json_conformance.md": [],
+  "011_foundational_technical_requirements_part_2_/03_scheduling_latency_and_isolation_proof.md": [],
+  "012_foundational_technical_requirements_part_3_/01_cli_standardized_output_and_errors.md": [],
+  "012_foundational_technical_requirements_part_3_/02_workflow_input_validation_logic.md": [],
+  "012_foundational_technical_requirements_part_3_/03_run_snapshot_immutability.md": [],
+  "013_foundational_technical_requirements_part_4_/01_run_slug_uniqueness_enforcement.md": [],
+  "013_foundational_technical_requirements_part_4_/02_fanout_completion_serialization.md": [],
+  "013_foundational_technical_requirements_part_4_/03_pool_exhaustion_webhook_episode_tracking.md": [],
+  "013_foundational_technical_requirements_part_4_/04_interface_layer_no_business_logic.md": [],
+  "014_foundational_technical_requirements_part_5_/01_devs_core_dependency_audit.md": [],
+  "014_foundational_technical_requirements_part_5_/02_devs_proto_artifact_persistence.md": [],
+  "014_foundational_technical_requirements_part_5_/03_shared_state_architecture.md": [],
+  "014_foundational_technical_requirements_part_5_/04_single_workspace_manifest.md": [],
+  "015_foundational_technical_requirements_part_6_/01_implement_wire_type_boundary_lint.md": [],
+  "015_foundational_technical_requirements_part_6_/01_wire_type_boundary_enforcement.md": [],
+  "015_foundational_technical_requirements_part_6_/02_config_validation_single_pass_error_collection.md": [],
+  "015_foundational_technical_requirements_part_6_/02_implement_multi_error_config_validation.md": [],
+  "015_foundational_technical_requirements_part_6_/03_implement_atomic_discovery_file_write.md": [],
+  "015_foundational_technical_requirements_part_6_/03_mcp_port_failure_releases_grpc_port.md": [],
+  "015_foundational_technical_requirements_part_6_/04_atomic_discovery_file_write.md": [],
+  "015_foundational_technical_requirements_part_6_/04_implement_resilient_project_restoration.md": [],
+  "015_foundational_technical_requirements_part_6_/05_checkpoint_restoration_fault_tolerance.md": [],
+  "015_foundational_technical_requirements_part_6_/05_implement_port_binding_cleanup.md": [],
+  "016_foundational_technical_requirements_part_7_/01_config_path_default_and_explicit_behavior.md": [],
+  "016_foundational_technical_requirements_part_7_/02_discovery_file_directory_creation.md": [],
+  "016_foundational_technical_requirements_part_7_/03_graceful_shutdown_discovery_deletion_and_grpc_cancellation.md": [
+    "016_foundational_technical_requirements_part_7_/02_discovery_file_directory_creation.md"
+  ],
+  "017_foundational_technical_requirements_part_8_/01_implement_discovery_file_logic.md": [],
+  "017_foundational_technical_requirements_part_8_/02_implement_shutdown_state_persistence_logic.md": [],
+  "017_foundational_technical_requirements_part_8_/03_implement_shutdown_signal_escalation_handler.md": [
+    "017_foundational_technical_requirements_part_8_/02_implement_shutdown_state_persistence_logic.md"
+  ],
+  "018_foundational_technical_requirements_part_9_/01_client_discovery_logic.md": [],
+  "018_foundational_technical_requirements_part_9_/02_e2e_test_isolation_infrastructure.md": [
+    "018_foundational_technical_requirements_part_9_/01_client_discovery_logic.md"
+  ],
+  "018_foundational_technical_requirements_part_9_/03_concurrency_and_blocking_policy.md": [],
+  "019_foundational_technical_requirements_part_10_/01_async_rwlock_mutex_policy_enforcement.md": [],
+  "019_foundational_technical_requirements_part_10_/02_pool_concurrency_semaphore_contract.md": [
+    "019_foundational_technical_requirements_part_10_/01_async_rwlock_mutex_policy_enforcement.md"
+  ],
+  "019_foundational_technical_requirements_part_10_/03_scheduler_state_structure.md": [
+    "019_foundational_technical_requirements_part_10_/01_async_rwlock_mutex_policy_enforcement.md"
+  ],
+  "019_foundational_technical_requirements_part_10_/04_lock_acquisition_order_enforcement.md": [
+    "019_foundational_technical_requirements_part_10_/01_async_rwlock_mutex_policy_enforcement.md",
+    "019_foundational_technical_requirements_part_10_/02_pool_concurrency_semaphore_contract.md",
+    "019_foundational_technical_requirements_part_10_/03_scheduler_state_structure.md"
+  ],
+  "019_foundational_technical_requirements_part_10_/05_webhook_dispatcher_channel_contract.md": [
+    "019_foundational_technical_requirements_part_10_/01_async_rwlock_mutex_policy_enforcement.md"
+  ],
+  "020_foundational_technical_requirements_part_11_/01_workspace_lints_configuration.md": [],
+  "020_foundational_technical_requirements_part_11_/02_grpc_standard_unary_responses_and_error_mapping.md": [],
+  "020_foundational_technical_requirements_part_11_/03_grpc_reflection_and_streaming_standards.md": [
+    "020_foundational_technical_requirements_part_11_/02_grpc_standard_unary_responses_and_error_mapping.md"
+  ],
+  "021_foundational_technical_requirements_part_12_/01_configure_root_manifest.md": [],
+  "021_foundational_technical_requirements_part_12_/01_workspace_safety_and_resolver_config.md": [],
+  "021_foundational_technical_requirements_part_12_/02_cargo_profile_definitions.md": [],
+  "021_foundational_technical_requirements_part_12_/02_enforce_feature_flag_constraints.md": [
+    "021_foundational_technical_requirements_part_12_/01_configure_root_manifest.md"
+  ],
+  "021_foundational_technical_requirements_part_12_/03_feature_flag_policy_and_ci_enforcement.md": [],
+  "021_foundational_technical_requirements_part_12_/03_update_ci_for_all_features.md": [
+    "021_foundational_technical_requirements_part_12_/02_enforce_feature_flag_constraints.md"
+  ],
+  "022_foundational_technical_requirements_part_13_/01_unsafe_code_deny_lint_enforcement.md": [],
+  "022_foundational_technical_requirements_part_13_/01_unsafe_code_prohibition.md": [],
+  "022_foundational_technical_requirements_part_13_/02_anyhow_restricted_to_binary_crates.md": [],
+  "022_foundational_technical_requirements_part_13_/02_error_library_enforcement.md": [],
+  "022_foundational_technical_requirements_part_13_/03_dependency_audit_infrastructure.md": [],
+  "022_foundational_technical_requirements_part_13_/03_dependency_audit_lint_step.md": [],
+  "022_foundational_technical_requirements_part_13_/04_proto_file_header_enforcement.md": [],
+  "022_foundational_technical_requirements_part_13_/04_proto_header_standardization.md": [],
+  "023_foundational_technical_requirements_part_14_/01_proto_build_script_fallback.md": [],
+  "023_foundational_technical_requirements_part_14_/02_proto_api_reexports.md": [
+    "023_foundational_technical_requirements_part_14_/01_proto_build_script_fallback.md"
+  ],
+  "023_foundational_technical_requirements_part_14_/03_server_service_info_and_standards.md": [
+    "023_foundational_technical_requirements_part_14_/01_proto_build_script_fallback.md"
+  ],
+  "024_foundational_technical_requirements_part_15_/01_gitlab_ci_job_timeout_configuration.md": [],
+  "024_foundational_technical_requirements_part_15_/01_posix_sh_do_script.md": [],
+  "024_foundational_technical_requirements_part_15_/02_ci_artifact_upload_configuration.md": [
+    "024_foundational_technical_requirements_part_15_/01_gitlab_ci_job_timeout_configuration.md"
+  ],
+  "024_foundational_technical_requirements_part_15_/02_gitlab_ci_foundation.md": [
+    "024_foundational_technical_requirements_part_15_/01_posix_sh_do_script.md"
+  ],
+  "024_foundational_technical_requirements_part_15_/03_cargo_cache_configuration.md": [
+    "024_foundational_technical_requirements_part_15_/01_gitlab_ci_job_timeout_configuration.md"
+  ],
+  "024_foundational_technical_requirements_part_15_/03_ci_e2e_isolation.md": [
+    "024_foundational_technical_requirements_part_15_/02_gitlab_ci_foundation.md"
+  ],
+  "024_foundational_technical_requirements_part_15_/04_do_script_posix_sh_compatibility.md": [],
+  "024_foundational_technical_requirements_part_15_/05_devs_discovery_file_e2e_test_isolation.md": [],
+  "025_foundational_technical_requirements_part_16_/01_rust_formatting_and_clippy_policy.md": [],
+  "025_foundational_technical_requirements_part_16_/01_rustfmt_toml_configuration.md": [],
+  "025_foundational_technical_requirements_part_16_/02_format_and_lint_command_separation.md": [
+    "025_foundational_technical_requirements_part_16_/01_rustfmt_toml_configuration.md"
+  ],
+  "025_foundational_technical_requirements_part_16_/02_gitlab_ci_command_implementation.md": [],
+  "025_foundational_technical_requirements_part_16_/03_clippy_configuration.md": [
+    "025_foundational_technical_requirements_part_16_/02_format_and_lint_command_separation.md"
+  ],
+  "025_foundational_technical_requirements_part_16_/04_clippy_suppression_policy.md": [
+    "025_foundational_technical_requirements_part_16_/03_clippy_configuration.md"
+  ],
+  "025_foundational_technical_requirements_part_16_/05_do_ci_temporary_commit_mechanism.md": [],
+  "026_foundational_technical_requirements_part_17_/01_dependency_audit_lint.md": [],
+  "026_foundational_technical_requirements_part_17_/02_idempotent_setup_tools.md": [],
+  "026_foundational_technical_requirements_part_17_/03_presubmit_timeout_telemetry.md": [
+    "026_foundational_technical_requirements_part_17_/02_idempotent_setup_tools.md"
+  ],
+  "027_foundational_technical_requirements_part_18_/01_do_unknown_command_handling.md": [],
+  "027_foundational_technical_requirements_part_18_/02_do_test_traceability_check.md": [],
+  "027_foundational_technical_requirements_part_18_/03_unit_vs_e2e_test_separation_and_serialization.md": [],
+  "027_foundational_technical_requirements_part_18_/04_do_coverage_report_generation.md": [
+    "027_foundational_technical_requirements_part_18_/03_unit_vs_e2e_test_separation_and_serialization.md"
+  ],
+  "028_foundational_technical_requirements_part_19_/01_do_coverage_exit_logic.md": [],
+  "028_foundational_technical_requirements_part_19_/02_interface_e2e_coverage.md": [
+    "028_foundational_technical_requirements_part_19_/01_do_coverage_exit_logic.md"
+  ],
+  "028_foundational_technical_requirements_part_19_/03_tui_headless_testing_infra.md": [],
+  "028_foundational_technical_requirements_part_19_/04_state_machine_transition_validation.md": [],
+  "028_foundational_technical_requirements_part_19_/05_workflow_stage_atomic_cancellation.md": [
+    "028_foundational_technical_requirements_part_19_/04_state_machine_transition_validation.md"
+  ],
+  "029_foundational_technical_requirements_part_20_/01_checkpoint_persistence_atomic_null.md": [],
+  "029_foundational_technical_requirements_part_20_/02_checkpoint_error_resilience_enospc.md": [
+    "029_foundational_technical_requirements_part_20_/01_checkpoint_persistence_atomic_null.md"
+  ],
+  "029_foundational_technical_requirements_part_20_/03_workflow_snapshot_and_immutability.md": [
+    "029_foundational_technical_requirements_part_20_/01_checkpoint_persistence_atomic_null.md"
+  ],
+  "030_foundational_technical_requirements_part_21_/01_snapshot_commit_metadata.md": [],
+  "030_foundational_technical_requirements_part_21_/02_context_file_schema_and_dependency_scope.md": [],
+  "030_foundational_technical_requirements_part_21_/03_context_file_size_limits_and_truncation.md": [
+    "030_foundational_technical_requirements_part_21_/02_context_file_schema_and_dependency_scope.md"
+  ],
+  "030_foundational_technical_requirements_part_21_/04_context_file_atomic_write.md": [
+    "030_foundational_technical_requirements_part_21_/02_context_file_schema_and_dependency_scope.md",
+    "030_foundational_technical_requirements_part_21_/03_context_file_size_limits_and_truncation.md"
+  ],
+  "031_foundational_technical_requirements_part_22_/01_structured_output_parsing.md": [],
+  "031_foundational_technical_requirements_part_22_/01_structured_output_parsing_logic.md": [],
+  "031_foundational_technical_requirements_part_22_/02_workflow_validation.md": [],
+  "031_foundational_technical_requirements_part_22_/02_workflow_validation_order.md": [],
+  "031_foundational_technical_requirements_part_22_/03_scheduler_dispatch_latency.md": [],
+  "031_foundational_technical_requirements_part_22_/03_scheduler_latency_contract.md": [],
+  "032_foundational_technical_requirements_part_23_/01_fanout_expansion_stage_run_model.md": [],
+  "032_foundational_technical_requirements_part_23_/01_implement_fan_out_expansion.md": [],
+  "032_foundational_technical_requirements_part_23_/02_implement_multi_project_scheduling.md": [],
+  "032_foundational_technical_requirements_part_23_/02_multi_project_scheduling_policy.md": [],
+  "032_foundational_technical_requirements_part_23_/03_implement_retry_delay_computation.md": [],
+  "032_foundational_technical_requirements_part_23_/03_retry_delay_computation.md": [],
+  "032_foundational_technical_requirements_part_23_/04_docker_executor_contract.md": [],
+  "032_foundational_technical_requirements_part_23_/04_implement_docker_executor.md": [],
+  "032_foundational_technical_requirements_part_23_/05_implement_remote_ssh_executor.md": [],
+  "032_foundational_technical_requirements_part_23_/05_remote_ssh_executor_contract.md": [],
+  "033_foundational_technical_requirements_part_24_/01_define_normative_proto_files.md": [],
+  "033_foundational_technical_requirements_part_24_/02_grpc_error_handling_mapping.md": [],
+  "033_foundational_technical_requirements_part_24_/03_workflow_validation_error_formatting.md": [
+    "033_foundational_technical_requirements_part_24_/02_grpc_error_handling_mapping.md"
+  ],
+  "033_foundational_technical_requirements_part_24_/04_define_mcp_tool_schemas.md": [
+    "033_foundational_technical_requirements_part_24_/01_define_normative_proto_files.md"
+  ],
+  "034_foundational_technical_requirements_part_25_/01_protocol_state_machines.md": [],
+  "034_foundational_technical_requirements_part_25_/02_webhook_delivery_envelope.md": [
+    "034_foundational_technical_requirements_part_25_/01_protocol_state_machines.md"
+  ],
+  "034_foundational_technical_requirements_part_25_/03_cli_json_output_schemas.md": [
+    "034_foundational_technical_requirements_part_25_/01_protocol_state_machines.md"
+  ],
+  "034_foundational_technical_requirements_part_25_/04_version_compatibility_enforcement.md": [],
+  "035_foundational_technical_requirements_part_26_/01_json_serialization_rules.md": [],
+  "035_foundational_technical_requirements_part_26_/02_timestamp_generation_utility.md": [],
+  "035_foundational_technical_requirements_part_26_/03_grpc_streaming_behavior_contracts.md": [],
+  "035_foundational_technical_requirements_part_26_/04_protocol_edge_case_validation.md": [
+    "035_foundational_technical_requirements_part_26_/01_json_serialization_rules.md"
+  ],
+  "036_detailed_domain_specifications_part_1_/01_coverage_crash_handling.md": [],
+  "036_detailed_domain_specifications_part_1_/02_e2e_coverage_boundary_enforcement.md": [],
+  "036_detailed_domain_specifications_part_1_/03_hardcoded_coverage_thresholds.md": [],
+  "036_detailed_domain_specifications_part_1_/04_presubmit_wall_clock_timeout.md": [],
+  "037_detailed_domain_specifications_part_2_/01_ci_multi_platform_quality_gates.md": [],
+  "037_detailed_domain_specifications_part_2_/02_platform_specific_coverage_enforcement.md": [
+    "037_detailed_domain_specifications_part_2_/01_ci_multi_platform_quality_gates.md"
+  ],
+  "037_detailed_domain_specifications_part_2_/03_agent_adapter_e2e_completeness.md": [],
+  "037_detailed_domain_specifications_part_2_/04_traceability_failure_enforcement.md": [],
+  "038_detailed_domain_specifications_part_3_/01_authoritative_tag_extraction.md": [],
+  "038_detailed_domain_specifications_part_3_/02_stale_requirement_detection.md": [
+    "038_detailed_domain_specifications_part_3_/01_authoritative_tag_extraction.md"
+  ],
+  "038_detailed_domain_specifications_part_3_/03_lint_failure_reporting.md": [],
+  "038_detailed_domain_specifications_part_3_/04_configuration_precedence_logic.md": [],
+  "038_detailed_domain_specifications_part_3_/05_agent_credential_resolution.md": [
+    "038_detailed_domain_specifications_part_3_/04_configuration_precedence_logic.md"
+  ],
+  "039_detailed_domain_specifications_part_4_/01_doc_comment_clippy_reason_enforcement.md": [],
+  "039_detailed_domain_specifications_part_4_/02_unit_test_coverage_quality_gate.md": [],
+  "039_detailed_domain_specifications_part_4_/03_e2e_interface_coverage_quality_gates.md": [
+    "039_detailed_domain_specifications_part_4_/02_unit_test_coverage_quality_gate.md"
+  ],
+  "039_detailed_domain_specifications_part_4_/04_tui_snapshot_interaction_infrastructure.md": [],
+  "039_detailed_domain_specifications_part_4_/05_traceability_gate_enforcement.md": [],
+  "040_detailed_domain_specifications_part_5_/01_enforce_no_web_policy.md": [],
+  "040_detailed_domain_specifications_part_5_/02_enforce_no_http_listener.md": [
+    "040_detailed_domain_specifications_part_5_/01_enforce_no_web_policy.md"
+  ],
+  "040_detailed_domain_specifications_part_5_/02_grpc_api_gui_compatibility_review.md": [],
+  "040_detailed_domain_specifications_part_5_/03_document_architectural_non_goals.md": [],
+  "040_detailed_domain_specifications_part_5_/03_grpc_api_gui_compatibility_review.md": [],
+  "041_detailed_domain_specifications_part_6_/01_enforce_no_web_and_no_auth_policy.md": [],
+  "041_detailed_domain_specifications_part_6_/02_enforce_proto_as_api_source_of_truth.md": [
+    "041_detailed_domain_specifications_part_6_/01_enforce_no_web_and_no_auth_policy.md"
+  ],
+  "041_detailed_domain_specifications_part_6_/03_define_thin_adapter_service_trait_pattern.md": [
+    "041_detailed_domain_specifications_part_6_/02_enforce_proto_as_api_source_of_truth.md"
+  ],
+  "042_detailed_domain_specifications_part_7_/01_security_posture_and_mcp_auth_exclusion.md": [],
+  "042_detailed_domain_specifications_part_7_/02_identity_less_domain_types_and_connectivity_constraints.md": [
+    "042_detailed_domain_specifications_part_7_/01_security_posture_and_mcp_auth_exclusion.md"
+  ],
+  "043_detailed_domain_specifications_part_8_/01_enforce_forbidden_dependencies.md": [],
+  "043_detailed_domain_specifications_part_8_/02_server_config_secrets_section.md": [],
+  "043_detailed_domain_specifications_part_8_/03_credential_resolution_logic.md": [
+    "043_detailed_domain_specifications_part_8_/02_server_config_secrets_section.md"
+  ],
+  "043_detailed_domain_specifications_part_8_/04_verify_manual_trigger_only.md": [],
+  "044_detailed_domain_specifications_part_9_/01_reserve_triggers_config.md": [],
+  "044_detailed_domain_specifications_part_9_/02_enforce_run_creation_path.md": [],
+  "044_detailed_domain_specifications_part_9_/03_enforce_no_http_listener_no_filewatch.md": [],
+  "044_detailed_domain_specifications_part_9_/04_ci_non_goal_rejection_gate.md": [
+    "044_detailed_domain_specifications_part_9_/03_enforce_no_http_listener_no_filewatch.md"
+  ],
+  "045_detailed_domain_specifications_part_10_/01_changelog_and_non_goals.md": [],
+  "045_detailed_domain_specifications_part_10_/02_architecture_non_goal_validation.md": [
+    "045_detailed_domain_specifications_part_10_/01_changelog_and_non_goals.md"
+  ],
+  "045_detailed_domain_specifications_part_10_/03_enforce_acyclic_dependencies.md": [],
+  "045_detailed_domain_specifications_part_10_/04_traceability_placeholder_verification.md": [],
+  "046_detailed_domain_specifications_part_11_/01_workflow_stage_state_machines.md": [],
+  "046_detailed_domain_specifications_part_11_/02_template_variable_resolution.md": [
+    "046_detailed_domain_specifications_part_11_/01_workflow_stage_state_machines.md"
+  ],
+  "046_detailed_domain_specifications_part_11_/03_multi_error_validation_framework.md": [],
+  "046_detailed_domain_specifications_part_11_/04_server_config_schema.md": [
+    "046_detailed_domain_specifications_part_11_/03_multi_error_validation_framework.md"
+  ],
+  "046_detailed_domain_specifications_part_11_/05_crate_architectural_boundaries.md": [],
+  "047_detailed_domain_specifications_part_12_/01_config_override_precedence.md": [],
+  "047_detailed_domain_specifications_part_12_/02_project_registry_schema.md": [],
+  "047_detailed_domain_specifications_part_12_/03_git_checkpoint_store_foundation.md": [],
+  "047_detailed_domain_specifications_part_12_/04_atomic_checkpoint_write_protocol.md": [
+    "047_detailed_domain_specifications_part_12_/03_git_checkpoint_store_foundation.md"
+  ],
+  "047_detailed_domain_specifications_part_12_/05_crash_recovery_semantics.md": [],
+  "048_detailed_domain_specifications_part_13_/01_implement_retention_sweep.md": [],
+  "048_detailed_domain_specifications_part_13_/02_implement_scheduler_invariants.md": [],
+  "048_detailed_domain_specifications_part_13_/03_implement_pool_selection_flow.md": [],
+  "048_detailed_domain_specifications_part_13_/04_implement_rate_limit_cooldown.md": [
+    "048_detailed_domain_specifications_part_13_/03_implement_pool_selection_flow.md"
+  ],
+  "048_detailed_domain_specifications_part_13_/05_implement_pool_exhaustion_episode_tracking.md": [
+    "048_detailed_domain_specifications_part_13_/04_implement_rate_limit_cooldown.md"
+  ],
+  "049_detailed_domain_specifications_part_14_/01_adapter_context_and_command_types.md": [],
+  "049_detailed_domain_specifications_part_14_/02_adapter_pty_and_prompt_file_behavior.md": [
+    "049_detailed_domain_specifications_part_14_/01_adapter_context_and_command_types.md"
+  ],
+  "049_detailed_domain_specifications_part_14_/03_execution_handle_and_env_types.md": [],
+  "050_detailed_domain_specifications_part_15_/01_executor_preparation_sequence.md": [],
+  "050_detailed_domain_specifications_part_15_/02_artifact_collection_requirements.md": [
+    "050_detailed_domain_specifications_part_15_/01_executor_preparation_sequence.md"
+  ],
+  "050_detailed_domain_specifications_part_15_/03_webhook_delivery_lifecycle_and_payloads.md": [],
+  "050_detailed_domain_specifications_part_15_/03_webhook_event_types_and_payloads.md": [],
+  "050_detailed_domain_specifications_part_15_/04_webhook_delivery_lifecycle.md": [
+    "050_detailed_domain_specifications_part_15_/03_webhook_event_types_and_payloads.md"
+  ],
+  "050_detailed_domain_specifications_part_15_/04_webhook_retry_policy.md": [
+    "050_detailed_domain_specifications_part_15_/03_webhook_delivery_lifecycle_and_payloads.md"
+  ],
+  "050_detailed_domain_specifications_part_15_/05_webhook_retry_policy.md": [
+    "050_detailed_domain_specifications_part_15_/04_webhook_delivery_lifecycle.md"
+  ],
+  "051_detailed_domain_specifications_part_16_/01_mcp_server_protocol.md": [],
+  "051_detailed_domain_specifications_part_16_/02_mcp_streaming_logs.md": [
+    "051_detailed_domain_specifications_part_16_/01_mcp_server_protocol.md"
+  ],
+  "051_detailed_domain_specifications_part_16_/03_mcp_stdio_bridge.md": [
+    "051_detailed_domain_specifications_part_16_/01_mcp_server_protocol.md"
+  ],
+  "051_detailed_domain_specifications_part_16_/04_grpc_version_compatibility.md": [],
+  "052_detailed_domain_specifications_part_17_/01_grpc_streaming_resource_management.md": [],
+  "052_detailed_domain_specifications_part_17_/02_tui_test_infrastructure_setup.md": [],
+  "052_detailed_domain_specifications_part_17_/03_tui_keyboard_navigation_logic.md": [
+    "052_detailed_domain_specifications_part_17_/02_tui_test_infrastructure_setup.md"
+  ],
+  "052_detailed_domain_specifications_part_17_/04_tui_ascii_dag_rendering_logic.md": [
+    "052_detailed_domain_specifications_part_17_/02_tui_test_infrastructure_setup.md"
+  ],
+  "053_detailed_domain_specifications_part_18_/01_cli_run_id_resolution.md": [],
+  "053_detailed_domain_specifications_part_18_/02_cli_submit_input_parsing.md": [],
+  "053_detailed_domain_specifications_part_18_/03_cli_text_output_rules.md": [],
+  "053_detailed_domain_specifications_part_18_/04_server_startup_sequence.md": [
+    "053_detailed_domain_specifications_part_18_/05_discovery_file_write_protocol.md"
+  ],
+  "053_detailed_domain_specifications_part_18_/05_discovery_file_write_protocol.md": [],
+  "054_detailed_domain_specifications_part_19_/01_server_shared_state_and_shutdown.md": [],
+  "054_detailed_domain_specifications_part_19_/02_library_mocking_standards.md": [],
+  "054_detailed_domain_specifications_part_19_/03_webhook_config_schema.md": [],
+  "055_detailed_domain_specifications_part_20_/01_webhook_event_enumeration.md": [],
+  "055_detailed_domain_specifications_part_20_/02_webhook_payload_schema.md": [
+    "055_detailed_domain_specifications_part_20_/01_webhook_event_enumeration.md"
+  ],
+  "055_detailed_domain_specifications_part_20_/03_webhook_hmac_signing.md": [
+    "055_detailed_domain_specifications_part_20_/02_webhook_payload_schema.md"
+  ],
+  "055_detailed_domain_specifications_part_20_/04_webhook_delivery_retry_logic.md": [],
+  "055_detailed_domain_specifications_part_20_/05_webhook_dispatcher_domain_logic.md": [
+    "055_detailed_domain_specifications_part_20_/01_webhook_event_enumeration.md",
+    "055_detailed_domain_specifications_part_20_/04_webhook_delivery_retry_logic.md"
+  ],
+  "056_detailed_domain_specifications_part_21_/01_foundational_domain_types.md": [],
+  "056_detailed_domain_specifications_part_21_/01_string_field_length_validation.md": [],
+  "056_detailed_domain_specifications_part_21_/02_checkpoint_store_trait_definition.md": [
+    "056_detailed_domain_specifications_part_21_/01_foundational_domain_types.md"
+  ],
+  "056_detailed_domain_specifications_part_21_/02_persistence_strategy_json_git.md": [],
+  "056_detailed_domain_specifications_part_21_/03_devs_toml_schema_definition.md": [
+    "056_detailed_domain_specifications_part_21_/01_string_field_length_validation.md"
+  ],
+  "056_detailed_domain_specifications_part_21_/03_server_config_schema.md": [
+    "056_detailed_domain_specifications_part_21_/01_foundational_domain_types.md"
+  ],
+  "056_detailed_domain_specifications_part_21_/04_checkpoint_store_trait.md": [
+    "056_detailed_domain_specifications_part_21_/02_persistence_strategy_json_git.md"
+  ],
+  "056_detailed_domain_specifications_part_21_/04_webhook_management_grpc_cli.md": [
+    "056_detailed_domain_specifications_part_21_/01_foundational_domain_types.md"
+  ],
+  "056_detailed_domain_specifications_part_21_/05_cli_project_webhook_management.md": [
+    "056_detailed_domain_specifications_part_21_/03_devs_toml_schema_definition.md"
+  ],
+  "057_detailed_domain_specifications_part_22_/01_checkpoint_git_orphan_branch.md": [],
+  "057_detailed_domain_specifications_part_22_/02_dag_cycle_detection.md": [],
+  "057_detailed_domain_specifications_part_22_/03_agent_pool_manager_state.md": [],
+  "057_detailed_domain_specifications_part_22_/04_dag_scheduler_internal_loop.md": [
+    "057_detailed_domain_specifications_part_22_/02_dag_cycle_detection.md",
+    "057_detailed_domain_specifications_part_22_/03_agent_pool_manager_state.md",
+    "057_detailed_domain_specifications_part_22_/01_checkpoint_git_orphan_branch.md"
+  ],
+  "057_detailed_domain_specifications_part_22_/05_scheduler_dispatch_latency.md": [
+    "057_detailed_domain_specifications_part_22_/04_dag_scheduler_internal_loop.md"
+  ],
+  "058_detailed_domain_specifications_part_23_/01_agent_selection_algorithm.md": [],
+  "058_detailed_domain_specifications_part_23_/02_restore_checkpointed_runs.md": [],
+  "058_detailed_domain_specifications_part_23_/03_tech_stack_authoritative_binding.md": [],
+  "058_detailed_domain_specifications_part_23_/04_anyhow_restriction_enforcement.md": [],
+  "058_detailed_domain_specifications_part_23_/05_proto_syntax_policy_enforcement.md": [],
+  "059_detailed_domain_specifications_part_24_/01_proto_timestamp_and_build_logic.md": [],
+  "059_detailed_domain_specifications_part_24_/02_proto_staleness_detection_in_lint.md": [
+    "059_detailed_domain_specifications_part_24_/01_proto_timestamp_and_build_logic.md"
+  ],
+  "059_detailed_domain_specifications_part_24_/03_proto_field_removal_reserved_enforcement.md": [
+    "059_detailed_domain_specifications_part_24_/01_proto_timestamp_and_build_logic.md"
+  ],
+  "059_detailed_domain_specifications_part_24_/04_clippy_skip_generated_code.md": [
+    "059_detailed_domain_specifications_part_24_/01_proto_timestamp_and_build_logic.md"
+  ],
+  "060_detailed_domain_specifications_part_25_/01_do_script_hygiene.md": [],
+  "060_detailed_domain_specifications_part_25_/02_e2e_robustness.md": [],
+  "060_detailed_domain_specifications_part_25_/03_persistent_data_format.md": [],
+  "061_detailed_domain_specifications_part_26_/01_checkpoint_schema_version_enforcement.md": [],
+  "061_detailed_domain_specifications_part_26_/02_persistence_before_event_broadcast.md": [
+    "061_detailed_domain_specifications_part_26_/01_checkpoint_schema_version_enforcement.md"
+  ],
+  "061_detailed_domain_specifications_part_26_/03_prohibited_environment_keys_validation.md": [],
+  "061_detailed_domain_specifications_part_26_/04_corrupt_checkpoint_isolation.md": [
+    "061_detailed_domain_specifications_part_26_/01_checkpoint_schema_version_enforcement.md"
+  ],
+  "061_detailed_domain_specifications_part_26_/05_checkpoint_write_failure_survival.md": [
+    "061_detailed_domain_specifications_part_26_/02_persistence_before_event_broadcast.md",
+    "061_detailed_domain_specifications_part_26_/04_corrupt_checkpoint_isolation.md"
+  ],
+  "062_detailed_domain_specifications_part_27_/01_template_error_fail_fast.md": [],
+  "062_detailed_domain_specifications_part_27_/02_atomic_slug_collision_check.md": [],
+  "062_detailed_domain_specifications_part_27_/03_atomic_registry_updates.md": [],
+  "062_detailed_domain_specifications_part_27_/04_fanout_completion_validation.md": [],
+  "063_detailed_domain_specifications_part_28_/01_scheduler_state_transitions.md": [],
+  "063_detailed_domain_specifications_part_28_/02_idempotent_event_handling.md": [
+    "063_detailed_domain_specifications_part_28_/01_scheduler_state_transitions.md"
+  ],
+  "063_detailed_domain_specifications_part_28_/03_docker_config_and_contract.md": [],
+  "064_detailed_domain_specifications_part_29_/01_auto_collect_push_restriction.md": [],
+  "064_detailed_domain_specifications_part_29_/01_client_version_metadata.md": [],
+  "064_detailed_domain_specifications_part_29_/02_grpc_client_version_metadata.md": [],
+  "064_detailed_domain_specifications_part_29_/02_json_serialization_nulls.md": [],
+  "064_detailed_domain_specifications_part_29_/03_json_null_optional_fields.md": [],
+  "064_detailed_domain_specifications_part_29_/03_log_sequence_numbers.md": [],
+  "064_detailed_domain_specifications_part_29_/04_push_restriction.md": [],
+  "064_detailed_domain_specifications_part_29_/04_stream_run_events_reconnect_semantics.md": [],
+  "064_detailed_domain_specifications_part_29_/05_log_chunk_sequence_numbers.md": [],
+  "064_detailed_domain_specifications_part_29_/05_reconnect_semantics.md": [],
+  "065_detailed_domain_specifications_part_30_/01_config_validation_before_port_bind.md": [],
+  "065_detailed_domain_specifications_part_30_/01_server_startup_config_validation.md": [],
+  "065_detailed_domain_specifications_part_30_/02_discovery_file_path_and_format.md": [],
+  "065_detailed_domain_specifications_part_30_/02_server_startup_discovery_interlock.md": [
+    "065_detailed_domain_specifications_part_30_/01_server_startup_config_validation.md"
+  ],
+  "065_detailed_domain_specifications_part_30_/03_checkpoint_isolation_and_startup_ordering.md": [
+    "065_detailed_domain_specifications_part_30_/01_config_validation_before_port_bind.md",
+    "065_detailed_domain_specifications_part_30_/02_discovery_file_path_and_format.md"
+  ],
+  "065_detailed_domain_specifications_part_30_/03_server_startup_resilient_recovery.md": [
+    "065_detailed_domain_specifications_part_30_/01_server_startup_config_validation.md"
+  ],
+  "065_detailed_domain_specifications_part_30_/REPORTS.md": [],
+  "066_detailed_domain_specifications_part_31_/01_discovery_file_grpc_port_only.md": [],
+  "066_detailed_domain_specifications_part_31_/01_grpc_mcp_discovery.md": [],
+  "066_detailed_domain_specifications_part_31_/02_enforce_two_port_architecture.md": [],
+  "066_detailed_domain_specifications_part_31_/02_server_two_tcp_ports_only.md": [],
+  "066_detailed_domain_specifications_part_31_/03_agent_mcp_injection.md": [
+    "066_detailed_domain_specifications_part_31_/01_grpc_mcp_discovery.md"
+  ],
+  "066_detailed_domain_specifications_part_31_/03_client_server_grpc_mcp_only.md": [
+    "066_detailed_domain_specifications_part_31_/02_server_two_tcp_ports_only.md"
+  ],
+  "066_detailed_domain_specifications_part_31_/04_agent_mcp_communication_contract.md": [],
+  "066_detailed_domain_specifications_part_31_/04_concurrent_request_synchronization.md": [],
+  "066_detailed_domain_specifications_part_31_/05_concurrent_request_handling_safety.md": [],
+  "067_detailed_domain_specifications_part_32_/01_architectural_linting.md": [],
+  "067_detailed_domain_specifications_part_32_/02_server_runtime_policy.md": [],
+  "067_detailed_domain_specifications_part_32_/03_config_immutability.md": [],
+  "068_detailed_domain_specifications_part_33_/01_core_type_boundary_enforcement.md": [],
+  "068_detailed_domain_specifications_part_33_/02_lock_guard_audit.md": [],
+  "068_detailed_domain_specifications_part_33_/03_shared_scheduler_state.md": [],
+  "068_detailed_domain_specifications_part_33_/04_server_config_failure_exit.md": [],
+  "068_detailed_domain_specifications_part_33_/05_server_port_conflict_exit.md": [
+    "068_detailed_domain_specifications_part_33_/04_server_config_failure_exit.md"
+  ],
+  "069_detailed_domain_specifications_part_34_/01_discovery_based_cli_connection.md": [],
+  "069_detailed_domain_specifications_part_34_/01_server_discovery_and_graceful_shutdown_test.md": [],
+  "069_detailed_domain_specifications_part_34_/02_concurrent_submit_run_duplicate_handling_test.md": [],
+  "069_detailed_domain_specifications_part_34_/02_discovery_file_deletion_on_sigterm.md": [
+    "069_detailed_domain_specifications_part_34_/01_discovery_based_cli_connection.md"
+  ],
+  "069_detailed_domain_specifications_part_34_/03_e2e_test_isolation_verification.md": [],
+  "069_detailed_domain_specifications_part_34_/03_exit_code_3_unreachable_server.md": [
+    "069_detailed_domain_specifications_part_34_/02_discovery_file_deletion_on_sigterm.md"
+  ],
+  "069_detailed_domain_specifications_part_34_/04_simultaneous_submit_duplicate_handling.md": [
+    "069_detailed_domain_specifications_part_34_/01_discovery_based_cli_connection.md"
+  ],
+  "069_detailed_domain_specifications_part_34_/05_e2e_test_isolation.md": [
+    "069_detailed_domain_specifications_part_34_/01_discovery_based_cli_connection.md"
+  ],
+  "070_detailed_domain_specifications_part_35_/01_documentation_completeness_missing_docs_lint.md": [],
+  "070_detailed_domain_specifications_part_35_/01_enforce_documentation_completeness.md": [],
+  "070_detailed_domain_specifications_part_35_/02_core_crate_dependency_isolation.md": [],
+  "070_detailed_domain_specifications_part_35_/02_verify_core_crate_dependency_isolation.md": [],
+  "070_detailed_domain_specifications_part_35_/03_implement_robust_project_loading.md": [],
+  "070_detailed_domain_specifications_part_35_/03_robust_project_loading.md": [],
+  "070_detailed_domain_specifications_part_35_/04_crash_recovery_persistence.md": [],
+  "070_detailed_domain_specifications_part_35_/04_implement_crash_recovery_logic.md": [],
+  "070_detailed_domain_specifications_part_35_/05_enable_grpc_reflection.md": [],
+  "070_detailed_domain_specifications_part_35_/05_grpc_reflection_support.md": [],
+  "071_detailed_domain_specifications_part_36_/01_toolchain_and_edition_enforcement.md": [],
+  "071_detailed_domain_specifications_part_36_/01_unified_state_consistency.md": [],
+  "071_detailed_domain_specifications_part_36_/02_mcp_bridge_error_handling.md": [],
+  "071_detailed_domain_specifications_part_36_/02_server_config_path_validation.md": [
+    "071_detailed_domain_specifications_part_36_/01_toolchain_and_edition_enforcement.md"
+  ],
+  "071_detailed_domain_specifications_part_36_/03_config_path_validation.md": [],
+  "071_detailed_domain_specifications_part_36_/03_mcp_bridge_error_handling.md": [
+    "071_detailed_domain_specifications_part_36_/01_toolchain_and_edition_enforcement.md"
+  ],
+  "071_detailed_domain_specifications_part_36_/04_toolchain_pinning.md": [],
+  "071_detailed_domain_specifications_part_36_/04_unified_state_consistency_test.md": [
+    "071_detailed_domain_specifications_part_36_/02_server_config_path_validation.md",
+    "071_detailed_domain_specifications_part_36_/03_mcp_bridge_error_handling.md"
+  ],
+  "071_detailed_domain_specifications_part_36_/05_rust_edition_enforcement.md": [],
+  "072_detailed_domain_specifications_part_37_/01_dependency_version_documentation_lint.md": [],
+  "072_detailed_domain_specifications_part_37_/01_dependency_version_lint.md": [],
+  "072_detailed_domain_specifications_part_37_/02_clippy_policy_configuration.md": [],
+  "072_detailed_domain_specifications_part_37_/02_workspace_lint_config.md": [],
+  "072_detailed_domain_specifications_part_37_/03_missing_documentation_deny_enforcement.md": [],
+  "072_detailed_domain_specifications_part_37_/03_stable_rust_enforcement.md": [],
+  "072_detailed_domain_specifications_part_37_/04_blocking_formatting_lint.md": [],
+  "072_detailed_domain_specifications_part_37_/04_stable_rust_enforcement.md": [],
+  "072_detailed_domain_specifications_part_37_/05_formatting_lint_blocking_enforcement.md": [],
+  "073_detailed_domain_specifications_part_38_/01_implement_clippy_and_unsafe_lints.md": [],
+  "073_detailed_domain_specifications_part_38_/02_implement_documentation_lint_enforcement.md": [
+    "073_detailed_domain_specifications_part_38_/01_implement_clippy_and_unsafe_lints.md"
+  ],
+  "073_detailed_domain_specifications_part_38_/03_implement_clippy_suppressed_reason_check.md": [
+    "073_detailed_domain_specifications_part_38_/01_implement_clippy_and_unsafe_lints.md"
+  ],
+  "074_detailed_domain_specifications_part_39_/01_verify_toolchain_and_multiplatform_build.md": [],
+  "074_detailed_domain_specifications_part_39_/02_verify_formatting_consistency.md": [
+    "074_detailed_domain_specifications_part_39_/01_verify_toolchain_and_multiplatform_build.md"
+  ],
+  "074_detailed_domain_specifications_part_39_/03_verify_clippy_cleanliness.md": [
+    "074_detailed_domain_specifications_part_39_/02_verify_formatting_consistency.md"
+  ],
+  "074_detailed_domain_specifications_part_39_/04_verify_clean_documentation_generation.md": [
+    "074_detailed_domain_specifications_part_39_/03_verify_clippy_cleanliness.md"
+  ],
+  "075_detailed_domain_specifications_part_40_/01_dependency_and_error_handling_audits.md": [],
+  "075_detailed_domain_specifications_part_40_/01_devs_core_dependency_isolation_lint.md": [],
+  "075_detailed_domain_specifications_part_40_/02_anyhow_library_crate_ban.md": [],
+  "075_detailed_domain_specifications_part_40_/02_unsafe_code_prohibition.md": [],
+  "075_detailed_domain_specifications_part_40_/03_setup_verification_and_idempotency.md": [],
+  "075_detailed_domain_specifications_part_40_/03_unsafe_code_workspace_ban.md": [],
+  "075_detailed_domain_specifications_part_40_/04_setup_minimal_fresh_environment.md": [],
+  "075_detailed_domain_specifications_part_40_/05_setup_idempotence_verification.md": [
+    "075_detailed_domain_specifications_part_40_/04_setup_minimal_fresh_environment.md"
+  ],
+  "076_detailed_domain_specifications_part_41_/01_traceability_generation.md": [],
+  "076_detailed_domain_specifications_part_41_/02_stale_requirement_detection.md": [
+    "076_detailed_domain_specifications_part_41_/01_traceability_generation.md"
+  ],
+  "076_detailed_domain_specifications_part_41_/03_coverage_report_schema.md": [],
+  "076_detailed_domain_specifications_part_41_/04_coverage_quality_gate_enforcement.md": [
+    "076_detailed_domain_specifications_part_41_/03_coverage_report_schema.md"
+  ],
+  "076_detailed_domain_specifications_part_41_/05_presubmit_timeout_enforcement.md": [],
+  "077_detailed_domain_specifications_part_42_/01_do_script_validation_and_e2e_serialization.md": [
+    "003_developer_entrypoint_script/01_scaffold_do_script.md"
+  ],
+  "077_detailed_domain_specifications_part_42_/02_proto_sync_and_service_verification.md": [],
+  "077_detailed_domain_specifications_part_42_/03_headless_tui_testing_infrastructure.md": [
+    "001_workspace_toolchain_setup/02_scaffold_workspace_crates.md"
+  ],
+  "078_detailed_domain_specifications_part_43_/01_workflow_level_validation.md": [],
+  "078_detailed_domain_specifications_part_43_/01_workflow_name_validation.md": [],
+  "078_detailed_domain_specifications_part_43_/02_stage_count_limits.md": [
+    "078_detailed_domain_specifications_part_43_/01_workflow_name_validation.md"
+  ],
+  "078_detailed_domain_specifications_part_43_/02_workflow_input_validation_and_resolution.md": [
+    "078_detailed_domain_specifications_part_43_/01_workflow_level_validation.md"
+  ],
+  "078_detailed_domain_specifications_part_43_/03_input_count_limits.md": [
+    "078_detailed_domain_specifications_part_43_/01_workflow_name_validation.md"
+  ],
+  "078_detailed_domain_specifications_part_43_/03_stage_prompt_exclusivity_validation.md": [
+    "078_detailed_domain_specifications_part_43_/01_workflow_level_validation.md"
+  ],
+  "078_detailed_domain_specifications_part_43_/04_optional_input_resolution.md": [
+    "078_detailed_domain_specifications_part_43_/03_input_count_limits.md"
+  ],
+  "078_detailed_domain_specifications_part_43_/05_prompt_mutually_exclusive.md": [
+    "078_detailed_domain_specifications_part_43_/01_workflow_name_validation.md"
+  ],
+  "079_detailed_domain_specifications_part_44_/01_control_flow_fanout_validation.md": [],
+  "079_detailed_domain_specifications_part_44_/01_stage_control_flow_mutual_exclusion.md": [],
+  "079_detailed_domain_specifications_part_44_/02_fan_out_parameter_limits.md": [],
+  "079_detailed_domain_specifications_part_44_/02_retry_config_validation.md": [
+    "079_detailed_domain_specifications_part_44_/01_control_flow_fanout_validation.md"
+  ],
+  "079_detailed_domain_specifications_part_44_/03_agent_pool_validation.md": [
+    "079_detailed_domain_specifications_part_44_/02_retry_config_validation.md"
+  ],
+  "079_detailed_domain_specifications_part_44_/03_retry_attempt_limits.md": [],
+  "079_detailed_domain_specifications_part_44_/04_exponential_backoff_cap.md": [
+    "079_detailed_domain_specifications_part_44_/03_retry_attempt_limits.md"
+  ],
+  "079_detailed_domain_specifications_part_44_/05_agent_pool_limits.md": [],
+  "080_detailed_domain_specifications_part_45_/01_project_and_webhook_validation.md": [],
+  "080_detailed_domain_specifications_part_45_/01_project_weight_minimum_validation.md": [],
+  "080_detailed_domain_specifications_part_45_/02_snapshot_immutability_and_attempt_counter.md": [],
+  "080_detailed_domain_specifications_part_45_/02_webhook_scheme_validation.md": [],
+  "080_detailed_domain_specifications_part_45_/03_exit_code_persistence_specification.md": [],
+  "080_detailed_domain_specifications_part_45_/03_snapshot_immutability_enforcement.md": [],
+  "080_detailed_domain_specifications_part_45_/04_attempt_counter_semantic.md": [],
+  "080_detailed_domain_specifications_part_45_/05_exit_code_persistence.md": [],
+  "081_detailed_domain_specifications_part_46_/01_slug_uniqueness_constraint.md": [],
+  "081_detailed_domain_specifications_part_46_/02_cross_stage_variable_visibility.md": [],
+  "081_detailed_domain_specifications_part_46_/03_env_var_sanitation.md": [],
+  "081_detailed_domain_specifications_part_46_/03_environment_variable_sanitation.md": [],
+  "081_detailed_domain_specifications_part_46_/04_resilient_checkpoint_loading.md": [],
+  "081_detailed_domain_specifications_part_46_/05_missing_snapshot_handling.md": [
+    "081_detailed_domain_specifications_part_46_/04_resilient_checkpoint_loading.md"
+  ],
+  "082_detailed_domain_specifications_part_47_/01_checkpoint_concurrent_write_safety.md": [],
+  "082_detailed_domain_specifications_part_47_/01_concurrent_checkpoint_write_safety.md": [],
+  "082_detailed_domain_specifications_part_47_/02_atomic_write_failure_handling.md": [
+    "082_detailed_domain_specifications_part_47_/01_concurrent_checkpoint_write_safety.md"
+  ],
+  "082_detailed_domain_specifications_part_47_/02_checkpoint_atomic_write_resilience.md": [
+    "082_detailed_domain_specifications_part_47_/01_checkpoint_concurrent_write_safety.md"
+  ],
+  "082_detailed_domain_specifications_part_47_/03_output_truncation_logic.md": [],
+  "082_detailed_domain_specifications_part_47_/03_stage_output_truncation.md": [],
+  "082_detailed_domain_specifications_part_47_/04_template_resolution_failure_modes.md": [],
+  "082_detailed_domain_specifications_part_47_/04_template_resolution_failures.md": [],
+  "082_detailed_domain_specifications_part_47_/05_run_name_collision_rejection.md": [],
+  "082_detailed_domain_specifications_part_47_/05_submission_race_protection.md": [],
+  "083_detailed_domain_specifications_part_48_/01_checkpoint_schema_version_validation.md": [],
+  "083_detailed_domain_specifications_part_48_/02_lazy_prompt_file_resolution.md": [],
+  "083_detailed_domain_specifications_part_48_/03_workflow_cycle_detection_acceptance.md": [],
+  "083_detailed_domain_specifications_part_48_/04_illegal_transition_guard_acceptance.md": [],
+  "084_detailed_domain_specifications_part_49_/01_atomic_cancellation.md": [],
+  "084_detailed_domain_specifications_part_49_/02_output_truncation.md": [],
+  "084_detailed_domain_specifications_part_49_/03_disk_full_resilience.md": [],
+  "084_detailed_domain_specifications_part_49_/04_duplicate_submission_rejection.md": [],
+  "084_detailed_domain_specifications_part_49_/05_missing_prompt_file.md": [],
+  "085_detailed_domain_specifications_part_50_/01_validate_prompt_mutually_exclusive.md": [],
+  "085_detailed_domain_specifications_part_50_/02_validate_prohibited_env_keys.md": [],
+  "085_detailed_domain_specifications_part_50_/03_enforce_snapshot_immutability.md": [],
+  "085_detailed_domain_specifications_part_50_/04_implement_context_file_truncation.md": [],
+  "085_detailed_domain_specifications_part_50_/05_handle_missing_snapshot_recovery.md": [
+    "085_detailed_domain_specifications_part_50_/03_enforce_snapshot_immutability.md"
+  ],
+  "086_detailed_domain_specifications_part_51_/01_incompatible_template_completion_rejection.md": [],
+  "086_detailed_domain_specifications_part_51_/01_template_and_output_enforcement.md": [],
+  "086_detailed_domain_specifications_part_51_/02_boolean_success_enforcement.md": [],
+  "086_detailed_domain_specifications_part_51_/02_domain_validation_limits.md": [],
+  "086_detailed_domain_specifications_part_51_/03_fan_out_count_limit_validation.md": [],
+  "086_detailed_domain_specifications_part_51_/04_retry_count_limit_validation.md": [],
+  "086_detailed_domain_specifications_part_51_/05_project_weight_minimum_validation.md": [],
+  "087_detailed_domain_specifications_part_52_/01_runslug_format_validation.md": [],
+  "087_detailed_domain_specifications_part_52_/01_slug_format_acceptance.md": [],
+  "087_detailed_domain_specifications_part_52_/02_partial_checkpoint_recovery.md": [],
+  "087_detailed_domain_specifications_part_52_/03_max_webhook_limit.md": [],
+  "087_detailed_domain_specifications_part_52_/03_webhook_config_validation.md": [],
+  "087_detailed_domain_specifications_part_52_/04_non_empty_webhook_events.md": [],
+  "087_detailed_domain_specifications_part_52_/04_webhook_exhaustion_episode_logic.md": [],
+  "087_detailed_domain_specifications_part_52_/05_exhaustion_episode_logic.md": [],
+  "088_detailed_domain_specifications_part_53_/01_webhook_config_validation.md": [],
+  "088_detailed_domain_specifications_part_53_/02_webhook_delivery_mechanics.md": [
+    "088_detailed_domain_specifications_part_53_/01_webhook_config_validation.md"
+  ],
+  "088_detailed_domain_specifications_part_53_/03_architecture_acceptance_server.md": [
+    "088_detailed_domain_specifications_part_53_/01_webhook_config_validation.md",
+    "088_detailed_domain_specifications_part_53_/02_webhook_delivery_mechanics.md"
+  ],
+  "088_detailed_domain_specifications_part_53_/04_architecture_acceptance_logic.md": [
+    "088_detailed_domain_specifications_part_53_/03_architecture_acceptance_server.md"
+  ],
+  "088_detailed_domain_specifications_part_53_/05_tech_stack_acceptance_infrastructure.md": [
+    "088_detailed_domain_specifications_part_53_/04_architecture_acceptance_logic.md"
+  ],
+  "088_detailed_domain_specifications_part_53_/06_tech_stack_acceptance_audits.md": [
+    "088_detailed_domain_specifications_part_53_/05_tech_stack_acceptance_infrastructure.md"
+  ],
+  "089_detailed_domain_specifications_part_54_/01_distinct_port_and_discovery_path_conflict.md": [],
+  "089_detailed_domain_specifications_part_54_/02_prost_tonic_build_version_matching.md": [],
+  "089_detailed_domain_specifications_part_54_/03_openssl_dev_headers_setup.md": [],
+  "089_detailed_domain_specifications_part_54_/04_e2e_coverage_gate_enforcement.md": [],
+  "090_acceptance_criteria_roadmap_part_1_/01_implement_ansi_string_utils.md": [],
+  "090_acceptance_criteria_roadmap_part_1_/02_implement_ui_string_truncation.md": [
+    "090_acceptance_criteria_roadmap_part_1_/01_implement_ansi_string_utils.md"
+  ],
+  "090_acceptance_criteria_roadmap_part_1_/03_implement_tui_status_labels.md": [],
+  "091_acceptance_criteria_roadmap_part_2_/01_tui_ascii_and_snapshot_integrity_lints.md": [],
+  "091_acceptance_criteria_roadmap_part_2_/02_logbuffer_sanitization_v1.md": [],
+  "092_acceptance_criteria_roadmap_part_3_/01_logbuffer_tab_expansion.md": [],
+  "092_acceptance_criteria_roadmap_part_3_/02_dagview_ascii_rendering.md": [],
+  "092_acceptance_criteria_roadmap_part_3_/03_theme_monochrome_mode.md": [],
+  "093_acceptance_criteria_roadmap_part_4_/01_dag_arrow_constants_and_help_content.md": [],
+  "093_acceptance_criteria_roadmap_part_4_/02_help_overlay_rendering_and_snapshots.md": [
+    "093_acceptance_criteria_roadmap_part_4_/01_dag_arrow_constants_and_help_content.md"
+  ],
+  "093_acceptance_criteria_roadmap_part_4_/03_runlist_navigation_resilience.md": [],
+  "094_acceptance_criteria_roadmap_part_5_/01_tui_keyboard_event_handling.md": [],
+  "094_acceptance_criteria_roadmap_part_5_/02_tui_log_processing_ansi_stripping.md": [],
+  "094_acceptance_criteria_roadmap_part_5_/03_tui_log_rendering_tail_formatting.md": [
+    "094_acceptance_criteria_roadmap_part_5_/02_tui_log_processing_ansi_stripping.md"
+  ],
+  "095_acceptance_criteria_roadmap_part_6_/01_do_script_compliance_performance.md": [],
+  "095_acceptance_criteria_roadmap_part_6_/01_presubmit_linux_macos_windows.md": [],
+  "095_acceptance_criteria_roadmap_part_6_/02_devs_core_dependency_isolation.md": [],
+  "095_acceptance_criteria_roadmap_part_6_/02_presubmit_timing_budget_validation.md": [],
+  "095_acceptance_criteria_roadmap_part_6_/03_robustness_testing_core_logic.md": [],
+  "095_acceptance_criteria_roadmap_part_6_/03_template_resolver_unknown_variable_error.md": [],
+  "096_acceptance_criteria_roadmap_part_7_/01_grpc_reflection_verification.md": [],
+  "096_acceptance_criteria_roadmap_part_7_/02_authoritative_dependency_lint.md": [],
+  "096_acceptance_criteria_roadmap_part_7_/03_gitlab_ci_parallel_artifacts.md": [],
+  "096_acceptance_criteria_roadmap_part_7_/04_tui_rendering_performance_benchmark.md": [],
+  "096_acceptance_criteria_roadmap_part_7_/05_tui_event_loop_latency_verification.md": [
+    "096_acceptance_criteria_roadmap_part_7_/04_tui_rendering_performance_benchmark.md"
+  ],
+  "097_acceptance_criteria_roadmap_part_8_/01_stage_status_labels.md": [],
+  "097_acceptance_criteria_roadmap_part_8_/02_tui_event_loop_tick.md": [],
+  "097_acceptance_criteria_roadmap_part_8_/03_tick_event_side_effects.md": [
+    "097_acceptance_criteria_roadmap_part_8_/02_tui_event_loop_tick.md"
+  ],
+  "098_acceptance_criteria_roadmap_part_9_/01_implement_format_elapsed.md": [],
+  "098_acceptance_criteria_roadmap_part_9_/02_implement_truncate_with_tilde_base.md": [],
+  "099_acceptance_criteria_roadmap_part_10_/01_truncate_with_tilde_acceptance_cases.md": [
+    "098_acceptance_criteria_roadmap_part_9_/02_implement_truncate_with_tilde_base.md"
+  ],
+  "099_acceptance_criteria_roadmap_part_10_/02_strip_ansi_acceptance_cases.md": [
+    "090_acceptance_criteria_roadmap_part_1_/01_implement_ansi_string_utils.md"
+  ],
+  "100_acceptance_criteria_roadmap_part_11_/01_advanced_ansi_stripping.md": [
+    "099_acceptance_criteria_roadmap_part_10_/02_strip_ansi_acceptance_cases.md"
+  ],
+  "100_acceptance_criteria_roadmap_part_11_/02_theme_management_foundation.md": [],
+  "101_acceptance_criteria_roadmap_part_12_/01_tui_status_logic_and_labels.md": [],
+  "101_acceptance_criteria_roadmap_part_12_/02_tui_string_constants_and_lint.md": [
+    "101_acceptance_criteria_roadmap_part_12_/01_tui_status_logic_and_labels.md"
+  ],
+  "101_acceptance_criteria_roadmap_part_12_/03_tui_dashboard_snapshot_verification.md": [
+    "101_acceptance_criteria_roadmap_part_12_/02_tui_string_constants_and_lint.md"
+  ],
+  "102_acceptance_criteria_roadmap_part_13_/01_tui_monochrome_and_fanout_verification.md": [],
+  "102_acceptance_criteria_roadmap_part_13_/02_cli_list_format_e2e_verification.md": [],
+  "102_acceptance_criteria_roadmap_part_13_/03_ansi_modifier_restriction_lint.md": [],
+  "103_acceptance_criteria_roadmap_part_14_/01_truncate_with_tilde_utility.md": [],
+  "103_acceptance_criteria_roadmap_part_14_/02_roadmap_root_phase_verification.md": []
+}

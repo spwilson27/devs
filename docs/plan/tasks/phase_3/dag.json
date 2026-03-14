@@ -1,0 +1,697 @@
+{
+  "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md": [],
+  "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md": [],
+  "01_core_grpc_server_and_infrastructure/02_grpc_client_version_interceptor.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md": [
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/03_streaming_infrastructure.md": [
+    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md",
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/04_networking_security_baseline.md": [
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
+    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md": [],
+  "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/06_discovery_file_protocol.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/06_logging_and_audit_foundation.md": [
+    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md": [
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/07_security_startup_checks_and_network_policy.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/08_credential_security_and_env_handling.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/08_webhook_security_ssrf_and_hmac.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/09_input_validation_and_injection_prevention.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/09_transport_layer_security.md": [
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
+    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/10_network_security_webhook_ssrf_tls_size_limits.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/10_remote_execution_security.md": [
+    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/11_crypto_policy_and_dependency_audit.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/11_injection_prevention_and_subprocess_safety.md": [
+    "01_core_grpc_server_and_infrastructure/06_logging_and_audit_foundation.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/12_input_validation_and_state_integrity.md": [
+    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/13_architecture_forward_compatibility.md": [
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
+    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md",
+    "01_core_grpc_server_and_infrastructure/10_remote_execution_security.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/26_mcp_acceptance_criteria_group2_observation_workflow_tools.md": [
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/27_mcp_acceptance_criteria_group3_control_debug_tools.md": [
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/10_network_security_webhook_ssrf_tls_size_limits.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md": [
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/29_mcp_acceptance_criteria_group5_profiling_performance.md": [
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/30_mcp_observability_orchestration_debug_requirements.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/10_network_security_webhook_ssrf_tls_size_limits.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/31_prd_business_rules_server_clients.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/32_cli_interface_features_business_rules.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/06_discovery_file_protocol.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/33_tui_interface_features_business_rules.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/34_mcp_client_bridge_features.md": [
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/35_workflow_do_script_features.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/36_user_features_core_part1.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/10_network_security_webhook_ssrf_tls_size_limits.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md": [
+    "01_core_grpc_server_and_infrastructure/36_user_features_core_part1.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/38_user_feature_acceptance_criteria_part1.md": [
+    "01_core_grpc_server_and_infrastructure/36_user_features_core_part1.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/39_user_feature_acceptance_criteria_part2.md": [
+    "01_core_grpc_server_and_infrastructure/36_user_features_core_part1.md",
+    "01_core_grpc_server_and_infrastructure/38_user_feature_acceptance_criteria_part1.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/40_user_feature_business_rules_part1.md": [
+    "01_core_grpc_server_and_infrastructure/36_user_features_core_part1.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/41_user_feature_business_rules_part2.md": [
+    "01_core_grpc_server_and_infrastructure/40_user_feature_business_rules_part1.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/42_json_localization_crossplatform_features.md": [
+    "01_core_grpc_server_and_infrastructure/32_cli_interface_features_business_rules.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/43_ui_design_system_foundation.md": [
+    "01_core_grpc_server_and_infrastructure/33_tui_interface_features_business_rules.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/44_ui_design_subsystems.md": [
+    "01_core_grpc_server_and_infrastructure/43_ui_design_system_foundation.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/45_tui_component_acceptance_criteria.md": [
+    "01_core_grpc_server_and_infrastructure/43_ui_design_system_foundation.md",
+    "01_core_grpc_server_and_infrastructure/44_ui_design_subsystems.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/46_tui_interaction_acceptance_criteria.md": [
+    "01_core_grpc_server_and_infrastructure/33_tui_interface_features_business_rules.md",
+    "01_core_grpc_server_and_infrastructure/43_ui_design_system_foundation.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/47_architecture_routing_misc_requirements.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/33_tui_interface_features_business_rules.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "01_core_grpc_server_and_infrastructure/48_ui_ux_design_requirements.md": [
+    "01_core_grpc_server_and_infrastructure/43_ui_design_system_foundation.md",
+    "01_core_grpc_server_and_infrastructure/44_ui_design_subsystems.md",
+    "01_core_grpc_server_and_infrastructure/45_tui_component_acceptance_criteria.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "02_state_recovery_and_lifecycle/01_crash_recovery_logic.md": [],
+  "02_state_recovery_and_lifecycle/02_checkpoint_restoration_service.md": [
+    "02_state_recovery_and_lifecycle/01_crash_recovery_logic.md"
+  ],
+  "02_state_recovery_and_lifecycle/03_server_startup_recovery_integration.md": [
+    "02_state_recovery_and_lifecycle/02_checkpoint_restoration_service.md"
+  ],
+  "02_state_recovery_and_lifecycle/04_e2e_verification_crash_recovery.md": [
+    "02_state_recovery_and_lifecycle/03_server_startup_recovery_integration.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "03_cli_implementation/01_cli_scaffold_and_global_flags.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "03_cli_implementation/02_workflow_submission_and_listing.md": [
+    "03_cli_implementation/01_cli_scaffold_and_global_flags.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "03_cli_implementation/03_run_status_and_log_streaming.md": [
+    "03_cli_implementation/02_workflow_submission_and_listing.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "03_cli_implementation/04_control_and_project_commands.md": [
+    "03_cli_implementation/01_cli_scaffold_and_global_flags.md",
+    "03_cli_implementation/03_run_status_and_log_streaming.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "03_cli_implementation/05_cli_exit_codes_and_json_errors.md": [
+    "03_cli_implementation/01_cli_scaffold_and_global_flags.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "04_mcp_server_framework/01_mcp_crate_scaffold_and_jsonrpc_server.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "04_mcp_server_framework/01_mcp_server_foundation.md": [
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+  ],
+  "04_mcp_server_framework/02_mcp_response_envelope_and_error_atomicity.md": [
+    "04_mcp_server_framework/01_mcp_crate_scaffold_and_jsonrpc_server.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "04_mcp_server_framework/02_mcp_stdio_bridge.md": [
+    "04_mcp_server_framework/01_mcp_server_foundation.md",
+    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md"
+  ],
+  "04_mcp_server_framework/03_mcp_observation_framework.md": [
+    "04_mcp_server_framework/01_mcp_server_foundation.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+  ],
+  "04_mcp_server_framework/03_mcp_tool_registry_and_categorization.md": [
+    "04_mcp_server_framework/01_mcp_crate_scaffold_and_jsonrpc_server.md",
+    "04_mcp_server_framework/02_mcp_response_envelope_and_error_atomicity.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "04_mcp_server_framework/04_mcp_stdio_bridge.md": [
+    "04_mcp_server_framework/01_mcp_crate_scaffold_and_jsonrpc_server.md",
+    "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md"
+  ],
+  "05_mcp_tools_-_observability/01_mcp_bridge.md": [
+    "01_core_grpc_server_and_infrastructure/02_protocol_hardening_and_discovery.md",
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md"
+  ],
+  "05_mcp_tools_-_observability/01_mcp_stdio_bridge_binary.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md"
+  ],
+  "05_mcp_tools_-_observability/02_list_get_run.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md"
+  ],
+  "05_mcp_tools_-_observability/02_list_runs_tool.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "05_mcp_tools_-_observability/03_get_run_tool.md": [
+    "05_mcp_tools_-_observability/02_list_runs_tool.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "05_mcp_tools_-_observability/03_get_stage_output.md": [
+    "05_mcp_tools_-_observability/02_list_get_run.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md"
+  ],
+  "05_mcp_tools_-_observability/04_get_stage_output_tool.md": [
+    "05_mcp_tools_-_observability/03_get_run_tool.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "05_mcp_tools_-_observability/04_stream_logs.md": [
+    "05_mcp_tools_-_observability/03_get_stage_output.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "05_mcp_tools_-_observability/05_pool_workflow_obs.md": [
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "05_mcp_tools_-_observability/05_stream_logs_tool.md": [
+    "05_mcp_tools_-_observability/03_get_run_tool.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "05_mcp_tools_-_observability/06_get_pool_state_tool.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "05_mcp_tools_-_observability/06_list_checkpoints.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "05_mcp_tools_-_observability/07_get_workflow_definition_tool.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md"
+  ],
+  "05_mcp_tools_-_observability/07_submit_run.md": [
+    "05_mcp_tools_-_observability/05_pool_workflow_obs.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "05_mcp_tools_-_observability/08_cancel_tools.md": [
+    "05_mcp_tools_-_observability/07_submit_run.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "05_mcp_tools_-_observability/08_list_checkpoints_tool.md": [
+    "05_mcp_tools_-_observability/03_get_run_tool.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "05_mcp_tools_-_observability/09_e2e_traceability.md": [
+    "05_mcp_tools_-_observability/01_mcp_bridge.md",
+    "05_mcp_tools_-_observability/04_stream_logs.md",
+    "05_mcp_tools_-_observability/08_cancel_tools.md"
+  ],
+  "05_mcp_tools_-_observability/09_submit_and_cancel_tools.md": [
+    "05_mcp_tools_-_observability/02_list_runs_tool.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md"
+  ],
+  "05_mcp_tools_-_observability/10_e2e_observability_edge_cases.md": [
+    "05_mcp_tools_-_observability/04_get_stage_output_tool.md",
+    "05_mcp_tools_-_observability/05_stream_logs_tool.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "06_mcp_tools_-_control_and_management/01_mcp_control_tools.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md",
+    "05_mcp_tools_-_observability/07_submit_run.md"
+  ],
+  "06_mcp_tools_-_control_and_management/01_submit_run_tool.md": [],
+  "06_mcp_tools_-_control_and_management/02_cancel_run_and_stage_tools.md": [
+    "06_mcp_tools_-_control_and_management/01_submit_run_tool.md"
+  ],
+  "06_mcp_tools_-_control_and_management/02_mcp_workflow_updates.md": [
+    "01_core_grpc_server_and_infrastructure/01_core_grpc_server_and_lifecycle.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "06_mcp_tools_-_control_and_management/03_mcp_testing_tools.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md",
+    "05_mcp_tools_-_observability/07_submit_run.md"
+  ],
+  "06_mcp_tools_-_control_and_management/03_pause_resume_tools.md": [
+    "06_mcp_tools_-_control_and_management/02_cancel_run_and_stage_tools.md"
+  ],
+  "06_mcp_tools_-_control_and_management/04_mcp_mid_run_tools.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md",
+    "05_mcp_tools_-_observability/07_submit_run.md",
+    "05_mcp_tools_-_observability/05_pool_workflow_obs.md"
+  ],
+  "06_mcp_tools_-_control_and_management/04_signal_completion_tool.md": [
+    "06_mcp_tools_-_control_and_management/01_submit_run_tool.md",
+    "06_mcp_tools_-_control_and_management/02_cancel_run_and_stage_tools.md"
+  ],
+  "06_mcp_tools_-_control_and_management/05_mcp_filesystem_server.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "06_mcp_tools_-_control_and_management/05_report_progress_and_rate_limit_tools.md": [
+    "06_mcp_tools_-_control_and_management/01_submit_run_tool.md"
+  ],
+  "06_mcp_tools_-_control_and_management/06_mcp_protocol_invariants.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "06_mcp_tools_-_control_and_management/06_write_workflow_definition_tool.md": [
+    "06_mcp_tools_-_control_and_management/01_submit_run_tool.md"
+  ],
+  "06_mcp_tools_-_control_and_management/07_inject_stage_input_and_assert_output_tools.md": [
+    "06_mcp_tools_-_control_and_management/01_submit_run_tool.md",
+    "06_mcp_tools_-_control_and_management/04_signal_completion_tool.md",
+    "06_mcp_tools_-_control_and_management/02_cancel_run_and_stage_tools.md"
+  ],
+  "06_mcp_tools_-_control_and_management/07_mcp_submission_listing_refinement.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md",
+    "05_mcp_tools_-_observability/07_submit_run.md"
+  ],
+  "06_mcp_tools_-_control_and_management/08_filesystem_mcp_tools.md": [],
+  "06_mcp_tools_-_control_and_management/08_mcp_glass_box_observability.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md",
+    "05_mcp_tools_-_observability/07_submit_run.md",
+    "05_mcp_tools_-_observability/05_pool_workflow_obs.md"
+  ],
+  "06_mcp_tools_-_control_and_management/09_agentic_infrastructure.md": [
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "01_core_grpc_server_and_infrastructure/07_filesystem_security_and_path_handling.md",
+    "01_core_grpc_server_and_infrastructure/10_remote_execution_security.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "06_mcp_tools_-_control_and_management/09_mcp_server_shared_state_and_data_model.md": [],
+  "06_mcp_tools_-_control_and_management/10_agentic_loop_support.md": [
+    "06_mcp_tools_-_control_and_management/09_agentic_infrastructure.md",
+    "01_core_grpc_server_and_infrastructure/05_credential_protection_and_redaction.md",
+    "01_core_grpc_server_and_infrastructure/10_remote_execution_security.md",
+    "05_mcp_tools_-_observability/02_list_get_run.md"
+  ],
+  "06_mcp_tools_-_control_and_management/10_observation_tool_data_and_streaming.md": [
+    "06_mcp_tools_-_control_and_management/09_mcp_server_shared_state_and_data_model.md"
+  ],
+  "06_mcp_tools_-_control_and_management/11_agent_state_and_context_management.md": [
+    "06_mcp_tools_-_control_and_management/08_filesystem_mcp_tools.md",
+    "06_mcp_tools_-_control_and_management/09_mcp_server_shared_state_and_data_model.md",
+    "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md",
+    "06_mcp_tools_-_control_and_management/01_submit_run_tool.md"
+  ],
+  "06_mcp_tools_-_control_and_management/12_self_dev_parallel_and_tdd_edge_cases.md": [
+    "06_mcp_tools_-_control_and_management/01_submit_run_tool.md",
+    "06_mcp_tools_-_control_and_management/04_signal_completion_tool.md",
+    "06_mcp_tools_-_control_and_management/07_inject_stage_input_and_assert_output_tools.md",
+    "06_mcp_tools_-_control_and_management/10_observation_tool_data_and_streaming.md",
+    "06_mcp_tools_-_control_and_management/11_agent_state_and_context_management.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/02_app_state_and_state_management.md": [
+    "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/03_grpc_client_and_discovery.md": [
+    "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "03_cli_implementation/01_cli_scaffold_and_global_flags.md"
+  ],
+  "07_tui_framework_and_navigation/04_connection_state_machine_and_reconnect.md": [
+    "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md",
+    "07_tui_framework_and_navigation/02_app_state_and_state_management.md",
+    "07_tui_framework_and_navigation/03_grpc_client_and_discovery.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/05_tab_navigation_and_status_bar.md": [
+    "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md",
+    "07_tui_framework_and_navigation/02_app_state_and_state_management.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/06_layout_system_and_terminal_constraints.md": [
+    "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md",
+    "07_tui_framework_and_navigation/05_tab_navigation_and_status_bar.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/07_string_constants_and_styling.md": [
+    "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/08_run_list_widget.md": [
+    "07_tui_framework_and_navigation/02_app_state_and_state_management.md",
+    "07_tui_framework_and_navigation/07_string_constants_and_styling.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/09_dag_view_widget.md": [
+    "07_tui_framework_and_navigation/02_app_state_and_state_management.md",
+    "07_tui_framework_and_navigation/07_string_constants_and_styling.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/10_stage_list_widget.md": [
+    "07_tui_framework_and_navigation/02_app_state_and_state_management.md",
+    "07_tui_framework_and_navigation/07_string_constants_and_styling.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/11_log_pane_and_ansi_stripping.md": [
+    "07_tui_framework_and_navigation/02_app_state_and_state_management.md",
+    "07_tui_framework_and_navigation/07_string_constants_and_styling.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/12_dashboard_tab_assembly.md": [
+    "07_tui_framework_and_navigation/06_layout_system_and_terminal_constraints.md",
+    "07_tui_framework_and_navigation/08_run_list_widget.md",
+    "07_tui_framework_and_navigation/09_dag_view_widget.md",
+    "07_tui_framework_and_navigation/10_stage_list_widget.md",
+    "07_tui_framework_and_navigation/11_log_pane_and_ansi_stripping.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/13_logs_tab.md": [
+    "07_tui_framework_and_navigation/06_layout_system_and_terminal_constraints.md",
+    "07_tui_framework_and_navigation/11_log_pane_and_ansi_stripping.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/14_debug_tab.md": [
+    "07_tui_framework_and_navigation/06_layout_system_and_terminal_constraints.md",
+    "07_tui_framework_and_navigation/11_log_pane_and_ansi_stripping.md",
+    "07_tui_framework_and_navigation/10_stage_list_widget.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/15_pools_tab.md": [
+    "07_tui_framework_and_navigation/06_layout_system_and_terminal_constraints.md",
+    "07_tui_framework_and_navigation/02_app_state_and_state_management.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/16_keyboard_input_and_focus_management.md": [
+    "07_tui_framework_and_navigation/05_tab_navigation_and_status_bar.md",
+    "07_tui_framework_and_navigation/12_dashboard_tab_assembly.md",
+    "07_tui_framework_and_navigation/13_logs_tab.md",
+    "07_tui_framework_and_navigation/14_debug_tab.md",
+    "07_tui_framework_and_navigation/15_pools_tab.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/17_cross_platform_compatibility.md": [
+    "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md",
+    "07_tui_framework_and_navigation/03_grpc_client_and_discovery.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/18_snapshot_testing_infrastructure.md": [
+    "07_tui_framework_and_navigation/01_tui_crate_scaffold_and_event_loop.md",
+    "07_tui_framework_and_navigation/02_app_state_and_state_management.md",
+    "07_tui_framework_and_navigation/07_string_constants_and_styling.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "07_tui_framework_and_navigation/19_tui_e2e_tests_and_coverage.md": [
+    "07_tui_framework_and_navigation/12_dashboard_tab_assembly.md",
+    "07_tui_framework_and_navigation/13_logs_tab.md",
+    "07_tui_framework_and_navigation/14_debug_tab.md",
+    "07_tui_framework_and_navigation/15_pools_tab.md",
+    "07_tui_framework_and_navigation/16_keyboard_input_and_focus_management.md",
+    "07_tui_framework_and_navigation/18_snapshot_testing_infrastructure.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "07_tui_framework_and_navigation/20_cli_command_architecture_and_mcp_bridge.md": [
+    "07_tui_framework_and_navigation/03_grpc_client_and_discovery.md",
+    "07_tui_framework_and_navigation/07_string_constants_and_styling.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/01_string_constants_and_ascii_hygiene.md": [
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/02_theme_and_color_mode_system.md": [
+    "08_tui_visualization_-_dag_and_logs/01_string_constants_and_ascii_hygiene.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/03_status_labels_typography_render_utils.md": [
+    "08_tui_visualization_-_dag_and_logs/01_string_constants_and_ascii_hygiene.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/04_ansi_stripping_and_log_buffer.md": [
+    "08_tui_visualization_-_dag_and_logs/01_string_constants_and_ascii_hygiene.md",
+    "08_tui_visualization_-_dag_and_logs/02_theme_and_color_mode_system.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/05_log_visualization_and_tail_rendering.md": [
+    "08_tui_visualization_-_dag_and_logs/04_ansi_stripping_and_log_buffer.md",
+    "08_tui_visualization_-_dag_and_logs/02_theme_and_color_mode_system.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/06_event_loop_and_widget_architecture.md": [
+    "08_tui_visualization_-_dag_and_logs/01_string_constants_and_ascii_hygiene.md",
+    "08_tui_visualization_-_dag_and_logs/02_theme_and_color_mode_system.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/07_layout_system_and_terminal_sizing.md": [
+    "08_tui_visualization_-_dag_and_logs/06_event_loop_and_widget_architecture.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/08_dag_tier_precomputation.md": [
+    "08_tui_visualization_-_dag_and_logs/03_status_labels_typography_render_utils.md",
+    "08_tui_visualization_-_dag_and_logs/06_event_loop_and_widget_architecture.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/09_dag_box_rendering.md": [
+    "08_tui_visualization_-_dag_and_logs/08_dag_tier_precomputation.md",
+    "08_tui_visualization_-_dag_and_logs/02_theme_and_color_mode_system.md",
+    "08_tui_visualization_-_dag_and_logs/03_status_labels_typography_render_utils.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/10_dag_interaction_and_scrolling.md": [
+    "08_tui_visualization_-_dag_and_logs/09_dag_box_rendering.md",
+    "08_tui_visualization_-_dag_and_logs/07_layout_system_and_terminal_sizing.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/11_keyboard_input_and_tab_navigation.md": [
+    "08_tui_visualization_-_dag_and_logs/06_event_loop_and_widget_architecture.md",
+    "08_tui_visualization_-_dag_and_logs/07_layout_system_and_terminal_sizing.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/12_control_actions_and_confirmation.md": [
+    "08_tui_visualization_-_dag_and_logs/11_keyboard_input_and_tab_navigation.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/13_reconnection_and_status_bar.md": [
+    "08_tui_visualization_-_dag_and_logs/06_event_loop_and_widget_architecture.md",
+    "08_tui_visualization_-_dag_and_logs/02_theme_and_color_mode_system.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/14_help_overlay_and_modal_system.md": [
+    "08_tui_visualization_-_dag_and_logs/11_keyboard_input_and_tab_navigation.md",
+    "08_tui_visualization_-_dag_and_logs/02_theme_and_color_mode_system.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/15_cli_and_mcp_bridge_output_formatting.md": [
+    "08_tui_visualization_-_dag_and_logs/01_string_constants_and_ascii_hygiene.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md"
+  ],
+  "08_tui_visualization_-_dag_and_logs/16_tui_snapshot_tests_edge_cases_acceptance.md": [
+    "08_tui_visualization_-_dag_and_logs/09_dag_box_rendering.md",
+    "08_tui_visualization_-_dag_and_logs/10_dag_interaction_and_scrolling.md",
+    "08_tui_visualization_-_dag_and_logs/05_log_visualization_and_tail_rendering.md",
+    "08_tui_visualization_-_dag_and_logs/12_control_actions_and_confirmation.md",
+    "08_tui_visualization_-_dag_and_logs/13_reconnection_and_status_bar.md",
+    "08_tui_visualization_-_dag_and_logs/14_help_overlay_and_modal_system.md",
+    "08_tui_visualization_-_dag_and_logs/15_cli_and_mcp_bridge_output_formatting.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "09_risks_and_roadmap_integration/01_risk_matrix_schema_and_validation_infrastructure.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "09_risks_and_roadmap_integration/02_technical_risk_covering_tests_part1.md": [
+    "09_risks_and_roadmap_integration/01_risk_matrix_schema_and_validation_infrastructure.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/01_devs_grpc_crate_scaffold_and_server_service.md",
+    "01_core_grpc_server_and_infrastructure/36_user_features_core_part1.md"
+  ],
+  "09_risks_and_roadmap_integration/03_technical_risk_covering_tests_part2.md": [
+    "09_risks_and_roadmap_integration/01_risk_matrix_schema_and_validation_infrastructure.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/10_network_security_webhook_ssrf_tls_size_limits.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "09_risks_and_roadmap_integration/04_technical_risk_covering_tests_part3.md": [
+    "09_risks_and_roadmap_integration/01_risk_matrix_schema_and_validation_infrastructure.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md"
+  ],
+  "09_risks_and_roadmap_integration/05_operational_risk_covering_tests.md": [
+    "09_risks_and_roadmap_integration/01_risk_matrix_schema_and_validation_infrastructure.md",
+    "01_core_grpc_server_and_infrastructure/03_grpc_service_stubs_and_streaming.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/05_graceful_shutdown_and_signal_handling.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md",
+    "01_core_grpc_server_and_infrastructure/36_user_features_core_part1.md"
+  ],
+  "09_risks_and_roadmap_integration/06_fallback_registry_and_activation_protocol.md": [
+    "09_risks_and_roadmap_integration/01_risk_matrix_schema_and_validation_infrastructure.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/08_credential_security_and_env_handling.md"
+  ],
+  "09_risks_and_roadmap_integration/07_roadmap_phase_definitions_and_ptc_validation.md": [
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "09_risks_and_roadmap_integration/08_phase_deliverable_and_bootstrap_tracking.md": [
+    "09_risks_and_roadmap_integration/07_roadmap_phase_definitions_and_ptc_validation.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/25_mcp_acceptance_criteria_group1_server_protocol.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ],
+  "09_risks_and_roadmap_integration/09_critical_path_and_checkpoint_records.md": [
+    "09_risks_and_roadmap_integration/07_roadmap_phase_definitions_and_ptc_validation.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/28_mcp_acceptance_criteria_group4_testing_self_dev.md"
+  ],
+  "09_risks_and_roadmap_integration/10_phase_lifecycle_and_nongoals_enforcement.md": [
+    "09_risks_and_roadmap_integration/07_roadmap_phase_definitions_and_ptc_validation.md",
+    "09_risks_and_roadmap_integration/09_critical_path_and_checkpoint_records.md",
+    "01_core_grpc_server_and_infrastructure/04_devs_server_crate_and_startup_sequence.md",
+    "01_core_grpc_server_and_infrastructure/37_user_features_core_part2.md"
+  ]
+}

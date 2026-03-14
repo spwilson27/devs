@@ -1,0 +1,491 @@
+{
+  "01_core_quality_gates/01_e2e_infrastructure.md": [],
+  "01_core_quality_gates/02_tui_snapshots.md": [
+    "01_core_quality_gates/01_e2e_infrastructure.md"
+  ],
+  "01_core_quality_gates/03_coverage_gates.md": [
+    "01_core_quality_gates/01_e2e_infrastructure.md"
+  ],
+  "01_core_quality_gates/04_traceability_report.md": [],
+  "01_core_quality_gates/05_e2e_isolation.md": [
+    "01_core_quality_gates/01_e2e_infrastructure.md",
+    "01_core_quality_gates/03_coverage_gates.md"
+  ],
+  "01_core_quality_gates/06_perf_core_infrastructure.md": [],
+  "01_core_quality_gates/07_slo_constants_and_integration_tests.md": [
+    "01_core_quality_gates/06_perf_core_infrastructure.md",
+    "01_core_quality_gates/01_e2e_infrastructure.md"
+  ],
+  "01_core_quality_gates/08_dispatch_latency_targets.md": [
+    "01_core_quality_gates/06_perf_core_infrastructure.md"
+  ],
+  "01_core_quality_gates/09_structural_limits_and_resource_budgets.md": [
+    "01_core_quality_gates/06_perf_core_infrastructure.md"
+  ],
+  "01_core_quality_gates/10_grpc_mcp_scheduler_rules.md": [
+    "01_core_quality_gates/06_perf_core_infrastructure.md",
+    "01_core_quality_gates/07_slo_constants_and_integration_tests.md"
+  ],
+  "01_core_quality_gates/11_observability_and_structured_logging.md": [
+    "01_core_quality_gates/06_perf_core_infrastructure.md",
+    "01_core_quality_gates/09_structural_limits_and_resource_budgets.md"
+  ],
+  "01_core_quality_gates/12_presubmit_timing_infrastructure.md": [
+    "01_core_quality_gates/06_perf_core_infrastructure.md"
+  ],
+  "01_core_quality_gates/13_guiding_principles_and_regression.md": [
+    "01_core_quality_gates/06_perf_core_infrastructure.md",
+    "01_core_quality_gates/07_slo_constants_and_integration_tests.md"
+  ],
+  "01_core_quality_gates/14_perf_traceability_scanner.md": [
+    "01_core_quality_gates/04_traceability_report.md",
+    "01_core_quality_gates/06_perf_core_infrastructure.md"
+  ],
+  "01_core_quality_gates/15_slo_edge_cases_and_error_paths.md": [
+    "01_core_quality_gates/07_slo_constants_and_integration_tests.md",
+    "01_core_quality_gates/10_grpc_mcp_scheduler_rules.md"
+  ],
+  "01_core_quality_gates/16_e2e_perf_acceptance_tests.md": [
+    "01_core_quality_gates/01_e2e_infrastructure.md",
+    "01_core_quality_gates/06_perf_core_infrastructure.md",
+    "01_core_quality_gates/07_slo_constants_and_integration_tests.md",
+    "01_core_quality_gates/11_observability_and_structured_logging.md"
+  ],
+  "01_core_quality_gates/17_section7_test_scenarios.md": [
+    "01_core_quality_gates/01_e2e_infrastructure.md",
+    "01_core_quality_gates/07_slo_constants_and_integration_tests.md",
+    "01_core_quality_gates/08_dispatch_latency_targets.md",
+    "01_core_quality_gates/10_grpc_mcp_scheduler_rules.md"
+  ],
+  "01_core_quality_gates/18_tui_layout_correctness.md": [
+    "01_core_quality_gates/02_tui_snapshots.md"
+  ],
+  "01_core_quality_gates/19_string_constant_hygiene.md": [],
+  "02_core_quality_gates/01_traceability_hardening.md": [],
+  "02_core_quality_gates/02_traceability_stale_file_handling.md": [
+    "02_core_quality_gates/01_traceability_hardening.md"
+  ],
+  "02_core_quality_gates/03_mcp_assertion_snippet_truncation.md": [],
+  "02_core_quality_gates/04_mcp_presubmit_gate_verification.md": [
+    "02_core_quality_gates/03_mcp_assertion_snippet_truncation.md"
+  ],
+  "03_core_quality_gates/01_unknown_failure_investigation_protocol.md": [],
+  "03_core_quality_gates/02_coverage_report_gate_verification.md": [],
+  "03_core_quality_gates/03_traceability_final_verification.md": [],
+  "03_core_quality_gates/04_security_audit_and_ci_performance.md": [],
+  "04_mvp_roadmap/01_verify_bootstrap_milestone.md": [],
+  "04_mvp_roadmap/02_setup_docker_ssh_e2e_infra.md": [
+    "04_mvp_roadmap/01_verify_bootstrap_milestone.md"
+  ],
+  "04_mvp_roadmap/03_implement_lib_macro_linter.md": [],
+  "04_mvp_roadmap/04_enforce_presubmit_performance_targets.md": [],
+  "05_risk_001_verification/01_risk_matrix_extraction.md": [],
+  "05_risk_001_verification/02_mitigation_consistency.md": [
+    "05_risk_001_verification/01_risk_matrix_extraction.md"
+  ],
+  "05_risk_001_verification/03_risk_traceability.md": [
+    "05_risk_001_verification/01_risk_matrix_extraction.md",
+    "05_risk_001_verification/02_mitigation_consistency.md"
+  ],
+  "06_risk_006_verification/01_enhanced_risk_table_validation.md": [
+    "05_risk_001_verification/01_risk_matrix_extraction.md"
+  ],
+  "06_risk_006_verification/02_risk_schema_validation.md": [
+    "06_risk_006_verification/01_enhanced_risk_table_validation.md"
+  ],
+  "06_risk_006_verification/03_risk_regression_reporting.md": [
+    "05_risk_001_verification/03_risk_traceability.md",
+    "06_risk_006_verification/02_risk_schema_validation.md"
+  ],
+  "07_risk_001_verification/01_risk_mitigation_audit.md": [],
+  "07_risk_001_verification/02_critical_risk_coverage.md": [
+    "07_risk_001_verification/01_risk_mitigation_audit.md"
+  ],
+  "07_risk_001_verification/03_high_risk_coverage.md": [
+    "07_risk_001_verification/02_critical_risk_coverage.md"
+  ],
+  "07_risk_001_verification/04_risk_lifecycle_audit.md": [
+    "07_risk_001_verification/03_high_risk_coverage.md"
+  ],
+  "08_risk_006_verification/01_automated_risk_state_transitions.md": [],
+  "08_risk_006_verification/02_high_severity_risk_merge_gating.md": [
+    "08_risk_006_verification/01_automated_risk_state_transitions.md"
+  ],
+  "08_risk_006_verification/03_risk_lifecycle_matrix_integrity.md": [
+    "08_risk_006_verification/02_high_severity_risk_merge_gating.md"
+  ],
+  "08_risk_006_verification/04_security_configuration_verification_tests.md": [],
+  "08_risk_006_verification/05_stale_fallback_meta_risk_check.md": [],
+  "09_risk_011_verification/01_risk_matrix_schema_and_timestamp_validation.md": [],
+  "09_risk_011_verification/02_audit_manual_scoring_and_inherent_risk.md": [
+    "09_risk_011_verification/01_risk_matrix_schema_and_timestamp_validation.md"
+  ],
+  "09_risk_011_verification/03_monitoring_readiness_gate.md": [
+    "09_risk_011_verification/01_risk_matrix_schema_and_timestamp_validation.md"
+  ],
+  "09_risk_011_verification/04_ci_artifact_configuration_presubmit_timings.md": [],
+  "10_risk_016_verification/01_implement_risk_matrix_parser.md": [],
+  "10_risk_016_verification/02_implement_risk_coverage_validation.md": [
+    "10_risk_016_verification/01_implement_risk_matrix_parser.md"
+  ],
+  "10_risk_016_verification/03_enforce_monitoring_and_interdependencies.md": [
+    "10_risk_016_verification/02_implement_risk_coverage_validation.md"
+  ],
+  "10_risk_016_verification/04_verify_compound_risk_assessment.md": [
+    "10_risk_016_verification/03_enforce_monitoring_and_interdependencies.md"
+  ],
+  "11_risk_001_verification/01_verify_statemachine_concurrency.md": [],
+  "11_risk_001_verification/02_verify_dag_logic_and_cascading.md": [
+    "11_risk_001_verification/01_verify_statemachine_concurrency.md"
+  ],
+  "11_risk_001_verification/03_scheduler_stress_testing.md": [
+    "11_risk_001_verification/02_verify_dag_logic_and_cascading.md"
+  ],
+  "11_risk_001_verification/04_lock_order_static_lint.md": [
+    "11_risk_001_verification/03_scheduler_stress_testing.md"
+  ],
+  "12_mit-001/01_statemachine_idempotency.md": [],
+  "12_mit-001/02_scheduler_mutex_locking.md": [
+    "12_mit-001/01_statemachine_idempotency.md"
+  ],
+  "12_mit-001/03_concurrency_stress_tests.md": [
+    "12_mit-001/02_scheduler_mutex_locking.md"
+  ],
+  "12_mit-001/04_fanout_race_verification.md": [
+    "12_mit-001/02_scheduler_mutex_locking.md"
+  ],
+  "13_risk_001_verification/01_verify_cascading_cancellation.md": [],
+  "13_risk_001_verification/02_lock_order_lint_verification.md": [],
+  "13_risk_001_verification/03_pty_capability_probe_mitigation.md": [],
+  "13_risk_001_verification/04_pty_fallback_logging.md": [
+    "13_risk_001_verification/03_pty_capability_probe_mitigation.md"
+  ],
+  "14_risk_002_verification/01_mcp_pty_active_field.md": [],
+  "14_risk_002_verification/02_pty_fallback_behavior.md": [
+    "14_risk_002_verification/01_mcp_pty_active_field.md"
+  ],
+  "14_risk_002_verification/03_pty_unavailable_failure.md": [
+    "14_risk_002_verification/02_pty_fallback_behavior.md"
+  ],
+  "15_risk_002_verification/01_pty_unavailability_handling.md": [],
+  "15_risk_002_verification/02_atomic_checkpoint_write.md": [],
+  "15_risk_002_verification/03_checkpoint_orphan_cleanup.md": [
+    "15_risk_002_verification/02_atomic_checkpoint_write.md"
+  ],
+  "16_risk_003_verification/01_checkpoint_write_failure_handling.md": [],
+  "16_risk_003_verification/02_checkpoint_load_integrity_validation.md": [
+    "16_risk_003_verification/01_checkpoint_write_failure_handling.md"
+  ],
+  "16_risk_003_verification/03_mock_checkpoint_store_for_testing.md": [],
+  "16_risk_003_verification/04_structured_error_logging_for_checkpoint_write_failures.md": [
+    "16_risk_003_verification/03_mock_checkpoint_store_for_testing.md"
+  ],
+  "16_risk_003_verification/05_non_fatal_git_push_failure_handling.md": [
+    "16_risk_003_verification/01_checkpoint_write_failure_handling.md"
+  ],
+  "16_risk_003_verification/06_checkpoint_json_validation_function.md": [],
+  "16_risk_003_verification/07_server_startup_corrupted_checkpoint_recovery.md": [
+    "16_risk_003_verification/06_checkpoint_json_validation_function.md"
+  ],
+  "17_risk_003_verification/01_verify_checkpoint_orphan_cleanup.md": [],
+  "17_risk_003_verification/02_verify_agent_adapter_cli_integrity.md": [],
+  "18_risk_004_verification/01_adapter_version_tracking.md": [],
+  "18_risk_004_verification/02_rate_limit_and_binary_checks.md": [],
+  "18_risk_004_verification/03_adapter_compatibility_tests.md": [
+    "18_risk_004_verification/01_adapter_version_tracking.md"
+  ],
+  "19_risk_004_verification/01_rate_limit_pattern_tests.md": [],
+  "19_risk_004_verification/02_adapter_version_staleness_lint.md": [],
+  "19_risk_004_verification/03_presubmit_incremental_timing_logging.md": [],
+  "19_risk_004_verification/04_presubmit_background_wall_clock_timer.md": [
+    "19_risk_004_verification/03_presubmit_incremental_timing_logging.md"
+  ],
+  "20_risk_005_verification/01_verify_timing_logs_and_budget_warnings.md": [],
+  "20_risk_005_verification/02_verify_timer_cleanup_and_isolation.md": [],
+  "20_risk_005_verification/03_verify_hard_timeout_and_termination.md": [
+    "20_risk_005_verification/02_verify_timer_cleanup_and_isolation.md"
+  ],
+  "21_risk_005_verification/01_verify_ci_performance_thresholds.md": [],
+  "21_risk_005_verification/02_verify_coverage_exclusion_constraints.md": [
+    "21_risk_005_verification/01_verify_ci_performance_thresholds.md"
+  ],
+  "21_risk_005_verification/03_verify_e2e_coverage_isolation.md": [
+    "21_risk_005_verification/02_verify_coverage_exclusion_constraints.md"
+  ],
+  "22_risk_006_verification/01_coverage_gate_enforcement.md": [],
+  "22_risk_006_verification/02_coverage_delta_tracking.md": [
+    "22_risk_006_verification/01_coverage_gate_enforcement.md"
+  ],
+  "22_risk_006_verification/03_excluded_lines_validation.md": [
+    "22_risk_006_verification/01_coverage_gate_enforcement.md"
+  ],
+  "23_risk_006_verification/01_verify_coverage_details.md": [
+    "22_risk_006_verification/01_coverage_gate_enforcement.md"
+  ],
+  "23_risk_006_verification/02_template_resolver_single_pass.md": [],
+  "23_risk_006_verification/03_template_resolver_scalar_restriction.md": [
+    "23_risk_006_verification/02_template_resolver_single_pass.md"
+  ],
+  "24_risk_007_verification/00_sub_epic_index.md": [],
+  "24_risk_007_verification/01_template_output_truncation_implementation.md": [],
+  "24_risk_007_verification/02_template_resolution_acceptance_tests.md": [
+    "23_risk_006_verification/02_template_resolver_single_pass.md",
+    "23_risk_006_verification/03_template_resolver_scalar_restriction.md"
+  ],
+  "24_risk_007_verification/03_risk_007_mitigation_verification.md": [
+    "24_risk_007_verification/01_template_output_truncation_implementation.md",
+    "24_risk_007_verification/02_template_resolution_acceptance_tests.md"
+  ],
+  "25_risk_007_verification/01_template_truncation_and_boolean.md": [],
+  "25_risk_007_verification/02_template_resolution_perf_test.md": [
+    "25_risk_007_verification/01_template_truncation_and_boolean.md"
+  ],
+  "25_risk_007_verification/03_docker_e2e_bollard_enforcement.md": [],
+  "26_risk_008_verification/01_mock_executor_unit_tests.md": [],
+  "26_risk_008_verification/02_ssh_test_key_provisioning.md": [],
+  "26_risk_008_verification/03_executor_cleanup_hardening.md": [],
+  "26_risk_008_verification/04_e2e_infrastructure_feature_gating.md": [
+    "26_risk_008_verification/02_ssh_test_key_provisioning.md"
+  ],
+  "27_risk_008_verification/01_verify_docker_e2e_ci_integration.md": [],
+  "27_risk_008_verification/02_verify_ssh_e2e_localhost_integration.md": [],
+  "27_risk_008_verification/03_verify_e2e_aggregate_coverage_gate.md": [
+    "27_risk_008_verification/01_verify_docker_e2e_ci_integration.md",
+    "27_risk_008_verification/02_verify_ssh_e2e_localhost_integration.md"
+  ],
+  "27_risk_008_verification/04_verify_bootstrap_time_box_enforcement.md": [],
+  "28_risk_009_verification/01_enforce_sequential_crate_presubmit.md": [],
+  "28_risk_009_verification/02_implement_stub_check_in_lint.md": [],
+  "28_risk_009_verification/03_implement_workflow_validation_in_lint.md": [],
+  "28_risk_009_verification/04_verify_diagnostic_sequence_enforcement.md": [],
+  "28_risk_009_verification/05_verify_bootstrap_milestone_adr.md": [],
+  "29_mit-009/01_verify_workflow_definitions.md": [],
+  "29_mit-009/02_enforce_no_bootstrap_stubs.md": [],
+  "29_mit-009/03_implement_presubmit_e2e_test.md": [
+    "29_mit-009/01_verify_workflow_definitions.md"
+  ],
+  "29_mit-009/04_verify_presubmit_passes_on_linux.md": [
+    "29_mit-009/01_verify_workflow_definitions.md",
+    "29_mit-009/02_enforce_no_bootstrap_stubs.md"
+  ],
+  "29_mit-009/05_execute_self_hosting_milestone.md": [
+    "29_mit-009/01_verify_workflow_definitions.md",
+    "29_mit-009/02_enforce_no_bootstrap_stubs.md",
+    "29_mit-009/03_implement_presubmit_e2e_test.md",
+    "29_mit-009/04_verify_presubmit_passes_on_linux.md"
+  ],
+  "30_risk_009_verification/01_finalize_bootstrap_completion_adr.md": [],
+  "30_risk_009_verification/02_implement_rate_limit_logic.md": [],
+  "30_risk_009_verification/03_implement_pool_exhaustion_webhook.md": [
+    "30_risk_009_verification/02_implement_rate_limit_logic.md"
+  ],
+  "31_risk_010_verification/01_verify_report_rate_limit_mcp.md": [],
+  "31_risk_010_verification/02_verify_pool_exhausted_webhook.md": [],
+  "31_risk_010_verification/03_verify_stage_requeue_behavior.md": [
+    "31_risk_010_verification/01_verify_report_rate_limit_mcp.md"
+  ],
+  "31_risk_010_verification/04_verify_pool_provider_diversity.md": [],
+  "32_risk_010_verification/01_verify_pool_rate_limit_mcp.md": [],
+  "32_risk_010_verification/02_verify_passive_rate_limit_attempts.md": [
+    "32_risk_010_verification/01_verify_pool_rate_limit_mcp.md"
+  ],
+  "32_risk_010_verification/03_verify_pool_provider_diversity.md": [],
+  "32_risk_010_verification/04_verify_e2e_isolation_lint.md": [],
+  "33_risk_011_verification/01_server_handle_shutdown.md": [],
+  "33_risk_011_verification/02_e2e_test_config.md": [
+    "33_risk_011_verification/01_server_handle_shutdown.md"
+  ],
+  "33_risk_011_verification/03_discovery_file_lint.md": [
+    "33_risk_011_verification/02_e2e_test_config.md"
+  ],
+  "33_risk_011_verification/04_verify_e2e_isolation_stress_test.md": [
+    "33_risk_011_verification/01_server_handle_shutdown.md",
+    "33_risk_011_verification/02_e2e_test_config.md",
+    "33_risk_011_verification/03_discovery_file_lint.md"
+  ],
+  "34_risk_011_verification/01_devs_test_helper_server_handle.md": [],
+  "34_risk_011_verification/02_e2e_isolation_lint.md": [
+    "34_risk_011_verification/01_devs_test_helper_server_handle.md"
+  ],
+  "34_risk_011_verification/03_secure_permission_helpers.md": [],
+  "34_risk_011_verification/04_file_permission_lint.md": [
+    "34_risk_011_verification/03_secure_permission_helpers.md"
+  ],
+  "35_risk_012_verification/01_path_normalization_audit.md": [],
+  "35_risk_012_verification/02_shellcheck_compliance.md": [],
+  "35_risk_012_verification/03_platform_specific_test_audit.md": [],
+  "35_risk_012_verification/04_windows_security_check_warning.md": [],
+  "36_risk_012_verification/01_verify_shellcheck_do.md": [],
+  "36_risk_012_verification/02_verify_windows_security_check.md": [],
+  "36_risk_012_verification/03_verify_tui_snapshot_consistency.md": [],
+  "36_risk_012_verification/04_verify_permission_lint_enforcement.md": [],
+  "37_risk_013_verification/01_enforce_traceability_gates.md": [],
+  "37_risk_013_verification/02_commit_atomic_traceability_verification.md": [
+    "37_risk_013_verification/01_enforce_traceability_gates.md"
+  ],
+  "37_risk_013_verification/03_implement_traceability_scanner.md": [
+    "37_risk_013_verification/01_enforce_traceability_gates.md"
+  ],
+  "37_risk_013_verification/04_implement_traceability_exit_logic.md": [
+    "37_risk_013_verification/01_enforce_traceability_gates.md",
+    "37_risk_013_verification/03_implement_traceability_scanner.md"
+  ],
+  "37_risk_013_verification/05_implement_stale_annotation_detection.md": [
+    "37_risk_013_verification/01_enforce_traceability_gates.md",
+    "37_risk_013_verification/03_implement_traceability_scanner.md"
+  ],
+  "37_risk_013_verification/06_implement_commit_atomic_check.md": [
+    "37_risk_013_verification/01_enforce_traceability_gates.md",
+    "37_risk_013_verification/03_implement_traceability_scanner.md"
+  ],
+  "37_risk_013_verification/07_integrate_and_verify_complete_system.md": [
+    "37_risk_013_verification/01_enforce_traceability_gates.md",
+    "37_risk_013_verification/02_commit_atomic_traceability_verification.md",
+    "37_risk_013_verification/03_implement_traceability_scanner.md",
+    "37_risk_013_verification/04_implement_traceability_exit_logic.md",
+    "37_risk_013_verification/05_implement_stale_annotation_detection.md",
+    "37_risk_013_verification/06_implement_commit_atomic_check.md"
+  ],
+  "38_risk_013_verification/01_implement_rename_id_sync_audit.md": [
+    "37_risk_013_verification/01_enforce_traceability_gates.md",
+    "37_risk_013_verification/05_implement_stale_annotation_detection.md"
+  ],
+  "38_risk_013_verification/02_verify_traceability_acceptance_criteria.md": [
+    "37_risk_013_verification/01_enforce_traceability_gates.md",
+    "37_risk_013_verification/04_implement_traceability_exit_logic.md",
+    "37_risk_013_verification/05_implement_stale_annotation_detection.md"
+  ],
+  "39_risk_013_verification/01_verify_traceability_report_freshness.md": [],
+  "39_risk_013_verification/02_implement_webhook_ssrf_mitigation.md": [],
+  "40_risk_014_verification/01_ssrf_core_unit_tests.md": [],
+  "40_risk_014_verification/02_webhook_ssrf_logging_and_interceptor.md": [
+    "40_risk_014_verification/01_ssrf_core_unit_tests.md"
+  ],
+  "41_risk_014_verification/01_credential_redaction.md": [],
+  "41_risk_014_verification/02_mcp_server_hardening.md": [
+    "41_risk_014_verification/01_credential_redaction.md"
+  ],
+  "41_risk_014_verification/03_security_check_command.md": [
+    "41_risk_014_verification/02_mcp_server_hardening.md"
+  ],
+  "42_risk_015_verification/01_verify_startup_security_logs.md": [],
+  "42_risk_015_verification/02_cli_security_check_implementation.md": [
+    "42_risk_015_verification/01_verify_startup_security_logs.md"
+  ],
+  "42_risk_015_verification/03_mcp_redaction_and_transparency_verification.md": [],
+  "43_risk_015_verification/01_verify_sec_tls_missing_log.md": [],
+  "43_risk_015_verification/02_enforce_adr_per_crate.md": [],
+  "43_risk_015_verification/03_enforce_clippy_warnings_and_suppression_audit.md": [],
+  "43_risk_015_verification/04_verify_security_critical_crate_reviews.md": [],
+  "44_risk_016_verification/01_parse_mit_016_mitigation_strategy.md": [],
+  "44_risk_016_verification/02_create_code_review_workflow_toml.md": [
+    "44_risk_016_verification/01_parse_mit_016_mitigation_strategy.md"
+  ],
+  "44_risk_016_verification/03_implement_halt_for_remediation_branch_logic.md": [
+    "44_risk_016_verification/02_create_code_review_workflow_toml.md"
+  ],
+  "44_risk_016_verification/04_implement_adr_presence_verification.md": [],
+  "44_risk_016_verification/05_implement_clippy_warnings_enforcement.md": [],
+  "45_risk_016_verification/01_implement_adr_crate_lint.md": [],
+  "45_risk_016_verification/02_verify_code_review_halt_logic.md": [],
+  "45_risk_016_verification/03_execute_mvp_code_reviews.md": [
+    "45_risk_016_verification/02_verify_code_review_halt_logic.md"
+  ],
+  "45_risk_016_verification/04_verify_fanout_pool_fairness.md": [],
+  "46_risk_021_verification/01_verify_fanout_subrun_persistence.md": [],
+  "46_risk_021_verification/02_verify_fanout_concurrency_limits.md": [],
+  "46_risk_021_verification/03_verify_fanout_pause_signal.md": [],
+  "46_risk_021_verification/04_verify_default_merge_handler.md": [],
+  "47_risk_021_verification/01_verify_cancellation.md": [],
+  "47_risk_021_verification/02_verify_priority.md": [
+    "47_risk_021_verification/01_verify_cancellation.md"
+  ],
+  "47_risk_021_verification/03_verify_merge_failure.md": [
+    "47_risk_021_verification/01_verify_cancellation.md"
+  ],
+  "47_risk_021_verification/04_verify_mcp_nesting.md": [
+    "47_risk_021_verification/01_verify_cancellation.md"
+  ],
+  "48_risk_022_verification/01_verify_reconnect_and_fatal_error.md": [],
+  "48_risk_022_verification/02_json_robustness_and_network_isolation.md": [
+    "48_risk_022_verification/01_verify_reconnect_and_fatal_error.md"
+  ],
+  "49_mit-022/01_mcp_bridge_acceptance_hardening.md": [],
+  "49_mit-022/02_stage_completion_fallback.md": [],
+  "49_mit-022/03_mcp_bridge_e2e_parity.md": [
+    "49_mit-022/01_mcp_bridge_acceptance_hardening.md",
+    "49_mit-022/02_stage_completion_fallback.md"
+  ],
+  "50_risk_023_verification/01_e2e_subprocess_coverage_config.md": [],
+  "50_risk_023_verification/02_tui_in_process_coverage.md": [
+    "50_risk_023_verification/01_e2e_subprocess_coverage_config.md"
+  ],
+  "50_risk_023_verification/03_coverage_script_hardening.md": [
+    "50_risk_023_verification/01_e2e_subprocess_coverage_config.md",
+    "50_risk_023_verification/02_tui_in_process_coverage.md"
+  ],
+  "51_mit-023/01_e2e_subprocess_helper_llvm_profile.md": [],
+  "51_mit-023/02_server_sigterm_coverage_flush.md": [
+    "51_mit-023/01_e2e_subprocess_helper_llvm_profile.md"
+  ],
+  "51_mit-023/03_coverage_script_e2e_isolation.md": [
+    "51_mit-023/01_e2e_subprocess_helper_llvm_profile.md"
+  ],
+  "51_mit-023/04_coverage_script_profraw_guard.md": [
+    "51_mit-023/01_e2e_subprocess_helper_llvm_profile.md",
+    "51_mit-023/03_coverage_script_e2e_isolation.md"
+  ],
+  "51_mit-023/05_tui_e2e_inprocess_enforcement.md": [
+    "51_mit-023/01_e2e_subprocess_helper_llvm_profile.md"
+  ],
+  "52_risk_024_verification/01_gitlab_ci_yml_pipeline_structure.md": [],
+  "52_risk_024_verification/02_do_lint_yamllint_validation.md": [
+    "52_risk_024_verification/01_gitlab_ci_yml_pipeline_structure.md"
+  ],
+  "52_risk_024_verification/03_do_ci_job_failure_detection.md": [
+    "52_risk_024_verification/01_gitlab_ci_yml_pipeline_structure.md",
+    "52_risk_024_verification/02_do_lint_yamllint_validation.md"
+  ],
+  "52_risk_024_verification/04_do_ci_timeout_and_branch_cleanup.md": [
+    "52_risk_024_verification/03_do_ci_job_failure_detection.md"
+  ],
+  "53_mit-024/01_gitlab_ci_yml_definition.md": [],
+  "53_mit-024/02_do_lint_yamllint_integration.md": [
+    "53_mit-024/01_gitlab_ci_yml_definition.md"
+  ],
+  "53_mit-024/03_do_ci_gitlab_api_implementation.md": [
+    "53_mit-024/01_gitlab_ci_yml_definition.md",
+    "53_mit-024/02_do_lint_yamllint_integration.md"
+  ],
+  "53_mit-024/04_presubmit_ci_parity_verification.md": [
+    "53_mit-024/01_gitlab_ci_yml_definition.md",
+    "53_mit-024/02_do_lint_yamllint_integration.md",
+    "53_mit-024/03_do_ci_gitlab_api_implementation.md"
+  ],
+  "54_risk_024_verification/01_ci_branch_cleanup_on_failure.md": [],
+  "54_risk_024_verification/02_snapshot_deep_clone_at_submit_time.md": [],
+  "54_risk_024_verification/03_write_once_snapshot_persistence.md": [
+    "54_risk_024_verification/02_snapshot_deep_clone_at_submit_time.md"
+  ],
+  "54_risk_024_verification/04_write_workflow_definition_isolation.md": [
+    "54_risk_024_verification/02_snapshot_deep_clone_at_submit_time.md",
+    "54_risk_024_verification/03_write_once_snapshot_persistence.md"
+  ],
+  "55_risk_025_verification/01_toctou_mutex_atomicity_enforcement.md": [],
+  "55_risk_025_verification/02_mit_025_mitigation_integration_test.md": [
+    "55_risk_025_verification/01_toctou_mutex_atomicity_enforcement.md"
+  ],
+  "55_risk_025_verification/03_snapshot_content_matches_submit_time_mcp_e2e.md": [
+    "55_risk_025_verification/02_mit_025_mitigation_integration_test.md"
+  ],
+  "55_risk_025_verification/04_snapshot_already_exists_acceptance_test.md": [
+    "55_risk_025_verification/02_mit_025_mitigation_integration_test.md"
+  ],
+  "55_risk_025_verification/05_concurrent_submit_run_and_write_definition_test.md": [
+    "55_risk_025_verification/01_toctou_mutex_atomicity_enforcement.md",
+    "55_risk_025_verification/04_snapshot_already_exists_acceptance_test.md"
+  ],
+  "56_risk_025_verification/01_two_active_runs_snapshot_isolation_test.md": [],
+  "56_risk_025_verification/02_snapshot_schema_validation_on_load.md": [],
+  "56_risk_025_verification/03_risk_matrix_integrity_lint_tooling.md": []
+}

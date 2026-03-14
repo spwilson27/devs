@@ -1,0 +1,327 @@
+{
+  "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md": [],
+  "01_mcp_tool_reliability_recovery/02_agent_stage_output_truncation_logic.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "01_mcp_tool_reliability_recovery/03_agent_bulk_status_monitoring_protocol.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "01_mcp_tool_reliability_recovery/04_agent_session_recovery_order.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "01_mcp_tool_reliability_recovery/05_agent_inflight_run_detection_and_cancellation.md": [
+    "01_mcp_tool_reliability_recovery/04_agent_session_recovery_order.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "01_mcp_tool_reliability_recovery/06_fallback_registry_data_model_and_validation.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "01_mcp_tool_reliability_recovery/07_fallback_state_machine_implementation.md": [
+    "01_mcp_tool_reliability_recovery/06_fallback_registry_data_model_and_validation.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "01_mcp_tool_reliability_recovery/08_fallback_activation_protocol_and_lint_rules.md": [
+    "01_mcp_tool_reliability_recovery/06_fallback_registry_data_model_and_validation.md",
+    "01_mcp_tool_reliability_recovery/07_fallback_state_machine_implementation.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "01_mcp_tool_reliability_recovery/09_fallback_concurrency_limits_and_presubmit_warnings.md": [
+    "01_mcp_tool_reliability_recovery/06_fallback_registry_data_model_and_validation.md",
+    "01_mcp_tool_reliability_recovery/07_fallback_state_machine_implementation.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "01_mcp_tool_reliability_recovery/10_fallback_retirement_protocol.md": [
+    "01_mcp_tool_reliability_recovery/06_fallback_registry_data_model_and_validation.md",
+    "01_mcp_tool_reliability_recovery/07_fallback_state_machine_implementation.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "02_mcp_escalation_connection_recovery/01_workflow_snapshot_ground_truth.md": [],
+  "02_mcp_escalation_connection_recovery/02_task_state_persistence.md": [
+    "02_mcp_escalation_connection_recovery/01_workflow_snapshot_ground_truth.md"
+  ],
+  "02_mcp_escalation_connection_recovery/03_cross_session_recovery_and_merge.md": [
+    "02_mcp_escalation_connection_recovery/02_task_state_persistence.md",
+    "02_mcp_escalation_connection_recovery/01_workflow_snapshot_ground_truth.md"
+  ],
+  "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "03_mcp_execution_control_atoms/03_retry_stage_attempt_reset.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md"
+  ],
+  "03_mcp_execution_control_atoms/04_retry_stage_atomicity.md": [
+    "03_mcp_execution_control_atoms/03_retry_stage_attempt_reset.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md"
+  ],
+  "04_mcp_run_workflow_observation/01_agent_observation_run_tracking.md": [],
+  "04_mcp_run_workflow_observation/02_agent_observation_wait_logic.md": [
+    "04_mcp_run_workflow_observation/01_agent_observation_run_tracking.md"
+  ],
+  "04_mcp_run_workflow_observation/03_agent_observation_shutdown_resiliency.md": [
+    "04_mcp_run_workflow_observation/02_agent_observation_wait_logic.md",
+    "04_mcp_run_workflow_observation/01_agent_observation_run_tracking.md"
+  ],
+  "05_mcp_list_filter_operations/01_list_runs_pagination.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "05_mcp_list_filter_operations/02_list_runs_filtering_sorting.md": [
+    "05_mcp_list_filter_operations/01_list_runs_pagination.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "05_mcp_list_filter_operations/03_list_workflows_tool.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "05_mcp_list_filter_operations/04_workflow_definition_normalization.md": [
+    "05_mcp_list_filter_operations/03_list_workflows_tool.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "05_mcp_list_filter_operations/05_context_file_generation.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md"
+  ],
+  "05_mcp_list_filter_operations/06_prompt_header_validation.md": [],
+  "05_mcp_list_filter_operations/07_get_run_response_completeness.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "05_mcp_list_filter_operations/01_list_runs_pagination.md"
+  ],
+  "05_mcp_list_filter_operations/08_pool_state_pre_submission.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md"
+  ],
+  "05_mcp_list_filter_operations/09_server_restart_validation.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "05_mcp_list_filter_operations/06_prompt_header_validation.md"
+  ],
+  "06_mcp_logging_stage_output/01_agent_diagnostic_pool_inspection.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "05_mcp_list_filter_operations/08_pool_state_pre_submission.md"
+  ],
+  "06_mcp_logging_stage_output/02_parallel_submission_source_overlap.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md"
+  ],
+  "06_mcp_logging_stage_output/03_parallel_submission_concurrency.md": [
+    "06_mcp_logging_stage_output/01_agent_diagnostic_pool_inspection.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "05_mcp_list_filter_operations/08_pool_state_pre_submission.md"
+  ],
+  "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md": [],
+  "06_mcp_logging_stage_output/05_atomic_task_state_verification.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md"
+  ],
+  "07_agent_diagnostic_behaviors/01_diagnostic_investigation_sequence.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md"
+  ],
+  "07_agent_diagnostic_behaviors/02_non_terminal_run_recovery.md": [
+    "07_agent_diagnostic_behaviors/01_diagnostic_investigation_sequence.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "07_agent_diagnostic_behaviors/03_failure_classification_and_targeted_fix.md": [
+    "07_agent_diagnostic_behaviors/01_diagnostic_investigation_sequence.md",
+    "07_agent_diagnostic_behaviors/06_test_failure_verification.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "05_mcp_list_filter_operations/06_prompt_header_validation.md",
+    "07_agent_diagnostic_behaviors/02_non_terminal_run_recovery.md"
+  ],
+  "07_agent_diagnostic_behaviors/04_filesystem_mcp_enforcement.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md"
+  ],
+  "07_agent_diagnostic_behaviors/05_test_annotation_enforcement.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "05_mcp_list_filter_operations/06_prompt_header_validation.md",
+    "07_agent_diagnostic_behaviors/02_non_terminal_run_recovery.md"
+  ],
+  "07_agent_diagnostic_behaviors/06_test_failure_verification.md": [
+    "07_agent_diagnostic_behaviors/05_test_annotation_enforcement.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "05_mcp_list_filter_operations/06_prompt_header_validation.md",
+    "07_agent_diagnostic_behaviors/02_non_terminal_run_recovery.md"
+  ],
+  "07_agent_diagnostic_behaviors/07_presubmit_enforcement.md": [
+    "07_agent_diagnostic_behaviors/06_test_failure_verification.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "05_mcp_list_filter_operations/06_prompt_header_validation.md"
+  ],
+  "07_agent_diagnostic_behaviors/08_mcp_address_discovery.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md",
+    "07_agent_diagnostic_behaviors/01_diagnostic_investigation_sequence.md"
+  ],
+  "08_agent_self-correction_fix_logic/01_agent_session_isolation.md": [
+    "05_mcp_list_filter_operations/06_prompt_header_validation.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md"
+  ],
+  "08_agent_self-correction_fix_logic/02_workflow_snapshot_integrity.md": [
+    "08_agent_self-correction_fix_logic/01_agent_session_isolation.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md"
+  ],
+  "08_agent_self-correction_fix_logic/03_e2e_checkpoint_diagnosis_protocol.md": [
+    "08_agent_self-correction_fix_logic/01_agent_session_isolation.md",
+    "08_agent_self-correction_fix_logic/02_workflow_snapshot_integrity.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "09_agent_failure_classification/01_coverage_gate_failure.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "09_agent_failure_classification/01_diagnosing_to_editing_gate.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "09_agent_failure_classification/02_clippy_denial_failure.md": [
+    "09_agent_failure_classification/01_coverage_gate_failure.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "09_agent_failure_classification/03_traceability_failure.md": [
+    "09_agent_failure_classification/01_coverage_gate_failure.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "09_agent_failure_classification/04_process_timeout_failure.md": [
+    "09_agent_failure_classification/01_coverage_gate_failure.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md"
+  ],
+  "09_agent_failure_classification/05_unknown_failure_handler.md": [
+    "09_agent_failure_classification/01_coverage_gate_failure.md",
+    "09_agent_failure_classification/02_clippy_denial_failure.md",
+    "09_agent_failure_classification/03_traceability_failure.md",
+    "09_agent_failure_classification/04_process_timeout_failure.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "10_agent_tdd_loop_enforcement/01_define_core_tdd_workflows.md": [
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "10_agent_tdd_loop_enforcement/02_presubmit_check_assertion_verification.md": [
+    "10_agent_tdd_loop_enforcement/01_define_core_tdd_workflows.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "05_mcp_list_filter_operations/01_list_runs_pagination.md"
+  ],
+  "10_agent_tdd_loop_enforcement/03_parallel_run_orchestration_monitoring.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "05_mcp_list_filter_operations/08_pool_state_pre_submission.md",
+    "05_mcp_list_filter_operations/05_context_file_generation.md"
+  ],
+  "10_agent_tdd_loop_enforcement/04_diagnostic_sequence_enforcement.md": [
+    "10_agent_tdd_loop_enforcement/01_define_core_tdd_workflows.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "08_agent_self-correction_fix_logic/03_e2e_checkpoint_diagnosis_protocol.md"
+  ],
+  "10_agent_tdd_loop_enforcement/05_failure_classification_lookup_table.md": [
+    "10_agent_tdd_loop_enforcement/01_define_core_tdd_workflows.md",
+    "10_agent_tdd_loop_enforcement/04_diagnostic_sequence_enforcement.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "10_agent_tdd_loop_enforcement/06_tdd_red_phase_workflow.md": [
+    "10_agent_tdd_loop_enforcement/01_define_core_tdd_workflows.md",
+    "10_agent_tdd_loop_enforcement/05_failure_classification_lookup_table.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md",
+    "08_agent_self-correction_fix_logic/03_e2e_checkpoint_diagnosis_protocol.md"
+  ],
+  "10_agent_tdd_loop_enforcement/07_tdd_green_phase_workflow.md": [
+    "10_agent_tdd_loop_enforcement/05_failure_classification_lookup_table.md",
+    "10_agent_tdd_loop_enforcement/06_tdd_red_phase_workflow.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "10_agent_tdd_loop_enforcement/08_assert_stage_output_tool.md": [
+    "10_agent_tdd_loop_enforcement/01_define_core_tdd_workflows.md",
+    "10_agent_tdd_loop_enforcement/05_failure_classification_lookup_table.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "05_mcp_list_filter_operations/01_list_runs_pagination.md"
+  ],
+  "11_agent_traceability_submission/01_agent_log_streaming_error_tracking.md": [
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "05_mcp_list_filter_operations/01_list_runs_pagination.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md"
+  ],
+  "11_agent_traceability_submission/02_glass_box_diagnostic_workflow.md": [
+    "11_agent_traceability_submission/01_agent_log_streaming_error_tracking.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md",
+    "05_mcp_list_filter_operations/01_list_runs_pagination.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md"
+  ],
+  "12_roadmap_dependency_verification/01_define_additional_workflows.md": [
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "12_roadmap_dependency_verification/02_verify_phase_3_readiness.md": [
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md",
+    "08_agent_self-correction_fix_logic/03_e2e_checkpoint_diagnosis_protocol.md"
+  ],
+  "12_roadmap_dependency_verification/03_ordered_bootstrap_protocol.md": [
+    "12_roadmap_dependency_verification/01_define_additional_workflows.md",
+    "12_roadmap_dependency_verification/02_verify_phase_3_readiness.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md",
+    "08_agent_self-correction_fix_logic/03_e2e_checkpoint_diagnosis_protocol.md"
+  ],
+  "13_roadmap_phase_4_infrastructure/01_define_standard_workflows.md": [
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md"
+  ],
+  "13_roadmap_phase_4_infrastructure/02_configure_server_infrastructure.md": [
+    "13_roadmap_phase_4_infrastructure/01_define_standard_workflows.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md",
+    "05_mcp_list_filter_operations/08_pool_state_pre_submission.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md",
+    "07_agent_diagnostic_behaviors/01_diagnostic_investigation_sequence.md",
+    "08_agent_self-correction_fix_logic/03_e2e_checkpoint_diagnosis_protocol.md"
+  ],
+  "13_roadmap_phase_4_infrastructure/03_verify_presubmit_check_lifecycle.md": [
+    "13_roadmap_phase_4_infrastructure/02_configure_server_infrastructure.md",
+    "03_mcp_execution_control_atoms/01_write_workflow_definition_atomicity.md",
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "05_mcp_list_filter_operations/06_prompt_header_validation.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md",
+    "08_agent_self-correction_fix_logic/03_e2e_checkpoint_diagnosis_protocol.md"
+  ],
+  "14_roadmap_phase_4_validation/01_implement_bootstrap_stub_lint.md": [
+    "05_mcp_list_filter_operations/06_prompt_header_validation.md"
+  ],
+  "14_roadmap_phase_4_validation/02_verify_tdd_workflows.md": [
+    "03_mcp_execution_control_atoms/02_cancel_run_atomicity.md",
+    "06_mcp_logging_stage_output/04_e2e_isolation_discovery_file.md",
+    "08_agent_self-correction_fix_logic/03_e2e_checkpoint_diagnosis_protocol.md"
+  ],
+  "14_roadmap_phase_4_validation/03_finalize_bootstrap_complete_adr.md": [
+    "14_roadmap_phase_4_validation/01_implement_bootstrap_stub_lint.md",
+    "14_roadmap_phase_4_validation/02_verify_tdd_workflows.md",
+    "01_mcp_tool_reliability_recovery/01_agent_search_before_read_policy.md"
+  ],
+  "15_tdd_lifecycle_roadmap/01_immutable_render_contract.md": [
+    "12_roadmap_dependency_verification/02_verify_phase_3_readiness.md"
+  ],
+  "15_tdd_lifecycle_roadmap/02_event_loop_config_throttling.md": [
+    "15_tdd_lifecycle_roadmap/01_immutable_render_contract.md",
+    "12_roadmap_dependency_verification/02_verify_phase_3_readiness.md"
+  ],
+  "15_tdd_lifecycle_roadmap/03_render_performance_benchmark.md": [
+    "15_tdd_lifecycle_roadmap/01_immutable_render_contract.md",
+    "12_roadmap_dependency_verification/02_verify_phase_3_readiness.md"
+  ],
+  "15_tdd_lifecycle_roadmap/04_terminal_restore_on_exhaustion.md": [
+    "15_tdd_lifecycle_roadmap/02_event_loop_config_throttling.md",
+    "12_roadmap_dependency_verification/02_verify_phase_3_readiness.md"
+  ]
+}

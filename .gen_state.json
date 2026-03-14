@@ -45,7 +45,7 @@
     "requirements_merged": true,
     "requirements_ordered": true,
     "phases_completed": true,
-    "tasks_completed": false,
+    "tasks_completed": true,
     "tasks_reviewed": false,
     "cross_phase_reviewed": false,
     "tasks_generated": [
@@ -276,7 +276,7 @@
     "scope_gate_passed": true,
     "shared_components_completed": true,
     "interface_contracts_completed": true,
-    "fixup_validation_completed": false,
+    "fixup_validation_completed": true,
     "cross_phase_reviewed_pass_1": false,
     "cross_phase_reviewed_pass_2": false,
     "tasks_reordered_pass_1": false,
