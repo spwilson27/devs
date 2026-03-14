@@ -4,8 +4,8 @@
 - [AC-RISK-013-04]
 
 ## Dependencies
-- depends_on: [docs/plan/tasks/phase_5/38_risk_013_verification/02_verify_traceability_acceptance_criteria.md]
-- shared_components: [./do Entrypoint Script, Traceability & Verification Infrastructure]
+- depends_on: [none]
+- shared_components: [./do Entrypoint Script & CI Pipeline (Consumer), Traceability & Coverage Infrastructure (Consumer)]
 
 ## 1. Initial Test Written
 - [ ] Create a Python integration test in `.tools/tests/test_traceability_freshness.py`.

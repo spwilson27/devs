@@ -5,7 +5,7 @@
 
 ## Dependencies
 - depends_on: [none]
-- shared_components: [devs-webhook]
+- shared_components: [devs-webhook (Consumer)]
 
 ## 1. Initial Test Written
 - [ ] Create a unit test suite in `crates/devs-webhook/src/ssrf_test.rs` for `check_ssrf`.

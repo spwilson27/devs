@@ -29,7 +29,7 @@
 - [ ] Run `./do lint` and ensure it passes.
 
 ## 5. Update Documentation
-- [ ] Document in `GEMINI.md` that `./do` must remain POSIX `sh` compliant and that `shellcheck` enforces this.
+- [ ] Document in `.agent/MEMORY.md` under the "Brittle Areas" section that `./do` must remain POSIX `sh` compliant and that `shellcheck` enforces this.
 
 ## 6. Automated Verification
 - [ ] Run `shellcheck --shell=sh ./do` and verify it exits 0.

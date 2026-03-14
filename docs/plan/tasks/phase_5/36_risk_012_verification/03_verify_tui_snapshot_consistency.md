@@ -28,7 +28,7 @@
 - [ ] Verify that no new `.new` snapshot files are created and the tests pass.
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` to note that TUI visual consistency is enforced through cross-platform snapshot testing.
+- [ ] Document in `.agent/MEMORY.md` under the "Brittle Areas" section that TUI visual consistency is enforced through cross-platform snapshot testing.
 
 ## 6. Automated Verification
 - [ ] Verify that `insta` snapshot comparison is active in the CI for all platforms.

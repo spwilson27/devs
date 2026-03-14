@@ -31,7 +31,7 @@
 - [ ] Run `.tools/verify_ci_warn_count.py` against a local test run log.
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` to note the accepted limitation of file permissions on Windows.
+- [ ] Document in `.agent/MEMORY.md` under the "Brittle Areas" section the accepted limitation of file permissions on Windows.
 
 ## 6. Automated Verification
 - [ ] Verify `target/traceability.json` shows `AC-RISK-012-02` and `AC-RISK-012-03` as covered.

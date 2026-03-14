@@ -29,7 +29,7 @@
 - [ ] `cargo test --test dag_logic_cascade`
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` to reflect the verification of DAG scheduling integrity and cascading failure handling.
+- [ ] Update `.agent/MEMORY.md` to document the atomic DAG eligibility evaluation pattern and cascading cancellation behavior.
 
 ## 6. Automated Verification
 - [ ] Validate `checkpoint.json` structure after a cascading failure to ensure all expected cancellations are present and no "orphaned" `Waiting` stages remain.

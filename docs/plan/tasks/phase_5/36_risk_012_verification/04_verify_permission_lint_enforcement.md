@@ -28,7 +28,7 @@
 - [ ] Run `./do lint` and ensure it passes.
 
 ## 5. Update Documentation
-- [ ] Document in `GEMINI.md` that direct use of `std::fs::set_permissions` is prohibited outside the `devs-checkpoint` permissions module to maintain cross-platform security consistency.
+- [ ] Document in `.agent/MEMORY.md` under the "Brittle Areas" section that direct use of `std::fs::set_permissions` is prohibited outside the `devs-checkpoint` permissions module to maintain cross-platform security consistency.
 
 ## 6. Automated Verification
 - [ ] Verify that `grep -rn "fs::set_permissions" crates/ | grep -v "devs-checkpoint/src/permissions.rs"` returns no matches.

@@ -9,7 +9,7 @@
 
 ## 1. Initial Test Written
 - [ ] Create an integration test in `devs-checkpoint/tests/write_failure_tests.rs` that uses a mock `CheckpointStore`.
-- [ ] Implement a mock `CheckpointStore` that can be configured to return `io::ErrorKind::StorageFull` (ENOSPC) during write operations.
+- [ ] Implement a mock `CheckpointStore` that can be configured to return `io::ErrorKind::StorageFull` during write operations.
 - [ ] Assert that when `StorageFull` is returned, the server emits a structured `ERROR` log with `event_type: "checkpoint.write_failed"` and the correct `run_id`.
 - [ ] Assert that the server continues to process other active runs after a checkpoint write failure.
 - [ ] Implement a test case where a `git2` push operation fails.

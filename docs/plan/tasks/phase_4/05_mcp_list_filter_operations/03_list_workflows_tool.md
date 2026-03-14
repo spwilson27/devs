@@ -1,11 +1,15 @@
 # Task: Implement list_workflows Tool (Sub-Epic: 05_MCP List & Filter Operations)
 
 ## Covered Requirements
-- [3_MCP_DESIGN-REQ-085]
+- [3_MCP_DESIGN-REQ-003] (list_workflows tool support)
 
 ## Dependencies
 - depends_on: [none]
 - shared_components: [devs-mcp, devs-config]
+
+## Note
+- This task was previously mapped to [3_MCP_DESIGN-REQ-085], but that requirement is now covered by:
+  - [3_MCP_DESIGN-REQ-085] → `08_pool_state_pre_submission.md`
 
 ## 1. Initial Test Written
 - [ ] Write unit tests in `crates/devs-mcp/src/tools/list_workflows.rs` that verify:

@@ -28,7 +28,7 @@
 - [ ] Manually verify that the lint fails on the "poisoned" test file.
 
 ## 5. Update Documentation
-- [ ] Document the canonical lock acquisition order in `GEMINI.md` and explain how to resolve violations reported by the lint.
+- [ ] Document the canonical lock acquisition order in `.agent/MEMORY.md` and explain how to resolve violations reported by the lint.
 
 ## 6. Automated Verification
 - [ ] Run `./do lint` on the entire codebase and verify it reports 0 violations after any necessary refactoring is completed.

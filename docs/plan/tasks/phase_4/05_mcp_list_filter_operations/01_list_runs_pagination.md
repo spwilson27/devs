@@ -1,11 +1,16 @@
 # Task: Implement list_runs Pagination (Sub-Epic: 05_MCP List & Filter Operations)
 
 ## Covered Requirements
-- [3_MCP_DESIGN-REQ-054], [3_MCP_DESIGN-REQ-AC-1.01]
+- [3_MCP_DESIGN-REQ-001] (list_runs pagination support)
 
 ## Dependencies
 - depends_on: [none]
 - shared_components: [devs-mcp, devs-core, devs-proto]
+
+## Note
+- This task was previously mapped to [3_MCP_DESIGN-REQ-054] and [3_MCP_DESIGN-REQ-AC-1.01], but those requirements are now covered by:
+  - [3_MCP_DESIGN-REQ-054] → `05_context_file_generation.md`
+  - [3_MCP_DESIGN-REQ-AC-1.01] → `07_get_run_response_completeness.md`
 
 ## 1. Initial Test Written
 - [ ] Write unit tests in `crates/devs-mcp/src/tools/list_runs.rs` that verify:

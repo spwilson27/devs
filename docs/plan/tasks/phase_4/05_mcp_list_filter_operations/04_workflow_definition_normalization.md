@@ -1,11 +1,15 @@
 # Task: Implement get_workflow Normalization (Sub-Epic: 05_MCP List & Filter Operations)
 
 ## Covered Requirements
-- [3_MCP_DESIGN-REQ-086]
+- [3_MCP_DESIGN-REQ-004] (get_workflow_definition normalization support)
 
 ## Dependencies
 - depends_on: [03_list_workflows_tool.md]
 - shared_components: [devs-mcp, devs-config]
+
+## Note
+- This task was previously mapped to [3_MCP_DESIGN-REQ-086], but that requirement is now covered by:
+  - [3_MCP_DESIGN-REQ-086] → `09_server_restart_validation.md`
 
 ## 1. Initial Test Written
 - [ ] Write unit tests in `crates/devs-mcp/src/tools/get_workflow.rs` that verify:
@@ -38,4 +42,4 @@
 - [ ] Note any changes to the `WorkflowDefinition` schema in the TAS.
 
 ## 6. Automated Verification
-- [ ] Run `./do test` to ensure all tests pass and traceability is updated for requirement [3_MCP_DESIGN-REQ-086].
+- [ ] Run `./do test` to ensure all tests pass and traceability is updated.

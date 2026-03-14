@@ -1,11 +1,15 @@
 # Task: Implement list_runs Filtering and Sorting (Sub-Epic: 05_MCP List & Filter Operations)
 
 ## Covered Requirements
-- [3_MCP_DESIGN-REQ-079]
+- [3_MCP_DESIGN-REQ-002] (list_runs filtering and sorting support)
 
 ## Dependencies
 - depends_on: [01_list_runs_pagination.md]
 - shared_components: [devs-mcp, devs-core, devs-proto]
+
+## Note
+- This task was previously mapped to [3_MCP_DESIGN-REQ-079], but that requirement is now covered by:
+  - [3_MCP_DESIGN-REQ-079] → `06_prompt_header_validation.md`
 
 ## 1. Initial Test Written
 - [ ] Write unit tests in `crates/devs-mcp/src/tools/list_runs.rs` that verify:

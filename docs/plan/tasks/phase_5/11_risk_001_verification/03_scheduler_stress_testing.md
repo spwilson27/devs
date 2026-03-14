@@ -28,7 +28,7 @@
 - [ ] (On Nightly) `RUSTFLAGS="-Z sanitizer=thread" cargo test --workspace -- scheduler`
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` to document the results of the multi-threaded stress tests and TSan verification.
+- [ ] Update `.agent/MEMORY.md` to document the stress test methodology and TSan verification results.
 
 ## 6. Automated Verification
 - [ ] Run the scheduler stress test in a loop 10 times and ensure a 100% success rate to confirm no flaky race conditions.

@@ -29,7 +29,7 @@
 - [ ] `cargo test --test concurrency_stress`
 
 ## 5. Update Documentation
-- [ ] Update `GEMINI.md` to reflect the verification of the state machine's thread-safety and idempotency.
+- [ ] Update `.agent/MEMORY.md` to document the mutex synchronization pattern and idempotency guarantee for state transitions.
 
 ## 6. Automated Verification
 - [ ] Run `./do coverage` and ensure the new concurrency tests achieve 100% branch coverage for the state transition logic.
